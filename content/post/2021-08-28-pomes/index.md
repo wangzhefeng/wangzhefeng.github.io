@@ -21,6 +21,11 @@ tags: [pomes]
 <center>可堪回首，佛狸祠下，一片神鸦社鼓。</center>
 <center>凭谁问：廉颇老矣，尚能饭否？</center>
 
+## 鹧鸪天·送人
+
+<center>唱彻《阳关》泪未干，功名馀事且加餐。浮天水送无穷树，带雨云埋一半山。</center>
+<center>今古恨，几千般，只应离合是悲欢？江头未是风波恶，别有人间行路难！</center>
+
 # 王昌龄--[唐 689-756]
 
 ## 出塞
@@ -46,3 +51,25 @@ tags: [pomes]
 <center>半入江风半入云。</center>
 <center>此曲只应天上有，</center>
 <center>人间能得几回闻。</center>
+
+
+# 诗经
+
+## 无衣《秦风》
+
+<center>岂曰无衣？与子同袍。</center>
+<center>王于兴师，修我戈矛。与子同仇！</center>
+<center>岂曰无衣？与子同泽。</center>
+<center>王于兴师，修我矛戟。与子偕作！</center>
+<center>岂曰无衣？与子同裳。</center>
+<center>王于兴师，修我兵甲。与子偕行！</center>
+
+## 大秦帝国《赳赳老秦》
+
+<center>赳赳老秦，共赴国难，</center>
+<center>赳赳老秦，复我河山。</center>
+<center>血不流干，死不休战！</center>
+<center>西有大秦，如日方升，</center>
+<center>百年国恨，沧桑难平！</center>
+<center>天下纷扰，何得康宁！</center>
+<center>秦有锐士，谁与争锋！</center>
