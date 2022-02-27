@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-02-28'
 slug: projects
 categories:
-  - blogdown
+  - note
 tags:
   - note
 ---
