@@ -1,5 +1,5 @@
 ---
-title: 中国通史通读
+title: 中国通史
 author: 王哲峰
 date: '2021-08-28'
 slug: general-history-of-china
