@@ -9,6 +9,8 @@ tags:
   - 纪录片
 ---
 
+![fluffy_hat_lg](images/fluffy_hat_lg.png)
+
 # 人物
 
 - 滕州-墨子
@@ -175,6 +177,12 @@ tags:
 - 北周
 - 北齐
 
+#### 军事
+
+- 西魏府兵制
+
+![西魏府兵制](images/fubing.jpg)
+
 ### 南朝
 
 - 宋
@@ -186,7 +194,16 @@ tags:
 
 ## 隋朝
 
+
+- 三省六部制
+
+![三省六部制](images/male.jpg)
+
 ## 唐朝
+
+- 唐朝后宫结构
+
+![唐朝后宫结构](images/female.jpg)
 
 ## [五胡十六国时期]
 
