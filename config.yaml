@@ -1,6 +1,6 @@
 baseurl: "https://wangzhefeng.github.io/"
 languageCode: en-us
-title: "Wangzf 7" 
+title: "这里应该是张图片" 
 theme: "hugo-ivy"
 googleAnalytics: ""
 # disqusShortname: "zhefeng"
@@ -19,27 +19,33 @@ menu:
     - name: "首页"
       url: "/"
       weight: 1
+    - name: "日志"
+      url: "/post/"
+      weight: 2
+    - name: "备忘"
+      url: "/note/"
+      weight: 3
     - name: "关于"
       url: "/about/"
-      weight: 2
-    # - name: "分类"
-      # url: "/categories/"
-      # weight: 3
-    # - name: "标签"
-      # url: "/tags/"
-      # weight: 4
-    # - name: "订阅"
-      # url: "/index.xml"
-      # weight: 5
+      weight: 4
+    - name: "标签"
+      url: "/tags/"
+      weight: 5
     - name: "简历"
-      url: "/resume"
+      url: "/resume/"
       weight: 6
     - name: "主题"
       url: "/Ivy/"
-
+      weight: 7
+    # - name: "分类"
+      # url: "/categories/"
+      # weight: 3
+    # - name: "订阅"
+      # url: "/index.xml"
+      # weight: 5
 params:
-  # description: "Personal website of Zhefeng Wang; 王哲峰的个人网站"
-  footer: "&copy; [zfwang](https://github.com/wangzhefeng) 2021"
+  description: "Personal website of wangzhefeng"
+  footer: "&copy; [Zhefeng Wang](https://github.com/wangzhefeng) 2021 - 2022"
   disqusURL: ""
   githubContentURL: "https://github.com/wangzhefeng"
   # options for highlight.js (version, additional languages, and theme)
@@ -50,7 +56,7 @@ params:
   # logo
   logo:
       main:
-        img: "/images/logo.png"
+        img: "/images/logo.jpg"
         url: "/"
         alt: "Zhefeng Wang"
         tag: ""

@@ -4,12 +4,10 @@ author: 王哲峰
 date: '2021-08-28'
 slug: general-history-of-china
 categories:
-  - TV
-tags:
   - 纪录片
+tags:
+  - note
 ---
-
-![fluffy_hat_lg](images/fluffy_hat_lg.png)
 
 # 人物
 
