@@ -451,7 +451,7 @@ $ git clone git@github.com:wangzhefeng/packaging_example.git
 2. 将本地 project 进行 Git 初始化，并 Push 到 GitHub 仓库 `packaging_tutorial`
 
 ```bash
-echo "# packaging_example" >> README.md
+$ echo "# packaging_example" >> README.md
 
 $ touch .gitignore
 
