@@ -39,7 +39,7 @@ $ cd src
 $ mkdir example_package
 ```
 
-4. 在 `example` 目录中创建 Python 源代码模块文件 `__init__.py`、`example.py`
+4. 在 `example_package` 目录中创建 Python 源代码模块文件 `__init__.py`、`example.py`
 
 ```bash
 $ cd example_package
@@ -77,10 +77,10 @@ packaging_tutorial/
 
 ```
 packaging_tutorial/         # project
-├── LICENSE                 # 
-├── pyproject.toml          # 
-├── README.md
-├── setup.cfg               # 
+├── LICENSE                 # 许可证
+├── pyproject.toml          # TODO
+├── README.md               # 项目介绍 
+├── setup.cfg               # metadata
 ├── src/                    # 源代码
 │   └── example_package/
 │       ├── __init__.py
