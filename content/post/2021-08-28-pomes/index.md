@@ -2,9 +2,11 @@
 title: 诗词
 author: 王哲峰
 date: '2021-08-28'
+categories:
+  - 文学
+tags:
+  - note
 slug: pomes
-categories: 文学
-tags: note
 ---
 
 # 辛弃疾--[南宋 11400528~12071003]
@@ -40,8 +42,6 @@ tags: note
 ---
 
 
-
-
 # 王昌龄--[唐 689-756]
 
 ## 出塞
@@ -59,7 +59,9 @@ tags: note
 <center>洛阳亲友如相问，</center>
 <center>一片冰心在玉壶。</center>
 
+
 ---
+
 
 # 杜甫
 
@@ -122,8 +124,6 @@ tags: note
 <center>映户凝娇乍不进，出帷含态笑相迎。</center>
 <center>妖姬脸似花含露，玉树流光照后庭；</center>
 <center>花开花落不长久，落红满地归寂中！</center>
-
-# 十二支红楼曲
 
 ---
 

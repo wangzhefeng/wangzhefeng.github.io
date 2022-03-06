@@ -2,11 +2,11 @@
 title: 中国通史
 author: 王哲峰
 date: '2021-08-28'
-slug: general-history-of-china
 categories:
   - 纪录片
 tags:
   - note
+slug: general-history-of-china
 ---
 
 # 人物

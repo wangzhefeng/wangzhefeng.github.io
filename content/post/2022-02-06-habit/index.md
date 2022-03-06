@@ -1,10 +1,12 @@
 ---
-title: 好习惯就是成功
+title: 养习惯
 author: 王哲峰
 date: '2022-02-06'
+categories:
+  - 个人感悟
+tags:
+  - note
 slug: habit
-categories: 个人感悟
-tags: note
 ---
 
 # 人生习惯

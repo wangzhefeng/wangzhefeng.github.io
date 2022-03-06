@@ -2,11 +2,11 @@
 title: 给父亲
 author: 王哲峰
 date: '2022-03-03'
-slug: to-my-father
 categories:
   - 文学
 tags:
   - note
+slug: to-my-father
 ---
 
 

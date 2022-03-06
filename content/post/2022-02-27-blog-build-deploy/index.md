@@ -2,9 +2,11 @@
 title: 本站建立记录
 author: 王哲峰
 date: '2022-02-27'
+categories:
+  - blogdown
+tags:
+  - note
 slug: blog-build-deploy
-categories: blogdown
-tags: note
 ---
 
 > 经过断断续续的折腾，2020.02.27 终于连上了 Internet，不容易啊，慢慢维护

@@ -2,11 +2,11 @@
 title: 自研项目
 author: 王哲峰
 date: '2022-02-28'
-slug: projects
 categories:
-  - note
+  - 学习
 tags:
-  - note
+  - project
+slug: projects
 ---
 
 
