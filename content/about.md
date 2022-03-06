@@ -38,7 +38,7 @@ title: 关于
     * Python Sphinx(vscode)
     * Typora
     * RStudio
-    * Vim
+    * VimR
 
 - 工作
 
@@ -52,8 +52,6 @@ title: 关于
 - 作图
 
     * draw.io
-    
-- 
 
 ### 书籍
 

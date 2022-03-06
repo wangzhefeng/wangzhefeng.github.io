@@ -9,6 +9,8 @@ tags:
 slug: to-my-father
 ---
 
+![Father painting by Maggi Hambling](images/father.png)
+<center>Father painting by Maggi Hambling</center>
 
 ### 给父亲 - [北岛]
 
@@ -58,3 +60,5 @@ slug: to-my-father
 - [《My Blood》-- Westlife](https://music.163.com/#/song?id=1399054436)
 
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1854076006&auto=0&height=66"></iframe>
+
+- [Father painting by Maggi Hambling](https://images1.bonhams.com/image?src=Images/live/2009-02/03/94437009-2-1.jpg&width=640&height=480&autosizefit=1)

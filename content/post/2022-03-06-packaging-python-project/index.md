@@ -1,5 +1,5 @@
 ---
-title: Packaging Python Projects
+title: Python 项目打包发布
 author: 王哲峰
 date: '2022-03-06'
 categories:
