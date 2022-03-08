@@ -32,7 +32,7 @@ $ cd packaging_tutorial
 $ mkdir src
 ```
 
-3. 在 `src` 目录中创建 Python 源代码包 `example_packge` 目录
+3. 在 `src` 目录中创建 Python 源代码包 `example_package` 目录
 
 ```bash
 $ cd src
