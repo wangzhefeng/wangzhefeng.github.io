@@ -34,9 +34,8 @@ type: widget_page
 
 ## 工作经历
 
-1. 2019.07 至今 上海优也信息科技有限公司，数据分析师、算法工程师
-2. 2017.07 ~ 2019.06 上海四衡网络科技有限公司，数据分析师
-
+- 2019.07 至今 上海优也信息科技有限公司，数据分析师、算法工程师
+- 2017.07 ~ 2019.06 上海四衡网络科技有限公司，数据分析师
 
 ## 获得奖励
 
@@ -44,8 +43,8 @@ type: widget_page
 
 ## 发表论文
 
-1. [Wang, Z.F. and Ye, W.Z. (2016) An Efficient Smooth Quantile Boost Algorithm for Binary Classification.](https://file.scirp.org/pdf/APM_2016082411292370.pdf)
-2. 基于光滑分位数的二分类梯度提升算法
+- [Wang, Z.F. and Ye, W.Z. (2016) An Efficient Smooth Quantile Boost Algorithm for Binary Classification.](https://file.scirp.org/pdf/APM_2016082411292370.pdf)
+- 王哲峰 (2017) 基于光滑分位数的二分类梯度提升算法
 
 
 ## 自我评价
