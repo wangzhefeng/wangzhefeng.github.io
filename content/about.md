@@ -4,6 +4,7 @@ title: 关于
 
 ## 我是谁
 
+- 山西晋中平遥国际化大都市的一介平民，新上海人
 - 数学系毕业的统计学专业的数据分析师、算法工程师、程序员
 
 ## 写作原则
@@ -17,19 +18,21 @@ title: 关于
 - 概率论与数理统计
 - 贝叶斯统计
 - 统计数据可视化
+- 统计学习
 - 机器学习
 - 深度学习
 
 ### 编程
 
-- VIM
-- R
-- Python
-- SQL
-- C++
-- Java
-- JavaScript
-- Spark
+- VIM：装X必备
+- R：职业的起点
+- Python：饭碗
+- SQL：混社会小技能
+- C++：想看看
+- Java：为了学习 Spark，学习了 Scala，为了学好 Scala，学习了 Java
+- JavaScript：觉得很好玩
+- Spark：了解大数据的窗口
+- Shell：可能某一天会有用
 
 ### 软件
 
@@ -49,8 +52,13 @@ title: 关于
 
     * 滴答清单
 
-- 作图
+- 日记
 
+    * 格致
+
+- 作图
+    
+    * ProcessOn
     * draw.io
 
 ### 书籍
@@ -73,8 +81,13 @@ title: 关于
 
 ### 节目
 
-- 十三邀
+- 《十三邀》
+    - 许知远是当代知识分子的灯塔！
+    - 思考人生、寻找思想上的共鸣
+- 《乔家大院》
+    - 集亲情、友情、爱情、乡情于一体
 - 相声-郭德纲、于谦
+    - 雅俗共赏，体会生活中无处不在的梗
 
 ### 电影
 
@@ -90,15 +103,18 @@ title: 关于
 - 《实习生》
 - 《触不可及》[EN]
 - 《闻香识女人》
+- 《芬奇》
 
 ### 音乐
 
 - 坂本龙一
 - 胡波涛
 - 关大洲
+- 周杰伦
 
 ## 本站架构
 
+- [R](https://www.r-project.org/)
 - [blogdown](https://github.com/rstudio/blogdown)
 - [GitHub](https://github.com)
 - [Netlify](https://www.netlify.com/)

@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-03-11'
 slug: wavelet-fourier-transform
 categories:
-  - 学习
+  - 数学、统计学
 tags:
   - note
 ---

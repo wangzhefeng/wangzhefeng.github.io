@@ -3,7 +3,7 @@ title: 自研项目
 author: 王哲峰
 date: '2022-02-28'
 categories:
-  - 学习
+  - 整理
 tags:
   - project
 slug: projects
