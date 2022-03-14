@@ -9,6 +9,27 @@ tags:
   - note
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
+
 根据维基百科的介绍，基础研究是这样的：
 
 > 基础科学（fundamental science），或称基础研究（basic research），是研究自然界最基本的事物与作用和之间的相互关系，以及规律的科学[1]。按照还原论的逻辑，一切的现象都可以追溯到基础科学的研究。生物学、化学、物理学都是基础科学，而工程学不是。基础科学和应用科学是不同的。基础科学可能没有直接的应用。基础科学的研究建立在受控制的实验和仔细观察的基础上（尽管这些方式不能分清基础科学与应用科学）。基础科学的研究依靠得到确定的证据和有价值的理论进行推演。传统上认为基础科学与自然科学密切相关。

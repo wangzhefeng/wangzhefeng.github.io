@@ -9,6 +9,27 @@ tags:
   - note
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
+
 > LIFE Value 是我的一个前领导在一家德国公司工作时的祖传个人价值观，是的，他传给了我。
 我现在还记得他当时对我的教导，并且给我打印了一份，我回家就粘在办公桌边上的墙上吃灰了。
 最近突然想回忆一下，所以稍作整理，希望有空的时候可以读一读，对照一下自己，帮助自己进步。

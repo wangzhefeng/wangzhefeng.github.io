@@ -9,6 +9,26 @@ tags:
   - note
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
 
 # 傅里叶变换
 
@@ -18,6 +38,12 @@ tags:
 >
 > - 时域 (time domain) 是描述数学函数或物理信号对时间的关系。例如一个信号的时域波形可以表达信号随着时间的变化
 > - 频域 (frequency domain) 在电子学、控制系统、统计学中是指在对函数或信号进行分析时，分析其和频率有关的部分，而不是和时间有关的部分
+
+
+## 傅里叶变换的应用
+
+- TODO
+
 
 
 # 小波分析
@@ -33,7 +59,9 @@ tags:
 > 小波变换分成两个大类：离散小波变换 (DWT)  和连续小波变换 (CWT)。两者的主要区别在于，连续变换在所有可能的缩放和平移上操作，而离散变换采用所有缩放和平移值的特定子集。
 
 
+## 小波分析的应用
 
+- TODO
 
 
 
