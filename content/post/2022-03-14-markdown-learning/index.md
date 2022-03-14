@@ -1,5 +1,5 @@
 ---
-title: Markdown & Markdown 边写边学
+title: Markdown & RMarkdown 边写边学
 author: 王哲峰
 date: '2022-03-14'
 slug: markdown-learning
