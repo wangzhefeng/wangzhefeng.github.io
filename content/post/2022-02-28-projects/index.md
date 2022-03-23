@@ -30,56 +30,131 @@ h2 {
 }
 </style>
 
+
+
 # 项目目录
 
-- machine learning
-    * timeseries
-    * machine learning project
-    * model deploy
-- deeplearning
-    * image
-    * text
-    * timeseries
-- spark
-    * PySpark
-- C++
-- data visualization
-    * R 语言
-    * Python
-    * ECharts
-- go
-- Java
-- Julia
-- Linux
-    * Vim
-    * Shell
-- Python
-    * Django
-    * FastAPI
-    * Flask
-    * python data science
-    * PyPI package build/release
-- R
-    * blogdown
-- Scala(TODO)
-- Web
-    * React.js
-    * Vue.js
-    * JavaScript
-    * HTML
-    * CSS
-    * WeChat
-- Docker
+## Machine Learning
 
+### machine learning
+
+- 方法
+
+  * classification
+  * regression
+  * ranking
+  * timeseries
+  * model deploy
+
+- 工具
+
+  * numpy 
+  * pandas
+  * scikit-learn
+
+
+### deeplearning
+
+- 方法
+
+  - Computer Vision
+  - Natural Language Processing
+  - Structured Data
+  - Timeseries
+  - Audio Data
+  - Generative Deep Learning
+  - Reinforcement Learning
+  - Graph Data
+
+- 工具
+
+  - Keras
+  - TensorFlow
+  - Pytorch
+
+
+### Image Processing
+
+- 工具
+
+  - OpenCV
+  - Pillow
+
+## Spark
+
+* Scala(TODO)
+* PySpark
+
+## C++
+
+- 《C++ Primer》
+
+## data visualization
+
+- R 语言
+- Python
+- ECharts
+
+## go
+
+- TODO
+
+## Java
+
+- TODO
+
+## Julia
+
+- TODO
+
+## Linux
+
+* Vim
+* Shell
+
+## Python
+
+* Django
+* FastAPI
+* Flask
+* python data science
+* PyPI package build/release
+  - DONE
+
+## R
+
+- blogdown
+
+## Web
+
+* React.js
+* Vue.js
+* JavaScript
+* HTML
+* CSS
+* WeChat
+
+
+# 其他
+
+- Docker
 - drawio
-- mlproj
+  
+  - https://www.diagrams.net/
+  - https://app.diagrams.net/
+  - https://viewer.diagrams.net/#Uhttps%3A%2F%2Fviewer.diagrams.net%2Fshortcuts.svg
+  - https://www.diagrams.net/doc/faq/configure-diagram-editor
+  - https://baijiahao.baidu.com/s?id=1711955037467050478&wfr=spider&for=pc
+
 - reading
 - recommended system
-- reinforcement learning
 - risk control
+
+
 - markdown
     * slidev
     * markdeep
+
 
 # 技能管理
 

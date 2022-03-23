@@ -32,12 +32,16 @@ menu:
     - name: "简历"
       url: "/resume/"
       weight: 4
+    - name: "事务"
+      url: "/todo/"
+      weight: 5
     - name: "主题"
       url: "/Ivy/"
-      weight: 5
+      weight: 6
     # - name: "订阅"
       # url: "/index.xml"
       # weight: 5
+    
 
 params:
   description: ""
@@ -87,3 +91,4 @@ markup:
       autoHeadingIDType: blackfriday
   tableOfContents:
     startLevel: 1
+
