@@ -1,0 +1,1125 @@
+---
+title: 玩转 Docker
+author: 王哲峰
+date: '2022-03-26'
+slug: docker
+categories:
+  - Linux
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#docker-概述">1.Docker 概述</a>
+<ul>
+<li><a href="#docker-历史">1.1 Docker 历史</a></li>
+<li><a href="#docker-概述-1">1.2 Docker 概述</a>
+<ul>
+<li><a href="#docker-能做什么">1.2.1 Docker 能做什么</a></li>
+<li><a href="#docker-platform">1.2.2 Docker Platform</a></li>
+<li><a href="#docker-engine">1.2.3 Docker Engine</a></li>
+<li><a href="#docker-架构">1.2.4 Docker 架构</a></li>
+<li><a href="#docker-run-命令示例">1.2.5 <code>docker run</code> 命令示例</a></li>
+<li><a href="#docker-底层技术">1.2.6 Docker 底层技术</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#docker-安装">2.Docker 安装</a>
+<ul>
+<li><a href="#环境查看">2.1 环境查看</a></li>
+<li><a href="#dcoker-安装">2.2 Dcoker 安装</a>
+<ul>
+<li><a href="#macos">2.2.1 macOS</a></li>
+<li><a href="#ubuntu">2.2.2 Ubuntu</a></li>
+<li><a href="#windows">2.2.3 Windows</a></li>
+</ul></li>
+<li><a href="#docker-desktop-使用入门">2.3 Docker Desktop 使用入门</a>
+<ul>
+<li><a href="#查看-docker-版本">2.3.1 查看 Docker 版本</a></li>
+<li><a href="#运行-hello-word-容器">2.3.2 运行 hello-word 容器</a></li>
+<li><a href="#构建-app-容器镜像">2.3.3 构建 App 容器、镜像</a></li>
+<li><a href="#分享-app">2.3.4 分享 App</a></li>
+<li><a href="#持久化数据库">2.3.5 持久化数据库</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#docker-命令">3.Docker 命令</a>
+<ul>
+<li><a href="#docker-help">3.1 docker help</a></li>
+<li><a href="#docker-镜像命令">3.2 docker 镜像命令</a>
+<ul>
+<li><a href="#docker-images-查看镜像">3.2.1 docker images 查看镜像</a></li>
+<li><a href="#docker-search-搜索镜像">3.2.2 docker search 搜索镜像</a></li>
+<li><a href="#docker-pull-下载镜像">3.2.3 docker pull 下载镜像</a></li>
+<li><a href="#docker-remove-删除镜像">3.2.4 docker remove 删除镜像</a></li>
+</ul></li>
+<li><a href="#docker-容器命令">3.3 docker 容器命令</a>
+<ul>
+<li><a href="#新建容器并使用">3.3.1 新建容器并使用</a></li>
+<li><a href="#退出容器">3.3.2 退出容器</a></li>
+<li><a href="#查看容器">3.3.3 查看容器</a></li>
+<li><a href="#删除容器">3.3.4 删除容器</a></li>
+<li><a href="#启动停止容器">3.3.5 启动、停止容器</a></li>
+</ul></li>
+<li><a href="#其他常用命令">3.4 其他常用命令</a>
+<ul>
+<li><a href="#后台启动容器">3.4.1 后台启动容器</a></li>
+<li><a href="#查看日志命令">3.4.2 查看日志命令</a></li>
+<li><a href="#查看容器中的进程信息">3.4.3 查看容器中的进程信息</a></li>
+<li><a href="#查看容器的元命令">3.4.4 查看容器的元命令</a></li>
+<li><a href="#进入正在运行的容器">3.4.5 进入正在运行的容器</a></li>
+<li><a href="#从容器内拷贝文件到主机上">3.4.6 从容器内拷贝文件到主机上</a></li>
+<li><a href="#从主机内拷贝文件到容器上">3.4.7 从主机内拷贝文件到容器上</a></li>
+</ul></li>
+<li><a href="#docker-命令练习">3.5 docker 命令练习</a>
+<ul>
+<li><a href="#docker-安装-nginx">3.5.1 docker 安装 Nginx</a></li>
+<li><a href="#docker-安装-tomcat">3.5.2 docker 安装 Tomcat</a></li>
+<li><a href="#docker-安装-es-kibana">3.5.3 docker 安装 ES + Kibana</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#docker-镜像">4.Docker 镜像</a></li>
+<li><a href="#容器数据卷">5.容器数据卷</a></li>
+<li><a href="#dockerfile">6.DockerFile</a>
+<ul>
+<li><a href="#变量">6.1 变量</a></li>
+<li><a href="#from">6.2 FROM</a></li>
+<li><a href="#run">6.3 RUN</a></li>
+<li><a href="#cmd">6.4 CMD</a></li>
+<li><a href="#label">6.5 LABEL</a></li>
+<li><a href="#expose">6.6 EXPOSE</a></li>
+<li><a href="#env">6.7 ENV</a></li>
+<li><a href="#add">6.8 ADD</a></li>
+<li><a href="#copy">6.9 COPY</a></li>
+<li><a href="#entrypoint">6.10 ENTRYPOINT</a></li>
+<li><a href="#volume">6.11 VOLUME</a></li>
+<li><a href="#arg">6.12 ARG</a></li>
+<li><a href="#onbuild">6.13 ONBUILD</a></li>
+<li><a href="#stopsignal">6.14 STOPSIGNAL</a></li>
+<li><a href="#healthcheck">6.15 HEALTHCHECK</a></li>
+<li><a href="#shell">6.16 SHELL</a></li>
+<li><a href="#workdir">6.17 WORKDIR</a></li>
+<li><a href="#user">6.18 USER</a></li>
+</ul></li>
+<li><a href="#docker-网络原理">7.Docker 网络原理</a></li>
+<li><a href="#docker-compose">8.Docker Compose</a></li>
+<li><a href="#docker-swarm">9.Docker Swarm</a></li>
+<li><a href="#cicd-jenkins">10.CI/CD jenkins</a></li>
+<li><a href="#idea-整合-docker">11.IDEA 整合 Docker</a></li>
+<li><a href="#docker-安装环境">12.Docker 安装环境</a>
+<ul>
+<li><a href="#docker-安装-ubuntu">12.1 Docker 安装 Ubuntu</a></li>
+<li><a href="#docker-安装-python">12.2 Docker 安装 Python</a></li>
+<li><a href="#docker-安装-tensorflow">12.3 Docker 安装 TensorFlow</a></li>
+<li><a href="#docker-安装-pytorch">12.4 Docker 安装 PyTorch</a></li>
+</ul></li>
+<li><a href="#docker-使用示例">13.Docker 使用示例</a>
+<ul>
+<li><a href="#公司工作站环境">13.1 公司工作站环境</a></li>
+</ul></li>
+<li><a href="#kubernetes">14.Kubernetes</a></li>
+</ul>
+</div>
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
+<div id="docker-概述" class="section level1">
+<h1>1.Docker 概述</h1>
+<div id="docker-历史" class="section level2">
+<h2>1.1 Docker 历史</h2>
+<ul>
+<li><p>Docker 历史</p>
+<ul>
+<li><p>2010 年, 几个搞 IT 的年轻人在美国成立了一加公司 dotCloud, 做一些 PASS 的云计算服务！LXC 有关的容器技术.
+他们将自己的技术(容器化技术)命名就是 Docker. Docker 刚刚诞生的时候, 没有引起行业的注意, dotCloud 活不下去了.</p></li>
+<li><p>2013 年 Docker 开源. Docker 的优点越来越多地被人发现. Docker 每个月都会更新一个版本！</p></li>
+<li><p>2014 年 4月9日, Docker 1.0 发布.</p>
+<ul>
+<li>Docker 为什么这么火？十分轻巧！</li>
+<li>在容器技术出来之前, 我们都是使用虚拟技术. 通过虚拟机可以虚拟出来一台或者多台电脑,
+非常笨重. 虚拟机也是属于虚拟化技术, Docker 容器技术, 也是一种虚拟化技术.</li>
+</ul></li>
+</ul></li>
+<li><p>Docker 是基于 Go 语言开发的一个开源项目</p>
+<ul>
+<li>管网: <a href="https://www.docker.com/" class="uri">https://www.docker.com/</a></li>
+<li>文档: <a href="https://docs.docker.com/" class="uri">https://docs.docker.com/</a></li>
+<li>仓库: <a href="https://hub.docker.com/" class="uri">https://hub.docker.com/</a></li>
+<li>阿里云仓库:</li>
+</ul></li>
+</ul>
+</div>
+<div id="docker-概述-1" class="section level2">
+<h2>1.2 Docker 概述</h2>
+<div id="docker-能做什么" class="section level3">
+<h3>1.2.1 Docker 能做什么</h3>
+<ul>
+<li>Fast, consistent delivery of your applications</li>
+<li>Responsive deployment and scaling</li>
+<li>Running more workloads on the same hardware</li>
+</ul>
+</div>
+<div id="docker-platform" class="section level3">
+<h3>1.2.2 Docker Platform</h3>
+<ul>
+<li><p>Docker 提供了在完全隔离的环境中(容器)中打包和运行应用程序的功能, 隔离和安全性使得可以在给定服务器上同时运行多个容器.</p></li>
+<li><p>Docker 的容器是很轻巧的, 因为他们不需要虚拟机管理程序的额外负载, 而是直接在服务器主机的内核中运行.</p></li>
+<li><p>Docker 提供了工具和一个平台来管理容器的生命周期:</p>
+<ul>
+<li>使用容器来开发应用及其支持的组件</li>
+<li>容器成为分发和测试应用程序的单元</li>
+<li>将应用程序作为容器或协调服务部署到生产环境中, 生产环境可以是本地数据中心或云服务器</li>
+</ul></li>
+</ul>
+</div>
+<div id="docker-engine" class="section level3">
+<h3>1.2.3 Docker Engine</h3>
+<div class="figure">
+<img src="images/engine-components-flow.png" alt="" />
+<p class="caption">docker</p>
+</div>
+<p>Docker 是一个客户端-服务器应用程序, 具有以下组件:</p>
+<ul>
+<li><p><strong>Server</strong>: Docker daemon</p>
+<ul>
+<li><p>一个长期运行的程序</p></li>
+<li><p><code>dockerd</code> 命令</p></li>
+<li><p>Docker daemon 创建并管理 Docker object:</p>
+<ul>
+<li>networs</li>
+<li>containers</li>
+<li>images</li>
+<li>data volumes</li>
+</ul></li>
+</ul></li>
+<li><p><strong>REST API</strong></p>
+<ul>
+<li>提供了外部程序与 Docker daemon 进行通信、交互的接口</li>
+</ul></li>
+<li><p><strong>Client</strong>: Docker CLI</p>
+<ul>
+<li>CLI 通过脚本或 CLI 命令, 使用 Docker REST API 控制 Docker daemon, 或与 Docker daemon 进行交互</li>
+<li><code>docker</code> 命令</li>
+</ul></li>
+</ul>
+</div>
+<div id="docker-架构" class="section level3">
+<h3>1.2.4 Docker 架构</h3>
+<p>Docker 使用客户端-服务器架构:</p>
+<div class="figure">
+<img src="images/architecture.png" alt="" />
+<p class="caption">docker</p>
+</div>
+<p>Docker 客户端与 Docker 守护进程进行交互, 其中:</p>
+<ul>
+<li>Docker 守护进程负责完成构建、运行、分发 Docker 容器的工作.</li>
+<li>Docker 客户端和守护进程可以运行在同一系统上, 也可以使用 Docker 客户端连接到远程的 Docker 守护进程.</li>
+<li>Docker 客户端与守护进程也可以使用 REST API 通过 UNIX sockets 或者其他网络接口进行交互.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><p>Docker Client(客户端)–<code>docker</code></p>
+<ul>
+<li><p>Docker client 是 Docker 用户与 Docker 交互的主要途径, 当运行命令 <code>docker run</code>,
+Docker client 会发送命令到 <code>docked</code> , <code>docker</code> 命令使用的是 Docker API.</p></li>
+<li><p>Docker client 可以与多个 Docker daemon 进行通信.</p></li>
+<li><p>Docker client 命令:</p>
+<ul>
+<li><code>docker build</code></li>
+<li><code>docker pull</code></li>
+<li><code>docker run</code></li>
+</ul></li>
+</ul></li>
+<li><p>DOCKER_HOST</p></li>
+</ol>
+<ul>
+<li><p>2.1 Docker daemon(守护进程)–<code>docked</code></p>
+<ul>
+<li>Docker daemon 负责监听 Docker API 的请求, 并管理 Docker Object,
+如 images, containers, networks, volumes</li>
+<li>Docker daemon 也可以与其他 daemon 进行通信来管理 Docker Service</li>
+</ul></li>
+<li><p>2.2 Docker Object(对象)</p></li>
+</ul>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>NOTE</strong></td>
+</tr>
+<tr class="even">
+<td>- 当使用 Docker 时, 用户会创建和使用 images、containers、networks、volumes、plugins 和其他对象.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>2.2.1 Image</p></li>
+<li><p>Docker 镜像就是一个用于创建 Docker 容器的只读模板</p>
+<ul>
+<li>镜像 -&gt; run -&gt; 容器(提供服务器)</li>
+</ul></li>
+<li><p>一个镜像通常基于另一个镜像, 只是多了一些额外的自定义配置, 比如: 可以构建一个基于 <code>ubuntu</code> 的镜像,
+在该镜像的基础上安装 Apache web 服务和自己的应用程序, 还要其他的具体配置项</p></li>
+<li><p>用户可以创建自己的镜像, 也可以使用其他人创建好的已经在 Docker 仓库中发布的镜像</p>
+<ul>
+<li>要构建自己的镜像, 需要先创建一个 Dockerfile, 以定义创建镜像并运行它所需的步骤,
+Dockerfile 中的每条指令都会在镜像中创建一个层, 当更改 Dockerfile 并重新构建镜像时,
+只需要重新构建那些已经更改的层即可</li>
+</ul></li>
+<li><p>通过镜像可以创建多个容器, 最终服务运行或者项目运行就是在容器中</p></li>
+<li><p>2.2.2 Container</p>
+<ul>
+<li>一个容器就是一个可运行的镜像实例, 可以通过 Docker API 或者 CLI 来创建、启动、停止、移动、删除容器</li>
+<li>一个容器可以连接到一个或多个网络, 并将存储空间赋予它, 甚至可以基于它的当前状态创建一个新的镜像</li>
+<li>默认情况下, 容器与其他容器及其主机之间的隔离度相对较高, 可以控制容器的网络、存储空间、或其他基础子系统与其他容器或主机的隔离程度</li>
+<li>容器由镜像、以及在创建或启动时为该镜像提供的任何配置选项定义, 删除容器后, 未存储在永久性存储空间中的状态将消失</li>
+<li>Docker 利用容器技术, 独立运行一个或者一组应用</li>
+<li>可以把容器理解为就是一个简易的 Linux 系统</li>
+</ul></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Docker Registry(仓库)</li>
+</ol>
+<ul>
+<li><p>Docker registry 存储 Docker images</p></li>
+<li><p>Docker registry 分为公有仓库、私有仓库</p>
+<ul>
+<li><p>公有仓库:</p>
+<ul>
+<li>国外: Docker Hub</li>
+<li>国内: 阿里云</li>
+</ul></li>
+<li><p>私有仓库</p>
+<ul>
+<li>可以使用 <code>docker pull</code> 或者 <code>docker run</code> 命令从配置的仓库中拉取镜像,
+使用 <code>docker push</code> 命令会将镜像推送到配置的仓库</li>
+</ul></li>
+</ul></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Docker Services</p>
+<ul>
+<li>Docker Services 允许将 Containers 扩展在多个 Docker daemon 上, 这是一个拥有多个 managers 和 workers 的 swarm,
+每一个 swarm 的成员都是一个 Docker daemon, 并且所有的 daemon 可以通过 Docker API 进行通信</li>
+<li>Docker Service 允许你定义所需的状态, 比如, 在任何给定时间必须可用的服务副本的数量</li>
+<li>Docker Service 是一个单独的应用程序</li>
+<li>Docker Engine 在 Docker 1.12 及更高版本中开始支持集群模式</li>
+</ul></li>
+</ol>
+</div>
+<div id="docker-run-命令示例" class="section level3">
+<h3>1.2.5 <code>docker run</code> 命令示例</h3>
+<ul>
+<li>运行一个 ubuntu 容器</li>
+</ul>
+<pre class="bash"><code>$ docker run -i -t ubuntu /bin/bash</code></pre>
+<ul>
+<li>1.如果 ubuntu 在本地没有镜像, Docker 会从已配置的仓库中拉取, 等同于: <code>docker pull ubuntu</code></li>
+<li>2.Docker 会创建一个新容器, 等同于: <code>docker container create</code></li>
+<li>3.Docker 将一个读写文件系统分配给容器, 作为其最后一层. 这允许运行中的容器在其本地文件系统中创建或修改文件和目录</li>
+<li>4.Docker 创建了一个网络接口, 将容器连接到默认网络, 因为您未指定任何网络选项. 这包括为容器分配 IP 地址. 默认情况下, 容器可以使用主机的网络连接连接到外部网络</li>
+<li>5.Docker 启动容器并执行 <code>/bin/bash</code>. 因为容器是交互式运行的, 并且已附加到您的终端（由于 -i 和 -t 标志）, 所以您可以在输出记录到终端时使用键盘提供输入</li>
+<li>6.当键入 <code>exit</code> 以终止 <code>/bin/bash</code> 命令时, 容器将停止但不会被删除. 您可以重新启动或删除它</li>
+</ul>
+</div>
+<div id="docker-底层技术" class="section level3">
+<h3>1.2.6 Docker 底层技术</h3>
+<p>Docker 是一个 Client-Server 结构的系统,
+Docker 的守护进程(Docker daemon)运行在主机(Docker Server)上,
+通过 Socket 从客户端(Docker Client[docker CLI, REST API])访问,
+Docker Server 接收到 Docker Client 的指令, 就去执行这个命令.</p>
+<p>Docker 用 Go 编程语言编写, 并利用 Linux 内核的多个功能来交付其功能.</p>
+<ul>
+<li><p>Namespaces</p>
+<ul>
+<li><p>Docker 使用一种称为 namespaces 的技术提供了称为 container 的隔离工作空间,
+当运行一个 container 时, Docker 会为这个 container 创建一系列 namespaces</p></li>
+<li><p>Docker Engine 在 Linux 上使用以下名称空间:</p>
+<ul>
+<li>pid namespaces: 进程隔离, PID: Process ID</li>
+<li>net namespaces: 管理网络接口, NET: Networking</li>
+<li>ipc namespaces: 管理获取 IPC 资源的能力, IPC: InterProcess Communication</li>
+<li>mnt namespaces: 管理文件系统节点, MNT: Mount</li>
+<li>uts namespaces: 隔离内核和版本识别, UTS: Unix Timesharing System</li>
+</ul></li>
+</ul></li>
+<li><p>Control groups</p>
+<ul>
+<li>Linux上的Docker引擎还依赖于另一种称为控制组 （cgroups）的技术. cgroup将应用程序限制为一组特定的资源. 控制组允许Docker Engine将可用的硬件资源共享给容器, 并有选择地实施限制和约束. 例如, 您可以限制特定容器可用的内存.</li>
+</ul></li>
+<li><p>Union file systems</p>
+<ul>
+<li>联合文件系统或UnionFS是通过创建图层进行操作的文件系统, 使其非常轻便且快速. Docker Engine使用UnionFS为容器提供构建模块. Docker Engine可以使用多个UnionFS变体, 包括AUFS, btrfs, vfs和DeviceMapper.</li>
+</ul></li>
+<li><p>Container format</p>
+<ul>
+<li>Docker Engine将名称空间, 控制组和UnionFS组合到一个称为容器格式的包装器中. 默认容器格式为libcontainer. 将来, Docker可以通过与BSD Jails或Solaris Zones等技术集成来支持其他容器格式.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="docker-安装" class="section level1">
+<h1>2.Docker 安装</h1>
+<div id="环境查看" class="section level2">
+<h2>2.1 环境查看</h2>
+<ul>
+<li>Linux</li>
+</ul>
+<pre class="bash"><code># 系统内核
+$ uname -a
+
+# 系统配置
+$ cat /etc/os-release</code></pre>
+<ul>
+<li>macOS</li>
+</ul>
+<pre class="bash"><code>$ uname -a</code></pre>
+</div>
+<div id="dcoker-安装" class="section level2">
+<h2>2.2 Dcoker 安装</h2>
+<ul>
+<li><p>安装目录: <a href="https://docs.docker.com/get-docker/" class="uri">https://docs.docker.com/get-docker/</a></p>
+<ul>
+<li>macOS: <a href="https://docs.docker.com/docker-for-mac/install/" class="uri">https://docs.docker.com/docker-for-mac/install/</a></li>
+<li>Linux: <a href="https://docs.docker.com/engine/install/" class="uri">https://docs.docker.com/engine/install/</a></li>
+</ul></li>
+</ul>
+<div id="macos" class="section level3">
+<h3>2.2.1 macOS</h3>
+<ol style="list-style-type: decimal">
+<li><p>安装 Docker Desktop</p>
+<ul>
+<li><p>安装内容</p>
+<ul>
+<li>Docker Engine</li>
+<li>Docker CLI client</li>
+<li>Docker Compose</li>
+<li>Notary</li>
+<li>Kubernetes</li>
+<li>Credential Helper</li>
+</ul></li>
+<li><p><a href="https://docs.docker.com/docker-for-mac/install/" class="uri">https://docs.docker.com/docker-for-mac/install/</a></p></li>
+<li><p><a href="https://hub.docker.com/editions/community/docker-ce-desktop-mac/" class="uri">https://hub.docker.com/editions/community/docker-ce-desktop-mac/</a></p></li>
+</ul></li>
+<li><p>卸载 Docker Desktops</p>
+<ul>
+<li><a href="https://docs.docker.com/docker-for-mac/install/" class="uri">https://docs.docker.com/docker-for-mac/install/</a></li>
+</ul></li>
+</ol>
+</div>
+<div id="ubuntu" class="section level3">
+<h3>2.2.2 Ubuntu</h3>
+<ol style="list-style-type: decimal">
+<li>删除旧版本</li>
+</ol>
+<pre class="bash"><code>$ sudo apt-get remove docker docker-engine docker.io containerd runc</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>设置存储库</li>
+</ol>
+<pre class="bash"><code># 1.更新apt软件包索引并安装软件包以允许apt通过HTTPS使用存储库
+$ sudo apt-get update
+$ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# 2.添加Docker的官方GPG密钥
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo apt-key fingerprint 0EBFCD88
+
+# 3.设置稳定的存储库
+$ sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>安装 Docker Engine</li>
+</ol>
+<pre class="bash"><code># 1.更新apt软件包索引
+$ sudo apt-get update
+
+# 2.安装最新版本的Docker Engine和容器化的容器, 或转到下一步以安装特定版本
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+# 3.查看可用的仓库版本(如果想安装特定版本的Docker Engine)
+$ apt-cache madison docker-ce
+$ sudo apt-get install \
+    docker-ce=&lt;VERSION_STRING&gt; \
+    docker-ce-cli=&lt;VERSION_STRING&gt; \
+    containerd.io</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>运行 hello-world</li>
+</ol>
+<pre class="bash"><code># 启动 Docker
+$ systemctl start docker
+$ docker version
+
+# 运行 hello-world
+$ docker run --help
+$ sudo docker run hello-world
+
+# 查看下载的 image
+$ docker images</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>升级 Docker Engine</li>
+</ol>
+<pre class="bash"><code># 按照安装说明进行
+$ sudo apt-get update</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>卸载 Docker Engine</li>
+</ol>
+<ul>
+<li>卸载 Docker Engine, CLI, Containerd packages</li>
+</ul>
+<pre class="bash"><code>$ sudo apt-get purge docker-ce docker-ce-cli containerd.io</code></pre>
+<ul>
+<li>删除 Images, containers, volumes</li>
+</ul>
+<pre class="bash"><code>$ sudo rm -rf /var/lib/docker</code></pre>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>NOTE</strong></td>
+</tr>
+<tr class="even">
+<td>customized configuration files 需要手动删除</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="windows" class="section level3">
+<h3>2.2.3 Windows</h3>
+</div>
+</div>
+<div id="docker-desktop-使用入门" class="section level2">
+<h2>2.3 Docker Desktop 使用入门</h2>
+<div id="查看-docker-版本" class="section level3">
+<h3>2.3.1 查看 Docker 版本</h3>
+<pre class="bash"><code>$ docker version</code></pre>
+</div>
+<div id="运行-hello-word-容器" class="section level3">
+<h3>2.3.2 运行 hello-word 容器</h3>
+<div class="figure">
+<img src="images/docker_helloworld.png" alt="" />
+<p class="caption">docker</p>
+</div>
+<pre class="bash"><code>$ docker run -d -p 80:80 docker/getting-started
+# or
+$ docker run -dp 80:80 docker/getting-started</code></pre>
+<ul>
+<li><code>-d</code>: 以 detached 模式(后台运行)运行容器</li>
+<li><code>-p 80:80</code>: 将主机的 80 端口映射到容器的 80 端口</li>
+<li><code>docker/getting-started</code>: 可用的镜像</li>
+</ul>
+</div>
+<div id="构建-app-容器镜像" class="section level3">
+<h3>2.3.3 构建 App 容器、镜像</h3>
+<p>2.1 下载 App</p>
+<ul>
+<li><a href="https://github.com/docker/getting-started/tree/master/app" class="uri">https://github.com/docker/getting-started/tree/master/app</a></li>
+</ul>
+<p>2.2 构建 App 的容器镜像</p>
+<ul>
+<li>(1)在 package.json 所在目录下创建 <code>Dockerfile</code> 文件, 内容如下</li>
+</ul>
+<pre class="bash"><code>FROM node:12-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD [&quot;node&quot;, &quot;src/index.js&quot;]</code></pre>
+<ul>
+<li>(2)构建容器镜像</li>
+</ul>
+<pre class="bash"><code>$ docker build -t getting-started .</code></pre>
+<ul>
+<li><code>-t</code>: 为镜像打一个可读性好的标签</li>
+<li><code>.</code>: Docker 在当前目录下寻找 <code>Dockerfile</code> 文件</li>
+</ul>
+<p>2.3 启动 App 容器</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>启动 App 容器</li>
+</ol></li>
+</ul>
+<pre class="bash"><code>$ docker run -dp 3000:3000 getting-started</code></pre>
+<ul>
+<li><p>(2)查看 App</p>
+<ul>
+<li><a href="http://localhost:3000/" class="uri">http://localhost:3000/</a></li>
+</ul></li>
+</ul>
+<p>2.4 更新 App</p>
+<ul>
+<li>(1)更改 App 源代码</li>
+<li>(2)重新构建更新后的镜像</li>
+</ul>
+<pre class="bash"><code>$ docker build -t getting-started .</code></pre>
+<ul>
+<li><p>(3)停止旧容器</p>
+<ul>
+<li>命令行模式:</li>
+</ul>
+<pre class="bash"><code># 查看正在运行的容器 ID
+$ docker ps
+
+# Swap out &lt;the-container-id&gt; with the ID from docker ps
+$ docker stop &lt;the-container-id&gt;
+$ docker stop -f &lt;the-container-id&gt;</code></pre>
+<ul>
+<li>Docker Dashboard 模式</li>
+</ul></li>
+<li><p>(3)删除旧容器</p>
+<ul>
+<li>命令行模式</li>
+</ul></li>
+</ul>
+<pre class="bash"><code>$ docker rm &lt;the-container-id&gt;
+$ docker rm -f &lt;the-container-id&gt; </code></pre>
+<pre><code>- Docker Dashboard 模式</code></pre>
+<ul>
+<li><p>(4)开启新的容器</p>
+<pre class="bash"><code>$ docker run -dp 3000:3000 getting-started</code></pre></li>
+<li><p>(5)查看 App</p>
+<ul>
+<li><a href="http://localhost:3000/" class="uri">http://localhost:3000/</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="分享-app" class="section level3">
+<h3>2.3.4 分享 App</h3>
+<p>3.1 创建一个 Repo</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><code>Docker Hub &lt;https://hub.docker.com/&gt;</code>_</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><code>Create a Repository</code></li>
+</ol></li>
+</ul>
+<div class="figure">
+<img src="images/docker_repo.png" alt="" />
+<p class="caption">docker</p>
+</div>
+<p>3.2 Push 镜像</p>
+<ul>
+<li>(1)查看镜像</li>
+</ul>
+<pre class="bash"><code>$ docker image ls</code></pre>
+<ul>
+<li>(2)登录到 Docker Hub</li>
+</ul>
+<pre class="bash"><code>$ docker login -u zfwang</code></pre>
+<ul>
+<li>(3)为 <code>getting-started</code> 镜像创建一个新标签</li>
+</ul>
+<pre class="bash"><code>$ docker tag getting-started zfwang/getting-started</code></pre>
+<ul>
+<li>(4)Push 镜像</li>
+</ul>
+<pre class="bash"><code>$ docker push zfwang/getting-started</code></pre>
+<p>3.3 在一个新的实例中运行镜像</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><code>Play with Docker &lt;https://labs.play-with-docker.com/&gt;</code>_</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>登录 Docker Hub 账号</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><code>+ ADD NEW INSTANCE</code></li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li>运行容器</li>
+</ol></li>
+</ul>
+<pre class="bash"><code>$ docker run -dp 3000:3000 YOUR-USER-NAME/getting-started</code></pre>
+</div>
+<div id="持久化数据库" class="section level3">
+<h3>2.3.5 持久化数据库</h3>
+<p>4.1 容器的文件系统
+4.2 启动一个 <code>ubuntu</code>容器, 并创建一个文件 <code>/data.txt</code></p>
+<pre class="bash"><code>$ docker run -d ubuntu zsh -c &quot;shuf -i 1-10000 -n 1 -o /data.txt &amp;&amp; tail -f /dev/null&quot;</code></pre>
+<p>4.3 在 Docker Desktop 中代开 <code>ubuntu</code> 容器中的 CLI</p>
+<pre class="bash"><code>$ cat /data.txt</code></pre>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>NOTE</strong></td>
+</tr>
+<tr class="even">
+<td>- 或者在主机命令行中运行</td>
+</tr>
+</tbody>
+</table>
+<pre class="bash"><code>$ docker exec &lt;container-id&gt; cat /data.txt</code></pre>
+<p>4.4 启动另一个 <code>ubuntu</code> 容器(使用同一个 image)</p>
+<pre class="bash"><code>$ docker run -it ubuntu ls /</code></pre>
+<p>4.5 删除第一个容器</p>
+<pre class="bash"><code>$ docker rm -f &lt;container-id&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="docker-命令" class="section level1">
+<h1>3.Docker 命令</h1>
+<div class="figure">
+<img src="images/docker_cheetsheet.png" alt="" />
+<p class="caption">docker</p>
+</div>
+<div id="docker-help" class="section level2">
+<h2>3.1 docker help</h2>
+<ul>
+<li>Docker 的版本信息</li>
+</ul>
+<pre class="bash"><code>$ docker version
+$ docker -f args
+$ docker --kubeconfig args</code></pre>
+<ul>
+<li>Docker 的系统信息, 包括镜像、容器的数量</li>
+</ul>
+<pre class="bash"><code>$ docker info</code></pre>
+<ul>
+<li>Docker 的帮助命令</li>
+</ul>
+<pre class="bash"><code>$ docker &lt;command&gt; --help</code></pre>
+</div>
+<div id="docker-镜像命令" class="section level2">
+<h2>3.2 docker 镜像命令</h2>
+<div id="docker-images-查看镜像" class="section level3">
+<h3>3.2.1 docker images 查看镜像</h3>
+<pre class="bash"><code>$ docker images
+$ docker images -a
+$ docker images -q
+$ docker images -aq</code></pre>
+</div>
+<div id="docker-search-搜索镜像" class="section level3">
+<h3>3.2.2 docker search 搜索镜像</h3>
+<pre class="bash"><code>$ docker search mysql
+$ docker search --filter=STARS=3000</code></pre>
+</div>
+<div id="docker-pull-下载镜像" class="section level3">
+<h3>3.2.3 docker pull 下载镜像</h3>
+<pre class="bash"><code>$ docker pull &lt;image&gt;
+$ docker pull &lt;image&gt;:&lt;tag/version&gt;
+
+# &lt;adderss&gt;: 镜像实际地址
+$ docker pull &lt;address&gt;</code></pre>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>NOTE</strong></td>
+</tr>
+<tr class="even">
+<td>- 如果不写 <code>tag</code>, 默认就是 <code>latest</code>
+- docker 分层下载是 docker image 的核心, 联合文件系统</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="docker-remove-删除镜像" class="section level3">
+<h3>3.2.4 docker remove 删除镜像</h3>
+<pre class="bash"><code># 删除指定容器
+$ docker rmi -f &lt;images-id&gt;
+
+# 删除多个容器
+$ docker rmi -f &lt;images-id&gt; &lt;images-id&gt; &lt;images-id&gt;
+
+# 删除全部镜像
+$ docker rmi -f $(docker images -aq)</code></pre>
+</div>
+</div>
+<div id="docker-容器命令" class="section level2">
+<h2>3.3 docker 容器命令</h2>
+<div id="新建容器并使用" class="section level3">
+<h3>3.3.1 新建容器并使用</h3>
+<ul>
+<li>语法:</li>
+</ul>
+<pre class="bash"><code># 下载镜像
+$ docker pull centos
+
+# 启动并进入容器
+$ docker run [可选参数] image
+$ docker run -it centos /bin/bin</code></pre>
+<ul>
+<li><p>参数说明</p>
+<ul>
+<li><code>--name=Name</code>: 容器名字, 用来区分容器</li>
+<li><code>-d</code>: 后台运行方式</li>
+<li><code>-it</code>: 使用交互方式运行</li>
+<li><code>-p</code>: 指定容器的端口, -p 8080:8080
+<ul>
+<li><code>-p ip:主机端口:容器端口</code></li>
+<li><code>-p 主机端口:容器端口</code>: 常用</li>
+<li><code>-p 容器端口</code></li>
+<li><code>-p</code></li>
+</ul></li>
+<li><code>-p 随机指定端口</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="退出容器" class="section level3">
+<h3>3.3.2 退出容器</h3>
+<pre class="bash"><code>$ exit            # 从容器退回主机
+$ Ctrl + P + Q    # 容器不停止退出</code></pre>
+</div>
+<div id="查看容器" class="section level3">
+<h3>3.3.3 查看容器</h3>
+<pre class="bash"><code>$ docker ps       # 查看正在运行的容器
+$ docker ps -a    # 列出当前正在运行的容器 + 带出历史运行过的容器
+$ docker ps -n=?  # 最近创建的容器
+$ docker ps -q    # 只显示容器的编号</code></pre>
+</div>
+<div id="删除容器" class="section level3">
+<h3>3.3.4 删除容器</h3>
+<pre class="bash"><code>$ docker rm 容器id                 # 删除指定的容器, 不能删除正在运行的容器
+$ docker rm -f ${docker ps -aq}   # 删除所有容器(包含正在运行的容器)
+$ docker ps -a -q|xargs docker rm # 删除所有容器(包含正在运行的容器)</code></pre>
+</div>
+<div id="启动停止容器" class="section level3">
+<h3>3.3.5 启动、停止容器</h3>
+<pre class="bash"><code>$ docker start 容器id
+$ docker restart 容器id
+$ docker stop 容器id
+$ docker kill 容器id</code></pre>
+</div>
+</div>
+<div id="其他常用命令" class="section level2">
+<h2>3.4 其他常用命令</h2>
+<div id="后台启动容器" class="section level3">
+<h3>3.4.1 后台启动容器</h3>
+<pre class="bash"><code>$ docker run -d 镜像名
+$ docker run -d centos
+$ docker ps</code></pre>
+<hr />
+<p><strong>NOTE</strong></p>
+<p>docker ps 会有问题, 发现 <code>centos</code> 停止了:</p>
+<ul>
+<li>docker 容器使用后台运行, 就必须要有一个前台进程, docker 发现没有应用, 就会自动停止</li>
+<li>nginx 容器启动后, 发现自己没有提供服务, 就会立刻停止, 没有程序了</li>
+</ul>
+<hr />
+</div>
+<div id="查看日志命令" class="section level3">
+<h3>3.4.2 查看日志命令</h3>
+<pre class="bash"><code>$ docker logs --help
+$ docker logs -tf --tail n 容器id
+
+# 自己写一段脚本
+$ docker run -d centos /bin/sh -C &quot;while true;do echo wangzhefeng;sleep 1;done&quot;
+$ docker ps
+$ docker logs -tf tail 10 容器id</code></pre>
+<ul>
+<li><p>参数说明</p>
+<ul>
+<li><code>-tf</code>: 显示日志</li>
+<li><code>--tail number</code>: 要显示日志条数</li>
+</ul></li>
+</ul>
+</div>
+<div id="查看容器中的进程信息" class="section level3">
+<h3>3.4.3 查看容器中的进程信息</h3>
+<pre class="bash"><code>$ docker top --help
+$ docker top 容器id</code></pre>
+</div>
+<div id="查看容器的元命令" class="section level3">
+<h3>3.4.4 查看容器的元命令</h3>
+<pre class="bash"><code>$ docker inspect --help
+$ docker inspect 容器id</code></pre>
+</div>
+<div id="进入正在运行的容器" class="section level3">
+<h3>3.4.5 进入正在运行的容器</h3>
+<pre class="bash"><code># 方式一: 新建一个命令行窗口
+$ docker exec -it 容器id /bin/bash
+
+# 方式二: 不新建一个命令行窗口
+$ docker attach 容器id</code></pre>
+</div>
+<div id="从容器内拷贝文件到主机上" class="section level3">
+<h3>3.4.6 从容器内拷贝文件到主机上</h3>
+<ul>
+<li>拷贝是一个手动过程, 可以使用 -v 卷技术将容器 <code>/home</code> 与 主机 <code>/home</code> 打通</li>
+</ul>
+<pre class="bash"><code>$ docker cp 容器id:容器内路径 目的地主机地址</code></pre>
+</div>
+<div id="从主机内拷贝文件到容器上" class="section level3">
+<h3>3.4.7 从主机内拷贝文件到容器上</h3>
+<pre class="bash"><code>$ todo</code></pre>
+</div>
+</div>
+<div id="docker-命令练习" class="section level2">
+<h2>3.5 docker 命令练习</h2>
+<div id="docker-安装-nginx" class="section level3">
+<h3>3.5.1 docker 安装 Nginx</h3>
+<p>1.搜索镜像</p>
+<pre class="bash"><code>$ docker search nginx</code></pre>
+<p>2.下载镜像</p>
+<pre class="bash"><code>$ docker pull nginx</code></pre>
+<p>3.查看镜像</p>
+<pre class="bash"><code>$ docker images</code></pre>
+<p>4.启动容器</p>
+<pre class="bash"><code>$ docker run -d --name nginx01 -p 3344:80 nginx</code></pre>
+<p>5.查看容器</p>
+<pre class="bash"><code>$ curl localhost:3344</code></pre>
+<p>6.端口暴露的概念</p>
+</div>
+<div id="docker-安装-tomcat" class="section level3">
+<h3>3.5.2 docker 安装 Tomcat</h3>
+<p>1.搜索镜像</p>
+<pre class="bash"><code>$ docker search tomcat</code></pre>
+<p>2.下载镜像</p>
+<pre class="bash"><code>
+$ docker pull tomcat
+
+# 停止容器后, 容器还可以查到, 一般用来测试, 用完即删除
+$ docker run -it --rm tomcat:9.0</code></pre>
+<p>3.查看镜像</p>
+<pre class="bash"><code>$ docker images</code></pre>
+<p>4.启动容器</p>
+<pre class="bash"><code>$ docker run -d --name tomcat01 -p 3355:8080 tomcat</code></pre>
+<p>5.查看容器</p>
+<p><a href="https://localhost:3355" class="uri">https://localhost:3355</a></p>
+<p>6.进入容器, 查看 tomcat</p>
+<pre class="bash"><code>$ docker exec -it tomcat01 /bin/bash</code></pre>
+</div>
+<div id="docker-安装-es-kibana" class="section level3">
+<h3>3.5.3 docker 安装 ES + Kibana</h3>
+<ol style="list-style-type: decimal">
+<li>搜索镜像</li>
+</ol>
+<pre class="bash"><code>$ docker search elasticsearch</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>下载镜像</li>
+</ol>
+<pre class="bash"><code>$ docker pull elasticsearch</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>查看镜像</li>
+</ol>
+<pre class="bash"><code>$ docker images</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>启动容器</li>
+</ol>
+<pre class="bash"><code>$ docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e </code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>查看容器</li>
+</ol>
+<pre class="bash"><code>$ docker </code></pre>
+</div>
+</div>
+</div>
+<div id="docker-镜像" class="section level1">
+<h1>4.Docker 镜像</h1>
+</div>
+<div id="容器数据卷" class="section level1">
+<h1>5.容器数据卷</h1>
+</div>
+<div id="dockerfile" class="section level1">
+<h1>6.DockerFile</h1>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzAwMjg1NjY3Nw==&amp;mid=2247518419&amp;idx=2&amp;sn=2e25da85a7dcf19fe6ca80484128deb3&amp;chksm=9ac6cb59adb1424f76071ee35d0a01ba9635490b422b239290693851fc2f099bd3414af7792c&amp;scene=132#wechat_redirect" class="uri">https://mp.weixin.qq.com/s?__biz=MzAwMjg1NjY3Nw==&amp;mid=2247518419&amp;idx=2&amp;sn=2e25da85a7dcf19fe6ca80484128deb3&amp;chksm=9ac6cb59adb1424f76071ee35d0a01ba9635490b422b239290693851fc2f099bd3414af7792c&amp;scene=132#wechat_redirect</a></li>
+<li>Docker 可以通过读取 Dockerfile 中的指令自动构建镜像.</li>
+<li>Dockerfile 是一个文本文档, 其中包含了用户创建镜像的所有命令和说明.</li>
+</ul>
+<div id="变量" class="section level2">
+<h2>6.1 变量</h2>
+<p>变量用 <code>$variable_name</code> 或者 `${variable_name} 表示:</p>
+<pre><code>  - `${variable:-word}` 表示如果 `variable` 设置, 则结果将是该值, 如果 `variable` 未设置,  `word` 则将是结果
+  - `${variabel:+word}` 表示如果 `variable` 设置, 则为 `word` 结果, 否则为 空字符串</code></pre>
+<p>变量前加 <code>\</code> 可以转义成普通字符串: <code>\$foo</code> 或者 <code>\${foo}</code> 表示转换为 <code>$foo</code> 和 <code>${foo}</code> 文本</p>
+</div>
+<div id="from" class="section level2">
+<h2>6.2 FROM</h2>
+<p>初始化一个新的构建阶段, 并设置基础镜像:</p>
+<pre class="bash"><code>FROM [--platform=&lt;platform&gt;] &lt;image&gt; [AS &lt;name&gt;]
+FROM [--platform=&lt;platform&gt;] &lt;image&gt;[:&lt;tag&gt;] [AS &lt;name&gt;]
+FROM [--platform=&lt;platform&gt;] &lt;image&gt;[@digest] [AS &lt;name&gt;]</code></pre>
+<ul>
+<li><p>单个 Dockfile 可以多次出现 <code>FROM</code> , 以使用之前的构建阶段作为另一个构建阶段的依赖项</p></li>
+<li><p><code>AS &lt;name&gt;</code> 表示为构建阶段命名, 在后续 <code>FROM</code> 和 <code>COPY --from=</code> 说明中可以使用这个名词,
+引用此阶段构建的镜像</p></li>
+<li><p><code>digest</code> 其实就是根据镜像内容产生的一个 ID, 只要要镜像的内容不变 <code>digest</code> 也不会变</p></li>
+<li><p><code>tag</code> 或 <code>digest</code> 值是可选的.</p>
+<ul>
+<li>如果省略其中任何一个, 构建器默认使用一个 <code>latest</code> 标签</li>
+<li>如果找不到该 <code>tag</code> 值, 构建器将返回错误</li>
+</ul></li>
+<li><p><code>--platform</code> 标志可用于在 <code>FROM</code> 引用多平台镜像的情况下指定平台.
+例如, <code>linux/amd64</code>、 <code>linux/arm64</code> 、 或 <code>windows/amd64</code></p></li>
+</ul>
+</div>
+<div id="run" class="section level2">
+<h2>6.3 RUN</h2>
+</div>
+<div id="cmd" class="section level2">
+<h2>6.4 CMD</h2>
+</div>
+<div id="label" class="section level2">
+<h2>6.5 LABEL</h2>
+</div>
+<div id="expose" class="section level2">
+<h2>6.6 EXPOSE</h2>
+</div>
+<div id="env" class="section level2">
+<h2>6.7 ENV</h2>
+</div>
+<div id="add" class="section level2">
+<h2>6.8 ADD</h2>
+</div>
+<div id="copy" class="section level2">
+<h2>6.9 COPY</h2>
+</div>
+<div id="entrypoint" class="section level2">
+<h2>6.10 ENTRYPOINT</h2>
+</div>
+<div id="volume" class="section level2">
+<h2>6.11 VOLUME</h2>
+</div>
+<div id="arg" class="section level2">
+<h2>6.12 ARG</h2>
+</div>
+<div id="onbuild" class="section level2">
+<h2>6.13 ONBUILD</h2>
+</div>
+<div id="stopsignal" class="section level2">
+<h2>6.14 STOPSIGNAL</h2>
+</div>
+<div id="healthcheck" class="section level2">
+<h2>6.15 HEALTHCHECK</h2>
+</div>
+<div id="shell" class="section level2">
+<h2>6.16 SHELL</h2>
+</div>
+<div id="workdir" class="section level2">
+<h2>6.17 WORKDIR</h2>
+</div>
+<div id="user" class="section level2">
+<h2>6.18 USER</h2>
+<p>设置用户名(或 UID) 和可选的用户组(或 GID)</p>
+<pre class="bash"><code>USER &lt;user&gt;[:&lt;group&gt;]
+# or
+USER &lt;UID&gt;[:GID]</code></pre>
+</div>
+</div>
+<div id="docker-网络原理" class="section level1">
+<h1>7.Docker 网络原理</h1>
+</div>
+<div id="docker-compose" class="section level1">
+<h1>8.Docker Compose</h1>
+</div>
+<div id="docker-swarm" class="section level1">
+<h1>9.Docker Swarm</h1>
+</div>
+<div id="cicd-jenkins" class="section level1">
+<h1>10.CI/CD jenkins</h1>
+</div>
+<div id="idea-整合-docker" class="section level1">
+<h1>11.IDEA 整合 Docker</h1>
+</div>
+<div id="docker-安装环境" class="section level1">
+<h1>12.Docker 安装环境</h1>
+<div id="docker-安装-ubuntu" class="section level2">
+<h2>12.1 Docker 安装 Ubuntu</h2>
+<p>1.查看可用的 Ubuntu 版本</p>
+<ul>
+<li>Ubuntu 镜像库地址 <a href="https://hub.docker.com/_/ubuntu?tab=tags&amp;page=1" class="uri">https://hub.docker.com/_/ubuntu?tab=tags&amp;page=1</a></li>
+</ul>
+<p>2.拉取最新版的 Ubuntu 镜像</p>
+<pre class="bash"><code>docker pull ubuntu
+docker pull ubuntu:latest</code></pre>
+<p>3.查看本地镜像</p>
+<pre class="bash"><code>docker images</code></pre>
+<p>4.运行容器</p>
+<ul>
+<li>可以通过 <code>exec</code> 命令进入 ubuntu 容器</li>
+</ul>
+<pre class="bash"><code>docker run -itd --name ubuntu-test ubuntu</code></pre>
+<p>5.安装成功</p>
+<pre class="bash"><code>docker ps</code></pre>
+</div>
+<div id="docker-安装-python" class="section level2">
+<h2>12.2 Docker 安装 Python</h2>
+</div>
+<div id="docker-安装-tensorflow" class="section level2">
+<h2>12.3 Docker 安装 TensorFlow</h2>
+</div>
+<div id="docker-安装-pytorch" class="section level2">
+<h2>12.4 Docker 安装 PyTorch</h2>
+</div>
+</div>
+<div id="docker-使用示例" class="section level1">
+<h1>13.Docker 使用示例</h1>
+<div id="公司工作站环境" class="section level2">
+<h2>13.1 公司工作站环境</h2>
+<ol style="list-style-type: decimal">
+<li>查看容器</li>
+</ol>
+<pre class="bash"><code>$ sudo docker ps -a</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>开启 TensorFlow 环境</li>
+</ol>
+<pre class="bash"><code>$ sudo docker attach tf_env</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>数据目录</li>
+</ol>
+<pre class="bash"><code>$ cd /workspace/dataSets</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>退出 TensorFlow Docker(容器还在运行)</li>
+</ol>
+<pre class="bash"><code>$ Ctrl + P + Q</code></pre>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>NOTE</strong></td>
+</tr>
+<tr class="even">
+<td>- tf 环境的 docker, name 是 tf_env, 已运行 jupyter notebook, 192.168.0.66:7777
+- torch 环境的 docker, name 是 torch_env, 已运行 jupyter notebook, 192.168.0.66:6666
+- 初次进入需要密码
+- 挂载的目录都是 /workspace/dataSets 挂载宿主机 /mnt/dataSets</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="kubernetes" class="section level1">
+<h1>14.Kubernetes</h1>
+<p>Docker Desktop 包含一个可以在 Mac 上运行的 Kubernetes 服务器,
+因此可以在 Kubernetes 上部署 Docker 工作负载.</p>
+<p>Kubernetes 的客户端命令是 <code>kubectl</code></p>
+<ul>
+<li>将 Kubernetes 指向 docker-desktop:</li>
+</ul>
+<pre class="bash"><code>kubectl config get-contexts
+kubectl config user-context docker-desktop</code></pre>
+</div>
