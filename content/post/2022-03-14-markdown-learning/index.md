@@ -89,6 +89,27 @@ Markdown 的维基百科介绍是这样的：
 </div>
 
 
+## 生成目录
+
+```bash
+npm install doctoc -g
+```
+
+
+```bash
+cd project
+doctoc file.md
+```
+
+### DocToc
+
+- https://github.com/thlorenz/doctoc
+
+
+## 插入Note、Important
+
+- TODO
+
 # RMarkdwon
 
 - https://rpubs.com/Wangzf/RMarkdown
