@@ -3,7 +3,7 @@ languageCode: zh-cn
 title: "wangzf"
 theme: "hugo-ivy"
 googleAnalytics: ""
-disqusShortname: "disqus_FyEG7UbORQ"
+disqusShortname: "wangzf"
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 preserveTaxonomyNames: true
 hasCJKLanguage: true
@@ -45,7 +45,7 @@ menu:
 params:
   description: ""
   footer: "&copy; [Zhefeng Wang](https://wangzhefeng.com) 2021 - 2022 | [GitHub](https://github.com/wangzhefeng)"
-  # disqusURL: "wangzhefeng.com/"
+  disqusURL: "https://wangzhefeng.com/"
   # costomJS:
   githubContentURL: "https://github.com/wangzhefeng"
   twitterImage: "/images/logo.jpg"
