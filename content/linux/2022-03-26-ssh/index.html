@@ -1,0 +1,345 @@
+---
+title: 玩转 SSH
+author: 王哲峰
+date: '2022-03-26'
+slug: ssh
+categories:
+  - Linux
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#安装-ssh-服务debina">安装 SSH 服务(Debina)</a></li>
+<li><a href="#什么是-ssh">1.什么是 SSH</a></li>
+<li><a href="#ssh-工作原理">2.SSH 工作原理</a></li>
+<li><a href="#ssh-存在的问题中间人攻击">3.SSH 存在的问题–中间人攻击</a></li>
+<li><a href="#ssh-功能">4.SSH 功能</a>
+<ul>
+<li><a href="#ssh-口令登录">4.1 SSH 口令登录</a></li>
+<li><a href="#ssh-公钥登录">4.2 SSH 公钥登录</a></li>
+<li><a href="#ssh-端口转发">4.3 SSH 端口转发</a>
+<ul>
+<li><a href="#端口转发的参数">4.3.1 端口转发的参数</a></li>
+<li><a href="#本地转发">4.3.2 本地转发</a></li>
+<li><a href="#远程转发">4.3.3 远程转发</a></li>
+<li><a href="#动态端口转发">4.3.4 动态端口转发</a></li>
+</ul></li>
+<li><a href="#ssh-远程操作">4.4 SSH 远程操作</a></li>
+<li><a href="#利用远程转发实现代理功能">4.5 利用远程转发实现代理功能</a></li>
+</ul></li>
+<li><a href="#内网外网穿透">5.内网、外网穿透</a></li>
+</ul>
+</div>
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
+<div id="安装-ssh-服务debina" class="section level1">
+<h1>安装 SSH 服务(Debina)</h1>
+<ol style="list-style-type: decimal">
+<li>安装 SSH</li>
+</ol>
+<pre class="bash"><code># 更新软件源
+$ sudo apt-get update
+# 安装 SSH
+$ sudo apt-get install ssh
+# 修改配置文件
+$ vim /etc/ssh/sshd_config
+
+PasswordAuthentication yes
+PermitRootLogin yes
+
+# 重启 SSH 服务
+$ /etc/init.d/ssh restart</code></pre>
+<p>此时我们就可以使用 SSH 对服务器进行远程连接, 但也不排除无法连接的情况</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>SSH 无法连接的场景排查</p>
+<ul>
+<li><p>检查网络</p>
+<ul>
+<li>很多情况下, 无法使用 SSH 进行连接都是因为网络或者 iptables 限制导致的,
+所以可以通过 <code>ping</code> 命令来检查网络的连通性</li>
+<li>当然, 有时候也会遇到防火墙拦截了 ICMP 和 SSH, 所以检查网络最好是在需要 SSH 连接的服务下进行</li>
+</ul>
+<pre class="bash"><code>$ ping xxx.xxx.xxx.xxx</code></pre></li>
+<li><p>检查端口</p>
+<ul>
+<li>SSH 使用的是 22 端口, 所以可以使用 <code>telnet</code> 命令检测该端口</li>
+</ul>
+<pre class="bash"><code>$ telnet xxx.xxx.xxx.xxx 22</code></pre>
+<ul>
+<li>如果正常能通, 一般情况下 SSH 服务器也就没有问题了；如果不能通, 检查 iptables；因为为了服务器的安全性, 经常会通过 iptables 去限制特定的网段才允许连接服务器</li>
+</ul></li>
+<li><p>检查服务</p>
+<ul>
+<li>如果网络能通, 且端口未被屏蔽. 依旧无法使用 SSH 连接到服务器, 那么检查 SSH 服务, 以及配置文件是否正确配置</li>
+</ul>
+<pre class="bash"><code>$ /etc/init.d/ssh status</code></pre></li>
+</ul></li>
+</ol>
+</div>
+<div id="什么是-ssh" class="section level1">
+<h1>1.什么是 SSH</h1>
+<div class="figure">
+<img src="images/Linux_ssh2.png" alt="" />
+<p class="caption">ssh</p>
+</div>
+<p>SSH 是 Secure Shell 的缩写, 也叫安全外壳协议, 是一种网络协议,
+用于计算机之间的安全远程加密登录. 最早的时候, 互联网通信都是明文通信,
+一旦被截获, 内容就暴露无疑. 1995年, 芬兰学者 Tatu YIonen 设计了 SSH 协议,
+将登录信息全部加密, 成为互联网安全的一个基本解决方案, 迅速在全世界获得推广,
+目前已经成为 Linux 系统的标准配置.</p>
+</div>
+<div id="ssh-工作原理" class="section level1">
+<h1>2.SSH 工作原理</h1>
+<div class="figure">
+<img src="images/Linux_ssh1.png" alt="" />
+<p class="caption">ssh</p>
+</div>
+<p>SSH 的安全性比较好, 其对数据进行加密的方式主要有两种:</p>
+<ul>
+<li><p>对称加密(密钥加密, Symmetrical encryption)</p>
+<ul>
+<li>对称加密指加密、解密使用的是同一套密钥</li>
+<li>Client 端把密钥加密后发送给 Server 端, Server 用同一套密钥解密</li>
+<li>对称加密的加密强度比较高, 很难破解. 但是, Client 数量庞大,
+很难保证密钥不泄露, 如果有一个 Client 端的密钥泄露,
+那么整个系统的安全性就存在严重的漏洞. 为了解决对称加密的漏洞,
+于是就产生了非对称加密</li>
+</ul></li>
+<li><p>非对称加密(公钥加密, Asymmetrical encryption)</p>
+<ul>
+<li>非对称加密有两个密钥: 公钥和私钥, 公钥加密后的密文, 只能通过对应私钥进行解密.
+想从公钥解密出私钥几乎不可能, 所以非对称加密的安全性比较高.</li>
+</ul></li>
+<li><p>Hasing 加密</p></li>
+</ul>
+<p>SSH 的加密原理中, 使用了 RSA 非对称加密算法, 整个过程是这样的:</p>
+<pre><code>1. 远程主机收到用户的登录请求, 把自己的公钥发送给用户
+2. 用户使用这个公钥, 将登录密码加密后, 发送给远程主机
+3. 远程主机用自己的私钥解密登录密码, 如果密码正确, 就同意用户登录</code></pre>
+</div>
+<div id="ssh-存在的问题中间人攻击" class="section level1">
+<h1>3.SSH 存在的问题–中间人攻击</h1>
+<p>SSH 之所以能够保证安全, 原因在于它采用了公钥加密, 这个过程本身是安全的, 但是实际用的时候存在一个风险:
+如果有人截获了登录请求, 然后冒充远程主机, 将伪造的公钥发送给用户, 那么用户很难辨别真伪.
+因为不像 HTTPS 协议, SSH 协议的公钥是没有证书中心(CA)公证的, 也就是说, 都是自己签发的.</p>
+<p>可以设想, 如果攻击者插在用户与远程主机之间(比如公共的 WIFI 区域), 用伪造的公钥获取用户的登录密码.
+再用这个密码登录远程主机, 那么 SSH 的安全机制就荡然无存了.
+这种风险就是著名的 “中间人攻击(Man-in-the-middle attack)”.</p>
+</div>
+<div id="ssh-功能" class="section level1">
+<h1>4.SSH 功能</h1>
+<div id="ssh-口令登录" class="section level2">
+<h2>4.1 SSH 口令登录</h2>
+<p>如果是第一次登录远程机, 会出现以下提示:</p>
+<pre class="bash"><code>$ ssh user@host
+# The authenticity of host &#39;host (12.18.429.21)&#39; can&#39;t be established.
+# RSA key fingerprint is 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d.
+# Are you sure you want to continue connecting (yes/no)? </code></pre>
+<p>当用户发送登录请求 <code>ssh user@host</code> 给远程主机后, 远程主机发送自己的公钥给用户.
+因为公钥长度较长(采用 RSA 算法, 长达 1024 位), 很难比对, 所以对其进行 MD5 计算,
+将它变成一个 128 位的指纹. 如: 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d,
+这样比对就容易多了.</p>
+<p>经过对比后, 如果用户接受这个远程主机的公钥, 系统会出现一句提示语, 表示 host 主机已经得到认可,
+然后输入登录密码就可以登录了:</p>
+<pre class="bash"><code>Warning: Permanently added &#39;host,12.18.429.21&#39; (RSA) to the list of known hosts.</code></pre>
+<p>当远程主机的公钥被接受以后, 它就会被保存在文件 <code>~/.ssh/known_hosts</code> 之中.
+下次再连接这台主机, 系统就会认出它的公钥已经保存在本地了, 从而跳过警告部分,
+直接提示输入密码. 每个 SSH 用户都有自己的 <code>known_hosts</code> 文件, 此外系统也有一个这样的文件,
+一般是 <code>/etc/ssh/ssh_known_hosts</code>, 保存一些对所有用户都可信赖的远程主机的公钥.</p>
+</div>
+<div id="ssh-公钥登录" class="section level2">
+<h2>4.2 SSH 公钥登录</h2>
+<p>使用密码登录, 每次都必须输入密码, 非常麻烦. 好在 SSH 还提供了公钥登录, 可以省去输入密码的步骤.
+所谓“公钥登录”, 原理很简单, 就是用户将自己的公钥储存在远程主机上. 登录的时候,
+远程主机会向用户发送一段随机字符串, 用户用自己的私钥加密后, 再发回来.
+远程主机用事先储存的公钥进行解密, 如果成功, 就证明用户是可信的, 直接允许登录 shell, 不再要求密码.
+这种方法要求用户必须提供自己的公钥. 如果没有现成的, 可以直接用 <code>ssh-keygen</code> 生成一个:</p>
+<pre class="bash"><code>$ ssh-keygen</code></pre>
+<p>运行上面的命令以后, 系统会出现一系列提示, 可以一路回车. 其中有一个问题是,
+要不要对私钥设置口令(passphrase), 如果担心私钥的安全, 这里可以设置一个.
+运行结束以后, 在 <code>~/.ssh/</code> 目录下, 会新生成两个文件: <code>id_rsa.pub</code> 和 <code>id_rsa</code>.
+前者是公钥, 后者是私钥.</p>
+<p>这时再输入下面的命令, 将公钥传送到远程主机 host 上面:</p>
+<pre class="bash"><code>$ ssh-copy-id user@host</code></pre>
+<p>远程主机将用户的公钥, 保存在登录后的用户主目录的 <code>~/.ssh/authorized_keys</code> 文件中.
+这样, 以后就登录远程主机不需要输入密码了.</p>
+<p>如果还是不行, 就用 vim 打开远程主机的 <code>/etc/ssh/sshd_config</code> 这个文件, 将以下几行的注释去掉.</p>
+<pre class="bash"><code>RSAAuthentication yes 
+PubkeyAuthentication yes 
+AuthorizedKeysFile 
+.ssh/authorized_keys</code></pre>
+<p>然后, 重启远程主机的ssh服务:</p>
+<pre class="bash"><code># Redhat6系统
+service ssh restart
+
+# Redhat7系统
+systemctl restart sshd
+
+# ubuntu系统
+service ssh restart
+
+# debian系统
+/etc/init.d/ssh restart</code></pre>
+<p>最后, 登录远程主机:</p>
+<pre class="bash"><code>$ ifconfig                 # 查看服务器 IP 地址
+$ netstat -ntlp | grep ssh # 查看服务器是否启用了 SSH
+$ ssh -p 22 user@host
+$ ssh user@host            # 默认端口为 22, 当端口为 22时, 可以省略端口
+$ ssh host                 # 本地使用的用户名与远程登录的用户名一致, 登录的用户名可以省略
+$ exit                     # 退出服务器</code></pre>
+</div>
+<div id="ssh-端口转发" class="section level2">
+<h2>4.3 SSH 端口转发</h2>
+<p>SSH 不仅能够自动加密和解密 SSH 客户端与服务端之间的网络数据,
+同时, SSH 还能够提供一个非常有用的功能, 端口转发,
+即将 TCP 端口的网络数据转发到指定的主机的某个端口上.
+在转发的同时会对数据进行相应的加密和解密. 如果工作环境中防火墙限制了一些网络端口的使用,
+但是允许 SSH 的连接, 那么也是能够使用 SSH 转发后的端口进行通信.</p>
+<p>SSH 端口转发有三种: 动态端口转发、本地端口转发、远程端口转发</p>
+<p>举例说明: 假设有三台主机: host1、host2、host3</p>
+<pre><code>- 动态端口转发是找一个代理端口, 然后通过代理端口去连相应的端口. 
+动态端口转发的好处在于通过代理端口可以去找很多需要连接的端口, 
+提高了工作效率. 比如 host1 本来是连不上 host2 的, 而 host3 却可以连上 host2. 
+host1 可以找到 host3 作代理, 然后通过 host3 去连接 host2 的相应端口
+- 本地端口转发也是找到第三方, 通过第三方再连接想要连接的端口, 
+但这种方式的端口转发是固定的, 是点对点的. 比如假定 host1 是本地主机, 
+host2 是远程主机. 由于种种原因, 这两台主机之间无法连通. 
+但是, 另外还有一台 host3, 可以同时连上 host1 和 host2 这两台主机. 
+通过 host3, 将 host1 连上 host2. host1 找到 host3, 
+host1 和 host3 之间就像有一条数据传输的道路, 通常被称为 &quot;SSH 隧道&quot;, 
+通过这条隧道 host1 就可以连上 host2
+- 远程端口转发和本地端口转发就是反过来了. 假如 host1 在外网, host2 在内网, 
+正常情况下, host1 不能访问 host2. 通过远程端口转发, host2 可以反过来访问host1. 
+host2 和 host1 之间形成了一条道路, host1 就可以通过这条道路去访问 host2</code></pre>
+<div id="端口转发的参数" class="section level3">
+<h3>4.3.1 端口转发的参数</h3>
+<ul>
+<li><code>-c</code>: 压缩数据</li>
+<li><code>-f</code>: 后台认证用户/密码, 通常和 <code>-N</code> 连用, 不用登录到远程主机</li>
+<li><code>-N</code>: 不执行脚本或命令, 通常与 <code>-f</code> 连用</li>
+<li><code>-g</code>: 在 <code>-L</code>/<code>-R</code>/<code>-D</code> 参数中, 允许远程主机连接到建立的转发的端口上, 如果不加这个参数, 只允许本地主机建立连接</li>
+<li><code>-L</code>: 本地网卡地址:本地端口:目标IP:目标端口</li>
+<li><code>-D</code>: 动态端口转发</li>
+<li><code>-R</code>: 远程端口转发</li>
+<li><code>-T</code>: 不分配 TTY 只做代理用</li>
+<li><code>-q</code>: 安静模式, 不输出错误/警告信息</li>
+</ul>
+</div>
+<div id="本地转发" class="section level3">
+<h3>4.3.2 本地转发</h3>
+<p>有本地网络服务器的某个端口, 转发到远程服务器的某个端口. 说白了就是, 将发送到本地端口的请求,
+转发到目标端口, 格式如下:</p>
+<pre class="bash"><code>$ ssh -L 本地网卡地址:本地端口:目标地址:目标端口 user@host
+$ ssh -L 本地端口:目标地址:目标端口 user@host            # 本地网卡地址可以省略
+$ ssh -L 本地网卡地址:本地端口:目标地址:目标端口           # 如果本地用户名与远程用户名相同, 用户名可以省略</code></pre>
+<p>举例说明:</p>
+<pre><code>- 有两台机器
+
+    - centOS A(192.168.13.139)
+    - centOS B(192.168.13.142) =&gt; 安装了 MySQL
+
+- 如果 centOS B 上设置了允许任何主机连接 MySQL, 
+此时, 在 centOS A 上面是可以连上 centOS B 的 MySQL 的
+- 如果设置 centOS B 限制不允许外部 IP 连接, 仅仅让 127.0.0.1 连接, 
+此时 centOS A 需要通过本地端口转发的方式连接 centOS B 上的 MySQL 服务, 
+即将 centOS A 本地的某个端口, 映射到 centOS B 上, 然后在 centOS A 上连接
+centOS B 上的 MySQL 服务</code></pre>
+<pre class="bash"><code># current on centOS A
+$ ssh -L 127.0.0.1:3306:127.0.0.1:3306 root@192.168.13.142
+$ bin/mysql -h127.0.0.1 -uroot -p
+$ lsof -i:3306 # 查看 SSH 转发监听的进程
+$ netstat -apn |grep 3306
+$ ps -ef |grep ssh</code></pre>
+</div>
+<div id="远程转发" class="section level3">
+<h3>4.3.3 远程转发</h3>
+<p>远程转发是指由远程服务器的某个端口转发到本地网络服务器的某个端口. 说白了,
+就是将发送到远程端口的请求转发到目标端口, 格式如下:</p>
+<pre class="bash"><code>$ ssh -R 远程网卡地址:远程端口:目标地址:目标端口</code></pre>
+<p>举例说明:</p>
+<pre><code>- 有三台机器
+
+    - centOS A(192.168.13.139)
+    - centOS B(192.168.13.142)
+    - win7(10.18.78.135)</code></pre>
+<ul>
+<li>假设 win7 与 centOS B 不能直接连接, 但是 win7 与 centOS A 可以连接,
+centOS B 也可以与 centOS A 连接, 那么, 就可以在 centOS A 上使用远程端口转发了,
+让 win7 与 centOS B 进行通信, 即 centOS B 监听自己的 80 端口,
+然后将所有数据由 centOS A 发给 win7.</li>
+</ul>
+<pre class="bash"><code># current on centOS A
+$ ssh -R 127.0.0.1:80:10.18.78.135:80 root@192.168.13.142</code></pre>
+</div>
+<div id="动态端口转发" class="section level3">
+<h3>4.3.4 动态端口转发</h3>
+<p>对于 SSH 的本地转发和远程转发, 都需要将本地端口和远程端口一一绑定, 格式如下:</p>
+<pre class="bash"><code>$ ssh -D [本地地址:]本地端口 user@host</code></pre>
+</div>
+</div>
+<div id="ssh-远程操作" class="section level2">
+<h2>4.4 SSH 远程操作</h2>
+<p>SSH 远程操作, 主要用于在远程服务器上面执行某个操作, 格式如下:</p>
+<pre class="bash"><code>$ ssh user@host &#39;command&#39;</code></pre>
+<p>示例:</p>
+<pre class="bash"><code>user_a $ ssh user_b@host_b &#39;uname -a&#39; # 在 user_a 上查看 user_b 的操作系统
+user_a $ tar -cz test | ssh user_b@host_b &#39;tar -xz&#39;
+user_a $ ssh user_b@host_b &#39;netstat -tln |grep 1080&#39; # 在 user_a 上查看 user_b 是否监听了 1080 端口</code></pre>
+</div>
+<div id="利用远程转发实现代理功能" class="section level2">
+<h2>4.5 利用远程转发实现代理功能</h2>
+<p>目前 B 机器, 只能在自己 127.0.0.1 的 80 端口监听并转发, 如何让 B 机器作为代理,
+转发其他机器的请求到 A 机器上面呢？比如, 现在有一台机器 C(192.168.13.143),
+C 不能访问 A, 但是能够访问 B. 如何让 C 利用 B 来访问 A 呢？</p>
+<p>此时, 需要将 B 的监听, 由 127.0.0.1:8081, 改为 0:0.0.0:8081, 修改
+<code>sshd</code> 的配置 <code>/etc/ssh/sshd_config</code>:</p>
+<pre class="bash"><code>vim /etc/ssh/sshd_config
+#如果有
+GatewayPorts no
+#改为
+GatewayPorts yes
+#没有, 添加即可</code></pre>
+<p>然后重启 <code>sshd</code></p>
+<pre class="bash"><code>$ sudo service sshd restart</code></pre>
+<p>然后重新, 设置动态转发, 如下:</p>
+<pre class="bash"><code>$ ssh -f -g  -N -R 8081:127.0.0.1:80 dequan@192.168.13.149</code></pre>
+<p>可以看到, 此时 B 机器, 已经监听了 0:0.0.0:8081</p>
+<p>在C机器上面, 我们通过curl模拟请求, 利用B机器做代理, 如下:</p>
+<pre class="bash"><code>$ curl -x 192.168.13.149:8081 127.0.0.1</code></pre>
+<p>当然, 如果还有其他机器, 也可以使用类似的方式, 来请求A机器.</p>
+</div>
+</div>
+<div id="内网外网穿透" class="section level1">
+<h1>5.内网、外网穿透</h1>
+<ul>
+<li>TODO</li>
+</ul>
+</div>

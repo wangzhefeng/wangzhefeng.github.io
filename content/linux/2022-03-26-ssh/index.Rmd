@@ -7,28 +7,12 @@ categories:
   - Linux
 tags:
   - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
 ---
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [安装 SSH 服务(Debina)](#%E5%AE%89%E8%A3%85-ssh-%E6%9C%8D%E5%8A%A1debina)
-- [1.什么是 SSH](#1%E4%BB%80%E4%B9%88%E6%98%AF-ssh)
-- [2.SSH 工作原理](#2ssh-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86)
-- [3.SSH 存在的问题--中间人攻击](#3ssh-%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98--%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB)
-- [4.SSH 功能](#4ssh-%E5%8A%9F%E8%83%BD)
-  - [4.1 SSH 口令登录](#41-ssh-%E5%8F%A3%E4%BB%A4%E7%99%BB%E5%BD%95)
-  - [4.2 SSH 公钥登录](#42-ssh-%E5%85%AC%E9%92%A5%E7%99%BB%E5%BD%95)
-  - [4.3 SSH 端口转发](#43-ssh-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91)
-    - [4.3.1 端口转发的参数](#431-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8F%82%E6%95%B0)
-    - [4.3.2 本地转发](#432-%E6%9C%AC%E5%9C%B0%E8%BD%AC%E5%8F%91)
-    - [4.3.3 远程转发](#433-%E8%BF%9C%E7%A8%8B%E8%BD%AC%E5%8F%91)
-    - [4.3.4 动态端口转发](#434-%E5%8A%A8%E6%80%81%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91)
-  - [4.4 SSH 远程操作](#44-ssh-%E8%BF%9C%E7%A8%8B%E6%93%8D%E4%BD%9C)
-  - [4.5 利用远程转发实现代理功能](#45-%E5%88%A9%E7%94%A8%E8%BF%9C%E7%A8%8B%E8%BD%AC%E5%8F%91%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD)
-- [5.内网、外网穿透](#5%E5%86%85%E7%BD%91%E5%A4%96%E7%BD%91%E7%A9%BF%E9%80%8F)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 <style>
 h1 {

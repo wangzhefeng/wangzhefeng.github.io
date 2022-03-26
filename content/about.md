@@ -56,13 +56,15 @@ h2 {
 - JavaScript：觉得很好玩
 - Spark：了解大数据的窗口
 - Shell：可能某一天会有用
+- Markdown[^markdown]: 写文档专用
+- slidev: 炫酷吊炸天的 PPT
 
 ### 软件
 
 - 写作
     
     * Python Sphinx(vscode)
-    * Typora
+    * Typora[^markdown]
     * RStudio
     * VimR
 
@@ -83,6 +85,12 @@ h2 {
     
     * ProcessOn
     * draw.io
+
+* PPT
+  
+    - slidev
+    - RStudio
+  
 
 ### 书籍
 
@@ -143,3 +151,6 @@ h2 {
 - [Netlify](https://www.netlify.com/)
 - [Vercel](https://vercel.com/)
 - [Hugo Ivy 主题](https://github.com/yihui/hugo-ivy)
+
+
+[^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)

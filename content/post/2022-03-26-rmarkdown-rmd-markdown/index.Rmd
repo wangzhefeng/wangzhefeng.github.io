@@ -1,0 +1,298 @@
+---
+title: R Markdown 与 Rmd 与 Markdown 的测试
+author: 王哲峰
+date: '2022-03-26'
+slug: rmarkdown-rmd-markdown
+categories:
+  - Markdown
+tags:
+  - note
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
+
+
+# Markdown
+
+Markdown 的维基百科[^Markdown维基百科]介绍是这样的：
+
+> Markdown是一种轻量级标记语言，创始人为约翰·格鲁伯。
+  它允许人们使用易读易写的纯文本格式编写文档，
+  然后转换成有效的XHTML（或者HTML）文档。
+  这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。
+> 
+> 由于Markdown的轻量化、易读易写特性，并且对于图片，
+  图表、数学式都有支持，目前许多网站都广泛使用 Markdown 
+  来撰写帮助文档或是用于论坛上发表消息。如GitHub、Reddit、
+  Diaspora、Stack Exchange、OpenStreetMap 、SourceForge、
+  简书等，甚至还能被用来撰写电子书。
+
+[^Markdown维基百科]: 百度百科也可以看看
+
+
+## TODO list
+
+
+- 语法示例
+
+```markdown
+# 未选中
+
+* [ ] todo item 1
+* [ ] todo item 2
+* [ ] todo item 3
+```
+
+- 效果展示
+
+* [ ] todo item 1
+* [ ] todo item 2
+* [ ] todo item 3
+
+
+* [x] todo item 1
+* [x] todo item 2
+* [x] todo item 3
+
+
+## 上标、下标
+
+上标、下标是一种文字的特殊写法，常用于化学式、数学公式、引用文字的脚注等。
+
+Markdown 的原生语法不支持上、下标的写法。需要通过 html 标签实现此类效果。
+在 Markdown 中，我们可以通过 <sub> 和 <sup> 标签来实现上标和下标
+
+- 语法示例
+
+```markdown
+a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
+```
+
+- 效果展示
+
+  - a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
+
+
+## 脚注尾注
+
+脚注和尾注都是对文章的补充说明。
+
+* 脚注通常与被注释内容出现在同一页，并位于该页面的最下方，一般用来解释专有名词、数据来源等
+* 尾注通常出现在文章的最后一页，写在文章全部正文之后，一般用来列明引用的文章列表等
+
+1. 添加引用的描述
+
+要增加脚注/尾注，首先需要在文章的适当位置增加引用的描述
+
+- 脚注声明语法
+
+```markdown
+[^引用ID]: 说明文字
+```
+
+2. 引用部位添加引用注释
+
+在需要增加引用标记的内容后面增加引用注释
+
+- 脚注引用注释语法
+
+```markdown
+`[^引用ID]`
+```
+
+3. 完整示例
+
+```markdown
+<!-- 脚本引用 -->
+- 这里是一个脚注[^脚注ID1]
+- 这里是一个脚注[^脚注ID2]
+
+<!-- 引用注释 -->
+- [脚注ID1]: 此处是 **脚注** 的 *文本内容*
+- [脚注ID2]: 此处是 **脚注** 的 *文本内容*
+```
+
+<!-- 脚本引用 -->
+- 这里是一个脚注[^脚注ID1]
+- 这里是一个脚注[^脚注ID2]
+
+<!-- 引用注释 -->
+[^脚注ID1]: 此处是 **脚注** 的 *文本内容*
+[^脚注ID2]: 此处是 **脚注** 的 *文本内容*
+
+
+## 流程图
+
+```mermaid
+graph LR
+	XX管理系统 --> 管理员登录
+	管理员登录 --> 系统设置
+	管理员登录 --> 学员管理
+  管理员登录 --> 教师管理
+ 	管理员登录 --> 部门管理
+ 	部门管理 --> 增加
+ 	部门管理 --> 修改
+ 	部门管理 --> 删除
+ 	部门管理 --> 批量导入
+```
+
+## 饼图
+
+```
+pie title 宠物的选择
+    "狗" : 386
+    "猫" : 85
+    "兔子" : 15 
+```
+
+
+## 插入表情(Emogi)
+
+- 表情
+
+    - \:smile\: => :smile:
+    - \:joy\: => :joy:
+
+- 十二星座都可以
+
+    - \:aries\: => :aries:
+    - \:taurus\: => :taurus:
+    - \:gemini\: => :gemini:
+    - \:cancer\: => :cancer:
+    - \:le\o => :leo:
+    - \:virgo\: => :virgo:
+    - \:libra\: => :libra:
+    - \:scorpius\: => :scorpius:
+    - \:sagittarius\: => :sagittarius:
+    - \:capricorn\: => :capricorn:
+    - \:aquarius\: => :aquarius:
+    - \:pisces\: => :pisces:
+    - \:ophiuchus\: => :ophiuchus:
+    - \:six_pointed_star\: => :six_pointed_star:
+
+- 钟表时间
+
+    - \:clock930\: => :clock930:
+
+## 插入视屏
+
+<div class="plyr__video-embed" id="player">
+  <iframe
+    src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
+    allowfullscreen
+    allowtransparency
+    allow="autoplay"
+  ></iframe>
+</div>
+
+
+## 生成目录
+
+### TOC
+
+```
+[TOC]
+
+# Header 1
+
+## Header 2
+
+### Header 3
+```
+
+### DocToc
+
+- 
+
+```bash
+npm install doctoc -g
+```
+
+```bash
+cd project
+doctoc file.md
+```
+
+## 插入Note、Important
+
+
+```markdown
+# 标题
+
+正文
+
+***
+**Note**
+This is a note.
+***
+```
+
+## 代码高亮
+
+Markdown 的代码高亮是对代码块语法的扩展。即通过对代码块进行语法标注，对其在渲染输出时匹配不同的样式。
+
+代码高亮模块是 Markdown 的一种扩展语法，通常通过第三方的高亮插件完成支持。常见的高亮插件实现如 Typora 使用的 「codemirror」，还有在网页中应用较多的 「highlightjs」等。大部分的 Markdown 编辑器或者编辑环境都已经集成好，只要按照其语法规范，在文档完成渲染后即可得到带有高亮样式的代码块了。
+
+
+
+- https://highlightjs.org/
+
+
+## Blog Markdown
+
+### 数学公式
+
+```
+`$a^{2}+b^{2} = c^{2}$`
+
+$a^{2}+b^{2} = c^{2}$
+```
+
+`$a^{2}+b^{2} = c^{2}$`
+
+$a^{2}+b^{2} = c^{2}$
+
+# RMarkdwon
+
+- https://rpubs.com/Wangzf/RMarkdown
+
+# 参考资料
+
+- [Markdown 维基百科](https://zh.wikipedia.org/wiki/Markdown)
+- [Markdown 官网](https://daringfireball.net/projects/markdown/syntax)
+- [插入表情](https://www.webfx.com/tools/emoji-cheat-sheet/)
+- [插入 Note](https://stackoverflow.com/questions/25654845/how-can-i-create-a-text-box-for-a-note-in-markdown)
+- [插入目录 DocToc](https://github.com/thlorenz/doctoc)
+
+
+
+
+
+
+
+
+
