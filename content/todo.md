@@ -53,7 +53,7 @@ h2 {
 - [ ] 人脸识别实例及项目建立 https://mp.weixin.qq.com/s/3iFDnGb1Hlf-J_6qzu05gA
 - [ ] feedly 查看 https://feedly.com/i/welcome
 - [ ] ssh_config Linux manual page 查看 https://man7.org/linux/man-pages/man5/ssh_config.5.html
-- [ ] 项目教学外部支持，修复 dev 环境
+- [x] 项目教学外部支持，修复 dev 环境
 
 
 ## DOING
@@ -61,11 +61,12 @@ h2 {
 * [ ] Keras 例子查看
     - mnist 分类
 
+
 ## DONE
 
-1. 
-2. 
-3. 
+1. Blog Disqus 评论功能
+2. Blog 首页日志移除
+3. 分类、日志中文显示
 
 ## Backlog
 
@@ -93,8 +94,14 @@ h2 {
 
 ## Reading
 
-1. 《Python 工匠》
-2. 《C++ Primer》
+* [ ] 《Python 工匠》
+  * [x] 第一章
+  * [x] 第二章
+  * [ ] 第三章
+  * [ ] 第四章
+* [ ] 《C++ Primer》
+  * [x] 第一章
+  * [ ] 第二章
 3. 《R 语言编程艺术》
 
 ## Personal
@@ -105,7 +112,7 @@ h2 {
 
 ## Random
 
-1.
+1. HTML
 2.
 3.
 
@@ -120,6 +127,4 @@ h2 {
 | 周五 | 朝九晚六；晚上看本周文章 |
 | 周六 | 上午睡觉、打扫；下午看 R |
 | 周日 | 上午看书、下午整理 Blog |
-
-
 

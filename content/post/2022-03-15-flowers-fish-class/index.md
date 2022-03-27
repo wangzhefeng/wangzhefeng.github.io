@@ -82,6 +82,40 @@ h2 {
 
     - TODO
 
+## 收集的花
+
+* 碧桃
+
+<img src="images/bitao.jpeg" width=300 height=600 align="center">
+
+* 吃丝海棠
+
+<img src="images/chuisihaitang.jpeg" width=300 height=600 align="center">
+
+* 枸谷
+
+<img src="images/gougu.jpeg" width=300 height=600 align="center">
+
+* 康乃馨
+
+<img src="images/kangnaixin.jpeg" width=300 height=600 align="center">
+
+* 山茶
+
+<img src="images/shancha.jpeg" width=300 height=600 align="center">
+
+* 玉兰
+
+<img src="images/yulan.jpeg" width=300 height=600 align="center">
+
+* 紫荆
+
+<img src="images/zijing.jpeg" width=300 height=600 align="center">
+
+
+
+
+
 
 # 鱼类的识别
 

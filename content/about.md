@@ -27,7 +27,7 @@ h2 {
 
 ## 我是谁
 
-- 出生于国际化大都市山西平遥的一介平民，新上海人
+- 出生于国际化大都市山西平遥，新上海人
 - 数学系毕业的统计学专业的数据分析师、算法工程师、程序员
 
 ## 写作原则
@@ -151,6 +151,6 @@ h2 {
 - [Netlify](https://www.netlify.com/)
 - [Vercel](https://vercel.com/)
 - [Hugo Ivy 主题](https://github.com/yihui/hugo-ivy)
-
+- [Disqus](https://disqus.com/)
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)
