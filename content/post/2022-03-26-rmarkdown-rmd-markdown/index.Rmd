@@ -220,9 +220,10 @@ cd project
 doctoc file.md
 ```
 
-## blogdown
+### blogdown
 
 ```yaml/toml
+---
 title: R Markdown 与 Rmd 与 Markdown 的测试
 author: 王哲峰
 date: '2022-03-26'
@@ -236,6 +237,7 @@ output:
     toc: true
     fig_width: 6
     dev: "svg"
+---
 ```
 
 ## 插入Note、Important

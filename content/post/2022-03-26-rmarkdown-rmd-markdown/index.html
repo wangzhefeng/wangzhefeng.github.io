@@ -29,8 +29,8 @@ output:
 <ul>
 <li><a href="#toc">TOC</a></li>
 <li><a href="#doctoc">DocToc</a></li>
-</ul></li>
 <li><a href="#blogdown">blogdown</a></li>
+</ul></li>
 <li><a href="#插入noteimportant">插入Note、Important</a></li>
 <li><a href="#代码高亮">代码高亮</a></li>
 <li><a href="#blog-markdown">Blog Markdown</a>
@@ -233,10 +233,10 @@ todo item 3</li>
 <pre class="bash"><code>cd project
 doctoc file.md</code></pre>
 </div>
-</div>
-<div id="blogdown" class="section level2">
-<h2>blogdown</h2>
-<pre class="yaml/toml"><code>title: R Markdown 与 Rmd 与 Markdown 的测试
+<div id="blogdown" class="section level3">
+<h3>blogdown</h3>
+<pre class="yaml/toml"><code>---
+title: R Markdown 与 Rmd 与 Markdown 的测试
 author: 王哲峰
 date: &#39;2022-03-26&#39;
 slug: rmarkdown-rmd-markdown
@@ -248,7 +248,9 @@ output:
   blogdown::html_page:
     toc: true
     fig_width: 6
-    dev: &quot;svg&quot;</code></pre>
+    dev: &quot;svg&quot;
+---</code></pre>
+</div>
 </div>
 <div id="插入noteimportant" class="section level2">
 <h2>插入Note、Important</h2>
