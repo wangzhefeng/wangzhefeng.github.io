@@ -1,7 +1,7 @@
 ---
 title: DL Batch Normalization
 author: 王哲峰
-date: '2022-03-16'
+date: '2017-07-04'
 slug: dl-batch-normalization
 categories:
   - deeplearning

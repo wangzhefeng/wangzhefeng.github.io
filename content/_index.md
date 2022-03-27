@@ -32,6 +32,7 @@ h2 {
 ### Blog TODO List:
 
 - [ ] Disqus 在一些页面不启用
+- [ ] 集成 Disqus 和 Utterances 到评论区
 - [ ] 首页内容更新
 - [ ] 弄懂后台 JS、HTML、CSS 的原理
 - [ ] 处理页面中标题的字体样式

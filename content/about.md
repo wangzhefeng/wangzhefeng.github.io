@@ -152,5 +152,7 @@ h2 {
 - [Vercel](https://vercel.com/)
 - [Hugo Ivy 主题](https://github.com/yihui/hugo-ivy)
 - [Disqus](https://disqus.com/)
+- [Utterances](https://utteranc.es/)
+
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)

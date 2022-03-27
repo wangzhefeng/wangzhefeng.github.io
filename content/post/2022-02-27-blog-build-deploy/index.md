@@ -30,19 +30,29 @@ h2 {
 }
 </style>
 
-> 经过断断续续的折腾，2020.02.27 终于连上了 Internet，不容易啊，慢慢维护
+
+> 早在 2016 年左右，我就一直在研究 R 相关的包构建 Blog。
+  之前使用过 Hexo，部署在 GitHub Pages 上，但之后断断续续删了重建。
+  后来就没有投入太多的精力搞这个，把各种内容写在了本地，
+  有些存储在 GitHub 代码仓库中.
+> 
+> 后来慢慢发现了 R 包 blogdown，重新激起我建站的动力，
+  经过断断续续的折腾，2020.02.27 终于连上了 Internet，不容易啊，慢慢维护
+
 
 # 软件/知识
 
 - R
 - RStudio IDE
-- Markdown
 - blogdown
 - Hugo
+- Markdown
+- R Markdown
 - Github
 - Netlify
 - Vercel
-
+- Disqus
+- Utterances
 
 # 1.创建 GitHub 仓库
 
@@ -67,16 +77,43 @@ blogdown::serve_site()
 
 # 3.新建文章
 
-
 ```r
 blogdown::new_post(title = "Hi Hugo", 
                    ext = ".md",
                    subdir = "post")
 ```
 
+# 4.评论功能
 
+- Disqus
+- Utterances
 
-# 4.提交代码到 GitHub
+# 5.页面自定义
+
+- HTML
+- CSS
+- JS
+- Markdown
+- R
+- R Markdown
+- Hugo
+- blogdown
+
+# 6.部署前检查
+
+- 检查 `.gitignore` 文件
+
+```r
+blogdown::check_gitignore()
+```
+
+- 检查内容
+
+```r
+blogdown::check_content()
+```
+
+# 7.提交代码到 GitHub
 
 ```r
 file.edit(".gitignore")
@@ -93,47 +130,36 @@ file.edit(".gitignore")
 Thumbs.db
 ```
 
-# 4.部署前检查
+# 8.部署
 
-- 检查 `.gitignore` 文件
+## 8.1 Netlify
 
-```r
-blogdown::check_gitignore()
-```
-
-- 检查内容
-
-```r
-blogdown::check_content()
-```
-
-
-# 5.部署
-
-## 5.1 Netlify
-
-### 部署
+### 8.1.1 部署
 
 1. 注册、登录 [Netlify](https://vercel.com/login)
 2. 导入 GitHub 仓库 [wangzhefeng.github.io](https://github.com/wangzhefeng/wangzhefeng.github.io)
 3. 点击部署
 4. 查看网站 [wangzhefeng.com](https://wangzhefeng.com/)
 
-### 设置私有域名
+### 8.1.2 设置私有域名
 
+- 腾讯域名: wangzhefeng.com
 
+## 8.2 Vercel
 
-## 5.2 Vercel
-
-### 部署
+### 8.2.1 部署
 
 1. 注册、登录 [Vercel](https://vercel.com/login)
 2. 导入 GitHub 仓库 [wangzhefeng.github.io](https://github.com/wangzhefeng/wangzhefeng.github.io)
 3. 点击部署
 
-### 设置私有域名
+### 8.2.2 设置私有域名
 
-4. 查看网站 [wangzhefeng.com](https://wangzhefeng.vercel.app/)
+- 腾讯域名: wangzhefeng.com
+
+# 9.最终效果
+
+- [wangzhefeng.com](https://wangzhefeng.vercel.app/)
 
 # 参考资料
 
