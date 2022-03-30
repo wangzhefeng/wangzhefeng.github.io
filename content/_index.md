@@ -31,16 +31,16 @@ h2 {
 
 ### Blog TODO List:
 
-- [ ] Disqus 在一些页面不启用
-- [ ] 集成 Disqus 和 Utterances 到评论区
-- [ ] 首页内容更新
-- [ ] 弄懂后台 JS、HTML、CSS 的原理
-- [ ] 处理页面中标题的字体样式
-- [ ] 头像问题处理 <img src="./images/logo.jpg" width=20 height=20>
-- [ ] 部署到私有云服务器上
-- [ ] 图片的保存问题
-- [ ] 加载速度问题
-- [ ] 微信屏蔽问题
+- :black_square_button: Disqus 在一些页面不启用
+- :black_square_button: 集成 Disqus 和 Utterances 到评论区
+- :black_square_button: 首页内容更新
+- :black_square_button: 弄懂后台 JS、HTML、CSS 的原理
+- :black_square_button: 处理页面中标题的字体样式
+- :black_square_button: 头像问题处理 <img src="./images/logo.jpg" width=20 height=20>
+- :black_square_button: 部署到私有云服务器上
+- :black_square_button: 图片的保存问题
+- :black_square_button: 加载速度问题
+- :black_square_button: 微信屏蔽问题
 
 
 

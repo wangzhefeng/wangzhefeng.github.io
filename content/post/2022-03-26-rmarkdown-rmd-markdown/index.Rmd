@@ -157,31 +157,47 @@ a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
 
 ## 插入表情(Emogi)
 
-- 表情
+* 表情
 
-    - \:smile\: => :smile:
-    - \:joy\: => :joy:
+  - \:smile\: => :smile:
+  - \:joy\: => :joy:
 
-- 十二星座都可以
+* 十二星座都可以
 
-    - \:aries\: => :aries:
-    - \:taurus\: => :taurus:
-    - \:gemini\: => :gemini:
-    - \:cancer\: => :cancer:
-    - \:le\o => :leo:
-    - \:virgo\: => :virgo:
-    - \:libra\: => :libra:
-    - \:scorpius\: => :scorpius:
-    - \:sagittarius\: => :sagittarius:
-    - \:capricorn\: => :capricorn:
-    - \:aquarius\: => :aquarius:
-    - \:pisces\: => :pisces:
-    - \:ophiuchus\: => :ophiuchus:
-    - \:six_pointed_star\: => :six_pointed_star:
+  - \:aries\: => :aries:
+  - \:taurus\: => :taurus:
+  - \:gemini\: => :gemini:
+  - \:cancer\: => :cancer:
+  - \:le\o => :leo:
+  - \:virgo\: => :virgo:
+  - \:libra\: => :libra:
+  - \:scorpius\: => :scorpius:
+  - \:sagittarius\: => :sagittarius:
+  - \:capricorn\: => :capricorn:
+  - \:aquarius\: => :aquarius:
+  - \:pisces\: => :pisces:
+  - \:ophiuchus\: => :ophiuchus:
+  - \:six_pointed_star\: => :six_pointed_star:
 
-- 钟表时间
+* 钟表时间
 
-    - \:clock930\: => :clock930:
+  - \:clock930\: => :clock930:
+
+* 其他好用的
+
+  - :white_check_mark:
+  - :heavy_check_mark:
+  - :heavy_multiplication_x:
+  - :black_square_button:
+  - :heavy_exclamation_mark:
+  - :x:
+  - :bangbang:
+  - :link:
+  - :recycle:
+  - :negative_squared_cross_mark:
+  - :cn:
+  - :mag:
+  - :octocat:
 
 ## 插入视屏
 
