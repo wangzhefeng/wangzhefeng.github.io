@@ -1,0 +1,527 @@
+---
+title: 玩转 HTML
+author: 王哲峰
+date: '2022-04-03'
+slug: html
+categories:
+  - 前端
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#html-介绍">HTML 介绍</a></li>
+<li><a href="#html-关键概念">HTML 关键概念</a></li>
+<li><a href="#html-文档">HTML 文档</a></li>
+<li><a href="#html-header-中的元数据">HTML header 中的元数据</a></li>
+<li><a href="#html-文字处理">HTML 文字处理</a>
+<ul>
+<li><a href="#基础文字处理">基础文字处理</a>
+<ul>
+<li><a href="#标题和段落">标题和段落</a></li>
+<li><a href="#列表">列表</a></li>
+<li><a href="#重点强调">重点强调</a></li>
+</ul></li>
+<li><a href="#高级文本排版">高级文本排版</a></li>
+</ul></li>
+<li><a href="#html-超链接">HTML 超链接</a></li>
+<li><a href="#html-文档和网站结构">HTML 文档和网站结构</a>
+<ul>
+<li><a href="#html-文档的基本组成部分">HTML 文档的基本组成部分</a></li>
+<li><a href="#html-文档示例">HTML 文档示例</a></li>
+<li><a href="#html-布局元素">HTML 布局元素</a>
+<ul>
+<li><a href="#主要元素">主要元素</a></li>
+<li><a href="#无语义元素">无语义元素</a></li>
+<li><a href="#换行与水平分割线">换行与水平分割线</a></li>
+<li><a href="#网站规划">网站规划</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#html-调试">HTML 调试</a></li>
+<li><a href="#html-多媒体与嵌入内容">HTML 多媒体与嵌入内容</a></li>
+<li><a href="#html-表格">HTML 表格</a>
+<ul>
+<li><a href="#表格知识点">表格知识点</a></li>
+<li><a href="#表格示例">表格示例</a></li>
+<li><a href="#表格样式化">表格样式化</a></li>
+</ul></li>
+<li><a href="#html-表单">HTML 表单</a></li>
+<li><a href="#cors-处理跨域图片">CORS 处理跨域图片</a></li>
+<li><a href="#cors-设置属性">CORS 设置属性</a></li>
+<li><a href="#使用-relpreload-预加载页面内容">使用 rel=“preload” 预加载页面内容</a></li>
+<li><a href="#相关教程文章">相关教程、文章</a></li>
+</ul>
+</div>
+
+<div id="html-介绍" class="section level1">
+<h1>HTML 介绍</h1>
+<p>超文本标记语言(HyperText Markup Language, HTML）是构成 Web 世界的一砖一瓦。
+它定义了网页内容的含义和结构。</p>
+<p>HTML 元素通过“标签”（tag）将文本从文档中引出，标签由在“&lt;”和“&gt;”中包裹的元素名组成，
+HTML 标签里的元素名不区分大小写。</p>
+</div>
+<div id="html-关键概念" class="section level1">
+<h1>HTML 关键概念</h1>
+<ul>
+<li>HTML 元素
+<ul>
+<li>开始标签(opening tag)</li>
+<li>结束标签(closing tag)</li>
+<li>内容(content)</li>
+<li>元素(element)
+<ul>
+<li>属性(attribute)</li>
+</ul></li>
+</ul></li>
+<li>嵌套元素</li>
+<li>空元素</li>
+<li>HTML 文档</li>
+<li>图像</li>
+<li>标记文本
+<ul>
+<li>标题</li>
+<li>段落</li>
+<li>列表</li>
+<li>链接</li>
+</ul></li>
+</ul>
+</div>
+<div id="html-文档" class="section level1">
+<h1>HTML 文档</h1>
+<pre class="html"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;测试页面&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;img src=&quot;images/firefox-icon.png&quot; alt=&quot;测试图片&quot;&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<div id="html-header-中的元数据" class="section level1">
+<h1>HTML header 中的元数据</h1>
+</div>
+<div id="html-文字处理" class="section level1">
+<h1>HTML 文字处理</h1>
+<div id="基础文字处理" class="section level2">
+<h2>基础文字处理</h2>
+<div id="标题和段落" class="section level3">
+<h3>标题和段落</h3>
+<ul>
+<li>标签
+<ul>
+<li><code>&lt;h1&gt;&lt;/h1&gt;</code></li>
+<li><code>&lt;h2&gt;&lt;/h2&gt;</code></li>
+<li><code>&lt;h3&gt;&lt;/h3&gt;</code></li>
+<li><code>&lt;h4&gt;&lt;/h4&gt;</code></li>
+<li><code>&lt;h5&gt;&lt;/h5&gt;</code></li>
+<li><code>&lt;h6&gt;&lt;/h6&gt;</code></li>
+<li><code>&lt;p&gt;&lt;/p&gt;</code></li>
+</ul></li>
+<li>最佳实践
+<ul>
+<li>应该最好只对每个页面使用一次 <code>&lt;h1&gt;</code>，这是顶级标题，所有其他标题位于层次结构中的下方</li>
+<li>请确保在层次结构中以正确的顺序使用标题。不要使用 <code>&lt;h3&gt;</code> 来表示副标题，
+后面跟 <code>&lt;h2&gt;</code> 来表示副副标题，这是没有意义的，会导致奇怪的结果</li>
+<li>在可用的六个标题级别中，您应该只在每页使用不超过三个，除非您认为有必要使用更多。
+具有许多级别的文档(即较深的标题层次结构)变得难以操作并且难以导航。
+在这种情况下，如果可能，建议将内容分散在多个页面上</li>
+</ul></li>
+</ul>
+</div>
+<div id="列表" class="section level3">
+<h3>列表</h3>
+<ul>
+<li><p>无需列表</p>
+<ul>
+<li><code>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</code></li>
+</ul></li>
+<li><p>有序列表</p>
+<ul>
+<li><code>&lt;ol&gt;&lt;li&gt;&lt;/li&gt;&lt;/ol&gt;</code></li>
+</ul></li>
+<li><p>嵌套列表</p>
+<pre class="html"><code>&lt;ol&gt;
+    &lt;li&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;/li&gt;
+    &lt;li&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/ol&gt;`</code></pre></li>
+</ul>
+</div>
+<div id="重点强调" class="section level3">
+<h3>重点强调</h3>
+<ul>
+<li>强调
+<ul>
+<li><code>&lt;em&gt;&lt;/em&gt;</code> (emphasis): 斜体</li>
+<li><code>&lt;span class=""&gt;&lt;/span&gt;</code> + CSS</li>
+</ul></li>
+<li>非常重要
+<ul>
+<li><code>&lt;strong&gt;&lt;/strong&gt;</code> (strong importance): 粗体字</li>
+<li><code>&lt;span class=""&gt;&lt;/span&gt;</code> + CSS</li>
+</ul></li>
+<li>表象元素(presentational elements)
+<ul>
+<li>斜体字
+<ul>
+<li><code>i</code>: 被用来传达传统上用斜体表达的意义：外国文字，分类名称，技术术语，一种思想……</li>
+</ul></li>
+<li>粗体字
+<ul>
+<li><code>b</code>: 被用来传达传统上用粗体表达的意义：关键字，产品名称，引导句……</li>
+</ul></li>
+<li>下划线
+<ul>
+<li><code>u</code>: 用来传达传统上用下划线表达的意义：专有名词，拼写错误……</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr />
+<p><strong>最佳实践</strong></p>
+<ul>
+<li>如果没有更合适的元素，那么使用 <code>&lt;b&gt;</code>、<code>&lt;i&gt;</code> 或 <code>&lt;u&gt;</code> 来表达传统上的粗体、斜体或下划线表达的意思是合适的。
+然而，始终拥有可访问性的思维模式是至关重要的。斜体的概念对人们使用屏幕阅读器是没有帮助的，
+对使用其他书写系统而不是拉丁文书写系统的人们也是没有帮助的</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="高级文本排版" class="section level2">
+<h2>高级文本排版</h2>
+</div>
+</div>
+<div id="html-超链接" class="section level1">
+<h1>HTML 超链接</h1>
+</div>
+<div id="html-文档和网站结构" class="section level1">
+<h1>HTML 文档和网站结构</h1>
+<p>HTML 不仅能够定义网页的单独部分(例如“段落”或“图片”)，
+还可以使用 <strong>块级元素</strong> (例如 “标题栏”、“导航栏”、“主内容列”)来定义网站中的复合区域。</p>
+<div id="html-文档的基本组成部分" class="section level2">
+<h2>HTML 文档的基本组成部分</h2>
+<p>网页的外观多种多样，但是除了全屏视频或游戏，或艺术作品页面，
+或只是结构不当的页面以外，都倾向于使用类似的标准组件:</p>
+<ul>
+<li>页眉 <code>&lt;header&gt;&lt;/header&gt;</code>
+<ul>
+<li>通常横跨于整个页面顶部有一个大标题 和/或 一个标志。
+这是网站的主要一般信息，通常存在于所有网页</li>
+</ul></li>
+<li>导航栏 <code>&lt;nav&gt;&lt;/nav&gt;</code>
+<ul>
+<li>指向网站各个主要区段的超链接。通常用菜单按钮、链接或标签页表示。
+类似于标题栏，导航栏通常应在所有网页之间保持一致，否则会让用户感到疑惑，
+甚至无所适从。许多 web 设计人员认为导航栏是标题栏的一部分，而不是独立的组件，
+但这并非绝对；还有人认为，两者独立可以提供更好的 无障碍访问特性，
+因为屏幕阅读器可以更清晰地分辨二者</li>
+</ul></li>
+<li>主内容 <code>&lt;main&gt;&lt;/main&gt;</code>
+<ul>
+<li>中心的大部分区域是当前网页大多数的独有内容，
+例如视频、文章、地图、新闻等。这些内容是网站的一部分，
+且会因页面而异</li>
+</ul></li>
+<li>侧边栏 <code>&lt;aside&gt;&lt;/aside&gt;</code>
+<ul>
+<li>一些外围信息、链接、引用、广告等。通常与主内容相关(例如一个新闻页面上，
+侧边栏可能包含作者信息或相关文章链接)，还可能存在其他的重复元素，如辅助导航系统</li>
+</ul></li>
+<li>页脚 <code>&lt;footer&gt;&lt;/footer&gt;</code>
+<ul>
+<li>横跨页面底部的狭长区域。和标题一样，页脚是放置公共信息(比如版权声明或联系方式)的，
+一般使用较小字体，且通常为次要内容。 还可以通过提供快速访问链接来进行搜索引擎优化(SEO)</li>
+</ul></li>
+</ul>
+<p>HTML 代码中可根据功能来为区段添加标记。可使用元素来无歧义地表示上文所讲的内容区段，
+屏幕阅读器等辅助技术可以识别这些元素，并帮助执行“找到主导航 “或”找到主内容“等任务。
+为了实现语义化标记，HTML 提供了明确这些区段的专用标签，例如:</p>
+<ul>
+<li>导航栏 <code>&lt;nav&gt;&lt;/nav&gt;</code></li>
+<li>页眉 <code>&lt;header&gt;&lt;/header&gt;</code></li>
+<li>主内容 <code>&lt;main&gt;&lt;/main&gt;</code>
+<ul>
+<li><code>&lt;article&gt;&lt;/article&gt;</code></li>
+<li><code>&lt;section&gt;&lt;/section&gt;</code></li>
+<li><code>&lt;div&gt;&lt;/div&gt;</code></li>
+</ul></li>
+<li>侧边栏 <code>&lt;aside&gt;&lt;/aside&gt;</code></li>
+<li>页脚 <code>&lt;footer&gt;&lt;/footer&gt;</code></li>
+</ul>
+</div>
+<div id="html-文档示例" class="section level2">
+<h2>HTML 文档示例</h2>
+<pre class="html"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;title&gt;页面&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;!-- 页眉 --&gt;
+        &lt;header&gt; &lt;!-- 本站所有网页的统一主标题 --&gt;
+            &lt;h1&gt;Header 1&lt;/h1&gt;
+        &lt;/header&gt;
+        
+        &lt;!-- 导航栏 --&gt;
+        &lt;nav&gt; &lt;!-- 本站统一的导航栏 --&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;主页&lt;/a&gt;&lt;/li&gt;
+                &lt;!-- 共n个导航栏项目，省略…… --&gt;
+            &lt;ul&gt;
+            
+            &lt;form&gt; &lt;!-- 搜索栏是站点内导航的一个非线性的方式。 --&gt;
+                &lt;input type=&quot;search&quot; name=&quot;q&quot; placeholder=&quot;要搜索的内容&quot;&gt;
+                &lt;input type=&quot;submit&quot; value=&quot;搜索&quot;&gt;
+             &lt;/form&gt;
+        &lt;/nav&gt;
+        
+        &lt;!-- 主内容 --&gt;
+        &lt;main&gt; &lt;!-- 网页主体内容 --&gt;
+            &lt;article&gt;
+                &lt;!-- 此处包含一个 article（一篇文章），内容略…… --&gt;
+            &lt;/article&gt;
+            
+            &lt;section&gt;&lt;/section&gt;
+            
+            &lt;div&gt;&lt;/div&gt;
+        
+        
+            &lt;!-- 侧边栏 --&gt;
+            &lt;aside&gt; &lt;!-- 侧边栏在主内容右侧 --&gt;
+            &lt;/aside&gt;
+        &lt;/main&gt;
+        
+        &lt;!-- 页脚--&gt;
+        &lt;footer&gt; &lt;!-- 本站所有网页的统一页脚 --&gt;
+            &lt;p&gt;所有权利&lt;/p&gt;
+        &lt;/footer&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<div id="html-布局元素" class="section level2">
+<h2>HTML 布局元素</h2>
+<div id="主要元素" class="section level3">
+<h3>主要元素</h3>
+<ul>
+<li><code>&lt;header&gt;&lt;/header&gt;</code>
+<ul>
+<li>是简介形式的内容。如果它是
+<body>
+的子元素，那么就是网站的全局页眉。
+如果它是
+<article>
+或
+<section>
+的子元素，那么它是这些部分特有的页眉</li>
+</ul></li>
+<li><code>&lt;nav&gt;&lt;/nav&gt;</code>
+<ul>
+<li>包含页面主导航功能。其中不应包含二级链接等内容</li>
+</ul></li>
+<li><code>&lt;main&gt;&lt;/main&gt;</code>
+<ul>
+<li>存放每个页面独有的内容。每个页面上只能用一次
+<main>
+，
+且直接位于
+<body>
+中。最好不要把它嵌套进其它元素</li>
+</ul></li>
+<li><code>&lt;article&gt;&lt;/article&gt;</code>
+<ul>
+<li>包围的内容即一篇文章，与页面其它部分无关(比如一篇博文)</li>
+</ul></li>
+<li><code>&lt;section&gt;&lt;/section&gt;</code>
+<ul>
+<li>与
+<article>
+类似，但
+<section>
+更适用于组织页面使其按功能(比如迷你地图、一组文章标题和摘要)分块。
+一般的最佳用法是：以标题作为开头；也可以把一篇
+<article>
+分成若干部分并分别置于不同的
+<section>
+中，
+也可以把一个区段
+<section>
+分成若干部分并分别置于不同的
+<article>
+中，取决于上下文</li>
+</ul></li>
+<li><code>&lt;aside&gt;&lt;/aside&gt;</code>
+<ul>
+<li>包含一些间接信息(术语条目、作者简介、相关链接，等等)</li>
+</ul></li>
+<li><code>&lt;footer&gt;&lt;/footer&gt;</code>
+<ul>
+<li>包含了页面的页脚部分</li>
+</ul></li>
+</ul>
+</div>
+<div id="无语义元素" class="section level3">
+<h3>无语义元素</h3>
+<p>对于一些要组织的项目或要包装的内容，现有的语义元素均不能很好对应。
+有时候你可能只想将一组元素作为一个单独的实体来修饰来响应单一的用 CSS 或 JavaScript。
+为了应对这种情况，HTML 提供了 <code>&lt;div&gt;</code> 和 <code>&lt;span&gt;</code> 元素。
+应配合使用 <code>class</code> 属性提供一些标签，使这些元素能易于查询。</p>
+<ul>
+<li><code>&lt;div class=""&gt;&lt;/div&gt;</code> 是一个块级(block)无语义元素，
+应仅用于找不到更好的块级元素时，或者不想增加特定的意义时</li>
+<li><code>&lt;span class=""&gt;&lt;/span&gt;</code> 是一个内联的(inline)无语义元素，
+最好只用于无法找到更好的语义元素来包含内容时，或者不想增加特定的含义时</li>
+</ul>
+</div>
+<div id="换行与水平分割线" class="section level3">
+<h3>换行与水平分割线</h3>
+<ul>
+<li><code>&lt;br&gt;</code>
+<ul>
+<li>可在段落中进行换行, 是唯一能够生成多个短行结构(例如邮寄地址或诗歌)的元素</li>
+</ul></li>
+<li><code>&lt;hr&gt;</code>
+<ul>
+<li>元素在文档中生成一条水平分割线，表示文本中主题的变化(例如话题或场景的改变)。一般就是一条水平的直线</li>
+</ul></li>
+</ul>
+</div>
+<div id="网站规划" class="section level3">
+<h3>网站规划</h3>
+<p>在完成页面内容的规划后，一般应按部就班地规划整个网站的内容：</p>
+<ul>
+<li>要可能带给用户最好的体验</li>
+<li>需要哪些页面</li>
+<li>如何排列组合这些页面、</li>
+<li>如何互相链接等问题不可忽略</li>
+</ul>
+<p>这些工作称为信息架构。在大型网站中，大多数规划工作都可以归结于此，
+而对于一个只有几个页面的简单网站，规划设计过程可以更简单，更有趣。</p>
+<p>下面是一个简单的网站规划步骤</p>
+<ol style="list-style-type: decimal">
+<li>大多数页面会使用一些相同的元素，例如导航菜单以及页脚内容
+<ul>
+<li>通用内容
+<ul>
+<li>页眉: 标题、Logo</li>
+<li>页脚: 联系方式、版权声明</li>
+</ul></li>
+</ul></li>
+<li>接下来，可为页面结构绘制草图，记录每一块的作用</li>
+<li>下面，对于期望添加近站点的所有其他(通用内容以外的)内容展开头脑风暴，直接罗列出来</li>
+<li>下一步，试着对这些内容进行分组，这样可以让你了解哪些内容可以放在统一页面上，这种做法和卡片分类非常相似</li>
+<li>接下来，试着绘制一个站点地图的草图，使用一个气泡代表网站的一个页面，
+并绘制连线来表示页面间的一般工作流。主页面一般置于中心，
+且链接到其他大多数页面；小型网站的大多数页面都可以从主页的导航栏中链接跳转。
+也可记录下内容的显示方式</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="html-调试" class="section level1">
+<h1>HTML 调试</h1>
+</div>
+<div id="html-多媒体与嵌入内容" class="section level1">
+<h1>HTML 多媒体与嵌入内容</h1>
+<ul>
+<li>HTML 中的图片</li>
+<li>HTML 中的视频和音频</li>
+<li>HTML 中的嵌入技术</li>
+<li>HTML 中的矢量图像</li>
+<li>HTML 中的响应式图片</li>
+</ul>
+</div>
+<div id="html-表格" class="section level1">
+<h1>HTML 表格</h1>
+<div id="表格知识点" class="section level2">
+<h2>表格知识点</h2>
+<ul>
+<li>表格标签 <code>&lt;table&gt;&lt;/table&gt;</code>: table</li>
+<li>表格标题 <code>&lt;th&gt;&lt;/th&gt;</code>: table head</li>
+<li>表格行标签 <code>&lt;tr&gt;&lt;/tr&gt;</code>: table row</li>
+<li>单元格标签 <code>&lt;td&gt;&lt;/td&gt;</code>: table data</li>
+<li>单元格跨越多个列和行: <code>colspan</code> 属性、<code>rowspan</code> 属性
+<ul>
+<li><code>&lt;th colspan="n"&gt;&lt;/th&gt;</code></li>
+<li><code>&lt;th rowspan="n"&gt;&lt;/th&gt;</code></li>
+<li><code>&lt;td colspan="n"&gt;&lt;/td&gt;</code></li>
+<li><code>&lt;td rowspan="n"&gt;&lt;/td&gt;</code></li>
+</ul></li>
+<li>表格样式化
+<ul>
+<li>为列提供样式 <code>&lt;colgroup&gt;&lt;col&gt;&lt;col style=""&gt;&lt;/colgroup&gt;</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="表格示例" class="section level2">
+<h2>表格示例</h2>
+<pre class="html"><code>&lt;table&gt;  &lt;!-- 表格标签 --&gt;
+  &lt;colgroup&gt;
+    &lt;col&gt;                                           &lt;!-- 第一列样式 --&gt;
+    &lt;col style=&quot;background-color: yellow&quot; span=&quot;&quot;&gt;  &lt;!-- 第一列样式 --&gt;
+    &lt;col&gt;                                           &lt;!-- 第一列样式 --&gt;
+  &lt;/colgroup&gt;
+  
+  &lt;tr&gt;  &lt;!-- 第一行(标题行) --&gt;
+    &lt;th colspan=&quot;2&quot;&gt;Column Header 1&lt;/th&gt;
+    &lt;th&gt;Column Header 2&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;  &lt;!-- 第二行 --&gt;
+    &lt;td&gt;row1 col1&lt;/td&gt;
+    &lt;td&gt;row1 col2&lt;/td&gt;
+    &lt;td&gt;row1 col3&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;  &lt;!-- 第三行 --&gt;
+    &lt;td&gt;row2 col1&lt;/td&gt;
+    &lt;td&gt;row2 col2&lt;/td&gt;
+    &lt;td&gt;row2 col3&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;  &lt;!-- 第四行 --&gt;
+    &lt;td&gt;row3 col1&lt;/td&gt;
+    &lt;td&gt;row3 col2&lt;/td&gt;
+    &lt;td&gt;row3 col3&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+</div>
+<div id="表格样式化" class="section level2">
+<h2>表格样式化</h2>
+</div>
+</div>
+<div id="html-表单" class="section level1">
+<h1>HTML 表单</h1>
+</div>
+<div id="cors-处理跨域图片" class="section level1">
+<h1>CORS 处理跨域图片</h1>
+</div>
+<div id="cors-设置属性" class="section level1">
+<h1>CORS 设置属性</h1>
+</div>
+<div id="使用-relpreload-预加载页面内容" class="section level1">
+<h1>使用 rel=“preload” 预加载页面内容</h1>
+</div>
+<div id="相关教程文章" class="section level1">
+<h1>相关教程、文章</h1>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML" class="uri">https://developer.mozilla.org/zh-CN/docs/Web/HTML</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references" class="uri">https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references</a></li>
+<li><a href="https://html.spec.whatwg.org/multipage/" class="uri">https://html.spec.whatwg.org/multipage/</a></li>
+<li><a href="https://validator.w3.org/#validate_by_uri" class="uri">https://validator.w3.org/#validate_by_uri</a></li>
+<li><a href="https://ogp.me/" class="uri">https://ogp.me/</a></li>
+<li><a href="https://www.w3.org/International/articles/language-tags/" class="uri">https://www.w3.org/International/articles/language-tags/</a></li>
+<li><a href="https://search.google.com/search-console/welcome?hl=zh-CN&amp;utm_source=wmx&amp;utm_medium=deprecation-pane&amp;utm_content=home" class="uri">https://search.google.com/search-console/welcome?hl=zh-CN&amp;utm_source=wmx&amp;utm_medium=deprecation-pane&amp;utm_content=home</a></li>
+</ul>
+</div>

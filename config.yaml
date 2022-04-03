@@ -26,21 +26,24 @@ menu:
     - name: "日志"
       url: "/post/"
       weight: 3
-    - name: "分类"
-      url: "/categories/"
+    - name: "笔记"
+      url: "/note/"
       weight: 4
+    # - name: "分类"
+      # url: "/categories/"
+      # weight: 5
     - name: "简历"
       url: "/resume/"
-      weight: 5
+      weight: 6
     - name: "事务"
       url: "/todo/"
-      weight: 6
+      weight: 7
     - name: "主题"
       url: "/Ivy/"
-      weight: 7
+      weight: 8
     # - name: "标签"
       # url: "/tags/"
-      # weight: 7
+      # weight: 9
     # - name: "订阅"
       # url: "/index.xml"
       # weight: 5
