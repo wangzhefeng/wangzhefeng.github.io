@@ -1,0 +1,185 @@
+---
+title: NLP-gensim
+author: 王哲峰
+date: '2022-04-05'
+slug: nlp-gensim
+categories:
+  - NLP
+tags:
+  - tool
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="gensim-简介" class="section level1">
+<h1>1.Gensim 简介</h1>
+<div id="gensim-简介-1" class="section level2">
+<h2>1.1 Gensim 简介</h2>
+<ul>
+<li>Gensim is a Free python library</li>
+<li>Gensim is a topic modelling for humans
+<ul>
+<li>Train large-scale semantic NLP models</li>
+<li>Represent text as semantic vectors</li>
+<li>Find semantically related documents</li>
+</ul></li>
+<li>Why Gensim?
+<ul>
+<li>super fast</li>
+<li>data streaming</li>
+<li>platform independent</li>
+<li>proven</li>
+<li>open source</li>
+<li>ready-to-use models and corpora</li>
+</ul></li>
+</ul>
+</div>
+<div id="demo" class="section level2">
+<h2>1.2 Demo</h2>
+<pre class="python"><code>from gensim import corpora, models, similarities, downloader
+
+# Stream a training corpus directly from S3.
+corpus = corpora.MmCorpus(&quot;s3://path/to/corpus&quot;)
+
+# Train Latent Semantic Indexing with 200D vectors.
+lsi = models.LsiModel(corpus, num_topics = 200)
+
+# Convert another corpus to the LSI space and index it.
+index = similarities.MatrixSimilarity(lsi[another_corpus])
+
+# Compute similarity of a query vs indexed documents.
+sims = index[query]</code></pre>
+</div>
+</div>
+<div id="gensim-安装" class="section level1">
+<h1>2.Gensim 安装</h1>
+<div id="gensim-安装-1" class="section level2">
+<h2>2.1 Gensim 安装</h2>
+<pre class="bash"><code>$ pip install --upgrade gensim
+
+$ conda install -c conda-forge gensim</code></pre>
+</div>
+<div id="gensim-依赖" class="section level2">
+<h2>2.2 Gensim 依赖</h2>
+<ul>
+<li>Python 3.6, 3.7, 3.8</li>
+<li>Numpy</li>
+<li>smart_open: 用于打开远程存储库中的文件或压缩文件</li>
+</ul>
+</div>
+</div>
+<div id="gensim-使用" class="section level1">
+<h1>3.Gensim 使用</h1>
+<pre class="python"><code>import  pprint</code></pre>
+<div id="gensim-中常用核心概念" class="section level2">
+<h2>3.1 Gensim 中常用核心概念</h2>
+<p><code>gensim</code> 的核心概念:</p>
+<ul>
+<li>Document</li>
+<li>Corpus</li>
+<li>Vector</li>
+<li>Model</li>
+</ul>
+<div id="document" class="section level3">
+<h3>3.1.1 Document</h3>
+<pre class="python"><code>document = &quot;Human machine interface for lab abc computer applications&quot;</code></pre>
+</div>
+<div id="corpus" class="section level3">
+<h3>3.1.2 Corpus</h3>
+<p>一个 <code>Corpus</code> 是一系列 <code>Document</code> 对象的集合，Corpora 在 Gensim 中提供了两个角色:</p>
+<ul>
+<li><p>1.<code>Model</code> 训练的输入. 在训练期间，模型会使用该训练语料库来查找常见的主题和主题，从而初始化其内部模型参数</p>
+<ul>
+<li>Gensim 专注于无监督模型，因此不需要人工干预，例如昂贵的注释或手工标记文档.</li>
+</ul></li>
+<li><p>2.整理好的 <code>Document</code>. 训练后，可以使用主题模型从新文档(训练语料库中未显示的文档)中提取主题</p>
+<ul>
+<li>可以为此类语料库索引 <strong>相似性查询</strong>，通过语义相似性查询，聚类等</li>
+</ul></li>
+</ul>
+<pre class="python"><code>from gensim import corpora, models, similarities, downloader
+from collections import defaultdict
+
+# 1.语料库
+text_corpus = [
+    &quot;Human machine interface for lab abc computer applications&quot;,
+    &quot;A survey of user opinion of computer system response time&quot;,
+    &quot;The EPS user interface management system&quot;,
+    &quot;System and human system engineering testing of EPS&quot;,
+    &quot;Relation of user perceived response time to error measurement&quot;,
+    &quot;The generation of random binary unordered trees&quot;,
+    &quot;The intersection graph of paths in trees&quot;,
+    &quot;Graph minors IV Widths of trees and well quasi ordering&quot;,
+    &quot;Graph minors A survey&quot;,
+]
+
+# 2.创建常用词集合
+# 停用词
+stoplist = set(&quot;for a of the and to in&quot;.spilt(&quot; &quot;))
+# 常用词
+texts = [[word for word in document.lower().split() if word not in stoplist] for document in text_corpus]
+
+# 3.统计词频
+frequency = defaultdict(int)
+for text in texts:
+    for token in text:
+        frequency[token] += 1
+
+# 4.删除只出现一次的词
+processed_corpus = [[token for token in text if frequency[token] &gt; 1] for text in texts]
+pprint.pprint(processed_corpus)
+
+# 5.将语料库中的每个单词与唯一的整数ID相关联
+dictionary = corpora.Dictionary(processed_corpus)
+print(dictionary)</code></pre>
+</div>
+<div id="vector" class="section level3">
+<h3>3.1.3 Vector</h3>
+<p>为了推断语料库中的潜在结构，需要可以表示文档的数学处理方式:</p>
+<ul>
+<li><p>方法 1: 将文档表示为 <strong>特征向量</strong></p>
+<ul>
+<li>密集向量</li>
+</ul></li>
+<li><p>方法 2: 词袋模型</p>
+<ul>
+<li>稀疏向量/词袋向量</li>
+</ul></li>
+</ul>
+<pre class="python"><code>pprint.pprint(dictionary.token2id)</code></pre>
+<p>使用 <code>doc2bow</code> 为文档创建单词袋表示法:</p>
+<pre class="python"><code>new_doc = &quot;Human computer interaction&quot;
+new_vec = dictionary.doc2bow(new_doc.lower().split())
+print(new_vec)</code></pre>
+</div>
+<div id="model" class="section level3">
+<h3>3.1.4 Model</h3>
+<p>常用模型:</p>
+<pre><code>- tf-idf</code></pre>
+<pre class="python"><code>from gensim import models
+
+# 训练模型
+tfidf = models.TfidfModel(bow_corpus)
+
+# 转换 &quot;system minors&quot; 字符串
+words = &quot;system minors&quot;.lower().split()
+print(tfidf[dictionary.doc2bow(words)])</code></pre>
+</div>
+</div>
+<div id="语料corpora和词空间vector-spaces" class="section level2">
+<h2>3.2 语料(Corpora)和词空间(Vector Spaces)</h2>
+</div>
+<div id="主题topics和转换transformations" class="section level2">
+<h2>3.3 主题(Topics)和转换(Transformations)</h2>
+</div>
+<div id="相似性查询similarity-queries" class="section level2">
+<h2>3.4 相似性查询(Similarity Queries)</h2>
+</div>
+<div id="常用教程" class="section level2">
+<h2>3.5 常用教程</h2>
+</div>
+</div>
+<div id="gensim-常用-api" class="section level1">
+<h1>4.Gensim 常用 API</h1>
+</div>

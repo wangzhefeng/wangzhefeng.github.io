@@ -54,6 +54,10 @@ h2 {
 - [ ] feedly 查看 https://feedly.com/i/welcome
 - [ ] ssh_config Linux manual page 查看 https://man7.org/linux/man-pages/man5/ssh_config.5.html
 - [x] 项目教学外部支持，修复 dev 环境
+- [ ] NLP-fastText
+- Audio-librosa
+- Audio-scipy
+
 
 
 ## DOING

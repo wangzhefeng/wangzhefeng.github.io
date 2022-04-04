@@ -164,3 +164,87 @@ h2 {
     * 六西格玛
 - 项目管理
 
+
+# 算法工程师技能列表
+
+## 1.岗位行业
+
+   - 搜索推荐
+   - 广告
+   - 数据挖掘
+   - 机器学习
+   - 信息检索
+   - 推荐系统
+
+## 2.算法栈
+
+   1. 数据结构和算法
+   2. 图像分类
+   3. 图像识别
+   4. 目标检测
+   5. 目标分类
+   6. 目标跟踪
+   7. 目标分割
+   8. 通用 OCR
+   9. 语义分割
+   10. 实例分割
+   11. 语音分析
+      
+      - 情感分析
+      - 话题分析
+      - 话题摘要
+      - 观点识别
+      - 语义理解
+
+   12. 多模态情感计算
+   
+
+## 3.技术栈
+
+   1. C++
+   2. Java
+   3. SQL
+   4. NoSQL
+   5. Python
+      
+      - Scikit-learn
+      - Tensorflow
+      - keras
+      - pytorch
+      - YOLOv5
+      - deeplearning 部署框架
+         
+         - Tensorflow Lite
+         - NCNN
+         - MNN
+         - TensorRT
+         - Tengine
+         - OpenVINO
+         - NCNN
+      - Python 单元测试框架
+      - Python 文档框架
+      - Python 包构建与分发经验
+    
+   6. CUDA编程
+   7. OPENCL编程
+      
+   8. Linux
+         
+      - 嵌入式开发
+      
+   9. 神经网络
+      
+      - ResNet
+      - EfficientNet
+      - Yolo
+      - Mask-RCNN
+      - RetinaNet
+      - DeepLab
+
+   10. Spark
+   11. Hadoop
+   12. OpenCV
+   13. PCL
+   14. git
+   15. adb
+   16. shell
