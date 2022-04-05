@@ -1,0 +1,50 @@
+---
+title: pytorch-model
+author: 王哲峰
+date: '2022-04-05'
+slug: pytorch-model
+categories:
+  - deeplearning
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#pytorch-保存模型">1.PyTorch 保存模型</a>
+<ul>
+<li><a href="#方法-1保存和加载模型参数">1.1 方法 1:保存和加载模型参数</a></li>
+<li><a href="#方法-2保存和加载整个模型">1.2 方法 2:保存和加载整个模型</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="pytorch-保存模型" class="section level1">
+<h1>1.PyTorch 保存模型</h1>
+<div id="方法-1保存和加载模型参数" class="section level2">
+<h2>1.1 方法 1:保存和加载模型参数</h2>
+<pre class="python"><code>import torch</code></pre>
+<pre class="python"><code># 保存模型
+torch.save(the_model.state_dict(), PATH)
+
+# 加载模型
+the_model = TheModelClass(*args, **kwargs)
+the_model.load_state_dict(torch.load(PATH))</code></pre>
+</div>
+<div id="方法-2保存和加载整个模型" class="section level2">
+<h2>1.2 方法 2:保存和加载整个模型</h2>
+<pre class="python"><code>import torch</code></pre>
+<pre class="python"><code># 保存模型
+torch.save(the_model, PATH)
+
+# 加载模型
+the_model = torch.load(PATH)</code></pre>
+</div>
+</div>

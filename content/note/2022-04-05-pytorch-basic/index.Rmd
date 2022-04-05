@@ -1,0 +1,667 @@
+---
+title: PyTorch 基础
+author: 王哲峰
+date: '2022-04-05'
+slug: pytorch-basic
+categories:
+  - deeplearning
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+
+
+内容概要
+
+* 1.tensor 的简介及创建
+
+   - tensor 是多维数组
+   - tensor 的创建
+      - 直接创建
+         - `torch.tensor`
+         - `torch.from_numpy`      
+      - 依数值创建
+         - `empty`
+         - `ones`
+         - `zeros`
+         - `eye`
+         - `full`
+         - `arange`
+         - `linspace`
+      - 依概率分布创建
+         - `torch.normal`
+         - `torch.randn`
+         - `torch.rand`
+         - `torch.randint`
+         - `torch.randperm`
+* 2.tensor 的操作
+   - tensor 的基本操作
+      - tensor 的拼接
+         - `torch.cat()`
+         - `torch.stack()`
+      - tensor 的切分
+         - `torch.chunk()`
+         - `torch.split()`
+      - tensor 的索引
+         - `index_select()`
+         - `masked_select()`
+      - tensor 的变换
+         - `torch.reshape()`
+         - `torch.transpose()`
+         - `torch.t`
+   - tensor 的数学运算
+      - `add(input, aplha, other)`
+
+# 1.pytorch tensor 的创建
+
+## 1.1 tensor 的介绍
+
+tensor 是 pytorch 中最基本的概念,其参与了整个运算过程,这里主要介绍 tensor 的概念和属性,如 data, variable, device 等,
+并且介绍 tensor 的基本创建方法,如直接创建、依属主创建、依概率分布创建等.
+
+- tensor
+  - tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
+- tensor 与 variable 
+  - 在 pytorch 0.4.0 版本之后 variable 已经并入 tensor,但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
+     variable 是 `torch.autograd` 中的数据类型
+  - variable(`torch.autograd.variable`) 有 5 个属性, 这些属性都是为了 tensor 的自动求导而设置的:
+     - `data`
+     - `grad`
+     - `grad_fn`
+     - `requires_grad`
+     - `is_leaf`
+  - tensor(`torch.tensor`) 有 8 个属性:
+     - 与数据本身相关
+        - `data`: 被包装的 tensor
+        - `dtype`:tensor 的数据类型,如 `torch.floattensor`, `torch.cuda.floattensor`, `float32`, `int64(torch.long)`
+        - `shape`: tensor 的形状
+        - `device`:tensor 所在的设备, gpu/cup,tensor 放在 gpu 上才能使用加速     
+     - 与梯度求导相关
+        - `requires_grad`: 是否需要梯度
+        - `grad`: `data` 的梯度
+        - `grad_fn`: fn 表示 function 的意思，记录创建 tensor 时用到的方法
+        - `is_leaf`: 是否是叶子节点(tensor)
+
+## 1.2 tensor 的创建
+
+```python
+from __future__ import print_function
+import numpy as np
+import torch
+```
+
+### 1.2.1 直接创建
+
+1.torch.tensor(): 从 data 创建 tensor api
+   
+- API:
+
+```python
+torch.tensor(
+   data,                   # list, numpy
+   dtype = none,
+   device = none,
+   requires_grad = false,
+   pin_memory = false      # 是否存于锁页内存
+)
+```
+
+- 示例:
+
+```python
+arr = np.ones((3, 3))
+t = torch.tensor(arr, device = "cuda")
+print(t)
+```
+
+1. 通过 numpy array 来创建 tensor api
+
+- 创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动
+
+- API:
+
+```python
+torch.from_numpy(ndarray)
+```
+
+- 示例:
+
+```python
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+t = torch.from_numpy(arr)
+print(arr)
+arr[0, 0] = 0
+print(arr, t)
+t[1, 1] = 100
+print(arr, t)
+```
+
+### 1.2.2 依数值创建
+
+- api:
+
+```python
+torch.zeros(
+   *size,
+   out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
+   dtype = none,
+   layout = torch.strided, # 内存的布局形式
+   device = none,
+   requires_grad = false
+)
+```
+
+- 示例:
+
+```python
+out_t = torch.tensor([1])
+t = torch.zeros((3, 3), out = out_t)
+print(out_t, t)
+print(id(out_t), id(t), id(t) == id(out_t))
+```
+
+2.pytorch tensor 的操作
+--------------------------
+
+- torch.add(, out)
+- .add_()
+- .view()
+
+- add:
+
+```python
+x = torch.zeros(5, 3, dtype = torch.long)
+y = torch.rand(5, 3)
+
+# method 1
+print(x + y)
+
+# method 2
+print(torch.add(x, y))
+
+# method 3
+result = torch.empty(5, 3)
+torch.add(x, y, out = result)
+print(result)
+
+# method 4
+y.add_(x)
+print(y)
+```
+
+- index:
+
+```python
+x = torch.zeros(5, 3, dtype = torch.long)
+print(x[:, 1])
+```
+
+- resize:
+
+```python
+x = torch.randn(4, 4)
+y = x.view(16)
+z = x.view(-1, 8)
+print(x.size(), y.size(), z.size())
+```
+
+- object trans:
+
+```python
+x = torch.randn(1)
+print(x)
+print(x.item()) # python number
+```
+
+- torch tensor 2 numpy array:
+
+```python
+a = torch.ones(5)
+b = a.numpy()
+print(a)
+print(b)
+
+a.add_(1)
+print(a)
+print(b)
+```
+
+- numpy array 2 torch tensor:
+
+```python
+import numpy as np
+a = np.ones(5)
+b = torch.from_numpy(a)
+np.add(a, 1, out = a)
+print(a)
+print(b)
+```
+
+# 3.pytorch cuda tensor
+
+```python
+# let us run this cell only if cuda is available
+# we will use `torch.device` objects to move tensors in and out of gpu
+if torch.cuda.is_available():
+   device = torch.device("cuda")          # a cuda device object
+   y = torch.ones_like(x, device=device)  # directly create a tensor on gpu
+   x = x.to(device)                       # or just use strings `.to("cuda")`
+   z = x + y
+   print(z)
+   print(z.to("cpu", torch.double))       # `.to` can also change dtype together!
+```
+
+
+
+
+
+# PyTorch 数据读取与预处理
+
+## PyTorch 数据读取
+
+
+### 构造自定义的 Datasets, Dataloaders, Transforms
+
+
+### 依赖库
+
+```python
+from __future__ import print_function, division
+import os
+import torch
+import pandas as pd 
+from skimage import io, transform
+import numpy as np 
+import matplotlib.pyplot as plt 
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transform, utils
+
+# Ignore warnings
+import warnings
+warnings.filterwarnings("ignore")
+
+plt.ion() # interactive mode
+```
+
+
+## 读取数据
+
+```python
+landmarks_frame = pd.read_csv("../data/faces/face_landmarks.csv")
+n = 65
+img_name = landmarks_frame.iloc[n, 0]
+landmarks = landmarks_frame.iloc[n, 1:].as_matrix()
+landmarks = landmarks.astype("float").reshape(-1, 2)
+
+
+print("Image name: {}".format(img_name))
+print("Landmarks shape: {}".format(landmarks.shape))
+print("First 4 Landmarks: {}".format(landmarks[:4]))
+```
+
+```python
+def show_landmarks(image, landmarks):
+   """show image with landmarks"""
+   plt.imshow(image)
+   plt.scatter(landmarks[:, 0], landmarks[:, 1], s = 10, marker = ".", c = "r")
+   plt.pause(0.001)
+
+plt.figure()
+show_landmarks(io.imread(os.path.join("../data/faces/", img_name)), landmarks)
+```
+
+## Dataset class
+
+```python
+class FaceLandmarksDataset(Dataset):
+   """Face Landmarks dataset."""
+   def __init__(self, csv_file, root_dir, transform = None):
+      pass
+```
+
+
+# PyTorch 数据并行
+
+
+## 让模型跑在 GPU 上
+
+```python
+import torch
+
+# 让模型在 GPU 上运行
+device = torch.device("cuda:0")
+model.to(device)
+
+# 将 tensor 复制到 GPU 上
+my_tensor = torch.ones(2, 2, dtype = torch.double)
+mytensor = my_tensor.to(device)
+```
+
+## 让模型跑在多个 GPU 上
+
+-  PyTorch 默认使用单个 GPU 执行运算
+
+```python
+model = nn.DataParallel(model)
+```
+
+```python
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+
+# Parameters and DataLoaders
+input_size = 5
+output_size = 2
+
+batch_size = 30
+data_size = 100
+
+# Device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+```
+
+```python
+class RandomDataset(Dataset):
+
+def __init__(self, size, length):
+	self.len = length
+	self.data = torch.randn(length, size)
+
+def __getitem__(self, index):
+	return self.data[index]
+
+def __len__(self):
+	return self.len
+
+rand_loader = DataLoader(dataset = RandomDataset(input_size, data_size), 
+						batch_size = batch_size, 
+						shuffle = True)
+```
+
+```python
+class Model(nn.Module):
+
+def __init__(self, input_size, output_size):
+	super(Model, self)__init__()
+	self.fc = nn.Linear(input_size, output_size)
+
+def forward(self, input):
+	output = self.fc(input)
+	print("\tIn Model: input size", input.size(),
+			"output size", output.size())
+
+	return output
+```
+
+```python
+model = Model(input_size, output_size)
+if torch.cuda.device_count() > 1:
+print("Let's use", torch.cuda.device_count(), "GPUs!")
+model = nn.DataParallel(model)
+
+model.to(device)
+```
+
+```python
+for data in rand_loader:
+	input = data.to(device)
+	output = model(input)
+	print("Outside: input size", input.size(),
+		"output_size", output.size())
+```
+
+
+
+PyTorch nn
+
+A typical training procedure for a neural network is as follows:
+
+-  Define the neural network that has some learnable parameters (or
+   weights)
+-  Iterate over a dataset of inputs
+-  Process input through the network
+-  Compute the loss (how far is the output from being correct)
+-  Propagate gradients back into the network’s parameters
+-  Update the weights of the network, typically using a simple update
+   rule: ``weight = weight - learning_rate * gradient``
+
+.. _header-n18:
+
+## 定义神经网
+
+```python
+
+# nn
+# autograd
+# nn.Module
+    # forward(input) => output
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        # 1 input image channel, 6 output channels, 3x3 square convolution kernel
+        self.conv1 = nn.Conv2d(1, 6, 3)
+        self.conv2 = nn.Conv2d(6, 16, 3)
+        # an affine operation: y = Wx + b
+        self.fc1 = nn.Linear(16 * 6 * 6, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        # Max pooling over a (2, 2) window
+        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        # If the size is a square you can only specify a single number
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = x.view(-1, self.num_flat_features(x))
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+
+        return x
+
+    def num_flat_features(self, x):
+        size = x.size()[1:]
+        num_features = 1
+        for s in size:
+            num_features *= s
+
+        return num_features
+
+
+net = Net()
+print(net)
+```
+
+```python
+   params = list(net.parameters)
+   print(len(params))
+   print(params[0].size()) # conv1's .weight
+```
+
+```python
+net.zero_grad()
+out.backward(torch.randn(1, 10))
+```
+
+
+
+
+# PyTorch 自动求导
+
+``autograd`` 包提供了对所有 Tensor 的自动微分操作
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+`autograd` package:
+-------------------
+跟踪 torch.Tensor 上所有的操作:torch.Tensor(requires_grad = True)
+自动计算所有的梯度:.backward()
+torch.Tensor 上的梯度:.grad
+torch.Tensor 是否被跟踪:.requires_grad
+停止跟踪 torch.Tensor 上的跟踪历史、未来的跟踪:.detach()
+
+with torch.no_grad():
+      pass
+
+Function
+.grad_fn
+"""
+
+import torch
+
+# --------------------
+# 创建 Tensor 时设置 requires_grad 跟踪前向计算
+# --------------------
+x = torch.ones(2, 2, requires_grad = True)
+print("x:", x)
+
+y = x + 2
+print("y:", y)
+print("y.grad_fn:", y.grad_fn)
+
+z = y * y * 3
+print("z:", z)
+print("z.grad_fn", z.grad_fn)
+
+out = z.mean()
+print("out:", out)
+print("out.grad_fn:", out.grad_fn)
+out.backward()
+print("x.grad:", x.grad)
+
+# --------------------
+# .requires_grad_() 能够改变一个已经存在的 Tensor 的 `requires_grad`
+# --------------------
+a = torch.randn(2, 2)
+a = ((a * 3) / (a - 1))
+print("a.requires_grad", a.requires_grad)
+a.requires_grad_(True)
+print("a.requires_grad:", a.requires_grad)
+b = (a * a).sum()
+print("b.grad_fn", b.grad_fn)
+
+
+
+# 梯度
+x = torch.randn(3, requires_grad = True)
+y = x * 2
+while y.data.norm() < 1000:
+      y = y * 2
+v = torch.tensor([0.1, 1.0, 0.0001], dtype = torch.float)
+y.backward(v)
+print(x.grad)
+
+# .requires_grad
+print(x.requires_grad)
+print((x ** 2).requires_grad)
+
+with torch.no_grad():
+      print((x ** 2).requires_grad)
+
+# .detach()
+print(x.requires_grad)
+y = x.detach()
+print(y.requires_grad)
+print(x.eq(y).all())
+```
+
+
+# 4.PyTorch 动态图、自动求导
+
+- 4.1 计算图
+
+   - 描述运算的有向无环图
+
+      - Tensor 的 is_leaf 属性
+
+      - Tensor 的 grad_fn 属性
+
+- 4.2 PyTorch 动态图机制
+
+   - 动态图与静态图
+
+- 4.3 PyTorch 自动求导机制
+
+   - torch.autograd.backward() 方法自动求取梯度
+
+   - torch.autograd.grad() 方法可以高阶求导
+
+   - note
+      - 梯度不自动清零
+      - 依赖叶节点的节点, requires_grad 默认为 True
+      - 叶节点不能执行原位操作
+
+## 4.1 计算图
+
+计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
+其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。
+
+使用计算图的好处不仅是让计算看起来更加简洁，还有个更大的优势是让梯度求导也变得更加方便。
+
+- 示例:
+
+```python
+x = torch.tensor([2.], requires_grad = True)
+w = torch.tensor([1.], requires_grad = True)
+
+a = torch.add(w, x)
+b = torch.add(w, 1)
+
+y = torch.mul(a, b)
+
+y.backward()
+print(w.grad)
+```      
+
+
+
+
+
+
+
+
+## 4.2 Pytorch 动态图机制
+
+
+
+
+
+
+## 4.3 PyTorch 自动求导机制
+
+-  package ``autograd``
+-  torch.Tensor
+-  .requires_grad = True
+-  .backward()
+-  .grad
+-  .detach()
+-  with torch.no_grad(): pass
+-  .grad_fn
+
+PyTorch 自动求导机制使用的是 ``torch.autograd.backward`` 方法，功能就是自动求取梯度。
+
+- API:
+
+```python
+torch.autograd.backward(
+   tensors, 
+   gard_tensors = None, 
+   retain_graph = None, 
+   create_graph = False
+)
+```
+
