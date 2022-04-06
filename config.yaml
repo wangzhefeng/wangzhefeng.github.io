@@ -26,12 +26,12 @@ menu:
     - name: "日志"
       url: "/post/"
       weight: 3
-    - name: "笔记"
-      url: "/note/"
-      weight: 4
+    # - name: "笔记"
+    #   url: "/note/"
+    #   weight: 4
     # - name: "分类"
-      # url: "/categories/"
-      # weight: 5
+    #   url: "/categories/"
+    #   weight: 5
     - name: "简历"
       url: "/resume/"
       weight: 6
