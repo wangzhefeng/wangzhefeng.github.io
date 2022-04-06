@@ -18,7 +18,19 @@ output:
 
 <div id="TOC">
 <ul>
-<li><a href="#pytorch-tensor-的创建">1.pytorch tensor 的创建</a>
+<li><a href="#需要掌握的内容">需要掌握的内容</a>
+<ul>
+<li><a href="#get-stated">Get Stated</a></li>
+<li><a href="#tutorials">Tutorials</a>
+<ul>
+<li><a href="#learn-the-basics">Learn the Basics</a></li>
+<li><a href="#pytorch-recipes">PyTorch Recipes</a></li>
+<li><a href="#additional-resources">Additional Resources</a></li>
+</ul></li>
+<li><a href="#docs">Docs</a></li>
+<li><a href="#github">GitHub</a></li>
+</ul></li>
+<li><a href="#pytorch-tensor-的创建">1.PyTorch tensor 的创建</a>
 <ul>
 <li><a href="#tensor-的介绍">1.1 tensor 的介绍</a></li>
 <li><a href="#tensor-的创建">1.2 tensor 的创建</a>
@@ -26,48 +38,49 @@ output:
 <li><a href="#直接创建">1.2.1 直接创建</a></li>
 <li><a href="#依数值创建">1.2.2 依数值创建</a></li>
 </ul></li>
-<li><a href="#pytorch-tensor-的操作">2.pytorch tensor 的操作</a></li>
+<li><a href="#tensor-的操作">1.3 tensor 的操作</a></li>
+<li><a href="#cuda-tensor">1.4 cuda tensor</a></li>
 </ul></li>
-<li><a href="#pytorch-cuda-tensor">3.pytorch cuda tensor</a></li>
-<li><a href="#pytorch-数据读取与预处理">PyTorch 数据读取与预处理</a>
+<li><a href="#pytorch-数据读取与预处理">2.PyTorch 数据读取与预处理</a>
 <ul>
-<li><a href="#pytorch-数据读取">PyTorch 数据读取</a>
+<li><a href="#pytorch-数据读取">2.1 PyTorch 数据读取</a>
 <ul>
-<li><a href="#构造自定义的-datasets-dataloaders-transforms">构造自定义的 Datasets, Dataloaders, Transforms</a></li>
-<li><a href="#依赖库">依赖库</a></li>
+<li><a href="#构造自定义的-datasets-dataloaders-transforms">2.1.1 构造自定义的 Datasets, Dataloaders, Transforms</a></li>
+<li><a href="#读取数据">2.1.2 读取数据</a></li>
 </ul></li>
-<li><a href="#读取数据">读取数据</a></li>
-<li><a href="#dataset-class">Dataset class</a></li>
-</ul></li>
-<li><a href="#pytorch-数据并行">PyTorch 数据并行</a>
+<li><a href="#dataset-class">2.2 Dataset class</a></li>
+<li><a href="#pytorch-数据并行">2.3 PyTorch 数据并行</a>
 <ul>
-<li><a href="#让模型跑在-gpu-上">让模型跑在 GPU 上</a></li>
-<li><a href="#让模型跑在多个-gpu-上">让模型跑在多个 GPU 上</a></li>
+<li><a href="#让模型跑在-gpu-上">2.3.1 让模型跑在 GPU 上</a></li>
+<li><a href="#让模型跑在多个-gpu-上">2.3.2 让模型跑在多个 GPU 上</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#pytorch-nn">3.PyTorch nn</a>
+<ul>
 <li><a href="#定义神经网">定义神经网</a></li>
 </ul></li>
-<li><a href="#pytorch-自动求导">PyTorch 自动求导</a></li>
 <li><a href="#pytorch-动态图自动求导">4.PyTorch 动态图、自动求导</a>
 <ul>
 <li><a href="#计算图">4.1 计算图</a></li>
 <li><a href="#pytorch-动态图机制">4.2 Pytorch 动态图机制</a></li>
 <li><a href="#pytorch-自动求导机制">4.3 PyTorch 自动求导机制</a></li>
 </ul></li>
-<li><a href="#pytorch-模型">1.PyTorch 模型</a>
+<li><a href="#pytorch-模型">5.PyTorch 模型</a>
 <ul>
-<li><a href="#pytorch-模型的创建">1.1 PyTorch 模型的创建</a></li>
-<li><a href="#pytorch-模型容器">1.2 PyTorch 模型容器</a></li>
+<li><a href="#pytorch-模型的创建">5.1 PyTorch 模型的创建</a></li>
+<li><a href="#pytorch-模型容器">5.2 PyTorch 模型容器</a></li>
 </ul></li>
-<li><a href="#pytorch-损失函数">4.PyTorch 损失函数</a></li>
-<li><a href="#pytorch-权重初始化">6.PyTorch 权重初始化</a>
+<li><a href="#pytorch-损失函数">6.PyTorch 损失函数</a></li>
+<li><a href="#pytorch-权重初始化">7.PyTorch 权重初始化</a>
 <ul>
-<li><a href="#权重初始化方法">6.1 权重初始化方法</a></li>
+<li><a href="#权重初始化方法">7.1 权重初始化方法</a></li>
 </ul></li>
-<li><a href="#pytorch-保存模型">7.PyTorch 保存模型</a>
+<li><a href="#pytorch-模型保存和加载">8.PyTorch 模型保存和加载</a>
 <ul>
-<li><a href="#方法-1保存和加载模型参数">7.1 方法 1:保存和加载模型参数</a></li>
-<li><a href="#方法-2保存和加载整个模型">5.2 方法 2:保存和加载整个模型</a></li>
+<li><a href="#方法-1保存和加载模型参数">8.1 方法 1:保存和加载模型参数</a></li>
+<li><a href="#方法-2保存和加载整个模型">8.2 方法 2:保存和加载整个模型</a></li>
 </ul></li>
-<li><a href="#pytorch-cheat-sheet">PyTorch Cheat Sheet</a>
+<li><a href="#pytorch-cheat-sheet">9.PyTorch Cheat Sheet</a>
 <ul>
 <li><a href="#imports">1.Imports</a></li>
 <li><a href="#tensors">2.Tensors</a></li>
@@ -77,40 +90,123 @@ output:
 </ul>
 </div>
 
-<p>内容概要</p>
+<div id="需要掌握的内容" class="section level1">
+<h1>需要掌握的内容</h1>
+<div id="get-stated" class="section level2">
+<h2>Get Stated</h2>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Start Locally</li>
+<li><input type="checkbox" disabled="" />
+Start via Partners</li>
+</ul>
+</div>
+<div id="tutorials" class="section level2">
+<h2>Tutorials</h2>
+<div id="learn-the-basics" class="section level3">
+<h3>Learn the Basics</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Introduction to PyTorch</li>
+<li><input type="checkbox" disabled="" />
+Learning PyTorch</li>
+<li><input type="checkbox" disabled="" />
+Image and Video</li>
+<li><input type="checkbox" disabled="" />
+Text</li>
+<li><input type="checkbox" disabled="" />
+Deploying PyTorch Model in Production</li>
+<li><input type="checkbox" disabled="" />
+Model Optimization</li>
+<li><input type="checkbox" disabled="" />
+Parallel and Distributed Training</li>
+</ul>
+</div>
+<div id="pytorch-recipes" class="section level3">
+<h3>PyTorch Recipes</h3>
 <ul>
-<li><p>1.tensor 的简介及创建</p>
+<li>[] 快速入门</li>
+<li><input type="checkbox" disabled="" />
+自定义层、训练循环</li>
+<li><input type="checkbox" disabled="" />
+分布式训练</li>
+</ul>
+</div>
+<div id="additional-resources" class="section level3">
+<h3>Additional Resources</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Examples of PyTorch</li>
+<li><input type="checkbox" disabled="" />
+PyTorch Cheat Sheet</li>
+<li><input type="checkbox" disabled="" />
+Tutorials on GitHub</li>
+<li><input type="checkbox" disabled="" />
+Run Tutorials on Google Colab</li>
+</ul>
+</div>
+</div>
+<div id="docs" class="section level2">
+<h2>Docs</h2>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+PyTorch</li>
+<li><input type="checkbox" disabled="" />
+torchaudio</li>
+<li><input type="checkbox" disabled="" />
+torchtext</li>
+<li><input type="checkbox" disabled="" />
+torchvision</li>
+<li><input type="checkbox" disabled="" />
+TorchElastic</li>
+<li><input type="checkbox" disabled="" />
+TorchServe</li>
+<li><input type="checkbox" disabled="" />
+PyTorch on XLA Devices</li>
+</ul>
+</div>
+<div id="github" class="section level2">
+<h2>GitHub</h2>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+<a href="https://github.com/pytorch/pytorch" class="uri">https://github.com/pytorch/pytorch</a></li>
+</ul>
+</div>
+</div>
+<div id="pytorch-tensor-的创建" class="section level1">
+<h1>1.PyTorch tensor 的创建</h1>
+<ul>
+<li>1.tensor 的简介及创建
 <ul>
 <li>tensor 是多维数组</li>
 <li>tensor 的创建
 <ul>
 <li>直接创建
 <ul>
-<li><code>torch.tensor</code></li>
-<li><code>torch.from_numpy</code><br />
-</li>
+<li><code>torch.tensor()</code></li>
+<li><code>torch.from_numpy()</code></li>
 </ul></li>
 <li>依数值创建
 <ul>
-<li><code>empty</code></li>
-<li><code>ones</code></li>
-<li><code>zeros</code></li>
-<li><code>eye</code></li>
-<li><code>full</code></li>
-<li><code>arange</code></li>
-<li><code>linspace</code></li>
+<li><code>torch.empty()</code></li>
+<li><code>torch.ones()</code></li>
+<li><code>torch.zeros()</code></li>
+<li><code>torch.eye()</code></li>
+<li><code>torch.full()</code></li>
+<li><code>torch.arange()</code></li>
+<li><code>torch.linspace()</code></li>
 </ul></li>
 <li>依概率分布创建
 <ul>
-<li><code>torch.normal</code></li>
-<li><code>torch.randn</code></li>
-<li><code>torch.rand</code></li>
-<li><code>torch.randint</code></li>
-<li><code>torch.randperm</code></li>
+<li><code>torch.normal()</code></li>
+<li><code>torch.randn()</code></li>
+<li><code>torch.rand()</code></li>
+<li><code>torch.randint()</code></li>
+<li><code>torch.randperm()</code></li>
 </ul></li>
 </ul></li>
 </ul></li>
-<li><p>2.tensor 的操作</p>
+<li>2.tensor 的操作
 <ul>
 <li>tensor 的基本操作
 <ul>
@@ -142,12 +238,11 @@ output:
 </ul></li>
 </ul></li>
 </ul>
-<div id="pytorch-tensor-的创建" class="section level1">
-<h1>1.pytorch tensor 的创建</h1>
 <div id="tensor-的介绍" class="section level2">
 <h2>1.1 tensor 的介绍</h2>
-<p>tensor 是 pytorch 中最基本的概念,其参与了整个运算过程,这里主要介绍 tensor 的概念和属性,如 data, variable, device 等,
-并且介绍 tensor 的基本创建方法,如直接创建、依属主创建、依概率分布创建等.</p>
+<p>tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程,
+这里主要介绍 tensor 的概念和属性, 如 data, variable, device 等,
+并且介绍 tensor 的基本创建方法, 如直接创建、依属主创建、依概率分布创建等</p>
 <ul>
 <li>tensor
 <ul>
@@ -155,9 +250,11 @@ output:
 </ul></li>
 <li>tensor 与 variable
 <ul>
-<li>在 pytorch 0.4.0 版本之后 variable 已经并入 tensor,但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
-variable 是 <code>torch.autograd</code> 中的数据类型</li>
-<li>variable(<code>torch.autograd.variable</code>) 有 5 个属性, 这些属性都是为了 tensor 的自动求导而设置的:
+<li>在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor,
+但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
+variable 是 <code>torch.autograd</code> 中的数据类型.
+variable(<code>torch.autograd.variable</code>) 有 5 个属性,
+这些属性都是为了 tensor 的自动求导而设置的:
 <ul>
 <li><code>data</code></li>
 <li><code>grad</code></li>
@@ -170,10 +267,9 @@ variable 是 <code>torch.autograd</code> 中的数据类型</li>
 <li>与数据本身相关
 <ul>
 <li><code>data</code>: 被包装的 tensor</li>
-<li><code>dtype</code>:tensor 的数据类型,如 <code>torch.floattensor</code>, <code>torch.cuda.floattensor</code>, <code>float32</code>, <code>int64(torch.long)</code></li>
+<li><code>dtype</code>: tensor 的数据类型, 如 <code>torch.floattensor</code>, <code>torch.cuda.floattensor</code>, <code>float32</code>, <code>int64(torch.long)</code></li>
 <li><code>shape</code>: tensor 的形状</li>
-<li><code>device</code>:tensor 所在的设备, gpu/cup,tensor 放在 gpu 上才能使用加速<br />
-</li>
+<li><code>device</code>: tensor 所在的设备, gpu/cup, tensor 放在 gpu 上才能使用加速</li>
 </ul></li>
 <li>与梯度求导相关
 <ul>
@@ -193,73 +289,114 @@ import numpy as np
 import torch</code></pre>
 <div id="直接创建" class="section level3">
 <h3>1.2.1 直接创建</h3>
-<p>1.torch.tensor(): 从 data 创建 tensor api</p>
-<ul>
-<li>API:</li>
-</ul>
-<pre class="python"><code>torch.tensor(
-   data,                   # list, numpy
-   dtype = none,
-   device = none,
-   requires_grad = false,
-   pin_memory = false      # 是否存于锁页内存
-)</code></pre>
-<ul>
-<li>示例:</li>
-</ul>
-<pre class="python"><code>arr = np.ones((3, 3))
-t = torch.tensor(arr, device = &quot;cuda&quot;)
-print(t)</code></pre>
 <ol style="list-style-type: decimal">
-<li>通过 numpy array 来创建 tensor api</li>
+<li>torch.tensor(): 从 data 创建 tensor api</li>
 </ol>
 <ul>
-<li><p>创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动</p></li>
-<li><p>API:</p></li>
+<li><p>API</p>
+<pre class="python"><code>torch.tensor(
+    data,                   # list, numpy
+    dtype = none,
+    device = none,
+    requires_grad = false,
+    pin_memory = false      # 是否存于锁页内存
+)</code></pre></li>
+<li><p>示例</p>
+<pre class="python"><code>arr = np.ones((3, 3))
+
+t = torch.tensor(arr, device = &quot;cuda&quot;)
+print(t)</code></pre></li>
 </ul>
-<pre class="python"><code>torch.from_numpy(ndarray)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>通过 numpy array 来创建 tensor api</li>
+</ol>
+<blockquote>
+<p>创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动</p>
+</blockquote>
 <ul>
-<li>示例:</li>
-</ul>
-<pre class="python"><code>arr = np.array([[1, 2, 3], [4, 5, 6]])
-t = torch.from_numpy(arr)
+<li><p>API</p>
+<pre class="python"><code>torch.from_numpy(ndarray)</code></pre></li>
+<li><p>示例</p>
+<pre class="python"><code># np.ndarray
+arr = np.array(
+    [
+        [1, 2, 3], 
+        [4, 5, 6]
+    ]
+)
 print(arr)
+
+# torch.tensor
+t = torch.from_numpy(arr)
+print(t)
+
+# 修改 arr    
 arr[0, 0] = 0
 print(arr, t)
+
+# 修改 torch.tensor
 t[1, 1] = 100
-print(arr, t)</code></pre>
+print(arr, t)</code></pre></li>
+</ul>
 </div>
 <div id="依数值创建" class="section level3">
 <h3>1.2.2 依数值创建</h3>
 <ul>
-<li>api:</li>
-</ul>
+<li><p>API</p>
 <pre class="python"><code>torch.zeros(
-   *size,
-   out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
-   dtype = none,
-   layout = torch.strided, # 内存的布局形式
-   device = none,
-   requires_grad = false
-)</code></pre>
-<ul>
-<li>示例:</li>
-</ul>
+    *size,
+    out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
+    dtype = none,
+    layout = torch.strided, # 内存的布局形式
+    device = none,
+    requires_grad = false
+)</code></pre></li>
+<li><p>示例</p>
 <pre class="python"><code>out_t = torch.tensor([1])
 t = torch.zeros((3, 3), out = out_t)
 print(out_t, t)
-print(id(out_t), id(t), id(t) == id(out_t))</code></pre>
-</div>
-</div>
-<div id="pytorch-tensor-的操作" class="section level2">
-<h2>2.pytorch tensor 的操作</h2>
-<ul>
-<li><p>torch.add(, out)</p></li>
-<li><p>.add_()</p></li>
-<li><p>.view()</p></li>
-<li><p>add:</p></li>
+print(id(out_t), id(t), id(t) == id(out_t))</code></pre></li>
 </ul>
-<pre class="python"><code>x = torch.zeros(5, 3, dtype = torch.long)
+</div>
+</div>
+<div id="tensor-的操作" class="section level2">
+<h2>1.3 tensor 的操作</h2>
+<blockquote>
+<ul>
+<li>相加
+<ul>
+<li><code>+</code></li>
+<li><code>torch.add(, out)</code></li>
+<li><code>.add_()</code></li>
+</ul></li>
+<li>index
+<ul>
+<li><code>[:, :]</code></li>
+</ul></li>
+<li>resize
+<ul>
+<li><code>.view()</code></li>
+<li><code>.size()</code></li>
+</ul></li>
+<li>object trans
+<ul>
+<li><code>.items()</code></li>
+</ul></li>
+<li>numpy.array to torch.tensor
+<ul>
+<li><code>torch.from_numpy()</code></li>
+</ul></li>
+<li>torch.tensor to numpy.array
+<ul>
+<li><code>.numpy()</code></li>
+</ul></li>
+</ul>
+</blockquote>
+<ul>
+<li><p>add</p>
+<pre class="python"><code>import torch
+
+x = torch.zeros(5, 3, dtype = torch.long)
 y = torch.rand(5, 3)
 
 # method 1
@@ -275,68 +412,72 @@ print(result)
 
 # method 4
 y.add_(x)
-print(y)</code></pre>
-<ul>
-<li>index:</li>
-</ul>
-<pre class="python"><code>x = torch.zeros(5, 3, dtype = torch.long)
-print(x[:, 1])</code></pre>
-<ul>
-<li>resize:</li>
-</ul>
-<pre class="python"><code>x = torch.randn(4, 4)
+print(y)</code></pre></li>
+<li><p>index</p>
+<pre class="python"><code>import torch
+
+x = torch.zeros(5, 3, dtype = torch.long)
+print(x[:, 1])</code></pre></li>
+<li><p>resize</p>
+<pre class="python"><code>import torch
+
+x = torch.randn(4, 4)
 y = x.view(16)
 z = x.view(-1, 8)
-print(x.size(), y.size(), z.size())</code></pre>
-<ul>
-<li>object trans:</li>
-</ul>
-<pre class="python"><code>x = torch.randn(1)
+print(x.size(), y.size(), z.size())</code></pre></li>
+<li><p>object trans</p>
+<pre class="python"><code>import torch
+
+x = torch.randn(1)
 print(x)
-print(x.item()) # python number</code></pre>
-<ul>
-<li>torch tensor 2 numpy array:</li>
-</ul>
-<pre class="python"><code>a = torch.ones(5)
+print(x.item()) # python number</code></pre></li>
+<li><p>torch tensor 2 numpy array</p>
+<pre class="python"><code>import torch
+
+a = torch.ones(5)
 b = a.numpy()
 print(a)
 print(b)
 
 a.add_(1)
 print(a)
-print(b)</code></pre>
-<ul>
-<li>numpy array 2 torch tensor:</li>
-</ul>
+print(b)</code></pre></li>
+<li><p>numpy array 2 torch tensor</p>
 <pre class="python"><code>import numpy as np
+
 a = np.ones(5)
 b = torch.from_numpy(a)
 np.add(a, 1, out = a)
+
 print(a)
-print(b)</code></pre>
+print(b)</code></pre></li>
+</ul>
 </div>
-</div>
-<div id="pytorch-cuda-tensor" class="section level1">
-<h1>3.pytorch cuda tensor</h1>
+<div id="cuda-tensor" class="section level2">
+<h2>1.4 cuda tensor</h2>
 <pre class="python"><code># let us run this cell only if cuda is available
 # we will use `torch.device` objects to move tensors in and out of gpu
+x = torch.tensor([1])
 if torch.cuda.is_available():
-   device = torch.device(&quot;cuda&quot;)          # a cuda device object
-   y = torch.ones_like(x, device=device)  # directly create a tensor on gpu
-   x = x.to(device)                       # or just use strings `.to(&quot;cuda&quot;)`
+   device = torch.device(&quot;cuda&quot;)            # a cuda device object
+
+   y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
+   
+   x = x.to(device)                         # or just use strings `.to(&quot;cuda&quot;)`
+   
    z = x + y
-   print(z)
-   print(z.to(&quot;cpu&quot;, torch.double))       # `.to` can also change dtype together!</code></pre>
+   z.to(&quot;cpu&quot;, torch.double)                # `.to` can also change dtype together!</code></pre>
+</div>
 </div>
 <div id="pytorch-数据读取与预处理" class="section level1">
-<h1>PyTorch 数据读取与预处理</h1>
+<h1>2.PyTorch 数据读取与预处理</h1>
 <div id="pytorch-数据读取" class="section level2">
-<h2>PyTorch 数据读取</h2>
+<h2>2.1 PyTorch 数据读取</h2>
 <div id="构造自定义的-datasets-dataloaders-transforms" class="section level3">
-<h3>构造自定义的 Datasets, Dataloaders, Transforms</h3>
+<h3>2.1.1 构造自定义的 Datasets, Dataloaders, Transforms</h3>
 </div>
-<div id="依赖库" class="section level3">
-<h3>依赖库</h3>
+<div id="读取数据" class="section level3">
+<h3>2.1.2 读取数据</h3>
 <pre class="python"><code>from __future__ import print_function, division
 import os
 import torch
@@ -352,10 +493,6 @@ import warnings
 warnings.filterwarnings(&quot;ignore&quot;)
 
 plt.ion() # interactive mode</code></pre>
-</div>
-</div>
-<div id="读取数据" class="section level2">
-<h2>读取数据</h2>
 <pre class="python"><code>landmarks_frame = pd.read_csv(&quot;../data/faces/face_landmarks.csv&quot;)
 n = 65
 img_name = landmarks_frame.iloc[n, 0]
@@ -375,18 +512,18 @@ print(&quot;First 4 Landmarks: {}&quot;.format(landmarks[:4]))</code></pre>
 plt.figure()
 show_landmarks(io.imread(os.path.join(&quot;../data/faces/&quot;, img_name)), landmarks)</code></pre>
 </div>
+</div>
 <div id="dataset-class" class="section level2">
-<h2>Dataset class</h2>
+<h2>2.2 Dataset class</h2>
 <pre class="python"><code>class FaceLandmarksDataset(Dataset):
    &quot;&quot;&quot;Face Landmarks dataset.&quot;&quot;&quot;
    def __init__(self, csv_file, root_dir, transform = None):
       pass</code></pre>
 </div>
-</div>
-<div id="pytorch-数据并行" class="section level1">
-<h1>PyTorch 数据并行</h1>
-<div id="让模型跑在-gpu-上" class="section level2">
-<h2>让模型跑在 GPU 上</h2>
+<div id="pytorch-数据并行" class="section level2">
+<h2>2.3 PyTorch 数据并行</h2>
+<div id="让模型跑在-gpu-上" class="section level3">
+<h3>2.3.1 让模型跑在 GPU 上</h3>
 <pre class="python"><code>import torch
 
 # 让模型在 GPU 上运行
@@ -397,11 +534,13 @@ model.to(device)
 my_tensor = torch.ones(2, 2, dtype = torch.double)
 mytensor = my_tensor.to(device)</code></pre>
 </div>
-<div id="让模型跑在多个-gpu-上" class="section level2">
-<h2>让模型跑在多个 GPU 上</h2>
+<div id="让模型跑在多个-gpu-上" class="section level3">
+<h3>2.3.2 让模型跑在多个 GPU 上</h3>
+<blockquote>
 <ul>
 <li>PyTorch 默认使用单个 GPU 执行运算</li>
 </ul>
+</blockquote>
 <pre class="python"><code>model = nn.DataParallel(model)</code></pre>
 <pre class="python"><code>import torch
 import torch.nn as nn
@@ -454,7 +593,11 @@ model.to(device)</code></pre>
     output = model(input)
     print(&quot;Outside: input size&quot;, input.size(),
         &quot;output_size&quot;, output.size())</code></pre>
-<p>PyTorch nn</p>
+</div>
+</div>
+</div>
+<div id="pytorch-nn" class="section level1">
+<h1>3.PyTorch nn</h1>
 <p>A typical training procedure for a neural network is as follows:</p>
 <ul>
 <li>Define the neural network that has some learnable parameters (or
@@ -466,12 +609,9 @@ weights)</li>
 <li>Update the weights of the network, typically using a simple update
 rule: <code>weight = weight - learning_rate * gradient</code></li>
 </ul>
-<p>.. _header-n18:</p>
-</div>
 <div id="定义神经网" class="section level2">
 <h2>定义神经网</h2>
-<pre class="python"><code>
-# nn
+<pre class="python"><code># nn
 # autograd
 # nn.Module
     # forward(input) =&gt; output
@@ -515,15 +655,84 @@ class Net(nn.Module):
 
 net = Net()
 print(net)</code></pre>
-<pre class="python"><code>   params = list(net.parameters)
-   print(len(params))
-   print(params[0].size()) # conv1&#39;s .weight</code></pre>
+<pre class="python"><code>params = list(net.parameters)
+print(len(params))
+print(params[0].size()) # conv1&#39;s .weight</code></pre>
 <pre class="python"><code>net.zero_grad()
 out.backward(torch.randn(1, 10))</code></pre>
 </div>
 </div>
-<div id="pytorch-自动求导" class="section level1">
-<h1>PyTorch 自动求导</h1>
+<div id="pytorch-动态图自动求导" class="section level1">
+<h1>4.PyTorch 动态图、自动求导</h1>
+<ul>
+<li><p>4.1 计算图</p>
+<ul>
+<li><p>描述运算的有向无环图</p>
+<ul>
+<li><p>Tensor 的 is_leaf 属性</p></li>
+<li><p>Tensor 的 grad_fn 属性</p></li>
+</ul></li>
+</ul></li>
+<li><p>4.2 PyTorch 动态图机制</p>
+<ul>
+<li>动态图与静态图</li>
+</ul></li>
+<li><p>4.3 PyTorch 自动求导机制</p>
+<ul>
+<li><p>torch.autograd.backward() 方法自动求取梯度</p></li>
+<li><p>torch.autograd.grad() 方法可以高阶求导</p></li>
+<li><p>note</p>
+<ul>
+<li>梯度不自动清零</li>
+<li>依赖叶节点的节点, requires_grad 默认为 True</li>
+<li>叶节点不能执行原位操作</li>
+</ul></li>
+</ul></li>
+</ul>
+<div id="计算图" class="section level2">
+<h2>4.1 计算图</h2>
+<p>计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
+其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。</p>
+<p>使用计算图的好处不仅是让计算看起来更加简洁，还有个更大的优势是让梯度求导也变得更加方便。</p>
+<ul>
+<li>示例:</li>
+</ul>
+<pre class="python"><code>x = torch.tensor([2.], requires_grad = True)
+w = torch.tensor([1.], requires_grad = True)
+
+a = torch.add(w, x)
+b = torch.add(w, 1)
+
+y = torch.mul(a, b)
+
+y.backward()
+print(w.grad)</code></pre>
+</div>
+<div id="pytorch-动态图机制" class="section level2">
+<h2>4.2 Pytorch 动态图机制</h2>
+</div>
+<div id="pytorch-自动求导机制" class="section level2">
+<h2>4.3 PyTorch 自动求导机制</h2>
+<ul>
+<li>package <code>autograd</code></li>
+<li>torch.Tensor</li>
+<li>.requires_grad = True</li>
+<li>.backward()</li>
+<li>.grad</li>
+<li>.detach()</li>
+<li>with torch.no_grad(): pass</li>
+<li>.grad_fn</li>
+</ul>
+<p>PyTorch 自动求导机制使用的是 <code>torch.autograd.backward</code> 方法，功能就是自动求取梯度。</p>
+<ul>
+<li>API:</li>
+</ul>
+<pre class="python"><code>torch.autograd.backward(
+   tensors, 
+   gard_tensors = None, 
+   retain_graph = None, 
+   create_graph = False
+)</code></pre>
 <p><code>autograd</code> 包提供了对所有 Tensor 的自动微分操作</p>
 <pre class="python"><code>#!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -601,95 +810,23 @@ y = x.detach()
 print(y.requires_grad)
 print(x.eq(y).all())</code></pre>
 </div>
-<div id="pytorch-动态图自动求导" class="section level1">
-<h1>4.PyTorch 动态图、自动求导</h1>
-<ul>
-<li><p>4.1 计算图</p>
-<ul>
-<li><p>描述运算的有向无环图</p>
-<ul>
-<li><p>Tensor 的 is_leaf 属性</p></li>
-<li><p>Tensor 的 grad_fn 属性</p></li>
-</ul></li>
-</ul></li>
-<li><p>4.2 PyTorch 动态图机制</p>
-<ul>
-<li>动态图与静态图</li>
-</ul></li>
-<li><p>4.3 PyTorch 自动求导机制</p>
-<ul>
-<li><p>torch.autograd.backward() 方法自动求取梯度</p></li>
-<li><p>torch.autograd.grad() 方法可以高阶求导</p></li>
-<li><p>note</p>
-<ul>
-<li>梯度不自动清零</li>
-<li>依赖叶节点的节点, requires_grad 默认为 True</li>
-<li>叶节点不能执行原位操作</li>
-</ul></li>
-</ul></li>
-</ul>
-<div id="计算图" class="section level2">
-<h2>4.1 计算图</h2>
-<p>计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
-其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。</p>
-<p>使用计算图的好处不仅是让计算看起来更加简洁，还有个更大的优势是让梯度求导也变得更加方便。</p>
-<ul>
-<li>示例:</li>
-</ul>
-<pre class="python"><code>x = torch.tensor([2.], requires_grad = True)
-w = torch.tensor([1.], requires_grad = True)
-
-a = torch.add(w, x)
-b = torch.add(w, 1)
-
-y = torch.mul(a, b)
-
-y.backward()
-print(w.grad)</code></pre>
-</div>
-<div id="pytorch-动态图机制" class="section level2">
-<h2>4.2 Pytorch 动态图机制</h2>
-</div>
-<div id="pytorch-自动求导机制" class="section level2">
-<h2>4.3 PyTorch 自动求导机制</h2>
-<ul>
-<li>package <code>autograd</code></li>
-<li>torch.Tensor</li>
-<li>.requires_grad = True</li>
-<li>.backward()</li>
-<li>.grad</li>
-<li>.detach()</li>
-<li>with torch.no_grad(): pass</li>
-<li>.grad_fn</li>
-</ul>
-<p>PyTorch 自动求导机制使用的是 <code>torch.autograd.backward</code> 方法，功能就是自动求取梯度。</p>
-<ul>
-<li>API:</li>
-</ul>
-<pre class="python"><code>torch.autograd.backward(
-   tensors, 
-   gard_tensors = None, 
-   retain_graph = None, 
-   create_graph = False
-)</code></pre>
-</div>
 </div>
 <div id="pytorch-模型" class="section level1">
-<h1>1.PyTorch 模型</h1>
+<h1>5.PyTorch 模型</h1>
 <div id="pytorch-模型的创建" class="section level2">
-<h2>1.1 PyTorch 模型的创建</h2>
+<h2>5.1 PyTorch 模型的创建</h2>
 </div>
 <div id="pytorch-模型容器" class="section level2">
-<h2>1.2 PyTorch 模型容器</h2>
+<h2>5.2 PyTorch 模型容器</h2>
 </div>
 </div>
 <div id="pytorch-损失函数" class="section level1">
-<h1>4.PyTorch 损失函数</h1>
+<h1>6.PyTorch 损失函数</h1>
 </div>
 <div id="pytorch-权重初始化" class="section level1">
-<h1>6.PyTorch 权重初始化</h1>
+<h1>7.PyTorch 权重初始化</h1>
 <div id="权重初始化方法" class="section level2">
-<h2>6.1 权重初始化方法</h2>
+<h2>7.1 权重初始化方法</h2>
 <p>正确的权重初始化可以加速模型的收敛，不恰当的权重初始化导致输出层的输出过大或者过小，
 最终导致梯度爆炸或者消失，使得模型无法训练</p>
 <ul>
@@ -698,10 +835,10 @@ print(w.grad)</code></pre>
 </ul>
 </div>
 </div>
-<div id="pytorch-保存模型" class="section level1">
-<h1>7.PyTorch 保存模型</h1>
+<div id="pytorch-模型保存和加载" class="section level1">
+<h1>8.PyTorch 模型保存和加载</h1>
 <div id="方法-1保存和加载模型参数" class="section level2">
-<h2>7.1 方法 1:保存和加载模型参数</h2>
+<h2>8.1 方法 1:保存和加载模型参数</h2>
 <pre class="python"><code>import torch</code></pre>
 <pre class="python"><code># 保存模型
 torch.save(the_model.state_dict(), PATH)
@@ -711,7 +848,7 @@ the_model = TheModelClass(*args, **kwargs)
 the_model.load_state_dict(torch.load(PATH))</code></pre>
 </div>
 <div id="方法-2保存和加载整个模型" class="section level2">
-<h2>5.2 方法 2:保存和加载整个模型</h2>
+<h2>8.2 方法 2:保存和加载整个模型</h2>
 <pre class="python"><code>import torch</code></pre>
 <pre class="python"><code># 保存模型
 torch.save(the_model, PATH)
@@ -721,7 +858,7 @@ the_model = torch.load(PATH)</code></pre>
 </div>
 </div>
 <div id="pytorch-cheat-sheet" class="section level1">
-<h1>PyTorch Cheat Sheet</h1>
+<h1>9.PyTorch Cheat Sheet</h1>
 <div id="imports" class="section level2">
 <h2>1.Imports</h2>
 <pre class="python"><code># General

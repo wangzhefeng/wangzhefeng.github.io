@@ -1,16 +1,21 @@
 ---
-title: DL Batch Normalization
+title: DL Regularization
 author: 王哲峰
-date: '2017-07-04'
-slug: dl-batch-normalization
+date: '2019-07-04'
+slug: dl-regularization
 categories:
   - deeplearning
 tags:
   - note
 ---
 
-# Batch Normalization 是什么？
+# Dropout
 
+
+
+# Batch Normalization
+
+## Batch Normalization 是什么？
 
 在神经网络模型训练过程中，当我们更新之前的权重(weight)时，
 每个中间激活层的输出分布会在每次迭代时发生变化，这种现象
@@ -20,7 +25,7 @@ tags:
 这样能帮助神经网络更快。因此减少这种内部协变量位移是推动 Batch Normalization 
 发展的关键原则。
 
-# Batch Normalization 原理
+## Batch Normalization 原理
 
 Batch Normalization 通过在 Batch 上减去经验平均值，
 除以经验标准差来对前一个输出层的输出进行归一化。
@@ -38,7 +43,7 @@ $$y_{i} \leftarrow \gamma \hat{x}_{i} + \beta$$
 并且，学习了新的平均值 $\gamma$ 和协方差 $\beta$，即，
 可以认为 Batch Normalization 能够帮助控制 batch 分布的一阶和二阶动量。
 
-# Batch Normalization 的优点
+## Batch Normalization 的优点
 
 - 更快地收敛
 - 降低初始权重的重要性
@@ -47,9 +52,9 @@ $$y_{i} \leftarrow \gamma \hat{x}_{i} + \beta$$
 
 ![bn](images/bn.png)
 
-# Batch Normalization 的缺点
+## Batch Normalization 的缺点
 
-## Batch Normalization 在使用 batch size 的时候不稳定
+### Batch Normalization 在使用 batch size 的时候不稳定
 
 Batch Normalization 在训练时的时候必须计算平均值和方差，以便在 batch 中对之前的输出进行归一化。
 如果 batch 比较大的话，这种统计估计是比较准确的，而随着 batch 减小，估计的准确性持续减小。
@@ -67,7 +72,7 @@ Batch Normalization 在训练时的时候必须计算平均值和方差，以便
 在分布式训练的时候，大的 batch 最终将作为一组小 batch 分布在各个实例中。
 
 
-## Batch Normalization 导致训练时间增加
+### Batch Normalization 导致训练时间增加
 
 NVIDIA 和卡耐基梅隆大学进行的实验结果表明，“尽管 Batch Normalization 不是计算密集型，
 而且收敛所需的总迭代次数也减少了。” 但是每个迭代的时间显著增加了，
@@ -81,7 +86,7 @@ NVIDIA 和卡耐基梅隆大学进行的实验结果表明，“尽管 Batch Nor
 原因是 batch normalization 需要通过输入数据进行两次迭代，
 一次用于计算 batch 统计信息，另一次用于归一化输出。
 
-## Batch Normalization 训练和推理时结果不一样
+### Batch Normalization 训练和推理时结果不一样
 
 例如，在真实世界中做“物体检测”。在训练一个物体检测器时，
 我们通常使用大 batch(YOLOv4 和 Faster-RCNN 都是在默认 batch=64 的情况下训练的)。
@@ -91,7 +96,7 @@ NVIDIA 和卡耐基梅隆大学进行的实验结果表明，“尽管 Batch Nor
 一些实现倾向于基于训练集上使用预先计算的平均值和方差。
 另一种可能是基于你的测试集分布计算平均值和方差值。
 
-## Batch Normalization 对于在线学习不友好
+### Batch Normalization 对于在线学习不友好
 
 ![online-learning](images/online-learning.png)
 
@@ -104,14 +109,14 @@ NVIDIA 和卡耐基梅隆大学进行的实验结果表明，“尽管 Batch Nor
 数据可能单独或批量到达。由于每次迭代中batch大小的变化，
 对输入数据的尺度和偏移的泛化能力不好，最终影响了性能。
 
-## Batch Normalization 对循环神经网络不友好
+### Batch Normalization 对循环神经网络不友好
 
 虽然 Batch Normalization可以显著提高卷积神经网络的训练和泛化速度，
 但它们很难应用于递归结构。Batch Normalization 可以应用于RNN堆栈之间，
 其中归一化是“垂直”应用的，即每个RNN的输出。但是它不能“水平地”应用，
 例如在时间步之间，因为它会因为重复的重新缩放而产生爆炸性的梯度而伤害到训练。
 
-# Batch Normalization 的可替代方法
+## Batch Normalization 的可替代方法
 
 在 Batch Normalization 无法很好工作的情况下，有几种可替代方法可用：
 
@@ -119,5 +124,4 @@ NVIDIA 和卡耐基梅隆大学进行的实验结果表明，“尽管 Batch Nor
 - Instance Normalization
 - Group Normalization (+ weight standardization)
 - Synchronous Batch Normalization
-
 

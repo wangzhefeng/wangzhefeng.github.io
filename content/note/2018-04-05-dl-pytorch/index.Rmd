@@ -14,31 +14,75 @@ output:
     dev: "svg"
 ---
 
+# 需要掌握的内容
 
+## Get Stated
 
-内容概要
+- [ ] Start Locally
+- [ ] Start via Partners
+
+## Tutorials
+
+### Learn the Basics
+
+* [ ] Introduction to PyTorch
+    - [ ] Save and Load the Model
+* [ ] Learning PyTorch
+* [ ] Image and Video
+* [ ] Text
+* [ ] Deploying PyTorch Model in Production
+* [ ] Model Optimization
+* [ ] Parallel and Distributed Training
+
+### PyTorch Recipes
+
+* [ ] 快速入门
+* [ ] 自定义层、训练循环
+* [ ] 分布式训练
+
+### Additional Resources
+
+* [ ] Examples of PyTorch
+* [ ] PyTorch Cheat Sheet
+* [ ] Tutorials on GitHub
+* [ ] Run Tutorials on Google Colab
+
+## Docs
+
+* [ ] PyTorch
+* [ ] torchaudio
+* [ ] torchtext
+* [ ] torchvision
+* [ ] TorchElastic
+* [ ] TorchServe
+* [ ] PyTorch on XLA Devices
+
+## GitHub
+
+* [ ] https://github.com/pytorch/pytorch
+
+# 1.PyTorch tensor 的创建
 
 * 1.tensor 的简介及创建
-
    - tensor 是多维数组
    - tensor 的创建
       - 直接创建
-         - `torch.tensor`
-         - `torch.from_numpy`      
+         - `torch.tensor()`
+         - `torch.from_numpy()`
       - 依数值创建
-         - `empty`
-         - `ones`
-         - `zeros`
-         - `eye`
-         - `full`
-         - `arange`
-         - `linspace`
+         - `torch.empty()`
+         - `torch.ones()`
+         - `torch.zeros()`
+         - `torch.eye()`
+         - `torch.full()`
+         - `torch.arange()`
+         - `torch.linspace()`
       - 依概率分布创建
-         - `torch.normal`
-         - `torch.randn`
-         - `torch.rand`
-         - `torch.randint`
-         - `torch.randperm`
+         - `torch.normal()`
+         - `torch.randn()`
+         - `torch.rand()`
+         - `torch.randint()`
+         - `torch.randperm()`
 * 2.tensor 的操作
    - tensor 的基本操作
       - tensor 的拼接
@@ -57,35 +101,36 @@ output:
    - tensor 的数学运算
       - `add(input, aplha, other)`
 
-# 1.pytorch tensor 的创建
-
 ## 1.1 tensor 的介绍
 
-tensor 是 pytorch 中最基本的概念,其参与了整个运算过程,这里主要介绍 tensor 的概念和属性,如 data, variable, device 等,
-并且介绍 tensor 的基本创建方法,如直接创建、依属主创建、依概率分布创建等.
+tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程, 
+这里主要介绍 tensor 的概念和属性, 如 data, variable, device 等,
+并且介绍 tensor 的基本创建方法, 如直接创建、依属主创建、依概率分布创建等
 
 - tensor
-  - tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
+    - tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
 - tensor 与 variable 
-  - 在 pytorch 0.4.0 版本之后 variable 已经并入 tensor,但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
-     variable 是 `torch.autograd` 中的数据类型
-  - variable(`torch.autograd.variable`) 有 5 个属性, 这些属性都是为了 tensor 的自动求导而设置的:
-     - `data`
-     - `grad`
-     - `grad_fn`
-     - `requires_grad`
-     - `is_leaf`
-  - tensor(`torch.tensor`) 有 8 个属性:
-     - 与数据本身相关
-        - `data`: 被包装的 tensor
-        - `dtype`:tensor 的数据类型,如 `torch.floattensor`, `torch.cuda.floattensor`, `float32`, `int64(torch.long)`
-        - `shape`: tensor 的形状
-        - `device`:tensor 所在的设备, gpu/cup,tensor 放在 gpu 上才能使用加速     
-     - 与梯度求导相关
-        - `requires_grad`: 是否需要梯度
-        - `grad`: `data` 的梯度
-        - `grad_fn`: fn 表示 function 的意思，记录创建 tensor 时用到的方法
-        - `is_leaf`: 是否是叶子节点(tensor)
+    - 在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor, 
+      但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
+      variable 是 `torch.autograd` 中的数据类型. 
+      variable(`torch.autograd.variable`) 有 5 个属性, 
+      这些属性都是为了 tensor 的自动求导而设置的:
+        - `data`
+        - `grad`
+        - `grad_fn`
+        - `requires_grad`
+        - `is_leaf`
+    - tensor(`torch.tensor`) 有 8 个属性:
+        - 与数据本身相关
+            - `data`: 被包装的 tensor
+            - `dtype`: tensor 的数据类型, 如 `torch.floattensor`, `torch.cuda.floattensor`, `float32`, `int64(torch.long)`
+            - `shape`: tensor 的形状
+            - `device`: tensor 所在的设备, gpu/cup, tensor 放在 gpu 上才能使用加速
+        - 与梯度求导相关
+            - `requires_grad`: 是否需要梯度
+            - `grad`: `data` 的梯度
+            - `grad_fn`: fn 表示 function 的意思，记录创建 tensor 时用到的方法
+            - `is_leaf`: 是否是叶子节点(tensor)
 
 ## 1.2 tensor 的创建
 
@@ -97,178 +142,218 @@ import torch
 
 ### 1.2.1 直接创建
 
-1.torch.tensor(): 从 data 创建 tensor api
-   
-- API:
+1. torch.tensor(): 从 data 创建 tensor api
 
-```python
-torch.tensor(
-   data,                   # list, numpy
-   dtype = none,
-   device = none,
-   requires_grad = false,
-   pin_memory = false      # 是否存于锁页内存
-)
-```
+- API
 
-- 示例:
+    ```python
+    torch.tensor(
+        data,                   # list, numpy
+        dtype = none,
+        device = none,
+        requires_grad = false,
+        pin_memory = false      # 是否存于锁页内存
+    )
+    ```
 
-```python
-arr = np.ones((3, 3))
-t = torch.tensor(arr, device = "cuda")
-print(t)
-```
+- 示例
 
-1. 通过 numpy array 来创建 tensor api
+    ```python
+    arr = np.ones((3, 3))
 
-- 创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动
+    t = torch.tensor(arr, device = "cuda")
+    print(t)
+    ```
 
-- API:
+2. 通过 numpy array 来创建 tensor api
 
-```python
-torch.from_numpy(ndarray)
-```
+> 创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动
 
-- 示例:
+- API
 
-```python
-arr = np.array([[1, 2, 3], [4, 5, 6]])
-t = torch.from_numpy(arr)
-print(arr)
-arr[0, 0] = 0
-print(arr, t)
-t[1, 1] = 100
-print(arr, t)
-```
+    ```python
+    torch.from_numpy(ndarray)
+    ```
+
+- 示例
+
+    ```python
+    # np.ndarray
+    arr = np.array(
+        [
+            [1, 2, 3], 
+            [4, 5, 6]
+        ]
+    )
+    print(arr)
+    
+    # torch.tensor
+    t = torch.from_numpy(arr)
+    print(t)
+
+    # 修改 arr    
+    arr[0, 0] = 0
+    print(arr, t)
+
+    # 修改 torch.tensor
+    t[1, 1] = 100
+    print(arr, t)
+    ```
 
 ### 1.2.2 依数值创建
 
-- api:
 
-```python
-torch.zeros(
-   *size,
-   out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
-   dtype = none,
-   layout = torch.strided, # 内存的布局形式
-   device = none,
-   requires_grad = false
-)
-```
 
-- 示例:
 
-```python
-out_t = torch.tensor([1])
-t = torch.zeros((3, 3), out = out_t)
-print(out_t, t)
-print(id(out_t), id(t), id(t) == id(out_t))
-```
+- API
 
-2.pytorch tensor 的操作
---------------------------
+    ```python
+    torch.zeros(
+        *size,
+        out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
+        dtype = none,
+        layout = torch.strided, # 内存的布局形式
+        device = none,
+        requires_grad = false
+    )
+    ```
 
-- torch.add(, out)
-- .add_()
-- .view()
+- 示例
 
-- add:
+    ```python
+    out_t = torch.tensor([1])
+    t = torch.zeros((3, 3), out = out_t)
+    print(out_t, t)
+    print(id(out_t), id(t), id(t) == id(out_t))
+    ```
 
-```python
-x = torch.zeros(5, 3, dtype = torch.long)
-y = torch.rand(5, 3)
+## 1.3 tensor 的操作
 
-# method 1
-print(x + y)
+> * 相加
+>   - `+`
+>   - `torch.add(, out)`
+>   - `.add_()`
+> * index
+>   - `[:, :]`
+> * resize
+>   - `.view()`
+>   - `.size()`
+> * object trans
+>   - `.items()`
+> * numpy.array to torch.tensor
+>   - `torch.from_numpy()`
+> * torch.tensor to numpy.array
+>   - `.numpy()`
 
-# method 2
-print(torch.add(x, y))
+- add
 
-# method 3
-result = torch.empty(5, 3)
-torch.add(x, y, out = result)
-print(result)
+    ```python
+    import torch
 
-# method 4
-y.add_(x)
-print(y)
-```
+    x = torch.zeros(5, 3, dtype = torch.long)
+    y = torch.rand(5, 3)
 
-- index:
+    # method 1
+    print(x + y)
 
-```python
-x = torch.zeros(5, 3, dtype = torch.long)
-print(x[:, 1])
-```
+    # method 2
+    print(torch.add(x, y))
 
-- resize:
+    # method 3
+    result = torch.empty(5, 3)
+    torch.add(x, y, out = result)
+    print(result)
 
-```python
-x = torch.randn(4, 4)
-y = x.view(16)
-z = x.view(-1, 8)
-print(x.size(), y.size(), z.size())
-```
+    # method 4
+    y.add_(x)
+    print(y)
+    ```
 
-- object trans:
+- index
 
-```python
-x = torch.randn(1)
-print(x)
-print(x.item()) # python number
-```
+    ```python
+    import torch
 
-- torch tensor 2 numpy array:
+    x = torch.zeros(5, 3, dtype = torch.long)
+    print(x[:, 1])
+    ```
 
-```python
-a = torch.ones(5)
-b = a.numpy()
-print(a)
-print(b)
+- resize
 
-a.add_(1)
-print(a)
-print(b)
-```
+    ```python
+    import torch
 
-- numpy array 2 torch tensor:
+    x = torch.randn(4, 4)
+    y = x.view(16)
+    z = x.view(-1, 8)
+    print(x.size(), y.size(), z.size())
+    ```
 
-```python
-import numpy as np
-a = np.ones(5)
-b = torch.from_numpy(a)
-np.add(a, 1, out = a)
-print(a)
-print(b)
-```
+- object trans
 
-# 3.pytorch cuda tensor
+    ```python
+    import torch
+
+    x = torch.randn(1)
+    print(x)
+    print(x.item()) # python number
+    ```
+
+- torch tensor 2 numpy array
+
+    ```python
+    import torch
+
+    a = torch.ones(5)
+    b = a.numpy()
+    print(a)
+    print(b)
+
+    a.add_(1)
+    print(a)
+    print(b)
+    ```
+
+- numpy array 2 torch tensor
+
+    ```python
+    import numpy as np
+    
+    a = np.ones(5)
+    b = torch.from_numpy(a)
+    np.add(a, 1, out = a)
+    
+    print(a)
+    print(b)
+    ```
+
+## 1.4 cuda tensor
 
 ```python
 # let us run this cell only if cuda is available
 # we will use `torch.device` objects to move tensors in and out of gpu
+x = torch.tensor([1])
 if torch.cuda.is_available():
-   device = torch.device("cuda")          # a cuda device object
-   y = torch.ones_like(x, device=device)  # directly create a tensor on gpu
-   x = x.to(device)                       # or just use strings `.to("cuda")`
+   device = torch.device("cuda")            # a cuda device object
+
+   y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
+   
+   x = x.to(device)                         # or just use strings `.to("cuda")`
+   
    z = x + y
-   print(z)
-   print(z.to("cpu", torch.double))       # `.to` can also change dtype together!
+   z.to("cpu", torch.double)                # `.to` can also change dtype together!
 ```
 
 
 
 
+# 2.PyTorch 数据读取与预处理
 
-# PyTorch 数据读取与预处理
+## 2.1 PyTorch 数据读取
 
-## PyTorch 数据读取
+### 2.1.1 构造自定义的 Datasets, Dataloaders, Transforms
 
-
-### 构造自定义的 Datasets, Dataloaders, Transforms
-
-
-### 依赖库
+### 2.1.2 读取数据
 
 ```python
 from __future__ import print_function, division
@@ -287,9 +372,6 @@ warnings.filterwarnings("ignore")
 
 plt.ion() # interactive mode
 ```
-
-
-## 读取数据
 
 ```python
 landmarks_frame = pd.read_csv("../data/faces/face_landmarks.csv")
@@ -315,7 +397,7 @@ plt.figure()
 show_landmarks(io.imread(os.path.join("../data/faces/", img_name)), landmarks)
 ```
 
-## Dataset class
+## 2.2 Dataset class
 
 ```python
 class FaceLandmarksDataset(Dataset):
@@ -324,11 +406,9 @@ class FaceLandmarksDataset(Dataset):
       pass
 ```
 
+## 2.3 PyTorch 数据并行
 
-# PyTorch 数据并行
-
-
-## 让模型跑在 GPU 上
+### 2.3.1 让模型跑在 GPU 上
 
 ```python
 import torch
@@ -342,9 +422,9 @@ my_tensor = torch.ones(2, 2, dtype = torch.double)
 mytensor = my_tensor.to(device)
 ```
 
-## 让模型跑在多个 GPU 上
+### 2.3.2 让模型跑在多个 GPU 上
 
--  PyTorch 默认使用单个 GPU 执行运算
+> * PyTorch 默认使用单个 GPU 执行运算
 
 ```python
 model = nn.DataParallel(model)
@@ -418,25 +498,23 @@ for data in rand_loader:
 
 
 
-PyTorch nn
+# 3.PyTorch nn
 
 A typical training procedure for a neural network is as follows:
 
--  Define the neural network that has some learnable parameters (or
+- Define the neural network that has some learnable parameters (or
    weights)
--  Iterate over a dataset of inputs
--  Process input through the network
--  Compute the loss (how far is the output from being correct)
--  Propagate gradients back into the network’s parameters
--  Update the weights of the network, typically using a simple update
-   rule: ``weight = weight - learning_rate * gradient``
+- Iterate over a dataset of inputs
+- Process input through the network
+- Compute the loss (how far is the output from being correct)
+- Propagate gradients back into the network’s parameters
+- Update the weights of the network, typically using a simple update
+   rule: `weight = weight - learning_rate * gradient`
 
-.. _header-n18:
 
 ## 定义神经网
 
 ```python
-
 # nn
 # autograd
 # nn.Module
@@ -484,9 +562,9 @@ print(net)
 ```
 
 ```python
-   params = list(net.parameters)
-   print(len(params))
-   print(params[0].size()) # conv1's .weight
+params = list(net.parameters)
+print(len(params))
+print(params[0].size()) # conv1's .weight
 ```
 
 ```python
@@ -497,9 +575,82 @@ out.backward(torch.randn(1, 10))
 
 
 
-# PyTorch 自动求导
 
-``autograd`` 包提供了对所有 Tensor 的自动微分操作
+# 4.PyTorch 动态图、自动求导
+
+- 4.1 计算图
+
+   - 描述运算的有向无环图
+
+      - Tensor 的 is_leaf 属性
+
+      - Tensor 的 grad_fn 属性
+
+- 4.2 PyTorch 动态图机制
+
+   - 动态图与静态图
+
+- 4.3 PyTorch 自动求导机制
+
+   - torch.autograd.backward() 方法自动求取梯度
+
+   - torch.autograd.grad() 方法可以高阶求导
+
+   - note
+      - 梯度不自动清零
+      - 依赖叶节点的节点, requires_grad 默认为 True
+      - 叶节点不能执行原位操作
+
+## 4.1 计算图
+
+计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
+其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。
+
+使用计算图的好处不仅是让计算看起来更加简洁，还有个更大的优势是让梯度求导也变得更加方便。
+
+- 示例:
+
+```python
+x = torch.tensor([2.], requires_grad = True)
+w = torch.tensor([1.], requires_grad = True)
+
+a = torch.add(w, x)
+b = torch.add(w, 1)
+
+y = torch.mul(a, b)
+
+y.backward()
+print(w.grad)
+```
+
+## 4.2 Pytorch 动态图机制
+
+
+## 4.3 PyTorch 自动求导机制
+
+- package `autograd`
+- torch.Tensor
+- .requires_grad = True
+- .backward()
+- .grad
+- .detach()
+- with torch.no_grad(): pass
+- .grad_fn
+
+PyTorch 自动求导机制使用的是 ``torch.autograd.backward`` 方法，功能就是自动求取梯度。
+
+- API:
+
+```python
+torch.autograd.backward(
+   tensors, 
+   gard_tensors = None, 
+   retain_graph = None, 
+   create_graph = False
+)
+```
+
+`autograd` 包提供了对所有 Tensor 的自动微分操作
 
 ```python
 #!/usr/bin/env python
@@ -579,111 +730,13 @@ print(y.requires_grad)
 print(x.eq(y).all())
 ```
 
+# 5.PyTorch 模型
 
-# 4.PyTorch 动态图、自动求导
+## 5.1 PyTorch 模型的创建
 
-- 4.1 计算图
-
-   - 描述运算的有向无环图
-
-      - Tensor 的 is_leaf 属性
-
-      - Tensor 的 grad_fn 属性
-
-- 4.2 PyTorch 动态图机制
-
-   - 动态图与静态图
-
-- 4.3 PyTorch 自动求导机制
-
-   - torch.autograd.backward() 方法自动求取梯度
-
-   - torch.autograd.grad() 方法可以高阶求导
-
-   - note
-      - 梯度不自动清零
-      - 依赖叶节点的节点, requires_grad 默认为 True
-      - 叶节点不能执行原位操作
-
-## 4.1 计算图
-
-计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
-其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。
-
-使用计算图的好处不仅是让计算看起来更加简洁，还有个更大的优势是让梯度求导也变得更加方便。
-
-- 示例:
-
-```python
-x = torch.tensor([2.], requires_grad = True)
-w = torch.tensor([1.], requires_grad = True)
-
-a = torch.add(w, x)
-b = torch.add(w, 1)
-
-y = torch.mul(a, b)
-
-y.backward()
-print(w.grad)
-```      
+## 5.2 PyTorch 模型容器
 
 
-
-
-
-
-
-
-## 4.2 Pytorch 动态图机制
-
-
-
-
-
-
-## 4.3 PyTorch 自动求导机制
-
--  package ``autograd``
--  torch.Tensor
--  .requires_grad = True
--  .backward()
--  .grad
--  .detach()
--  with torch.no_grad(): pass
--  .grad_fn
-
-PyTorch 自动求导机制使用的是 ``torch.autograd.backward`` 方法，功能就是自动求取梯度。
-
-- API:
-
-```python
-torch.autograd.backward(
-   tensors, 
-   gard_tensors = None, 
-   retain_graph = None, 
-   create_graph = False
-)
-```
-
-
-
-# 1.PyTorch 模型
-
-## 1.1 PyTorch 模型的创建
-
-
-
-
-
-## 1.2 PyTorch 模型容器
-
-
-
-
-
-
-
-# 4.PyTorch 损失函数
 
 
 
@@ -699,52 +752,51 @@ torch.autograd.backward(
 - 使用与饱和激活函数 tanh 等的 Xavier 初始化方法
 - 非饱和激活函数 relu 等的 Kaiming 初始化方法
 
+# 7.PyTorch 损失函数
+
+# 8.PyTorhc 优化器
+
+# 9.PyTorch 评价指标
 
 
 
 
+# 10.PyTorch 模型保存和加载
 
+## 10.1 保存和加载模型权重参数
 
-
-# 7.PyTorch 保存模型
-
-## 7.1 方法 1:保存和加载模型参数
-
+PyTorch 将模型训练的学习到的权重参数保存在一个状态字典中, `state_dict`
 
 ```python
 import torch
-```
+import torchvision.models as models
 
-```python
 # 保存模型
-torch.save(the_model.state_dict(), PATH)
+model = models.vgg16(pretrained = True)
+MODEL_PATH = "model_weights.pth"
+torch.save(model.state_dict(), MODEL_PATH)
 
 # 加载模型
-the_model = TheModelClass(*args, **kwargs)
-the_model.load_state_dict(torch.load(PATH))
+model = models.vgg16()
+MODEL_PATH = "model_weights.pth"
+model.load_state_dict(torch.load(MODEL_PATH))
+model.eval()
 ```
 
-## 5.2 方法 2:保存和加载整个模型
-
+## 8.2 保存和加载整个模型
 
 ```python
 import torch
-```
 
-
-```python
 # 保存模型
 torch.save(the_model, PATH)
 
 # 加载模型
 the_model = torch.load(PATH)
 ```
+# 11.PyTorch Cheat Sheet
 
-
-
-# PyTorch Cheat Sheet
-
-## 1.Imports
+## 11.1 Imports
 
 ```python
 # General
@@ -778,7 +830,7 @@ import torch.distributed as dist
 from torch.multiprocessing import Process
 ```
 
-## 2.Tensors
+## 11.2 Tensors
 
 ```python   
 import torch
@@ -820,7 +872,7 @@ net.to(device)
 x = x.to(device)
 ```
 
-## 3.Deep Learning
+## 11.3 Deep Learning
 
 ```python
 import torch.nn as nn
@@ -853,7 +905,7 @@ scheduler.step()
 optim.lr_scheduler.X
 ```
 
-## 4.Data Utilities
+## 11.4 Data Utilities
 
 ```python
 # Dataset
