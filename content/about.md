@@ -1,7 +1,5 @@
 ---
 title: 关于
-author: 王哲峰
-date: '2019-08-06'
 ---
 
 <style>
@@ -142,17 +140,5 @@ h2 {
 - 胡波涛
 - 关大洲
 - 周杰伦
-
-## 本站架构
-
-- [R](https://www.r-project.org/)
-- [blogdown](https://github.com/rstudio/blogdown)
-- [GitHub](https://github.com)
-- [Netlify](https://www.netlify.com/)
-- [Vercel](https://vercel.com/)
-- [Hugo Ivy 主题](https://github.com/yihui/hugo-ivy)
-- [Disqus](https://disqus.com/)
-- [Utterances](https://utteranc.es/)
-
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)
