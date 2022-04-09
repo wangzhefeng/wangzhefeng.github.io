@@ -30,6 +30,14 @@ h2 {
 }
 </style>
 
+<details><summary>:link:</summary><p>
+
+- [Hugo 简介](#hugo-简介)
+- [Hugo 安装](#hugo-安装)
+- [Hugo 主题](#hugo-主题)
+- [参考资料](#参考资料)
+</p></details><p></p>
+
 # Hugo 简介
 
 ![hugo](images/hugo_intro.jpg)

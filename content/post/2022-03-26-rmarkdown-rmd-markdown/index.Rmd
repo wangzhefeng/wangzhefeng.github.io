@@ -36,6 +36,8 @@ h2 {
 </style>
 
 
+
+
 # Markdown
 
 Markdown 的维基百科[^Markdown维基百科]介绍是这样的：
@@ -107,6 +109,15 @@ a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
 - 效果展示
 
   - a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
+
+
+## 文档内引用
+
+```markdown
+[text](#header-label)
+[text](path)
+```
+
 
 ## 脚注尾注
 
@@ -210,6 +221,29 @@ a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
   ></iframe>
 </div>
 
+- 方法2
+
+```markdown
+[![Machine Learning Meets Fashion](doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
+```
+
+
+## 插入图片
+
+- markdown 方法
+
+```markdown
+![text](/path/image.png)
+```
+
+
+- html 方法
+
+```markdown
+<image src="/path/image.png" width=100%>
+<image src="/path/image.png" width=50%><image src="/path/image.png" width=50%>
+```
+
 
 ## 生成目录
 
@@ -254,6 +288,17 @@ output:
     fig_width: 6
     dev: "svg"
 ---
+```
+
+### html
+
+```markdown
+<details><summary>Table of Contents</summary><p>
+
+* [Header1-1](#header1-label)
+* [Header1-2](#header2-label)
+  - [Header2-1](##header2-1-label)
+</p></details><p></p>
 ```
 
 ## 插入Note、Important
@@ -319,7 +364,7 @@ $a^{2}+b^{2} = c^{2}$
 
 # 参考资料
 
-- [Markdown 维基百科](https://zh.wikipedia.org/wiki/Markdown)
+- [Markdown 维基百科](https://zh.wikipedia.org/wiki/Markdown) | [:link:](https://zh.wikipedia.org/wiki/Markdown)
 - [Markdown 官网](https://daringfireball.net/projects/markdown/syntax)
 - [插入表情](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - [插入 Note](https://stackoverflow.com/questions/25654845/how-can-i-create-a-text-box-for-a-note-in-markdown)

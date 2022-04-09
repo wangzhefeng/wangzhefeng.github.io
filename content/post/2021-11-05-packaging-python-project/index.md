@@ -30,6 +30,34 @@ h2 {
 }
 </style>
 
+
+<details><summary>:link:</summary><p>
+
+- [1.创建一个简单的 project](#1创建一个简单的-project)
+  - [1.1 创建一个 project](#11-创建一个-project)
+  - [1.2 生成的 project 结构](#12-生成的-project-结构)
+- [2.创建 package 文件](#2创建-package-文件)
+  - [2.1 创建用于单元测试的 `tests` 目录](#21-创建用于单元测试的-tests-目录)
+  - [2.2 创建 `pyproject.toml` 文件](#22-创建-pyprojecttoml-文件)
+  - [2.3 配置 metadata](#23-配置-metadata)
+  - [2.4 创建 `README.md` 文件](#24-创建-readmemd-文件)
+  - [2.5 创建 `LICENSE` 文件](#25-创建-license-文件)
+  - [2.6 创建其他文件](#26-创建其他文件)
+- [3.生成分发档案](#3生成分发档案)
+- [4.上传分发档案](#4上传分发档案)
+  - [4.1 在 TestPyPI 上注册账户，并生成一个 API token](#41-在-testpypi-上注册账户并生成一个-api-token)
+  - [4.2 将生成的 API token 配置在本地](#42-将生成的-api-token-配置在本地)
+  - [4.3 上传分发档案](#43-上传分发档案)
+- [5.安装新上传的 package](#5安装新上传的-package)
+- [6.下一步 -- PyPI](#6下一步----pypi)
+- [7.最后 -- Git/GitHub](#7最后----gitgithub)
+  - [7.1 Clone](#71-clone)
+  - [7.1 在命令行新建一个 GitHub 仓库](#71-在命令行新建一个-github-仓库)
+  - [7.3 将本地仓库直接推送到一个 GitHub 仓库](#73-将本地仓库直接推送到一个-github-仓库)
+  - [7.4 从其他仓库导入代码](#74-从其他仓库导入代码)
+- [参考](#参考)
+</p></details><p></p>
+
 > - 本文介绍如何对一个 Python 项目在本地打包，发布在 PyPI 上
 > - 大致流程:
 >   - project => package => distribution package => archives => PyPI => pip

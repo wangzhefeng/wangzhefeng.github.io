@@ -18,18 +18,7 @@ output:
 
 <div id="TOC">
 <ul>
-<li><a href="#需要掌握的内容">需要掌握的内容</a>
-<ul>
-<li><a href="#get-stated">Get Stated</a></li>
-<li><a href="#tutorials">Tutorials</a>
-<ul>
-<li><a href="#learn-the-basics">Learn the Basics</a></li>
-<li><a href="#pytorch-recipes">PyTorch Recipes</a></li>
-<li><a href="#additional-resources">Additional Resources</a></li>
-</ul></li>
-<li><a href="#docs">Docs</a></li>
-<li><a href="#github">GitHub</a></li>
-</ul></li>
+<li><a href="#需要掌握的内容">需要掌握的内容</a></li>
 <li><a href="#pytorch-tensor-的创建">1.PyTorch tensor 的创建</a>
 <ul>
 <li><a href="#tensor-的介绍">1.1 tensor 的介绍</a></li>
@@ -43,16 +32,20 @@ output:
 </ul></li>
 <li><a href="#pytorch-数据读取与预处理">2.PyTorch 数据读取与预处理</a>
 <ul>
-<li><a href="#pytorch-数据读取">2.1 PyTorch 数据读取</a>
+<li><a href="#torchvision-torchtext-torchaudio-dataset">2.1 TorchVision, TorchText, TorchAudio Dataset</a></li>
+<li><a href="#dataset-和-dataloader">2.2 Dataset 和 DataLoader</a></li>
+<li><a href="#transforms">2.3 Transforms</a></li>
+<li><a href="#pytorch-数据读取">2.4 PyTorch 数据读取</a></li>
+<li><a href="#构造自定义的-datasets-dataloaders-transforms">2.5 构造自定义的 Datasets, Dataloaders, Transforms</a>
 <ul>
-<li><a href="#构造自定义的-datasets-dataloaders-transforms">2.1.1 构造自定义的 Datasets, Dataloaders, Transforms</a></li>
-<li><a href="#读取数据">2.1.2 读取数据</a></li>
+<li><a href="#datasets">2.5.1 Datasets</a></li>
+<li><a href="#dataloaders">2.5.2 DataLoaders</a></li>
+<li><a href="#transforms-1">2.5.3 Transforms</a></li>
 </ul></li>
-<li><a href="#dataset-class">2.2 Dataset class</a></li>
-<li><a href="#pytorch-数据并行">2.3 PyTorch 数据并行</a>
+<li><a href="#pytorch-数据并行">2.6 PyTorch 数据并行</a>
 <ul>
-<li><a href="#让模型跑在-gpu-上">2.3.1 让模型跑在 GPU 上</a></li>
-<li><a href="#让模型跑在多个-gpu-上">2.3.2 让模型跑在多个 GPU 上</a></li>
+<li><a href="#让模型跑在-gpu-上">2.6.1 让模型跑在 GPU 上</a></li>
+<li><a href="#让模型跑在多个-gpu-上">2.6.2 让模型跑在多个 GPU 上</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#pytorch-nn">3.PyTorch nn</a>
@@ -70,44 +63,57 @@ output:
 <li><a href="#pytorch-模型的创建">5.1 PyTorch 模型的创建</a></li>
 <li><a href="#pytorch-模型容器">5.2 PyTorch 模型容器</a></li>
 </ul></li>
-<li><a href="#pytorch-损失函数">6.PyTorch 损失函数</a></li>
-<li><a href="#pytorch-权重初始化">7.PyTorch 权重初始化</a>
+<li><a href="#pytorch-权重初始化">6.PyTorch 权重初始化</a>
 <ul>
-<li><a href="#权重初始化方法">7.1 权重初始化方法</a></li>
+<li><a href="#权重初始化方法">6.1 权重初始化方法</a></li>
 </ul></li>
-<li><a href="#pytorch-模型保存和加载">8.PyTorch 模型保存和加载</a>
+<li><a href="#pytorch-损失函数">7.PyTorch 损失函数</a></li>
+<li><a href="#pytorhc-优化器">8.PyTorhc 优化器</a></li>
+<li><a href="#pytorch-评价指标">9.PyTorch 评价指标</a></li>
+<li><a href="#pytorch-模型保存和加载">10.PyTorch 模型保存和加载</a>
 <ul>
-<li><a href="#方法-1保存和加载模型参数">8.1 方法 1:保存和加载模型参数</a></li>
-<li><a href="#方法-2保存和加载整个模型">8.2 方法 2:保存和加载整个模型</a></li>
+<li><a href="#保存和加载模型权重参数">10.1 保存和加载模型权重参数</a></li>
+<li><a href="#保存和加载整个模型">10.2 保存和加载整个模型</a></li>
+<li><a href="#导出模型为-onnx">10.3 导出模型为 ONNX</a></li>
+<li><a href="#保存和加载-checkpoint">10.4 保存和加载 checkpoint</a></li>
 </ul></li>
-<li><a href="#pytorch-cheat-sheet">9.PyTorch Cheat Sheet</a>
+<li><a href="#pytorch-cheat-sheet">11.PyTorch Cheat Sheet</a>
 <ul>
-<li><a href="#imports">1.Imports</a></li>
-<li><a href="#tensors">2.Tensors</a></li>
-<li><a href="#deep-learning">3.Deep Learning</a></li>
-<li><a href="#data-utilities">4.Data Utilities</a></li>
+<li><a href="#imports">11.1 Imports</a></li>
+<li><a href="#tensors">11.2 Tensors</a></li>
+<li><a href="#deep-learning">11.3 Deep Learning</a></li>
+<li><a href="#data-utilities">11.4 Data Utilities</a></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="需要掌握的内容" class="section level1">
 <h1>需要掌握的内容</h1>
-<div id="get-stated" class="section level2">
-<h2>Get Stated</h2>
 <ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Get Stated<ul class="task-list">
 <li><input type="checkbox" disabled="" />
 Start Locally</li>
 <li><input type="checkbox" disabled="" />
 Start via Partners</li>
-</ul>
-</div>
-<div id="tutorials" class="section level2">
-<h2>Tutorials</h2>
-<div id="learn-the-basics" class="section level3">
-<h3>Learn the Basics</h3>
+</ul></li>
+<li><input type="checkbox" disabled="" />
+Tutorials<ul>
+<li>Learn the Basics
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
-Introduction to PyTorch</li>
+Introduction to PyTorch<ul class="task-list">
+<li><input type="checkbox" disabled="" checked="" />
+Learn the Basics</li>
+<li><input type="checkbox" disabled="" />
+Quickstart</li>
+<li><input type="checkbox" disabled="" />
+Tensors</li>
+<li><input type="checkbox" disabled="" />
+Datasets &amp; DataLoaders</li>
+<li><input type="checkbox" disabled="" checked="" />
+Save and Load the Model</li>
+</ul></li>
 <li><input type="checkbox" disabled="" />
 Learning PyTorch</li>
 <li><input type="checkbox" disabled="" />
@@ -120,20 +126,17 @@ Deploying PyTorch Model in Production</li>
 Model Optimization</li>
 <li><input type="checkbox" disabled="" />
 Parallel and Distributed Training</li>
-</ul>
-</div>
-<div id="pytorch-recipes" class="section level3">
-<h3>PyTorch Recipes</h3>
-<ul>
-<li>[] 快速入门</li>
+</ul></li>
+<li>PyTorch Recipes
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+快速入门</li>
 <li><input type="checkbox" disabled="" />
 自定义层、训练循环</li>
 <li><input type="checkbox" disabled="" />
 分布式训练</li>
-</ul>
-</div>
-<div id="additional-resources" class="section level3">
-<h3>Additional Resources</h3>
+</ul></li>
+<li>Additional Resources
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 Examples of PyTorch</li>
@@ -143,12 +146,10 @@ PyTorch Cheat Sheet</li>
 Tutorials on GitHub</li>
 <li><input type="checkbox" disabled="" />
 Run Tutorials on Google Colab</li>
-</ul>
-</div>
-</div>
-<div id="docs" class="section level2">
-<h2>Docs</h2>
-<ul class="task-list">
+</ul></li>
+</ul></li>
+<li><input type="checkbox" disabled="" />
+Docs<ul class="task-list">
 <li><input type="checkbox" disabled="" />
 PyTorch</li>
 <li><input type="checkbox" disabled="" />
@@ -163,15 +164,15 @@ TorchElastic</li>
 TorchServe</li>
 <li><input type="checkbox" disabled="" />
 PyTorch on XLA Devices</li>
-</ul>
-</div>
-<div id="github" class="section level2">
-<h2>GitHub</h2>
-<ul class="task-list">
+</ul></li>
+<li><input type="checkbox" disabled="" />
+GitHub<ul class="task-list">
 <li><input type="checkbox" disabled="" />
 <a href="https://github.com/pytorch/pytorch" class="uri">https://github.com/pytorch/pytorch</a></li>
+<li><input type="checkbox" disabled="" />
+<a href="https://github.com/onnx/tutorials" class="uri">https://github.com/onnx/tutorials</a></li>
+</ul></li>
 </ul>
-</div>
 </div>
 <div id="pytorch-tensor-的创建" class="section level1">
 <h1>1.PyTorch tensor 的创建</h1>
@@ -471,13 +472,58 @@ if torch.cuda.is_available():
 </div>
 <div id="pytorch-数据读取与预处理" class="section level1">
 <h1>2.PyTorch 数据读取与预处理</h1>
-<div id="pytorch-数据读取" class="section level2">
-<h2>2.1 PyTorch 数据读取</h2>
-<div id="构造自定义的-datasets-dataloaders-transforms" class="section level3">
-<h3>2.1.1 构造自定义的 Datasets, Dataloaders, Transforms</h3>
+<div id="torchvision-torchtext-torchaudio-dataset" class="section level2">
+<h2>2.1 TorchVision, TorchText, TorchAudio Dataset</h2>
+<ul>
+<li><p>TorchVision</p></li>
+<li><p>TorchText</p></li>
+<li><p>TorchAudio</p></li>
+<li><p>加载相关库</p></li>
+</ul>
+<pre class="python"><code>from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
+from torchvision import datasets
+from torchvision.transforms import ToTensor</code></pre>
+<ul>
+<li>下载、读取数据</li>
+</ul>
+<pre class="python"><code>training_data = datasets.FashionMNIST(
+    root = &quot;data&quot;,
+    trian = True,
+    download = True,
+    transform = ToTensor(),
+)
+
+test_data = datasets.FashionMNIST(
+    root = &quot;data&quot;,
+    train = False,
+    download = True,
+    transform = ToTensor(),
+)</code></pre>
+<ul>
+<li>生成数据加载器</li>
+</ul>
+<pre class="python"><code>batch_size = 64
+
+# create data loaders
+train_dataloader = DataLoader(trianing_data, batch_size = batch_size)
+test_dataloader = DataLoader(test_data, batch_size = batch_size)
+
+for X, y in test_dataloader:
+    print(f&quot;Shape of X [N, C, H, W]: {X.shape}&quot;)
+    print(f&quot;Shape of y: {y.shape} {y.dtype}&quot;)
+    break</code></pre>
 </div>
-<div id="读取数据" class="section level3">
-<h3>2.1.2 读取数据</h3>
+<div id="dataset-和-dataloader" class="section level2">
+<h2>2.2 Dataset 和 DataLoader</h2>
+<pre class="python"><code>from torch.utils.data import Dataset
+from torch.utils.data import DataLoader</code></pre>
+</div>
+<div id="transforms" class="section level2">
+<h2>2.3 Transforms</h2>
+</div>
+<div id="pytorch-数据读取" class="section level2">
+<h2>2.4 PyTorch 数据读取</h2>
 <pre class="python"><code>from __future__ import print_function, division
 import os
 import torch
@@ -512,18 +558,26 @@ print(&quot;First 4 Landmarks: {}&quot;.format(landmarks[:4]))</code></pre>
 plt.figure()
 show_landmarks(io.imread(os.path.join(&quot;../data/faces/&quot;, img_name)), landmarks)</code></pre>
 </div>
-</div>
-<div id="dataset-class" class="section level2">
-<h2>2.2 Dataset class</h2>
+<div id="构造自定义的-datasets-dataloaders-transforms" class="section level2">
+<h2>2.5 构造自定义的 Datasets, Dataloaders, Transforms</h2>
+<div id="datasets" class="section level3">
+<h3>2.5.1 Datasets</h3>
 <pre class="python"><code>class FaceLandmarksDataset(Dataset):
    &quot;&quot;&quot;Face Landmarks dataset.&quot;&quot;&quot;
    def __init__(self, csv_file, root_dir, transform = None):
       pass</code></pre>
 </div>
+<div id="dataloaders" class="section level3">
+<h3>2.5.2 DataLoaders</h3>
+</div>
+<div id="transforms-1" class="section level3">
+<h3>2.5.3 Transforms</h3>
+</div>
+</div>
 <div id="pytorch-数据并行" class="section level2">
-<h2>2.3 PyTorch 数据并行</h2>
+<h2>2.6 PyTorch 数据并行</h2>
 <div id="让模型跑在-gpu-上" class="section level3">
-<h3>2.3.1 让模型跑在 GPU 上</h3>
+<h3>2.6.1 让模型跑在 GPU 上</h3>
 <pre class="python"><code>import torch
 
 # 让模型在 GPU 上运行
@@ -535,7 +589,7 @@ my_tensor = torch.ones(2, 2, dtype = torch.double)
 mytensor = my_tensor.to(device)</code></pre>
 </div>
 <div id="让模型跑在多个-gpu-上" class="section level3">
-<h3>2.3.2 让模型跑在多个 GPU 上</h3>
+<h3>2.6.2 让模型跑在多个 GPU 上</h3>
 <blockquote>
 <ul>
 <li>PyTorch 默认使用单个 GPU 执行运算</li>
@@ -611,14 +665,14 @@ rule: <code>weight = weight - learning_rate * gradient</code></li>
 </ul>
 <div id="定义神经网" class="section level2">
 <h2>定义神经网</h2>
-<pre class="python"><code># nn
-# autograd
-# nn.Module
-    # forward(input) =&gt; output
-
-import torch
+<pre class="python"><code>import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
+print(f&quot;Using {device} device&quot;)
+
 
 class Net(nn.Module):
 
@@ -653,7 +707,7 @@ class Net(nn.Module):
         return num_features
 
 
-net = Net()
+net = Net().to(device)
 print(net)</code></pre>
 <pre class="python"><code>params = list(net.parameters)
 print(len(params))
@@ -820,13 +874,10 @@ print(x.eq(y).all())</code></pre>
 <h2>5.2 PyTorch 模型容器</h2>
 </div>
 </div>
-<div id="pytorch-损失函数" class="section level1">
-<h1>6.PyTorch 损失函数</h1>
-</div>
 <div id="pytorch-权重初始化" class="section level1">
-<h1>7.PyTorch 权重初始化</h1>
+<h1>6.PyTorch 权重初始化</h1>
 <div id="权重初始化方法" class="section level2">
-<h2>7.1 权重初始化方法</h2>
+<h2>6.1 权重初始化方法</h2>
 <p>正确的权重初始化可以加速模型的收敛，不恰当的权重初始化导致输出层的输出过大或者过小，
 最终导致梯度爆炸或者消失，使得模型无法训练</p>
 <ul>
@@ -835,32 +886,157 @@ print(x.eq(y).all())</code></pre>
 </ul>
 </div>
 </div>
-<div id="pytorch-模型保存和加载" class="section level1">
-<h1>8.PyTorch 模型保存和加载</h1>
-<div id="方法-1保存和加载模型参数" class="section level2">
-<h2>8.1 方法 1:保存和加载模型参数</h2>
-<pre class="python"><code>import torch</code></pre>
-<pre class="python"><code># 保存模型
-torch.save(the_model.state_dict(), PATH)
-
-# 加载模型
-the_model = TheModelClass(*args, **kwargs)
-the_model.load_state_dict(torch.load(PATH))</code></pre>
+<div id="pytorch-损失函数" class="section level1">
+<h1>7.PyTorch 损失函数</h1>
 </div>
-<div id="方法-2保存和加载整个模型" class="section level2">
-<h2>8.2 方法 2:保存和加载整个模型</h2>
-<pre class="python"><code>import torch</code></pre>
-<pre class="python"><code># 保存模型
-torch.save(the_model, PATH)
+<div id="pytorhc-优化器" class="section level1">
+<h1>8.PyTorhc 优化器</h1>
+</div>
+<div id="pytorch-评价指标" class="section level1">
+<h1>9.PyTorch 评价指标</h1>
+</div>
+<div id="pytorch-模型保存和加载" class="section level1">
+<h1>10.PyTorch 模型保存和加载</h1>
+<div id="保存和加载模型权重参数" class="section level2">
+<h2>10.1 保存和加载模型权重参数</h2>
+<p>PyTorch 将模型训练的学习到的权重参数保存在一个状态字典中, <code>state_dict</code></p>
+<ul>
+<li>模型保存</li>
+</ul>
+<pre class="python"><code>import torch
+import torchvision.models as models
 
-# 加载模型
-the_model = torch.load(PATH)</code></pre>
+# 保存模型
+model = models.vgg16(pretrained = True)
+MODEL_PATH = &quot;models/model_weights.pth&quot;
+torch.save(
+    model.state_dict(), 
+    MODEL_PATH
+)</code></pre>
+<ul>
+<li>模型加载</li>
+</ul>
+<pre class="python"><code>import torch
+import torchvision.models as models
+
+# do not specify pretrained=True, i.e. do not load default weights
+model = models.vgg16()
+MODEL_PATH = &quot;models/model_weights.pth&quot;
+model.load_state_dict(
+    torch.load(MODEL_PATH)
+)
+model.eval()</code></pre>
+</div>
+<div id="保存和加载整个模型" class="section level2">
+<h2>10.2 保存和加载整个模型</h2>
+<ul>
+<li>模型保存</li>
+</ul>
+<pre class="python"><code>import torch
+import torchvision.models as models
+
+model = models.vgg16(pretrained = True)
+MODEL_PATH = &quot;models/model.pth&quot;
+torch.save(the_model, MODEL_PATH)</code></pre>
+<ul>
+<li>模型加载</li>
+</ul>
+<pre class="python"><code>import torch
+
+MODEL_PATH = &quot;models/model.pth&quot;
+model = torch.load(MODEL_PATH)  # require pickle module</code></pre>
+</div>
+<div id="导出模型为-onnx" class="section level2">
+<h2>10.3 导出模型为 ONNX</h2>
+<ul>
+<li>PyTorch 还具有原生 ONNX 导出支持。然而，鉴于 PyTorch 执行图的动态特性，
+导出过程必须遍历执行图以生成持久的 ONNX 模型。出于这个原因，
+应该将适当大小的测试变量传递给导出例程</li>
+<li><a href="https://github.com/onnx/tutorials">ONNX 教程</a></li>
+</ul>
+<pre class="python"><code>import torch
+import torch.onnx as onnx
+
+input_image = torch.zeros((1, 3, 224, 224))</code></pre>
+</div>
+<div id="保存和加载-checkpoint" class="section level2">
+<h2>10.4 保存和加载 checkpoint</h2>
+<ul>
+<li>加载相关库</li>
+</ul>
+<pre class="python"><code>import torch
+import torch.nn as nn
+import torch.optim as optim</code></pre>
+<ul>
+<li>定义和初始化模型</li>
+</ul>
+<pre class="python"><code>class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+net = Net()
+print(net)</code></pre>
+<ul>
+<li>初始化优化器</li>
+</ul>
+<pre class="python"><code>optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)</code></pre>
+<ul>
+<li>保存 checkpoint</li>
+</ul>
+<pre class="python"><code>EPOCH = 5
+PATH = &quot;model.pt&quot;
+LOSS = 0.4
+
+torch.save({
+    &quot;epoch&quot;: EPOCH,
+    &quot;model_state_dict&quot;: net.state_dict(),
+    &quot;optimizer_state_dict&quot;: optimizer.state_dict(),
+    &quot;loss&quot;: LOSS,
+}, PATH)</code></pre>
+<ul>
+<li>加载 checkpoint</li>
+</ul>
+<pre class="python"><code>PATH = &quot;model.pt&quot;
+
+# 初始化模型
+model = Net()
+# 初始化优化器
+optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)
+
+# 加载 checkpoint
+checkpoint = torch.load(PATH)
+
+model.load_state_dict(checkpoint[&quot;model_state_dict&quot;])
+optimizer.load_state_dict(checkpoint[&quot;optimizer_state_dict&quot;])
+
+epoch = checkpoint[&quot;epoch&quot;]
+loss = checkpoint[&quot;loss&quot;]
+
+model.eval()
+# - or - 
+model.train()</code></pre>
 </div>
 </div>
 <div id="pytorch-cheat-sheet" class="section level1">
-<h1>9.PyTorch Cheat Sheet</h1>
+<h1>11.PyTorch Cheat Sheet</h1>
 <div id="imports" class="section level2">
-<h2>1.Imports</h2>
+<h2>11.1 Imports</h2>
 <pre class="python"><code># General
 import torch # root package
 from torch.utils.data import Dataset, Dataloader # dataset representation and loading
@@ -892,7 +1068,7 @@ import torch.distributed as dist
 from torch.multiprocessing import Process</code></pre>
 </div>
 <div id="tensors" class="section level2">
-<h2>2.Tensors</h2>
+<h2>11.2 Tensors</h2>
 <pre class="python"><code>import torch
 
 # Creation
@@ -932,7 +1108,7 @@ net.to(device)
 x = x.to(device)</code></pre>
 </div>
 <div id="deep-learning" class="section level2">
-<h2>3.Deep Learning</h2>
+<h2>11.3 Deep Learning</h2>
 <pre class="python"><code>import torch.nn as nn
 
 nn.Linear(m, n)
@@ -963,7 +1139,7 @@ scheduler.step()
 optim.lr_scheduler.X</code></pre>
 </div>
 <div id="data-utilities" class="section level2">
-<h2>4.Data Utilities</h2>
+<h2>11.4 Data Utilities</h2>
 <pre class="python"><code># Dataset
 Dataset
 TensorDataset

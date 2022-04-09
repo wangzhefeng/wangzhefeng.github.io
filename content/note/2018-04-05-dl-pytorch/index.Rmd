@@ -16,50 +16,43 @@ output:
 
 # 需要掌握的内容
 
-## Get Stated
-
-- [ ] Start Locally
-- [ ] Start via Partners
-
-## Tutorials
-
-### Learn the Basics
-
-* [ ] Introduction to PyTorch
-    - [ ] Save and Load the Model
-* [ ] Learning PyTorch
-* [ ] Image and Video
-* [ ] Text
-* [ ] Deploying PyTorch Model in Production
-* [ ] Model Optimization
-* [ ] Parallel and Distributed Training
-
-### PyTorch Recipes
-
-* [ ] 快速入门
-* [ ] 自定义层、训练循环
-* [ ] 分布式训练
-
-### Additional Resources
-
-* [ ] Examples of PyTorch
-* [ ] PyTorch Cheat Sheet
-* [ ] Tutorials on GitHub
-* [ ] Run Tutorials on Google Colab
-
-## Docs
-
-* [ ] PyTorch
-* [ ] torchaudio
-* [ ] torchtext
-* [ ] torchvision
-* [ ] TorchElastic
-* [ ] TorchServe
-* [ ] PyTorch on XLA Devices
-
-## GitHub
-
-* [ ] https://github.com/pytorch/pytorch
+* [ ] Get Stated
+    - [ ] Start Locally
+    - [ ] Start via Partners
+* [ ] Tutorials
+    - Learn the Basics
+        - [ ] Introduction to PyTorch
+            - [x] Learn the Basics
+            - [ ] Quickstart
+            - [ ] Tensors
+            - [ ] Datasets & DataLoaders
+            - [x] Save and Load the Model
+        - [ ] Learning PyTorch
+        - [ ] Image and Video
+        - [ ] Text
+        - [ ] Deploying PyTorch Model in Production
+        - [ ] Model Optimization
+        - [ ] Parallel and Distributed Training
+    - PyTorch Recipes
+        - [ ] 快速入门
+        - [ ] 自定义层、训练循环
+        - [ ] 分布式训练
+    - Additional Resources
+        - [ ] Examples of PyTorch
+        - [ ] PyTorch Cheat Sheet
+        - [ ] Tutorials on GitHub
+        - [ ] Run Tutorials on Google Colab
+* [ ] Docs
+    - [ ] PyTorch
+    - [ ] torchaudio
+    - [ ] torchtext
+    - [ ] torchvision
+    - [ ] TorchElastic
+    - [ ] TorchServe
+    - [ ] PyTorch on XLA Devices
+* [ ] GitHub
+    - [ ] https://github.com/pytorch/pytorch
+    - [ ] https://github.com/onnx/tutorials
 
 # 1.PyTorch tensor 的创建
 
@@ -201,9 +194,6 @@ import torch
     ```
 
 ### 1.2.2 依数值创建
-
-
-
 
 - API
 
@@ -349,62 +339,167 @@ if torch.cuda.is_available():
 
 # 2.PyTorch 数据读取与预处理
 
-## 2.1 PyTorch 数据读取
+## 2.1 Dataset 和 DataLoader
 
-### 2.1.1 构造自定义的 Datasets, Dataloaders, Transforms
+> - Dataset 保存了数据的样本和标签
+> - DataLoader 将 Dataset 封装为可迭代对象, 便于访问样本
 
-### 2.1.2 读取数据
+### 2.1.1 使用 TorchVision, TorchText, TorchAudio dataset
+
+* 加载相关库
 
 ```python
-from __future__ import print_function, division
+from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
+from torchvision import datasets
+from torchvision.transforms import ToTensor
+```
+
+* 下载、读取数据
+
+```python
+training_data = datasets.FashionMNIST(
+    root = "data",
+    trian = True,
+    download = True,
+    transform = ToTensor(),
+)
+
+test_data = datasets.FashionMNIST(
+    root = "data",
+    train = False,
+    download = True,
+    transform = ToTensor(),
+)
+```
+
+* 生成数据加载器
+
+```python
+batch_size = 64
+
+# create data loaders
+train_dataloader = DataLoader(trianing_data, batch_size = batch_size)
+test_dataloader = DataLoader(test_data, batch_size = batch_size)
+
+for X, y in test_dataloader:
+    print(f"Shape of X [N, C, H, W]: {X.shape}")
+    print(f"Shape of y: {y.shape} {y.dtype}")
+    break
+
+# Display image and label.
+train_features, train_labels = next(iter(train_dataloader))
+print(f"Feature batch shape: {train_features.size()}")
+print(f"Labels batch shape: {train_labels.size()}")
+img = train_features[0].squeeze()
+label = train_labels[0]
+plt.imshow(img, cmap="gray")
+plt.show()
+print(f"Label: {label}")
+```
+
+### 2.1.2 使用文件创建自定义的 Dataset
+
+> * `Dataset` 类需要实现以下方法
+>     - `__init__`
+>     - `__len__`
+>     - `__getitem__`
+
+* 记载相关库
+
+```python
 import os
-import torch
-import pandas as pd 
-from skimage import io, transform
-import numpy as np 
-import matplotlib.pyplot as plt 
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transform, utils
-
-# Ignore warnings
-import warnings
-warnings.filterwarnings("ignore")
-
-plt.ion() # interactive mode
+import pandas as pd
+import torchvision.io import read_image
+# TODO import torchtext.iop import *
+from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
 ```
+
+* 创建 Dataset 类
+
+    - 文件所在目录结构如下 TODO
+
+    ```
+    - img_dir
+        - 
+        - labels.csv
+            tshirt1.jpg, 0
+            tshirt2.jpg, 0
+            ...
+            ankleboot999.jpg, 9
+    ```
 
 ```python
-landmarks_frame = pd.read_csv("../data/faces/face_landmarks.csv")
-n = 65
-img_name = landmarks_frame.iloc[n, 0]
-landmarks = landmarks_frame.iloc[n, 1:].as_matrix()
-landmarks = landmarks.astype("float").reshape(-1, 2)
+class CustomImage(Dataset):
 
+    def __init__(self, annotations_file, img_dir, transform = None, target_transform = None):
+        self.img_labels = pd.read_csv(annotations_file)
+        self.img_dir = img_dir
+        self.transform = transform
+        self.target_transform = target_transform
 
-print("Image name: {}".format(img_name))
-print("Landmarks shape: {}".format(landmarks.shape))
-print("First 4 Landmarks: {}".format(landmarks[:4]))
+    def __len__(self):
+        return len(self.img_labels)
+    
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
+        image = read_image(img_path)
+        label = self.img_labels.iloc[idx, 1]
+        if self.transform:
+            image = self.transform(image)
+        if self.target_transform:
+            label = self.target_transform(label)
+        return image, label
 ```
+
+* 使用 DataLoader 准备训练数据集
 
 ```python
-def show_landmarks(image, landmarks):
-   """show image with landmarks"""
-   plt.imshow(image)
-   plt.scatter(landmarks[:, 0], landmarks[:, 1], s = 10, marker = ".", c = "r")
-   plt.pause(0.001)
+training_data = CustomImage(
+    annotations_file = "",
+    img_dir = "",
+    transform = ToTensor(),
+    target_transform = ToTensor(),
+)
+test_data = CustomImage(
+    annotations_file = "",
+    img_dir = "",
+    transform = ToTensor(),
+    target_transform = ToTensor(),
+)
 
-plt.figure()
-show_landmarks(io.imread(os.path.join("../data/faces/", img_name)), landmarks)
+train_dataloader = DataLoader(training_data, batch_size = 64, shuffle = True)
+test_dataloader = DataLoader(test_data, batch_size = 64, shuffle = True)
+
+# Display image and label.
+train_features, train_labels = next(iter(train_dataloader))
+print(f"Feature batch shape: {train_features.size()}")
+print(f"Labels batch shape: {train_labels.size()}")
+img = train_features[0].squeeze()
+label = train_labels[0]
+plt.imshow(img, cmap="gray")
+plt.show()
+print(f"Label: {label}")
 ```
 
-## 2.2 Dataset class
+## 2.2 torch.utils.data API
 
-```python
-class FaceLandmarksDataset(Dataset):
-   """Face Landmarks dataset."""
-   def __init__(self, csv_file, root_dir, transform = None):
-      pass
-```
+* torch.utils
+    - torch.utils.benchmark
+    - torch.utils.bottleneck
+    - torch.utils.checkpoint
+    - torch.utils.cpp_extension
+    - **torch.utils.data**
+    - torch.utils.dlpack
+    - torch.utils.mobile_optimizer
+    - torch.utils.model_zoo
+    - torch.utils.tensorboard
+
+
+
+
+
 
 ## 2.3 PyTorch 数据并行
 
@@ -444,51 +539,46 @@ data_size = 100
 
 # Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-```
 
-```python
 class RandomDataset(Dataset):
 
-def __init__(self, size, length):
-	self.len = length
-	self.data = torch.randn(length, size)
+    def __init__(self, size, length):
+        self.len = length
+        self.data = torch.randn(length, size)
 
-def __getitem__(self, index):
-	return self.data[index]
+    def __len__(self):
+        return self.len
+    
+    def __getitem__(self, index):
+        return self.data[index]
 
-def __len__(self):
-	return self.len
+rand_loader = DataLoader(
+    dataset = RandomDataset(input_size, data_size), 
+	batch_size = batch_size, 
+    shuffle = True
+)
 
-rand_loader = DataLoader(dataset = RandomDataset(input_size, data_size), 
-						batch_size = batch_size, 
-						shuffle = True)
-```
-
-```python
 class Model(nn.Module):
 
-def __init__(self, input_size, output_size):
-	super(Model, self)__init__()
-	self.fc = nn.Linear(input_size, output_size)
+    def __init__(self, input_size, output_size):
+        super(Model, self)__init__()
+        self.fc = nn.Linear(input_size, output_size)
 
-def forward(self, input):
-	output = self.fc(input)
-	print("\tIn Model: input size", input.size(),
-			"output size", output.size())
+    def forward(self, input):
+        output = self.fc(input)
+        print("\tIn Model: input size", input.size(),
+                "output size", output.size())
 
-	return output
-```
+        return output
 
-```python
 model = Model(input_size, output_size)
 if torch.cuda.device_count() > 1:
 print("Let's use", torch.cuda.device_count(), "GPUs!")
 model = nn.DataParallel(model)
 
 model.to(device)
-```
 
-```python
+
 for data in rand_loader:
 	input = data.to(device)
 	output = model(input)
@@ -498,31 +588,40 @@ for data in rand_loader:
 
 
 
+
+
+
+
+
+
+
+
+
+
 # 3.PyTorch nn
 
 A typical training procedure for a neural network is as follows:
 
 - Define the neural network that has some learnable parameters (or
-   weights)
+  weights)
 - Iterate over a dataset of inputs
 - Process input through the network
 - Compute the loss (how far is the output from being correct)
-- Propagate gradients back into the network’s parameters
+- Propagate gradients back into the network's parameters
 - Update the weights of the network, typically using a simple update
-   rule: `weight = weight - learning_rate * gradient`
-
+  rule: `weight = weight - learning_rate * gradient`
 
 ## 定义神经网
 
 ```python
-# nn
-# autograd
-# nn.Module
-    # forward(input) => output
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using {device} device")
+
 
 class Net(nn.Module):
 
@@ -557,7 +656,7 @@ class Net(nn.Module):
         return num_features
 
 
-net = Net()
+net = Net().to(device)
 print(net)
 ```
 
@@ -767,33 +866,162 @@ print(x.eq(y).all())
 
 PyTorch 将模型训练的学习到的权重参数保存在一个状态字典中, `state_dict`
 
+- 模型保存
+
 ```python
 import torch
 import torchvision.models as models
 
 # 保存模型
 model = models.vgg16(pretrained = True)
-MODEL_PATH = "model_weights.pth"
-torch.save(model.state_dict(), MODEL_PATH)
+MODEL_PATH = "models/model_weights.pth"
+torch.save(
+    model.state_dict(), 
+    MODEL_PATH
+)
+```
 
-# 加载模型
+- 模型加载
+
+```python
+import torch
+import torchvision.models as models
+
+# do not specify pretrained=True, i.e. do not load default weights
 model = models.vgg16()
-MODEL_PATH = "model_weights.pth"
-model.load_state_dict(torch.load(MODEL_PATH))
+MODEL_PATH = "models/model_weights.pth"
+model.load_state_dict(
+    torch.load(MODEL_PATH)
+)
 model.eval()
 ```
 
-## 8.2 保存和加载整个模型
+## 10.2 保存和加载整个模型
+
+- 模型保存
+
+```python
+import torch
+import torchvision.models as models
+
+model = models.vgg16(pretrained = True)
+MODEL_PATH = "models/model.pth"
+torch.save(the_model, MODEL_PATH)
+```
+
+- 模型加载
 
 ```python
 import torch
 
-# 保存模型
-torch.save(the_model, PATH)
-
-# 加载模型
-the_model = torch.load(PATH)
+MODEL_PATH = "models/model.pth"
+model = torch.load(MODEL_PATH)  # require pickle module
 ```
+
+## 10.3 导出模型为 ONNX
+
+* PyTorch 还具有原生 ONNX 导出支持。然而，鉴于 PyTorch 执行图的动态特性，
+  导出过程必须遍历执行图以生成持久的 ONNX 模型。出于这个原因，
+  应该将适当大小的测试变量传递给导出例程
+* [ONNX 教程](https://github.com/onnx/tutorials)
+
+```python
+import torch
+import torch.onnx as onnx
+
+input_image = torch.zeros((1, 3, 224, 224))
+```
+
+## 10.4 保存和加载 checkpoint
+
+- 加载相关库
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+```
+
+- 定义和初始化模型
+
+```python
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+net = Net()
+print(net)
+```
+
+- 初始化优化器
+
+```python
+optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)
+```
+
+- 保存 checkpoint
+
+```python
+EPOCH = 5
+PATH = "model.pt"
+LOSS = 0.4
+
+torch.save({
+    "epoch": EPOCH,
+    "model_state_dict": net.state_dict(),
+    "optimizer_state_dict": optimizer.state_dict(),
+    "loss": LOSS,
+}, PATH)
+```
+
+- 加载 checkpoint
+
+```python
+PATH = "model.pt"
+
+# 初始化模型
+model = Net()
+# 初始化优化器
+optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)
+
+# 加载 checkpoint
+checkpoint = torch.load(PATH)
+
+model.load_state_dict(checkpoint["model_state_dict"])
+optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+
+epoch = checkpoint["epoch"]
+loss = checkpoint["loss"]
+
+model.eval()
+# - or - 
+model.train()
+```
+
+
+
+
+
+
+
+
+
 # 11.PyTorch Cheat Sheet
 
 ## 11.1 Imports
@@ -918,3 +1146,4 @@ DataLoader(dataset, batch_size = 1, ...)
 sampler.Sampler(dataset, ...)
 sampler.XSampler where ...
 ```
+

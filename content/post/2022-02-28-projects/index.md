@@ -31,6 +31,32 @@ h2 {
 </style>
 
 
+<details><summary>:link:</summary><p>
+
+- [项目目录](#项目目录)
+  - [Machine Learning](#machine-learning)
+    - [machine learning](#machine-learning-1)
+    - [deeplearning](#deeplearning)
+    - [Image Processing](#image-processing)
+  - [Spark](#spark)
+  - [C++](#c)
+  - [data visualization](#data-visualization)
+  - [go](#go)
+  - [Java](#java)
+  - [Julia](#julia)
+  - [Linux](#linux)
+  - [Python](#python)
+  - [R](#r)
+  - [Web](#web)
+- [其他](#其他)
+- [技能管理](#技能管理)
+- [算法工程师技能列表](#算法工程师技能列表)
+  - [1.岗位行业](#1岗位行业)
+  - [2.算法栈](#2算法栈)
+  - [3.技术栈](#3技术栈)
+</p></details><p></p>
+
+
 
 # 项目目录
 

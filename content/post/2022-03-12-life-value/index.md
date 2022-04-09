@@ -30,6 +30,18 @@ h2 {
 }
 </style>
 
+<details><summary>:link:</summary><p>
+
+- [LIFE 价值观](#life-价值观)
+  - [Leadership](#leadership)
+  - [Integrity](#integrity)
+  - [Flexibility](#flexibility)
+  - [Efficiency](#efficiency)
+</p></details><p></p>
+
+
+
+
 > LIFE Value 是我的一个前领导在一家德国公司工作时的祖传个人价值观，是的，他传给了我。
 我现在还记得他当时对我的教导，并且给我打印了一份，我回家就粘在办公桌边上的墙上吃灰了。
 最近突然想回忆一下，所以稍作整理，希望有空的时候可以读一读，对照一下自己，帮助自己进步。

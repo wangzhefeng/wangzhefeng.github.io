@@ -22,14 +22,17 @@ output:
 <ul>
 <li><a href="#todo-list">TODO list</a></li>
 <li><a href="#上标下标">上标、下标</a></li>
+<li><a href="#文档内引用">文档内引用</a></li>
 <li><a href="#脚注尾注">脚注尾注</a></li>
 <li><a href="#插入表情emogi">插入表情(Emogi)</a></li>
 <li><a href="#插入视屏">插入视屏</a></li>
+<li><a href="#插入图片">插入图片</a></li>
 <li><a href="#生成目录">生成目录</a>
 <ul>
 <li><a href="#toc">TOC</a></li>
 <li><a href="#doctoc">DocToc</a></li>
 <li><a href="#blogdown">blogdown</a></li>
+<li><a href="#html">html</a></li>
 </ul></li>
 <li><a href="#插入noteimportant">插入Note、Important</a></li>
 <li><a href="#代码高亮">代码高亮</a></li>
@@ -133,6 +136,11 @@ todo item 3</li>
 </ul></li>
 </ul>
 </div>
+<div id="文档内引用" class="section level2">
+<h2>文档内引用</h2>
+<pre class="markdown"><code>[text](#header-label)
+[text](path)</code></pre>
+</div>
 <div id="脚注尾注" class="section level2">
 <h2>脚注尾注</h2>
 <p>脚注和尾注都是对文章的补充说明。</p>
@@ -217,7 +225,6 @@ todo item 3</li>
 <li>:cn:</li>
 <li>:mag:</li>
 <li>:octocat:</li>
-<li>:github:</li>
 </ul></li>
 </ul>
 </div>
@@ -231,6 +238,22 @@ todo item 3</li>
     allow="autoplay"
   ></iframe></p>
 </div>
+<ul>
+<li>方法2</li>
+</ul>
+<pre class="markdown"><code>[![Machine Learning Meets Fashion](doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)</code></pre>
+</div>
+<div id="插入图片" class="section level2">
+<h2>插入图片</h2>
+<ul>
+<li>markdown 方法</li>
+</ul>
+<pre class="markdown"><code>![text](/path/image.png)</code></pre>
+<ul>
+<li>html 方法</li>
+</ul>
+<pre class="markdown"><code>&lt;image src=&quot;/path/image.png&quot; width=100%&gt;
+&lt;image src=&quot;/path/image.png&quot; width=50%&gt;&lt;image src=&quot;/path/image.png&quot; width=50%&gt;</code></pre>
 </div>
 <div id="生成目录" class="section level2">
 <h2>生成目录</h2>
@@ -267,6 +290,15 @@ output:
     fig_width: 6
     dev: &quot;svg&quot;
 ---</code></pre>
+</div>
+<div id="html" class="section level3">
+<h3>html</h3>
+<pre class="markdown"><code>&lt;details&gt;&lt;summary&gt;Table of Contents&lt;/summary&gt;&lt;p&gt;
+
+* [Header1-1](#header1-label)
+* [Header1-2](#header2-label)
+  - [Header2-1](##header2-1-label)
+&lt;/p&gt;&lt;/details&gt;&lt;p&gt;&lt;/p&gt;</code></pre>
 </div>
 </div>
 <div id="插入noteimportant" class="section level2">
@@ -329,7 +361,7 @@ $a^{2}+b^{2} = c^{2}$</code></pre>
 <div id="参考资料" class="section level1">
 <h1>参考资料</h1>
 <ul>
-<li><a href="https://zh.wikipedia.org/wiki/Markdown">Markdown 维基百科</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/Markdown">Markdown 维基百科</a> | <a href="https://zh.wikipedia.org/wiki/Markdown">:link:</a></li>
 <li><a href="https://daringfireball.net/projects/markdown/syntax">Markdown 官网</a></li>
 <li><a href="https://www.webfx.com/tools/emoji-cheat-sheet/">插入表情</a></li>
 <li><a href="https://stackoverflow.com/questions/25654845/how-can-i-create-a-text-box-for-a-note-in-markdown">插入 Note</a></li>
