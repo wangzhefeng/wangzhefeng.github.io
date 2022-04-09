@@ -28,10 +28,30 @@ h2 {
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
 </style>
 
-
-<details><summary>:link:</summary><p>
+<details><summary>目录</summary><p>
 
 - [前言(千言万语道不尽)](#前言千言万语道不尽)
 - [热电联产小科普](#热电联产小科普)
