@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2021-03-15'
 slug: slidev-test
 categories:
-  - slidev
+  - markdown
 tags:
   - tool
 ---

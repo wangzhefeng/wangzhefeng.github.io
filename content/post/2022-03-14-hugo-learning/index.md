@@ -61,13 +61,13 @@ details[open] summary {
 
 # Hugo 简介
 
-![hugo](images/hugo_intro.jpg)
+- 一张图介绍
 
+<img src="images/hugo_intro.jpg" width="100%" />
 
+* Hugo 可爱的图标(老外就喜欢搞这种可爱的东西)
 
-
-
-Hugo 可爱的图标，老外就喜欢搞这种东西，让我想到了 Golang 的图标：![hugo](images/gopher-hero.svg)
+<img src="images/gopher-hero.svg" width="40%" />
 
 
 

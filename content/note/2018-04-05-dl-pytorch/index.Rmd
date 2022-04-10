@@ -14,6 +14,12 @@ output:
     dev: "svg"
 ---
 
+
+<details><summary>目录</summary><p>
+
+- [需要掌握的内容](#需要掌握的内容)
+</p></details><p></p>
+
 # 需要掌握的内容
 
 * [ ] Get Stated
@@ -26,6 +32,7 @@ output:
             - [ ] Quickstart
             - [ ] Tensors
             - [ ] Datasets & DataLoaders
+            - [ ] Transform
             - [x] Save and Load the Model
         - [ ] Learning PyTorch
         - [ ] Image and Video
@@ -483,7 +490,7 @@ plt.show()
 print(f"Label: {label}")
 ```
 
-## 2.2 torch.utils.data API
+### 2.1.3 torch.utils.data API
 
 * torch.utils
     - torch.utils.benchmark
@@ -496,10 +503,32 @@ print(f"Label: {label}")
     - torch.utils.model_zoo
     - torch.utils.tensorboard
 
+## 2.2 Transforms
 
+### 2.1.1 示例
 
+```python
+import torch
+from torchvision import datasets
+from torchvision import ToTensor, Lambda
 
+ds = datasets.FashionMNIST(
+    root = "data",
+    train = True,
+    download = True,
+    transform = ToTensor(),
+    target_transform = Lambda(
+        lambda y: torch.zeros(10, dtype = torch.float)
+            .scatter_(0, torch.tensor(y), value = 1)
+    )
+)
+```
 
+### 2.2.2 transforms API
+
+- torchvision.transforms
+- torchtext.transforms
+- torchaudio.transforms
 
 ## 2.3 PyTorch 数据并行
 

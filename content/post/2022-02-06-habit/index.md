@@ -1,9 +1,9 @@
 ---
-title: 养习惯
+title: 习惯
 author: 王哲峰
 date: '2022-02-06'
 categories:
-  - 个人感悟
+  - 感悟
 tags:
   - note
 slug: habit

@@ -1,10 +1,10 @@
 ---
-title: 统计哲学 Statistical Philosophy
+title: 统计哲学
 author: 王哲峰
 date: '2022-03-11'
 slug: statistical-philosophy
 categories:
-  - 知识点
+  - 内心的疑问
 tags:
   - note
 ---

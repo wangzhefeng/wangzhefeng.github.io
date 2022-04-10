@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-03-09'
 slug: dl-model-deploy
 categories:
-  - pyhton
+  - deeplearning
 tags:
   - note
 ---

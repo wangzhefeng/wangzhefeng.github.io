@@ -1,5 +1,5 @@
 ---
-title: R Markdown 与 Rmd 与 Markdown 的测试
+title: RMarkdown、Rmd、Markdown
 author: 王哲峰
 date: '2022-03-26'
 slug: rmarkdown-rmd-markdown
@@ -248,22 +248,43 @@ a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
   - :mag:
   - :octocat:
 
+
 ## 插入视屏
 
-<div class="plyr__video-embed" id="player">
+- HTML script
+
+```markdown
+<div class="plyr__video-embed" id="player" width="100%">
   <iframe
     src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
     allowfullscreen
     allowtransparency
     allow="autoplay"
+    width="100%"
+    height="400px"
+  ></iframe>
+</div>
+```
+
+<div class="plyr__video-embed" id="player" width="100%">
+  <iframe
+    src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
+    allowfullscreen
+    allowtransparency
+    allow="autoplay"
+    width="100%"
+    height="400px"
   ></iframe>
 </div>
 
-- 方法2
+
+- 图片加视频连接
 
 ```markdown
-[![Machine Learning Meets Fashion](doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
+[![Machine Learning Meets Fashion](images/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
 ```
+
+[![Machine Learning Meets Fashion](https://github.com/zalandoresearch/fashion-mnist/blob/master/doc/img/ae143b2d.png?raw=true)](https://youtu.be/RJudqel8DVA)
 
 
 ## 插入图片
@@ -358,7 +379,6 @@ This is a note.
 This is a note.
 
 ***
-
 
 
 ## 代码高亮

@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-03-15'
 slug: painting
 categories:
-  - 玩耍
+  - 绘画
 tags:
   - note
 ---

@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-03-12'
 slug: life-value
 categories:
-  - 个人感悟
+  - 感悟
 tags:
   - note
 ---

@@ -1,5 +1,5 @@
 ---
-title: 书
+title: 书到用时方恨少，上厕所时不好找
 author: 王哲峰
 date: '2014-10-01'
 categories:
@@ -53,16 +53,10 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [名言](#名言)
 - [读书方法](#读书方法)
 - [书单](#书单)
 - [TODO](#todo)
 </p></details><p></p>
-
-
-# 名言
-
-> - 书到用时方恨少，上厕所时不好找
 
 
 # 读书方法
