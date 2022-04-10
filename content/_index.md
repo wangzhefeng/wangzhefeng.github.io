@@ -30,16 +30,9 @@ h2 {
 
 ### 本站架构
 
-- [R](https://www.r-project.org/)
-- [blogdown](https://github.com/rstudio/blogdown)
-- [GitHub](https://github.com)
-- [Netlify](https://www.netlify.com/)
-- [Vercel](https://vercel.com/)
-- [Hugo Ivy 主题](https://github.com/yihui/hugo-ivy)
-- [Disqus](https://disqus.com/)
-- [Utterances](https://utteranc.es/)
+[<img src="https://www.r-project.org/logo/Rlogo.svg" width="10%" />](https://www.r-project.org/)[<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/13ed1ab84f92d90be43439c371a6cf2b49d8c373/SVG/RStudio.svg" width="7%" />](https://www.rstudio.com/)[<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/13ed1ab84f92d90be43439c371a6cf2b49d8c373/SVG/blogdown.svg" width="7%" />](https://github.com/rstudio/blogdown)[<img src="https://github.com/gohugoio/hugo/blob/master/docs/static/img/hugoSM.png?raw=true" width="9%">](https://gohugo.io/)[<img src="https://hugothemesfree.com/content/images/2019/04/hugothemes.png" width="9%">](https://github.com/yihui/hugo-ivy)[<img src="https://simpleicons.org/icons/github.svg" width="9%" />](https://github.com)[<img src="https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg" width="9%" />](https://www.netlify.com/)[<img src="https://simpleicons.org/icons/vercel.svg" width="9%" />](https://vercel.com/)[<img src="https://simpleicons.org/icons/disqus.svg" width="9%">](https://disqus.com/)[<img src="https://github.com/utterance/utterances/blob/master/src/icons/utterances-300.png?raw=true" width="9%">](https://utteranc.es/)[<img src="https://simpleicons.org/icons/markdown.svg" width="9%" />](https://daringfireball.net/projects/markdown/syntax)
 
-### TODO:
+### TODO
 
 - :black_square_button: Disqus 在一些页面不启用
 - :black_square_button: 集成 Disqus 和 Utterances 到评论区

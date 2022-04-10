@@ -26,12 +26,12 @@ menu:
     - name: "日志"
       url: "/post/"
       weight: 3
-    # - name: "笔记"
-    #   url: "/note/"
-    #   weight: 4
-    # - name: "分类"
-    #   url: "/categories/"
-    #   weight: 5
+    - name: "笔记"
+      url: "/note/"
+      weight: 4
+    - name: "分类"
+      url: "/categories/"
+      weight: 5
     - name: "简历"
       url: "/resume/"
       weight: 6
@@ -50,11 +50,11 @@ menu:
 
 params:
   description: ""
-  footer: "&copy; [Zhefeng Wang](https://wangzhefeng.com) 2022 | [GitHub](https://github.com/wangzhefeng)"
+  footer: "&copy; [wangzf](https://wangzhefeng.com) 2022 | [<img src='https://simpleicons.org/icons/github.svg' width='3%'>](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
   # costomJS: TODO
   githubContentURL: "https://github.com/wangzhefeng"
-  twitterImage: "/images/logo.jpg"
+  twitterImage: "https://simpleicons.org/icons/github.svg"
 
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
@@ -67,9 +67,9 @@ params:
   #   issueTerm: pathname
   #   theme: github-light
   logo:
-    img: "static/images/logo.jpg"
-    url: "/"
-    alt: "Zhefeng Wang"
+    img: "github.svg"
+    url: "https://simpleicons.org/icons/"
+    alt: "wangzf"
     tag: "log"
 
 # HTML 渲染
