@@ -7,11 +7,6 @@ categories:
   - Markdown
 tags:
   - note
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
 <style>
@@ -33,9 +28,52 @@ h2 {
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
 </style>
 
 
+<details><summary>目录</summary><p>
+
+- [Markdown](#markdown)
+  - [TODO list](#todo-list)
+  - [上标、下标](#上标下标)
+  - [文档内引用](#文档内引用)
+  - [脚注尾注](#脚注尾注)
+  - [插入表情(Emogi)](#插入表情emogi)
+  - [插入视屏](#插入视屏)
+  - [插入图片](#插入图片)
+  - [生成目录](#生成目录)
+    - [TOC](#toc)
+    - [DocToc](#doctoc)
+    - [blogdown](#blogdown)
+    - [html](#html)
+  - [插入Note、Important](#插入noteimportant)
+  - [代码高亮](#代码高亮)
+  - [Blog Markdown](#blog-markdown)
+    - [数学公式](#数学公式)
+- [RMarkdwon](#rmarkdwon)
+- [参考资料](#参考资料)
+</p></details><p></p>
 
 
 # Markdown

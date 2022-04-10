@@ -1,9 +1,8 @@
-baseurl: "https://wangzhefeng.com/"
+baseurl: https://wangzhefeng.com/
 languageCode: zh-cn
-title: "wangzf"
-theme: "hugo-ivy"
-googleAnalytics: ""  # TODO
-disqusShortname: "wangzf"
+title: Zhefeng Wang | 王哲峰
+theme: hugo-ivy
+disqusShortname: wangzf
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 preserveTaxonomyNames: true
 hasCJKLanguage: true
@@ -54,23 +53,26 @@ params:
   disqusURL: "https://wangzhefeng.com/"
   # costomJS: TODO
   githubContentURL: "https://github.com/wangzhefeng"
-  twitterImage: "https://simpleicons.org/icons/github.svg"
+  twitterImage: "/images/logo2.jpg"
 
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
   highlightjsLang: ["r", "yaml", "tex", "python", "bash", "shell", "cpp"]
   highlightjsTheme: "github"  # atom-one-dark, github
   highlightjsVersion: "9.12.0"
+  
+  # logo TODO
+  logo:
+    img: "images/logo2.jpg"
+    url: "/"
+    alt: "Zhefeng Wang"
+    tag: ""
+  
   # utteranc: TODO
   #   enable: false
   #   repo: wangzhefeng/blog_comment
   #   issueTerm: pathname
   #   theme: github-light
-  logo:
-    img: "github.svg"
-    url: "https://simpleicons.org/icons/"
-    alt: "wangzf"
-    tag: "log"
 
 # HTML 渲染
 markup:
