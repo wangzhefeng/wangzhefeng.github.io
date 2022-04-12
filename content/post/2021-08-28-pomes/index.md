@@ -76,6 +76,10 @@ details[open] summary {
   - [正月十五闻京有灯很不能观](#正月十五闻京有灯很不能观)
 - [法家言论](#法家言论)
   - [《商君书·赏刑》](#商君书赏刑)
+- [朱熹](#朱熹)
+  - [出山道中口占](#出山道中口占)
+- [宋之问](#宋之问)
+  - [渡汉江](#渡汉江)
 </p></details><p></p>
 
 
@@ -226,6 +230,34 @@ details[open] summary {
 
 <center>有功于前，有败于后，不为损刑。</center>
 <center>有善于前，有过于后，不为亏法。</center>
+
+
+
+---
+
+# 朱熹
+
+<center>宋</center>
+
+## 出山道中口占
+
+<center>穿原红绿一时新，</center>
+<center>暮雨朝晴更可人。</center>
+<center>书册埋头无了日，</center>
+<center>不如抛却去寻春。</center>
+
+---
+
+
+# 宋之问
+
+<center>唐</center>
+
+## 渡汉江
+
+<center>岭外音书断，经冬复历春。</center>
+<center>近乡情更怯，不敢问来人。</center>
+
 
 
 

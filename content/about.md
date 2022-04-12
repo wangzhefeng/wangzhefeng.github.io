@@ -10,7 +10,7 @@ slug: "about"
 
 ## 写作原则
 
-- 收集、记录、分享
+- 收集、记录、目前不分享
 
 ## 喜欢的事
 
@@ -82,6 +82,7 @@ slug: "about"
 - [行星](https://v.qq.com/x/search/?q=%E8%A1%8C%E6%98%9F&stag=0&smartbox_ab=)
 - [河西走廊](https://www.bilibili.com/bangumi/media/md20790/?spm_id_from=666.25.b_6d656469615f6d6f64756c65.2)
 - [中国通史](https://www.bilibili.com/bangumi/media/md28229010/?spm_id_from=666.25.b_6d656469615f6d6f64756c65.2)
+- [西汉帝陵]()
 
 ### 诗词
 
@@ -120,5 +121,28 @@ slug: "about"
 - 胡波涛
 - 关大洲
 - 周杰伦
+
+## 想去还没去的博物馆
+
+- [山西博物馆]()
+- [秦皇陵]()
+- [西汉长陵]()
+- [西汉阳陵]()
+- [西汉霸陵]()
+- [西汉茂陵]()
+- [南昌汉代海昏侯国遗址博物馆](http://www.hhhmuseum.cn/)
+- [敦煌博物院]()
+
+## 养过的猫(Tomster)
+
+<img src="/images/tomster1.jpeg" width=49% height="270px" /> <img src="/images/tomster2.jpeg" width=49% height="270px" />
+
+<img src="/images/tomster3.jpeg" width=100% />
+
+<img src="/images/tomster4.jpeg" width=100% />
+
+<img src="/images/tomster5.jpeg" width=32% height="260px" />
+<img src="/images/tomster6.jpeg" width=34% height="260px" />
+<img src="/images/tomster7.jpeg" width=32% height="260px" />
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)

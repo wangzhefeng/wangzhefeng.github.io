@@ -31,15 +31,15 @@ menu:
     - name: "分类"
       url: "/categories/"
       weight: 5
-    - name: "简历"
-      url: "/resume/"
-      weight: 6
     - name: "事务"
       url: "/todo/"
+      weight: 6
+    - name: "简历"
+      url: "/resume/"
       weight: 7
-    - name: "主题"
-      url: "/Ivy/"
-      weight: 8
+    # - name: "主题"
+    #   url: "/Ivy/"
+    #   weight: 8
     # - name: "标签"
       # url: "/tags/"
       # weight: 9
