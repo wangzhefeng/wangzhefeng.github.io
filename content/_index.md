@@ -15,9 +15,9 @@ disable_highlight: true
 > * 此曲只应天上有，人间能得几回闻。 -- 《赠花卿》【杜甫】
 > * 书册埋头无了日，不如抛却去寻春。--《出山道中口占》【朱熹】
 
-喜欢的一段视频：
 
-<div class="plyr__video-embed" id="player" width="100%">
+<!-- 喜欢的一段视频： -->
+<!-- <div class="plyr__video-embed" id="player" width="100%">
   <iframe
     src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
     allowfullscreen
@@ -26,7 +26,7 @@ disable_highlight: true
     width="100%"
     height="400px"
   ></iframe>
-</div>
+</div> -->
 
 <!-- 喜欢的一张图片：
 <image src="images/background.jpg" width="100%" height="350px"> -->
@@ -46,4 +46,4 @@ disable_highlight: true
 
 ### 本站架构
 
-[<img src="https://www.r-project.org/logo/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/13ed1ab84f92d90be43439c371a6cf2b49d8c373/SVG/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/13ed1ab84f92d90be43439c371a6cf2b49d8c373/SVG/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="https://github.com/gohugoio/hugo/blob/master/docs/static/img/hugoSM.png?raw=true" width="6%">](https://gohugo.io/) [<img src="https://hugothemesfree.com/content/images/2019/04/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="https://simpleicons.org/icons/github.svg" width="6%" />](https://github.com) [<img src="https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="https://simpleicons.org/icons/vercel.svg" width="6%" />](https://vercel.com/) [<img src="https://www.vectorlogo.zone/logos/disqus/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="https://github.com/utterance/utterances/blob/master/src/icons/utterances-300.png?raw=true" width="6%">](https://utteranc.es/) [<img src="https://simpleicons.org/icons/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
+[<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.svg" width="6%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)

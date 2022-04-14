@@ -53,7 +53,7 @@ params:
   disqusURL: "https://wangzhefeng.com/"
   # costomJS: TODO
   githubContentURL: "https://github.com/wangzhefeng"
-  twitterImage: "/images/logo2.jpg"
+  twitterImage: "/images/logo.jpg"
 
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
@@ -63,7 +63,7 @@ params:
   
   # logo TODO
   logo:
-    img: "images/logo2.jpg"
+    img: "images/logo.jpg"
     url: "/"
     alt: "Zhefeng Wang"
     tag: ""
