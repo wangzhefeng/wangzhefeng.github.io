@@ -53,23 +53,56 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [1.Pillow 概览](#1pillow-概览)
-- [2.Pillow 安装](#2pillow-安装)
-- [3.Pillow 核心](#3pillow-核心)
-  - [3.1 `Image` class](#31-image-class)
-  - [3.2 图像读、写、转换](#32-图像读写转换)
-  - [3.3 图像剪切、粘贴、拼接](#33-图像剪切粘贴拼接)
-  - [3.4 图像几何变换](#34-图像几何变换)
-  - [3.5 图像颜色转换](#35-图像颜色转换)
-  - [3.6 图像增强](#36-图像增强)
-  - [3.7 图像序列](#37-图像序列)
-  - [3.8 PostScript 打印](#38-postscript-打印)
-  - [3.9 图像读取](#39-图像读取)
-  - [3.10 控制图像编码](#310-控制图像编码)
-- [4.Pillow API](#4pillow-api)
+- [Pillow 概览](#pillow-概览)
+- [Pillow 安装](#pillow-安装)
+- [Pillow 核心](#pillow-核心)
+  - [`Image` class](#image-class)
+  - [图像读、写、转换](#图像读写转换)
+  - [图像剪切、粘贴、拼接](#图像剪切粘贴拼接)
+  - [图像几何变换](#图像几何变换)
+  - [图像颜色转换](#图像颜色转换)
+  - [图像增强](#图像增强)
+  - [图像序列](#图像序列)
+  - [PostScript 打印](#postscript-打印)
+  - [图像读取](#图像读取)
+  - [控制图像编码](#控制图像编码)
+- [Pillow API](#pillow-api)
 </p></details><p></p>
 
-# 1.Pillow 概览
+# 图像处理基本操作
+
+- 图像读取
+- 图像显示
+- 图像保存
+- pad 边缘填充
+- resize 
+- Crop 裁剪
+    - center crop
+    - five crop(top_left, top_right, bottom_left, bottom_right, center)
+    - random crop
+    - random resized crop
+- gray scale
+- color jitter 改变图片亮度、明暗、色调
+    - brightness
+    - saturation
+    - ...
+- Blur 模糊化
+    - Gaussian
+- Perspective 透视 
+- Rotation 旋转
+- Affine 仿射
+- Invert 反转
+- Posterize 调色（改变每个通道的颜色值）
+- Solarize 曝光
+- Adjust Sharpness 调节锐度
+- Adjust Contrast 对比度
+- Equalize 均衡
+- Augment 增强
+- Trivial Augment Wide
+- Flip 翻转
+    - Horizon tal Flip
+
+# Pillow 概览
 
 PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
     
@@ -92,7 +125,7 @@ PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
     - 图像仿射变换(image arbitray affine transforms)
     - 图像统计信息分析直方图(histogram method)
 
-# 2.Pillow 安装
+# Pillow 安装
 
 - macOS 安装:
 
@@ -115,9 +148,9 @@ $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --upgrade Pillow
 ```
 
-# 3.Pillow 核心
+# Pillow 核心
 
-## 3.1 `Image` class
+## `Image` class
 
 API:
 
@@ -161,7 +194,7 @@ except IOError as e:
 - `.size`: 图像尺寸(width_pixels, height_pixels)
 - `.mode`: 图像中条带的数量和名称、像素类型、像素深度
 
-## 3.2 图像读、写、转换
+## 图像读、写、转换
 
 API:
 
@@ -269,7 +302,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-## 3.3 图像剪切、粘贴、拼接
+## 图像剪切、粘贴、拼接
 
 API:
 
@@ -365,7 +398,6 @@ except OSError:
 
 ![images](images/lena_roll.png)
 
-
 - RGB波段拆分、合并
 
 ```python
@@ -396,7 +428,7 @@ except OSError:
     - 对于单波段图像(single-band)，`Image.split` 返回图像本身
     - 为了对单个颜色波段进行处理，需要首先将图像转换为 RGB
 
-## 3.4 图像几何变换
+## 图像几何变换
 
 API:
 
@@ -483,23 +515,23 @@ except OSError:
     - `trasnpose(ROTATE)` 与 `Image.Image.rotate` 效果相同
     - `transform()` 能进行更多形式的图像转换
 
-## 3.5 图像颜色转换
+## 图像颜色转换
 
-## 3.6 图像增强
-
-
-## 3.7 图像序列
-
-## 3.8 PostScript 打印
-
-## 3.9 图像读取
+## 图像增强
 
 
-## 3.10 控制图像编码
+## 图像序列
+
+## PostScript 打印
+
+## 图像读取
+
+
+## 控制图像编码
 
 
 
-# 4.Pillow API
+# Pillow API
 
 - Module
     - Image
