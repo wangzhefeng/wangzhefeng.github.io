@@ -68,11 +68,11 @@ params:
     alt: "Zhefeng Wang"
     tag: ""
   
-  # utteranc: TODO
-  #   enable: false
-  #   repo: wangzhefeng/blog_comment
-  #   issueTerm: pathname
-  #   theme: github-light
+  utteranc: 
+    enable: true
+    repo: wangzhefeng/blog_comment
+    issueTerm: pathname
+    theme: github-light
 
 # HTML 渲染
 markup:

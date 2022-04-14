@@ -100,7 +100,8 @@ details[open] summary {
 - Augment 增强
 - Trivial Augment Wide
 - Flip 翻转
-    - Horizon tal Flip
+    - Horizontal Flip
+    - Vertical Flip
 
 # Pillow 概览
 
