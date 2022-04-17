@@ -1,5 +1,5 @@
 ---
-title: 第十七章、事件
+title: 事件
 author: 王哲峰
 date: '2020-11-01'
 slug: js-event
@@ -7,26 +7,82 @@ categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
-# 一、事件
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [事件](#事件)
+	- [事件流](#事件流)
+		- [事件冒泡](#事件冒泡)
+		- [事件捕获](#事件捕获)
+		- [DOM 事件流](#dom-事件流)
+	- [事件处理程序](#事件处理程序)
+		- [HTML 事件处理程序](#html-事件处理程序)
+		- [DOM0 事件处理程序](#dom0-事件处理程序)
+		- [DOM2 事件处理程序](#dom2-事件处理程序)
+		- [IE 事件处理程序](#ie-事件处理程序)
+		- [跨浏览器事件处理程序](#跨浏览器事件处理程序)
+	- [事件对象](#事件对象)
+	- [事件类型](#事件类型)
+	- [内存与性能](#内存与性能)
+	- [模拟事件](#模拟事件)
+</p></details><p></p>
+
+# 事件
 
 - JavaScript 与 HTML 的交互式通过事件实现的，事件代表文档或浏览器窗口中某个有意义的时刻
 - 可以使用仅在事件发生时执行的监听器(也叫处理程序)订阅事件
 	- 在传统软件工程领域，这个模型叫做“观察者模式”，其能够做到页面行为 (在 JavaScript 中定义) 与页面展示 (在 HTML 和 CSS 中定义) 的分离
 
-## 1.事件流
+## 事件流
 
 - 事件流描述了页面接收事件的顺序
 	- IE 支持事件冒泡流
 	- Netscape Communicator 支持事件捕获流
 
-### 1.1 事件冒泡
+### 事件冒泡
 
 - IE 事件流被称为事件冒泡，这是因为事件被定义为从最具体的元素（文档树中最深的节点）开始触发，然后向上传播至没有那么具体的元素（文档）
 
@@ -62,7 +118,7 @@ output:
 
 	<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210412172308547.png" alt="image-20210412172308547" style="zoom:50%;" />
 
-### 1.2 事件捕获
+### 事件捕获
 
 - Netscape Communicator 团队提出了另一种名为事件捕获的事件流。事件捕获的意思是最不具体的节 点应该最先收到事件，而最具体的节点应该最后收到事件。事件捕获实际上是为了在事件到达最终目标前拦截事件
 - 虽然这是 Netscape Communicator 唯一的事件流模型，但事件捕获得到了所有现代浏览器的支持
@@ -78,7 +134,7 @@ output:
 
 <img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210412172706526.png" alt="image-20210412172706526" style="zoom:50%;" />
 
-### 1.3 DOM 事件流
+### DOM 事件流
 
 - DOM2 Events 规范规定事件流分为 3 个阶段：
 	- 事件捕获：事件捕获最先发生，为提前拦截事件提供了可能
@@ -90,7 +146,7 @@ output:
 
 <img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210412173132838.png" alt="image-20210412173132838" style="zoom:50%;" />
 
-## 2.事件处理程序
+## 事件处理程序
 
 - 事件意味着用户或浏览器执行的某种动作，比如：
 	- 单击（click）
@@ -106,7 +162,7 @@ output:
 	- DOM2
 	- IE
 
-### 2.1 HTML 事件处理程序
+### HTML 事件处理程序
 
 - 特定元素支持的每个事件都可以使用事件处理程序的名字以 HTML 属性的形式来指定，此时属性的值必须是能够执行的 JavaScript 代码
 
@@ -195,7 +251,7 @@ output:
 		<input type="button" value="Click Me" onclick="try{showMessage();} catch(ex) {}">
 		```
 
-### 2.2 DOM0 事件处理程序
+### DOM0 事件处理程序
 
 - 在 JavaScript 中指定事件处理程序的传统方式是把一个函数赋值给（DOM元素的）一个事件处理程序属性
 	- 这也是在第四代 Web 浏览器中开始支持的事件处理程序赋值方法，直到现在所有现代浏览器 仍然都支持此方法，主要原因是简单
@@ -220,22 +276,24 @@ btn.onclick = function () {
 btn.onclick = null; // 移除事件处理程序
 ```
 
-### 2.3 DOM2 事件处理程序
+### DOM2 事件处理程序
 
-### 2.4 IE 事件处理程序
+### IE 事件处理程序
 
-### 2.5 跨浏览器事件处理程序
-
-## 3.事件对象
+### 跨浏览器事件处理程序
 
 
 
-## 4.事件类型
+
+
+## 事件对象
+
+## 事件类型
 
 
 
-## 5.内存与性能
+## 内存与性能
 
 
 
-## 6.模拟事件
+## 模拟事件

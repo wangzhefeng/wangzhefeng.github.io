@@ -1,5 +1,5 @@
 ---
-title: XML JSON
+title: XML、JSON
 author: 王哲峰
 date: '2020-12-03'
 slug: js-xml-json
@@ -54,12 +54,18 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [XML](#xml)
+  - [浏览器对 XML DOM 的支持](#浏览器对-xml-dom-的支持)
+  - [在 JavaScript 中使用 XPath](#在-javascript-中使用-xpath)
+  - [使用 XSLT 处理器](#使用-xslt-处理器)
 - [JSON](#json)
   - [JSON 语法](#json-语法)
     - [简单值](#简单值)
     - [对象](#对象)
     - [数组](#数组)
   - [JSON 解析](#json-解析)
+    - [JSON 对象](#json-对象)
+    - [序列化选项](#序列化选项)
+    - [解析选项](#解析选项)
   - [JSON 序列化](#json-序列化)
 </p></details>
 

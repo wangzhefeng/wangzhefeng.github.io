@@ -167,15 +167,24 @@ print(img.shape)
 
 使用 `cv.imshow` 显示图像时，显示图像的窗口自动适合图像尺寸
 
-***
+<div class="warning" style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>Note</b>
+        </p>
+        <p style='margin-left:1em;'>
+            由于 OpenCV 和 Matplotlib 具有不同的原色顺序，
+            OpenCV 以 BGR 的形式读取图像, Matplotlib 以 RGB 的形式读取图像，
+            因此为了正常显示图像，在用 Matplotlib 显示图像时，
+            需要将图像转换为 Matplotlib 的形式
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b></b> 
+            <i></i>
+        </p>
+    </span>
+</div>
 
-**Note**
-- 由于 OpenCV 和 Matplotlib 具有不同的原色顺序，
-OpenCV 以 BGR 的形式读取图像, Matplotlib 以 RGB 的形式读取图像，
-因此为了正常显示图像，在用 Matplotlib 显示图像时，
-需要将图像转换为 Matplotlib 的形式
-
-***
 
 * Jupyter Notebook
 

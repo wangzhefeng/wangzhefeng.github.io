@@ -363,22 +363,130 @@ output:
 ## 插入Note、Important
 
 ```markdown
-# 标题
-
-正文
+* method 1
 
 ***
 **Note**
 This is a note.
 ***
+
+* method 2
+
+> **_Note:_** 
+> 
+> The note content.
+
+* method 3
+
+<div class="warning" style='padding:0.1em; background-color:#E9D8FD; color:#69337A'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>On the importance of sentence length</b></p>
+<p style='margin-left:1em;'>
+This is a note.<br><br>
+This ia another note.
+</p>
+<p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> <b>- Gary Provost</b> <i>(100 Ways to Improve Your Writing, 1985)</i>
+</p></span>
+</div>
+
+* method 3
+
+| | |
+|-|-|
+|`NOTE` | This is a note.|
+
+* method 4
+
+|`NOTE` | This is a note.|
+|-|-|
+
+* method 5
+
+| | |
+|-|-|
+|`NOTE` | This is a note.|
+
+* method 6
+
+<div class="warning" style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+<span>
+<p style='margin-top:1em; text-align:center'>
+<b>On the importance of sentence length</b></p>
+<p style='margin-left:1em;'>
+This is a note.<br>
+This ia another note.
+</p>
+<p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> <b>- Gary Provost</b> <i>(100 Ways to Improve Your Writing, 1985)</i>
+</p></span>
+</div>
 ```
 
-***
+* method 1
 
+***
 **Note**
 This is a note.
-
 ***
+
+* method 2
+
+> **_Note:_** 
+> 
+> This is a note.
+
+* method 3
+
+<div class="warning" style='padding:0.1em; background-color:#E9D8FD; color:#69337A'>
+    <span>
+        <p style='margin-top:1em; text-align:center'>
+            <b>On the importance of sentence length</b>
+        </p>
+        <p style='margin-left:1em;'>
+            This is a note.<br>
+            This ia another note.
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+          <b>- Gary Provost</b> 
+          <i>(100 Ways to Improve Your Writing, 1985)</i>
+        </p>
+    </span>
+</div>
+
+* method 3
+
+| | |
+|-|-|
+|`NOTE` | This is a note.|
+
+* method 4
+
+|`NOTE` | This is a note.|
+|-|-|
+
+* method 5
+
+| | |
+|-|-|
+|`NOTE` | This is a note.|
+
+* method 6
+
+<div class="warning" style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>On the importance of sentence length</b>
+        </p>
+        <p style='margin-left:1em;'>
+            This is a note.<br>
+            This ia another note.
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b>- Gary Provost</b> 
+            <i>(100 Ways to Improve Your Writing, 1985)</i>
+        </p>
+    </span>
+</div>
 
 
 ## 代码高亮

@@ -1,5 +1,5 @@
 ---
-title: 第八章、对象、类与面向对象编程
+title: 对象、类与面向对象编程
 author: 王哲峰
 date: '2020-06-01'
 slug: js-object-class-oop
@@ -7,16 +7,112 @@ categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
-# 三、语言基础
 
-## 8.Object
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [语言基础](#语言基础)
+	- [Object](#object)
+- [集合引用类型](#集合引用类型)
+	- [Object](#object-1)
+		- [创建 Object 实例](#创建-object-实例)
+		- [访问属性](#访问属性)
+- [对象、类与面向对象编程](#对象类与面向对象编程)
+	- [理解对象](#理解对象)
+		- [属性的类型](#属性的类型)
+		- [定义多个属性-Object.defineProperties()](#定义多个属性-objectdefineproperties)
+		- [读取属性的特性--Object.getOwnPropertyDescriptor(s)](#读取属性的特性--objectgetownpropertydescriptors)
+		- [合并对象--Object.assign()](#合并对象--objectassign)
+		- [对象标识及相等判定--Object.is()](#对象标识及相等判定--objectis)
+		- [增强的对象语法](#增强的对象语法)
+			- [属性值的简写](#属性值的简写)
+			- [可计算属性](#可计算属性)
+			- [简写方法名](#简写方法名)
+		- [对象解构](#对象解构)
+			- [对象解构简介](#对象解构简介)
+			- [嵌套解构](#嵌套解构)
+			- [部分解构](#部分解构)
+			- [参数上下文匹配](#参数上下文匹配)
+	- [创建对象](#创建对象)
+		- [工厂模式](#工厂模式)
+		- [构造函数模式](#构造函数模式)
+		- [原型模式](#原型模式)
+		- [对象迭代](#对象迭代)
+	- [继承](#继承)
+		- [原型链](#原型链)
+		- [盗用构造函数](#盗用构造函数)
+		- [组合继承](#组合继承)
+		- [原型式继承](#原型式继承)
+		- [寄生式继承](#寄生式继承)
+		- [寄生式组合继承](#寄生式组合继承)
+	- [类](#类)
+		- [类定义](#类定义)
+			- [类的定义](#类的定义)
+			- [类的构成](#类的构成)
+		- [类构造函数](#类构造函数)
+			- [实例化](#实例化)
+		- [实例、原型和类成员](#实例原型和类成员)
+			- [实例成员](#实例成员)
+			- [原型方法与访问器](#原型方法与访问器)
+			- [静态类方法](#静态类方法)
+			- [非函数原型和类成员](#非函数原型和类成员)
+			- [迭代器与生成器方法](#迭代器与生成器方法)
+		- [继承](#继承-1)
+			- [继承基础](#继承基础)
+			- [构造函数、HomeObject 和 super()](#构造函数homeobject-和-super)
+			- [抽象基类](#抽象基类)
+			- [继承内置类型](#继承内置类型)
+			- [类混入](#类混入)
+</p></details><p></p>
+
+
+
+# 语言基础
+
+## Object
 
 - 1.ECMAScript 中的对象其实就是一组数据和功能的组合
 - 2.严格来讲，ECMA-262 中对象的行为不一定适合 JavaScript 中的其他对象
@@ -53,13 +149,13 @@ console.log(o2.toString()); // [object Object]
 console.log(o2.valueOf()); // Object { name: "wangzf" }
 ```
 
-# 六、集合引用类型
+# 集合引用类型
 
-## 1.Object
+## Object
 
 - Object 是 ECMAScript 中最常用的引用类型之一，虽然 Object 的实例没有多少功能，但很适合存储在应用程序间交互数据
 
-### 1.1 创建 Object 实例
+### 创建 Object 实例
 
 - （1）使用 `new` 操作符和 `Object` 构造函数
 
@@ -114,7 +210,7 @@ console.log(o2.valueOf()); // Object { name: "wangzf" }
 	});
 	```
 
-### 1.2 访问属性
+### 访问属性
 
 - （1）点语法
 
@@ -137,14 +233,14 @@ console.log(person[propertyName]); // "Nicholas"
 person["first name"] = "Nicholas";
 ```
 
-# 八、对象、类与面向对象编程
+# 对象、类与面向对象编程
 
 - ECMA-262 将对象定义为一组属性的无序集合
 	- 严格来说，这意味着对象就是一组没有特定顺序的值
 	- 对象的每个属性或方法都由一个名称来标识，这个名称映射到一个值
 	- 可以把 ECMAScript 的对象想象成一张散列表，其中的内容就是一组名/值对，值可以是数据或函数
 
-## 1.理解对象
+## 理解对象
 
 - 创建自定义对象的通常方式是创建 Object 的一个新实例，然后再给它添加属性和方法
 
@@ -172,7 +268,7 @@ let person = {
 };
 ```
 
-### 1.1 属性的类型
+### 属性的类型
 
 - ECMA-262 使用一些**内部特性**来描述**属性的特征**。这些特性是由为 JavaScript 实现引擎的规范定义的，因此，开发者不能在 JavaScript 中直接访问这些特性，为了将某个特性表示为内部特性，规范会用两个中括号把特性的名称括起来
 
@@ -269,7 +365,7 @@ let person = {
 	
 	- 在不支持 `Object.definedProperty()` 的浏览器中没有办法修改 `[[Configurable]]` 和 `[[Enumerable]]`
 
-### 1.2 定义多个属性-Object.defineProperties()
+### 定义多个属性-Object.defineProperties()
 
 - ECMAScript 提供了 `Object.defineProperties()` 方法，这个方法可以通过多个描述符一次性定义多个属性。它接收两个参数：
 
@@ -307,7 +403,7 @@ let person = {
 	);
 	```
 
-### 1.3 读取属性的特性--Object.getOwnPropertyDescriptor(s)
+### 读取属性的特性--Object.getOwnPropertyDescriptor(s)
 
 - 使用 `Object.getOwnPropertyDescriptor()` 方法可以取得指定属性的属性描述符
 
@@ -404,7 +500,7 @@ let person = {
 	// }
 	```
 
-### 1.4 合并对象--Object.assign()
+### 合并对象--Object.assign()
 
 - 合并(merge)，把源对象所有的本地属性一起复制到目标对象上，也称为混入(mixin)，因为目标对象通过混入源对象的属性得到了增强
 - ECMAScript 6 专门为合并提供了 `Object.assign()` 方法
@@ -521,7 +617,8 @@ console.log(dest);              // { a: {} }
 console.log(dest.a === src.a);  // true
 ```
 
-- 如果赋值期间出错，则操作会中止并退出，同时抛出错误。Object.assign() 没有"回滚"之前赋值的概念，因此它是一个尽力而为、可能只会完成部分复制的方法
+- 如果赋值期间出错，则操作会中止并退出，同时抛出错误。Object.assign() 没有"回滚"之前赋值的概念，
+  因此它是一个尽力而为、可能只会完成部分复制的方法
 
 ```js
 let dect, src, result;
@@ -538,7 +635,7 @@ src = {
 
 
 
-### 1.5 对象标识及相等判定--Object.is()
+### 对象标识及相等判定--Object.is()
 
 - 在 ECMAScript 6 之前，对于有些对象相等的判定的特殊情况即使是 `===` 操作符也无能为力
 
@@ -579,12 +676,12 @@ function recursivelyCheckEqual(x, ...rest) {
 }
 ```
 
-### 1.6 增强的对象语法
+### 增强的对象语法
 
 - ECMAScript 6 为定义和操作对象新增了很多极其有用的语法糖特性，这些特性都没有改变现有引擎的行为，但极大地提升了处理对象的方便程度
 - 这里的所有对象语法同样适用于 ECMAScript 6 的类
 
-#### 1.6.1 属性值的简写
+#### 属性值的简写
 
 - 在给对象添加变量的时候，开发者经常会发现属性名和变量名是一样的，为此，简写属性名语法出现了
 
@@ -626,7 +723,7 @@ function recursivelyCheckEqual(x, ...rest) {
 	console.log(person.name);      // Matt
 	```
 
-#### 1.6.2 可计算属性
+#### 可计算属性
 
 - 如果想使用变量的值作为属性，那么必须先声明对象，然后使用中括号语法来添加属性，换句话说，不能在对象字面量中直接动态命名属性
 
@@ -676,7 +773,7 @@ console.log(person); // { name: "Matt", age_1: 27, job: "Software engineer" }
 
 
 
-#### 1.6.3 简写方法名
+#### 简写方法名
 
 - 在给对象定义方法时，通常都要写一个方法名、冒号，然后再引用一个匿名函数表达式
 
@@ -727,11 +824,11 @@ let person = {
 person.sayName("Matt"); // My name is Matt
 ```
 
-### 1.7 对象解构
+### 对象解构
 
 - ECMAScript 6 新增了对象解构语法，可以在一条语句中使用嵌套数据实现一个或多个赋值操作。简单地说，对象解构就是使用与对象匹配的结构来实现对象属性赋值。
 
-#### 1.7.1 对象解构简介
+#### 对象解构简介
 
 - 不使用对象解构
 
@@ -806,11 +903,11 @@ person.sayName("Matt"); // My name is Matt
 
 - 
 
-#### 1.7.2 嵌套解构
+#### 嵌套解构
 
-#### 1.7.3 部分解构
+#### 部分解构
 
-#### 1.7.4 参数上下文匹配
+#### 参数上下文匹配
 
 - 在函数参数列表中也可以进行解构赋值。对参数的结构赋值不会影响 arguments 对象，但可以在函数签名中声明在函数体内使用局部变量
 
@@ -839,14 +936,14 @@ printPerson2('1st', person, '2nd');
 // 'Matt', 27
 ```
 
-## 2.创建对象
+## 创建对象
 
 - 使用 Object 构造函数、对象字面量创建具有同样接口的多个对象需要重复编写很多代码.
 - ECMAScript 5.1 并没有正式支持面向对象的结构，比如类或继承，但是通过巧妙地运用原型继承可以成功地模拟同样的行为
 - ECMAScript 6 开始正式支持类和继承.
 	- ES6 的类旨在完全涵盖之前规范设计的基于原型的继承模式，不过，无论从哪方面看，ES6 的类都仅仅是封装了 ES 5.1 构造函数加原型继承的语法糖而已
 
-### 2.1 工厂模式
+### 工厂模式
 
 - 工厂模式是一种众所周知的设计模式，用于抽象创建特定对象的过程
 - 下面这种工厂模式虽然可以解决创建多个类似对象的问题，但没有解决对象标识问题(即新创建的对象是什么类型)
@@ -868,7 +965,7 @@ let person1 = createPerson("Nicholas", 29, "Software Engineer");
 let person2 = createPerson("Greg", 27, "Doctor");
 ```
 
-### 2.2 构造函数模式
+### 构造函数模式
 
 - ECMAScript 中的构造函数是用于创建特定类型对象的
 	- 像 Object 和 Array 这样的原生构造函数，运行时可以直接在执行环境中使用
@@ -898,7 +995,7 @@ person1.sayName(); // Nicholas
 person2.sayName(); // Greg
 ```
 
-### 2.3 原型模式
+### 原型模式
 
 - 每个函数都会创建一个 prototype 属性，这个属性是一个对象，包含应该由特定引用类型的实例共享的属性和方法。实际上这个对象就是通过调用构造函数创建的对象的原型
 - 使用原型对象的好处是，在它上面定义的属性和方法可以被对象实例共享。原来在构造函数中直接给对象实例的值，可以直接赋值给它们的原型
@@ -921,30 +1018,30 @@ person2.sayName(); // "Nicholas"
 console.log(person1.sayName == person2.sayName); // true
 ```
 
-### 2.4 对象迭代
+### 对象迭代
 
-## 3.继承
+## 继承
 
-### 3.1 原型链
+### 原型链
 
-### 3.2 盗用构造函数
+### 盗用构造函数
 
-### 3.3 组合继承
+### 组合继承
 
-### 3.4 原型式继承
+### 原型式继承
 
-### 3.5 寄生式继承
+### 寄生式继承
 
-3.6 寄生式组合继承
+### 寄生式组合继承
 
-## 4.类
+## 类
 
 - ECMAScript 6 新引入的 class 关键字具有正式定义类的能力
 - 类(class) 是ECMAScirpt 中新的基础性语法糖结构，虽然 ECMAScript 6 类表面上看起来可以支持正式的面向对象编程，但实际上它背后使用的仍然是原型和构造函数的概念
 
-### 4.1 类定义
+### 类定义
 
-#### 4.1.1 类的定义
+#### 类的定义
 
 - 与函数类型类似，定义类也有两种主要方式，这两种方式都使用 class 关键字加大括号
 
@@ -1016,7 +1113,7 @@ console.log(person1.sayName == person2.sayName); // true
 			console.log(ClassExpression); // class {}
 			```
 
-#### 4.1.2 类的构成
+#### 类的构成
 
 - 类可以包含下面的方法或函数，但这些都不是必需的，空的类定义照样有效。默认情况下，类定义中的代码都在严格模式下执行：
   - 构造函数方法
@@ -1067,13 +1164,13 @@ console.log(Person.name); // PersonName
 console.log(PersonName);  // ReferenceError: PersonName is not defined
 ```
 
-### 4.2 类构造函数
+### 类构造函数
 
 - constructor 关键字用于在类定义块内部创建类的构造函数
 	- constructor 会告诉解释器在使用 new 操作符创建类的新实例时，应该调用这个函数
 - 构造函数的定义不是必需的，不定义构造函数相当于将构造函数定义为空函数
 
-#### 4.2.1 实例化
+#### 实例化
 
 ```js
 // 类
@@ -1107,23 +1204,23 @@ let p3 = new Person("Jake"); // 1
 console.log(p3.name); // Jake
 ```
 
-### 4.3 实例、原型和类成员
+### 实例、原型和类成员
 
-#### 4.3.1 实例成员
+#### 实例成员
 
-#### 4.3.2 原型方法与访问器
+#### 原型方法与访问器
 
-#### 4.3.3 静态类方法
+#### 静态类方法
 
-#### 4.3.4 非函数原型和类成员
+#### 非函数原型和类成员
 
-#### 4.3.5 迭代器与生成器方法
+#### 迭代器与生成器方法
 
-### 4.4 继承
+### 继承
 
 - ECMAScript 6 新增特性中最出色的一个就是原生支持了类继承机制。虽然类继承使用的是新语法，但背后依旧使用的是原型链
 
-#### 4.4.1 继承基础
+#### 继承基础
 
 - ES6 类支持单继承。使用 `extends` 关键字，就可以继承任何拥有 `[[Construct]]` 和`原型`的对象。很大程度上，这意味着不仅可以继承一个类，也可以继承普通的构造函数
 
@@ -1185,7 +1282,7 @@ console.log(p3.name); // Jake
 	let Bus = class extends Vehicle {};
 	```
 
-#### 4.4.2 构造函数、HomeObject 和 super()
+#### 构造函数、HomeObject 和 super()
 
 - 派生类的方法可以通过 `super` 关键字引用它们的原型。这个关键字只能在派生类中使用，而且仅限于类构造函数、实例方法和静态方法内部。在类构造函数中使用 super 可以调用父类构造函数
 
@@ -1206,8 +1303,8 @@ console.log(p3.name); // Jake
 	```
 
 
-#### 4.4.3 抽象基类
+#### 抽象基类
 
-#### 4.4.4 继承内置类型
+#### 继承内置类型
 
-#### 4.4.5 类混入
+#### 类混入

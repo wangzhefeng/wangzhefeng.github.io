@@ -34,16 +34,23 @@ tags:
 $ g++ -o prog prog.cc
 ```
 
-***
-
-**Note**
-
-   - `-o prog` 是编译器参数, 指定了可执行文件的文件名. 
-      如果不省略该参数, 在 Windows 中生成 `prog.exe` 文件; 在 UNIX 系统中生成 `prog` 文件;
-      如果省略该参数, 在 Windows 中生成 `prog.exe` 文件; 在 UNIX 系统中生成 `prog.out` 文件
-   - 根据使用的 GNU 编译器的版本, 可能需要指定 `-std=c++0x` 参数来打开对 C++11 的支持
-
-***
+<div class="warning" style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>Note</b>
+        </p>
+        <p style='margin-left:1em;'>
+            - <code>-o prog</code> 是编译器参数, 指定了可执行文件的文件名. 
+               如果不省略该参数, 在 Windows 中生成 `prog.exe` 文件; 在 UNIX 系统中生成 `prog` 文件;
+               如果省略该参数, 在 Windows 中生成 `prog.exe` 文件; 在 UNIX 系统中生成 `prog.out` 文件<br><br>
+            - 根据使用的 GNU 编译器的版本, 可能需要指定 `-std=c++0x` 参数来打开对 C++11 的支持
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b></b> 
+            <i></i>
+        </p>
+    </span>
+</div>
 
 - Windows
 
