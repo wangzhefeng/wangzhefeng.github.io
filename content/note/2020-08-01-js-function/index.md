@@ -616,13 +616,40 @@ function makeKing() {
 }
 ```
 
+* 因为参数是按顺序初始化的，所以后定义默认值的参数可以引用先定义的参数。
+  但是，参数初始化顺序遵循“暂时性死区”规则
+  - 前面定义的参数不能引用后面定义的
+  - 参数也存在于自己的作用域中，它们不能引用函数体的作用域
 
+```js
+function makeKing(name = "Henry", numerals = name) {
+    return `King ${name} ${numerals}`;
+}
+console.log(makeKing());  // King Henry Henry
+```
 
+```js
+// 调用时不传第一个参数会报错
+function makeKing(name = numerals, numerals = "VIII") {
+    return `King ${name} ${numerals}`;
+}
+```
+
+```js
+// 调用时不传第二个参数会报错
+function makeKing(name = "Henry", numerals = defaultNumeral) {
+    let defaultNumeral = "VIII";
+    return `King ${name} ${numerals}`
+}
+```
 
 # 参数扩展与收集
 
-- ECMAScript 6 新增了扩展操作符，使用它可以非常简洁地操作和组合集合数据
-- 扩展操作符最有用的场景就是函数定义中的参数列表，在这里可以充分利用这门语言的弱类型及参数长度可变的特点。扩展操作符既可以用于调用函数时传参，也可以用于定义函数参数
+ECMAScript 6 新增了扩展操作符，使用它可以非常简洁地操作和组合集合数据
+
+扩展操作符最有用的场景就是函数定义中的参数列表，
+在这里可以充分利用这门语言的弱类型及参数长度可变的特点。
+扩展操作符既可以用于调用函数时传参，也可以用于定义函数参数
 
 ## 扩展参数
 
