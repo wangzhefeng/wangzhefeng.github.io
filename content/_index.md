@@ -16,6 +16,22 @@ disable_highlight: true
 > * 书册埋头无了日，不如抛却去寻春。--《出山道中口占》【朱熹】
 
 
+<div class="plyr__video-embed" id="player" width="100%">
+  <iframe
+    src="videos/voice_of_april.mp4"
+    allowfullscreen
+    allowtransparency
+    autoplay="false"
+    width="100%"
+    height="400px"
+  ></iframe>
+</div>
+
+
+<!-- <video id="player" playsinline controls data-poster="images/voice_of_april.jpg">
+  <source src="videos/voice_of_april.mp4" type="video/mp4" />
+</video> -->
+
 <!-- 喜欢的一段视频： -->
 <!-- <div class="plyr__video-embed" id="player" width="100%">
   <iframe

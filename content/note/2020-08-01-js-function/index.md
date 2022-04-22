@@ -81,7 +81,12 @@ details[open] summary {
   - [默认参数与暂时性死区](#默认参数与暂时性死区)
 - [参数扩展与收集](#参数扩展与收集)
   - [扩展参数](#扩展参数)
+    - [扩展操作符用于传参](#扩展操作符用于传参)
+    - [扩展操作符用于命名参数](#扩展操作符用于命名参数)
   - [收集参数](#收集参数)
+    - [收集参数用法](#收集参数用法)
+    - [箭头函数收集参数](#箭头函数收集参数)
+    - [收集参数不影响 `arguments`](#收集参数不影响-arguments)
 - [函数声明与函数表达式](#函数声明与函数表达式)
 - [函数作为值](#函数作为值)
 - [函数内部](#函数内部)
@@ -645,7 +650,8 @@ function makeKing(name = "Henry", numerals = defaultNumeral) {
 
 # 参数扩展与收集
 
-ECMAScript 6 新增了扩展操作符，使用它可以非常简洁地操作和组合集合数据
+ECMAScript 6 新增了**扩展操作符**: `...`，
+使用它可以非常简洁地操作和组合**集合数据**
 
 扩展操作符最有用的场景就是函数定义中的参数列表，
 在这里可以充分利用这门语言的弱类型及参数长度可变的特点。
@@ -653,12 +659,21 @@ ECMAScript 6 新增了扩展操作符，使用它可以非常简洁地操作和�
 
 ## 扩展参数
 
-- 在给函数传参时，有时候可能不需要传入一个数组，而是分别传入数组的元素
+在给函数传参时，有时候可能不需要传入一个数组，而是分别传入数组的元素
+
+### 扩展操作符用于传参
+
+- 如果不使用扩展操作符，想把定义在这个函数这面的数组拆分，那么就得求助于 `apply()` 方法。
+  但 在 ES6 中，可以通过扩展操作符 `...` 极为简洁地实现这种操作，
+  对可迭代对象应用扩展操作符，并将其作为一个参数传入，
+  可以将可迭代对象拆分，并将迭代返回的每个值单独传入
+
 
 ```js
 let values = [1, 2, 3, 4];
 
-// 这个函数希望将所有加数逐个传进来，然后通过迭代 arguments 对象来实现累加
+// 这个函数希望将所有加数逐个传进来，
+// 然后通过迭代 arguments 对象来实现累加
 function getSum() {
     let sum = 0;
     for (let i = 0; i < arguments.length; ++i) {
@@ -666,21 +681,25 @@ function getSum() {
     }
     return sum;
 }
+```
 
-// 如果不适用扩展操作符，想把定义在这个函数这面的数组拆分，那么久得求助于 apply() 方法
+```js
 console.log(getSum.apply(null, values)); // 10
-
-// 但 在 ES6 中，可以通过扩展操作符极为简洁地实现这种操作，对可迭代对象应用扩展操作符，并将其作为一个参数传入，可以将可迭代对象拆分，并将迭代返回的每个值单独传入
 console.log(getSum(...values)); // 10
+```
 
-// 因为数组的长度已知，所以在使用扩展操作符传参的时候，并不妨碍在其前面或后面再传其他的值，包括使用扩展操作符传其他参数
+因为数组的长度已知，所以在使用扩展操作符传参的时候，
+并不妨碍在其前面或后面再传其他的值，包括使用扩展操作符传其他参数
+
+```js
 consoel.log(getSum(-1, ...value)); // 9
 console.log(getSum(...values, 5)); // 15
-console.log(getSum(-1, ..values, 5)); // 14
+console.log(getSum(-1, ...values, 5)); // 14
 console.log(getSum(...values, ...[5, 6, 7])); // 28
 ```
 
-- 对函数中的 arguments 对象而言，它并不知道扩展操作符的存在，而是调用函数时传入的参数接收每一个值
+对函数中的 `arguments` 对象而言，它并不知道扩展操作符的存在，
+而是按照调用函数时传入的参数接收每一个值
 
 ```js
 let values = [1, 2, 3, 4];
@@ -695,7 +714,10 @@ countArguments(-1, ...values, 5); // 6
 countArguments(...values, ...[5, 6, 7]); // 7
 ```
 
-- arguments 对象只是扩展操作符的一种方式。在普通函数和箭头函数中，也可以将扩展操作符用于命名参数，当然同时也可以使用默认参数
+### 扩展操作符用于命名参数
+
+- `arguments` 对象只是消费扩展操作符的一种方式。在普通函数和箭头函数中，
+  也可以将扩展操作符用于命名参数，当然同时也可以使用默认参数
 
 ```js
 function getProduct(a, b, c = 1) {
@@ -710,26 +732,31 @@ console.log(getProduct(...[1, 2])); // 2
 console.log(getProduct(...[1, 2, 3])); // 6
 console.log(getProduct(...[1, 2, 3, 4])); // 6
 
-console.log(getSum(..[0, 1])); // 1
-console.log(getSum(..[0, 1, 2])); // 3
-console.log(getSum(..[0,1,2,3]))); // 3
+console.log(getSum(...[0, 1])); // 1
+console.log(getSum(...[0, 1, 2])); // 3
+console.log(getSum(...[0,1,2,3]))); // 3
 ```
 
 ## 收集参数
 
-- 在构思函数定义时，可以使用扩展操作符把不同长度的独立参数组合为一个数组，这有点类似 arguments 对象的构造机制，只不过收集参数的结果会得到一个 Array 实例
-    - 收集参数的前面如果还有命名参数，则会收集其余的参数
-    - 如果没有则会得到空数组，因为收集的参数的结果可变，所以只能把它作为最后一个参数
+### 收集参数用法
+
+- 在构思函数定义时，可以使用扩展操作符把不同长度的独立参数组合为一个数组，
+  这有点类似 arguments 对象的构造机制，只不过收集参数的结果会得到一个 Array 实例
 
 ```js
 function getSum(...values) {
     // 顺序累加 values 中的所有值
     // 初始值的总和为 0
-    return values.reduce((x, y) => x + y, 0); 
+    return values.reduce((x, y) => x + y, 0);
 }
 
 console.log(getSum(1, 2, 3)); // 6
 ```
+
+收集参数的前面如果还有命名参数，则会收集其余的参数, 
+如果没有则会得到空数组，因为收集的参数的结果可变，
+所以只能把它作为最后一个参数
 
 ```js
 // 不可以
@@ -745,7 +772,10 @@ ignoreFirst(1, 2); // [2]
 ignoreFirst(1, 2, 3); // [2, 3]
 ```
 
-- 箭头函数虽然不支持 arguments 对象，但支持收集参数的定义方式，因此可以实现与使用 arguments 一样的逻辑
+### 箭头函数收集参数
+
+- 箭头函数虽然不支持 `arguments` 对象，但支持收集参数的定义方式，
+  因此可以实现与使用 `arguments` 一样的逻辑
 
 ```js
 let getSum = (...values) => {
@@ -755,7 +785,9 @@ let getSum = (...values) => {
 console.log(getSum(1, 2, 3)); // 6
 ```
 
-- 使用收集参数并不影响 arguments 对象，它仍然反映调用时传给函数的参数
+### 收集参数不影响 `arguments`
+
+- 使用收集参数并不影响 `arguments` 对象，它仍然反映调用时传给函数的参数
 
 ```js
 function getSum(...values) {
@@ -769,9 +801,12 @@ console.log(getSum(1, 2, 3));
 
 # 函数声明与函数表达式
 
-- JavaScript 引擎在加载数据时对函数声明和函数表达式是区别对待的
-    - JavaScript 引擎在任何代码执行之前，会先读取**函数声明**，并在执行上下文中生成函数定义，这个个过程叫做**函数声明提升(function declaration hoisting)**，即在执行代码时，JavaScript 引擎会先执行一遍扫描，把发现的函数声明提升到源代码树的顶部
-    - 而**函数表达式**必须等到代码执行到它那一行，才会在执行上下文中生成函数定义
+JavaScript 引擎在加载数据时对函数声明和函数表达式是区别对待的
+    
+- JavaScript 引擎在任何代码执行之前，会先读取**函数声明**，
+  并在执行上下文中生成函数定义，这个个过程叫做**函数声明提升(function declaration hoisting)**，
+  即在执行代码时，JavaScript 引擎会先执行一遍扫描，把发现的函数声明提升到源代码树的顶部
+- **函数表达式**必须等到代码执行到它那一行，才会在执行上下文中生成函数定义
 
 ```js
 // 没问题--函数声明
@@ -801,16 +836,17 @@ let sum = function sum() {};
 
 # 函数作为值
 
-- 因为函数名在 ECMAScript 中就是变量，所以函数可以用在任何可以使用变量的地方
-    - 可以把函数作为参数传给一个函数
-    - 可以在一个函数中返回另一个函数
+因为函数名在 ECMAScript 中就是变量，所以函数可以用在任何可以使用变量的地方。
+可以把函数作为参数传给一个函数，也可以在一个函数中返回另一个函数
+
+* 示例: 函数作为参数
 
 ```js
 function callSomeFunction(someFunction, someArgument) {
     return someFunction(someArgument);
 }
 
-// 示例 1
+// 示例 1.1
 function add10(num) {
     return num + 10;
 }
@@ -818,13 +854,15 @@ let result1 = callSomeFunction(add10, 10);
 console.log(result1); // 20
 
 
-// 示例 2
+// 示例 1.2
 function getGreeting(name) {
     return "Hello, " + name;
 }
 let result2 = callSomeFunction(getGreeting, "Nicholas");
 console.log(result2); // Hello, Nicholas
 ```
+
+* 示例： 函数中返回另一个函数
 
 ```js
 function createComparisonFunction(propertyName) {
@@ -862,23 +900,20 @@ console.log(data[0].name); // Zachary
 # 函数内部
 
 - ECMAScript 5 中，函数内部存在两个特殊的对象
-    - arguments
-    - this
+    - `arguments`
+    - `this`
 - ECMAScript 6 又新增了一个属性属性
-    - new.target
+    - `new.target`
 
 ## arguments
 
-- arguments 对象有很多特征:
+arguments 对象有很多特征:
 
-  - 一个类数组对象，包含调用函数时传入的所有参数
-
-  - 只有以 function 关键字定义函数时才会有
-
-  - 有个 callee 属性，是一个指向 arguments 对象所在函数的指针，因此可以在函数内部递归调用
-
-    - 使用 `arguments.callee` 就可以让函数逻辑与函数名解耦
-    - 在严格模式下运行的代码时不能访问 `arguments.callee` 的，因为访问会报错，此时可以使用命名函数表达式(named function expression)达到目的
+* `arguments` 是一个类数组对象，包含调用函数时传入的所有参数
+* `arguments` 对象只有以 `function` 关键字定义函数时才会有
+* 有个 callee 属性，是一个指向 arguments 对象所在函数的指针，因此可以在函数内部递归调用
+  - 使用 `arguments.callee` 就可以让函数逻辑与函数名解耦
+  - 在严格模式下运行的代码时不能访问 `arguments.callee` 的，因为访问会报错，此时可以使用命名函数表达式(named function expression)达到目的
 
   ```js
   // 阶乘函数一般定义成递归调用的，只要给函数一个名称，而且这个名称不会变，这样定义就没有问题。但是，这个函数要正确执行就必须保证函数名是 factorial，从而导致了紧密耦合
