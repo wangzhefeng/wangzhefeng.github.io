@@ -34,12 +34,9 @@ menu:
     - name: "事务"
       url: "/todo/"
       weight: 6
-    - name: "四月"
-      url: "/voice/"
-      weight: 7
     - name: "简历"
       url: "/resume/"
-      weight: 8
+      weight: 7
     # - name: "主题"
     #   url: "/Ivy/"
     #   weight: 8
