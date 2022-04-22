@@ -15,19 +15,6 @@ disable_highlight: true
 > * 此曲只应天上有，人间能得几回闻。 -- 《赠花卿》【杜甫】
 > * 书册埋头无了日，不如抛却去寻春。--《出山道中口占》【朱熹】
 
-
-<!-- 比较魔幻的一段视频 -->
-<div class="plyr__video-embed" id="player" width="100%">
-  <iframe
-    src="videos/voice_of_april.mp4"
-    allowfullscreen
-    allowtransparency
-    autoplay="false"
-    width="100%"
-    height="400px"
-  ></iframe>
-</div>
-
 <!-- 喜欢的一段视频： -->
 <!-- <div class="plyr__video-embed" id="player" width="100%">
   <iframe
