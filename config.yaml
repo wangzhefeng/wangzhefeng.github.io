@@ -1,6 +1,6 @@
 baseurl: https://wangzhefeng.com/
 languageCode: zh-cn
-title: Zhefeng Wang | 王哲峰
+title: wangzf|王哲峰
 theme: hugo-ivy
 disqusShortname: wangzf
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
@@ -65,7 +65,7 @@ params:
   logo:
     img: "images/logo.jpg"
     url: "/"
-    alt: "Zhefeng Wang"
+    alt: "logo"
     tag: ""
   
   utteranc: 

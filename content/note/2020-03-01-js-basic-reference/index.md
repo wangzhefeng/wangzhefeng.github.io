@@ -1,5 +1,5 @@
 ---
-title: 第五章、基本引用类型
+title: 基本引用类型
 author: 王哲峰
 date: '2020-03-01'
 slug: js-basic-reference
@@ -7,12 +7,93 @@ categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [Date](#date)
+	- [1.1 继承的方法](#11-继承的方法)
+	- [1.2 日期格式化方法](#12-日期格式化方法)
+	- [1.3 日期/时间组件方法](#13-日期时间组件方法)
+- [2.RegExp](#2regexp)
+	- [2.1 RegExp 实例属性](#21-regexp-实例属性)
+	- [2.2 RegExp 实例方法](#22-regexp-实例方法)
+	- [2.3 RegExp 构造函数属性](#23-regexp-构造函数属性)
+	- [2.4 模式局限](#24-模式局限)
+- [3.原始值包装类型](#3原始值包装类型)
+	- [3.1 Boolean](#31-boolean)
+	- [3.2 Number](#32-number)
+	- [3.3 String](#33-string)
+		- [3.3.1 JavaScript 字符](#331-javascript-字符)
+		- [3.3.2 normalize() 方法](#332-normalize-方法)
+		- [3.3.3 字符串操作方法](#333-字符串操作方法)
+		- [3.3.4 字符串位置方法](#334-字符串位置方法)
+		- [3.3.5 字符串包含方法](#335-字符串包含方法)
+		- [3.3.6 trim() 方法](#336-trim-方法)
+		- [3.3.7 repeat() 方法](#337-repeat-方法)
+		- [3.3.8 padStart() 和 padEnd() 方法](#338-padstart-和-padend-方法)
+		- [3.3.9 字符串迭代与解构](#339-字符串迭代与解构)
+		- [3.3.10 字符串大小写转换](#3310-字符串大小写转换)
+		- [3.3.11 字符串模式匹配方法](#3311-字符串模式匹配方法)
+		- [3.3.12 localeCompare() 方法](#3312-localecompare-方法)
+		- [3.3.13 HTML 方法](#3313-html-方法)
+- [4.单例内置对象](#4单例内置对象)
+	- [4.1 Global](#41-global)
+		- [4.1.1 URL 编码方法](#411-url-编码方法)
+		- [4.1.2 eval() 方法](#412-eval-方法)
+		- [4.1.3 Global 对象属性](#413-global-对象属性)
+		- [4.1.4 window 对象](#414-window-对象)
+	- [4.2 Math](#42-math)
+		- [4.2.1 Math 对象属性](#421-math-对象属性)
+		- [4.2.2 Math.min() 和 Math.max() 方法](#422-mathmin-和-mathmax-方法)
+		- [4.2.3 舍入方法](#423-舍入方法)
+		- [4.2.4 Math.random() 方法](#424-mathrandom-方法)
+		- [4.2.5 其他方法](#425-其他方法)
+</p></details><p></p>
+
+
 
 - 引用值(或者对象)是某个特定**引用类型**的**实例**
 	- 在 ECMAScript 中，**引用类型**是把数据和功能组织到一起的结构，经常被人错误地称作“类”
@@ -24,7 +105,7 @@ output:
 	- Regexp
 	- Function
 
-## 1.Date
+## Date
 
 - ECMAScript 的 Date 类型参考了 Java 早期版本中的 java.util.Date。为此，Date 类型将日期保存为自协调世界时(UTC，Universal Time Coordinated)时间 1970 年 1 月 1 日午夜(零时)至今所经过的毫秒数。使用这种存储格式，Date 类型可以精确表示 1970 年 1 月 1 日之前及之后 285616 年的日期。
 

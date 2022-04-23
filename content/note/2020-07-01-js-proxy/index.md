@@ -1,5 +1,5 @@
 ---
-title: 第九章、代理与反射
+title: 代理与反射
 author: 王哲峰
 date: '2020-07-01'
 slug: js-proxy
@@ -7,14 +7,65 @@ categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
-# 第九章、代理与反射
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [1.代理基础](#1代理基础)
+  - [1.1 创建空代理](#11-创建空代理)
+  - [1.2 定义捕获器](#12-定义捕获器)
+  - [1.3 捕获器参数和反射 API](#13-捕获器参数和反射-api)
+  - [1.4 捕获器不变式](#14-捕获器不变式)
+  - [1.5 可撤销代理](#15-可撤销代理)
+  - [1.6 实用反射 API](#16-实用反射-api)
+  - [1.7 代理另一个代理](#17-代理另一个代理)
+  - [1.8 代理的问题与不足](#18-代理的问题与不足)
+- [2.代理捕获器与反射方法](#2代理捕获器与反射方法)
+- [3.代理模式](#3代理模式)
+</p></details><p></p>
+
 
 - ECMAScript 6 新增的代理和反射为开发者提供了 **拦截并向基本操作嵌入额外行为的能力**
 - 具体地说，可以给**目标对象**定义一个关联的**代理对象**，而这个代理对象可以作为抽象的目标对象来使用

@@ -1,5 +1,5 @@
 ---
-title: 第六章、集合引用类型
+title: 集合引用类型
 author: 王哲峰
 date: '2020-04-01'
 slug: js-set-reference
@@ -7,18 +7,94 @@ categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
-## 1.Object
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [Object](#object)
+	- [创建 Object 实例](#创建-object-实例)
+	- [1.2 访问属性](#12-访问属性)
+- [2.Array](#2array)
+	- [2.1 创建数组](#21-创建数组)
+	- [2.2 数组空位](#22-数组空位)
+	- [2.3 数组索引](#23-数组索引)
+	- [2.4 检测数组](#24-检测数组)
+	- [2.5 迭代器方法](#25-迭代器方法)
+	- [2.6 复制和填充方法](#26-复制和填充方法)
+	- [2.7 转换方法](#27-转换方法)
+	- [2.8 栈方法](#28-栈方法)
+	- [2.9 队列方法](#29-队列方法)
+	- [2.10 排序方法](#210-排序方法)
+	- [2.11 操作方法](#211-操作方法)
+	- [2.12 搜索和位置方法](#212-搜索和位置方法)
+	- [2.13 迭代方法](#213-迭代方法)
+	- [2.14 归并方法](#214-归并方法)
+- [3.定型数组](#3定型数组)
+	- [3.1 历史](#31-历史)
+	- [3.2 ArrayBuffer](#32-arraybuffer)
+	- [3.3 DataView](#33-dataview)
+	- [3.4 定型数组](#34-定型数组)
+- [4.Map](#4map)
+	- [4.1 Map 基本 API](#41-map-基本-api)
+	- [4.2 顺序与迭代](#42-顺序与迭代)
+	- [4.3 选择 Object 还是 Map](#43-选择-object-还是-map)
+- [5.WeakMap](#5weakmap)
+- [6.Set](#6set)
+	- [6.1 Set 基本 API](#61-set-基本-api)
+	- [6.2 顺序与迭代](#62-顺序与迭代)
+	- [6.3 定义正式集合操作](#63-定义正式集合操作)
+- [7.WeakSet](#7weakset)
+- [8.迭代与扩展操作](#8迭代与扩展操作)
+</p></details><p></p>
+
+
+## Object
 
 - Object 是 ECMAScript 中最常用的类型之一，虽然 Object 的实例没有多少功能，但很适合存储在应用程序间交互数据
 
-### 1.1 创建 Object 实例
+### 创建 Object 实例
 
 - （1）使用 new 操作符合 Object 构造函数
 

@@ -53,7 +53,6 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [内容](#内容)
 - [函数定义方式](#函数定义方式)
   - [函数声明](#函数声明)
   - [函数表达式](#函数表达式)
@@ -95,34 +94,44 @@ details[open] summary {
   - [caller](#caller)
   - [new.target](#newtarget)
 - [函数属性与方法](#函数属性与方法)
+  - [length](#length)
+  - [prototype](#prototype)
+  - [apply](#apply)
+  - [call](#call)
+  - [apply 和 call](#apply-和-call)
+  - [bind](#bind)
+  - [toLocalString 和 toString](#tolocalstring-和-tostring)
+  - [valueOf](#valueof)
 - [函数表达式](#函数表达式-1)
+  - [函数声明和函数表达式](#函数声明和函数表达式)
+  - [函数提升](#函数提升)
+  - [作为函数返回值的函数表达式](#作为函数返回值的函数表达式)
 - [递归](#递归)
+  - [经典的递归阶乘函数](#经典的递归阶乘函数)
+  - [严格模式下的递归](#严格模式下的递归)
 - [尾调用优化](#尾调用优化)
   - [尾调用优化的条件](#尾调用优化的条件)
   - [尾调用优化的代码](#尾调用优化的代码)
 - [闭包](#闭包)
+  - [闭包简介](#闭包简介)
+  - [作用域链、执行上下文](#作用域链执行上下文)
+  - [变量对象、活动对象](#变量对象活动对象)
+  - [闭包示例](#闭包示例)
   - [this 对象](#this-对象)
   - [内存泄漏](#内存泄漏)
 - [立即调用的函数表达式](#立即调用的函数表达式)
 - [私有变量](#私有变量)
+  - [特权方法](#特权方法)
+  - [在构造函数中实现特权方法](#在构造函数中实现特权方法)
   - [静态私有变量](#静态私有变量)
   - [模块模式](#模块模式)
   - [模块增强模式](#模块增强模式)
 </p></details><p></p>
 
-
-# 内容
-
-* 函数表达式、函数声明及箭头函数
-* 默认参数及扩展操作符
-* 使用函数实现递归
-* 使用闭包实现私有变量
-
 # 函数定义方式
 
 * 函数是对象。每个函数都是 `Function` 类型的实例，而 `Function` 也有属性和方法，跟其他引用类型一样
 * 因为函数是对象，所以函数名就是指向函数对象的指针，而且不一定与函数本身紧密绑定
-
 
 ## 函数声明
 
@@ -169,7 +178,6 @@ ECMAScript 6 新增了使用胖箭头 (`=>`) 语法定义函数表达式的能�
 
 **箭头函数**实例化的函数对象与正式的**函数表达式**创建的函数对象行为是相同的。
 任何可以使用函数表达式的地方，都可以使用箭头函数。
-
 
 * 语法
 
@@ -911,100 +919,133 @@ arguments 对象有很多特征:
 
 * `arguments` 是一个类数组对象，包含调用函数时传入的所有参数
 * `arguments` 对象只有以 `function` 关键字定义函数时才会有
-* 有个 callee 属性，是一个指向 arguments 对象所在函数的指针，因此可以在函数内部递归调用
+* `arguments` 有个 `callee` 属性，是一个指向 `arguments` 对象所在函数的指针，
+  因此可以在函数内部递归调用
   - 使用 `arguments.callee` 就可以让函数逻辑与函数名解耦
-  - 在严格模式下运行的代码时不能访问 `arguments.callee` 的，因为访问会报错，此时可以使用命名函数表达式(named function expression)达到目的
+  - 在严格模式下运行的代码时不能访问 `arguments.callee` 的，
+    因为访问会报错，此时可以使用命名函数表达式(named function expression)达到目的
 
-  ```js
-  // 阶乘函数一般定义成递归调用的，只要给函数一个名称，而且这个名称不会变，这样定义就没有问题。但是，这个函数要正确执行就必须保证函数名是 factorial，从而导致了紧密耦合
-  
-  // 经典的阶乘函数
-  function factorial(num) {
-      if (num <= 1) {
-          return 1;
-      } else {
-          return num * factorial(num - 1);
-      }
-  }
-  
-  // 使用 arguments.callee
-  // 这个重写之后的 factorial()函数已经用 arguments.callee 代替了之前硬编码的 factorial。 12 这意味着无论函数叫什么名称，都可以引用正确的函数
-  function factorial(num) {
-      if (num <= 1) {
-          return 1;
-      } else {
-          return num * arguments.callee(num - 1);
-      }
-  }
-  
-  // 严格模式下使用 arguments.callee
-  // 这里创建了一个命名函数表达式 f()，然后将它赋值给了变量 factorial。即使把函数赋值给另 一个变量，函数表达式的名称 f 也不变，因此递归调用不会有问题。这个模式在严格模式和非严格模式 下都可以使用
-  "use strict";
-  const factorial = (function f(num) {
-      if (num < 1) {
-          return 1;
-      } else {
-          return num * f(num - 1);
-      }
-  });
-  ```
+* 经典的阶乘函数
+
+```js
+// 阶乘函数一般定义成递归调用的，只要给函数一个名称，
+// 而且这个名称不会变，这样定义就没有问题。
+// 但是，这个函数要正确执行就必须保证函数名是 factorial，
+// 从而导致了紧密耦合
+
+function factorial(num) {
+    if (num <= 1) {
+        return 1;
+    } else {
+        return num * factorial(num - 1);
+    }
+}
+```
+
+*  使用 arguments.callee 的阶乘函数
+
+```js
+// 这个重写之后的 factorial() 函数已经用 arguments.callee 
+// 代替了之前硬编码的 factorial。这意味着无论函数叫什么名称，
+// 都可以引用正确的函数
+function factorial(num) {
+    if (num <= 1) {
+        return 1;
+    } else {
+        return num * arguments.callee(num - 1);
+    }
+}
+
+let trueFactorial = factorial;
+factorial = function() {
+    return 0;
+};
+
+console.log(trueFactorial(5));  // 120
+console.log(factorial(5));  // 0
+```
+
+* 严格模式下使用 `arguments.callee`
+
+```js
+// 这里创建了一个命名函数表达式 f()，然后将它赋值给了变量 factorial。
+// 即使把函数赋值给另一个变量，函数表达式的名称 f 也不变，
+// 因此递归调用不会有问题。这个模式在严格模式和非严格模式下都可以使用
+"use strict";
+const factorial = (function f(num) {
+    if (num < 1) {
+        return 1;
+    } else {
+        return num * f(num - 1);
+    }
+});
+```
 
 ## this
 
-- `this` 在标准函数和箭头函数中有不同的行为
+`this` 在标准函数和箭头函数中有不同的行为
 
-    - 在标准函数中，this 引用的是把函数当成 **方法** 调用的上下文对象，这时候通常称其为 this 值(在网页的全局上下文中调用函数时，this 指向 window)
+* 在标准函数中，`this` 引用的是把函数当成**方法**调用的上下文对象，
+  这时候通常称其为 `this` 值(在网页的全局上下文中调用函数时，`this` 指向 `window`)
 
-    ```js
-    // window 全局对象
-    window.color = "red";
-    
-    // 自定义对象
-    let o = {
-        color: "blue"
-    };
-    
-    // 定义在全局上下文中的函数引用了this对象，这个this到底引用哪个对象必须到函数被调用时才能确定
-    function sayColor() {
-        console.log(this.color);
-    }
-    
-    // 全局上下文中调用 sayColor(),this 指向 window,  this.color = window.color
-    sayColor(); // "red"
-    
-    // sayColor() 赋值给了对象 O，sayColor() 作为 O 的方法调用，this 指向对象 o
-    o.sayColor = sayColor;
-    o.sayColor(); // "blue"
-    ```
+```js
+// window 全局对象
+window.color = "red";
 
-- 在箭头函数中，this 引用的是定义箭头函数的上下文
+// 自定义对象
+let o = {
+    color: "blue"
+};
 
-    ```js
-    // window 全局对象
-    window.color = "red";
-    
-    // 自定义对象
-    let o = {
-        color: "blue"
-    };
-    
-    // 定义在 window 上下文中的箭头函数
-    let sayColor = () => console.log(this.color);
-    
-    
-    sayColor(); // "red"
-    
-    o.sayColor = sayColor;
-    o.sayColor(); // "red"
-    ```
+// 定义在全局上下文中的函数引用了this对象，
+// 这个 this 到底引用哪个对象必须到函数被调用时才能确定
+function sayColor() {
+    console.log(this.color);
+}
 
-- 在事件回调或定时回调中调用某个函数时，this 值指向的并非想要的对象。此时将回调函数写成箭头函数就可以解决问题，这是因为箭头函数中的 this 会保留定义该函数时的上下文
+// 全局上下文中调用 sayColor(), 
+// this 指向 window, this.color = window.color
+sayColor(); // "red"
+
+// sayColor() 赋值给了对象 o，
+// sayColor() 作为 o 的方法调用，this 指向对象 o
+o.sayColor = sayColor;
+o.sayColor(); // "blue"
+```
+
+* 在箭头函数中，`this` 引用的是定义箭头函数的上下文
+
+```js
+// window 全局对象
+window.color = "red";
+
+// 自定义对象
+let o = {
+    color: "blue"
+};
+
+// 定义在 window 上下文中的箭头函数
+let sayColor = () => {
+    console.log(this.color);
+};
+
+
+sayColor(); // "red"
+
+o.sayColor = sayColor;
+o.sayColor(); // "red"
+```
+
+* 在**事件回调**或**定时回调**中调用某个函数时，
+  `this` 值指向的并非想要的对象。
+  此时将回调函数写成箭头函数就可以解决问题，
+  这是因为箭头函数中的 this 会保留定义该函数时的上下文
 
 ```js
 function King() {
     this.royaltyName = "Henry";
     // this 引用 King 的实例
-    setTimeout() => console.log((this.royaltyName), 10000);
+    setTimeout(() => console.log(this.royaltyName), 10000);
 }
 
 function Queen() {
@@ -1019,7 +1060,8 @@ new Queen(); // undefined
 
 ## caller
 
-- ECMAScript 5 会给函数对象上添加一个属性 `caller`，这个属性引用的是调用当前函数的函数，或者如果是在全局作用域中调用的则为 `null`
+ECMAScript 5 会给函数对象上添加一个属性 `caller`，
+这个属性引用的是调用当前函数的函数，或者如果是在全局作用域中调用的则为 `null`
 
 ```js
 function outer() {
@@ -1030,7 +1072,7 @@ function inner() {
     console.log(inner.caller);
 }
 
-outer(); // outer() 函数的源代码
+outer();  // outer() 函数的源代码
 
 // 如果要降低耦合度，可以通过 arguments.callee.caller 来引用同样的值
 function outer() {
@@ -1040,19 +1082,37 @@ function outer() {
 function inner() {
     console.log(arguments.callee.caller);
 }
-outer();
+outer();  // outer() 函数的源代码
 ```
 
-- 在严格模式下访问 arguments.callee 会报错
-- ECMAScript 5 也定义了 arguments.caller，但在严格模式下访问它会报错，在非严格模式下则始终是 undefined。这是为了分清 arguments.caller 和函数的 caller 而故意为之的。而作为对这门语言的安全防护，这些改动也让第三方代码无法检测同 一上下文中运行的其他代码
-- 严格模式下还有一个限制，就是不能给函数的 caller 属性赋值，否则会导致错误
+<div class="warning" 
+     style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>Note</b>
+        </p>
+        <p style='margin-left:1em;'>
+            在严格模式下访问 arguments.callee 会报错:</br></br>
+            ECMAScript 5 也定义了 arguments.caller，但在严格模式下访问它会报错，
+            在非严格模式下则始终是 undefined。这是为了分清 arguments.caller 和函数的 caller 而故意为之的。
+            而作为对这门语言的安全防护，这些改动也让第三方代码无法检测同一上下文中运行的其他代码</br></br>
+            严格模式下还有一个限制，就是不能给函数的 caller 属性赋值，否则会导致错误
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b></b> 
+            <i></i>
+        </p>
+    </span>
+</div>
 
 ## new.target
 
-- ECMAScript 中的函数始终可以作为构造函数实例化一个新对象，也可以作为普通函数被调用
-- EMCAScript 6 新增了检测函数是否使用 new 关键调用的 `new.target` 属性
-    - 如果函数是正常调用的，则 new.target 的值是 undefined
-    - 如果是使用 new 关键字调用的，则 new.target 将引用被调用的构造函数
+ECMAScript 中的函数始终可以作为构造函数实例化一个新对象，也可以作为普通函数被调用
+
+EMCAScript 6 新增了检测函数是否使用 `new` 关键调用的 `new.target` 属性
+    
+* 如果函数是正常调用的，则 `new.target` 的值是 `undefined`
+* 如果是使用 `new` 关键字调用的，则 `new.target` 将引用被调用的构造函数
 
 ```js
 function King() {
@@ -1068,153 +1128,297 @@ King(); // Error: "King must be instantiated using 'new'"
 
 # 函数属性与方法
 
-- ECMAScript 中的函数是对象，因此有属性和方法，每个函数都有两个属性
+ECMAScript 中的函数是对象，因此有属性和方法，每个函数都有两个属性:
 
-    - `length`
+* `length`
+* `prototype`
 
-        - 保存函数定义的命名参数的个数
+函数还有两个方法，这两个方法都会以指定的 `this` 值来调用函数，
+即会设置调用函数时函数体内 `this` 对象的值:
 
-    - `prototype`
+* `apply`
+* `call`
 
-        - 保存引用类型所有实例方法，这意味着 `toString()`、`valueOf()` 等方法实际上都保存在 `prototype` 上，进而由所有实例共享
-        - 在 ECMAScript 5 中，prototype 属性是不可枚举的，因此使用 for-in 循环不会返回这个属性
+## length
 
-    - 函数海还有两个方法，这两个方法都会以指定的 this 值来调用函数，即会设置调用函数时函数体内 this 对象的值
+`length` 属性保存函数定义的命名参数的个数
 
-        - `apply()` 方法接收两个参数:
-            - 函数内 this 的值
-            - 一个参数数组，可以是 Array 的实例，但也可以是 arguments 对象
+```js
+function sayName(name) {
+    console.log(name);
+}
 
-        ```js
-        function sum(num1, num2) {
-            return num1 + num2;
-        }
-        
-        // callSum1()会调用 sum()函数，将 this 作为函数体内的 this 值(这里等于 window，因为是在全局作用域中调用的)传入，同时还传入了 arguments 对象
-        function callSum1(num1, num2) {
-            return sum.apply(this, arguments); // 传入 arguments 对象
-        }
-        
-        // callSum2()也会调 用 sum()函数，但会传入参数的数组
-        function callSum2(num1, num2) {
-            return sum.apply(this, [num1, num2]); // 传入数组
-        }
-        
-        console.log(callSum1(10, 10)); // 20
-        console.log(callSum2(10, 10)); // 20
-        ```
+function sum(num1, num2) {
+    return num1 + num2;
+}
 
-        - `call()` 方法与 `apply()` 的作用一样，只是传参的形式不同
-            - 第一个参数跟 `apply()` 一样，也是 this 值
-            - 剩下的要传给被调用函数的参数则是逐个传递的，换句话说，通过 call() 向函数传参时，必须将参数一个一个地列出来
+function sayHi() {
+    console.log("hi");
+}
 
-        ```js
-        function sum(num1, num2) {
-            return num1 + num2;
-        }
-        
-        function callSum(num1, num2) {
-            return sum.call(this, num1, num2);
-        }
-        
-        console.log(callSum(10, 10)); // 20
-        ```
+console.log(sayName.length); // 1
+console.log(sum.length); // 2
+console.log(sayHi.length); // 0
+```
 
-        - 到底是使用 `apply()` 还是 `call()` ，完全取决于怎么给要调用的函数传参更方便。如果想直接传 arguments 对象或者一个数组，那就用 `apply()`，否则，就用 `call()`。当然，如果不用给被调用的函数传参，则使用哪个方法都一样
-        - `apply()` 和 `call()` 真正强大的地方不是给函数传参，而是控制函数调用上下文即函数体内 this 值的能力
+## prototype
 
-        ```js
-        window.color = "red";
-        
-        let o = {
-            color: "blue"
-        };
-        
-        function sayColor() {        // 全局函数
-            console.log(this.color); // this.color 会求值为 window.color
-        }
-        
-        sayColor(); 	       // red，this.color 会求值为 window.color
-        sayColor.call(this);   // red，this.color 会求值为 window.color
-        sayColor.call(window); // red，this.color 会求值为 window.color
-        sayColor.call(o);      // blue，该调用把函数的执行上下文即 this 切换为对象 o
-        ```
+`prototype` 属性也许是 ECMAScript 核心中最有趣的部分
 
-        
+`prototype` 是保存引用类型所有实例方法的地方，
+这意味着 `toString()`、`valueOf()` 等方法实际上都保存在 `prototype` 上，
+进而由所有实例共享，这个属性在自定义类型时特别重要
+
+在 ECMAScript 5 中，`prototype` 属性是不可枚举的，
+因此使用 `for-in` 循环不会返回这个属性
+
+## apply
+
+`apply()` 方法接收两个参数:
+
+* 函数内 `this` 的值
+* 一个参数数组，可以是 `Array` 的实例，但也可以是 `arguments` 对象
+
+```js
+function sum(num1, num2) {
+    return num1 + num2;
+}
+
+function callSum1(num1, num2) {
+    // 传入 arguments 对象, this 作为函数体内的 this 值，这里等于 window
+    return sum.apply(this, arguments);
+}
+
+function callSum2(num1, num2) {
+    // 传入数组, this 作为函数体内的 this 值，这里等于 window
+    return sum.apply(this, [num1, num2]);
+}
+
+console.log(callSum1(10, 10)); // 20
+console.log(callSum2(10, 10)); // 20
+```
+
+## call
+
+`call()` 方法与 `apply()` 的作用一样，只是传参的形式不同。
+到底是使用 `apply()` 还是 `call()`，完全取决于怎么给要调用的函数传参更方便。
+如果想直接传 `arguments` 对象或者一个数组，那就用 `apply()`，
+否则，就用 `call()`。当然，如果不用给被调用的函数传参，则使用哪个方法都一样
+
+* 第一个参数跟 `apply()` 一样，也是 `this` 值
+* 剩下的要传给被调用函数的参数则是逐个传递的，换句话说，
+  通过 `call()` 向函数传参时，必须将参数一个一个地列出来
+
+```js
+function sum(num1, num2) {
+    return num1 + num2;
+}
+
+function callSum(num1, num2) {
+    return sum.call(this, num1, num2);
+}
+
+console.log(callSum(10, 10));  // 20
+```
+
+## apply 和 call
+
+`apply()` 和 `call()` 真正强大的地方不是给函数传参，
+而是控制函数调用上下文即函数体内 `this` 值的能力
+
+使用 `call()` 或 `apply()` 的好处是可以将任意对象设置为任意函数的作用域，
+这样对象可以不用关心方法
+
+```js
+window.color = "red";
+
+let o = {
+    color: "blue"
+};
+
+function sayColor() {        // 全局函数
+    console.log(this.color); // this.color 会求值为 window.color
+}
+
+sayColor(); 	       // red，this.color 会求值为 window.color
+sayColor.call(this);   // red，this.color 会求值为 window.color
+sayColor.call(window); // red，this.color 会求值为 window.color
+sayColor.call(o);      // blue，该调用把函数的执行上下文即 this 切换为对象 o
+```
+
+## bind
+
+* ECMAScript 5 定义了一个新方法: `bind()`，`bind()` 方法会创建一个新的实例，
+  其 `this`  值会被绑定到传给 `bind()` 的对象
+
+```js
+window.color = "red";
+
+var o = {
+    color: "blue"
+};
+
+function sayColor() {
+    console.log(this.color);
+}
+
+// 在 sayColor() 上调用 bind() 并传入对象 o 创建了一个新函数 objectSayColor()
+let objectSayColor = sayColor.bind(o); // objectSayColor() 中的 this 值被设置为 o
+objectSayColor();  // blue
+```
+
+## toLocalString 和 toString
+
+对函数而言，继承的方法 `toLocaleString()` 和 `toString()` 始终返回函数的代码。
+
+返回代码的具体格式因浏览器而异。有的返回源代码，包含注释，而有的只返回代码的内部形式，
+会删除注释，甚至代码可能被解释器修改过。
+
+由于这些差异，因此不能在重要功能中依赖这些方法返回的值，
+而只应在调试中使用它们。
+
+```js
+function sayName(name) {
+    console.log(name);
+}
+
+console.log(sayName.toLocaleString());
+console.log(sayName.toString());
+```
+
+## valueOf
+
+继承的方法 `valueOf()` 返回函数本身
+
+```js
+function sayName(name) {
+    console.log(name);
+}
+
+console.log(sayName.valueOf());
+```
 
 # 函数表达式
 
-- 函数表达式看起来就像一个普通的变量定义和赋值，即创建一个函数再把它赋值给一个变量。这样创建的函数叫做**匿名函数(anonymous function)**，因为 function 关键字后面没有标识符。
+函数表达式看起来就像一个普通的变量定义和赋值，即创建一个函数再把它赋值给一个变量。
+这样创建的函数叫做**匿名函数(anonymous function)**，因为 `function` 关键字后面没有标识符
 
-    - 匿名函数有时候也被称为**兰姆达哈函数**
-    - 未赋值给其他变量的匿名函数的 name 属性是空字符串
-    - 函数表达式跟 JavaScript 中的其他表达式一样，需要先赋值再使用
+* 匿名函数有时候也被称为**兰姆达函数**
+* 未赋值给其他变量的匿名函数的 `name` 属性是空字符串
+* 函数表达式跟 JavaScript 中的其他表达式一样，需要先赋值再使用
 
-    ```js
-    // 千万别这样做
-    if (condition) {
-        function sayHi() {
-            console.log("Hi!");
-        }
-    } else {
-        function sayHi() {
-            console.log("Yo!");
-        }
+## 函数声明和函数表达式
+
+* 函数声明、函数声明提升
+
+```js
+function functionName(arg0, arg1, arg2) {
+    // 函数体
+}
+```
+
+```js
+sayHi();
+function sayHi() {
+    console.log("Hi");
+}
+```
+
+* 函数表达式、函数先赋值再使用
+
+```js
+let functionName = function(arg0, arg1, arg2) {
+    // 函数体
+}
+```
+
+```js
+sayHi(); // Error! function doesn't exist yet
+let sayHi = function() {
+    console.log("Hi");
+}
+```
+
+## 函数提升
+
+理解函数声明与函数表达式之间的区别，关键是理解提升
+
+```js
+// 千万别这样做
+if (condition) {
+    function sayHi() {
+        console.log("Hi!");
     }
-    
-    // 没问题
-    let sayHi;
-    if (condition) {
-        sayHi = function() {
-            console.log("Hi!");
-        };
-    } else {
-        sayHi = function() {
-            console.log("Yo!");
-        };
+} else {
+    function sayHi() {
+        console.log("Yo!");
     }
-    ```
+}
+
+// 没问题
+let sayHi;
+if (condition) {
+    sayHi = function() {
+        console.log("Hi!");
+    };
+} else {
+    sayHi = function() {
+        console.log("Yo!");
+    };
+}
+```
+
+## 作为函数返回值的函数表达式
 
 - 创建函数并赋值给变量的能力也可以用在一个函数中把另一个函数当做返回值
+- 任何时候，只要函数被当做值来使用，它就是一个函数表达式
 
-    ```js
-    function createComparisonFunction(propertyName) {
-        return function (object1, object2) {
-            let value1 = object1[propertyName];
-            let value2 = object2[propertyName];
-            
-            if (value1 < value2) {
-                return -1;
-            } else if (value1 > value2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        };
-    }
-    ```
+```js
+function createComparisonFunction(propertyName) {
+    return function (object1, object2) {
+        let value1 = object1[propertyName];
+        let value2 = object2[propertyName];
+        
+        if (value1 < value2) {
+            return -1;
+        } else if (value1 > value2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+}
+```
 
 # 递归
 
-- 递归函数通常的形式是一个函数通过名称调用自己
-- 示例
+递归函数通常的形式是一个函数通过名称调用自己
+
+## 经典的递归阶乘函数
+
+阶乘函数:
 
 ```js
-// 经典的递归阶乘函数
 function factorial(num) {
-    if (num < 1) {
+    if (num <= 1) {
         return 1;
     } else {
         return num * factorial(num - 1);
     }
 }
+```
 
-// 如果把这个函数赋值给其他变量，就会出问题
+如果把这个函数赋值给其他变量，就会出问题:
+
+```js
 let anotherFactorial = factorial;
-factorial = null; 			      // factorial 已经不是函数了
-console.log(anotherFactorial(4)); // 报错
+factorial = null;  // factorial 已经不是函数了
+console.log(anotherFactorial(4));  // 报错
+```
 
-// 使用 arguments.callee 可以避免上面的问题
+使用 `arguments.callee` 可以避免上面的问题:
+
+```js
 function factorial(num) {
     if (num <= 1) {
         return 1;
@@ -1222,9 +1426,18 @@ function factorial(num) {
         return num * arguments.callee(num - 1);
     }
 }
+```
 
-// 由于严格模式下是不能使用使用 arguments.callee 的，所以需要使用命名函数表达式(named function expression)来实现递归
-// 这里创建了一个命名函数表达式 f()，然后将它赋值给了变量 factorial。即使把函数赋值给另 一个变量，函数表达式的名称 f 也不变，因此递归调用不会有问题。这个模式在严格模式和非严格模式 下都可以使用
+## 严格模式下的递归
+
+由于严格模式下是不能使用使用 `arguments.callee` 的，
+所以需要使用**命名函数表达式(named function expression)**来实现递归
+
+这里创建了一个命名函数表达式 `f()`，然后将它赋值给了变量 `factorial`。
+即使把函数赋值给另一个变量，函数表达式的名称 `f` 也不变，
+因此递归调用不会有问题。这个模式在严格模式和非严格模式下都可以使用
+
+```js
 "use strict";
 const factorial = (function f(num) {
     if (num < 1) {
@@ -1237,49 +1450,49 @@ const factorial = (function f(num) {
 
 # 尾调用优化
 
-- ECMAScript 6 新增了一项内存管理优化机制，让 JavaScript 引擎在满足条件时可以重用栈帧
+ECMAScript 6 新增了一项内存管理优化机制，让 JavaScript 引擎在满足条件时可以重用栈帧。
+具体来说，这项优化非常适合 **尾调用**，即外部函数的返回值是一个内部函数的返回值
 
-    - 具体来说，这项优化非常适合 **尾调用**，即外部函数的返回值是一个内部函数的返回值
+```js
+function outerFunction() {
+    return innerFunction();  // 尾调用
+}
+```
 
-    ```js
-    function outerFunction() {
-        return innerFunction(); // 尾调用
-    }
-    ```
+* 在 ES6 优化之前，这行这个例子会在内存中发生如下操作
+    - (1)执行到 outerFunction 函数体，**第一个栈帧被推到栈上**
+    - (2)执行 outerFunction 函数体，到 return 语句。计算返回值必须先计算 innerFunction
+    - (3)执行到 innerFunction 函数体，**第二个栈帧被推到栈上**
+    - (4)执行 innerFunction 函数体，计算其返回值
+    - (5)将返回值传回 outerFunction，然后 outerFunction 再返回值
+    - (6)**将栈帧弹出栈外**
+* 在 ES6 优化之后，执行这个例子会在内存中发生如下操作
+    - (1)执行到 outerFunction 函数体，**第一个栈帧被推到栈上**
+    - (2)执行 outerFunction 函数体，到 return 语句。计算返回值必须先计算 innerFunction
+    - (3)引擎发现把第一个栈帧弹出栈外也没问题，因为 innerFunction 的返回值也是 outerFunction 的返回值
+    - (4)**将 outerFunction 的栈帧弹出栈外**
+    - (5)执行到 innerFunction 函数体，**第二个栈帧被推到栈上**
+    - (6)执行 innerFunction 函数体，计算其返回值
+    - (7)**将 innerFunction 的栈帧弹出栈外**
 
-- 在 ES6 优化之前，这行这个例子会在内存中发生如下操作
-
-    - (1) 执行到 outerFunction 函数体，第一个栈帧被推到栈上
-    -  (2) 执行 outerFunction 函数体，到 return 语句。计算返回值必须先计算 innerFunction
-    -  (3) 执行到 innerFunction 函数体，第二个栈帧被推到栈上
-    -  (4) 执行 innerFunction 函数体，计算其返回值
-    -  (5) 将返回值传回 outerFunction，然后 outerFunction 再返回值
-    -  (6) 将栈帧弹出栈外
-
-- 在 ES6 优化之后，执行这个例子会在内存中发生如下操作
-
-    -  (1) 执行到 outerFunction 函数体，第一个栈帧被推到栈上
-    -  (2) 执行 outerFunction 函数体，到达 return 语句。为求值返回语句，必须先求值 innerFunction
-    - (3) 引擎发现把第一个栈帧弹出栈外也没问题，因为innerFunction的返回值也是outerFunction的返回值
-    -  (4) 弹出 outerFunction 的栈帧
-    -  (5) 执行到 innerFunction 函数体，栈帧被推到栈上
-    -  (6) 执行 innerFunction 函数体，计算其返回值
-    -  (7) 将 innerFunction 的栈帧弹出栈外
-
-- 很明显，第一种情况下每多调用一次嵌套函数，就会多增加一个栈帧。而第二种情况下无论调用多
-
-    少次嵌套函数，都只有一个栈帧。这就是 ES6 尾调用优化的关键: **如果函数的逻辑允许基于尾调用将其销毁，则引擎就会那么做**
+很明显，第一种情况下每多调用一次嵌套函数，就会多增加一个栈帧。
+而第二种情况下无论调用多。少次嵌套函数，都只有一个栈帧。
+这就是 ES6 尾调用优化的关键: **如果函数的逻辑允许基于尾调用将其销毁，则引擎就会那么做**
 
 ## 尾调用优化的条件
 
-- 尾调用优化的条件就是确定外部栈帧真的没有必要存在了。涉及的条件如下:  
-    - 代码在严格模式下执行
-    -  外部函数的返回值是对尾调用函数的调用
-    - 尾调用函数返回后不需要执行额外的逻辑
-    - 尾调用函数不是引用外部函数作用域中自由变量的闭包
-- 差异化尾调用和递归尾调用是容易让人混淆的地方。无论是递归尾调用还是非递归尾调用，都可以 应用优化。引擎并不区分尾调用中调用的是函数自身还是其他函数。不过，这个优化在递归场景下的效 果是最明显的，因为递归代码最容易在栈内存中迅速产生大量栈帧
+尾调用优化的条件就是**确定外部栈帧真的没有必要存在了**。涉及的条件如下:  
+ 
+* 代码在严格模式下执行
+* 外部函数的返回值是对尾调用函数的调用
+* 尾调用函数返回后不需要执行额外的逻辑
+* 尾调用函数不是引用外部函数作用域中自由变量的闭包
 
-- 示例：违反尾调用优化条件
+差异化尾调用和递归尾调用是容易让人混淆的地方。无论是递归尾调用还是非递归尾调用，
+都可以应用优化。引擎并不区分尾调用中调用的是函数自身还是其他函数。
+不过，这个优化在递归场景下的效果是最明显的，因为递归代码最容易在栈内存中迅速产生大量栈帧
+
+* 示例：违反尾调用优化条件
 
 ```js
 // 无优化:尾调用没有返回
@@ -1301,13 +1514,15 @@ function outerFunction() {
 // 无优化:尾调用是一个闭包
 function outerFunction() {
     let foo = "bar";
-    function innerFunction() { return foo; }
+    function innerFunction() { 
+        return foo; 
+    }
 
     return innerFunction();
 }
 ```
 
-- 示例：符合尾调用优化条件
+* 示例：符合尾调用优化条件
 
 ```js
 "use strict";
@@ -1329,17 +1544,17 @@ function outerFunction(a, b) {
 function outerFunction(condition) {
     return condition ? innerFunctionA() : innerFunctionB();
 }
-
 ```
 
 ## 尾调用优化的代码
 
-- 可以通过把简单的递归函数转换为待优化的代码来加深对尾调用的理解
-- 示例
+可以通过把简单的递归函数转换为待优化的代码来加深对尾调用的理解
+
+* 示例: 通过递归计算斐波那契数列的函数
 
 ```js
-// 通过递归计算斐波那契数列的函数
-// 显然这个函数不符合尾调用优化的条件，因为返回语句中有一个相加的操作。结果，fib(n)的栈 帧数的内存复杂度是 O(2n)
+// 显然这个函数不符合尾调用优化的条件，因为返回语句中有一个相加的操作。
+// 结果，fib(n) 的栈 帧数的内存复杂度是 O(2^n)
 function fib(n) {
     if (n < 2) {
         return n;
@@ -1358,8 +1573,11 @@ console.log(fib(6)); // 8
 fib(1000);
 ```
 
+* 示例: 将其重构为满足优化条件的形式
+ 
+为此可以使用两个嵌套的函数，外部函数作为基础框架，内部函数执行递归
+
 ```js
-// 将其重构为满足优化条件的形式。为此可以使用两个嵌套的函数，外部函数作为基础框架，内部 函数执行递归
 "use strict";
 
 // 基础框架
@@ -1378,6 +1596,102 @@ function fibImpl(a, b, n) {
 
 # 闭包
 
+## 闭包简介
+
+闭包(closure)指的是那些引用了另一个函数作用域中变量的函数，
+通常是在嵌套函数中实现的。匿名函数经常被人误认为是闭包
+
+## 作用域链、执行上下文
+
+理解作用域链创建和使用的细节对理解闭包非常重要。
+在调用一个函数时，会为这个函数调用创建一个**执行上下文**，并创建一个**作用域链**。
+然后用 `arguments` 和其他命名参数来初始化这个函数的活动对象。
+
+外部函数的活动对象是内部函数作用域链上的第二个对象。
+这个作用域链一直向外串起了所有包含函数的活动对象，直到全局执行上下文才终
+
+* 在定义函数时，就会为它创建**作用域链**，预装载全局变量对象，并保存在内部的 [[Scope]] 中
+* 在调用这个函数时，会创建相应的**执行上下文**，然后通过复制函数的 [[Scope]] 来创建其作用域链。
+  接着会创建函数的活动对象(用作变量对象)并将其推入作用域链的前端。
+
+## 变量对象、活动对象
+
+函数执行时，每个执行上下文中都会有一个包含其中变量的对象:
+
+* 全局上下文中的叫**变量对象**，它会在代码执行期间始终存在
+* 函数局部上下文中的叫**活动对象**，只在函数执行期间存在
+
+函数内部的代码在访问变量时，就会使用给定的名称从作用域链中查找变量。
+函数执行完毕后，局部活动对象会被销毁，内存中就只剩下全局作用域。不过，闭包就不一样了
+
+
+## 闭包示例
+
+* 示例
+
+```js
+function createComparisonFunction(propertyName) {
+    return function(object1, object2) {
+        // 内部函数引用了外部函数的变量 propertyName
+        // 内部函数的作用域链包含外部函数的作用域
+        let value1 = object1[propertyName];
+        let value2 = object2[propertyName];
+
+        if (value1 < value2) {
+            return -1;
+        } else if (value1 > value2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+// 创建比较函数
+let compareNames = createComparisonFunction("name");
+
+// 调用函数
+let result = compareNames(
+    {
+        name: "Nicholas"
+    },
+    {
+        name: "Matt"
+    }
+);
+
+// 解除对函数的引用，这样就可以释放内存了
+// 从而让垃圾回收程序可以将内存释放掉
+// 作用域链也会被销毁，其他作用域(除全局作用域之外)也可以销毁
+compareNames = null;
+```
+
+* 示例
+
+这里定义的 compare() 函数是在全局上下文中调用的。
+第一次调用 compare() 时，会为它创建一个包含 arguments、value1 和 value2 的活动对象，
+这个对象是其作用域链上的第一个对象。而全局上下文的变量对象则是 compare() 作用域链上的第二个对象，
+其中包含 this、result 和 compare
+
+```js
+function compare(value1, value2) {
+    if (value1 < value2) {
+        return -1;
+    } else if (value1 > value2) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+let result = compare(5, 10);
+```
+
+在这个例子中，这意味着 compare() 函数执行上下文的作用域链中有两个变量对象: 
+**局部变量对象**和**全局变量对象**。
+作用域链其实是一个包含指针的列表，每个指针分别指向一个变量对象，但物理上并不会包含相应的对象
+
+
 
 
 ## this 对象
@@ -1386,9 +1700,12 @@ function fibImpl(a, b, n) {
 
 ## 内存泄漏
 
-- 闭包（closure）指的是那些引用了另一个函数作用域中变量的函数，通常是在嵌套函数中实现的
-    - 匿名函数经常被人误认为是闭包
-- 
+由于 IE 在 IE9 之前 JScript 对象和 COM 对象使用了不同的垃圾回收机制，
+所以闭包在这些旧版本 IE 中可能会导致问题。
+
+在这些版本的 IE 中，把 HTML 元素保存在某个闭包
+
+
 
 # 立即调用的函数表达式
 
@@ -1396,9 +1713,73 @@ function fibImpl(a, b, n) {
 
 # 私有变量
 
+严格来讲，JavaScript 没有私有成员的概念，所有对象属性都公有的。
+不过，倒是有**私有变量**的概念
 
+任何定义在函数或块中的变量，都可以认为是私有的，
+因为在这个函数或块的外部无法访问其中的变量。
+私有变量包括函数参数、局部变量，以及函数内部定义的其他函数
+
+## 特权方法
+
+如果一个函数中创建了一个闭包，则这个闭包能通过其作用域访问其外部的变量。
+基于这一点，这就可以创建出能够访问私有变量的公有方法。
+
+**特权方法(privileged method)** 是能够访问函数私有变量(以及私有函数)的公有方法
+在对象上有两种方式创建特权方法:
+
+## 在构造函数中实现特权方法
+
+在构造函数中实现特权方法的模式是把私有变量和私有函数都定义在构造函数中。
+然后再创建一个能够访问这些私有成员的特权方法
+
+定义在构造函数中的特权方法其实是一个闭包，它具有访问构造函数中定义的所有变量和函数的能力
+
+```js
+// 变量 privateVariable 和函数 privateFunction() 
+// 只能通过 publicMethod() 方法来访问
+function MyObject() {
+    // 私有变量
+    let privateVariable = 10;
+    // 私有函数
+    function privateFunction() {
+        return false;
+    }
+    // 特权方法--能访问私有成员的特权方法
+    this.publicMethod = function() {
+        privateVariable++;
+        return privateFunction();
+    }
+}
+```
+
+```js
+// 定义私有变量和特权的方法，已隐藏不能被直接修改的数据
+function Person(name) {
+    // 特权方法
+    this.getName = function() {
+        return name;
+    };
+    // 特权方法
+    this.setName = function(value) {
+        name = value;
+    };
+}
+
+let person = new Person("Nicholas");
+console.log(person.getName());  // 'Nicholas'
+
+person.setName("Greg")l
+console.log(person.getName());  // 'Greg'
+```
 
 ## 静态私有变量
+
+构造函数模式的缺点是每个实例都会重新创建一遍新方法，
+使用静态私有变量实现特权方法可以避免这个问题
+
+特权方法也可以通过使用私有作用域定义私有变量和函数来实现
+
 
 
 

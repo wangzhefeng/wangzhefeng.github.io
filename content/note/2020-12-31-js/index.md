@@ -1,17 +1,12 @@
 ---
 title: 玩转 JavaScript
 author: 王哲峰
-date: '2021-04-03'
+date: '2020-12-31'
 slug: javascript
 categories:
   - 前端
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
 # JavaScript 内容
@@ -24,6 +19,20 @@ output:
 - ECharts.js
 - npm
 - nvm
+
+# JavaScript 掌握情况
+
+* [ ] 数据类型
+* [ ] 操作符
+* [ ] 语句
+* [ ] 变量
+* [ ] 作用域
+* [ ] 内存
+* [ ] 引用类型
+* [ ] 函数
+* [ ] 对象
+* [ ] 类、面向对象编程
+* [ ] 错误处理与调试
 
 # 相关教程、文章
 
