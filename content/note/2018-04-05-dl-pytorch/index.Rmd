@@ -1,5 +1,5 @@
 ---
-title: DL PyTorch 
+title: PyTorch 
 author: 王哲峰
 date: '2018-04-05'
 slug: dl-pytorch

@@ -1,5 +1,5 @@
 ---
-title: DL RNN
+title: RNN
 author: 王哲峰
 date: '2019-04-06'
 slug: dl-rnn
@@ -8,5 +8,11 @@ categories:
 tags:
   - note
 ---
+
+
+# RNN
+
+
+# LSTM
 
 

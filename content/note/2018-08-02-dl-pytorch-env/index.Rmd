@@ -1,5 +1,5 @@
 ---
-title: DL PyTorch Env
+title: PyTorch Env
 author: 王哲峰
 date: '2018-08-02'
 slug: dl-pytorch-env

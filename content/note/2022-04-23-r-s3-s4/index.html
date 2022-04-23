@@ -1,0 +1,103 @@
+---
+title: R OOP
+author: 王哲峰
+date: '2022-04-23'
+slug: r-s3-s4
+categories:
+  - r
+tags:
+  - tool
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#r-语言的面向对象编程">R 语言的面向对象编程</a></li>
+<li><a href="#s3-类">S3 类</a>
+<ul>
+<li><a href="#s3-类-1">S3 类</a></li>
+<li><a href="#s3-类泛型函数">S3 类泛型函数</a></li>
+<li><a href="#继承">继承</a></li>
+<li><a href="#示例">示例</a></li>
+</ul></li>
+<li><a href="#s4-类">S4 类</a>
+<ul>
+<li><a href="#s4-类-1">S4 类</a></li>
+<li><a href="#s4-类实现泛型函数">S4 类实现泛型函数</a></li>
+</ul></li>
+<li><a href="#对象的管理">对象的管理</a>
+<ul>
+<li><a href="#ls-列出对象">ls 列出对象</a></li>
+<li><a href="#rm-删除对象">rm 删除对象</a></li>
+<li><a href="#save-保存对象">save 保存对象</a></li>
+<li><a href="#查看对象的内部结构">查看对象的内部结构</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="r-语言的面向对象编程" class="section level1">
+<h1>R 语言的面向对象编程</h1>
+<ul>
+<li>R 中的所有东西都是对象</li>
+<li>R 支持<strong>封装(encapsulation)</strong></li>
+<li>R 类是<strong>多态(polymorphic)</strong>的</li>
+<li>R 允许<strong>继承(inheritance)</strong></li>
+</ul>
+</div>
+<div id="s3-类" class="section level1">
+<h1>S3 类</h1>
+<div id="s3-类-1" class="section level2">
+<h2>S3 类</h2>
+<p>S3 类的实例是通过构建一个列表的方式来创建的，这个列表的组件是该类的成员变量。
+类属性通过 <code>attr</code> 或者 <code>class</code> 函数手动设置，然后再定义各种泛型函数的实现方法</p>
+<ul>
+<li>R 中原始的类结构，即 S3 类</li>
+<li>大多数 R 中内置的类都是 S3 类的</li>
+<li>一个 S3 类包含：
+<ul>
+<li>一个列表</li>
+<li>一个类名属性</li>
+<li>调度(dispathc)功能：使泛型函数(generic function)的使用变成可能</li>
+</ul></li>
+</ul>
+</div>
+<div id="s3-类泛型函数" class="section level2">
+<h2>S3 类泛型函数</h2>
+</div>
+<div id="继承" class="section level2">
+<h2>继承</h2>
+</div>
+<div id="示例" class="section level2">
+<h2>示例</h2>
+</div>
+</div>
+<div id="s4-类" class="section level1">
+<h1>S4 类</h1>
+<div id="s4-类-1" class="section level2">
+<h2>S4 类</h2>
+</div>
+<div id="s4-类实现泛型函数" class="section level2">
+<h2>S4 类实现泛型函数</h2>
+</div>
+</div>
+<div id="对象的管理" class="section level1">
+<h1>对象的管理</h1>
+<div id="ls-列出对象" class="section level2">
+<h2>ls 列出对象</h2>
+</div>
+<div id="rm-删除对象" class="section level2">
+<h2>rm 删除对象</h2>
+</div>
+<div id="save-保存对象" class="section level2">
+<h2>save 保存对象</h2>
+</div>
+<div id="查看对象的内部结构" class="section level2">
+<h2>查看对象的内部结构</h2>
+</div>
+</div>

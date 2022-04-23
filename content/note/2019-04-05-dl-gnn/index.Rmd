@@ -1,5 +1,5 @@
 ---
-title: DL GNN
+title: GNN
 author: 王哲峰
 date: '2019-04-05'
 slug: dl-gnn
