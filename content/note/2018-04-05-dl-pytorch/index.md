@@ -1,5 +1,5 @@
 ---
-title: PyTorch 
+title: PyTorch 基础
 author: 王哲峰
 date: '2018-04-05'
 slug: dl-pytorch
@@ -7,16 +7,81 @@ categories:
   - deeplearning
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
 <details><summary>目录</summary><p>
 
 - [需要掌握的内容](#需要掌握的内容)
+- [PyTorch tensor 的创建](#pytorch-tensor-的创建)
+  - [tensor 的介绍](#tensor-的介绍)
+  - [tensor 的创建](#tensor-的创建)
+    - [直接创建](#直接创建)
+    - [依数值创建](#依数值创建)
+  - [tensor 的操作](#tensor-的操作)
+- [PyTorch 数据读取与预处理](#pytorch-数据读取与预处理)
+  - [Dataset 和 DataLoader](#dataset-和-dataloader)
+    - [使用 TorchVision, TorchText, TorchAudio dataset](#使用-torchvision-torchtext-torchaudio-dataset)
+    - [使用文件创建自定义的 Dataset](#使用文件创建自定义的-dataset)
+    - [2.1.3 torch.utils.data API](#213-torchutilsdata-api)
+- [PyTorch 数据预处理](#pytorch-数据预处理)
+  - [Transforms 示例](#transforms-示例)
+  - [torchvision transforms](#torchvision-transforms)
+  - [torchtext transforms](#torchtext-transforms)
+  - [torchaudio transforms](#torchaudio-transforms)
+- [PyTorch 数据并行](#pytorch-数据并行)
+  - [让模型跑在 GPU 上](#让模型跑在-gpu-上)
+  - [让模型跑在多个 GPU 上](#让模型跑在多个-gpu-上)
+- [PyTorch 动态图、自动求导](#pytorch-动态图自动求导)
+  - [计算图](#计算图)
+  - [Pytorch 动态图机制](#pytorch-动态图机制)
+  - [PyTorch 自动求导机制](#pytorch-自动求导机制)
+- [PyTorch Cheat Sheet](#pytorch-cheat-sheet)
+  - [Imports](#imports)
+  - [Tensors](#tensors)
+  - [Deep Learning](#deep-learning)
+  - [Data Utilities](#data-utilities)
 </p></details><p></p>
 
 # 需要掌握的内容
@@ -60,7 +125,7 @@ output:
     - [ ] https://github.com/pytorch/pytorch
     - [ ] https://github.com/onnx/tutorials
 
-# 1.PyTorch tensor 的创建
+# PyTorch tensor 的创建
 
 * 1.tensor 的简介及创建
    - tensor 是多维数组
@@ -100,7 +165,7 @@ output:
    - tensor 的数学运算
       - `add(input, aplha, other)`
 
-## 1.1 tensor 的介绍
+## tensor 的介绍
 
 tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程, 
 这里主要介绍 tensor 的概念和属性, 如 data, variable, device 等,
@@ -131,7 +196,7 @@ tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程,
             - `grad_fn`: fn 表示 function 的意思，记录创建 tensor 时用到的方法
             - `is_leaf`: 是否是叶子节点(tensor)
 
-## 1.2 tensor 的创建
+## tensor 的创建
 
 ```python
 from __future__ import print_function
@@ -139,7 +204,7 @@ import numpy as np
 import torch
 ```
 
-### 1.2.1 直接创建
+### 直接创建
 
 1. torch.tensor(): 从 data 创建 tensor api
 
@@ -199,7 +264,7 @@ import torch
     print(arr, t)
     ```
 
-### 1.2.2 依数值创建
+### 依数值创建
 
 - API
 
@@ -223,7 +288,7 @@ import torch
     print(id(out_t), id(t), id(t) == id(out_t))
     ```
 
-## 1.3 tensor 的操作
+## tensor 的操作
 
 > * 相加
 >   - `+`
@@ -323,7 +388,7 @@ import torch
     print(b)
     ```
 
-## 1.4 cuda tensor
+##cuda tensor
 
 ```python
 # let us run this cell only if cuda is available
@@ -343,14 +408,14 @@ if torch.cuda.is_available():
 
 
 
-# 2.PyTorch 数据读取与预处理
+# PyTorch 数据读取与预处理
 
-## 2.1 Dataset 和 DataLoader
+## Dataset 和 DataLoader
 
 > - Dataset 保存了数据的样本和标签
 > - DataLoader 将 Dataset 封装为可迭代对象, 便于访问样本
 
-### 2.1.1 使用 TorchVision, TorchText, TorchAudio dataset
+### 使用 TorchVision, TorchText, TorchAudio dataset
 
 * 加载相关库
 
@@ -404,7 +469,7 @@ plt.show()
 print(f"Label: {label}")
 ```
 
-### 2.1.2 使用文件创建自定义的 Dataset
+### 使用文件创建自定义的 Dataset
 
 > * `Dataset` 类需要实现以下方法
 >     - `__init__`
@@ -503,13 +568,16 @@ print(f"Label: {label}")
     - torch.utils.tensorboard
 
 
-# 3.PyTorch 数据预处理
+
+
+
+# PyTorch 数据预处理
 
 * torchvision.transforms
 * torchtext.transforms
 * torchaudio.transforms
 
-## 3.1 Transforms 示例
+## Transforms 示例
 
 ```python
 import torch
@@ -538,7 +606,7 @@ test_data = datasets.FashionMNIST(
 )
 ```
 
-## 3.2 torchvision transforms
+## torchvision transforms
 
 * Scriptable transforms
 * Compositions of transforms
@@ -550,17 +618,11 @@ test_data = datasets.FashionMNIST(
 * Automatic Augmentation transforms
 * Functional transforms
 
+## torchtext transforms
 
 
 
-
-
-
-## 3.3 torchtext transforms
-
-
-
-## 3.4 torchaudio transforms
+## torchaudio transforms
 
 
 
@@ -568,9 +630,9 @@ test_data = datasets.FashionMNIST(
 
 
 
-## 2.3 PyTorch 数据并行
+# PyTorch 数据并行
 
-### 2.3.1 让模型跑在 GPU 上
+## 让模型跑在 GPU 上
 
 ```python
 import torch
@@ -584,7 +646,7 @@ my_tensor = torch.ones(2, 2, dtype = torch.double)
 mytensor = my_tensor.to(device)
 ```
 
-### 2.3.2 让模型跑在多个 GPU 上
+## 让模型跑在多个 GPU 上
 
 > * PyTorch 默认使用单个 GPU 执行运算
 
@@ -665,109 +727,28 @@ for data in rand_loader:
 
 
 
-# 3.PyTorch nn
-
-A typical training procedure for a neural network is as follows:
-
-- Define the neural network that has some learnable parameters (or
-  weights)
-- Iterate over a dataset of inputs
-- Process input through the network
-- Compute the loss (how far is the output from being correct)
-- Propagate gradients back into the network's parameters
-- Update the weights of the network, typically using a simple update
-  rule: `weight = weight - learning_rate * gradient`
-
-## 定义神经网
-
-```python
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using {device} device")
-
-
-class Net(nn.Module):
-
-    def __init__(self):
-        super(Net, self).__init__()
-        # 1 input image channel, 6 output channels, 3x3 square convolution kernel
-        self.conv1 = nn.Conv2d(1, 6, 3)
-        self.conv2 = nn.Conv2d(6, 16, 3)
-        # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(16 * 6 * 6, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
-
-    def forward(self, x):
-        # Max pooling over a (2, 2) window
-        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
-        # If the size is a square you can only specify a single number
-        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        x = x.view(-1, self.num_flat_features(x))
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-
-        return x
-
-    def num_flat_features(self, x):
-        size = x.size()[1:]
-        num_features = 1
-        for s in size:
-            num_features *= s
-
-        return num_features
-
-
-net = Net().to(device)
-print(net)
-```
-
-```python
-params = list(net.parameters)
-print(len(params))
-print(params[0].size()) # conv1's .weight
-```
-
-```python
-net.zero_grad()
-out.backward(torch.randn(1, 10))
-```
 
 
 
 
 
-# 4.PyTorch 动态图、自动求导
+# PyTorch 动态图、自动求导
 
 - 4.1 计算图
-
    - 描述运算的有向无环图
-
       - Tensor 的 is_leaf 属性
-
       - Tensor 的 grad_fn 属性
-
 - 4.2 PyTorch 动态图机制
-
    - 动态图与静态图
-
 - 4.3 PyTorch 自动求导机制
-
    - torch.autograd.backward() 方法自动求取梯度
-
    - torch.autograd.grad() 方法可以高阶求导
-
    - note
       - 梯度不自动清零
       - 依赖叶节点的节点, requires_grad 默认为 True
       - 叶节点不能执行原位操作
 
-## 4.1 计算图
+## 计算图
 
 计算图是用来描述运算的有向无环图。主要有两个因素:节点、边。
 其中节点表示数据，如向量、矩阵、张量；而边表示运算，如加减乘除、卷积等。
@@ -789,10 +770,10 @@ y.backward()
 print(w.grad)
 ```
 
-## 4.2 Pytorch 动态图机制
+## Pytorch 动态图机制
 
 
-## 4.3 PyTorch 自动求导机制
+## PyTorch 自动求导机制
 
 - package `autograd`
 - torch.Tensor
@@ -896,202 +877,9 @@ print(y.requires_grad)
 print(x.eq(y).all())
 ```
 
-# 5.PyTorch 模型
+# PyTorch Cheat Sheet
 
-## 5.1 PyTorch 模型的创建
-
-## 5.2 PyTorch 模型容器
-
-
-
-
-
-
-
-# 6.PyTorch 权重初始化
-
-## 6.1 权重初始化方法
-
-正确的权重初始化可以加速模型的收敛，不恰当的权重初始化导致输出层的输出过大或者过小，
-最终导致梯度爆炸或者消失，使得模型无法训练
-
-- 使用与饱和激活函数 tanh 等的 Xavier 初始化方法
-- 非饱和激活函数 relu 等的 Kaiming 初始化方法
-
-# 7.PyTorch 损失函数
-
-# 8.PyTorhc 优化器
-
-# 9.PyTorch 评价指标
-
-
-
-
-# 10.PyTorch 模型保存和加载
-
-## 10.1 保存和加载模型权重参数
-
-PyTorch 将模型训练的学习到的权重参数保存在一个状态字典中, `state_dict`
-
-- 模型保存
-
-```python
-import torch
-import torchvision.models as models
-
-# 保存模型
-model = models.vgg16(pretrained = True)
-MODEL_PATH = "models/model_weights.pth"
-torch.save(
-    model.state_dict(), 
-    MODEL_PATH
-)
-```
-
-- 模型加载
-
-```python
-import torch
-import torchvision.models as models
-
-# do not specify pretrained=True, i.e. do not load default weights
-model = models.vgg16()
-MODEL_PATH = "models/model_weights.pth"
-model.load_state_dict(
-    torch.load(MODEL_PATH)
-)
-model.eval()
-```
-
-## 10.2 保存和加载整个模型
-
-- 模型保存
-
-```python
-import torch
-import torchvision.models as models
-
-model = models.vgg16(pretrained = True)
-MODEL_PATH = "models/model.pth"
-torch.save(the_model, MODEL_PATH)
-```
-
-- 模型加载
-
-```python
-import torch
-
-MODEL_PATH = "models/model.pth"
-model = torch.load(MODEL_PATH)  # require pickle module
-```
-
-## 10.3 导出模型为 ONNX
-
-* PyTorch 还具有原生 ONNX 导出支持。然而，鉴于 PyTorch 执行图的动态特性，
-  导出过程必须遍历执行图以生成持久的 ONNX 模型。出于这个原因，
-  应该将适当大小的测试变量传递给导出例程
-* [ONNX 教程](https://github.com/onnx/tutorials)
-
-```python
-import torch
-import torch.onnx as onnx
-
-input_image = torch.zeros((1, 3, 224, 224))
-```
-
-## 10.4 保存和加载 checkpoint
-
-- 加载相关库
-
-```python
-import torch
-import torch.nn as nn
-import torch.optim as optim
-```
-
-- 定义和初始化模型
-
-```python
-class Net(nn.Module):
-
-    def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-net = Net()
-print(net)
-```
-
-- 初始化优化器
-
-```python
-optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)
-```
-
-- 保存 checkpoint
-
-```python
-EPOCH = 5
-PATH = "model.pt"
-LOSS = 0.4
-
-torch.save({
-    "epoch": EPOCH,
-    "model_state_dict": net.state_dict(),
-    "optimizer_state_dict": optimizer.state_dict(),
-    "loss": LOSS,
-}, PATH)
-```
-
-- 加载 checkpoint
-
-```python
-PATH = "model.pt"
-
-# 初始化模型
-model = Net()
-# 初始化优化器
-optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9)
-
-# 加载 checkpoint
-checkpoint = torch.load(PATH)
-
-model.load_state_dict(checkpoint["model_state_dict"])
-optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-
-epoch = checkpoint["epoch"]
-loss = checkpoint["loss"]
-
-model.eval()
-# - or - 
-model.train()
-```
-
-
-
-
-
-
-
-
-
-# 11.PyTorch Cheat Sheet
-
-## 11.1 Imports
+## Imports
 
 ```python
 # General
@@ -1125,7 +913,7 @@ import torch.distributed as dist
 from torch.multiprocessing import Process
 ```
 
-## 11.2 Tensors
+## Tensors
 
 ```python   
 import torch
@@ -1167,7 +955,7 @@ net.to(device)
 x = x.to(device)
 ```
 
-## 11.3 Deep Learning
+## Deep Learning
 
 ```python
 import torch.nn as nn
@@ -1200,7 +988,7 @@ scheduler.step()
 optim.lr_scheduler.X
 ```
 
-## 11.4 Data Utilities
+## Data Utilities
 
 ```python
 # Dataset

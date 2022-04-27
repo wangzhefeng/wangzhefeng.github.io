@@ -67,9 +67,7 @@ details[open] summary {
     - [序列化选项](#序列化选项)
     - [解析选项](#解析选项)
   - [JSON 序列化](#json-序列化)
-</p></details>
-
-<p></p>
+</p></details><p></p>
 
 # XML
 
