@@ -32,20 +32,23 @@ disable_highlight: true
 
 ### TODO
 
-- :white_check_mark: 评论在一些页面不启用
-- :white_check_mark: 集成 Disqus 和 Utterances 到评论区
-- :black_square_button: Disqus 评论功能出现广告，暂时不知道咋回事，先启用 utteranc 功能
-- :white_check_mark: 首页内容更新
-- :black_square_button: 弄懂后台 JS、HTML、CSS 的原理
-- :white_check_mark: 处理页面中标题的字体样式
-- :white_check_mark: 头像问题处理
-- :black_square_button: 部署到私有云服务器上
-  - [ ] 查找部署教程
-  - [ ] 购买云服务器
-  - [ ] 部署
-- :white_check_mark: 图片的保存问题处理
-- :black_square_button: 加载速度问题处理
-- :black_square_button: 微信屏蔽问题处理
+* :white_check_mark: 评论在一些页面不启用
+* :white_check_mark: 集成 Disqus 和 Utterances 到评论区
+* :black_square_button: Disqus 评论功能出现广告，暂时不知道咋回事，先启用 utteranc 功能
+* :white_check_mark: 首页内容更新
+* :black_square_button: 弄懂后台 JS、HTML、CSS 的原理
+* :white_check_mark: 处理页面中标题的字体样式
+* :white_check_mark: 头像问题处理
+* :black_square_button: 部署到私有云服务器上
+    - [ ] 查找部署教程
+    - [ ] 购买云服务器
+    - [ ] 部署
+* :white_check_mark: 图片的保存问题处理
+* :black_square_button: 加载速度问题处理
+    - [ ] 图片加载速度问题
+* :black_square_button: 微信屏蔽问题处理
+    - [x] 申请恢复访问
+    - [ ] 部署相关文件
 
 ### 本站架构
 

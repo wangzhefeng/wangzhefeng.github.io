@@ -1,7 +1,7 @@
 ---
 title: 语言基础
 author: 王哲峰
-date: '2020-01-01'
+date: '2020-01-03'
 slug: js-basic
 categories:
   - 前端
@@ -53,6 +53,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [概览](#概览)
 - [语法](#语法)
   - [区分大小写](#区分大小写)
   - [标识符](#标识符)
@@ -69,15 +70,22 @@ details[open] summary {
     - [var 定义变量](#var-定义变量)
     - [var 声明作用域](#var-声明作用域)
     - [var 声明提升](#var-声明提升)
+    - [var 反复声明](#var-反复声明)
+    - [var 全局声明](#var-全局声明)
   - [let 声明](#let-声明)
     - [let 声明变量](#let-声明变量)
-    - [暂时性死区](#暂时性死区)
+    - [let 不允许反复声明](#let-不允许反复声明)
+    - [暂时性死区(let 声明不会提升)](#暂时性死区let-声明不会提升)
     - [全局声明](#全局声明)
     - [条件声明](#条件声明)
     - [for 循环中的 let 声明](#for-循环中的-let-声明)
   - [const 声明](#const-声明)
-    - [const 声明变量](#const-声明变量)
-    - [声明风格及最佳实践](#声明风格及最佳实践)
+    - [const 声明变量必须初始化且不可改变](#const-声明变量必须初始化且不可改变)
+    - [const 不允许重复声明](#const-不允许重复声明)
+    - [const 声明范围是块作用域](#const-声明范围是块作用域)
+    - [const 声明的限制只适用于它指向的变量的引用](#const-声明的限制只适用于它指向的变量的引用)
+    - [for 循环中的 const 声明](#for-循环中的-const-声明)
+  - [声明风格及最佳实践](#声明风格及最佳实践)
 - [数据类型](#数据类型)
   - [typeof 操作符](#typeof-操作符)
   - [Undefined](#undefined)
@@ -121,6 +129,25 @@ details[open] summary {
 - [函数](#函数)
   - [函数基本知识](#函数基本知识)
 </p></details><p></p>
+
+# 概览
+
+JavaScript 的核心语言特性在 ECMA-262 中以伪语言 ECMAScript 的形式来定义。
+ECMAScript 包含 所有基本语法、操作符、数据类型和对象，
+能完成基本的计算任务，但没有提供获得输入和产生输出的机制。
+理解 ECMAScript 及其复杂的细节是完全理解浏览器中 JavaScript 的关键。
+下面总结一下 ECMAScript 中的基本元素:
+
+* ECMAScript 中的基本数据类型包括 `Undefined`、`Null`、`Boolean`、`Number`、`String` 和 `Symbol`
+    - 与其他语言不同，ECMAScript 不区分整数和浮点值，只有 Number 一种数值数据类型
+    - `Object` 是一种复杂数据类型，它是这门语言中所有对象的基类
+* 严格模式为这门语言中某些容易出错的部分施加了限制
+* ECMAScript 提供了 C 语言和类 C 语言中常见的很多基本操作符，包括数学操作符、布尔操作符、 关系操作符、相等操作符和赋值操作符等
+* ECMAScript 中的流控制语句大多是从其他语言中借鉴而来的，比如 `if` 语句、`for` 语句和 `switch` 语句等
+* ECMAScript 中的函数与其他语言中的函数不一样
+    - 不需要指定函数的返回值，因为任何函数可以在任何时候返回任何值。 
+    - 不指定返回值的函数实际上会返回特殊值 `undefined`
+
 
 # 语法
 
@@ -230,7 +257,7 @@ details[open] summary {
 
 |关键字        |是否掌握              |
 |-------------|---------------------|
-|`await`       |:black_square_button:|
+|`await`      |:black_square_button:|
 
 # 变量
 
@@ -238,13 +265,13 @@ details[open] summary {
 
 ### var 定义变量
 
-- 定义不初始化
+* 定义不初始化
 
 ```js
 var message;  // undefined
 ```
 
-- 定义并初始化
+* 定义并初始化
     - 只是一个简单的赋值, 可以改变保存的值, 也可以改变值的类型
 
 ```js
@@ -252,17 +279,19 @@ var message = "hi"
 message = 100;  // 合法, 但不推荐
 ```
 
-- 重复声明
+* 定义多个变量
 
 ```js
-var name = "Matt";
-var name = "John";
-console.log(name);  // "John"
+var message = "hi", 
+    found = false, 
+    age = 29;
 ```
 
 ### var 声明作用域
 
-- 使用 var 操作符定义的变量会成为包含它的函数的局部变量
+> var 声明的范围是函数作用域
+
+- 使用 `var` 操作符定义的变量会成为包含它的函数的局部变量
 
 ```js
 function test() {
@@ -272,7 +301,7 @@ test();
 console.log(message);  // 出错
 ```
 
-- 在函数内部定义变量时省略 var 操作符可以创建一个全局变量
+- 在函数内部定义变量时省略 `var` 操作符可以创建一个全局变量
 
 ```js
 function test() {
@@ -282,12 +311,6 @@ test();
 console.log(message);  // "hi"
 ```
 
-- 定义多个变量
-
-```js
-var message = "hi", found = false, age = 29;
-```
-
 <div class="warning" 
      style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
     <span>
@@ -295,6 +318,7 @@ var message = "hi", found = false, age = 29;
             <b>Note</b>
         </p>
         <p style='margin-left:1em;'>
+            虽然可以通过省略var操作符定义全局变量，但不推荐这么做。在局部作用域中定 义的全局变量很难维护，也会造成困惑。这是因为不能一下子断定省略 var 是不是有意而 为之。在严格模式下，如果像这样给未声明的变量赋值，则会导致抛出 ReferenceError</br></br>
             在严格模式下, 不能定义名为 eval 和 arguments 的变量, 否则会导致语法错误
         </p>
         <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
@@ -306,26 +330,36 @@ var message = "hi", found = false, age = 29;
 
 ### var 声明提升
 
-- 使用 var 关键字声明的变量会自动提升(hoist)到函数作用域顶部, 
+- 使用 `var` 关键字声明的变量会自动提升(hoist)到函数作用域顶部, 
   所谓的“提升”(hoist)，也就是把所有变量声明都拉到函数作用域的顶部 
 
 ```js
+// 正常代码
 function foo() {
-    console.log(age);
+    var age = 26;
+    console.log("age", age);
+}
+foo();  // age: 26
+
+// 变量声明提升--不会报错
+function foo() {
+    console.log("age:", age);
     var age = 26;
 }
-foo(); // undefined
+foo(); // age: undefined
 
-// 等价代码
+// 变量声明提升--不会报错, 与上面代码等价
 function foo() {
     var age;
-    console.log(age);
+    console.log("age:", age);
     age = 26;
 }
-foo(); // undefined
+foo(); // age: undefined
 ```
 
-- 反复多次使用 var 声明统一变量也没有问题
+### var 反复声明
+
+* 反复多次使用 `var` 声明同一变量也没有问题
 
 ```js
 function foo() {
@@ -337,13 +371,28 @@ function foo() {
 foo(); // 36
 ```
 
+```js
+var name = "Matt";
+var name = "John";
+console.log(name);  // "John"
+```
+
+### var 全局声明
+
+* 使用 `var` 在全局作用域中声明的变量会成为 `window` 对象的属性, 
+
+```js
+var name = "Matt";
+console.log(window.name); // "Matt"
+```
+
 ## let 声明
 
 ### let 声明变量
 
-* let 跟 var 最明显的区别是: 
-    - let 声明的范围是**块**作用域
-    - var 声明的范围是**函数**作用域
+`let` 跟 `var` 最明显的区别是: `let` 声明的范围是**块作用域**；`var` 声明的范围是**函数作用域**
+
+* `var` 声明的范围是**函数作用域**:
 
 ```js
 if (true) {
@@ -353,6 +402,8 @@ if (true) {
 console.log(name);  // Matt
 ```
 
+* `let` 声明的范围是**块作用域**
+
 ```js
 if (true) {
     let age = 26;
@@ -361,17 +412,21 @@ if (true) {
 console.log(age);  // ReferenceError: age 没有定义
 ```
 
-- let 不允许同一个块作用域中出现冗余声明, 会导致报错
+### let 不允许反复声明
+
+* `let` 不允许同一个块作用域中出现冗余声明, 会导致报错，而 `var` 可以
 
 ```js
 var name;
 var name;
+```
 
+```js
 let age;
 let age; // //SyntaxError;标识符age已经声明过了
 ```
 
-- JavaScript 引擎会记录用于变量声明的标识符及其所在的块作用域, 
+* JavaScript 引擎会记录用于变量声明的标识符及其所在的块作用域, 
   因此嵌套使用相同的标识符不会报错，这是因为同一个块中没有重复声明
 
 ```js
@@ -383,7 +438,9 @@ if (true) {
     var name = "Matt";
     console.log(name); // "Matt"
 }
+```
 
+```js
 // let
 let age = 30;
 console.log(age); //30
@@ -394,28 +451,33 @@ if (true) {
 }
 ```
 
-- 对声明冗余报错不会因为混用 `let` 和 `var` 而受影响。
-  这两个关键字声明的并不是不同类型的变量，它们只是指出变量在相关作用域如何存在
+* 对声明冗余报错不会因为混用 `let` 和 `var` 而受影响。
+  这两个关键字声明的并不是不同类型的变量，
+  它们只是指出变量在相关作用域如何存在
 
 ```js
 var name;
 let name; // SyntaxError
+```
 
+```js
 let age;
 var age; // SyntaxError
 ```
 
-### 暂时性死区
+### 暂时性死区(let 声明不会提升)
 
-* let 声明的变量不会在作用域中被提升
-    - 在 let 声明之前的执行瞬间被称为"暂时性死区"(temporal dead zone), 
-      在此阶段引用任何后面才声明的变量都会抛出 ReferenceError。
+* `let` 声明的变量不会在作用域中被提升。
+  在 `let` 声明之前的执行瞬间被称为"暂时性死区"(temporal dead zone), 
+  在此阶段引用任何后面才声明的变量都会抛出 `ReferenceError`
 
 ```js
 // name 会被提升
 console.log(name); // undefined
 var name = "Matt";
+```
 
+```js
 // age 不会被提升
 console.log(age); // ReferenceError: age 没有定义
 let age = 26;
@@ -423,22 +485,25 @@ let age = 26;
 
 ### 全局声明
 
-- 使用 let 在全局作用域中声明的变量不会成为 window 对象的属性, var 声明的变量则会
+* 使用 `let` 在全局作用域中声明的变量不会成为 `window` 对象的属性, 
+  `var` 声明的变量则会
 
 ```js
 var name = "Matt";
 console.log(window.name); // "Matt"
+```
 
+```js
 let age = 26;
 console.log(window.age); // undefined
 ```
 
 ### 条件声明
 
-- 因为 let 的作用域是块, 所以不可能检查前面是否已经使用 let 声明过同名变量, 
-  同时也就不可能在没有声明的情况下声明它。而 var 声明变量时, 由于声明会被提升, 
+* 因为 `let` 的作用域是块, 所以不可能检查前面是否已经使用 `let` 声明过同名变量, 
+  同时也就不可能在没有声明的情况下声明它。而 `var` 声明变量时, 由于声明会被提升, 
   JavaScript 引擎会自动将多余的声明在作用域顶部合并为一个声明
-- let 声明不能依赖条件声明模式
+- `let` 声明不能依赖条件声明模式
 
 ```html
 <script>
@@ -448,13 +513,16 @@ console.log(window.age); // undefined
 
 <script>
     // 假设脚本不确定页面中是否已经声明了同名变量, 那么可以假设还没有声明过
-    // 这里没有问题, 因为可以被作为一个提升声明来处理, 不需要检查之前是否声明过同名变量
+    // 这里没有问题, 因为可以被作为一个提升声明来处理, 
+    // 不需要检查之前是否声明过同名变量
     var name = "Matt";
     
     // 如果 age 之前声明过, 这里会报错
     let age = 26;
 </script>
 ```
+
+* 使用 `try/catch` 语句或 `typeof` 操作符也不能解决
 
 ```html
 <script>
@@ -475,27 +543,36 @@ console.log(window.age); // undefined
     catch(error) {
         let age;           // age 被限制在 catch {} 作用域内
     }
-    age = 26;          // 因此这个赋值形同全局赋值
+    age = 26;              // 因此这个赋值形同全局赋值
 </script>
 ```
 
 ### for 循环中的 let 声明
 
-- 在 let 出现之前, for 循环定义的迭代变量会渗透到循环体外部; 使用 let 之后, for 循环定义的迭代变量不会渗透到循环体外部
+在 `let` 出现之前, `for` 循环定义的迭代变量会渗透到循环体外部; 
+使用 `let` 之后, `for` 循环定义的迭代变量不会渗透到循环体外部
+
+* `for` 循环中的 `var` 定义的迭代变量会渗透到循环体外部
 
 ```js
 for (var i = 0; i < 5; ++i) {
     console.log("hello world!");
 }
 console.log(i); // 5
+```
 
+* `for` 循环中的 `let` 定义的迭代变量不会渗透到循环体外部
+
+```js
 for (let i = 0; i < 5; ++i) {
     console.log("hello world!");
 }
 console.log(i); // ReferenceError: i 没有定义
 ```
 
-- 使用 var 的时候, 在退出循环的时, 迭代变量保存的是导致循环退出的值, 之后执行超时逻辑时, 所有的迭代变量都是同一个变量; 而使用 let 声明迭代变量时, JavaScript 引擎在后台为每个循环声明一个新的迭代变量
+* 使用 `var` 的时候, 在退出循环的时, 迭代变量保存的是导致循环退出的值, 
+  之后执行超时逻辑时, 所有的迭代变量都是同一个变量; 
+  而使用 `let` 声明迭代变量时, JavaScript 引擎在后台为每个循环声明一个新的迭代变量
 
 ```js
 for (var i = 0; i < 5, ++i) {
@@ -509,16 +586,17 @@ for (let i = 0; i < 5; ++i) {
 
 ## const 声明
 
-### const 声明变量
+### const 声明变量必须初始化且不可改变
 
-- const 声明与 let 声明唯一一个重要区别是它声明变量时必须同时初始化变量, 且尝试修改 const 声明的变量会导致运行时错误
+* `const` 声明与 `let` 声明唯一一个重要区别是它声明变量时必须同时初始化变量, 
+  且尝试修改 `const` 声明的变量会导致运行时错误
 
 ```js
 const age = 26;
 age = 36; // TypeError: 给常量赋值
 ```
 
-- const 不允许重复声明
+### const 不允许重复声明
 
 ```js
 const name = "Matt";
@@ -526,7 +604,7 @@ const name = "John";
 console.log(name); // SyntaxError: Identifier 'name' has already been declared
 ```
 
-- const 声明的作用域也是块
+### const 声明范围是块作用域
 
 ```js
 const name = "Matt";
@@ -536,14 +614,21 @@ if (true) {
 console.log(name); // "Matt"
 ```
 
-- const 声明的限制只适用于它指向的变量的引用, 如果 const 变量引用的是一个对象, 那么修改这个对象内部的属性并不违反 const 对象不能修改变量的限制
+### const 声明的限制只适用于它指向的变量的引用
+
+* 如果 `const` 变量引用的是一个对象, 那么修改这个对象内部的属性并不违反 `const` 对象不能修改变量的限制
 
 ```js
 const person = {};
 person.name = "Matt"; // ok
 ```
 
-- 不能用 const 来声明迭代变量(因为迭代变量会自增), JavaScript 引擎会为 for 循环中的 let 声明分别创建独立的变量实例, 但 const 不行; 但是, 如果用 const 声明一个不被修改的 for 循环变量, 那是可以的, 也就是说, 每次迭代只是创建一个新变量, 这对 for-of 和 for-in 循环特别有意义
+### for 循环中的 const 声明
+
+* 不能用 `const` 来声明迭代变量(因为迭代变量会自增)
+    - JavaScript 引擎会为 `for` 循环中的 `let` 声明分别创建独立的变量实例, 但 `const` 不行; 
+    - 如果用 `const` 声明一个不被修改的 `for` 循环变量, 那是可以的, 
+      也就是说, 每次迭代只是创建一个新变量, 这对 `for-of` 和 `for-in` 循环特别有意义
 
 ```js
 for (const i = 0; i < 10; ++i) {
@@ -568,45 +653,48 @@ for (const value of [1, 2, 3, 4, 5]) {
 // 1, 2, 3, 4, 5
 ```
 
-### 声明风格及最佳实践
+## 声明风格及最佳实践
 
-- 不使用 var
-
-    - 有了 let 和 const, 大多数开发者会发现自己不再需要 var 了。限制自己只使用 let 和 const 有助于提升代码质量, 因为变量有了明确的作用域、声明位置, 以及不变的值。
-
-- const 优先, let 次之
-
-    - 使用 const 声明可以让浏览器运行时强制保持变量不变, 也可以让静态代码分析工具提前发现不合法的赋值操作。因此, 很多开发者认为应该优先使用 const 来声明变量。
-    - 只在提前知道未来会有修改时, 再使用 let。这样可以让开发者更有信心地推断某些变量的值永远不会变, 同时也能迅速发现因意外赋值导致的非预期行为。
+* 不使用 `var`
+    - 有了 `let` 和 `const`, 大多数开发者会发现自己不再需要 `var` 了。
+      限制自己只使用 `let` 和 `const` 有助于提升代码质量, 
+      因为变量有了明确的作用域、声明位置, 以及不变的值
+* `const` 优先, `let` 次之
+    - 使用 `const` 声明可以让浏览器运行时强制保持变量不变, 
+      也可以让静态代码分析工具提前发现不合法的赋值操作。
+      因此, 很多开发者认为应该优先使用 `const` 来声明变量
+    - 只在提前知道未来会有修改时, 再使用 `let`。
+      这样可以让开发者更有信心地推断某些变量的值永远不会变, 
+      同时也能迅速发现因意外赋值导致的非预期行为
 
 # 数据类型
 
-ECMAScript 有 6 种简单数据类型(也称为原始类型): 
-
-- Undefined
-- Null
-- Boolean
-- Number
-- String
-- Symbol
-
-1 种复杂数据类型: 
-
-- Object (对象)
-
-    - 无序名值对的集合
+> ECMAScript 有 6 种简单数据类型(也称为原始类型): 
+> 
+> * Undefined
+> * Null
+> * Boolean
+> * Number
+> * String
+> * Symbol
+> 
+> ECMAScript 有 1 种复杂数据类型: 
+> 
+> * Object: 无序名值对的集合
+>   - function[TODO]
 
 ## typeof 操作符
 
-- 因为 ECMAScript 的类型系统是松散的, 所以需要一种手段来确定任意变量的数据类型。typeof 操作符就是为此而生的, 对一个值使用 typeof 操作
-	- "undefined" 表示值未定义
-	- "boolean" 表示布尔值
-	- "string" 表示值为字符串
-	- "number" 表示值为数值
-	- "object" 表示值为对象(而不是函数) 或 null
-	- "function" 表示值为函数
-	- "symbol" 表示值为符号
-- 示例
+因为 ECMAScript 的类型系统是松散的, 所以需要一种手段来确定任意变量的数据类型。
+typeof 操作符就是为此而生的, 对一个值使用 typeof 操作得到的结果:
+
+* "undefined" 表示值未定义
+* "boolean" 表示布尔值
+* "string" 表示值为字符串
+* "number" 表示值为数值
+* "object" 表示值为对象(而不是函数) 或 null
+* "function" 表示值为函数
+* "symbol" 表示值为符号
 
 ```js
 let message = "some string";
@@ -617,8 +705,6 @@ console.log(typeof null); // object
 ```
 
 ## Undefined
-
-
 
 ## Null
 
@@ -633,18 +719,22 @@ console.log(typeof null); // object
 - Symbol(符号) 是 ECMAScript 6 新增的数据类型
 - 符号是原始值, 且符号实例是唯一、不可变的
 - 符号的用途是确保对象属性使用唯一标识符, 不会发生属性冲突的危险
-- 尽管听起来跟私有属性有点类似, 但符号并不是为了提供私有属性的行为才增加的(尤其是因为 Object API 提供了方法, 可以更方便地发现符号属性)。相反, 符号就是用来创建唯一记号, 进而用作非字符串形式的对象属性
+- 尽管听起来跟私有属性有点类似, 但符号并不是为了提供私有属性的行为才增加的
+  (尤其是因为 Object API 提供了方法, 可以更方便地发现符号属性)。
+  相反, 符号就是用来创建唯一记号, 进而用作非字符串形式的对象属性
 
 ### 符号的基本用法
 
-- 符号需要使用 Symbol() 函数初始化。因为符号本身是原始类型, 所以 typeof 操作符对符号返回 symbol
+- 符号需要使用 Symbol() 函数初始化。因为符号本身是原始类型, 
+  所以 typeof 操作符对符号返回 symbol
 
 ```js
 let sym = Symbol();
 console.log(typeof sym); // symbol
 ```
 
-- 调用 Symbol() 函数时, 可以传入一个字符串参数作为对符号的描述(description), 将来可以通过这个字符串来调试代码, 但是这个字符串参数与符号定义或表示完全无关
+- 调用 Symbol() 函数时, 可以传入一个字符串参数作为对符号的描述(description), 
+  将来可以通过这个字符串来调试代码, 但是这个字符串参数与符号定义或表示完全无关
 
 ```js
 let genericSymbol = Symbol();
@@ -656,7 +746,9 @@ console.log(genericSymbol == otherGenericSymbol); // false
 console.log(fooSymbol == otherFooSymbol); // false
 ```
 
-- 符号没有字面量语法, 这也是它们发挥作用的关键。按照规范, 你只要创建 `Symbol()` 实例并将其用作对象的新属性, 就可以保证它不会覆盖已有的对象属性, 无论是符号属性还是字符串属性。
+- 符号没有字面量语法, 这也是它们发挥作用的关键。按照规范, 
+  你只要创建 `Symbol()` 实例并将其用作对象的新属性, 
+  就可以保证它不会覆盖已有的对象属性, 无论是符号属性还是字符串属性。
 
 ```js
 let genericSymbol = Symbol();
@@ -666,7 +758,9 @@ let fooSymbol = Symbol("foo");
 console.log(fooSymbol); // Symbol(foo)
 ```
 
-- Symbol() 函数不能与 new 关键字一起作为构造函数使用。这样做是为了避免创建符号包装对象, 像使用 Boolean、String 或 Number 那样, 它们都支持构造函数且可用于初始化包含原始值的包装对象
+- Symbol() 函数不能与 new 关键字一起作为构造函数使用。
+  这样做是为了避免创建符号包装对象, 像使用 Boolean、String 或 Number 那样, 
+  它们都支持构造函数且可用于初始化包含原始值的包装对象
 
 ```js
 let myBoolean = new Boolean();
