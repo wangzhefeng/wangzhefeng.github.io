@@ -89,10 +89,35 @@ details[open] summary {
 - [数据类型](#数据类型)
   - [typeof 操作符](#typeof-操作符)
   - [Undefined](#undefined)
+    - [变量声明未初始化、变量未声明](#变量声明未初始化变量未声明)
+    - [undefined 是假值](#undefined-是假值)
   - [Null](#null)
+    - [变量初始化 nul](#变量初始化-nul)
+    - [undefined 与 null 表面上相等](#undefined-与-null-表面上相等)
+    - [null 是假值](#null-是假值)
   - [Boolean](#boolean)
+    - [其他类型的布尔值的等价形式及转换](#其他类型的布尔值的等价形式及转换)
   - [Number](#number)
+    - [整数](#整数)
+    - [浮点值](#浮点值)
+      - [浮点数定义](#浮点数定义)
+      - [转换为整数](#转换为整数)
+      - [科学计数法](#科学计数法)
+      - [浮点数精度](#浮点数精度)
+    - [值的范围](#值的范围)
+      - [最大最小值](#最大最小值)
+      - [无穷值](#无穷值)
+    - [NaN](#nan)
+      - [NaN](#nan-1)
+      - [NaN 属性](#nan-属性)
+    - [数值转换](#数值转换)
   - [String](#string)
+    - [字符字面量](#字符字面量)
+    - [字符串的特点](#字符串的特点)
+    - [转换为字符串](#转换为字符串)
+    - [模板字面量](#模板字面量)
+    - [模板字面量标签函数](#模板字面量标签函数)
+    - [原始字符串](#原始字符串)
   - [Symbol](#symbol)
     - [符号的基本用法](#符号的基本用法)
     - [使用全局符号注册表](#使用全局符号注册表)
@@ -148,7 +173,6 @@ ECMAScript 包含 所有基本语法、操作符、数据类型和对象，
     - 不需要指定函数的返回值，因为任何函数可以在任何时候返回任何值。 
     - 不指定返回值的函数实际上会返回特殊值 `undefined`
 
-
 # 语法
 
 ## 区分大小写
@@ -157,10 +181,10 @@ ECMAScript 包含 所有基本语法、操作符、数据类型和对象，
 
 ## 标识符
 
-- 标识符包含: 变量、函数、属性、函数参数
-- 字母、下划线、美元符号开头
-- 字母、数字、下划线、美元符号组成
-- 惯例: 驼峰大小写, 第一个单词的首字母小写, 后面每个单词的首字母大写
+* 标识符包含: 变量、函数、属性、函数参数
+* 字母、下划线、美元符号开头
+* 字母、数字、下划线、美元符号组成
+* 惯例: 驼峰大小写, 第一个单词的首字母小写, 后面每个单词的首字母大写
 
 ## 注释
 
@@ -181,18 +205,17 @@ ECMAScript 包含 所有基本语法、操作符、数据类型和对象，
 
 ## 严格模式
 
-- 严格模式是一种不同的 JavaScript 解析和执行模型, 
+* 严格模式是一种不同的 JavaScript 解析和执行模型, 
   ECMAScript 3 的一些不规范写法在这种模式下会被处理, 
   对于不安全的活动将抛出错误。选择这种语法形式的目的是不破坏 ECMAScript 3 语法
-- 要对整个脚本启用严格模式, 在脚本的开头加上 `"use strict";`
-- 所有现代浏览器都支持严格模式
+* 要对整个脚本启用严格模式, 在脚本的开头加上 `"use strict";`
+* 所有现代浏览器都支持严格模式
 
 ## 语句
 
-- 语句以分号结尾, 不是必须的, 建议加
-- 多条语句可以合并到一个 C 语言风格的代码块中。代码块由 `{}` 包含。
-  控制流语句在执行多条语句时要求必须有代码块, 
-  最佳实践是始终在控制语句中使用代码块
+* 语句以分号结尾, 不是必须的, 建议加
+* 多条语句可以合并到一个 C 语言风格的代码块中。代码块由 `{}` 包含。
+  控制流语句在执行多条语句时要求必须有代码块, 最佳实践是始终在控制语句中使用代码块
 
 # 关键字与保留字
 
@@ -503,7 +526,7 @@ console.log(window.age); // undefined
 * 因为 `let` 的作用域是块, 所以不可能检查前面是否已经使用 `let` 声明过同名变量, 
   同时也就不可能在没有声明的情况下声明它。而 `var` 声明变量时, 由于声明会被提升, 
   JavaScript 引擎会自动将多余的声明在作用域顶部合并为一个声明
-- `let` 声明不能依赖条件声明模式
+* `let` 声明不能依赖条件声明模式
 
 ```html
 <script>
@@ -693,26 +716,432 @@ typeof 操作符就是为此而生的, 对一个值使用 typeof 操作得到的
 * "string" 表示值为字符串
 * "number" 表示值为数值
 * "object" 表示值为对象(而不是函数) 或 null
+    - null 被认为是一个对空对象的引用
 * "function" 表示值为函数
 * "symbol" 表示值为符号
 
 ```js
 let message = "some string";
-console.log(typeof message); // "string"
-console.log(typeof(message)); // "string"
-console.log(typeof 95); // number
-console.log(typeof null); // object
+console.log(typeof message);   // "string"
+console.log(typeof(message));  // "string"
+console.log(typeof 95);        // number
+console.log(typeof null);      // object
 ```
+
+<div class="warning" 
+     style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>Note</b>
+        </p>
+        <p style='margin-left:1em;'>
+             <ul>
+                <li>typeof 是一个操作符而不是函数，所以不需要参数，但可以使用参数</li>
+                <li>
+                    严格来讲，函数在 ECMAScript 中被认为是对象，并不代表一种数据类型。
+                    可是，函数也有自己的特殊属性。为此，就有必要通过 typeof 操作符来区分函数和其他对象。
+                </li>
+             </ul>
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b></b> 
+            <i></i>
+        </p>
+    </span>
+</div>
 
 ## Undefined
 
+Undefined 类型只有一个值，就是特殊值 `undefined`
+
+### 变量声明未初始化、变量未声明
+
+当使用 `var` 或 `let` 声明了变量但没有初始化时，
+就相当于给变量赋予了 `undefined` 值
+
+一般来说，永远不要显式地给某个变量设置 `undefined` 值，字面值 `undefined` 主要用于比较。
+增加这个特殊值的目的就是为了正式明确空对象 `null` 和未初始化变量的区别
+
+```js
+let message;
+console.log(message == undefined);  // true
+
+let message = undefined;
+console.log(message == undefined);  // true
+```
+
+* 包含 `undefined` 值的变量跟未定义变量是有区别的，对未声明的变量执行除 `typeof` 操作时，
+  都会报错。对为声明的变量调用 `delete` 也不会报错，但这个操作没什么用，实际上在严格模式下会抛出错误
+* 无论是声明还是未声明，`typeof` 返回的都是字符串 "undefined"。
+  逻辑上讲这是对的，因为虽然严格来讲这两个变量存在根本性差异，但它们都无法执行实际操作
+* 即使未初始化的变量会被自动赋予 `undefined` 值，但仍然建议在声明变量的同时进行初始化。
+  这样，当 `typeof` 返回 "undefined" 时，你就会知道那是因为给定的变量尚未声明，
+  而不是声明了但未初始化
+
+```js
+let message;
+
+console.log(message);  // undefined
+console.log(age);  // 报错
+
+
+console.log(typeof message);  // "undefined"
+console.log(typeof age);  // "undefined"
+```
+
+### undefined 是假值
+
+`undefined` 是一个假值。因此，如果需要，可以用更简洁的方式检测它。
+不过要记住，也有很多 其他可能的值同样是假值。
+所以一定要明确自己想检测的就是 `undefined` 这个字面值，而不仅仅是假值
+
+```js
+let message;
+
+if (message) {
+    // 这个块不会执行
+}
+
+if (!message) {
+    // 这个块不会执行
+}
+
+if (age) {
+    // 这里会报错
+}
+```
+
 ## Null
+
+Null 类型只有一个值，即特殊值 `null`
+
+逻辑上讲，`null` 值表示一个空对象指针，
+这也是给 `typeof` 传一个 `null` 会返回 "object" 的原因
+
+
+### 变量初始化 nul
+
+在定义将来要保存对象值的变量时，建议使用 `null` 来初始化，不要使用其他值，
+这样，只要检查这个变量的值是不是 `null` 就可以知道这个变量是否在后来被重新赋予了一个对象的引用
+
+任何时候，只要变量要保存对象，而当时又没有那个 对象可保存，就要用 null 来填充该变量。
+这样就可以保持 null 是空对象指针的语义，并进一步将其 与 undefined 区分开来
+
+```js
+let car = null;
+console.log(typeof car);  // "object"
+
+if (car != null) {
+    // car 是一个对象的引用
+}
+```
+
+### undefined 与 null 表面上相等
+
+`undefined` 值是由 `null` 值派生而来的，因此 ECMA-262 将它们定义为表面上相等
+
+用 等于操作符(`==`)比较 `null` 和 `undefined` 始终返回 `true`，
+但是要注意，这个操作符会为了比较而转换它的操作数
+
+```js
+console.log(null == undefined);  // true
+```
+
+### null 是假值
+
+`null` 是一个假值。因此，如果需要，可以用更简洁的方式检测它。
+不过要记住，也有很多 其他可能的值同样是假值。
+所以一定要明确自己想检测的就是 `null` 这个字面值，而不仅仅是假值
+
+```js
+let message = null;     // null
+let age;                // undefined
+
+if (message) {
+    // 这个块不会执行
+}
+
+if (!message) {
+    // 这个块会执行
+}
+
+if (age) {
+    // 这个块不会执行
+}
+
+if (!age) {
+    // 这个块会执行
+}
+```
 
 ## Boolean
 
+Boolean 类型有两个字面值: `true` 和 `false`
+这两个布尔值不同于数值，因此 `true` 不等于 `1`，`false` 不等于 `0`
+
+### 其他类型的布尔值的等价形式及转换
+
+虽然布尔值只有两个，但所有其他 ECMAScript 类型的值都有相应的布尔值的等价形式。
+要将一个其他类型的值转换为布尔值，可以调用特定的 `Boolean()` 转型函数。
+`Boolean()` 转型函数可以在任意类型的数据上调用，而且始终返回一个布尔值。
+什么值能转换为 `true` 或 `false` 的规则取决于数据类型和实际的值。
+
+下表总结了不同类型与布尔值之间的转换规则:
+
+|数据类型  |转换为 true 的值    |转换为 false 的值 |
+|---------|------------------|----------------|
+|Undefined |N/A(不存在)        |undefined        |
+|Boolean  |true              |false           |
+|String   |非空字符串          |\"\"(空字符串)     |
+|Number   |非零数值(包括无穷值) |0, NaN          |
+|Object   |任意对象            |null            |
+
+
+```js
+let message = "Hello world!";
+let messageAsBoolean = Boolean(message);
+```
+
 ## Number
 
+Number 类型使用 IEEE 754 格式表示整数和浮点数(双精度值)。
+不同的数值类型相应地也有不同的数值字面量格式
+
+### 整数
+
+* 十进制整数
+* 八进制整数
+    - `0` + `0~7` 
+    - 如果字面量中包含的数字超出了应有的范围，就会忽略前缀的零，
+      后面的数字序列会被当成十进制数
+    - 八进制字面量在严格模式下是无效的，会导致 JavaScript 引擎抛出语法错误
+* 十六进制整数
+    - `0x` + `0~9` 以及 `A~F` 
+    - 字母大小写均可
+
+```js
+let intNum = 55;  // 整数
+let octalNum1 = 070; // 八进制的 56
+let octalNum2 = 079; // 无效的八进制值，当成 79 处理
+let hexNum1 = 0xA;  // 十六进制 10
+let hexNum2 = 0x1f;  // 十六进制 31
+```
+
+<div class="warning" 
+     style='background-color:#E9D8FD; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em;'>
+    <span>
+        <p style='margin-top:1em; text-align:left'>
+            <b>Note</b>
+        </p>
+        <p style='margin-left:1em;'>
+             <ul>
+                <li>使用八进制和十六进制格式创建的数值在所有的数学操作中都被视为十进制数值</li>
+                <li>
+                    由于 JavaScript 保存数值的方式，实际中可能存在正零(+0)和负零(-0)。
+                    正零和负零在所有情况下都被认为是等同的
+                </li>
+             </ul>
+        </p>
+        <p style='margin-bottom:1em; margin-right:1em; text-align:right; font-family:Georgia'> 
+            <b></b> 
+            <i></i>
+        </p>
+    </span>
+</div>
+
+
+### 浮点值
+
+#### 浮点数定义
+
+要定义浮点值，数值中必须包含小数点，而且小数点后面必须至少有一个数字。
+虽然小数点前面不是必须有整数，但推荐加上
+
+```js
+let floatNum1 = 1.1;
+let floatNum2 = 0.1;
+let floatNum3 = .1;  // 有效，但不推荐
+```
+
+#### 转换为整数
+
+因为存储浮点值使用的内存空间是存储整数值的两倍，
+所以 ECMAScript 总是想方设法把值转换为整数:
+
+* 在小数点后面没有数字的情况下，数值就会变成整数
+* 如果数值本身就是整数，只是小数点后面跟着 0，那它也会被转换为整数
+
+```js
+let floatNum1 = 1.;  // 1
+let floatNum2 = 10.0; // 10
+```
+
+#### 科学计数法
+
+对于非常大或非常小的数值，浮点值可以用科学计数法来表示，
+科学计数法用于表示一个应该乘以 10 的给定次幂的数值。
+
+ECMAScript 科学计数法的格式要求是一个数值(整数或浮点数)后跟一个大写或小写的字母 `e`，
+再加上一个要乘以10的多少次幂
+
+默认情况下，ECMAScript 会将小数点后至少包含 6 个零的浮点值转换为科学计数法
+
+```js
+let floatNum = 3.125e7; // 312500000
+```
+
+#### 浮点数精度
+
+浮点数的精度最高可达 17 为小数，但在计算中远不如整数精确。
+由于存在舍入错误，导致很难测试特定的浮点值。因此永远不要测试某个特定的浮点值
+
+```js
+if (a + b == 0.3) {  // 别这么干！
+  console.log("You got 0.3.")
+}
+```
+
+### 值的范围
+
+由于内存的限制，ECMAScript 并不支持表示这个世界上的所有数值
+
+#### 最大最小值
+
+* ECMAScript 可以表示的最小数值保存在 `Number.MIN_VALUE` 中，
+  这个值在浏览器中是 `5e-324`
+* ECMAScript 可以表示的最大数值保存在 `Number.MAX_VALUE` 中，
+  这个值在多数浏览器中是 `1.797 693 134 862 315 7e+308`
+
+#### 无穷值
+
+如果某个计算得到的数值结果超出了 JavaScript 可以表示的范围，
+那么这个数值会被自动转换为一个特殊的 `Infinity`(无穷)值
+
+* 任何无法表示的负数以 `-Infinity`(负无穷大)表示，
+  使用 `Number.NEGATIVE_INFINITY` 也可以获取负 Infinity
+* 任何无法表示的正数以 `Infinity`(正无穷大)表示，
+  使用 `Number.POSITIVE_INFINITY`  也可以获取正 Infinity
+
+如果计算返回正 `Infinity` 或负 `Infinity`，则该值将不能再进一步用于任何计算，
+这是因为 `Infinity` 没有可用于计算的数值表示形式。
+要确定一个值是不是有限大(介于最小值和最大值之间)，
+可以使用 `isFinite()` 函数
+
+```js
+let result = Number.MAX_VALUE + Number.MAX_VALUE;
+console.log(isFinite(result));  // false
+```
+
+### NaN
+
+#### NaN
+
+特殊的数值 `NaN`: 不是数值(Not a Number)，
+用于表示本来要返回数值的操作失败了(而不是抛出错误)，
+比如，用 0 除任意数值在其他语言中通常都会导致错误，从而中止代码执行，
+但在 ECMAScript 中，`0`、`+0`、`-0` 相除会返回 `NaN`
+
+```js
+console.log(0 / 0);  // NaN
+console.log(-0 / +0);  // NaN
+```
+
+如果分子是非 0 值，分母是有符号 0 或 无符号 0，则会返回 `Infinity` 或 `-Infinity`
+
+```js
+console.log(5 / 0);  // Infinity
+console.log(5 / -0);  // -Infinity
+```
+
+#### NaN 属性
+
+`NaN` 有几个独特的属性:
+
+* 首先，任何涉及 `NaN` 的操作始终返回 `NaN`，在连续多步计算时这可能是个问题
+* 其次，`NaN` 不等于包括 `NaN` 在内的任何值。为此，ECMAScript 提供了 `isNaN()`，
+  该函数接收一个参数，可以是任意数据类型，然后判断这个参数是否“不是数值”。
+  把一个值传给 `isNaN()` 后，该函数会尝试把它转换为数值，某些非数值的值可以直接转换成数值，
+  任何不能转换为数值的值都会导致这个函数返回 `true`
+
+  
+
+```js
+console.log(NaN == NaN);  // false
+```
+
+
+
+### 数值转换
+
+将非数值转换为数值: 
+
+* `Number()` 
+    - 转型函数，可用于任何数据类型 
+* `parseInt()`
+    - 用于将字符串转换为数值
+* `parseFloat()`
+    - 用于将字符串转换为数值 
+
+
+
 ## String
+
+String(字符串)数据类型表示零或多个16位 Unicode 字符序列。
+字符串可以使用如下符号进行标示：
+
+* `"`
+* `'`
+* `\``
+
+```js
+let firstName = "John";
+let lastName = 'Jacob';
+let lastName = `Jingleheimerschmidt`;
+```
+
+字符串属性:
+
+* length
+
+
+### 字符字面量
+
+字符串数据类型包含一些字符字面量，用于表示非打印字符或有其他用途的字符。
+并且转义字符表示一个字符:
+
+|字面量   |含义                                                                       |
+|--------|--------------------------------------------------------------------------|
+|`\n`    |换行                                                                       |
+|`\t`    |制表                                                                       |
+|`\b`    |退格                                                                       |
+|`\r`    |回车                                                                       |
+|`\f`    |换页                                                                       |
+|`\\`    |反斜杠(\\)                                                                 |
+|`\'`    |单引号(`'`)，在字符串以单引号标示时使用，例如 'He said, \\'hey.\\''              |
+|`\"`    |双引号(`"`)，在字符串以双引号标示时使用，例如 "He said, \\"hey.\\""              |
+| \\`    |反引号(`\``)，在字符串以反引号标示时使用                                        |
+|`\xnn`  |以十六进制编码 `nn` 表示的字符(其中 `n` 是十六进制数字 `0~F`)，例如 `\x41` 等于 "A"|
+|`\unnnn`|以十六进制编码 `nnnn` 表示的 Unicode 字符(其中 `n` 是十六进制数字 `0~F`)|
+
+
+
+
+### 字符串的特点
+
+
+### 转换为字符串
+
+
+### 模板字面量
+
+
+
+### 模板字面量标签函数
+
+
+### 原始字符串
+
+
 
 ## Symbol
 
