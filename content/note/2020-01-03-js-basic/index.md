@@ -111,11 +111,15 @@ details[open] summary {
       - [NaN](#nan-1)
       - [NaN 属性](#nan-属性)
     - [数值转换](#数值转换)
+      - [Number()](#number-1)
+      - [parseInt()](#parseint)
+      - [parseFloat()](#parsefloat)
   - [String](#string)
     - [字符字面量](#字符字面量)
     - [字符串的特点](#字符串的特点)
     - [转换为字符串](#转换为字符串)
     - [模板字面量](#模板字面量)
+    - [字符串插值](#字符串插值)
     - [模板字面量标签函数](#模板字面量标签函数)
     - [原始字符串](#原始字符串)
   - [Symbol](#symbol)
@@ -124,12 +128,34 @@ details[open] summary {
     - [使用符号作为属性](#使用符号作为属性)
     - [常用内置符号](#常用内置符号)
     - [Symbol.asyncIterator](#symbolasynciterator)
+    - [Symbol.hasInstance](#symbolhasinstance)
+    - [Symbol.isConcatSpreadable](#symbolisconcatspreadable)
+    - [Symbol.iterator](#symboliterator)
+    - [Symbol.match](#symbolmatch)
+    - [Symbol.replace](#symbolreplace)
+    - [Symbol.search](#symbolsearch)
+    - [Symbol.species](#symbolspecies)
+    - [Symbol.split](#symbolsplit)
+    - [Symbol.toPrimitive](#symboltoprimitive)
+    - [Symbol.toStringTag](#symboltostringtag)
+    - [Symbol.unscopables](#symbolunscopables)
   - [Object](#object)
 - [操作符](#操作符)
   - [一元操作符](#一元操作符)
+    - [递增/递减操作符](#递增递减操作符)
+      - [前缀递增-递减](#前缀递增-递减)
+      - [后缀递增-递减](#后缀递增-递减)
+      - [递增和递减原则](#递增和递减原则)
+    - [一元加和减](#一元加和减)
   - [位操作符](#位操作符)
   - [布尔操作符](#布尔操作符)
+    - [逻辑非](#逻辑非)
+    - [逻辑与](#逻辑与)
+    - [逻辑或](#逻辑或)
   - [乘性操作符](#乘性操作符)
+    - [乘法操作符](#乘法操作符)
+    - [除法操作符](#除法操作符)
+    - [取模操作符](#取模操作符)
   - [指数操作符](#指数操作符)
   - [加性操作符](#加性操作符)
   - [关系操作符](#关系操作符)
@@ -152,7 +178,6 @@ details[open] summary {
   - [with](#with)
   - [switch](#switch)
 - [函数](#函数)
-  - [函数基本知识](#函数基本知识)
 </p></details><p></p>
 
 # 概览
@@ -1058,18 +1083,24 @@ console.log(5 / -0);  // -Infinity
 `NaN` 有几个独特的属性:
 
 * 首先，任何涉及 `NaN` 的操作始终返回 `NaN`，在连续多步计算时这可能是个问题
-* 其次，`NaN` 不等于包括 `NaN` 在内的任何值。为此，ECMAScript 提供了 `isNaN()`，
-  该函数接收一个参数，可以是任意数据类型，然后判断这个参数是否“不是数值”。
-  把一个值传给 `isNaN()` 后，该函数会尝试把它转换为数值，某些非数值的值可以直接转换成数值，
-  任何不能转换为数值的值都会导致这个函数返回 `true`
-
-  
+* 其次，`NaN` 不等于包括 `NaN` 在内的任何值
+    - 为此，ECMAScript 提供了 `isNaN()`，
+      该函数接收一个参数，可以是任意数据类型，然后判断这个参数是否“不是数值”。
+      把一个值传给 `isNaN()` 后，该函数会尝试把它转换为数值，
+      某些非数值的值可以直接转换成数值，
+      任何不能转换为数值的值都会导致这个函数返回 `true`
+    - `isNaN()` 可以用于测试对象。此时，首先会调用对象的 `valueOf()` 方法，
+      然后再确定返回的值是否可以转换为数值，如果不能，再调用 `toString()` 方法，
+      并测试其返回值，这通常是 ECMAScript 内置函数和操作符的工作方式
 
 ```js
 console.log(NaN == NaN);  // false
+console.log(isNaN(NaN));  // true
+console.log(isNaN(10));  // false, 10 是数值
+console.log(isNaN("10"));  // false, 可以转换为数值 10
+console.log(isNaN("blue"));  // true, 不可以转换为数值
+console.log(isNaN(true));  // false, 可以转换为数值 1
 ```
-
-
 
 ### 数值转换
 
@@ -1082,7 +1113,81 @@ console.log(NaN == NaN);  // false
 * `parseFloat()`
     - 用于将字符串转换为数值 
 
+#### Number()
 
+`Number()` 函数基于如下规则执行转换:
+
+* 数值
+    - 直接返回
+* `null` -> `0`
+* `undefined` -> `NaN`
+* 布尔值
+    - `true` -> `1`
+    - `false` -> `0`
+* 字符串(String)，应用以下规则
+    - 如果字符串包含**数值字符**，包括数值字符前面带加、减号的情况，则转换为一个十进制数值，忽略前面的零
+    - 如果字符串包含有效的**浮点值**格式，如 `"1.1"`，则会转换为相应的浮点值，忽略前面的零
+    - 如果字符串包含有效的**十六进制**格式，如 `"0xf"`，则会转换为与该十六进制值对应的十进制整数值
+    - 如果是**空字符串** -> `0`
+    - 如果字符串包含除上述情况之外的其他字符 -> `NaN`
+* 对象(Object)
+    - 调用对象的 `valueOf()` 方法，并按照上述规则转换返回的值。如果转换结果是 `NaN`，
+      则调用 `toString()` 方法，再按照转换字符串的规则转换
+
+```js
+let num1 = Number("Hello world!");  // NaN
+let num2 = Number("");  // 0
+let num3 = Number("000011");  // 11
+let num4 = Number(true);  // 1
+```
+
+#### parseInt()
+
+通常在需要得到整数时可以优先使用 `parseInt()` 函数。
+`parseInt()` 函数更专注于字符串是否包含数值模式。
+
+* 字符串最前面的空格会被忽略，从第一个非空格字符开始转换
+* 如果第一个字符不是数值字符、加号、减号，立即返回 `NaN`
+* 如果第一个字符是数值字符、加号、减号，则继续一次检测每个字符，直到字符串末尾，或碰到非数值字符
+* 如果字符串的第一个字符是数值字符，可以识别不同的整数格式，十进制、八进制、十六进制
+* 不同的数值格式很容易混淆，因此 `parseInt()` 也接收第二个参数，
+  用于指定底数(进制数)，如果提供了进制参数，那么字符串前面的前缀可以省略，
+  因为不传底数参数相当于让 `parseInt()` 自己决定如何解析，所以为了避免解析出错，
+  建议始终传给它第二个参数
+
+```js
+let num1 = parseInt("123blue");  // 1234
+let num2 = parseInt("");  // NaN
+let num3 = parseInt("0xA");  // 10
+let num4 = parseInt("22.5");  // 22
+let num5 = parseInt("70");  // 70
+let num6 = parseInt("0xf");  // 15
+let num7 = parseInt("0xAF");  // 175
+let num8 = parseInt("AF");  // 175
+let num9 = parseInt("AF");  // NaN
+```
+
+#### parseFloat()
+
+`parseFloat()` 函数的工作方式跟 `parseInt()` 函数类似
+
+* 从位置 0 开始检测每个字符
+* 也是解析到字符串末尾或者解析到一个无效的浮点数值字符为止。
+  这意味着第一次出现的小数点是有效的，但第二次出现的小数点就无效了，
+  此时字符串的剩余字符都会被忽略
+* 始终忽略字符串开头的零，这个函数能识别前面讨论的所有浮点格式，以及十进制格式，
+  因为 `parseFloat()` 只解析十进制数值，因此不能指定底数
+    - 十六进制数值始终会返回 0
+* 如果字符串表示整数，没有小数点或者小数点后面只有一个零，则返回整数
+
+```js
+let num1 = parseFloat("1234blue");  // 1234
+let num2 = parseFloat("0xA");  // 0
+let num3 = parseFloat("22.5");  // 22.5
+let num4 = parseFloat("22.34.5");  // 22.34
+let num5 = parseFloat("0908.5");  // 908.5
+let num6 = parseFloat("3.125e7");  // 31250000
+```
 
 ## String
 
@@ -1099,9 +1204,10 @@ let lastName = 'Jacob';
 let lastName = `Jingleheimerschmidt`;
 ```
 
-字符串属性:
+TODO 字符串属性:
 
-* length
+* length：字符串的长度，这个属性返回字符串中 16 位字符的个数，
+  如果字符串中包含双字节字符，那么 length 属性返回的值可能不是准确的字符数
 
 
 ### 字符字面量
@@ -1123,51 +1229,361 @@ let lastName = `Jingleheimerschmidt`;
 |`\xnn`  |以十六进制编码 `nn` 表示的字符(其中 `n` 是十六进制数字 `0~F`)，例如 `\x41` 等于 "A"|
 |`\unnnn`|以十六进制编码 `nnnn` 表示的 Unicode 字符(其中 `n` 是十六进制数字 `0~F`)|
 
-
-
-
 ### 字符串的特点
 
+ECMAScript 中的字符串是不可变的(immutable)，意思是一旦创建，它们的值就不能变了。
+要修改某个变量的字符串值，必须先销毁原始的字符串，然后将包含新值的另一个字符串保存到该变量
+
+```js
+let lang = "Java";
+lang = lang + "Script";
+```
+
+整个过程首先会分配一个足够容纳 10 个字符的空间，然后填充上 "Java" 和 "Script"，
+最后销毁原始的字符串 "Java" 和字符串 "Script"，因为这两个字符串都没有用了
 
 ### 转换为字符串
 
+有两种方式把一个值转换为字符串:
+
+* `toString()`
+    - 几乎所有值都有的方法，`null` 和 `undefined` 值没有这个方法，
+      唯一的用途就是返回当前值的字符串等价物
+    - 字符串值也有这个方法，该方法只是简单地返回自身的一个副本
+    - 多数情况下，不接收任何参数。不过，在对数值调用这个方法时，
+      可以接收一个底数参数，即以什么底数来输出数值的字符串表示。
+      默认情况下，返回数值的十进制字符串表示，而通过传入参数，可以得到数值的
+      二级制、八进制、十六进制，或者其他任何有效基数的字符串表示
+
+```js
+let age = 11;
+let ageAsString = age.toString();  // 字符串 "11"
+let found = true;
+let foundAsString = found.toString();  // 字符串 "true"
+```
+
+```js
+let num = 10;
+console.log(num.toString());  // "10"
+console.log(num.toString(2));  // "1010"
+console.log(num.toString(8));  // "12"
+console.log(num.toString(10));  // "10"
+console.log(num.toString(16));  // "a"
+```
+
+* `String()`
+    - 如果不确定一个值是不是 `null` 或 `undefined`，可以使用 `String()` 转型函数，
+      它始终会返回表示相应类型值的字符串。`String()` 函数遵循以下规则:
+        - 如果值有 `toString()` 方法，则调用该方法(不传参数)并返回结果
+        - 如果值是 `null`，返回 `"null"`
+        - 如果值是 `undefined`，返回 `"undefined"`
+
+```js
+let value1 = 10;
+let value2 = true;
+let value3 = null;
+let value4;
+
+console.log(String(value1)); // "10"
+console.log(String(value2)); // "true"
+console.log(String(value3)); // "null"
+console.log(String(value4)); // "undefined"
+```
+
+* 号操作符给一个值加上一个空字符串""也可以将其转换为字符串
+
+```js
+// TODO
+```
 
 ### 模板字面量
 
+ECMAScript 6 新增了使用模板字面量定义字符串的能力
 
+* 与使用单引号或双引号不同，模板字面量保留换行符，可以跨行定义字符串
+
+```js
+let myMultiLineString = 'first line\nsecond line';
+let myMultiLineTemplateLiteral = `first line
+second line`;
+
+console.log(myMultiLineString);
+// first line
+// second line
+
+console.log(myMultiLineTemplateLiteral);
+// first line
+// second line
+
+console.log(myMultiLineString === myMultiLineTemplateLiteral); // true
+```
+
+* 顾名思义，模板字面量在定义模板时特别有用
+
+```js
+let pageHTML = `
+<div>
+    <a href="#">
+        <span>Jake</span>
+    </a>
+</div>
+`;
+```
+
+* 由于模板字面量会保持反引号内部的空格，因此在使用时要格外注意。
+  格式正确的模板字符串看起来可能缩进不当
+
+```js
+// 这个模板字面量在换行符之后有25个空格符
+let myTemplateLiteral = `first line
+                         second line`;
+console.log(myTemplateLiteral.length); // 47
+```
+
+```js
+// 这个模板字面量以一个换行符开头
+let secondTemplateLiteral = `
+first line
+second line`;
+console.log(secondTemplateLiteral[0] === '\n');  // true
+```
+
+
+```js
+// 这个模板字面量没有意料之外的字符
+let thirdTemplateLiteral = `first line
+second line`;
+console.log(thirdTemplateLiteral);
+// first line
+// second line
+```
+
+### 字符串插值
+
+模板字面量最常用的一个特性是支持字符串插值，也就是可以在一个连续定义中插入一个或多个值
+
+技术上讲，模板字面量不是字符串，而是一种特殊的 JavaScript 句法表达式，只不过求值后得到的是字符串。
+模板字面量在定义时立即求值并转换为字符串实例，任何插入的变量也会从它们最接近的作用域中取值。
+所有插入的值都会使用 `toString()` 强制转型为字符串，而且任何 JavaScript 表达式都可以用于插值
+
+* 字符串插值通过在 `{}` 中使用一个 JavaScript 表达式实现:
+
+```js
+let value = 5;
+let exponent = "second";
+
+// 以前，字符串插值
+let interpolateString = 
+value + " to the " + exponent + " power is " + (value * value);
+
+// 现在，使用模板字面量
+let interpolatedTemplateLiteral = 
+`${value} to the ${exponent} power is ${ value * value }`;
+```
+
+* 嵌套的模板字符串无须转义
+
+
+```js
+console.log(`Hello, ${ `World` }!`); // Hello, World!
+```
+
+* 将表达式转换为字符串时会调用 `toString()`
+
+```js
+let foo = { toString: () => 'World' };
+console.log(`Hello, ${ foo }!`);  // Hellow, World!
+```
+
+* 在插值表达式中可以调用函数和方法
+
+```js
+function capitalize(word) {
+    return `${ word[0].toUpperCase() }${ word.slice(1) }`;
+}
+
+console.log(`${ capitalize('hello') }, ${ capitalize('world') }!`); 
+// Hello, World!
+```
+
+* 模板也可以插入自己之前的值
+
+```js
+let value = '';
+function append() {
+    value = `${value}abc`;
+    console.log(value);
+}
+append();  // abc
+append();  // abcabc
+append();  // abcabcabc
+```
 
 ### 模板字面量标签函数
+
+模板字面量也支持定义**标签函数(tag function)**，而通过标签函数可以自定义插值行为。
+标签函数会接收被插值记号分割后的模板和对每个表达式求值的结果
+
+标签函数本身是一个常规函数，通过前缀到模板字面量来应用自定义行为
+
+```js
+let a = 6;
+let b = 9;
+
+function simpleTag(strings, 
+                   aValExpression, 
+                   bValExpression, 
+                   sumExpression) {
+    console.log(strings);
+    console.log(aValExpression);
+    console.log(bValExpression);
+    console.log(sumExpression);
+
+    return 'foobar';
+}
+
+let untaggedResult = `${ a } + ${ b } = ${ a + b }`;
+let taggedResult = simpleTag`${ a } + ${ b } = ${ a + b }`;
+// ["", " + ", " = ", ""]
+// 6
+// 9
+// 15
+
+console.log(untaggedResult);  // "6 + 9 = 15"
+console.log(taggedResult);  // "foobar"
+```
+
+* 因为表达式参数的数量时可变的，所以通常应该使用剩余操作符(rest operator)将它们收集到一个数组中
+
+```js
+let a = 6;
+let b = 9;
+
+function simpleTag(string ...expressions) {
+    console.log(strings);
+    for (const expression of expressions) {
+        console.log(expression);
+    }
+
+    return 'foobar';
+}
+
+let taggedResult = simpleTag`${ a } + ${ b } = ${ a + b }`;
+// ["", " + ", " = ", ""]
+// 6
+// 9
+// 15
+```
+
+* 对于有 n 个插值的模板字面量，传给标签函数的表达式参数的个数始终是 n，
+  而传给标签函数第一个参数所包含的字符串个数则始终是 n + 1。
+  因此，如果想把这些字符串和对表达式求值的结果拼接起来作为默认返回的字符串，
+  需要进行如下操作
+  
+
+```js
+let a = 6;
+let b = 9;
+
+function zipTag(strings, ...expressions) {
+    return strings[0] + expressions.map((e, i) => `${e}${strings[i + 1]}`).join('');
+}
+
+let untaggedResult = `${ a } + ${ b } = ${ a + b }`;
+let taggedResult = zipTag`${ a } + ${ b } = ${ a + b }`;
+
+console.log(untaggedResult);  // "6 + 9 = 15"
+console.log(taggedResult);  // "6 + 9 = 15"
+```
 
 
 ### 原始字符串
 
+使用模板字面量可以直接获取原始的模板字面量内容(如换行符或 Unicode 字符)，
+而不是被转换后的字符表示。为此可以使用默认的 `String.raw` 标签函数
 
+* Unicode 示例
+
+```js
+// \u00A9 是版权符号
+console.log(`\u00A9`);  // ©
+console.log(String.raw`\u00A9`); // \u00A9
+```
+
+* 换行符示例
+
+```js
+console.log(`first line \nsecond line`); 
+// first line
+// second line
+
+console.log(String.raw`first line\nsecond line`);  
+// "first line\nsecond line"
+```
+
+```js
+// 对实际的换行符来说是不行的
+console.log(`first line
+second line`);
+// first line
+// second line
+
+console.log(String.raw`first line
+second line`);
+// first line
+// second line
+```
+
+* 可以通过标签函数的第一个参数，即字符串数组的 `.raw` 属性取得每个字符串的原始内容
+
+```js
+function printRaw(strings) {
+    console.log('Actual characters:');
+    for (const string of strings) {
+        console.log(string);
+    }
+
+    console.log('Escaped characters:');
+    for (const rawString of strings.raw) {
+        console.log(rawString);
+    }
+}
+
+printRaw`\u00A9${ 'and' }\n`;
+// Actual characters:
+// ©
+// 换行符
+// Excaped characters:
+// \u00A9
+// \n
+```
 
 ## Symbol
 
-- Symbol(符号) 是 ECMAScript 6 新增的数据类型
-- 符号是原始值, 且符号实例是唯一、不可变的
-- 符号的用途是确保对象属性使用唯一标识符, 不会发生属性冲突的危险
-- 尽管听起来跟私有属性有点类似, 但符号并不是为了提供私有属性的行为才增加的
+* Symbol(符号) 是 ECMAScript 6 新增的数据类型
+* 符号是原始值, 且符号实例是唯一、不可变的
+* 符号的用途是确保对象属性使用唯一标识符, 不会发生属性冲突的危险
+* 尽管听起来跟私有属性有点类似, 但符号并不是为了提供私有属性的行为才增加的
   (尤其是因为 Object API 提供了方法, 可以更方便地发现符号属性)。
   相反, 符号就是用来创建唯一记号, 进而用作非字符串形式的对象属性
 
 ### 符号的基本用法
 
-- 符号需要使用 Symbol() 函数初始化。因为符号本身是原始类型, 
-  所以 typeof 操作符对符号返回 symbol
+* 符号需要使用 `Symbol()` 函数初始化。因为符号本身是**原始类型**, 
+  所以 `typeof` 操作符对符号返回 `symbol`
 
 ```js
 let sym = Symbol();
 console.log(typeof sym); // symbol
 ```
 
-- 调用 Symbol() 函数时, 可以传入一个字符串参数作为对符号的描述(description), 
+* 调用 `Symbol()` 函数时, 可以传入一个字符串参数作为对符号的描述(description), 
   将来可以通过这个字符串来调试代码, 但是这个字符串参数与符号定义或表示完全无关
 
 ```js
 let genericSymbol = Symbol();
 let otherGenericSymbol = Symbol();
+
 let fooSymbol = Symbol("foo");
 let otherFooSymbol = Symbol("foo");
 
@@ -1175,7 +1591,7 @@ console.log(genericSymbol == otherGenericSymbol); // false
 console.log(fooSymbol == otherFooSymbol); // false
 ```
 
-- 符号没有字面量语法, 这也是它们发挥作用的关键。按照规范, 
+* 符号没有字面量语法, 这也是它们发挥作用的关键。按照规范, 
   你只要创建 `Symbol()` 实例并将其用作对象的新属性, 
   就可以保证它不会覆盖已有的对象属性, 无论是符号属性还是字符串属性。
 
@@ -1187,8 +1603,8 @@ let fooSymbol = Symbol("foo");
 console.log(fooSymbol); // Symbol(foo)
 ```
 
-- Symbol() 函数不能与 new 关键字一起作为构造函数使用。
-  这样做是为了避免创建符号包装对象, 像使用 Boolean、String 或 Number 那样, 
+* `Symbol()` 函数不能与 `new` 关键字一起作为构造函数使用。
+  这样做是为了避免创建符号包装对象, 像使用 `Boolean`、`String` 或 `Number` 那样, 
   它们都支持构造函数且可用于初始化包含原始值的包装对象
 
 ```js
@@ -1211,70 +1627,100 @@ console.log(typeof myWrappedSymbol); // "object"
 
 ### 使用全局符号注册表
 
+如果运行时的不同部分需要共享和重用符号实例，那么可以用一个字符串作为键，
+在全局符号注册表中创建并重用符号，为此需要使用 `Symbol.for()` 方法
+
+* `Symbol.for()` 对每个字符串键都执行幂等操作。第一次使用某个字符串调用时，
+  它会检查全局运行时注册表，发现不存在对应的符号，于是就会生成一个新符号实例并添加到注册表中。
+  后续使用相同的字符串的调用同样会检查注册表，发现存在于该字符串对应的符号，然后就会返回该符号实例
+* 即使采用相同的符号描述，在全局注册表中定义的符号跟使用 Symbol() 定义的符号也并不等同
+
 ### 使用符号作为属性
 
 ### 常用内置符号
 
 ### Symbol.asyncIterator
 
+
+### Symbol.hasInstance
+
+
+### Symbol.isConcatSpreadable
+
+### Symbol.iterator
+
+
+### Symbol.match
+
+
+### Symbol.replace
+
+
+### Symbol.search
+
+
+### Symbol.species
+
+
+
+### Symbol.split
+
+
+### Symbol.toPrimitive
+
+
+### Symbol.toStringTag
+
+
+### Symbol.unscopables
+
 ## Object
 
-- ECMAScript 中的`对象(object)`其实就是一组数据和功能的组合
+ECMAScript 中的`对象(object)`其实就是一组数据和功能的组合
+对象通过 `new` 操作符后跟对象类型的名称来创建, 
+可以通过创建 Object 类型的实例来创建自己的对象, 
+然后再给对象添加属性和方法
 
-- 严格来讲, ECMA-262 中对象的行为不一定适合 JavaScript 中的其他对象
-
+* 严格来讲, ECMA-262 中对象的行为不一定适合 JavaScript 中的其他对象
     - 比如浏览器环境中的 BOM 对象 和 DOM 对象, 都是由宿主环境定义和提供的宿主对象
     - 而宿主对象不受 ECMA-262 约束, 所以它们可能会也可能不会继承 Object
-
-- 对象通过 `new` 操作符后跟对象类型的名称来创建, 可以通过创建 Object 类型的实例来创建自己的对象, 然后再给对象添加属性和方法
-
-- Object 的实例本身并不是很有用, 但理解与它相关的概念非常重要。类似 Java 中的 java.lang.Object, ECMAScript 中的 Object 也是派生其他对象的基类。Object 类型的所有属性和方法在派生的对象上同样存在。每个Object 实例都有如下属性和方法: 
-
-    - constructor
-
-        - 用于创建当前对象的函数
-
-    - hasOwnProperty(propertyName)
-
-        - 用于判断当前对象实例(不是原型)上是否存在给定的属性。要检查的属性名必须是字符串或符号
-
-    - isPrototypeOf(object)
-
+* Object 的实例本身并不是很有用, 但理解与它相关的概念非常重要。
+  类似 Java 中的 `java.lang.Object`, ECMAScript 中的 Object 也是派生其他对象的基类。
+  Object 类型的所有属性和方法在派生的对象上同样存在。每个 Object 实例都有如下属性和方法: 
+    - `constructor`
+        - 用于创建当前对象的函数，比如 `Object()` 函数
+    - `hasOwnProperty(propertyName)`
+        - 用于判断当前对象实例(不是原型)上是否存在给定的属性。要检查的属性名必须是**字符串**或**符号**
+    - `isPrototypeOf(object)`
         - 用于判断当前对象是否为另一个对象的原型
-
-    - propertyIsEnumerable(propertyName)
-
-        - 用于判断给定的属性是否可以使用 for-in 语句枚举。属性名必须是字符串或符号
-
-    - toLocaleString()
-
+    - `propertyIsEnumerable(propertyName)`
+        - 用于判断给定的属性是否可以使用 `for-in` 语句枚举。属性名必须是**字符串**或**符号**
+    - `toLocaleString()`
         - 返回对象的字符串表示, 该字符反映对象所在的本地化执行环境
-
-    - toString()
-
+    - `toString()`
         - 返回对象的字符串表示
-
-    - valueOf()
-
-        - 返回对象对应的字符串、数值或布尔值表示。通常与 toString() 的返回值相同
+    - `valueOf()`
+        - 返回对象对应的字符串、数值或布尔值表示。通常与 `toString()` 的返回值相同
 
 ```js
 let o1 = new Object();
-let o2 = new Object; // ECMAScript 只要求在给构造函数提供参数时使用括号, 合法, 但不推荐
+// ECMAScript 只要求在给构造函数提供参数时使用括号, 合法, 但不推荐
+let o2 = new Object;
 
 o2.name = "wangzf";
-console.log(o2.constructor);
-console.log(o2.hasOwnProperty("name"));
-console.log(o2.isPrototypeOf(o1));
-console.log(o2.propertyIsEnumerable("name"));
-console.log(o2.toLocaleString());
-console.log(o2.toString());
-console.log(o2.valueOf("name"));
+console.log(o2.constructor);                   // Object()
+console.log(o2.hasOwnProperty("name"));        // true
+console.log(o2.isPrototypeOf(o1));             // TODO
+console.log(o2.propertyIsEnumerable("name"));  // true
+console.log(o2.toLocaleString());              // wangzf
+console.log(o2.toString());                    // wangzf
+console.log(o2.valueOf("name"));               // wangzf
 ```
 
 # 操作符
 
-ECMAScript 中的操作符是独特的, 因为它们可用于各中值, 包括字符串、数值、布尔值、对象。在应用给对象时, 操作符通常会调用 valueOf() 和/或 toString() 方法来取得可以计算的值.
+ECMAScript 中的操作符是独特的, 因为它们可用于各种值, 包括字符串、数值、布尔值、对象。
+在应用给对象时, 操作符通常会调用 `valueOf()` 和/或 `toString()` 方法来取得可以计算的值
 
 - 数学操作符
 - 位操作符
@@ -1283,76 +1729,335 @@ ECMAScript 中的操作符是独特的, 因为它们可用于各中值, 包括�
 
 ## 一元操作符
 
-- 递增/递减操作符
-- 一元加和减
-	- 一元加由一个加号(+)表示, 
-	- 一元加放在变量前头, 对数值没有任何影响
-	- 一元加放在非数值, 则会执行与使用 Number() 转型函数一样的类型转换
-		- 布尔值 false 和 true 转换为0 和 1
+只操作一个值的操作符叫**一元操作符(unary operator)**
+
+### 递增/递减操作符
+
+JavaScript 的递增和递减操作符直接照搬自 C 语言，但有两个版本:
+
+* 前缀版
+    - 位于要操作的变量前头 
+    - 递增操作符会给数值加 1，把两个加号放在变量前头即可
+    - 递减操作符会给数值减 1，把两个减号放在变量前头即可
+    - 变量的值会在语句被求值之前改变，在计算机科学中，这通常被称为具有副作用
+    - 递增和递减在语句中的优先级是相等的，因此会从左到右依次求值
+* 后缀版
+    - 位于要操作的变量后头
+    - 递增操作符会给数值加 1，把两个加号放在变量后头即可
+    - 递减操作符会给数值减 1，把两个减号放在变量后头即可
+    - 递增和递减在语句被求值后才发生
+
+#### 前缀递增-递减
+
+* 递增
+
+```js
+let age = 29;
+++age;
+console.log(age);  // 30
+
+// 等价于
+let age = 29;
+age = age + 1;
+console.log(age);  // 30
+```
+
+* 递减
+
+```js
+let age = 29;
+--age;
+console.log(age);  // 28
+
+// 等价于
+let age = 29;
+age = age - 1;
+console.log(age);  // 28
+```
+
+* 求值: 无论使用前缀递增还是前缀递减操作符，变量的值都会在语句被求值之前改变
+
+```js
+let age = 29;
+let anotherAge = --age + 2;
+
+console.log(age);         // 28
+console.log(anotherAge);  // 30
+```
+
+* 前缀递增和递减在语句中的优先级是相等的，因此会从左到右依次求值
+
+```js
+let num1 = 2;
+let num2 = 20;
+let num3 = --num1 + num2;
+let num4 = num1 + num2;
+console.log(num3);  // 21
+console.log(num4);  // 21
+```
+
+#### 后缀递增-递减
+
+* 前缀、后缀效果相同的情况
+
+```js
+let age = 29;
+age++;
+console.log(age); // 30
+
+// 等价于
+let age = 29;
+++age;
+console.log(age); // 30
+```
+
+* 后缀递增、递减与其他操作混合
+
+```js
+let num1 = 2;
+let num2 = 20;
+let num3 = num1-- + num2;
+let num4 = num1 + num2;
+
+console.log(num3);  // 22
+console.log(num4);  // 21
+```
+
+#### 递增和递减原则
+
+4 个操作符可以作用于任何值，意思是不限于整数、字符串、布尔值、浮点值、对象，递增和递减操作遵循如下规则：
+
+* 字符串: 
+    - 如果是有效的数值形式，则转换为数值再应用改变。变量类型从字符串变成数值
+    - 如果不是有效的数值形式，则将变量的值设置为 NaN。变量类型从字符串变成数值
+* 布尔值
+    - 如果是 `false`，则转换为 `0` 再应用改变。变量类型从布尔值变成数值
+    - 如果是 `true`，则转换为 `1` 再应用改变。变量类型从布尔值变成数值
+* 浮点数
+    - 加 `1` 或减 `1`
+* 对象
+    - 调用其 `valueOf()` 方法取得可以操作的值。对得到的值应用上述规则。
+      如果是 `NaN`，则调用 `toString()` 并再次应用其他规则，
+      变量类型从对象变成数值
+
+```js
+let s1 = "2";
+let s2 = "z";
+let b = false;
+let f = 1.1;
+let o = {
+    valueOf() {
+        return -1;
+    }
+};
+
+s1++;  // 3
+s2++;  // NaN
+b++;  // 1
+f--;  // 0.10000000000000009
+o--;  // -2
+```
+
+### 一元加和减
+
+一元加和减操作符主要用于基本的算术，但也可以用于数据类型转换
+
+* 一元加由一个加号(`+`)表示    
+    - 放在变量前头, 对数值没有任何影响
+    - 放在非数值前面, 则会执行与使用 `Number()` 转型函数一样的类型转换
+
+```js
+let num = 25;
+num = +num;
+console.log(num); // 25
+```
+
+* 一元减由一个减号(`-`)表示
+    - 放在变量前头，主要用于把数值变成负值，对于数值将其变成相应的负值
+    - 放在非数值前面，遵循与一元加同样的规则，先对它们进行转换，然后再取负值
+
+```js
+let s1 = "01";
+let s2 = "1.1";
+let s3 = "z";
+let b = false;
+let f = 1.1;
+let o = {
+    valueOf() {
+        return -1;
+    }
+};
+
+s1 = -s1;  // 值变成数值 -1
+s2 = -s2;  // 值变成数值 -1.1
+s3 = -s3;  // 值变成 NaN
+b = -b;    // 值变成数值 0
+f = -f;    // 值变成 -1.1
+o = -o;    // 值变成数值 1
+```
 
 ## 位操作符
 
+* TODO
+
 ## 布尔操作符
 
-- 语法
+布尔操作符一共有 3 个：
 
-	- 逻辑非 `!` 
+* 逻辑非 `!`
+* 逻辑与 `&&`
+* 逻辑或 `||`
 
-		- 这个操作符始终返回布尔值, 无论应用的是什么数据类型, 逻辑非操作符首先将操作数转换为布尔值, 然后再对其取反
+### 逻辑非
 
-		- 规则
+* 操作符始终返回布尔值, 无论应用的是什么数据类型,
+  逻辑非操作符首先将操作数转换为布尔值, 然后再对其取反
+* 规则
 
-			| 表达式                 | 结果  |
-			| ---------------------- | ----- |
-			| !对象                  | false |
-			| !空字符串              | true  |
-			| !非空字符串            | false |
-			| !0                     | true  |
-			| !非0数值(包括Infinity) | false |
-			| !null                  | true  |
-			| !NaN                   | true  |
-			| !undefined             | true  |
+| 表达式                  | 结果  |
+| ---------------------- | ----- |
+| !对象                   | false |
+| !空字符串                | true  |
+| !非空字符串              | false |
+| !0                     | true  |
+| !非0数值(包括Infinity)    | false |
+| !null                  | true  |
+| !NaN                   | true  |
+| !undefined              | true  |
 
-		- `!!`: 相当于调用了转型函数 Boolean() , 无论操作数是什么类型, 第一个叹号总会返回布尔值, 第二个叹号对该布尔值取反, 从而给出变量真正对应的布尔值, 结果与对同一个值使用 Boolean() 函数是一样的
+* 逻辑非操作符也可以用于吧任意值转换为布尔值: `!!` 相当于调用了转型函数 `Boolean()`，
+  无论操作数是什么类型, 第一个叹号总会返回布尔值, 第二个叹号对该布尔值取反, 
+  从而给出变量真正对应的布尔值, 结果与对同一个值使用 `Boolean()` 函数是一样的
 
-			- 示例
+```js
+console.log(!!"blue"); // true
+console.log(!!0); // false
+console.log(!!NaN); // false
+console.log(!!""); // false
+console.log(!!12345); // true
+```
 
-			```js
-			console.log(!!"blue"); // true
-			console.log(!!0); // false
-			console.log(!!NaN); // false
-			console.log(!!""); // false
-			console.log(!!12345); // true
-			```
+### 逻辑与
 
-	- 逻辑与 `&&`
+* 逻辑与操作符遵循的真值表
 
-		- 逻辑与操作符遵循的真值表
+| 第一个操作数   | 第二个操作数   | 结果   |
+| ------------ | ------------ | ----- |
+| true         | true         | true  |
+| true         | false        | false |
+| false        | true         | false |
+| false        | false        | false |
 
-			| 第一个操作数 | 第二个操作数 | 结果  |
-			| ------------ | ------------ | ----- |
-			| true         | true         | true  |
-			| true         | false        | false |
-			| false        | true         | false |
-			| false        | false        | false |
+* 逻辑与操作符可用于任何类型的操作数，不限于布尔值。
+  如果有操作数不是布尔值，则逻辑与并不一定返回布尔值，遵循如下规则 
+    - 如果第一个操作数是对象，则返回第二个操作数
+    - 如果第二个操作数是对象，则只有第一个操作数求值为 true 才会返回该对象
+    - 如果两个操作数都是对象，则返回第二个操作数
+    - 如果有一个操作数是 `null`，则返回 `null`
+    - 如果有一个操作数是 `NaN`，则返回 `NaN`
+    - 如果有一个操作数是 `undefined`，则返回 `undefined`
+* 逻辑与操作符是一种短路操作符，意思是如果第一个操作数决定了结果，那么永远不会对第二个操作数求值
 
-		- 
+```js
+let found = true;
+let result = (found && someUndeclaredVariable);  // 会出错，someUndeclareVariable 没声明
+console.log(result);  // 不会执行
+```
 
-	- 逻辑或 `||`
-		- 逻辑或操作符遵循的真值表
+```js
+let found = false;
+let result = (found && someUndeclaredVariable);  // 不会出错，someUndeclareVariable 根本不会执行
+console.log(result);  // 会执行
+```
 
-			| 第一个操作数 | 第二个操作数 | 结果  |
-			| ------------ | ------------ | ----- |
-			| true         | true         | true  |
-			| true         | false        | true  |
-			| false        | true         | true  |
-			| false        | false        | false |
+### 逻辑或
 
-		- 
+* 逻辑或操作符遵循的真值表
+
+| 第一个操作数   | 第二个操作数   | 结果   |
+| ------------ | ------------ | ----- |
+| true         | true         | true  |
+| true         | false        | true  |
+| false        | true         | true  |
+| false        | false        | false |
+
+* 逻辑或操作符可用于任何类型的操作数，不限于布尔值。
+  如果有操作数不是布尔值，则逻辑或并不一定返回布尔值，遵循如下规则
+    - 如果第一个操作数是对象，则返回第一个操作数
+    - 如果第一个操作数求值为 `false`，则返回第二个操作数
+    - 如果两个操作数都是对象，则返回第一个操作数
+    - 如果两个操作数是 `null`，则返回 `null`
+    - 如果两个操作数是 `NaN`，则返回 `NaN`
+    - 如果两个操作数是 `undefined`，则返回 `undefined`
+* 逻辑或操作符是一种短路操作符，意思是如果第一个操作数为 `true`，第二个操作数就不会再被求值了
+
+```js
+let found = true;
+let result = (found || someUndeclaredVariable);  // 不会出错
+console.log(result);  // 会执行
+```
+
+```js
+let found = false;
+let result = (found || someUndeclaredVariable);  // 会出错
+console.log(result);  // 不会执行
+```
+
+```js
+// 利用逻辑或短路的行为，可以避免给变量赋值 null 或 undefined
+// preferredObject 变量包含首选值
+// backupObject 包含备用的值
+let myObject = preferredObject || backupObject;
+```
 
 ## 乘性操作符
 
+ECMAScript 定义了 3 个乘性操作符:
+
+* 乘法 `*`
+* 除法
+* 取模
+
+在处理非数值时，它们也会包含一些自动的类型转换: 
+如果乘性操作符有不是数值的操作数，则该操作数会在后台被使用 `Number()` 转型函数转换为数值。
+
+### 乘法操作符
+
+乘法操作数在处理特殊值时的特殊行为:
+
+* 如果 ECMAScript 不能表示乘积，则返回 `Infinity` 或 `-Infinity`
+* 如果有任一操作数是 `NaN`，则返回 `NaN`
+* 如果是 `Infinity` 乘以 0，则返回 `NaN`
+* 如果是 `Infinity` 乘以非 0 的有限数值，则根据第二个操作数的符号返回 `Infinity` 或 `-Infinity`
+* 如果有不是数值的操作数，则先在后台用 `Number()` 将其转换为数值，然后再应用上述规则
+
+### 除法操作符
+
+除法操作数在处理特殊值时的特殊行为:
+
+* 如果操作数都是数值，则执行常规的除法运算，即两个正值相除是正值，两个负值相除也是正值，
+  符号不同的值相除得到负值。如果 ECMAScript 不能表示商，则返回 `Infinity` 或 `-Infinity`
+* 如果有任一操作数是 `NaN`，则返回 `NaN`
+* 如果是 `Infinity` 除以 `Infinity`，则返回 `NaN`
+* 如果是 0 除以 0，则返回 `NaN`
+* 如果是非 0 的有限值除以 0，则根据第一个操作数的符号返回 `Infinity` 或 `-Infinity`
+* 如果是 `Infinity` 除以任何数值，则根据第二个操作数的符号返回 `Infinity` 或 `-Infinity`
+* 如果有不是数值的操作数，则先在后台用 `Number()` 函数将其转换为数值，然后再应用上述规则
+
+### 取模操作符
+
+* 如果操作数是数值，则执行常规除法运算，返回余数
+* 如果被除数是无限值，除数是有限值，则返回 `NaN`
+* 如果被除数是有限值，除数是 0，则返回 `NaN`
+* 如果被除数是 0，除数不是 0，则返回 0
+* 如果是 Infinity 除以 Infinity，则返回 NaN
+* 如果被除数是有限值，除数是无限值，则返回被除数
+* 如果有不是数值的操作数，则先在后台用 `Number()` 函数将其转换为数值，然后再应用上述规则
+
 ## 指数操作符
+
+
+
 
 ## 加性操作符
 
@@ -1362,8 +2067,12 @@ ECMAScript 中的操作符是独特的, 因为它们可用于各中值, 包括�
 
 ## 相等操作符
 
-- 在比较字符串、数值和布尔值是否相等时, 过程都很直观。但是在比较两个对象是否相等时, 情形就比较复杂了
-- ECMAScript 中的相等和不相等操作符, 原本在比较之前会执行类型转换, 但很快就有人质疑这种转换是否应该发生。最终, ECMAScript 提供了两组操作符, 第一组是等于和不等于, 它们在比较之前执行转换(强制类型转换)。第二组是全等和不全等, 它们在比较之前不执行转换
+- 在比较字符串、数值和布尔值是否相等时, 过程都很直观。
+  但是在比较两个对象是否相等时, 情形就比较复杂了
+- ECMAScript 中的相等和不相等操作符, 原本在比较之前会执行类型转换, 
+  但很快就有人质疑这种转换是否应该发生。最终, ECMAScript 提供了两组操作符, 
+  第一组是等于和不等于, 它们在比较之前执行转换(强制类型转换)。
+  第二组是全等和不全等, 它们在比较之前不执行转换
 
 ### 等于和不等于
 
@@ -1422,65 +2131,57 @@ let result2 = ("55" !=== 55); // true, 不相等, 因为数据类型不同
 
 ## 条件操作符
 
-- 语法
+* 语法
 
 ```js
 variable = boolean_expression ? true_value : false_value;
 ```
 
-- 示例
+* 示例
 
 ```js
 let max = (num1 > num2) ? num1 : num2;
 ```
 
-
-
 ## 赋值操作符
 
-- 简单赋值
+* 简单赋值
 	- `=`
-- 复合赋值
-	- `*=`
-	- `/=`
-	- `%=`
-	- `+=`
-	- `-=`
+* 复合赋值：使用乘性、加性、位操作符后跟等于号表示
+  这些操作仅仅是简写语法，使用它们不会提升性能
+	- 乘后赋值 `*=`
+	- 除后赋值 `/=`
+	- 取模后赋值 `%=`
+	- 加后赋值 `+=`
+	- 减后赋值 `-=`
 	- 左移后赋值 `<<=`
 	- 右移后赋值 `>>=`
 	- 无符号右移后赋值 `>>>=`
 
-- 示例: 
-
-```js
-let num = 10;
-num = num + 10;
-console.log(num);
-```
-
-等价于:
-
-```js
-let num = 10;
-num += 10;
-```
-
 ## 逗号操作符
 
-- 逗号操作符可以用来在一条语句中执行多个操作
+逗号操作符可以用来在一条语句中执行多个操作
 
-    - 在一条语句中同时声明多个变量是逗号操作符最常用的场景
-    - 也可以使用逗号操作符来辅助赋值。在赋值时使用逗号操作符分隔值, 最终会返回表达式中最后一个值
+* 在一条语句中同时声明多个变量是逗号操作符最常用的场景
+* 也可以使用逗号操作符来辅助赋值。在赋值时使用逗号操作符分隔值, 
+  最终会返回表达式中最后一个值
 
 ```js
 let num1 = 1, num2 = 2, num3 = 3;
 console.log(num1); // 1
 console.log(num2); // 2
 console.log(num3); // 3
+```
 
+```js
 let num = (5, 1, 4, 8, 0); 
 console.log(num);  // 0
 ```
+
+
+
+
+
 
 
 
@@ -1626,9 +2327,29 @@ with (expression) statement;
 
 ## switch
 
+
+
+
 # 函数
 
-## 函数基本知识
+ECMAScript 中的函数使用 `function` 关键字声明，后跟一组参数，然后是函数体
+
+* 函数基本语法
+
+```js
+function functionName(arg0, arg1, ..., argN) {
+    statements
+}
+```
+
+* 示例
+
+```js
+function sayHi(name, message) {
+    console.log("Hello " + name + ", " + message);
+}
+sayHi("Nicholas", "how are you today?");
+```
 
 * ECMAScript 中的函数不需要指定是否返回值, 任何函数在任何时间都可以使用 return 语句来返回函数的值, 
   用法是后跟要返回的值, 只要碰到 return 语句, 函数就立即停止执行并退出
@@ -1638,19 +2359,7 @@ with (expression) statement;
     - 函数的参数不能叫做 `eval` 或 `arguments`
     - 两个命名参数不能拥有同一个名称
 
-- 语法
 
-```js
-function functionName(arg0, arg1, ..., argN) {
-    statements
-}
-```
 
-- 示例
 
-```js
-function sayHi(name, message) {
-    console.log("Hello " + name + ", " + message);
-}
-sayHi("Nicholas", "how are you today?");
-```
+
