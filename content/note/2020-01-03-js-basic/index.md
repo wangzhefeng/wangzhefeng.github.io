@@ -158,7 +158,11 @@ details[open] summary {
     - [取模操作符](#取模操作符)
   - [指数操作符](#指数操作符)
   - [加性操作符](#加性操作符)
+    - [加法操作符](#加法操作符)
+    - [减法操作符](#减法操作符)
   - [关系操作符](#关系操作符)
+    - [规则](#规则)
+    - [字符串比较](#字符串比较)
   - [相等操作符](#相等操作符)
     - [等于和不等于](#等于和不等于)
     - [全等和不全等](#全等和不全等)
@@ -170,13 +174,23 @@ details[open] summary {
   - [do-while](#do-while)
   - [while](#while)
   - [for](#for)
+    - [基本用法](#基本用法)
+    - [关键字声明使用 let](#关键字声明使用-let)
+    - [初始化,条件表达式和循环后表达式都不是必需的](#初始化条件表达式和循环后表达式都不是必需的)
+    - [for 循环等价于 while 循环](#for-循环等价于-while-循环)
   - [for-in](#for-in)
   - [for-of](#for-of)
   - [label](#label)
-  - [break](#break)
-  - [continue](#continue)
+  - [break 和 continue](#break-和-continue)
+    - [基本用法](#基本用法-1)
+    - [与 label 语句一起使用](#与-label-语句一起使用)
   - [with](#with)
+    - [语法](#语法-1)
+    - [使用场景](#使用场景)
   - [switch](#switch)
+    - [语法](#语法-2)
+    - [示例](#示例)
+    - [特性](#特性)
 - [函数](#函数)
 </p></details><p></p>
 
@@ -2015,19 +2029,22 @@ let myObject = preferredObject || backupObject;
 ECMAScript 定义了 3 个乘性操作符:
 
 * 乘法 `*`
-* 除法
-* 取模
+* 除法 `/`
+* 取模 `%`
 
 在处理非数值时，它们也会包含一些自动的类型转换: 
-如果乘性操作符有不是数值的操作数，则该操作数会在后台被使用 `Number()` 转型函数转换为数值。
+如果乘性操作符有不是数值的操作数，
+则该操作数会在后台被使用 `Number()` 转型函数转换为数值
 
 ### 乘法操作符
 
 乘法操作数在处理特殊值时的特殊行为:
 
-* 如果 ECMAScript 不能表示乘积，则返回 `Infinity` 或 `-Infinity`
-* 如果有任一操作数是 `NaN`，则返回 `NaN`
-* 如果是 `Infinity` 乘以 0，则返回 `NaN`
+* 如果操作数都是数值，则执行常规的乘法运算，即两个正值相乘是正值，两个负值相乘也是正
+  值，正负符号不同的值相乘得到负值。如果 ECMAScript 不能表示乘积，则返回 `Infinity` 或 `-Infinity`
+* 返回 `NaN`
+    - 如果有任一操作数是 `NaN`，则返回 `NaN`
+    - 如果是 `Infinity` 乘以 0，则返回 `NaN`
 * 如果是 `Infinity` 乘以非 0 的有限数值，则根据第二个操作数的符号返回 `Infinity` 或 `-Infinity`
 * 如果有不是数值的操作数，则先在后台用 `Number()` 将其转换为数值，然后再应用上述规则
 
@@ -2037,11 +2054,13 @@ ECMAScript 定义了 3 个乘性操作符:
 
 * 如果操作数都是数值，则执行常规的除法运算，即两个正值相除是正值，两个负值相除也是正值，
   符号不同的值相除得到负值。如果 ECMAScript 不能表示商，则返回 `Infinity` 或 `-Infinity`
-* 如果有任一操作数是 `NaN`，则返回 `NaN`
-* 如果是 `Infinity` 除以 `Infinity`，则返回 `NaN`
-* 如果是 0 除以 0，则返回 `NaN`
-* 如果是非 0 的有限值除以 0，则根据第一个操作数的符号返回 `Infinity` 或 `-Infinity`
-* 如果是 `Infinity` 除以任何数值，则根据第二个操作数的符号返回 `Infinity` 或 `-Infinity`
+* 返回 `NaN`
+    - 如果有任一操作数是 `NaN`，则返回 `NaN`
+    - 如果是 `Infinity` 除以 `Infinity`，则返回 `NaN`
+    - 如果是 0 除以 0，则返回 `NaN`
+* 返回 `Infinity` 或 `-Infinity`
+    - 如果是非 0 的有限值除以 0，则根据第一个操作数的符号返回 `Infinity` 或 `-Infinity`
+    - 如果是 `Infinity` 除以任何数值，则根据第二个操作数的符号返回 `Infinity` 或 `-Infinity`
 * 如果有不是数值的操作数，则先在后台用 `Number()` 函数将其转换为数值，然后再应用上述规则
 
 ### 取模操作符
@@ -2050,48 +2069,159 @@ ECMAScript 定义了 3 个乘性操作符:
 * 如果被除数是无限值，除数是有限值，则返回 `NaN`
 * 如果被除数是有限值，除数是 0，则返回 `NaN`
 * 如果被除数是 0，除数不是 0，则返回 0
-* 如果是 Infinity 除以 Infinity，则返回 NaN
+* 如果是 `Infinity` 除以 `Infinity`，则返回 NaN
 * 如果被除数是有限值，除数是无限值，则返回被除数
 * 如果有不是数值的操作数，则先在后台用 `Number()` 函数将其转换为数值，然后再应用上述规则
 
 ## 指数操作符
 
+ECMAScript 7 新增了指数操作符，`Math.pow()` 现在有了自己的操作符 `**`
 
+```js
+console.log(Math.pow(3, 2));  // 9
+console.log(3 ** 2);  // 9
+```
 
+指数操作符也有自己的指数赋值操作符 `**=`，该操作符执行指数运算和结果的赋值操作
+
+```js
+let squared = 3;
+squared **= 2;
+console.log(squared);  // 9
+```
 
 ## 加性操作符
 
+### 加法操作符
+
+如果两个操作数都是数值，加法操作符执行加法运算并根据如下规则返回结果: 
+
+* 如果有任一操作数是 `NaN`，则返回 `NaN`
+* 如果是 `Infinity` 加 `Infinity`，则返回 `Infinity`
+* 如果是 `-Infinity` 加 `-Infinity`，则返回 `-Infinity`
+* 如果是 `Infinity` 加 `-Infinity`，则返回 `NaN`
+* 如果是 +0 加 +0，则返回 +0
+* 如果是 -0 加 +0，则返回 +0
+* 如果是 -0 加 -0，则返回 -0
+
+不过，如果有一个操作数是字符串，则要应用如下规则:
+
+* 如果两个操作数都是字符串，则将第二个字符串拼接到第一个字符串后面
+* 如果只有一个操作数是字符串，则将另一个操作数转换为字符串，再将两个字符串拼接在一起
+
+如果有任一操作数是对象、数值或布尔值，则调用它们的 `toString()` 方法以获取字符串，
+然后再应用前面的关于字符串的规则
+
+对于 `undefined` 和 `null`，则调用 `String()` 函数，分别获取 "undefined" 和 "null"
+
+### 减法操作符
+
+减法操作符也有一组规则用于处理 ECMAScript 中不同类型之间的转换。
+
+* 如果两个操作数都是数值，则执行数学减法运算并返回结果
+* 返回 `NaN`
+    - 如果有任一操作数是 `NaN`，则返回 `NaN`
+    - 如果是 `Infinity` 减 `Infinity`，则返回 `NaN`
+    - 如果是 `-Infinity` 减 `-Infinity`，则返回 `NaN`
+* 如果是 `Infinity` 减 `-Infinity`，则返回 `Infinity`
+* 如果是 `-Infinity` 减 `Infinity`，则返回 `-Infinity`
+* 如果是 +0 减 +0，则返回 +0
+* 如果是 +0 减 -0，则返回 -0
+* 如果是 -0 减 -0，则返回 +0
+* 如果有任一操作数是字符串、布尔值、`null` 或 `undefined`，
+  则先在后台使用 `Number()` 将其转换为数值，
+  然后再根据前面的规则执行数学运算。
+  如果转换结果是 `NaN`，则减法计算的结果是 `NaN`
+* 如果有任一操作数是对象，则调用其 `valueOf()` 方法取得表示它的数值。
+  如果该值是 `NaN`，则减法计算的结果是 `NaN`。
+  如果对象没有 `valueOf()` 方法，则调用其 `toString()` 方法，
+  然后再将得到的字符串转换为数值
+
+
 ## 关系操作符
 
+关系操作符执行比较两个值的操作:
 
+* `<`
+* `>`
+* `<=`
+* `>=`
+
+### 规则
+
+与 ECMAScript 中的其他操作符一样，
+在将它们应用到不同数据类型时也会发生类型转换和其他行为:
+
+* 如果操作数都是数值，则执行数值比较
+* 如果操作数都是字符串，则逐个比较字符串中对应字符的编码
+* 如果有任一操作数是数值，则将另一个操作数转换为数值，执行数值比较
+* 如果有任一操作数是对象，则调用其 `valueOf()` 方法，
+  取得结果后再根据前面的规则执行比较。 如果没有 `valueOf()` 操作符，
+  则调用 `toString()` 方法，取得结果后再根据前面的规则执行比较
+* 如果有任一操作数是布尔值，则将其转换为数值再执行比较
+
+### 字符串比较
+
+在使用关系操作符比较两个字符串时，会发生一个有趣的现象。
+很多人认为小于意味着“字母顺序靠前”，而大于意味着“字母顺序靠后”，
+实际上不是这么回事。对字符串而言，关系操作符会比较字符串中对应字符的编码，
+而这些编码是数值。比较完之后，会返回布尔值。
+问题的关键在于，大写字母的编码都小于小写字母的编码
+
+* 要得到确实按字母顺序比较的结果，就必须把两者都转换为相同的大小写形式(全大写或全小写)，
+然后再比较
+
+```js
+let result = "Brick".toLowerCase() < "alphabet".toLowerCase();  
+// false
+```
+
+* 在比较两个数值字符串的时候，比较奇怪
+
+```js
+let result = "23" < "3"; // true
+let result = "23" < 3;  // false
+```
+
+* 任何关系操作符在涉及比较 `NaN` 时都返回 `false`
+
+```js
+let result1 = NaN < 3;  // false
+let result2 = NaN >= 3;  // false
+```
 
 ## 相等操作符
 
-- 在比较字符串、数值和布尔值是否相等时, 过程都很直观。
-  但是在比较两个对象是否相等时, 情形就比较复杂了
-- ECMAScript 中的相等和不相等操作符, 原本在比较之前会执行类型转换, 
-  但很快就有人质疑这种转换是否应该发生。最终, ECMAScript 提供了两组操作符, 
-  第一组是等于和不等于, 它们在比较之前执行转换(强制类型转换)。
-  第二组是全等和不全等, 它们在比较之前不执行转换
+在比较字符串、数值和布尔值是否相等时, 过程都很直观。
+但是在比较两个对象是否相等时, 情形就比较复杂了
+
+ECMAScript 中的相等和不相等操作符, 原本在比较之前会执行类型转换, 
+但很快就有人质疑这种转换是否应该发生。最终, ECMAScript 提供了两组操作符, 
+
+* 第一组是**等于和不等于**, 它们在比较之前执行转换(强制类型转换)
+* 第二组是**全等和不全等**, 它们在比较之前不执行转换
 
 ### 等于和不等于
 
-- 语法
+* 语法
 	- `==`
 	- `!=`
-- 规则
-	- (1) 如果任一操作数是布尔值, 则将其转换为数值再比较是否相等。false转换为0, true转换为1
+* 规则
+	- (1) 如果任一操作数是布尔值, 则将其转换为数值再比较是否相等。`false` 转换为 0, `true` 转换为 1
 	- (2) 如果一个操作数是字符串, 另一个操作数不是, 则尝试将字符串转换为数值, 再比较是否相等
-	- (3) 如果一个操作数是对象, 另一个操作数不是, 则调用对象的 valueOf() 方法取得其原始值, 再根据前面的规则进行比较
-	- (4) null 和 undefined 相等
-	- (5) null 和 undefined 不能转换为其他类型的值再进行比较
-	- (6) 如果有任一操作数是 NaN,则相等操作符返回 false, 不相等操作符返回 true。记住: 即使两个操作数都是NaN, 相等操作符也返回 false, 因为按照规则, NaN 不等于 NaN
-	- (7) 如果两个操作数都是对象, 则比较它们是不是同一个对象。如果两个操作数都指向同一个对象, 则相等操作符返回 true, 否则, 两者不相等
-- 示例
+	- (3) 如果一个操作数是对象, 另一个操作数不是, 则调用对象的 `valueOf()` 方法取得其原始值, 
+	  再根据前面的规则进行比较
+	- (4) `null` 和 `undefined` 相等
+	- (5) `null` 和 `undefined` 不能转换为其他类型的值再进行比较
+	- (6) 如果有任一操作数是 `NaN`，则相等操作符返回 `false`, 不相等操作符返回 `true`
+	  记住: 即使两个操作数都是 `NaN`, 相等操作符也返回 `false`, 因为按照规则, `NaN` 不等于 `NaN`
+	- (7) 如果两个操作数都是对象, 则比较它们是不是同一个对象。
+	  如果两个操作数都指向同一个对象, 则相等操作符返回 `true`, 否则, 两者不相等
+* 示例
 
 | 表达式            | 结果  | 遵循的规则 |
 | ----------------- | ----- | ---------- |
-| null == undefined | true  | (4)        |
+| null == undefined  | true  | (4)        |
 | "NaN" == NaN      | false | (6)        |
 | 5 == NaN          | false | (6)        |
 | NaN == NaN        | fasle | (6)        |
@@ -2099,16 +2229,16 @@ ECMAScript 定义了 3 个乘性操作符:
 | false == 0        | true  | (1)        |
 | true == 1         | true  | (1)        |
 | true == 2         | false | (1)        |
-| undefined == 0    | false | (4)        |
+| undefined == 0     | false | (4)        |
 | null == 0         | false | (4)        |
 | "5" == 5          | true  | (2)        |
 
 ### 全等和不全等
 
-- 语法
+* 语法
 	- `===`
 	- `!==`
-- 示例
+* 示例
 
 ```js
 let result1 = ("55" == 55); // true, 转换后相等
@@ -2127,7 +2257,12 @@ let result2 = ("55" !=== 55); // true, 不相等, 因为数据类型不同
 | null == undefined  | true  |
 | null === undefined | false |
 
-> 由于相等和不相等操作符存在类型转换问题, 因此推荐使用全等和不全等操作符。这样有助于在代码中保持数据类型的完整性.
+> 由于相等和不相等操作符存在类型转换问题, 因此推荐使用全等和不全等操作符。
+  这样有助于在代码中保持数据类型的完整性
+
+
+
+
 
 ## 条件操作符
 
@@ -2157,6 +2292,7 @@ let max = (num1 > num2) ? num1 : num2;
 	- 左移后赋值 `<<=`
 	- 右移后赋值 `>>=`
 	- 无符号右移后赋值 `>>>=`
+    - 指数赋值操作符 `**=`
 
 ## 逗号操作符
 
@@ -2179,37 +2315,42 @@ console.log(num);  // 0
 ```
 
 
-
-
-
-
-
-
 # 语句
 
 ## if
 
-- 语法
+* 语法
+    - `condition` 可以是任何表达式，并且求值结果不一定是布尔值，
+      ECMAScript 会自动调用 `Boolean()` 函数将这个表达式的值转换为布尔值
 
 ```js
-if (condition) statement1 
-else statement2
+if (condition) {
+    statement1
+} 
+else {
+    statement2
+}
 ```
 
-```js
-if (condition) 
-    statement1 
-else if (condition2) 
-    statement2 
-else 
+```js   
+if (condition) {
+    statement1
+}
+else if (condition2) {
+    statement2
+}
+else {
     statement3
+}
 ```
 
 ## do-while
 
-- do-while 语句是一种后测试循环语句, 即循环体中的代码执行后才会对退出条件进行求值。
-  换句话说, 循环体内的代码至少执行一次
-- 语法
+`do-while` 语句是一种后测试循环语句, 
+即循环体中的代码执行后才会对退出条件进行求值。
+换句话说, 循环体内的代码至少执行一次
+
+* 语法
 
 ```js
 do {
@@ -2219,34 +2360,55 @@ do {
 
 ## while
 
-- 语法
+* 语法
 
 ```js
-while (expression) 
+while (expression) {
     statement
+}
 ```
 
 ## for
 
-- 语法
+### 基本用法
+
+* 语法
 
 ```js
-for (initialization; expression; post-loop-expression) 
+for (initialization; expression; post-loop-expression) {
     statement
+}
 ```
 
-- 在 for 循环的初始化代码中, 其实是可以不使用变量声明关键字的。
-  不过, 初始化定义的迭代器变量在循环执行完后几乎不可能再用到了。
-  因此, 最清晰的写法是使用 let 声明迭代器变量, 这样就可以将这个变量的作用域限定在循环中
-- 初始化、条件表达式和循环后表达式都不是必需的
+* 示例
 
 ```js
-for (;;) {// 无穷循环
+let count = 10;
+for (let i = 0; i < count; i++) {
+    console.log(i);
+}
+```
+
+### 关键字声明使用 let
+
+在 `for` 循环的初始化代码中, 其实是可以不使用变量声明关键字的。
+不过, 初始化定义的迭代器变量在循环执行完后几乎不可能再用到了。
+因此, 最清晰的写法是使用 `let` 声明迭代器变量, 
+这样就可以将这个变量的作用域限定在循环中
+
+### 初始化,条件表达式和循环后表达式都不是必需的
+
+* 无穷循环
+
+```js
+for (;;) {
     doSomething();
 }
 ```
 
-- 如果只包含条件表达式, 那么 for 循环实际上就变成了 while 循环
+### for 循环等价于 while 循环
+
+* 如果只包含条件表达式, 那么 for 循环实际上就变成了 while 循环
 
 ```js
 let count = 10;
@@ -2259,74 +2421,280 @@ for (; i < count; ) {
 
 ## for-in
 
-- for-in 语句是一种严格的迭代语句, 用于枚举对象中的非符号键属性
-- ECMAScript 中的对象的属性是无序的, 因此 for-in 语句不能保证返回对象属性的顺序。
-  换句话说, 所有可枚举的属性都会返回一次, 但返回的顺序可能会因浏览器而异
-- 如果 for-in 循环要迭代的变量是 null 或 undefined, 则不执行循环体
-- 语法
+`for-in` 语句是一种严格的迭代语句, 用于枚举对象中的非符号键属性
+
+ECMAScript 中的对象的属性是无序的, 因此 `for-in` 语句不能保证返回对象属性的顺序。
+换句话说, 所有可枚举的属性都会返回一次, 但返回的顺序可能会因浏览器而异
+
+如果 `for-in` 循环要迭代的变量是 `null` 或 `undefined`, 则不执行循环体
+
+* 语法
 
 ```js
-for (property in expression) statement
+for (property in expression) {
+    statement
+}
 ```
 
-- 示例
+* 示例
 
 ```js
-for (const propName in window) { // 控制语句中的 const 不是必需的, 但是为了确保这个局部变量不被修改, 推荐使用 const
+// 控制语句中的 const 不是必需的,
+// 但是为了确保这个局部变量不被修改, 推荐使用 const
+for (const propName in window) { 
     document.write(propName);
 }
 ```
 
 ## for-of
 
-- for-of 语句是一种严格的迭代语句, 用于遍历可迭代对象的元素
-- 语法
+`for-of` 语句是一种严格的迭代语句, 用于遍历可迭代对象的元素
+
+* 语法
 
 ```js
-for (property of expression) statement
+for (property of expression) {
+    statement
+}
 ```
 
-- 示例
+* 示例
 
 ```js
-for (const el of [2, 4, 6, 8]) {// 控制语句中的 const 不是必需的, 但是为了确保这个局部变量不被修改, 推荐使用 const
+// 控制语句中的 const 不是必需的, 
+// 但是为了确保这个局部变量不被修改, 推荐使用 const
+for (const el of [2, 4, 6, 8]) {
     document.write(el);
 }
 ```
 
 ## label
 
-- 标签语句用于给语句加标签, 标签可以在语句后面通过 break 或 continue 语句引用
-- 标签语句的典型应用场景是嵌套循环
-- 语法
+标签语句用于给语句加标签, 标签可以在语句后面通过 break 或 continue 语句引用。
+标签语句的典型应用场景是嵌套循环
+
+* 语法
 
 ```js
 label: statement
 ```
 
-- 示例
+* 示例
 
 ```js
-start: for (let i = 0; i < count; i++) {
+start: 
+for (let i = 0; i < count; i++) {
     console.log(i);
 }
 ```
 
-## break
+## break 和 continue
 
-## continue
+`break` 和 `continue` 语句为执行循环代码提供了更严格的控制手段:
+
+* `break` 语句用于立即退出循环，强制执行循环后的下一条语句
+* `continue` 语句也用于立即退出循环，但会再次从循环顶部开始执行
+
+### 基本用法
+
+* `break`
+
+```js
+let num = 0;;
+for (let i = 1; i< 10; i++) {
+    if (i % 5 == 0) {
+        break;
+    }
+    num++;
+}
+console.log(num);  // 4
+```
+
+* `continue`
+
+```js
+let num = 0;
+for (let i = 1; i < 10; i++) {
+    if (i % 5 == 0) {
+        continue;
+    }
+    num++;
+}
+console.log(num);  // 8
+```
+
+### 与 label 语句一起使用
+
+`break` 和 `continue` 都可以与标签语句一起使用，返回代码中特定的位置。
+这通常是在嵌套循环中
+
+组合使用标签语句和 `break`、`continue` 能实现复杂的逻辑，但也容易出错。
+注意标签要使用描述 性强的文本，而嵌套也不要太深
+
+```js
+let num = 0;
+
+outermost:
+for (let i = 0; i< 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        if (i == 5 && j == 5) {
+            break outermost;
+        }
+        num++;
+    }
+}
+console.log(num);  // 55
+```
+
+```js
+let num = 0;
+
+outermost:
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        if (i == 5 && j == 5) {
+            continue outermost;
+        }
+        num++;
+    }
+}
+console.log(num);  // 95
+```
+
+
 
 ## with
 
-- with 语句的用途是将代码作用域设置为特定的对象
-- 语法
+with 语句的用途是将代码作用域设置为特定的对象
+
+* 严格模式不允许使用 `with` 语句，否则会抛出错误
+* 由于 `with` 语句影响性能且难于调试其中的代码，通常不推荐在产品代码中使用 `with` 语句
+
+### 语法
 
 ```js
 with (expression) statement;
 ```
 
+### 使用场景
+
+使用 `with` 语句的主要场景是针对一个对象反复操作，
+这时候将代码作用域设置为该对象能提供便利
+
+```js
+let qs = location.search.substring(1);
+let hostname = location.hostname;
+let url = location.href;
+
+// 用 with 实现
+with (location) {
+    let qs = search.substring(1);
+    let hostname = hostname;
+    let url = href;
+}
+```
+
+`with` 语句用于连接 `location` 对象，这意味着在这个语句内部，
+每个变量首先会被认为是一个局部变量。如果没有找到局部变量，则会搜索 `location` 对象，
+看它是否有一个同名的属性。如果有，则该变量会被求值为 `location` 对象的属性
+
 ## switch
 
+`switch` 语句是与 `if` 语句紧密相关的一种流控制语句
+
+### 语法
+
+`switch` 语句在比较每个条件的值时会使用全等操作符(`===`)，因此不会强制转换数据类型
+
+为了避免不必要的条件判断，最好给每个条件后面都加上 `break` 语句。
+如果确实需要连续匹配几个条件，那么推荐写个注释表明是故意忽略了 `break`
+
+```js
+switch (expression) {
+    case value1: 
+        statement
+        break
+    case value2:
+        statement
+        break
+    case value3:
+        statement
+        break
+    case value4:
+        statement
+        /*跳过*/
+    default:
+        statement
+}
+```
+
+### 示例
+
+```js
+if (i == 25) {
+    console.log("25");
+} else if (i == 35) {
+    console.log("35");
+} else if (i == 45) {
+    console.log("45");
+} else {
+    console.log("Other");
+}
+```
+
+等价于:
+
+```js
+switch (i) {
+    case 25:
+        console.log("25");
+        break
+    case 35:
+        console.log("35");
+        break
+    case 45:
+        conosole.log("45");
+    default:
+        console.log("Other");
+}
+```
+
+### 特性
+
+虽然 switch 语句是从其他语言借鉴过来的，但 ECMAScript 为它赋予了一些独有的特性:
+
+* `switch` 语句可以用于所有数据类型，因此可以使用字符串甚至对象
+* 条件的值不需要是常量，也可以是变量或者表达式
+
+```js
+switch ("hello world") {
+    case "hello" + "world":
+        console.log("Greeting was found.");
+        break;
+    case "goodbye":
+        console.log("Closing was found.");
+        break;
+    default:
+        console.log("Unexpected message was found.")
+}
+```
+
+```js
+let num = 25;
+switch (true) {
+    case num < 0:
+        console.log("Less than 0.");
+        break;
+    case num >= 0 && num <= 10:
+        console.log("Between 0 and 10.");
+        break;
+    case num > 10 && num <= 20:
+        console.log("Between 10 and 20.");
+        break;
+    default:
+        console.log("More than 20.");
+}
+```
 
 
 
