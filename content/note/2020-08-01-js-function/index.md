@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-08-01'
 slug: js-function
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---

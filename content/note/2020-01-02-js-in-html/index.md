@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-01-02'
 slug: js-in-html
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---
