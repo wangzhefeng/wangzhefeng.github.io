@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-03-01'
 slug: js-basic-reference
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---
@@ -54,43 +54,43 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [Date](#date)
-	- [1.1 继承的方法](#11-继承的方法)
-	- [1.2 日期格式化方法](#12-日期格式化方法)
-	- [1.3 日期/时间组件方法](#13-日期时间组件方法)
-- [2.RegExp](#2regexp)
-	- [2.1 RegExp 实例属性](#21-regexp-实例属性)
-	- [2.2 RegExp 实例方法](#22-regexp-实例方法)
-	- [2.3 RegExp 构造函数属性](#23-regexp-构造函数属性)
-	- [2.4 模式局限](#24-模式局限)
-- [3.原始值包装类型](#3原始值包装类型)
-	- [3.1 Boolean](#31-boolean)
-	- [3.2 Number](#32-number)
-	- [3.3 String](#33-string)
-		- [3.3.1 JavaScript 字符](#331-javascript-字符)
-		- [3.3.2 normalize() 方法](#332-normalize-方法)
-		- [3.3.3 字符串操作方法](#333-字符串操作方法)
-		- [3.3.4 字符串位置方法](#334-字符串位置方法)
-		- [3.3.5 字符串包含方法](#335-字符串包含方法)
-		- [3.3.6 trim() 方法](#336-trim-方法)
-		- [3.3.7 repeat() 方法](#337-repeat-方法)
-		- [3.3.8 padStart() 和 padEnd() 方法](#338-padstart-和-padend-方法)
-		- [3.3.9 字符串迭代与解构](#339-字符串迭代与解构)
-		- [3.3.10 字符串大小写转换](#3310-字符串大小写转换)
-		- [3.3.11 字符串模式匹配方法](#3311-字符串模式匹配方法)
-		- [3.3.12 localeCompare() 方法](#3312-localecompare-方法)
-		- [3.3.13 HTML 方法](#3313-html-方法)
-- [4.单例内置对象](#4单例内置对象)
-	- [4.1 Global](#41-global)
-		- [4.1.1 URL 编码方法](#411-url-编码方法)
-		- [4.1.2 eval() 方法](#412-eval-方法)
-		- [4.1.3 Global 对象属性](#413-global-对象属性)
-		- [4.1.4 window 对象](#414-window-对象)
-	- [4.2 Math](#42-math)
-		- [4.2.1 Math 对象属性](#421-math-对象属性)
-		- [4.2.2 Math.min() 和 Math.max() 方法](#422-mathmin-和-mathmax-方法)
-		- [4.2.3 舍入方法](#423-舍入方法)
-		- [4.2.4 Math.random() 方法](#424-mathrandom-方法)
-		- [4.2.5 其他方法](#425-其他方法)
+	- [继承的方法](#继承的方法)
+	- [日期格式化方法](#日期格式化方法)
+	- [日期/时间组件方法](#日期时间组件方法)
+- [RegExp](#regexp)
+	- [RegExp 实例属性](#regexp-实例属性)
+	- [RegExp 实例方法](#regexp-实例方法)
+	- [RegExp 构造函数属性](#regexp-构造函数属性)
+	- [模式局限](#模式局限)
+- [原始值包装类型](#原始值包装类型)
+	- [Boolean](#boolean)
+	- [Number](#number)
+	- [String](#string)
+		- [JavaScript 字符](#javascript-字符)
+		- [normalize() 方法](#normalize-方法)
+		- [字符串操作方法](#字符串操作方法)
+		- [字符串位置方法](#字符串位置方法)
+		- [字符串包含方法](#字符串包含方法)
+		- [trim() 方法](#trim-方法)
+		- [repeat() 方法](#repeat-方法)
+		- [padStart() 和 padEnd() 方法](#padstart-和-padend-方法)
+		- [字符串迭代与解构](#字符串迭代与解构)
+		- [字符串大小写转换](#字符串大小写转换)
+		- [字符串模式匹配方法](#字符串模式匹配方法)
+		- [localeCompare() 方法](#localecompare-方法)
+		- [HTML 方法](#html-方法)
+- [单例内置对象](#单例内置对象)
+	- [Global](#global)
+		- [URL 编码方法](#url-编码方法)
+		- [eval() 方法](#eval-方法)
+		- [Global 对象属性](#global-对象属性)
+		- [window 对象](#window-对象)
+	- [Math](#math)
+		- [Math 对象属性](#math-对象属性)
+		- [Math.min() 和 Math.max() 方法](#mathmin-和-mathmax-方法)
+		- [舍入方法](#舍入方法)
+		- [Math.random() 方法](#mathrandom-方法)
+		- [其他方法](#其他方法)
 </p></details><p></p>
 
 
@@ -105,7 +105,7 @@ details[open] summary {
 	- Regexp
 	- Function
 
-## Date
+# Date
 
 - ECMAScript 的 Date 类型参考了 Java 早期版本中的 java.util.Date。为此，Date 类型将日期保存为自协调世界时(UTC，Universal Time Coordinated)时间 1970 年 1 月 1 日午夜(零时)至今所经过的毫秒数。使用这种存储格式，Date 类型可以精确表示 1970 年 1 月 1 日之前及之后 285616 年的日期。
 
@@ -169,7 +169,7 @@ details[open] summary {
 		result = stop - start;
 		```
 
-### 1.1 继承的方法
+## 继承的方法
 
 - Date 类型重写了 toLocaleString()、toString()、valueOf() 方法，但与其他类型不同，重写这些方法的返回值不一样
 	- toLocaleString() 方法返回与浏览器运行的本地环境一致的日期和时间，这通常意味着格式中包含针对时间的 AM(上午)或PM(下午)，但不包含时区信息(具体格式可能因浏览器而不同)
@@ -185,21 +185,21 @@ console.log(date1 < date2); // true
 console.log(date1 > date2); // false
 ```
 
-### 1.2 日期格式化方法
+## 日期格式化方法
 
 - Date 类型有几个专门用于格式化日期的方法，它们都返回字符串
 
-<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210413001515385.png" alt="image-20210413001515385" style="zoom:50%;" />
+<img src="images/image-20210413001515385.png" alt="image-20210413001515385" style="zoom:50%;" />
 
-### 1.3 日期/时间组件方法
+## 日期/时间组件方法
 
 - Date 类型还有直接涉及取得或设置日期值的特定部分
 
-<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210413001131754.png" alt="image-20210413001131754" style="zoom: 33%;" />
+<img src="images/image-20210413001131754.png" alt="image-20210413001131754" style="zoom: 33%;" />
 
-<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210413001221806.png" alt="image-20210413001221806" style="zoom: 33%;" />
+<img src="images/image-20210413001221806.png" alt="image-20210413001221806" style="zoom: 33%;" />
 
-## 2.RegExp
+# RegExp
 
 - ECMAScript 正则表达式语法
 
@@ -279,7 +279,7 @@ const re3 = new RegExp(re1, "i")
 console.log(re3); // "/cat/i"
 ```
 
-### 2.1 RegExp 实例属性
+## RegExp 实例属性
 
 - 每个 RegExp 实例都有下列属性，通过这些属性可以全面了解正则表达式的信息，不过实际开发中用得不多，因为模式声明中包含这些信息
 
@@ -293,32 +293,32 @@ console.log(re3); // "/cat/i"
 	- source 正则表达式的字面量字符串(不是传给构造函数的模式字符串)，没有开头和结尾的斜杆
 	- flags 正则表达式的标记字符串，始终以字面量而非传入构造函数的字符串模式形式返回(没有前后斜杆)
 
-	```js
-	let pattern1 = /\[bc\]at/i;
-	console.log(pattern1.global); // false
-	console.log(pattern1.ignoreCase); // true
-	console.log(pattern1.multiline); // false
-	console.log(pattern1.lastIndex); // 0
-	console.log(pattern1.source); // "\[bc\]at"
-	console.log(pattern1.flags); // "i"
-	let pattern2 = new RegExp("\\[bc\\]at", "i");
-	console.log(pattern2.global);      // false
-	console.log(pattern2.ignoreCase);  // true 
-	console.log(pattern2.multiline); // false
-	console.log(pattern2.lastIndex);//0
-	console.log(pattern2.source); // "\[bc\]at" 
-	console.log(pattern2.flags); // "i"
-	```
+```js
+let pattern1 = /\[bc\]at/i;
+console.log(pattern1.global); // false
+console.log(pattern1.ignoreCase); // true
+console.log(pattern1.multiline); // false
+console.log(pattern1.lastIndex); // 0
+console.log(pattern1.source); // "\[bc\]at"
+console.log(pattern1.flags); // "i"
+let pattern2 = new RegExp("\\[bc\\]at", "i");
+console.log(pattern2.global);      // false
+console.log(pattern2.ignoreCase);  // true 
+console.log(pattern2.multiline); // false
+console.log(pattern2.lastIndex);//0
+console.log(pattern2.source); // "\[bc\]at" 
+console.log(pattern2.flags); // "i"
+```
 
-### 2.2 RegExp 实例方法
-
-#TODO
-
-### 2.3 RegExp 构造函数属性
+## RegExp 实例方法
 
 #TODO
 
-### 2.4 模式局限
+## RegExp 构造函数属性
+
+#TODO
+
+## 模式局限
 
 - 虽然 ECMAScript 对正则表达式的支持有了长足的进步，但仍然缺少 Perl 语言中的一些高级特性。 下列特性目前还没有得到 ECMAScript 的支持
 	- \A 和 \Z 锚（分别匹配字符串的开始和末尾）
@@ -328,7 +328,7 @@ console.log(re3); // "/cat/i"
 	- 条件匹配
 	- 正则表达式注释
 
-## 3.原始值包装类型
+# 原始值包装类型
 
 - 为了方便操作原始值，ECMAScript 提供了 3 种特殊的引用类型，原始包装类型：
 
@@ -396,7 +396,7 @@ console.log(typeof obj);     // object
 
 - 虽然不推荐显式创建原始值包装类型的实例，但他们对于操作原始值的功能是很重要的。每个原始值包装类型都有相应的一套方法来方便数据操作
 
-### 3.1 Boolean
+## Boolean
 
 - Boolean 是对应布尔值的引用类型
 	- 要创建一个 Boolean 对象，就使用 `Boolean 构造函数` 并传入 `true` 或 `false`
@@ -453,7 +453,7 @@ console.log(trueValue.toString()); // "true"
 
 - 理解原始布尔值(`false`)和 Boolean 对象(`new Boolean(true/false)`)之间的区别非常重要，强烈建议永远不要使用后者
 
-### 3.2 Number
+## Number
 
 - Number 是对应数值的引用类型
 	- 要创建一个 Number 对象，就使用 `Number 构造函数`并传入一个`数值`
@@ -563,7 +563,7 @@ console.log(Number.isSafeInteger(2 ** 53)); 	       // false
 console.log(Number.isSafeInteger((2 ** 53) - 1));      // true
 ```
 
-### 3.3 String
+## String
 
 - String 是对应字符串的引用类型
 	- 要创建一个 String 对象，就使用 String 构造函数并传入一个数值
@@ -593,7 +593,7 @@ console.log(stringValue.length); // "11"
 
 - String 类型提供了很多方法来解析和操作字符串
 
-#### 3.3.1 JavaScript 字符
+### JavaScript 字符
 
 - JavaScript 字符串由 16 位码元(code unit)组成。对多数字符来说，每 16 位码元对应一个字符
 - 字符串的 length 属性表示字符串包含多少 16 位码元
@@ -622,11 +622,11 @@ console.log(message.charCodeAt(2)); // 99
 console.log(99 === 0x63); // true
 ```
 
-#### 3.3.2 normalize() 方法
+### normalize() 方法
 
 #TODO
 
-#### 3.3.3 字符串操作方法
+### 字符串操作方法
 
 - 字符串拼接
 
@@ -678,7 +678,7 @@ console.log(99 === 0x63); // true
 	console.log(stringValue.substr(3, -4));    // "" (empty string)
 	```
 
-#### 3.3.4 字符串位置方法
+### 字符串位置方法
 
 - `indexOf()`
 - `lastIndexOf()`
@@ -697,7 +697,7 @@ let pos = stringValue.indexOf("e");while(pos > -1) {
 } // [3, 24, 32, 35, 52]
 ```
 
-#### 3.3.5 字符串包含方法
+### 字符串包含方法
 
 - ECMAScript 6 增加了 3 个用于判断字符串中是否包含另一个字符的方法
 
@@ -750,7 +750,7 @@ console.log(message.includes("bar")); // true
 console.log(message.includes("qux")); // false
 ```
 
-#### 3.3.6 trim() 方法
+### trim() 方法
 
 - ECMAScript 在所有字符串上都提供了 `trim()`  方法，这个方法会创建字符串的一个副本，删除前、后所有空格符，再返回结果
 	- `trimLeft()`
@@ -764,7 +764,7 @@ console.log(stringValue); // "  hello world "
 console.log(trimmedStringValue); // "hello world"
 ```
 
-#### 3.3.7 repeat() 方法
+### repeat() 方法
 
 - ECMAScript 在所有字符串上都提供了 `repeat()` 方法，这个方法接收一个整数参数，表示要将字符串复制多少次，然后返回拼接所有副本后的结果
 
@@ -774,7 +774,7 @@ console.log(stringValue.repeat(16) + "batman");
 // na na na na na na na na na na na na na na na na batman
 ```
 
-#### 3.3.8 padStart() 和 padEnd() 方法
+### padStart() 和 padEnd() 方法
 
 - `padStart()` 和 `padEnd()` 方法会复制字符串，如果小于指定长度，则在相应一边填充字符，直至满足长度条件。
 
@@ -803,7 +803,7 @@ console.log(stringValue.repeat(16) + "batman");
 	console.log(stringValue.padEnd(2)); // "foo"
 	```
 
-#### 3.3.9 字符串迭代与解构
+### 字符串迭代与解构
 
 - 字符串的原型上暴露了一个 `@@iterator` 方法，表示可以迭代字符串的每个字符
 
@@ -837,7 +837,7 @@ let message = "abcde";
 console.log([...message]); // ["a", "b", "c", "d", "e"]
 ```
 
-#### 3.3.10 字符串大小写转换
+### 字符串大小写转换
 
 - `toLowerCase()`
 - `toLocaleLowerCase()`
@@ -847,7 +847,7 @@ console.log([...message]); // ["a", "b", "c", "d", "e"]
 	- 基于特定地区的实现，在少数语言中(如土耳其语)，Unicode 大小写转换需应用特殊规则
 - 如果不知道代码设计什么语言，则最好使用地区特定的转换方法
 
-#### 3.3.11 字符串模式匹配方法
+### 字符串模式匹配方法
 
 - String 类型专门在为字符串中实现模式匹配设计了几个方法
 
@@ -891,7 +891,7 @@ console.log([...message]); // ["a", "b", "c", "d", "e"]
 
 	- split()
 
-#### 3.3.12 localeCompare() 方法
+### localeCompare() 方法
 
 - localeCompare() 方法比较两个字符串，返回如下 3 个值中的一个
 	- 如果按照字母表顺序，字符串应该排在字符串参数前头，则返回负值
@@ -929,11 +929,11 @@ determineOrder("yellow");
 determineOrder("zoo");
 ```
 
-#### 3.3.13 HTML 方法
+### HTML 方法
 
 - 早期的浏览器开发商认为使用 JavaScript 动态生成 HTML 标签是一个需求。因此，早期浏览器扩展了规范，增加了生成 HTML 标签的方法。不过，这些方法基本上已经没有人使用了，因为结果通常不是语义化的标记
 
-## 4.单例内置对象
+# 单例内置对象
 
 - ECMA-262 对内置对象的定义是：
 	- **任何由 ECMAScript 实现提供、与宿主环境无关，并在 ECMAScript 程序开始执行时就存在的对象**
@@ -945,7 +945,7 @@ determineOrder("zoo");
 	- Global
 	- Math
 
-### 4.1 Global
+## Global
 
 - Global 对象是 ECMAScript 中最特别的对象，因为代码不会显式地访问它
 - ECMA-262 规定 Global 对象是一种兜底对象，它针对的是不属于任何对象的属性和方法
@@ -960,7 +960,7 @@ determineOrder("zoo");
 	- decodeURIComponent()
 	- eval()
 
-#### 4.1.1 URL 编码方法
+### URL 编码方法
 
 - `encodeURI()` 和 `encodeURIComponent()` 方法用于编码统一资源标识符(URI)，以便传给浏览器，有效的 URI 不能包含某些字符，比如空格。使用 URI 编码方法来编码 URI 可以让浏览器能够理解它们，同时又以特殊的 UTF-8 编码替换掉所有无效字符
 
@@ -996,7 +996,7 @@ determineOrder("zoo");
 	console.log(decodeURIComponent(uri));
 	```
 
-#### 4.1.2 eval() 方法
+### eval() 方法
 
 - `eval()` 可能是 ECMAScript 语言中最强大的方法了，这个方法就是一个完整的 ECMAScript 解释器，它接受一个参数，即一个要执行的 ECMAScript(JavaScript)字符串。当解释器发现 `eval()` 调用时，会将参数解释为实际的 ECMAScript 语句，然后将其插入到该位置
 
@@ -1039,7 +1039,7 @@ console.log(msg); // Reference Error: msg is not defined
 eval = "hi"; // 导致错误
 ```
 
-#### 4.1.3 Global 对象属性
+### Global 对象属性
 
 - Global 对象有很多属性
 
@@ -1065,7 +1065,7 @@ eval = "hi"; // 导致错误
 | TypeError      | TypeError 的构造函数   |
 | URIError       | URIError 的构造函数    |
 
-#### 4.1.4 window 对象
+### window 对象
 
 - 虽然 ECMA-262 没有规定直接访问 Global 对象的方式，但浏览器将 `window` 对象实现为 `Global` 对象的代理。因此，所有全局作用域中声明的变量和函数都变成了 `window` 的属性
 
@@ -1086,18 +1086,18 @@ let global = function() {
 }();
 ```
 
-### 4.2 Math
+## Math
 
 - ECMAScript 提供了 Math 对象作为保存数学公式、信息和计算的地方
 - Math 对象提供了一些辅助计算的属性和方法
 
-#### 4.2.1 Math 对象属性
+### Math 对象属性
 
 - Math 对象有一些属性，主要用于保存数学中的一些特殊值
 
-<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210413213822194.png" alt="image-20210413213822194" style="zoom: 33%;" />
+<img src="images/image-20210413213822194.png" alt="image-20210413213822194" style="zoom: 33%;" />
 
-#### 4.2.2 Math.min() 和 Math.max() 方法
+### Math.min() 和 Math.max() 方法
 
 - 多个参数取值
 
@@ -1117,7 +1117,7 @@ let max = Math.max(...values);
 console.log(max); // 8
 ```
 
-#### 4.2.3 舍入方法
+### 舍入方法
 
 - `Math.ceil()`
 	- 始终向上舍入为最近接的整数
@@ -1128,7 +1128,7 @@ console.log(max); // 8
 - `Math.fround()`
 	- 返回数值最接近的单精度(32)位浮点值表示
 
-#### 4.2.4 Math.random() 方法
+### Math.random() 方法
 
 - `Math.random()` 方法返回一个 0~1 范围内的随机数，其中包含 0 但不包含 1
 	- 对于希望显示随机名言或随机新闻的网页，这个方法非常方便
@@ -1163,7 +1163,7 @@ console.log(color);
 
 - `Math.random()` 方法在这里出于演示目的是没有问题的。如果为了加密而需要生成随机数(传给生成器的输入需要较高的不确定性)，那么建议使用 `window.crypto.getRandomValues()`
 
-#### 4.2.5 其他方法
+### 其他方法
 
-<img src="/Users/zfwang/Library/Application Support/typora-user-images/image-20210413214548023.png" alt="image-20210413214548023" style="zoom:33%;" />
+<img src="images/image-20210413214548023.png" alt="image-20210413214548023" style="zoom:33%;" />
 
