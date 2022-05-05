@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-03-26'
 slug: rmarkdown-rmd-markdown
 categories:
-  - Markdown
+  - markdown
 tags:
   - note
 ---

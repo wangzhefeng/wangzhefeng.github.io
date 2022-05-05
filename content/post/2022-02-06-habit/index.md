@@ -58,6 +58,10 @@ details[open] summary {
 - [生活习惯](#生活习惯)
 - [学习习惯](#学习习惯)
 - [工作习惯](#工作习惯)
+- [高效能人士的 7 个习惯](#高效能人士的-7-个习惯)
+  - [七个习惯的简要定义与架构图](#七个习惯的简要定义与架构图)
+  - [简要定义](#简要定义)
+  - [架构图](#架构图)
 </p></details><p></p>
 
 
@@ -100,3 +104,22 @@ details[open] summary {
 - 每日、每周工作计划、总结
 - 戒骄戒躁
 
+
+
+# 高效能人士的 7 个习惯
+
+习惯成为一个高效的人
+
+## 七个习惯的简要定义与架构图
+
+## 简要定义
+
+- 习惯一: 积极主动(Be Proactive)
+- 习惯二: 以终为始(Begin with the end in mind)
+- 习惯三: 要事第一(Put first things first)
+- 习惯四: 双赢思维(Think win-win)
+- 习惯五: 知彼解己(Seek first to understand, then to be understood)
+- 习惯六: 统合宗效(Synergize)
+- 习惯七: 不断更新(Sharpen the saw)
+
+## 架构图
