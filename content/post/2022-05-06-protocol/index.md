@@ -1,5 +1,5 @@
 ---
-title: 互联网协议(Internet Protocol Suite)
+title: 互联网协议
 author: 王哲峰
 date: '2022-05-06'
 slug: protocol

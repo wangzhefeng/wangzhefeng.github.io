@@ -1,7 +1,7 @@
 ---
 title: 数据库数据字典
 author: 王哲峰
-date: '2022-05-06'
+date: '2020-09-17'
 slug: data-directory
 categories:
   - database

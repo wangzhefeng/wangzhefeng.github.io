@@ -1,7 +1,7 @@
 ---
 title: MySQL 安装--Linux
 author: 王哲峰
-date: '2022-05-06'
+date: '2019-05-06'
 slug: database-mysql-install
 categories:
   - database

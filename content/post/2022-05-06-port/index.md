@@ -5,7 +5,6 @@ date: '2022-05-06'
 slug: port
 categories:
   - web
-  - network
 tags:
   - tool
 ---
