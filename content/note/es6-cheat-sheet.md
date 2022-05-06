@@ -4,13 +4,12 @@ author: 王哲峰
 date: '2015-11-20'
 slug: es6-cheat-sheet
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---
 
-ES6 速查表
-======================
+# ES6 速查表
 
 1. 模板字面量(template liternal)是允许嵌入表达式的字符串字面量: `${ninja}`
 2. 块级作用域变量

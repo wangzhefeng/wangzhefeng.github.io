@@ -9,6 +9,79 @@ tags:
   - tool
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [环境配置](#环境配置)
+- [Hadoop](#hadoop)
+  - [Hadoop架构](#hadoop架构)
+    - [Hadoop是什么?](#hadoop是什么)
+    - [分布式存储、分布式计算](#分布式存储分布式计算)
+    - [Hadoop构造模块](#hadoop构造模块)
+      - [NameNode](#namenode)
+      - [JobTracker](#jobtracker)
+  - [Hadoop集群安装](#hadoop集群安装)
+  - [Hadoop运行](#hadoop运行)
+- [HDFS文件操作](#hdfs文件操作)
+  - [Hadoop基本文件命令](#hadoop基本文件命令)
+    - [指定文件和目录确切位置的URI](#指定文件和目录确切位置的uri)
+    - [基本形式](#基本形式)
+    - [基本文件命令](#基本文件命令)
+  - [yarn命令行](#yarn命令行)
+- [MapReduce程序](#mapreduce程序)
+  - [MapReduce 程序通过操作键值对来处理数据](#mapreduce-程序通过操作键值对来处理数据)
+  - [Hadoop 数据类型](#hadoop-数据类型)
+  - [Mapper](#mapper)
+  - [Reducer](#reducer)
+  - [Partitioner: 重定向Mapper的输出](#partitioner-重定向mapper的输出)
+  - [Combiner: 本地reduce](#combiner-本地reduce)
+- [读/写](#读写)
+</p></details><p></p>
+
+
+
 # 环境配置
 
 - Java:Java 1.6及以上版本;

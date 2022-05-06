@@ -2,13 +2,70 @@
 title: 数据库操作优化
 author: 王哲峰
 date: '2022-05-06'
-slug: sql-optim
+slug: database-sql-optim
 categories:
   - database
 tags:
   - sql
   - tool
 ---
+
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [数据库](#数据库)
+- [数据库优化](#数据库优化)
+  - [数据库引擎优化](#数据库引擎优化)
+  - [表结构优化](#表结构优化)
+    - [常识](#常识)
+    - [优化](#优化)
+  - [SQL语句优化](#sql语句优化)
+    - [常识](#常识-1)
+    - [优化](#优化-1)
+</p></details><p></p>
 
 
 # 数据库

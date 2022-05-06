@@ -10,6 +10,82 @@ tags:
 ---
 
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [内容提要](#内容提要)
+- [推荐者序](#推荐者序)
+- [贝叶斯概率](#贝叶斯概率)
+  - [条件概率、贝叶斯公式](#条件概率贝叶斯公式)
+    - [条件概率](#条件概率)
+    - [乘法公式](#乘法公式)
+    - [全概率公式](#全概率公式)
+    - [贝叶斯公式](#贝叶斯公式)
+  - [贝叶斯估计](#贝叶斯估计)
+    - [统计推断的基础](#统计推断的基础)
+    - [贝叶斯公式的密度函数形式](#贝叶斯公式的密度函数形式)
+    - [贝叶斯估计](#贝叶斯估计-1)
+    - [共轭先验分布](#共轭先验分布)
+  - [统计决策理论与 Bayes 分析](#统计决策理论与-bayes-分析)
+    - [统计决策问题和损失函数](#统计决策问题和损失函数)
+    - [决策函数和风险函数](#决策函数和风险函数)
+    - [Bayes 决策准则和 Bayes 分析](#bayes-决策准则和-bayes-分析)
+- [贝叶斯思维](#贝叶斯思维)
+  - [建模和近似](#建模和近似)
+  - [代码利用](#代码利用)
+  - [贝叶斯定理](#贝叶斯定理)
+    - [基本概念](#基本概念)
+    - [贝叶斯定理](#贝叶斯定理-1)
+  - [统计计算](#统计计算)
+    - [分布](#分布)
+    - [Monty Hall 难题](#monty-hall-难题)
+    - [M&M 豆问题](#mm-豆问题)
+  - [估计](#估计)
+</p></details><p></p>
+
+
 
 
 

@@ -5,6 +5,7 @@ date: '2015-11-20'
 slug: react
 categories:
   - 前端
+  - javascript
 tags:
   - tool
 output:

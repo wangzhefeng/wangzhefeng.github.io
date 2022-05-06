@@ -10,6 +10,82 @@ tags:
   - tool
 ---
 
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [MySQL 建立表](#mysql-建立表)
+- [MySQL 约束](#mysql-约束)
+  - [主键](#主键)
+    - [主键介绍](#主键介绍)
+    - [主键规则](#主键规则)
+  - [外键](#外键)
+    - [外键介绍](#外键介绍)
+    - [外键规则](#外键规则)
+    - [创建外键](#创建外键)
+    - [删除外键](#删除外键)
+- [MySQL 索引](#mysql-索引)
+  - [索引介绍](#索引介绍)
+    - [索引](#索引)
+    - [为什么要使用索引](#为什么要使用索引)
+    - [索引的优缺点](#索引的优缺点)
+    - [索引的类型](#索引的类型)
+  - [建立索引](#建立索引)
+    - [创建索引的语法](#创建索引的语法)
+    - [创建普通索引](#创建普通索引)
+    - [创建唯一索引](#创建唯一索引)
+  - [查看索引](#查看索引)
+  - [删除索引](#删除索引)
+    - [使用 `DROP INDEX` 语句](#使用-drop-index-语句)
+    - [使用 `ALTER TABLE` 语句](#使用-alter-table-语句)
+- [MySQL 游标](#mysql-游标)
+  - [游标的使用](#游标的使用)
+- [MySQL 变量](#mysql-变量)
+</p></details><p></p>
+
+
 MySQL是一个关系型数据库管理系统, 也是最流行的关系型数据库管理系统之一, 在 WEB 应用方面, MySQL是最好的 RDBMS (Relational Database Management System, 关系数据库管理系统) 应用软件. 
 
 
