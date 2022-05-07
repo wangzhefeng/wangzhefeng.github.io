@@ -1,8 +1,8 @@
 ---
-title: HTML 中的 JavaScript
+title: 什么是 JavaScript
 author: 王哲峰
 date: '2020-01-02'
-slug: js-in-html
+slug: javascript
 categories:
   - javascript
 tags:
@@ -53,18 +53,13 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [\<script\> 元素](#script-元素)
-- [行内代码与外部文件](#行内代码与外部文件)
-- [文档模式](#文档模式)
-- [\<noscript\> 元素](#noscript-元素)
+- [JavaScript 历史](#javascript-历史)
+- [JavaScript 实现](#javascript-实现)
+- [JavaScript 版本](#javascript-版本)
 </p></details><p></p>
 
+## JavaScript 历史
 
-# \<script\> 元素
+## JavaScript 实现
 
-
-# 行内代码与外部文件
-
-# 文档模式
-
-# \<noscript\> 元素
+## JavaScript 版本

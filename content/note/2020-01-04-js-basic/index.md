@@ -1,7 +1,7 @@
 ---
 title: 语言基础
 author: 王哲峰
-date: '2020-01-03'
+date: '2020-01-04'
 slug: js-basic
 categories:
   - javascript
