@@ -10,6 +10,121 @@ tags:
 ---
 
 
+
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [Linux Shell](#linux-shell)
+  - [1.什么是Shell](#1什么是shell)
+  - [2.搭建运行环境](#2搭建运行环境)
+- [运行Bash环境](#运行bash环境)
+- [切换到Bash运行环境](#切换到bash运行环境)
+- [确认命令行中运行的是Bash](#确认命令行中运行的是bash)
+- [确保执行的命令具有可执行权限](#确保执行的命令具有可执行权限)
+- [运行脚本](#运行脚本)
+  - [3.Shell基本语法](#3shell基本语法)
+- [helloworld.sh](#helloworldsh)
+- [helloworld.sh](#helloworldsh-1)
+- [helloworld.sh](#helloworldsh-2)
+- [查找字符串`i`或`o`的位置(哪个字母先出现就计算哪个)](#查找字符串i或o的位置哪个字母先出现就计算哪个)
+- [method 1](#method-1)
+- [method 2](#method-2)
+- [method 3](#method-3)
+- [method 4](#method-4)
+- [params.sh](#paramssh)
+- [取得数组元素的个数](#取得数组元素的个数)
+- [or](#or)
+- [取得数组单个元素的长度](#取得数组单个元素的长度)
+- [-e: 开启转义](#-e-开启转义)
+- [-e: 开启转义, \c不换行](#-e-开启转义-c不换行)
+- [格式只指定了一个参数, 但多出的参数仍然会按照该格式输出, format-string 被重用](#格式只指定了一个参数-但多出的参数仍然会按照该格式输出-format-string-被重用)
+- [如果没有 arguments, 那么 %s 用NULL代替, %d 用 0 代替](#如果没有-arguments-那么-s-用null代替-d-用-0-代替)
+- [author: zfwang](#author-zfwang)
+- [file: demo.sh](#file-demosh)
+- [函数调用](#函数调用)
+- [author: zfwang](#author-zfwang-1)
+- [file: funWithReturn.sh](#file-funwithreturnsh)
+- [函数调用](#函数调用-1)
+- [author: zfwang](#author-zfwang-2)
+- [file: funWithParam.sh](#file-funwithparamsh)
+- [函数调用](#函数调用-2)
+- [将命令的完整的输出重定向到users文件中](#将命令的完整的输出重定向到users文件中)
+- [查看users文件中的内容](#查看users文件中的内容)
+- [将输出重定向覆盖users文件中的内容](#将输出重定向覆盖users文件中的内容)
+- [查看users文件中的内容](#查看users文件中的内容-1)
+- [将输出重定向追加到users文件的末尾](#将输出重定向追加到users文件的末尾)
+- [统计users文件中的行数(会输出文件名users)](#统计users文件中的行数会输出文件名users)
+- [统计users文件中的行数(不会输出文件名users)](#统计users文件中的行数不会输出文件名users)
+- [同时替换输入和输出,执行command,从文件infile读取内容, 然后将输出写入到outfile中](#同时替换输入和输出执行command从文件infile读取内容-然后将输出写入到outfile中)
+- [将两个delimiter之间的内容(document)作为输入传递给command](#将两个delimiter之间的内容document作为输入传递给command)
+- [通过wc -l 命令计算Here Document的行数](#通过wc--l-命令计算here-document的行数)
+- [hereDocument.sh](#heredocumentsh)
+- [屏蔽stdout和stderr](#屏蔽stdout和stderr)
+- [or](#or-1)
+- [file: test1.sh](#file-test1sh)
+- [file: test2.sh](#file-test2sh)
+- [使用`.`来引用test1.sh文件](#使用来引用test1sh文件)
+- [使用`source`来引用test1.sh文件](#使用source来引用test1sh文件)
+  - [4.Shell程序设计过程](#4shell程序设计过程)
+  - [5.Shell数值运算](#5shell数值运算)
+- [test](#test)
+  - [6.Shell 布尔运算](#6shell-布尔运算)
+  - [7.文件操作](#7文件操作)
+  - [8.Shell程序调试方法](#8shell程序调试方法)
+  - [9.用户管理](#9用户管理)
+- [创建家目录、指定登录 Shell](#创建家目录指定登录-shell)
+- [创建家目录、指定登录 Shell、加入所属组](#创建家目录指定登录-shell加入所属组)
+- [删除用户以及家目录](#删除用户以及家目录)
+- [常常用来修改默认的 Shell](#常常用来修改默认的-shell)
+- [把用户加入某个新安装软件所属的组](#把用户加入某个新安装软件所属的组)
+- [修改登录用户名并搬到新家](#修改登录用户名并搬到新家)
+- [禁用某个账号](#禁用某个账号)
+- [让用户 test 无需密码登录(密码为空), 这个很方便某些安全无关紧要的条件下(比如已登录主机中的虚拟机), 可避免每次频繁输入密码](#让用户-test-无需密码登录密码为空-这个很方便某些安全无关紧要的条件下比如已登录主机中的虚拟机-可避免每次频繁输入密码)
+</p></details><p></p>
+
+
 Linux Shell
 ===============
 

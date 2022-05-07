@@ -1,5 +1,5 @@
 ---
-title: linux-script
+title: Linux Script
 author: 王哲峰
 date: '2022-05-07'
 slug: linux-script
@@ -10,14 +10,98 @@ tags:
 ---
 
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
 
-Linux Script
-=================
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
 
+<details><summary>目录</summary><p>
 
-1.Bash快捷键
---------------------
+- [1.Bash快捷键](#1bash快捷键)
+  - [2.Linux基础](#2linux基础)
+- [or](#or)
+- [删除非空目录](#删除非空目录)
+- [删除日志文件](#删除日志文件)
+- [复制目录](#复制目录)
+- [找到文件/目录位置](#找到文件目录位置)
+- [切换到home目录](#切换到home目录)
+- [切换到上一级/上上级工作目录](#切换到上一级上上级工作目录)
+- [切换到上一个工作目录](#切换到上一个工作目录)
+- [显示当前路径](#显示当前路径)
+- [更改当前工作路径为"path"](#更改当前工作路径为path)
+- [显示当前目录下的文件](#显示当前目录下的文件)
+- [or](#or-1)
+- [or](#or-2)
+- [给每项文件前面加一个id编号](#给每项文件前面加一个id编号)
+- [or](#or-3)
+- [查看当前目录下文件的个数](#查看当前目录下文件的个数)
+- [搜寻当前目录下的文件或目录中是否有core开头的内容](#搜寻当前目录下的文件或目录中是否有core开头的内容)
+- [查看当前目录下是否有obj文件](#查看当前目录下是否有obj文件)
+- [递归当前目录及子目录删除所有.o文件](#递归当前目录及子目录删除所有o文件)
+- [寻找系统中包含有string的所有路径](#寻找系统中包含有string的所有路径)
+- [更新索引库](#更新索引库)
+- [显示文件时同时显示行号](#显示文件时同时显示行号)
+- [按页显示列表内容](#按页显示列表内容)
+- [只看前10行](#只看前10行)
+- [只看倒数10行](#只看倒数10行)
+- [查看两个文件间的差别](#查看两个文件间的差别)
+- [动态显示文本最新信息](#动态显示文本最新信息)
+  - [3.环境变量](#3环境变量)
+- [spark path](#spark-path)
+- [使环境变量马上生效](#使环境变量马上生效)
+- [spark path](#spark-path-1)
+- [使环境变量马上生效](#使环境变量马上生效-1)
+- [查看某个环境变量](#查看某个环境变量)
+- [查看所有环境变量](#查看所有环境变量)
+- [查看所有本地定义的环境变量](#查看所有本地定义的环境变量)
+- [先对".tar.gz"解压缩,生成".tar"](#先对targz解压缩生成tar)
+- [再解包](#再解包)
+- [如果tar不支持`j`, 需要先对".tar.bz2"解压缩,生成".tar"](#如果tar不支持j-需要先对tarbz2解压缩生成tar)
+- [再解包](#再解包-1)
+  - [4.运行代码时常用信息查看命令](#4运行代码时常用信息查看命令)
+  - [5.工具](#5工具)
+</p></details><p></p>
+
+
+# 1.Bash快捷键
 
 
 .. code:: 

@@ -1,5 +1,5 @@
 ---
-title: linux-os-manage
+title: Linux 系统管理
 author: 王哲峰
 date: '2022-05-07'
 slug: linux-os-manage
@@ -9,8 +9,57 @@ tags:
   - tool
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
 
-Linux 系统管理
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [网络管理](#网络管理)
+  - [网络状态查看](#网络状态查看)
+- [软件包管理器的使用](#软件包管理器的使用)
+</p></details><p></p>
+
+
 
 - 网络管理
 - 软件包安装

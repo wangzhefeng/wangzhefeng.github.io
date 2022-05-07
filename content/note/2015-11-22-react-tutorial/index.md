@@ -5,8 +5,9 @@ date: '2015-11-22'
 slug: react-tutorial
 categories:
   - javascript
+  - react
 tags:
-  - tool
+  - web
 ---
 
 # React 是什么

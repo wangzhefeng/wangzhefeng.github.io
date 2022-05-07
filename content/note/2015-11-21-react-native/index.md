@@ -5,8 +5,9 @@ date: '2015-11-21'
 slug: react-native
 categories:
   - javascript
+  - react
 tags:
-  - tool
+  - web
 ---
 
 # 快速开始

@@ -1,5 +1,5 @@
 ---
-title: linux-os-operation
+title: Linux 系统操作
 author: 王哲峰
 date: '2022-05-07'
 slug: linux-os-operation
@@ -9,8 +9,90 @@ tags:
   - tool
 ---
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
 
-Linux 系统操作
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [Linux Help](#linux-help)
+  - [`man`: 有问题找男人帮忙](#man-有问题找男人帮忙)
+  - [`help`](#help)
+  - [`info`](#info)
+  - [其他](#其他)
+- [文件查看](#文件查看)
+  - [`pwd` 显示当前的目录名称](#pwd-显示当前的目录名称)
+  - [`cd` 更改当前的操作目录](#cd-更改当前的操作目录)
+  - [`ls` 文件查看](#ls-文件查看)
+- [目录文件操作](#目录文件操作)
+  - [创建目录](#创建目录)
+  - [删除目录](#删除目录)
+  - [复制目录](#复制目录)
+  - [移动、重命名目录](#移动重命名目录)
+- [通配符](#通配符)
+- [文件操作](#文件操作)
+  - [用户与权限管理](#用户与权限管理)
+    - [新建用户](#新建用户)
+    - [修改用户密码](#修改用户密码)
+    - [删除用户](#删除用户)
+    - [修改用户属性](#修改用户属性)
+    - [修改用户生命周期](#修改用户生命周期)
+    - [组管理命令](#组管理命令)
+    - [用户切换](#用户切换)
+  - [打包压缩和解压缩](#打包压缩和解压缩)
+    - [打包](#打包)
+- [文本内容查看](#文本内容查看)
+  - [文件内容查看](#文件内容查看)
+  - [强大的文本编辑器 Vi/Vim](#强大的文本编辑器-vivim)
+    - [多模式文本编辑器](#多模式文本编辑器)
+    - [正常模式](#正常模式)
+    - [插入模式](#插入模式)
+    - [可视模式](#可视模式)
+    - [命令模式](#命令模式)
+- [其他命令](#其他命令)
+</p></details><p></p>
+
+
+
 
 **Linux 中一切皆文件**
 

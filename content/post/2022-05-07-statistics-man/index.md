@@ -10,8 +10,76 @@ tags:
 ---
 
 
+<style>
+h1 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+h2 {
+  background-color: #2B90B6;
+  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
 
-现代统计"四大天王":
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+
+<details><summary>目录</summary><p>
+
+- [摘要](#摘要)
+- [漫谈现代统计"四大天王": 卡尔·皮尔逊](#漫谈现代统计四大天王-卡尔皮尔逊)
+  - [统计](#统计)
+  - [世界的本质是随机的吗？](#世界的本质是随机的吗)
+  - [代表作](#代表作)
+  - [美照](#美照)
+- [漫谈现代统计"四大天王": 费舍尔](#漫谈现代统计四大天王-费舍尔)
+  - [试验该怎么做？](#试验该怎么做)
+  - [卡尔·皮尔逊与费舍尔的哲学之争](#卡尔皮尔逊与费舍尔的哲学之争)
+  - [代表作](#代表作-1)
+  - [美照](#美照-1)
+- [漫谈现代统计"四大天王": 埃贡·皮尔逊](#漫谈现代统计四大天王-埃贡皮尔逊)
+  - [没有故事的男同学](#没有故事的男同学)
+  - [痛苦的抉择与意外的转机](#痛苦的抉择与意外的转机)
+  - [启示: 好雪片片](#启示-好雪片片)
+  - [费舍尔藏在地毯下的问题](#费舍尔藏在地毯下的问题)
+  - [代表作](#代表作-2)
+  - [美照](#美照-2)
+  - [漫谈现代统计"四大天王": 内曼](#漫谈现代统计四大天王-内曼)
+    - [早年经历: 坎坷 VS 乐观](#早年经历-坎坷-vs-乐观)
+    - [与统计结缘](#与统计结缘)
+    - [在英国: 一个人战斗](#在英国-一个人战斗)
+    - [在美国: 筚路蓝缕, 一代宗师](#在美国-筚路蓝缕-一代宗师)
+</p></details><p></p>
+
 
 # 摘要
 

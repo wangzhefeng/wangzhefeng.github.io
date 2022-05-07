@@ -1,5 +1,5 @@
 ---
-title: mac OS
+title: macOS 命令行
 author: 王哲峰
 date: '2022-05-06'
 slug: macos
