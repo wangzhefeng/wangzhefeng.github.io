@@ -99,7 +99,7 @@ details[open] summary {
 # 目标
 
 * 了解基本的 React 概念和相关术语，例如 Babel、Webpack、JSX、组件(components)、
-  props、状态(state)和生命周期(lifecycle)
+  属性(props)、状态(state)和生命周期(lifecycle)
 * 构建一个非常简单的 React 应用程序来演示上述概念
 
 这是最终结果的源代码和现场演示:
@@ -140,7 +140,7 @@ details[open] summary {
       class App extends React.Component {
         render() {
           return <h1>Hello world!</h1>;
-        }
+        } 
       }
 
       ReactDOM.render(<App />, document.getElementById("root"))
@@ -438,10 +438,274 @@ class Table extends Component {
 
 # Props
 
+React 的一大亮点是它如何处理数据，它使用属性(props)和状态(state)来处理数据
 
+Props 是将现有数据传递给 React 组件的有效方式，但是组件不能更改 `props`，它们是只读的。
+
+1. 从 `src/Table.js` 的 `TableBody` 组件中删除所有数据
+
+```js
+// src/Table.js
+const TableBody = () => {
+  return <tbody />
+}
+```
+
+2. 将所有数据移动到一个对象数组中，就像引入了一个基于 JSON 的 API
+
+```js
+// src/App.js
+class App extends Component {
+  render() {
+    const characters = [
+      {
+        name: 'Charlie',
+        job: 'Janitor',
+      },
+      {
+        name: 'Mac',
+        job: 'Bouncer',
+      },
+      {
+        name: 'Dee',
+        job: 'Aspring actress',
+      }
+      {
+        name: 'Dennis',
+        job: 'Bartender',
+      }
+    ]
+
+    return (
+      <div className="container">
+        <Table />
+      </div>
+    )
+  }
+}
+```
+
+3. 使用 `props` 将 `App` 组件中定义的数据传递给 `App` 的子组件 `Table`
+    - 将要传递的 `props` 定义为 `characterData`
+    - 要传递的数据 `character` 变量，因为 `character` 是一个 JavaScript 表达式，所以加上花括号 `{}`
+
+```js
+// src/App.js
+class App extends Component {
+  render() {
+    const characters = [
+      {
+        name: 'Charlie',
+        job: 'Janitor',
+      },
+      {
+        name: 'Mac',
+        job: 'Bouncer',
+      },
+      {
+        name: 'Dee',
+        job: 'Aspring actress',
+      }
+      {
+        name: 'Dennis',
+        job: 'Bartender',
+      }
+    ]
+
+    return (
+      <div className="container">
+        <Table characterData={characters} />
+      </div>
+    )
+  }
+}
+```
+
+4. 现在数据已经传递到子组件 `Table`，现在在 `Table` 子组件中调用传递过去的 `props`
+
+```js
+// src/Table.js
+class Table extends Component {
+  render() {
+    const {characterData} = this.props
+    
+    return (
+      <table>
+        <TableHeader />
+        <TableBody characterData={characterData} />
+      </table>
+    )
+  }
+}
+```
+
+5. 现在打开 React DevTools 查看 `Table` 组件，可以看到 `Props` 中的名为 `characterData` 的 `Array` 数据。
+   存储在这里的数据称为**虚拟 DOM(virtual DOM)**，这是一种与实际 DOM 快速、有效同步数据的方式
+
+![virtual-dom](images/virtual_dom.png)
+
+6. 现在数据传递到组件 `Table` 的子组件 `TableBody`。 在组件 `TableBody` 中，将 `props` 作为参数传递，
+   并通过数组映射[Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)以返回数组中每个对象的表的行。该映射将包含在 `rows` 变量中，最后将它作为表达式返回
+
+```js
+// src/Table.js
+const TableBody = (props) => {
+  const rows = props.characterData.map((row, index) => {
+      return (
+          <tr key={index}>
+            <td>{row.name}</td>
+            <td>{row.job}</td>
+          </tr>
+      )
+  })
+
+  return <tbody>{rows}</tbody>
+}
+```
 
 # State
 
+现在，数据已经存储在一个变量的数组中，并将其作为 `props` 传递。
+使用 `props` 是一种单向的数据流，但使用 `state` 可以从组件更新私有数据
+
+可以将 `state` 视为应该保存和修改的任何数据，而不必将其添加到数据库中
+
+1. 在 `App` 组件中创建一个 `state` 对象。该对象将包含想要存储在 `state` 中的所有内容的属性，这个例子中就是 `characters`
+
+```js
+// src/App.js
+class App extends Component {
+    state = {}
+
+    render() {
+        const characters = [
+            {
+                name: 'Charlie',
+                job: 'Janitor',
+            },
+            {
+                name: 'Mac',
+                job: 'Bouncer',
+            },
+            {
+                name: 'Dee',
+                job: 'Aspring actress',
+            }
+            {
+                name: 'Dennis',
+                job: 'Bartender',
+            }
+        ]
+
+        return (
+            <div className="container">
+                <Table characterData={characters} />
+            </div>
+        )
+    }
+}
+```
+
+2. 将之前创建的整个对象数组移动到 `state.characters` 中
+
+```js
+// src/App.js
+class App extends Component {
+    state = {
+        characters: [
+            {
+                name: 'Charlie',
+                job: 'Janitor',
+            },
+            {
+                name: 'Mac',
+                job: 'Bouncer',
+            },
+            {
+                name: 'Dee',
+                job: 'Aspring actress',
+            }
+            {
+                name: 'Dennis',
+                job: 'Bartender',
+            }
+        ]
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <Table characterData={characters} />
+            </div>
+        )
+    }
+}
+```
+
+3. 由于希望能够从表中删除一个字符，所以创建一个 `removeCharacter` 方法。
+   要检索 `state`，将 `this.state.characters` 使用之前相同的 ES6 方法。
+   为了更新状态，将使用内置方法 `this.setState()` 用于操作状态
+
+```js
+// src/App.js
+class App extends Component {
+    state = {
+        characters: [
+            {
+                name: 'Charlie',
+                job: 'Janitor',
+            },
+            {
+                name: 'Mac',
+                job: 'Bouncer',
+            },
+            {
+                name: 'Dee',
+                job: 'Aspring actress',
+            }
+            {
+                name: 'Dennis',
+                job: 'Bartender',
+            }
+        ]
+    }
+    removeCharacter = (index) => {
+        const {characters} = this.state
+
+        this.setState({
+            characters: characters.filter((character, i) => {
+                return i !== index
+            }),
+        })
+    }
+
+    render() {
+        const { characters } = this.state
+
+        return (
+            <div className="container">
+                <Table characterData={characters} removeCharacter={this.removeCharacter} />
+            </div>
+        )
+    }
+}
+```
+
+1. 
+
+```js
+// src/Table.js
+const Table = (props) => {
+    const {characterData, removeCharacter} = this.props
+    
+    return (
+      <table>
+        <TableHeader />
+        <TableBody characterData={characterData} removeCharacter={removeCharacter} />
+      </table>
+    )
+}
+```
 
 # 开发表单
 
@@ -459,3 +723,8 @@ class Table extends Component {
 - React 官网: https://zh-hans.reactjs.org/
 - React 官方教程: 
 - React 教程 https://www.taniarascia.com/getting-started-with-react/
+- React API: https://reactjs.org/docs/react-api.html
+- React DOM API: https://reactjs.org/docs/react-dom.html
+- Babel: https://babeljs.io/
+- CSS: https://taniarascia.github.io/primitive/css/main.css
+
