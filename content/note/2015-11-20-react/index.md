@@ -74,6 +74,10 @@ details[open] summary {
 - [开发表单](#开发表单)
 - [提取 API 数据](#提取-api-数据)
 - [构建和部署 React 应用程序](#构建和部署-react-应用程序)
+  - [构建](#构建)
+  - [部署](#部署)
+    - [将 App 部署到 GitHub Page 上](#将-app-部署到-github-page-上)
+    - [部署 App](#部署-app)
 - [资料](#资料)
 </p></details><p></p>
 
@@ -469,7 +473,7 @@ class App extends Component {
       {
         name: 'Dee',
         job: 'Aspring actress',
-      }
+      },
       {
         name: 'Dennis',
         job: 'Bartender',
@@ -505,7 +509,7 @@ class App extends Component {
       {
         name: 'Dee',
         job: 'Aspring actress',
-      }
+      },
       {
         name: 'Dennis',
         job: 'Bartender',
@@ -566,47 +570,13 @@ const TableBody = (props) => {
 # State
 
 现在，数据已经存储在一个变量的数组中，并将其作为 `props` 传递。
-使用 `props` 是一种单向的数据流，但使用 `state` 可以从组件更新私有数据
+使用 `props` 是一种单向的数据流，但使用 `state` 可以从一个组件中更新私有数据
 
-可以将 `state` 视为应该保存和修改的任何数据，而不必将其添加到数据库中
+可以将 `state` 视为应该被保存和修改的任何数据，而不必将其添加到数据库中
 
-1. 在 `App` 组件中创建一个 `state` 对象。该对象将包含想要存储在 `state` 中的所有内容的属性，这个例子中就是 `characters`
-
-```js
-// src/App.js
-class App extends Component {
-    state = {}
-
-    render() {
-        const characters = [
-            {
-                name: 'Charlie',
-                job: 'Janitor',
-            },
-            {
-                name: 'Mac',
-                job: 'Bouncer',
-            },
-            {
-                name: 'Dee',
-                job: 'Aspring actress',
-            }
-            {
-                name: 'Dennis',
-                job: 'Bartender',
-            }
-        ]
-
-        return (
-            <div className="container">
-                <Table characterData={characters} />
-            </div>
-        )
-    }
-}
-```
-
-2. 将之前创建的整个对象数组移动到 `state.characters` 中
+1. 在 `App` 组件中创建一个 `state` 对象。
+   该对象将包含想要存储在 `state` 中的所有内容的属性，
+   将之前创建的整个对象数组移动到 `state.characters` 中
 
 ```js
 // src/App.js
@@ -624,7 +594,7 @@ class App extends Component {
             {
                 name: 'Dee',
                 job: 'Aspring actress',
-            }
+            },
             {
                 name: 'Dennis',
                 job: 'Bartender',
@@ -642,9 +612,9 @@ class App extends Component {
 }
 ```
 
-3. 由于希望能够从表中删除一个字符，所以创建一个 `removeCharacter` 方法。
-   要检索 `state`，将 `this.state.characters` 使用之前相同的 ES6 方法。
-   为了更新状态，将使用内置方法 `this.setState()` 用于操作状态
+2. 由于希望能够从表中删除一个字符，所以在类 `App` 中创建一个 `removeCharacter` 方法。
+   要检索 `state`，将 `this.state.characters` 使用与之前相同的 ES6 方法。
+   为了更新 `state`，将使用内置方法 `this.setState()` 用于操作状态
 
 ```js
 // src/App.js
@@ -662,15 +632,64 @@ class App extends Component {
             {
                 name: 'Dee',
                 job: 'Aspring actress',
-            }
+            },
             {
                 name: 'Dennis',
                 job: 'Bartender',
             }
         ]
     }
+
     removeCharacter = (index) => {
-        const {characters} = this.state
+        const { characters } = this.state
+
+        this.setState({
+            characters: characters.filter((character, i) => {
+                return i !== index
+            }),
+        })
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <Table characterData={characters} />
+            </div>
+        )
+    }
+}
+```
+
+3. 现在将 `removeCharacter()` 方法传递给 `Table` 组件，
+   并且将要向下传递给 `TableBody` 组件。
+   这样 `removeCharacter()` 将被作为 `props` 传递
+
+```js
+// src/App.js
+class App extends Component {
+    state = {
+        characters: [
+            {
+                name: 'Charlie',
+                job: 'Janitor',
+            },
+            {
+                name: 'Mac',
+                job: 'Bouncer',
+            },
+            {
+                name: 'Dee',
+                job: 'Aspring actress',
+            },
+            {
+                name: 'Dennis',
+                job: 'Bartender',
+            }
+        ]
+    }
+
+    removeCharacter = (index) => {
+        const { characters } = this.state
 
         this.setState({
             characters: characters.filter((character, i) => {
@@ -691,7 +710,7 @@ class App extends Component {
 }
 ```
 
-1. 
+4. 由于由于项目中的具有自己状态的组件是 `App` 和 `Form`，因此最好将 `Table` 组件转换为简单组件
 
 ```js
 // src/Table.js
@@ -707,7 +726,98 @@ const Table = (props) => {
 }
 ```
 
+5. 现在，在 `TableBody` 组件中创建一个带有 `onClick` 事件的按钮，
+   并且 在 `TableBody` 组件中，将 'key/index' 通过参数进行传递，
+   因此 `filter` 函数知道删除表中的哪个项目,
+   这里的 `index` 就是 `removeCharacter()` 中定义的 `index` 的来源
+
+```js
+// src/Table.js
+const TableBody = (props) => {
+  const rows = props.characterData.map((row, index) => {
+    return (
+      <tr key={index}>
+        <td>{row.name}</td>
+        <td>{row.job}</td>
+        <td>
+          <button onClick={() => props.removeCharacter(index)}>Delete</button>
+        </td>
+      </tr>
+    )
+  })
+
+  return (
+    <tbody>{rows}</tbody>
+  )
+}
+```
+
+6. 效果如下
+
+![delete-form](images/delete_form.png)
+
 # 开发表单
+
+现在已经将数据存储在了 `state` 中，并且可以从 `state` 中删除任何项目。
+
+接下来，希望能够向 `state` 中添加数据
+
+1. 首先，从 `state.characters` 中删除所有硬编码的数据，希望之后通过表单对其进行更新
+
+```js
+// src/App.js
+class App extends Component {
+    state = {
+        characters: [],
+    }
+
+    removeCharacter = (index) => {
+        const { characters } = this.state
+
+        this.setState({
+            characters: characters.filter((character, i) => {
+                return i !== index
+            }),
+        })
+    }
+
+    render() {
+        const { characters } = this.state
+
+        return (
+            <div className="container">
+                <Table characterData={characters} removeCharacter={this.removeCharacter} />
+            </div>
+        )
+    }
+}
+```
+
+2. 创建一个 `Form` 组件 `Form.js`
+
+```js
+// src/Form.js
+import React from 'react'
+
+class Form extends React.Component {
+  initialState = {
+    name: '',
+    job: '',
+  }
+
+  state = this.initialState
+}
+```
+
+3. 这个表单的目标是在表单中每次一个字段被修改时更新 `Form` 的 `state`，
+   并且，当提交表单数据时，所有数据都将传递给 `App` 组件的 `state`，
+   然后更新 `Table` 组件
+
+
+
+```js
+
+```
 
 
 
@@ -716,6 +826,60 @@ const Table = (props) => {
 
 
 # 构建和部署 React 应用程序
+
+到目前为止，都是在开发环境中运行，编译、热加载、即时更新。
+对于生产环境，希望加载静态文件，没有源代码
+
+## 构建
+
+构建将创建一个 `build` 目录来存放 App，
+
+```js
+$ npm run build
+```
+
+## 部署
+
+### 将 App 部署到 GitHub Page 上
+
+* 提交代码到 GitHub
+
+### 部署 App
+
+
+> 退出本地 React 环境，即代码当前未运行
+
+1. 往 `package.json` 中添加 `homepage` 字段，其中包含希望应用程序存在的 URL
+
+```js
+{
+    // ...
+    "home": "https://wangzhefeng.github.io/react-tutorial",
+}
+```
+
+
+2. 往 `package.json` 中的 `srcipt` 中添加
+
+```js
+"scripts": {
+    // ...
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+}
+```
+
+3. 添加 `gh-pages` 到 devDependencies
+
+```js
+$ npm install --save-dev gh-pages
+```
+
+4. 部署
+
+```js
+$ npm run deploy
+```
 
 
 # 资料
