@@ -56,6 +56,7 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [资料](#资料)
+- [Create React App 简介](#create-react-app-简介)
 - [快速升级 Create React App](#快速升级-create-react-app)
   - [更新 `create-react-app`](#更新-create-react-app)
   - [更新 `react-script`](#更新-react-script)
@@ -79,6 +80,17 @@ details[open] summary {
 # 资料
 
 - https://create-react-app.dev/
+
+
+# Create React App 简介
+
+Create React App 是一个用于学习 React 的舒适环境，也是用 React 创建新的单页应用的最佳方式。
+
+它会配置你的开发环境，以便使你能够使用最新的 JavaScript 特性，提供良好的开发体验，
+并为生产环境优化你的应用程序。你需要在你的机器上安装 Node >= 14.0.0 和 npm >= 5.6
+
+Create React App 不会处理后端逻辑或操纵数据库；它只是创建一个前端构建流水线（build pipeline），
+所以你可以使用它来配合任何你想使用的后端。它在内部使用 Babel 和 webpack，但你无需了解它们的任何细节
 
 # 快速升级 Create React App
 

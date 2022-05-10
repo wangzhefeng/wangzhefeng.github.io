@@ -1,5 +1,5 @@
 ---
-title: React 教程
+title: React
 author: 王哲峰
 date: '2015-11-22'
 slug: react-tutorial
@@ -71,3 +71,11 @@ tags:
 - 数组常用方法
 - 模块化
 - `jsx`
+
+# React 资料
+
+* https://reactfordesigners.com/
+* https://zh.javascript.info/
+* https://www.taniarascia.com/getting-started-with-react/
+* https://developer.mozilla.org/en-US/docs/Web/JavaScript
+

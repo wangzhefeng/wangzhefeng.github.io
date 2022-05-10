@@ -1,5 +1,5 @@
 ---
-title: React
+title: React Tutorial
 author: 王哲峰
 date: '2015-11-20'
 slug: react
