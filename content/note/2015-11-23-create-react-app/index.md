@@ -5,7 +5,7 @@ date: '2020-11-23'
 slug: create-react-app
 categories:
   - javascript
-  - reacet
+  - react
 tags:
   - web
 ---
