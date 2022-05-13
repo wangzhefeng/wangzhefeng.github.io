@@ -9,7 +9,6 @@ tags:
   - tool
 ---
 
-
 <style>
 h1 {
   background-color: #2B90B6;
@@ -55,6 +54,9 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [理解对象](#理解对象)
+  - [创建对象](#创建对象)
+    - [Object() 构造函数](#object-构造函数)
+    - [对象字面量](#对象字面量)
   - [属性的类型](#属性的类型)
   - [定义多个属性-Object.defineProperties()](#定义多个属性-objectdefineproperties)
   - [读取属性的特性--Object.getOwnPropertyDescriptor(s)](#读取属性的特性--objectgetownpropertydescriptors)
@@ -69,7 +71,7 @@ details[open] summary {
     - [嵌套解构](#嵌套解构)
     - [部分解构](#部分解构)
     - [参数上下文匹配](#参数上下文匹配)
-- [创建对象](#创建对象)
+- [创建对象](#创建对象-1)
   - [工厂模式](#工厂模式)
   - [构造函数模式](#构造函数模式)
   - [原型模式](#原型模式)
@@ -102,15 +104,20 @@ details[open] summary {
 </p></details><p></p>
 
 
-ECMA-262 将对象定义为一组属性的无序集合
-
-- 严格来说，这意味着对象就是一组没有特定顺序的值
-- 对象的每个属性或方法都由一个名称来标识，这个名称映射到一个值
-- 可以把 ECMAScript 的对象想象成一张散列表，其中的内容就是一组名/值对，值可以是数据或函数
+ECMA-262 将对象定义为一组属性的无序集合。
+严格来说，这意味着对象就是一组没有特定顺序的值。
+对象的每个属性或方法都由一个名称来标识，这个名称映射到一个值。
+可以把 ECMAScript 的对象想象成一张散列表，其中的内容就是一组名/值对，
+值可以是数据或函数
 
 # 理解对象
 
-- 创建自定义对象的通常方式是创建 Object 的一个新实例，然后再给它添加属性和方法
+
+## 创建对象
+
+### Object() 构造函数
+
+创建自定义对象的通常方式是创建 Object 的一个新实例，然后再给它添加属性和方法
 
 ```js
 let person = new Object();
@@ -123,7 +130,9 @@ person.sayName = function() {
 };
 ```
 
-- 更流行的方式是使用对象字面量
+### 对象字面量
+
+更流行的方式是使用对象字面量
 
 ```js
 let person = {

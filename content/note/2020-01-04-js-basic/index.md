@@ -915,7 +915,7 @@ if (!age) {
 
 ## Boolean
 
-Boolean 类型有两个字面值: `true` 和 `false`
+Boolean 类型有两个字面值: `true` 和 `false`。
 这两个布尔值不同于数值，因此 `true` 不等于 `1`，`false` 不等于 `0`
 
 ### 其他类型的布尔值的等价形式及转换

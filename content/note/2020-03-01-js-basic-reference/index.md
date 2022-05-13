@@ -79,14 +79,37 @@ details[open] summary {
   - [模式局限](#模式局限)
 - [Function](#function)
 - [原始值包装类型](#原始值包装类型)
-  - [原始值调用方法的原理](#原始值调用方法的原理)
-  - [引用类型和原始包装类型的区别](#引用类型和原始包装类型的区别)
+  - [原始包装类型简介](#原始包装类型简介)
+    - [原始值调用方法的原理](#原始值调用方法的原理)
+    - [引用类型和原始包装类型的区别](#引用类型和原始包装类型的区别)
+    - [Object 构造函数创建原始包装类型实例](#object-构造函数创建原始包装类型实例)
+    - [转型函数与原始包装类型构造函数](#转型函数与原始包装类型构造函数)
+    - [原始包装类型的用途](#原始包装类型的用途)
   - [Boolean](#boolean)
+    - [Boolean 引用类型对象](#boolean-引用类型对象)
+    - [valueOf()](#valueof)
+    - [toString()](#tostring)
+    - [原始值与引用值的区别](#原始值与引用值的区别)
   - [Number](#number)
+    - [Number 引用类型对象](#number-引用类型对象)
+    - [重写方法](#重写方法)
+    - [格式化数值为字符串](#格式化数值为字符串)
+    - [原始值与引用值的区别](#原始值与引用值的区别-1)
+    - [isInteger() 方法](#isinteger-方法)
+    - [isSafeInteger() 方法](#issafeinteger-方法)
   - [String](#string)
+    - [String 引用类型对象](#string-引用类型对象)
+    - [重写方法](#重写方法-1)
+    - [length 属性](#length-属性)
     - [JavaScript 字符](#javascript-字符)
+      - [length](#length)
+      - [charAt()](#charat)
+      - [charCodeAt()](#charcodeat)
+      - [fromCharCode()](#fromcharcode)
     - [normalize() 方法](#normalize-方法)
     - [字符串操作方法](#字符串操作方法)
+      - [字符串拼接](#字符串拼接)
+      - [字符串提取](#字符串提取)
     - [字符串位置方法](#字符串位置方法)
     - [字符串包含方法](#字符串包含方法)
     - [trim() 方法](#trim-方法)
@@ -458,52 +481,55 @@ console.log(pattern2.flags); // "i"
 
 # 原始值包装类型
 
-## 原始值调用方法的原理
+## 原始包装类型简介
+
+### 原始值调用方法的原理
 
 为了方便操作原始值，ECMAScript 提供了 3 种特殊的引用类型，原始包装类型：
 
-- Boolean
-- Number
-- String
+* `Boolean`
+* `Number`
+* `String`
 
-这些类型具有引用类型一样的特点，但也具有与各自原始类型对应的特殊行为，每当用到某个原始值的方法或属性时，
-后台都会创建一个相应原始包装类型的对象(Boolean, Number, String 类型的实例)，从而暴露出操作原始值的各种方法
+这些类型具有引用类型一样的特点，但也具有与各自原始类型对应的特殊行为。
+每当用到某个原始值的方法或属性时，后台都会创建一个相应原始包装类型的对象，
+即 `Boolean`, `Number`, `String` 类型的实例，从而暴露出操作原始值的各种方法
+
+原始值本身不是对象，因此逻辑上不应该有方法。而实际上上述例子又确实按照预期运行了。
+这是因为后天进行了很多处理，从而实现了上述操作。具体来说，当在原始值上调用方法时，
+实际上是以读模式访问的，也就是要从内存中读取变量保存的值。
+在以读模式访问原始值的任何时候，后台都会执行以下 3 步，
+这种行为可以让原始值拥有对象的行为：
+
+> 1. 创建一个 `Boolean`/`Number`/`String` 类型的实例
+> 2. 调用实例上的特定方法
+> 3. 销毁实例
 
 ```js
 // JavaScript 代码
 let s1 = "some text";      // 原始值
 let s2 = s1.substring(2);  // 原始值上调用 substring 方法
-```
 
-当在原始值上调用方法时，实际上是以读模式访问的，也就是要从内存中读取变量保存的值。
-在以读模式访问原始值的任何时候，后台都会执行以下 3 步，这种行为可以让原始值拥有对象的行为：
-
-- （1）创建一个 Boolean/Number/String 类型的实例
-- （2）调用实例上的特定方法
-- （3）销毁实例
-
-```js
 // 上面的代码与下面的步骤等价
+
 // ECMAScript 代码
 let s1 = new String("some text");
 let s2 = s1.substring(2);
 s1 = null;
 ```
 
-## 引用类型和原始包装类型的区别
+### 引用类型和原始包装类型的区别
 
-**引用类型** 与 **原始值包装类型** 的主要区别在于对象的生命周期. 
+> **引用类型** 与 **原始值包装类型** 的主要区别在于**对象的生命周期**。
+  在通过 `new` 实例化引用类型后，得到的实例会在离开作用域时被销毁。
+  而自动创建的原始包装对象则只存在于访问它的那行代码执行期间。
+  这意味着不能在运行时给原始值添加属性和方法
 
-在通过 `new` 实例化引用类型后，得到的实例会在离开作用域时被销毁
-
-而自动创建的原始包装对象则只存在于访问它的那行代码执行期间。
-这意味着不能在运行时给原始值添加属性和方法
-
-可以显示地使用 Boolean、Number、String 构造函数创建原始包装对象，
-不过应该在确实必要时再这么做，否则容易让开发者疑惑，分不清它们到底是原始值还是原始包装对象
-
-- 在原始值包装类型的实例上调用 typeof 会返回 "object"
-- 所有原始值包装对象都会转换为布尔值
+- 可以显示地使用 `Boolean`、`Number`、`String` 构造函数创建原始包装对象。
+  不过应该在确实必要时再这么做，否则容易让开发者疑惑，
+  分不清它们到底是原始值还是原始包装对象
+- 在原始值包装类型的实例上调用 `typeof` 会返回 `"object"`
+- 所有原始值包装对象都会转换为布尔值 `true`
 
 ```js
 let s1 = "some text";
@@ -511,7 +537,9 @@ s1.color = "red";
 console.log(s1.color); // undefined
 ```
 
-- Object 构造函数作为一个工厂方法，能够根据传入值的类型返回相应的原始包装类型的实例
+### Object 构造函数创建原始包装类型实例
+
+`Object` 构造函数作为一个工厂方法，能够根据传入值的类型返回相应的原始包装类型的实例
 
 ```js
 let obj_string = new Object("some text");
@@ -524,7 +552,23 @@ let obj_boolean = new Object(true);
 console.log(obj_boolean instanceof Boolean); // true
 ```
 
-- 使用 new 调用原始值包装类型的构造函数，与调用同名的转型函数并不一样
+### 转型函数与原始包装类型构造函数
+
+- 原始值类型
+    - `Boolean`
+    - `Number`
+    - `String`
+- 转型函数
+    - `Boolean()`
+    - `Number()`
+    - `Strings()`
+* 构造函数
+    - `new Boolean()`
+    - `new Number()`
+    - `new String()`
+
+
+使用 `new` 调用原始值包装类型的构造函数，与调用同名的转型函数并不一样
 
 ```js
 let value = "25";
@@ -536,18 +580,26 @@ let obj = new Number(value); // 构造函数, 变量 obj 中保存的是一个 N
 console.log(typeof obj);     // object
 ```
 
-- 虽然不推荐显式创建原始值包装类型的实例，但他们对于操作原始值的功能是很重要的。每个原始值包装类型都有相应的一套方法来方便数据操作
+### 原始包装类型的用途
+
+虽然不推荐显式创建原始值包装类型的实例，但他们对于操作原始值的功能是很重要的。
+每个原始值包装类型都有相应的一套方法来方便数据操作
 
 ## Boolean
 
-- Boolean 是对应布尔值的引用类型
-    - 要创建一个 Boolean 对象，就使用 `Boolean 构造函数` 并传入 `true` 或 `false`
+### Boolean 引用类型对象
+
+`Boolean` 是对应布尔值的引用类型。要创建一个 Boolean 对象，
+就使用 `Boolean()` 构造函数 并传入 `true` 或 `false`
 
 ```js
 let booleanObject = new Boolean(true);
 ```
 
-- Boolean 的实例会重写 valueOf() 方法，返回一个原始值 `true` 或 `false`
+### valueOf()
+
+`Boolean` 的实例会重写 `valueOf()` 方法，
+返回一个原始值 `true` 或 `false`
 
 ```js
 let booleanObject = new Boolean(true);
@@ -557,7 +609,10 @@ let trueValue = true;
 console.log(trueValue.valueOf()); // ture
 ```
 
-- toString() 方法被调用时也会被覆盖，返回字符串 `"true"` 或 `"false"`
+### toString()
+
+`toString()` 方法被调用时也会被覆盖，
+返回字符串 `"true"` 或 `"false"`
 
 ```js
 let booleanObject = new Boolean(true); 
@@ -567,124 +622,140 @@ let trueValue = true;
 console.log(trueValue.toString()); // "true"
 ```
 
-- Boolean 原始值(`let falseValue = fasle;`)与引用值(`let falseObject = new Boolean(fasle);`)有几个区别：
+### 原始值与引用值的区别
 
-    1. `typeof` 操作符对原始值返回 `"boolean"`，对引用值返回 `"object"`
+理解原始布尔值和 Boolean 对象之间的区别非常重要，强烈建议永远不要使用后者。
+Boolean 原始值与引用值(`Boolean` 对象)有几个区别：
 
-    ```js
-    let falseObject = new Boolean(false); // Boolean 对象
-    // 布尔运算中 false && true 应该等于 false
-    // 可是这个表达式是对 falseObject 对象而不是对它表示的值(false)求值
-    // 因为所有对象在布尔表达式中都会自动转换为 true，因此 falseObject 在这个表达式里实际上表示一个 true 值，那么 true && true 是 true
-    let result1 = falseObject && true; 
-    console.log(result1); // true
-    
-    let falseValue = false;
-    let result2 = falseValue && true;
-    console.log(result2); // false
-    ```
+1. `typeof` 操作符对原始值返回 `"boolean"`，对引用值返回 `"object"`
 
-    2. Boolean 对象是 Boolean 类型的实例，在使用 instanceof 操作符时返回 true，但对原始值则返回 false
+```js
+let falseObject = new Boolean(false); // Boolean 对象
+let falseValue = false;  // 原始值
 
-    ```js
-    console.log(typeof flaseObject); // object
-    console.log(typeof falseValue); // boolean
-    console.log(falseObject instanceof Boolean); // true
-    console.log(falseValue instanceof Boolean); // false
-    ```
+console.log(typeof falseObject); // object
+console.log(typeof falseValue); // boolean
+```
 
-- 理解原始布尔值(`false`)和 Boolean 对象(`new Boolean(true/false)`)之间的区别非常重要，强烈建议永远不要使用后者
+2. `Boolean` 对象是 `Boolean` 类型的实例，在使用 `instanceof` 操作符时返回 `true`，
+   但对原始值则返回 `false`
+
+```js
+let falseObject = new Boolean(false); // Boolean 对象
+let falseValue = false;  // 原始值
+
+console.log(falseObject instanceof Boolean); // true
+console.log(falseValue instanceof Boolean); // false
+```
 
 ## Number
 
-- Number 是对应数值的引用类型
-    - 要创建一个 Number 对象，就使用 `Number 构造函数`并传入一个`数值`
+### Number 引用类型对象
+
+`Number` 是对应数值的引用类型。要创建一个 Number 对象，
+就使用 `Number()` 构造函数并传入一个数值
 
 ```js
 let numberObject = new Number(10);
 ```
 
-- Number 类型重写了 valueOf()、toLocaleString()、toString() 等从 Object 继承的方法
+### 重写方法
 
-    - valueOf 方法返回 Number 对象表示的原始值
+`Number` 类型重写了 `valueOf()`、`toLocaleString()`、`toString()` 等从 Object 继承的方法
 
-    ```js
-    let num = 10;
-    console.log(num.valueOf()); // 10
-    
-    let numberObject = new Number(10);
-    console.log(numberObject.valueOf()); // 10
-    ```
+- `valueOf()` 方法返回 Number 对象表示的原始值
 
-    - toLocaleString() 方法返回数值字符串
+```js
+let num = 10;
+console.log(num.valueOf()); // 10
 
-    ```js
-    let num = 10;
-    console.log(num.toLocalString()); // "10"
-    
-    let numberObject = new Number(10);
-    console.log(numberObject.toLocalString()); // "10"
-    ```
+let numberObject = new Number(10);
+console.log(numberObject.valueOf()); // 10
+```
 
-    - toString() 方法返回数值字符串，并且可以选择地接收一个表示基数的参数，并返回相应基数形式的数值字符串
+- `toLocaleString()` 方法返回数值字符串
 
-    ```js
-    let num = 10;
-    console.log(num.toString()); // "10"
-    console.log(num.toString(2)); // "1010"
-    console.log(num.toString(8)); // "12"
-    console.log(num.toString(10)); // "10"
-    console.log(num.toString(16)); // "a"
-    
-    let numberObject = new Number(10);
-    console.log(numberObject.toString()); // "10"
-    console.log(numberObject.toString(2)); // "1010"
-    console.log(numberObject.toString(8)); // "12"
-    console.log(numberObject.toString(10)); // "10"
-    console.log(numberObject.toString(16)); // "a"
-    ```
+```js
+let num = 10;
+console.log(num.toLocalString()); // "10"
 
-- Number 类型提供了几个用于将数值格式化为字符串的方法
+let numberObject = new Number(10);
+console.log(numberObject.toLocalString()); // "10"
+```
 
-    - `toFixed()`返回包含指定小数点位数的数值字符串，如果数值超过了参数指定的位数，则四舍五入到最近的小数位
+- `toString()` 方法返回数值字符串，并且可以选择地接收一个表示基数的参数，
+  并返回相应基数形式的数值字符串
 
-    ```js
-    let num = 10;
-    console.log(num.toFixed(2)); // "10.00"
-    
-    let num = 10.005;
-    console.log(num.toFixed(2)); // "10.01"
-    ```
+```js
+let num = 10;
+console.log(num.toString()); // "10"
+console.log(num.toString(2)); // "1010"
+console.log(num.toString(8)); // "12"
+console.log(num.toString(10)); // "10"
+console.log(num.toString(16)); // "a"
 
-    - `toExponential()`返回以科学计数法(也称指数计数法)表示的数值字符串
+let numberObject = new Number(10);
+console.log(numberObject.toString()); // "10"
+console.log(numberObject.toString(2)); // "1010"
+console.log(numberObject.toString(8)); // "12"
+console.log(numberObject.toString(10)); // "10"
+console.log(numberObject.toString(16)); // "a"
+```
 
-    ```js
-    let num = 10;
-    console.log(num.toExponential(1)); // "1.0e+1"
-    ```
+### 格式化数值为字符串
 
-    - `toPrecision()`：会根据情况返回最合理的输出结果，可能是固定精度，也可能是科学计数法形式
+Number 类型提供了几个用于将数值格式化为字符串的方法
 
-    ```js
-    let num = 99;
-    console.log(num.toPrecision(1)); // "1e+2"
-    console.log(num.toPrecision(2)); // "99"
-    console.log(num.toPrecision(3)); // "99.0"
-    ```
+- `toFixed()` 返回包含指定小数点位数的数值字符串，
+  如果数值超过了参数指定的位数，则四舍五入到最近的小数位
 
-- 与 Boolean 对象类似，Number 对象也为数值提供了重要能力。但是，考虑到两者存在同样的潜在 问题，因此并不建议直接实例化 Number 对象
+```js
+let num = 10;
+console.log(num.toFixed(2)); // "10.00"
+
+let num = 10.005;
+console.log(num.toFixed(2)); // "10.01"
+```
+
+- `toExponential()` 返回以科学计数法(也称指数计数法)表示的数值字符串
+
+```js
+let num = 10;
+console.log(num.toExponential(1)); // "1.0e+1"
+```
+
+- `toPrecision()` 会根据情况返回最合理的输出结果，
+  可能是固定精度，也可能是科学计数法形式
+
+```js
+let num = 99;
+console.log(num.toPrecision(1)); // "1e+2"
+console.log(num.toPrecision(2)); // "99"
+console.log(num.toPrecision(3)); // "99.0"
+```
+
+### 原始值与引用值的区别
+
+与 Boolean 对象类似，Number 对象也为数值提供了重要能力。
+但是，考虑到两者存在同样的潜在问题，因此并不建议直接实例化 Number 对象。
+
+在处理原始数值和引用数值时，`typeof` 和 `instacnceof` 操作符会返回不同的结果
 
 ```js
 let numberObject = new Number(10);
 let numberValue = 10;
+
 console.log(typeof numberObject);	// "object"
 console.log(typeof numberValue);	// "number"
+
 console.log(numberObject instanceof Number); // ture
 console.log(numberObject instanceof Number); // false
 ```
 
-- `Number.isInteger()` 方法
-    - ES6 新增了 Number.isInteger() 方法，用于辨别一个数值是否保存整数。有时候，小数位的 0 可能会让人误以为数值是一个浮点数
+### isInteger() 方法
+
+ES6 新增了 `Number.isInteger()` 方法，用于辨别一个数值是否保存整数。
+有时候，小数位的 0 可能会让人误以为数值是一个浮点数
 
 ```js
 console.log(Number.isInteger(1)); 	 // true
@@ -692,11 +763,12 @@ console.log(Number.isInteger(1.00)); // true
 console.log(Number.isInteger(1.01)); // false
 ```
 
-- `Number.isSafeInteger()` 方法
-    - IEEE 754 数值格式有一个特殊的数值范围，在这个范围内二进制数值可以表示一个整数值
-    - 数值范围从 `Number.MIN_SAFE_INTEGER`($-2^{53}+1$) 到 `Number.MAX_SAFE_INTEGER`($2^{52}-1$)
-    - 对超出这个范围的数值，即使尝试保存为整数，IEEE 754 编码格式也意味着二进制值会表示一个完全不同的数值
-    - 为了鉴别一个整数是否在这个范围内，可以使用 Number.isSafeInteger() 方法
+### isSafeInteger() 方法
+
+IEEE 754 数值格式有一个特殊的数值范围，在这个范围内二进制数值可以表示一个整数值。
+数值范围从 `Number.MIN_SAFE_INTEGER`(`$-2^{53}+1$`) 到 `Number.MAX_SAFE_INTEGER`(`$2^{52}-1$`)。
+对超出这个范围的数值，即使尝试保存为整数，IEEE 754 编码格式也意味着二进制值会表示一个完全不同的数值。
+为了鉴别一个整数是否在这个范围内，可以使用 `Number.isSafeInteger()` 方法
 
 ```js
 console.log(Number.isSafeInteger(-1 * (2 ** 53)));     //false
@@ -707,53 +779,70 @@ console.log(Number.isSafeInteger((2 ** 53) - 1));      // true
 
 ## String
 
-- String 是对应字符串的引用类型
-    - 要创建一个 String 对象，就使用 String 构造函数并传入一个数值
+### String 引用类型对象
+
+`String` 是对应字符串的引用类型。要创建一个 String 对象，
+就使用 String 构造函数并传入一个数值
 
 ```js
 let stringObject = new String("hello world");
 ```
 
-- String 对象的方法可以在所有字符串原始值上调用。下面三个继承的方法都返回对象的原始字符串值：
-    - valueOf()
-    - toLocaleString()
-    - toString()
+### 重写方法
+
+String 对象的方法可以在所有字符串原始值上调用。下面三个继承的方法都返回对象的原始字符串值：
+
+- `valueOf()`
+- `toLocaleString()`
+- `toString()`
 
 ```js
 let stringValue = "hello world";
+
 console.log(stringObject.valueOf()); // "hello world"
 console.log(stringObject.toLocaleString()); // "hello world"
 console.log(stringObject.toString()); // "hello world"
 ```
 
-- String 对象都有一个 `length` 属性，表示字符串中字符的数量
+### length 属性
+
+String 对象都有一个 `length` 属性，表示字符串中字符的数量
 
 ```js
 let stringValue = "hello world";
 console.log(stringValue.length); // "11"
 ```
 
-- String 类型提供了很多方法来解析和操作字符串
-
 ### JavaScript 字符
 
-- JavaScript 字符串由 16 位码元(code unit)组成。对多数字符来说，每 16 位码元对应一个字符
-- 字符串的 length 属性表示字符串包含多少 16 位码元
+JavaScript 字符串由 16 位码元(code unit)组成。对多数字符来说，每 16 位码元对应一个字符
+
+JavaScript 字符串使用了两种 Unicode 编码混合的策略：UCS-2 和 UTF-16。
+对于可以采用 16位编码的字符(U+0000~U+FFFF)，这两种编码实际上是一样的
+
+#### length
+
+* 字符串的 `length` 属性表示字符串包含多少 16 位码元
 
 ```js
 let message = "abcde";
 console.log(message.length); // 5
 ```
 
-- `charAt()` 方法返回给定索引位置的字符
+#### charAt()
+
+* `charAt()` 方法返回给定索引位置的字符，由传给方法的整数参数指定。
+  具体来说，这个方法查找指定索引位置的 16 位码元
 
 ```js
 let message = "abcde";
 console.log(message.charAt(2)); // "c"
 ```
 
-- JavaScript 字符串使用了两种 Unicode 编码混合的策略：UCS-2 和 UTF-16。对于可以采用 16位编码的字符(U+0000~U+FFFF)，这两种编码实际上是一样的
-- `charCodeAt()` 方法可以查看指定码元的字符编码
+#### charCodeAt()
+
+* `charCodeAt()` 方法可以查看指定码元的字符编码。
+  这个方法返回指定索引位置的码元值，索引以整数指定 
 
 ```js
 let message = "abcde";
@@ -764,61 +853,72 @@ console.log(message.charCodeAt(2)); // 99
 console.log(99 === 0x63); // true
 ```
 
+#### fromCharCode()
+
+* `fromCharCode()` 方法用于根据给定的 UTF-16 码元创建字符串中的字符。
+  这个方法可以接收任意多个数值，并返回将所有数值对应的字符拼接起来的字符串
+
+
+* TODO
+
+
 ### normalize() 方法
 
-#TODO
+* TODO
 
 ### 字符串操作方法
 
-- 字符串拼接
+#### 字符串拼接
 
-    - `concat()`：将一个或多个字符串拼接成一个新字符串
+- `concat()`：将一个或多个字符串拼接成一个新字符串
 
-    ```js
-    let stringValue = "hello";
-    let result = stringValue.concat(" world");
-    console.log(result); // "hello world"
-    console.log(stringValue); // "hello"
-    ```
+```js
+let stringValue = "hello";
+let result = stringValue.concat(" world");
+console.log(result); // "hello world"
+console.log(stringValue); // "hello"
+```
 
-    ```js
-    let stringValue = "hello";
-    let result = stringValue.concat(" ", "world", "!");
-    console.log(result); // "hello world!"
-    console.log(stringValue); // "hello"
-    ```
+```js
+let stringValue = "hello";
+let result = stringValue.concat(" ", "world", "!");
+console.log(result); // "hello world!"
+console.log(stringValue); // "hello"
+```
 
-    - `+`：更常用
+- `+`：更常用
 
-    ```js
-    let result = stringValue + " " + "world" + "!";
-    console.log(result);
-    ```
+```js
+let result = stringValue + " " + "world" + "!";
+console.log(result);
+```
 
-- 字符串提取
+#### 字符串提取
 
-    - `slice(start[, end])`
-    - `substr(start[, end])`
-    - `substring(start[, num])`
+- `slice(start[, end])`
+- `substr(start[, end])`
+- `substring(start[, num])`
 
-    ```js
-    let stringValue = "hello world";
-    console.log(stringValue.slice(3)); 			// "lo world"
-    console.log(stringValue.substring(3)); 		// "lo world"
-    console.log(stringValue.substr(3)); 		// "lo world"
-    console.log(stringValue.slice(3, 7)); 		// "lo w"
-    console.log(stringValue.substring(3, 7)); 	// "low w"
-    console.log(stringValue.substr(3, 7)); 		// "lo worl"
-    // slice 方法将所有负值参数都当成字符串长度加上负参数
-    console.log(stringValue.slice(-3));        // "rld"
-    console.log(stringValue.slice(stringValue.length + (-3)));// substring 方法将所有福参数值都转换为0
-    console.log(stringValue.substring(-3));    // "hello world"
-    // substr 方法将第一个负参数值当成字符串长度加上改值
-    console.log(stringValue.substr(-3)); 	   // "rld"
-    console.log(stringValue.slice(3, -4)); 	   // "lo w"
-    console.log(stringValue.substring(3, -4)); // "hel"
-    console.log(stringValue.substr(3, -4));    // "" (empty string)
-    ```
+```js
+let stringValue = "hello world";
+console.log(stringValue.slice(3)); 			// "lo world"
+console.log(stringValue.substring(3)); 		// "lo world"
+console.log(stringValue.substr(3)); 		// "lo world"
+console.log(stringValue.slice(3, 7)); 		// "lo w"
+console.log(stringValue.substring(3, 7)); 	// "low w"
+console.log(stringValue.substr(3, 7)); 		// "lo worl"
+
+// slice 方法将所有负值参数都当成字符串长度加上负参数
+console.log(stringValue.slice(-3));        // "rld"
+console.log(stringValue.slice(stringValue.length + (-3)));// substring 方法将所有福参数值都转换为0
+console.log(stringValue.substring(-3));    // "hello world"
+
+// substr 方法将第一个负参数值当成字符串长度加上改值
+console.log(stringValue.substr(-3)); 	   // "rld"
+console.log(stringValue.slice(3, -4)); 	   // "lo w"
+console.log(stringValue.substring(3, -4)); // "hel"
+console.log(stringValue.substr(3, -4));    // "" (empty string)
+```
 
 ### 字符串位置方法
 
@@ -841,43 +941,43 @@ let pos = stringValue.indexOf("e");while(pos > -1) {
 
 ### 字符串包含方法
 
-- ECMAScript 6 增加了 3 个用于判断字符串中是否包含另一个字符的方法
+ECMAScript 6 增加了 3 个用于判断字符串中是否包含另一个字符的方法
 
-    - `startsWith()`
+- `startsWith()`
+    - 检查开始索引 0 的匹配项
+    - 可接受可选的第二个参数，表示开始搜索的位置，如果传入第二个参数，则意味着这两个方法会从指定位置向着字符串末尾搜索，忽略该位置之前的所有字符
 
-        - 检查开始索引 0 的匹配项
-        - 可接受可选的第二个参数，表示开始搜索的位置，如果传入第二个参数，则意味着这两个方法会从指定位置向着字符串末尾搜索，忽略该位置之前的所有字符
+```js
+let message = "foobarbaz";
 
-        ```js
-        let message = "foobarbaz";
-        
-        console.log(message.startsWith("foo")); // true
-        console.log(message.startsWith("foo", 1)); // false
-        ```
+console.log(message.startsWith("foo")); // true
+console.log(message.startsWith("foo", 1)); // false
+```
 
-    - `endsWith()`
+- `endsWith()`
 
-        - 检索开始于索引(string.length - substring.length)的匹配项
-        - 可接受可选的第二个参数，表示应该当作字符串末尾的位置，如果不提供这个参数，那么默认就是字符串长度。如果提供这个参数，那么就好像字符串只有那么多字符串一样
+    - 检索开始于索引(string.length - substring.length)的匹配项
+    - 可接受可选的第二个参数，表示应该当作字符串末尾的位置，如果不提供这个参数，那么默认就是字符串长度。如果提供这个参数，那么就好像字符串只有那么多字符串一样
 
-        ```js
-        let message = "foobarbaz";
-        
-        console.log(message.endsWith("bar")); // false
-        console.log(message.endsWith("bar", 6)); // true
-        ```
+```js
+let message = "foobarbaz";
 
-    - `includes()`
+console.log(message.endsWith("bar")); // false
+console.log(message.endsWith("bar", 6)); // true
+```
 
-        - 检查整个字符串
-        - 可接受可选的第二个参数，表示开始搜索的位置，如果传入第二个参数，则意味着这两个方法会从指定位置向着字符串末尾搜索，忽略该位置之前的所有字符
+- `includes()`
 
-        ```js
-        let message = "foobarbaz";
-        
-        console.log(message.includes("bar")); // true
-        console.log(message.includes("bar", 4)); // false
-        ```
+    - 检查整个字符串
+    - 可接受可选的第二个参数，表示开始搜索的位置，如果传入第二个参数，则意味着这两个方法会从指定位置向着字符串末尾搜索，忽略该位置之前的所有字符
+
+```js
+let message = "foobarbaz";
+
+console.log(message.includes("bar")); // true
+console.log(message.includes("bar", 4)); // false
+```
+
 
 ```js
 let message = "foobarbaz";
@@ -894,9 +994,11 @@ console.log(message.includes("qux")); // false
 
 ### trim() 方法
 
-- ECMAScript 在所有字符串上都提供了 `trim()`  方法，这个方法会创建字符串的一个副本，删除前、后所有空格符，再返回结果
-    - `trimLeft()`
-    - `trimRight()`
+ECMAScript 在所有字符串上都提供了 `trim()`  方法，
+这个方法会创建字符串的一个副本，删除前、后所有空格符，再返回结果
+
+- `trimLeft()`
+- `trimRight()`
 
 ```js
 let stringValue = "  hello world ";
@@ -908,7 +1010,8 @@ console.log(trimmedStringValue); // "hello world"
 
 ### repeat() 方法
 
-- ECMAScript 在所有字符串上都提供了 `repeat()` 方法，这个方法接收一个整数参数，表示要将字符串复制多少次，然后返回拼接所有副本后的结果
+ECMAScript 在所有字符串上都提供了 `repeat()` 方法，这个方法接收一个整数参数，
+表示要将字符串复制多少次，然后返回拼接所有副本后的结果
 
 ```js
 let stringValue = "na ";
@@ -918,32 +1021,32 @@ console.log(stringValue.repeat(16) + "batman");
 
 ### padStart() 和 padEnd() 方法
 
-- `padStart()` 和 `padEnd()` 方法会复制字符串，如果小于指定长度，则在相应一边填充字符，直至满足长度条件。
+`padStart()` 和 `padEnd()` 方法会复制字符串，如果小于指定长度，则在相应一边填充字符，直至满足长度条件。
 
-    - 这两个方法的第一个参数是长度，第二个 参数是可选的填充字符串，默认为空格(U+0020)
+- 这两个方法的第一个参数是长度，第二个 参数是可选的填充字符串，默认为空格(U+0020)
 
-    ```js
-    let stringValue = "foo";
-    
-    console.log(stringValue.padStart(6)); // "   foo"
-    console.log(stringValue.padStart(9, ".")); // "......foo"
-    
-    console.log(stringValue.padEnd(6)); // "foo   "
-    console.log(stringValue.padEnd(9, ".")); // "foo......"
-    ```
+```js
+let stringValue = "foo";
 
-    - 可选的第二个参数并不限于一个字符，如果提供了多个字符的字符串，则会将其拼接并截断以匹配指定长度
-    - 此外，如果长度小于或等于字符串长度，则会返回原始字符串
+console.log(stringValue.padStart(6)); // "   foo"
+console.log(stringValue.padStart(9, ".")); // "......foo"
 
-    ```js
-    let stringValue = "foo";
-    
-    console.log(stringValue.padStart(8, "bar")); // "barbafoo"
-    console.log(stringValue.padStart(2)); // "foo"
-    
-    console.log(stringValue.padEnd(8, "bar")); // "foobarba"
-    console.log(stringValue.padEnd(2)); // "foo"
-    ```
+console.log(stringValue.padEnd(6)); // "foo   "
+console.log(stringValue.padEnd(9, ".")); // "foo......"
+```
+
+- 可选的第二个参数并不限于一个字符，如果提供了多个字符的字符串，则会将其拼接并截断以匹配指定长度
+- 此外，如果长度小于或等于字符串长度，则会返回原始字符串
+
+```js
+let stringValue = "foo";
+
+console.log(stringValue.padStart(8, "bar")); // "barbafoo"
+console.log(stringValue.padStart(2)); // "foo"
+
+console.log(stringValue.padEnd(8, "bar")); // "foobarba"
+console.log(stringValue.padEnd(2)); // "foo"
+```
 
 ### 字符串迭代与解构
 
@@ -991,47 +1094,47 @@ console.log([...message]); // ["a", "b", "c", "d", "e"]
 
 ### 字符串模式匹配方法
 
-- String 类型专门在为字符串中实现模式匹配设计了几个方法
+String 类型专门在为字符串中实现模式匹配设计了几个方法
 
-    - `match(正则表达式字符串 or RegExp对象)`
-        - 本质上跟 RegExp 对象的 exec() 方法相同
+- `match(正则表达式字符串 or RegExp对象)`
+    - 本质上跟 RegExp 对象的 exec() 方法相同
 
-    ```js
-    let text = "cat, bat, sat, fat";
-    let pattern = /.at/;
-    
-    // 等价于 pattern.exec(text)
-    let matches = text.match(pattern);
-    console.log(matches.index); // 0
-    console.log(matches[0]); // "cat"
-    console.log(matches.lastIndex); // 0
-    ```
+```js
+let text = "cat, bat, sat, fat";
+let pattern = /.at/;
 
-    - `search(正则表达式字符串 or RegExp对象)`
+// 等价于 pattern.exec(text)
+let matches = text.match(pattern);
+console.log(matches.index); // 0
+console.log(matches[0]); // "cat"
+console.log(matches.lastIndex); // 0
+```
 
-    ```js
-    let text = "cat, bat, sat, fat";
-    let pattern = /at/;
-    let pos = text.search(pattern);
-    console.log(pos); // 1
-    ```
+- `search(正则表达式字符串 or RegExp对象)`
 
-    - `replace(RegExp对象 or 字符串, 字符串 or 函数)`
-        - 如果第一个参数是字符串，那么只会替换第一个字符串
-        - 想要替换素有字符串，第一个参数必须为正则表达式并且带全局标记`/g`
+```js
+let text = "cat, bat, sat, fat";
+let pattern = /at/;
+let pos = text.search(pattern);
+console.log(pos); // 1
+```
 
-    ```js
-    let text = "cat, bat, sat, fat";
-    let result = text.replace("at", "ond");
-    console.log(result); // "cond, bat, sat, fat"
-    
-    result = text.replace(/at/g, "ond");
-    console.log(result); // "cond, bond, sond, fond"
-    ```
+- `replace(RegExp对象 or 字符串, 字符串 or 函数)`
+    - 如果第一个参数是字符串，那么只会替换第一个字符串
+    - 想要替换素有字符串，第一个参数必须为正则表达式并且带全局标记`/g`
 
-    TOOD
+```js
+let text = "cat, bat, sat, fat";
+let result = text.replace("at", "ond");
+console.log(result); // "cond, bat, sat, fat"
 
-    - split()
+result = text.replace(/at/g, "ond");
+console.log(result); // "cond, bond, sond, fond"
+```
+
+TOOD
+
+- split()
 
 ### localeCompare() 方法
 
@@ -1073,76 +1176,82 @@ determineOrder("zoo");
 
 ### HTML 方法
 
-- 早期的浏览器开发商认为使用 JavaScript 动态生成 HTML 标签是一个需求。因此，早期浏览器扩展了规范，增加了生成 HTML 标签的方法。不过，这些方法基本上已经没有人使用了，因为结果通常不是语义化的标记
+早期的浏览器开发商认为使用 JavaScript 动态生成 HTML 标签是一个需求。
+因此，早期浏览器扩展了规范，增加了生成 HTML 标签的方法。
+不过，这些方法基本上已经没有人使用了，因为结果通常不是语义化的标记
 
 
 
 # 单例内置对象
 
-- ECMA-262 对内置对象的定义是：
-    - **任何由 ECMAScript 实现提供、与宿主环境无关，并在 ECMAScript 程序开始执行时就存在的对象**
-- 这意味着，开发者不用显示地实例化内置对象，因为它们已经实例化好了
-- 常见的内置对象：
-    - Object
-    - Array
-    - String
-    - Global
-    - Math
+ECMA-262 对内置对象的定义是：**任何由 ECMAScript 实现提供、与宿主环境无关，并在 ECMAScript 程序开始执行时就存在的对象**。
+这意味着，开发者不用显式地实例化内置对象，因为它们已经实例化好了。常见的内置对象：
+
+* `Object`
+* `Array`
+* `String`
+* `Global`
+* `Math`
 
 ## Global
 
-- Global 对象是 ECMAScript 中最特别的对象，因为代码不会显式地访问它
-- ECMA-262 规定 Global 对象是一种兜底对象，它针对的是不属于任何对象的属性和方法
-- 事实上，不存在全局变量或全局函数这种东西，在全局作用域中定义的变量和函数都会变成 Global 对象的属性，下面的函数都是 Global 对象的方法:
-    - isNaN()
-    - isFinite()
-    - parseInt()
-    - parseFloat()
-    - encodeURI()
-    - encodeURIComponent()
-    - decodeURI()
-    - decodeURIComponent()
-    - eval()
+Global 对象是 ECMAScript 中最特别的对象，因为代码不会显式地访问它。
+ECMA-262 规定 Global 对象是一种兜底对象，它针对的是不属于任何对象的属性和方法。
+事实上，不存在全局变量或全局函数这种东西，在全局作用域中定义的变量和函数都会变成 Global 对象的属性，
+下面的函数都是 Global 对象的方法:
+
+* `isNaN()`
+* `isFinite()`
+* `parseInt()`
+* `parseFloat()`
+* `encodeURI()`
+* `encodeURIComponent()`
+* `decodeURI()`
+* `decodeURIComponent()`
+* `eval()`
 
 ### URL 编码方法
 
-- `encodeURI()` 和 `encodeURIComponent()` 方法用于编码统一资源标识符(URI)，以便传给浏览器，有效的 URI 不能包含某些字符，比如空格。使用 URI 编码方法来编码 URI 可以让浏览器能够理解它们，同时又以特殊的 UTF-8 编码替换掉所有无效字符
+- `encodeURI()` 和 `encodeURIComponent()` 方法用于编码统一资源标识符(URI)，
+  以便传给浏览器，有效的 URI 不能包含某些字符，比如空格。
+  使用 URI 编码方法来编码 URI 可以让浏览器能够理解它们，
+  同时又以特殊的 UTF-8 编码替换掉所有无效字符
 
 - `encodeURI()` 方法用于对整个 URI 进行编码
-
     - 比如: `"www.wrox.com/illegal value.js"`
-
 - `encodeURIComponent()` 方法用于编码 URI 中单独的组件，
-
     - `"illegal value.js"`
+- `encodeURI()` 方法与 `encodeURIComponent()` 的主要区别是，
+  `encodeURI()` 不会编码属于 URL 组件的特殊字符，
+  比如 冒号、斜杆、问号、井号，而 `encodeURIComponent() ` 会编码它发现的素有非标准字符
 
-- `encodeURI()` 方法与 `encodeURIComponent()` 的主要区别是，`encodeURI()` 不会编码属于 URL 组件的特殊字符，比如 冒号、斜杆、问号、井号，而 `encodeURIComponent() ` 会编码它发现的素有非标准字符
+```js
+let uri = "http://www.wrox.com/illegal value.js#start";
 
-    ```js
-    let uri = "http://www.wrox.com/illegal value.js#start";
-    
-    // "http://www.wrox.com/illegal%20value.js#start"
-    console.log(encodeURI(uri));
-    
-    // "http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.js%23start"
-    console.log(encodeURIComponent(uri));
-    ```
+// "http://www.wrox.com/illegal%20value.js#start"
+console.log(encodeURI(uri));
+
+// "http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.js%23start"
+console.log(encodeURIComponent(uri));
+```
 
 - 与 `encodeURI()`  和 `encodeURIComponent()` 相对的是  `decodeURI()` 和 `decodeURIComponent()`
 
-    ```js
-    let uri = "http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.js%23start";
-    
-    // "http%3A%2F%2Fwww.wrox.com%2Fillegal value.js%23start"
-    console.log(decodeURI(uri));
-    
-    // "http://www.wrox.com/illegal value.js#start"
-    console.log(decodeURIComponent(uri));
-    ```
+```js
+let uri = "http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.js%23start";
+
+// "http%3A%2F%2Fwww.wrox.com%2Fillegal value.js%23start"
+console.log(decodeURI(uri));
+
+// "http://www.wrox.com/illegal value.js#start"
+console.log(decodeURIComponent(uri));
+```
 
 ### eval() 方法
 
-- `eval()` 可能是 ECMAScript 语言中最强大的方法了，这个方法就是一个完整的 ECMAScript 解释器，它接受一个参数，即一个要执行的 ECMAScript(JavaScript)字符串。当解释器发现 `eval()` 调用时，会将参数解释为实际的 ECMAScript 语句，然后将其插入到该位置
+`eval()` 可能是 ECMAScript 语言中最强大的方法了，这个方法就是一个完整的 ECMAScript 解释器，
+它接受一个参数，即一个要执行的 ECMAScript(JavaScript)字符串。当解释器发现 `eval()` 调用时，
+会将参数解释为实际的 ECMAScript 语句，然后将其插入到该位置
 
 - 示例
 
@@ -1154,7 +1263,8 @@ eval("console.log('hi')");
 console.log("hi");
 ```
 
-- 通过 `eval()` 执行的代码属于该调用所在上下文，被执行的代码与该上下文拥有相同的作用域链，这意味着定义在包含上下文中的变量可以在 `eval()` 调用内部被引用
+- 通过 `eval()` 执行的代码属于该调用所在上下文，被执行的代码与该上下文拥有相同的作用域链，
+  这意味着定义在包含上下文中的变量可以在 `eval()` 调用内部被引用
 
 ```js
 let msg = "hello world";
@@ -1168,7 +1278,8 @@ eval("function sayHi() { console.log('hi'); }");
 sayHi();
 ```
 
-- 通过 `eval()` 定义的任何变量和函数都不会被提升，这是因为在解析代码的时候，它们是被包含在一个字符串中的。它们只是在 `eval()` 执行的时候才会被创建
+- 通过 `eval()` 定义的任何变量和函数都不会被提升，这是因为在解析代码的时候，
+  它们是被包含在一个字符串中的。它们只是在 `eval()` 执行的时候才会被创建
 
 ```js
 eval("let msg = 'hello world';");
@@ -1187,11 +1298,11 @@ eval = "hi"; // 导致错误
 
 - Global 对象有很多属性
 
-| 属性           | 说明                   |
+| 属性            | 说明                    |
 | -------------- | ---------------------- |
-| undefined      | 特殊值 undefined       |
-| NaN            | 特殊值 NaN             |
-| Infinity       | 特殊值 Infinity        |
+| undefined       | 特殊值 undefined         |
+| NaN            | 特殊值 NaN              |
+| Infinity        | 特殊值 Infinity          |
 | Object         | Object 的构造函数      |
 | Array          | Array 的构造函数       |
 | Function       | Function 的构造函数    |
@@ -1211,7 +1322,9 @@ eval = "hi"; // 导致错误
 
 ### window 对象
 
-- 虽然 ECMA-262 没有规定直接访问 Global 对象的方式，但浏览器将 `window` 对象实现为 `Global` 对象的代理。因此，所有全局作用域中声明的变量和函数都变成了 `window` 的属性
+- 虽然 ECMA-262 没有规定直接访问 Global 对象的方式，
+  但浏览器将 `window` 对象实现为 `Global` 对象的代理。
+  因此，所有全局作用域中声明的变量和函数都变成了 `window` 的属性
 
 ```js
 var color = "red";
@@ -1222,7 +1335,8 @@ function sayColor() {
 window.sayColor(); // "red"
 ```
 
-- 当一个函数在没有明确(通过成为某个对象的方法，或者通过 `call()`/`apply()`)指定 `this` 值的情况下执行时，`this` 值等于 `Global` 对象，因此，调用一个简单返回 `this` 的函数是在任何执行上下文中获取 `Global` 对象的通用方式
+- 当一个函数在没有明确(通过成为某个对象的方法，或者通过 `call()`/`apply()`)指定 `this` 值的情况下执行时，
+  `this` 值等于 `Global` 对象，因此，调用一个简单返回 `this` 的函数是在任何执行上下文中获取 `Global` 对象的通用方式
 
 ```js
 let global = function() {
@@ -1305,7 +1419,8 @@ let color = colors[selectFrom(0, colors.length - 1)];
 console.log(color);
 ```
 
-- `Math.random()` 方法在这里出于演示目的是没有问题的。如果为了加密而需要生成随机数(传给生成器的输入需要较高的不确定性)，那么建议使用 `window.crypto.getRandomValues()`
+- `Math.random()` 方法在这里出于演示目的是没有问题的。
+  如果为了加密而需要生成随机数(传给生成器的输入需要较高的不确定性)，那么建议使用 `window.crypto.getRandomValues()`
 
 ### 其他方法
 
