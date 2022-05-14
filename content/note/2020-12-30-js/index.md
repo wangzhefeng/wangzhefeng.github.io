@@ -1,7 +1,7 @@
 ---
 title: 玩转 JavaScript
 author: 王哲峰
-date: '2020-12-31'
+date: '2020-12-30'
 slug: javascript
 categories:
   - javascript

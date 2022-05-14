@@ -4,14 +4,9 @@ author: 王哲峰
 date: '2015-05-20'
 slug: vue
 categories:
-  - 前端
+  - javascript
 tags:
-  - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
+  - web
 ---
 
 ## 1.Vue 简介
