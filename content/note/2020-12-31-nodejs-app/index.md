@@ -454,4 +454,7 @@ exports.route = route;
 * [Node 入门](https://www.nodebeginner.org/index-zh-cn.html#analyzing-our-http-server)
 * [Understanding node.js](http://debuggable.com/posts/understanding-node-js:4bd98440-45e4-4a9a-8ef7-0f7ecbdd56cb)
 * [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
-
+* [Node.js 官网](https://nodejs.org/en/)
+* [Node.js 教程](https://www.liaoxuefeng.com/wiki/1022910821149312/1023025635916288)
+* [函数式编程 Blog](http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html)
+* [Node.js Hello Workld App](https://github.com/manuelkiessling/nodebeginner.org/tree/master/code/application)
