@@ -16,7 +16,7 @@ disable_highlight: true
 > * 书册埋头无了日，不如抛却去寻春。--《出山道中口占》【朱熹】
 
 <!-- 喜欢的一段视频： -->
-<!-- <div class="plyr__video-embed" id="player" width="100%">
+<div class="plyr__video-embed" id="player" width="100%">
   <iframe
     src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
     allowfullscreen
@@ -25,7 +25,7 @@ disable_highlight: true
     width="100%"
     height="400px"
   ></iframe>
-</div> -->
+</div>
 
 <!-- 喜欢的一张图片：
 <image src="images/background.jpg" width="100%" height="350px"> -->
@@ -49,6 +49,7 @@ disable_highlight: true
 * :black_square_button: 微信屏蔽问题处理
     - [x] 申请恢复访问
     - [ ] 部署相关文件
+* :white_check_mark: 添加 favicon.ico
 
 ### 本站架构
 
