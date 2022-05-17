@@ -1028,13 +1028,10 @@ console.log(personName, personBar, personAge);
 // Mat, undefined, undefined
 ```
 
-
-
-
-
 ### 参数上下文匹配
 
-- 在函数参数列表中也可以进行解构赋值。对参数的结构赋值不会影响 arguments 对象，但可以在函数签名中声明在函数体内使用局部变量
+在函数参数列表中也可以进行解构赋值。对参数的解构赋值不会影响 `arguments` 对象，
+但可以在函数签名中声明在函数体内使用局部变量
 
 ```js
 let person = {
