@@ -69,8 +69,17 @@ details[open] summary {
     - [可计算属性](#可计算属性)
     - [简写方法名](#简写方法名)
   - [对象解构](#对象解构)
-    - [对象解构简介](#对象解构简介)
+    - [对象解构介绍](#对象解构介绍)
+      - [不使用对象解构](#不使用对象解构)
+      - [使用对象解构](#使用对象解构)
+      - [让变量直接使用属性的名称](#让变量直接使用属性的名称)
+      - [解构赋值不一定与对象的属性匹配](#解构赋值不一定与对象的属性匹配)
+      - [可以在解构赋值的同时定义默认值](#可以在解构赋值的同时定义默认值)
+      - [ToObject()](#toobject)
+      - [解构并不要求变量必须在解构表达式中声明](#解构并不要求变量必须在解构表达式中声明)
     - [嵌套解构](#嵌套解构)
+      - [通过解构复制对象属性](#通过解构复制对象属性)
+    - [解构赋值使用嵌套结构](#解构赋值使用嵌套结构)
     - [部分解构](#部分解构)
     - [参数上下文匹配](#参数上下文匹配)
 - [创建对象](#创建对象-1)
@@ -156,8 +165,10 @@ let person = {
 
 ## 属性的类型
 
-ECMA-262 使用一些**内部特性**来描述**属性的特征**。这些特性是由为 JavaScript 实现引擎的规范定义的，
-因此，开发者不能在 JavaScript 中直接访问这些特性，为了将某个特性表示为内部特性，
+ECMA-262 使用一些**内部特性**来描述**属性的特征**。
+这些特性是由为 JavaScript 实现引擎的规范定义的，
+因此，开发者不能在 JavaScript 中直接访问这些特性，
+为了将某个特性表示为内部特性，
 规范会用两个中括号把特性的名称括起来。属性分两种:
 
 * 数据属性
@@ -798,12 +809,12 @@ person.sayName("Matt"); // My name is Matt
 
 ## 对象解构
 
-- ECMAScript 6 新增了对象解构语法，可以在一条语句中使用嵌套数据实现一个或多个赋值操作。
-  简单地说，对象解构就是使用与对象匹配的结构来实现对象属性赋值。
+ECMAScript 6 新增了对象解构语法，可以在一条语句中使用嵌套数据实现一个或多个赋值操作。
+简单地说，对象解构就是使用与对象匹配的结构来实现对象属性赋值。
 
-### 对象解构简介
+### 对象解构介绍
 
-- 不使用对象解构
+#### 不使用对象解构
 
 ```js
 let person = {
@@ -816,8 +827,10 @@ console.log(personName); // Matt
 console.log(personAge);  // 27
 ```
 
-- 使用对象解构
-    - 可以在一个类似对象字面量的结构中，声明多个变量，同时执行多个赋值操作
+#### 使用对象解构
+    
+使用对象解构，可以在一个类似对象字面量的结构中，声明多个变量，
+同时执行多个赋值操作
 
 ```js
 let person = {
@@ -828,55 +841,196 @@ let person = {
 let { name: personName, age: personAge } = person;
 console.log(personName); // Matt
 console.log(personAge); // 27
+```
 
-// 让变量直接使用属性的名称，可以使用简单语法
+#### 让变量直接使用属性的名称
+
+让变量直接使用属性的名称，可以使用简单语法
+
+```js
+let person = {
+    name: "Matt",
+    age: 27
+}
+
 let { name, age } = person;
 console.log(name); // Matt
 console.log(age);  // 27
+```
 
-// 解构赋值不一定与对象的属性匹配。赋值的时候可以忽略某些属性，而如果引用的属性不存在，则该变量的值就是 undefined
+#### 解构赋值不一定与对象的属性匹配
+
+解构赋值不一定与对象的属性匹配。赋值的时候可以忽略某些属性，
+而如果引用的属性不存在，则该变量的值就是 `undefined`
+
+```js
 let person = {
     name: "Matt",
     age: 27
 };
+
 let { name, job } = person;
 console.log(name); // Matt
 console.log(job);  // undefined
+```
 
-// 可以在解构赋值的同时定义默认值，适用于引用的属性不存在于源对象中的情况
+#### 可以在解构赋值的同时定义默认值
+
+可以在解构赋值的同时定义默认值，适用于引用的属性不存在于源对象中的情况
+
+```js
 let person = {
     name: "Matt",
     age: 27
 };
-let { name, job = "Software engineer" } = person;
-console.log(name); // Matt
-console.log(job); // Software engineer
 
-// 解构在内部使用函数 ToObject() 不能在运行时环境中直接访问，把源数据解构转换为对象
-// 这意味着在对象解构的上下文中，原始值会被当成对象，这也意味着 null 和 undefined 不能被解构，否则会抛出错误
+let { name, job = "Software engineer" } = person;
+console.log(name);  // Matt
+console.log(job);  // Software engineer
+```
+
+#### ToObject()
+
+解构在内部使用函数 `ToObject()` (不能在运行时环境中直接访问)把源数据解构转换为对象。
+这意味着在对象解构的上下文中，原始值会被当成对象，
+这也意味着 null 和 undefined 不能被解构，否则会抛出错误
+
+```js
 let { lenght } = "foobar";
 console.log(length); // 6
 
 let { constructor: c } = 4;
-console.log(c === Number); // true
+console.log(c === Number);  // true
 
 let { _ } = null; 	   // TypeError
-let { _ } = undefined; // TypeError
+let { _ } = undefined;  // TypeError
+```
 
-// 解构并不要求变量必须在解构表达式中声明，不过，如果是事先声明的变量赋值，则赋值表达式必须包含在一对括号中
+#### 解构并不要求变量必须在解构表达式中声明
+
+解构并不要求变量必须在解构表达式中声明，不过，如果是给事先声明的变量赋值，
+则赋值表达式必须包含在一对括号中
+
+```js
 let personName, personAge;
 let person = {
     name: "Matt",
     age: 27
 };
 ({name: personName, age: personAge} = person);
-console.log(personName, personAge); // Matt, 27
+console.log(personName, personAge);  // Matt, 27
 ```
-
 
 ### 嵌套解构
 
+#### 通过解构复制对象属性
+
+解构对于引用嵌套的属性或赋值目标没有限制。
+为此，可以通过解构来复制对象属性
+
+```js
+let person = {
+    name: "Matt",
+    age: 27,
+    job: {
+        title: "Software engineer"
+    }
+};
+let personCopy = {};
+
+({
+    name: personCopy.name,
+    age: personCopy.age,
+    job: personCopy.job
+} = person);
+
+// 因为一个对象的引用被赋值给 personCopy，所以修改
+// person.job 对象的属性也会影响 personCopy
+person.job.title = "Hacker";
+
+console.log(person);
+// { name: "Matt", age: 27, job: { title: "Hacker" } }
+
+console.log(personCopy);
+// { name: "Matt", age: 27, job: { title: "Hacker" } }
+```
+
+### 解构赋值使用嵌套结构
+
+解构赋值可以使用嵌套结构，以匹配嵌套的属性
+
+```js
+let person = {
+    name: "Matt",
+    age: 27,
+    job: {
+        "title": "Software engineer"
+    }
+};
+
+// 声明 title 变量并将 person.job.title 的值赋给它
+let { job: { title } } = person;
+console.log(title);  // Software engineer
+```
+
+在外层属性没有定义的情况下不能使用嵌套解构。无论源对象还是目标对象都一样
+
+```js
+let person = {
+    job: {
+        title: "Software engineer"
+    }
+};
+let personCopy = {};
+
+// foo 在源对象上是 undefined
+({
+    foo: {
+        bar: personCopy.bar
+    }
+} = person);
+// TypeError: Cannot destructure property 'bar' of 'undefined' or 'null'.
+
+// job 在目标对象上是 undefined
+({
+    job: {
+        title: personCopy.job.title
+    }
+} = person);
+// TypeError: Cannot set property 'title' of undefined
+```
+
 ### 部分解构
+
+涉及多个属性的解构赋值是一个输出无关的顺序化操作。
+如果一个解构表达式涉及多个赋值，开始的赋值成功而后面的赋值出错，
+则整个解构赋值只会完成一部分
+
+```js
+let person = {
+    name: "Matt",
+    age: 27
+};
+let personName, personBar, personAge;
+
+try {
+    // person.foo 是 undefined，因此会抛出错误
+    ({
+        name: personName, 
+        foo: {
+            bar: personBar
+        },
+        age: personAge
+    } = person);
+} catch(e) {}
+
+console.log(personName, personBar, personAge);
+// Mat, undefined, undefined
+```
+
+
+
+
 
 ### 参数上下文匹配
 
