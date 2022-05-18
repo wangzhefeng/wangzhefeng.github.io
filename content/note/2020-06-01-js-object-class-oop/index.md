@@ -85,6 +85,13 @@ details[open] summary {
 - [创建对象](#创建对象-1)
   - [工厂模式](#工厂模式)
   - [构造函数模式](#构造函数模式)
+    - [构造函数模式解释](#构造函数模式解释)
+    - [构造函数模式原理](#构造函数模式原理)
+    - [constructor](#constructor)
+    - [构造函数用函数表达式创建](#构造函数用函数表达式创建)
+    - [构造函数实例化](#构造函数实例化)
+    - [构造函数也是函数](#构造函数也是函数)
+    - [构造函数的问题](#构造函数的问题)
   - [原型模式](#原型模式)
   - [对象迭代](#对象迭代)
 - [继承](#继承)
@@ -1097,19 +1104,9 @@ let person2 = createPerson("Greg", 27, "Doctor");
 
 ## 构造函数模式
 
-- ECMAScript 中的构造函数是用于创建特定类型对象的
-    - 像 Object 和 Array 这样的原生构造函数，运行时可以直接在执行环境中使用
-    - 也可以自定义构造函数，以函数的形式为自己的对象类型定义属性和方法
-- 构造函数模式相比于工厂模式，有如下区别
-    - 没有显式地创建对象
-    - 属性和方法直接赋值给 this
-    - 没有 return
-    - 函数名首字母大写，按照惯例，构造函数名称的首字母都要大写，
-      费构造函数则以小写字母开头，这是从面向对象编程语言哪里借鉴的，
-      有助于区分构造函数和普通函数，毕竟 ECMAScript 的构造函数就是能创建对象的函数
-- 构造函数模式创建的实例对象时使用 new 操作符，以这种方式调用构造函数会执行如下操作
-    - 在内存中创建一个新对象
-    - 这个新对象内部的 [[Prototype]] 特性被赋值为构造函数的 prototype 属性
+ECMAScript 中的构造函数是用于创建特定类型对象的。
+像 Object 和 Array 这样的原生构造函数，运行时可以直接在执行环境中使用。
+也可以自定义构造函数，以函数的形式为自己的对象类型定义属性和方法
 
 ```js
 function Person(name, age, job) {
@@ -1123,14 +1120,166 @@ function Person(name, age, job) {
 
 let person1 = new Person("Nicholas", 29, "Software Engineer");
 let person2 = new Person("Greg", 27, "Doctor");
+
 person1.sayName(); // Nicholas
 person2.sayName(); // Greg
 ```
 
+### 构造函数模式解释
+
+构造函数模式相比于工厂模式，有如下区别
+
+* 没有显式地创建对象
+* 属性和方法直接赋值给 `this`
+* 没有 `return`
+* 函数名首字母大写，按照惯例，构造函数名称的首字母都要大写，
+  非构造函数则以小写字母开头，这是从面向对象编程语言哪里借鉴的，
+  有助于区分构造函数和普通函数，毕竟 ECMAScript 的构造函数就是能创建对象的函数
+
+### 构造函数模式原理
+
+构造函数模式创建的实例对象时使用 `new` 操作符，以这种方式调用构造函数会执行如下操作:
+
+1. 在内存中创建一个新对象
+2. 这个新对象内部的 `[[Prototype]]` 特性被赋值为构造函数的 `prototype` 属性
+3. 构造函数内部的 `this` 被赋值为这个新对象(即 `this` 指向新对象)
+4. 执行构造函数内部的代码(给新对象添加属性)
+5. 如果构造函数返回非空对象，则返回该对象；否则，返回刚创建的新对象
+
+### constructor
+
+`constructor` 本来是用于标识对象类型的。不过，一般认为 `instanceof` 操作符是确定对象类型更可靠的方式。
+定义自定义构造函数可以确保实例被表示为特定类型，相比于工厂模式，这是一个很大的好处
+
+下面的示例中每个对象都是 Object 的实例，同时也是 Person 的实例:
+
+```js
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function() {
+        console.log(this.name);
+    };
+}
+
+let person1 = new Person("Nicholas", 29, "Software Engineer");
+let person2 = new Person("Greg", 27, "Doctor");
+
+person1.sayName(); // Nicholas
+person2.sayName(); // Greg
+
+console.log(person1.constructor == Person);  // true
+console.log(person2.constructor == Person);  // true
+
+console.log(person1 instanceof Object);  // true
+console.log(person1 instanceof Person);  // true
+console.log(person2 instanceof Object);  // true
+console.log(person2 instanceof Person);  // true
+```
+
+### 构造函数用函数表达式创建
+
+构造函数不一定要写成函数声明的形式。赋值给变量的函数表达式也可以表示构造函数
+
+```js
+let Person = function(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function() {
+        console.log(this.name);
+    };
+};
+
+let person1 = new Person("Nicholas", 29, "Software Engineer");
+let person2 = new Person("Greg", 27, "Doctor");
+
+person1.sayName();  // Nicholas
+person2.sayName();  // Greg
+
+console.log(person1 instanceof Object);  // true
+console.log(person1 instanceof Person);  // true
+console.log(person2 instanceof Object);  // true
+console.log(person2 instanceof Person);  // true
+```
+
+### 构造函数实例化
+
+在实例化时，如果不想传参数，那么构造函数后面的括号可加可不加。
+只要有 `new` 操作符，就可以调用相应的构造函数
+
+```js
+function Person() {
+    this.name = "Jake";
+    this.sayName = function() {
+        console.log(this.name);
+    };
+}
+
+let person1 = new Person();
+let person2 = new Person;
+
+person1.sayName();  // Jake
+person2.sayName();  // Jake
+
+console.log(person1 instanceof Object);  // true
+console.log(person1 instanceof Person);  // true
+console.log(person2 instanceof Object);  // true
+console.log(person2 instanceof Person);  // true
+```
+
+
+### 构造函数也是函数
+
+构造函数与普通函数唯一的区别就是调用方式不同。除此之外，构造函数也是函数。
+并没有把某个函数定义为构造函数的特殊语法。任何函数只要使用 `new` 操作符调用就是构造函数，
+而不使用 `new` 操作符调用的函数就是普通函数
+
+```js
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function() {
+        console.log(this.name);
+    };
+}
+
+// 作为构造函数
+let person = new Person("Nicholas", 29, "Software Engineer");
+person.sayName();  // Nicholas
+
+// 作为函数调用
+// 在用用一个函数而没有明确设置 this 值的情况下(即没有作为对象的方法调用，
+// 或者没有使用 call()/apply() 调用)，
+// this 始终指向 Global 对象(在浏览器中就是 window 对象)
+Person("Greg", 27, "Doctor");  // 添加到 window 对象
+window.sayName();  // Greg
+
+// 在另一个对象的作用域中调用
+let o = new Object();
+Person.call(o, "Kristen", 25, "Nurse");
+o.sayName();  // Kristen
+```
+
+### 构造函数的问题
+
+构造函数的主要问题在于，其定义的方法会在每个实例上都创建一遍
+
+
+
+
+
+
 ## 原型模式
 
-- 每个函数都会创建一个 prototype 属性，这个属性是一个对象，包含应该由特定引用类型的实例共享的属性和方法。实际上这个对象就是通过调用构造函数创建的对象的原型
-- 使用原型对象的好处是，在它上面定义的属性和方法可以被对象实例共享。原来在构造函数中直接给对象实例的值，可以直接赋值给它们的原型
+每个函数都会创建一个 `prototype` 属性，这个属性是一个对象，
+包含应该由特定引用类型的实例共享的属性和方法。
+实际上这个对象就是通过调用构造函数创建的**对象的原型**
+
+使用原型对象的好处是，在它上面定义的属性和方法可以被对象实例共享。
+原来在构造函数中直接给对象实例的值，可以直接赋值给它们的原型
 
 ```js
 function Person() {}
@@ -1152,9 +1301,26 @@ console.log(person1.sayName == person2.sayName); // true
 
 ## 对象迭代
 
+
+
+
+
+
 # 继承
 
+很多面向对象语言都支持两种继承:
+
+* 接口继承: 只继承方法签名
+* 实现继承: 继承实际的方法
+
+接口继承在 ECMAScript 中是不可能的，因为函数没有签名。
+实现继承是 ECMAScript 唯一支持的继承方式，而这主要是通过原型链实现的
+
 ## 原型链
+
+
+
+
 
 ## 盗用构造函数
 
@@ -1182,75 +1348,75 @@ console.log(person1.sayName == person2.sayName); // true
 
 ### 类的定义
 
-- 与函数类型类似，定义类也有两种主要方式，这两种方式都使用 class 关键字加大括号
+与函数类型类似，定义类也有两种主要方式，这两种方式都使用 class 关键字加大括号
 
-    - 类声明
+- 类声明
 
-        - 定义类
+    - 定义类
 
-        ```js
-        // 函数声明
-        function Person() {}
-        class Person {}
-        ```
+    ```js
+    // 函数声明
+    function Person() {}
+    class Person {}
+    ```
 
-        - 与函数定义不同的是，虽然函数声明可以提升，但类定义不能
+    - 与函数定义不同的是，虽然函数声明可以提升，但类定义不能
 
-            - 函数声明提升
-
-            ```js
-            console.log(FunctionDeclaration); // FunctionDeclaration() {}
-            function FunctionDeclaration() {}
-            console.log(FunctionDeclaration); // FunctionDeclaration() {}
-            ```
-
-            - 类声明不能提升
-
-            ```js
-            console.log(ClassDeclaration); // ReferenceError: ClassDeclaration is not defined
-            class ClassDeclaration {}
-            console.log(ClassDeclaration); // class ClassDeclaration {}
-            ```
-
-        - 与函数声明不同的还有，函数受函数作用域限制，而类受块作用域限制
+        - 函数声明提升
 
         ```js
-        {
-            function FunctionDeclaration() {}
-            class ClassDeclaration {}
-        }
-        
         console.log(FunctionDeclaration); // FunctionDeclaration() {}
-        console.log(ClassDeclaration);    // ReferenceError: ClassDeclaration is not defined
+        function FunctionDeclaration() {}
+        console.log(FunctionDeclaration); // FunctionDeclaration() {}
         ```
 
-    - 类表达式
-
-        - 定义类
+        - 类声明不能提升
 
         ```js
-        // 函数表达式
-        const Animal = function() {};
-        const Animal = class {};
+        console.log(ClassDeclaration); // ReferenceError: ClassDeclaration is not defined
+        class ClassDeclaration {}
+        console.log(ClassDeclaration); // class ClassDeclaration {}
         ```
 
-        - 与函数表达式类似，类表达式在它们被求值前也不能引用
+    - 与函数声明不同的还有，函数受函数作用域限制，而类受块作用域限制
 
-            - 函数表达式在定义前不能引用
+    ```js
+    {
+        function FunctionDeclaration() {}
+        class ClassDeclaration {}
+    }
+    
+    console.log(FunctionDeclaration); // FunctionDeclaration() {}
+    console.log(ClassDeclaration);    // ReferenceError: ClassDeclaration is not defined
+    ```
 
-            ```js
-            console.log(FunctionExpression); // undefined
-            var FunctionExpression = function() {};
-            console.log(FunctionExpression); // function() {}
-            ```
+- 类表达式
 
-            - 类表达式在定义前不能引用
+    - 定义类
 
-            ```js
-            console.log(ClassExpression); // undefined
-            var ClassExpression = class() {};
-            console.log(ClassExpression); // class {}
-            ```
+    ```js
+    // 函数表达式
+    const Animal = function() {};
+    const Animal = class {};
+    ```
+
+    - 与函数表达式类似，类表达式在它们被求值前也不能引用
+
+        - 函数表达式在定义前不能引用
+
+        ```js
+        console.log(FunctionExpression); // undefined
+        var FunctionExpression = function() {};
+        console.log(FunctionExpression); // function() {}
+        ```
+
+        - 类表达式在定义前不能引用
+
+        ```js
+        console.log(ClassExpression); // undefined
+        var ClassExpression = class() {};
+        console.log(ClassExpression); // class {}
+        ```
 
 ### 类的构成
 
@@ -1355,65 +1521,72 @@ console.log(p3.name); // Jake
 
 ### 迭代器与生成器方法
 
+
+
+
+
+
 ## 继承
 
-- ECMAScript 6 新增特性中最出色的一个就是原生支持了类继承机制。虽然类继承使用的是新语法，但背后依旧使用的是原型链
+ECMAScript 6 新增特性中最出色的一个就是原生支持了类继承机制。
+虽然类继承使用的是新语法，但背后依旧使用的是原型链
 
 ### 继承基础
 
-- ES6 类支持单继承。使用 `extends` 关键字，就可以继承任何拥有 `[[Construct]]` 和`原型`的对象。很大程度上，这意味着不仅可以继承一个类，也可以继承普通的构造函数
+ES6 类支持单继承。使用 `extends` 关键字，就可以继承任何拥有 `[[Construct]]` 和**原型**的对象。
+很大程度上，这意味着不仅可以继承一个类，也可以继承普通的构造函数
 
-    - 继承类
+- 继承类
 
-    ```js
-    class Vehicle {}
-    
-    // 继承类
-    class Bus extends Vehicle {}
-    
-    let b = new Bus();
-    console.log(b instanceof Bus);	   // true
-    console.log(b instanceof Vehicle); // true
-    ```
+```js
+class Vehicle {}
 
-    - 继承普通构造函数
+// 继承类
+class Bus extends Vehicle {}
 
-    ```js
-    function Person {}
-    
-    // 继承普通构造函数
-    class Engineer extends Person {}
-    
-    let e = new Engineer();
-    console.log(e instanceof Engineer); // true
-    console.log(e instanceof Person); 	// true
-    ```
+let b = new Bus();
+console.log(b instanceof Bus);	   // true
+console.log(b instanceof Vehicle); // true
+```
+
+- 继承普通构造函数
+
+```js
+function Person {}
+
+// 继承普通构造函数
+class Engineer extends Person {}
+
+let e = new Engineer();
+console.log(e instanceof Engineer); // true
+console.log(e instanceof Person); 	// true
+```
 
 - 派生类都会通过原型链访问到类和原型上定义的方法，this 的值会反映调用相应的方法的实例或者类
 
-    ```js
-    // 类
-    class Vehicle {
-        identifyPrototype(id) {
-            console.log(id, this);
-        }
-        static identifyClass(id) {
-            console.log(id, this);
-        }
+```js
+// 类
+class Vehicle {
+    identifyPrototype(id) {
+        console.log(id, this);
     }
-    
-    // 继承类
-    class Bus extends Vehicle {}
-    
-    let v = new Vehicle();
-    let b = new Bus();
-    
-    b.identifyPrototype("bus");     // bus, Bus {}
-    v.identifyPrototype("vehicle"); // vehicle, Vehicle {}
-    
-    Bus.identifyClass("bus"); 	      // bus, class Bus {}
-    Vehicle.identifyClass("vehicle"); // vehicle, class Vehicle {}
-    ```
+    static identifyClass(id) {
+        console.log(id, this);
+    }
+}
+
+// 继承类
+class Bus extends Vehicle {}
+
+let v = new Vehicle();
+let b = new Bus();
+
+b.identifyPrototype("bus");     // bus, Bus {}
+v.identifyPrototype("vehicle"); // vehicle, Vehicle {}
+
+Bus.identifyClass("bus"); 	      // bus, class Bus {}
+Vehicle.identifyClass("vehicle"); // vehicle, class Vehicle {}
+```
 
 - extends 关键字也可以在类表达式中使用，因此下面的也是有效的语法
 
@@ -1423,7 +1596,8 @@ console.log(p3.name); // Jake
 
 ### 构造函数、HomeObject 和 super()
 
-- 派生类的方法可以通过 `super` 关键字引用它们的原型。这个关键字只能在派生类中使用，而且仅限于类构造函数、实例方法和静态方法内部。在类构造函数中使用 super 可以调用父类构造函数
+派生类的方法可以通过 `super` 关键字引用它们的原型。这个关键字只能在派生类中使用，
+而且仅限于类构造函数、实例方法和静态方法内部。在类构造函数中使用 super 可以调用父类构造函数
 
 ```js
 class Vehicle {
@@ -1447,3 +1621,4 @@ class Bus extends Vehicle {
 ### 继承内置类型
 
 ### 类混入
+
