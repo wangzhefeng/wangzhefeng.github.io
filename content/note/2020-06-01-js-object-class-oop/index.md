@@ -92,8 +92,18 @@ details[open] summary {
     - [构造函数实例化](#构造函数实例化)
     - [构造函数也是函数](#构造函数也是函数)
     - [构造函数的问题](#构造函数的问题)
+      - [问题](#问题)
+      - [解决方法](#解决方法)
   - [原型模式](#原型模式)
+    - [理解原型](#理解原型)
+    - [原型层级](#原型层级)
+    - [原型和 in 操作符](#原型和-in-操作符)
+    - [属性枚举顺序](#属性枚举顺序)
   - [对象迭代](#对象迭代)
+    - [其他原型语法](#其他原型语法)
+    - [原型的动态性](#原型的动态性)
+    - [原生对象类型](#原生对象类型)
+    - [原型的问题](#原型的问题)
 - [继承](#继承)
   - [原型链](#原型链)
   - [盗用构造函数](#盗用构造函数)
@@ -1229,7 +1239,6 @@ console.log(person2 instanceof Object);  // true
 console.log(person2 instanceof Person);  // true
 ```
 
-
 ### 构造函数也是函数
 
 构造函数与普通函数唯一的区别就是调用方式不同。除此之外，构造函数也是函数。
@@ -1267,10 +1276,81 @@ o.sayName();  // Kristen
 
 构造函数的主要问题在于，其定义的方法会在每个实例上都创建一遍
 
+#### 问题
+
+```js
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function() {
+        console.log(this.name);
+    };
+}
+
+let person1 = new Person("Nicholas", 29, "Software Engineer");
+let person2 = new Person("Greg", 27, "Doctor");
+
+person1.sayName();  // Nicholas
+person2.sayName();  // Greg
+```
+
+上面的例子中，`person1` 和 `person2` 都有名为 `sayName()` 的方法，
+但这两个方法不是同一个 `Function()` 实例。
+
+ECMAScript 中的函数是对象，因此每次定义函数时，都会初始化一个对象。
+逻辑上讲，这个构造函数实际上是下面这样的。这样理解这个构造函数可以更清楚地知道，
+每个 `Person` 实例都会有自己的 `Function` 实例用于显示 `name` 属性。
+
+```js
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = new Function("console.log(this.name)"); // 逻辑等价
+}
+```
+
+以这种方式创建函数会带来不同的作用域链和标识符解析。
+但创建新 `Function` 实例的机制是一样的。因此不同实例上的函数虽然同名却不相等
+
+```js
+console.log(person1.sayName == person2.sayName);  // false
+```
+
+#### 解决方法
+
+因为都是做一样的事，所以没必要定义两个不同的 `Function` 实例。
+况且，`this` 对象可以把函数与对象的绑定推迟到运行时。
+要解决这个问题，可以把函数定义转移到构造函数外部
+
+```js
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    // sayName 属性等于全局 sayName() 函数
+    // sayName 属性中包含的只是一个指向外部函数的指针
+    this.sayName = sayName;
+}
+
+function sayName() {
+    console.log(this.name);
+}
+
+let person1 = new Person("Nicholas", 29, "Software Engineer");
+let person2 = new Person("Greg", 27, "Doctor");
 
 
+// person1 和 person2 共享了定义在全局作用域上的 sayName() 函数
+person1.sayName();  // Nicholas
+person2.sayName();  // Greg
+```
 
-
+这样虽然解决了相同逻辑的函数重复定义的问题，但全局作用域也因此被搞乱了，
+因为那个函数实际上只能在一个对象上调用。如果这个对象需要多个方法，
+那么就要在全局作用域中定义多个函数。这会导致自定义类型引用的代码不能很好地聚集一起。
+这个新问题可以通过原型模式来解决
 
 ## 原型模式
 
@@ -1280,6 +1360,8 @@ o.sayName();  // Kristen
 
 使用原型对象的好处是，在它上面定义的属性和方法可以被对象实例共享。
 原来在构造函数中直接给对象实例的值，可以直接赋值给它们的原型
+
+* 函数声明
 
 ```js
 function Person() {}
@@ -1299,9 +1381,90 @@ person2.sayName(); // "Nicholas"
 console.log(person1.sayName == person2.sayName); // true
 ```
 
+* 函数表达式
+
+```js
+let Person = function() {};
+
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineeer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+let person1 = new Person();
+person1.sayName();  // Nicholas
+
+let person2 = new Person();
+person2.sayName();  // Nicholas
+
+console.log(person1.sayName == person2.sayName);  // true
+```
+
+### 理解原型
+
+无论何时，只要创建一个函数，就会按照特定的规则为这个函数创建一个 `prototype` 属性(指向原型对象)。
+默认情况下，所有原型对象自动获得一个名为 `constructor` 的属性，指回与之关联的构造函数。
+
+对前面的例子而言，`Person.prototype.constructor` 指向 `Person`。
+然后，因构造函数而异，可能会给原型对象添加其他属性和方法。
+
+在自定义构造函数时，原型对象默认只会获得 `constructor` 属性，其他的所有方法都继承自 Object。
+每次调用构造函数创建一个新实例，这个实例的内部 `[[Prototype]]` 指针就会被赋值为构造函数的原型对象。
+脚本中没有访问这个 `[[Prototype]]` 特性的标准方式，但 Firefox、Safari 和 Chrome 会在每个对象上暴露 `__proto__` 属性，
+通过这个属性可以访问对象的原型。在其他实现中，这个特性完全被隐藏了。
+关键在于理解这一点: 实例与构造函数原型之间有直接的联系，但实例与构造函数之间没有。
+
+* 构造函数
+
+```js
+let Person = function() {};
+// or
+function Person() {}
+```
+
+* 声明之后，构造函数就有了一个与之关联的原型对象
+
+```js
+console.log(typeof Person.prototype);
+console.log(Person.prototype);
+// {
+//    constructor: f Person(),
+//    __proto__: Object
+// }
+```
+
+* 构造函数有一个 `prototype` 属性，引用其原型对象，
+  而这个原型对象也有一个 `constructor` 属性，引用这个构造函数。
+  换句话说，两者循环引用
+
+```js
+console.log(Person.prototype.constructor === Person);  // true
+```
+
+
+### 原型层级
+
+
+### 原型和 in 操作符
+
+
+### 属性枚举顺序
+
+
 ## 对象迭代
 
+### 其他原型语法
 
+
+
+### 原型的动态性
+
+
+### 原生对象类型
+
+### 原型的问题
 
 
 

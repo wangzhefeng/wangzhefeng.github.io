@@ -14,9 +14,15 @@ disable_highlight: true
 > * 江头未是风波恶，别有人间行路难。--《鹧鸪天·送人》【辛弃疾】
 > * 此曲只应天上有，人间能得几回闻。 -- 《赠花卿》【杜甫】
 > * 书册埋头无了日，不如抛却去寻春。--《出山道中口占》【朱熹】
+> * 你一定来自那温郁的南方！
+>   告诉我那儿的月色，那儿的日光！
+>   告诉我春风是怎样吹开百花，
+>   燕子是怎样痴恋着绿杨！
+>   我将合眼睡在你如梦的歌声里，
+>   那温暖我似乎记得，又似乎遗忘。--《预言》【何其芳】
 
 <!-- 喜欢的一段视频： -->
-<div class="plyr__video-embed" id="player" width="100%">
+<!-- <div class="plyr__video-embed" id="player" width="100%">
   <iframe
     src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
     allowfullscreen
@@ -25,7 +31,7 @@ disable_highlight: true
     width="100%"
     height="400px"
   ></iframe>
-</div>
+</div> -->
 
 <!-- 喜欢的一张图片：
 <image src="images/background.jpg" width="100%" height="350px"> -->
