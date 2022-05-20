@@ -1404,9 +1404,17 @@ console.log(person1.sayName == person2.sayName);  // true
 
 ### 理解原型
 
+
+* 函数、构造函数
+    - `prototype` 属性 -> 指向原型对象
+* 原型对象
+    - `constructor` 属性 -> 指向关联的构造函数
+* 实例
+    - `[[Prototype]]` 指针 -> 赋值为构造函数的原型对象
+    - `__proto__` 属性 -> 浏览器在实例对象上暴露的属性，可以访问构造函数的原型
+
 无论何时，只要创建一个函数，就会按照特定的规则为这个函数创建一个 `prototype` 属性(指向原型对象)。
 默认情况下，所有原型对象自动获得一个名为 `constructor` 的属性，指回与之关联的构造函数。
-
 对前面的例子而言，`Person.prototype.constructor` 指向 `Person`。
 然后，因构造函数而异，可能会给原型对象添加其他属性和方法。
 
@@ -1416,18 +1424,23 @@ console.log(person1.sayName == person2.sayName);  // true
 通过这个属性可以访问对象的原型。在其他实现中，这个特性完全被隐藏了。
 关键在于理解这一点: 实例与构造函数原型之间有直接的联系，但实例与构造函数之间没有。
 
-* 构造函数
+* 构造函数、实例
 
 ```js
 let Person = function() {};
 // or
 function Person() {}
+
+let person1 = new Person();
+let person2 = new Person();
 ```
 
-* 声明之后，构造函数就有了一个与之关联的原型对象
+* 构造函数 `Person` 声明之后，就有了一个与之关联的原型对象 `Person.prototype`
 
 ```js
 console.log(typeof Person.prototype);
+// object
+
 console.log(Person.prototype);
 // {
 //    constructor: f Person(),
@@ -1441,6 +1454,55 @@ console.log(Person.prototype);
 
 ```js
 console.log(Person.prototype.constructor === Person);  // true
+```
+
+* 正常的原型链都会终止于 Object 的原型对象，Object 原型的原型是 `null`
+
+```js
+console.log(Person.prototype.__proto__ === Object.prototype);  // ture
+console.log(Person.prototype.__proto__.constructor === Object);  // true
+console.log(Person.prototype.__proto__.__proto__ === null);  // true
+
+console.log(Person.prototype.__proto__);
+// {
+//   constructor: f Object(),
+//   toString: ...
+//   hasOwnProperty: ...
+//   isPrototypeOf: ...
+//   ...
+// }
+```
+
+* 构造函数、原型对象、实例是 3 个完全不同的对象
+
+```js
+console.log(person1 !== Person);  // true
+console.log(person1 !== Person.prototype);  // true
+console.log(Person.prototype !== Person);  // true
+```
+
+* 实例通过 `__proto__` 链接到原型对象，它实际上指向隐藏特性 `[[Prototype]]`。  
+* 构造函数通过 `prototype` 属性链接到原型对象
+* 实例与构造函数没有直接联系，与原型对象有直接联系
+
+```js
+console.log(person1.__proto__ === Person.prototype);  // true
+consoel.log(person1.__proto__.constructor === Person);  // true
+```
+
+* 同一个构造函数创建的两个实例共享同一个原型对象
+
+```js
+console.log(person1.__proto__ === person2.__proto__);  // true
+```
+
+
+* `instanceof` 检查实例的原型链中是否包含指定的构造函数的原型
+
+```js
+console.log(person1 instanceof Person);  // true
+console.log(person1 instanceof Object);  // true
+console.log(Person.prototype instanceof Object);  // true
 ```
 
 

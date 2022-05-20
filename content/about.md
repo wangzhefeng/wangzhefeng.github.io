@@ -9,7 +9,7 @@ slug: "about"
 - 数学系毕业的统计学专业的数据分析师、算法工程师、程序员
 
 
-## 我的用户画像
+<!-- ## 我的用户画像
 
 | 标签             | 标签属性               |
 |-----------------|-----------------------|
@@ -35,7 +35,7 @@ slug: "about"
 | 是否有孩子        | 否                    |
 | 孩子年龄          | 0                    |
 | 运动             | 慢跑                  |
-| 作息情况          | 早9点,晚12点           |
+| 作息情况          | 早9点,晚12点           | -->
 
 
 ## 写作原则
@@ -163,13 +163,24 @@ slug: "about"
 - [南昌汉代海昏侯国遗址博物馆](http://www.hhhmuseum.cn/)
 - [敦煌博物院]()
 
-## 养过的猫(Tomster)
+## 养过的猫
 
-<img src="/images/tomster1.jpeg" width=49% height="270px" /> <img src="/images/tomster2.jpeg" width=49% height="270px" />
-<img src="/images/tomster3.jpeg" width=49% /> <img src="/images/tomster4.jpeg" width=49% />
+<p>
+    <center>
+        Tomster
+    </center>
+</p>
+
+<img src="/images/tomster1.jpeg" width=50% height="250px" />
+
+
+<!-- 
+<img src="/images/tomster2.jpeg" width=49% height="270px" />
+<img src="/images/tomster3.jpeg" width=49% />
+<img src="/images/tomster4.jpeg" width=49% />
 <img src="/images/tomster5.jpeg" width=32% height="260px" />
 <img src="/images/tomster6.jpeg" width=34% height="260px" />
-<img src="/images/tomster7.jpeg" width=32% height="260px" />
+<img src="/images/tomster7.jpeg" width=32% height="260px" /> -->
 
 
 

@@ -2,9 +2,9 @@
 title: 表单脚本
 author: 王哲峰
 date: '2020-12-01'
-slug: form-script
+slug: js-form-script
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---
