@@ -1,6 +1,6 @@
 ---
-title: Linux
-subtitle: Linux Home
+title: Linux & macOS
+subtitle: OS Home
 list_pages: true
 # order_by: title
 ---

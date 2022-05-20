@@ -1,7 +1,7 @@
 ---
 title: ES6 Cheet Sheet
 author: 王哲峰
-date: '2020-01-01'
+date: '2021-02-13'
 slug: es6-cheat-sheet
 categories:
   - javascript

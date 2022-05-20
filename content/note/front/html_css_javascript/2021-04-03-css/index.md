@@ -1,17 +1,12 @@
 ---
 title: 玩转 CSS
 author: 王哲峰
-date: '2021-04-03'
+date: '2021-04-18'
 slug: css
 categories:
-  - 前端
+  - css
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
 # CSS 内容

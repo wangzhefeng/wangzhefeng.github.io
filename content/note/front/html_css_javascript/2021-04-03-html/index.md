@@ -4,14 +4,9 @@ author: 王哲峰
 date: '2021-04-03'
 slug: html
 categories:
-  - 前端
+  - html
 tags:
   - tool
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
 # HTML 介绍

@@ -1,6 +1,6 @@
 ---
 title: 首页
-date: '2022-04-10'
+# date: '2022-04-10'
 disable_mathjax: true
 disable_highlight: true
 ---
@@ -21,8 +21,8 @@ disable_highlight: true
 >   我将合眼睡在你如梦的歌声里，
 >   那温暖我似乎记得，又似乎遗忘。--《预言》【何其芳】
 
-<!-- 喜欢的一段视频： -->
-<!-- <div class="plyr__video-embed" id="player" width="100%">
+<!-- 喜欢的一段视频：
+<div class="plyr__video-embed" id="player" width="100%">
   <iframe
     src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
     allowfullscreen
@@ -36,7 +36,7 @@ disable_highlight: true
 <!-- 喜欢的一张图片：
 <image src="images/background.jpg" width="100%" height="350px"> -->
 
-### TODO
+<!-- ### TODO
 
 * :white_check_mark: 评论在一些页面不启用
 * :white_check_mark: 集成 Disqus 和 Utterances 到评论区
@@ -55,7 +55,7 @@ disable_highlight: true
 * :black_square_button: 微信屏蔽问题处理
     - [x] 申请恢复访问
     - [ ] 部署相关文件
-* :white_check_mark: 添加 favicon.ico
+* :white_check_mark: 添加 favicon.ico -->
 
 ### 本站架构
 
