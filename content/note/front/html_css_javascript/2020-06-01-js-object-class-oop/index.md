@@ -98,6 +98,8 @@ details[open] summary {
     - [理解原型](#理解原型)
     - [原型层级](#原型层级)
     - [原型和 in 操作符](#原型和-in-操作符)
+      - [单独使用](#单独使用)
+      - [在 for-in 循环中使用](#在-for-in-循环中使用)
     - [属性枚举顺序](#属性枚举顺序)
   - [对象迭代](#对象迭代)
     - [其他原型语法](#其他原型语法)
@@ -1404,32 +1406,33 @@ console.log(person1.sayName == person2.sayName);  // true
 
 ### 理解原型
 
+> * 函数、构造函数
+>     - `Person.prototype` 属性 -> 指向 `Person` 的原型对象
+>     - `Person.prototype.__proto__` 属性 -> 浏览器在实例对象上暴露的属性，可以访问构造函数的原型
+> * 原型对象
+>     - `Person.prototype.constructor` 属性 -> 指向关联的构造函数 `Person`
+>     - `Person.prototype.__proto__` 属性 -> 浏览器在实例对象上暴露的属性，可以访问构造函数的原型
+> * 实例
+>     - `person` 的 `[[Prototype]]` 指针 -> 赋值为构造函数的原型对象 `Person.prototype`
+>     - 脚本中没有访问 `[[Prototype]]` 特性的标准方式，但浏览器在每个对象上暴露 `__proto__` 属性，
+>       通过这个属性可以访问对象的原型 
+>     - 实例通过 `__proto__` 链接到原型对象，它实际上指向隐藏特性 `[[Prototype]]`
+>     - 实例 `person` 与构造函数原型 `Person.prototype` 之间有直接的联系，但实例 `person` 与构造函数 `Person` 之间没有
 
-* 函数、构造函数
-    - `prototype` 属性 -> 指向原型对象
-* 原型对象
-    - `constructor` 属性 -> 指向关联的构造函数
-* 实例
-    - `[[Prototype]]` 指针 -> 赋值为构造函数的原型对象
-    - `__proto__` 属性 -> 浏览器在实例对象上暴露的属性，可以访问构造函数的原型
-
-无论何时，只要创建一个函数，就会按照特定的规则为这个函数创建一个 `prototype` 属性(指向原型对象)。
-默认情况下，所有原型对象自动获得一个名为 `constructor` 的属性，指回与之关联的构造函数。
-对前面的例子而言，`Person.prototype.constructor` 指向 `Person`。
-然后，因构造函数而异，可能会给原型对象添加其他属性和方法。
-
-在自定义构造函数时，原型对象默认只会获得 `constructor` 属性，其他的所有方法都继承自 Object。
-每次调用构造函数创建一个新实例，这个实例的内部 `[[Prototype]]` 指针就会被赋值为构造函数的原型对象。
-脚本中没有访问这个 `[[Prototype]]` 特性的标准方式，但 Firefox、Safari 和 Chrome 会在每个对象上暴露 `__proto__` 属性，
-通过这个属性可以访问对象的原型。在其他实现中，这个特性完全被隐藏了。
-关键在于理解这一点: 实例与构造函数原型之间有直接的联系，但实例与构造函数之间没有。
+![img](images/prototype.jpg)
 
 * 构造函数、实例
 
 ```js
-let Person = function() {};
+// let Person = function() {};
 // or
 function Person() {}
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
 
 let person1 = new Person();
 let person2 = new Person();
@@ -1440,13 +1443,13 @@ let person2 = new Person();
 ```js
 console.log(typeof Person.prototype);
 // object
-
-console.log(Person.prototype);
-// {
-//    constructor: f Person(),
-//    __proto__: Object
-// }
 ```
+
+```js
+console.log(Person.prototype);
+```
+
+![prototype](images/prototype1.jpg)
 
 * 构造函数有一个 `prototype` 属性，引用其原型对象，
   而这个原型对象也有一个 `constructor` 属性，引用这个构造函数。
@@ -1456,22 +1459,39 @@ console.log(Person.prototype);
 console.log(Person.prototype.constructor === Person);  // true
 ```
 
+```js
+console.log(Person.prototype.constructor);
+```
+
+![img](images/prototype5.jpg)
+
 * 正常的原型链都会终止于 Object 的原型对象，Object 原型的原型是 `null`
 
 ```js
+// Person 的原型 与 Object 的原型相等
 console.log(Person.prototype.__proto__ === Object.prototype);  // ture
-console.log(Person.prototype.__proto__.constructor === Object);  // true
-console.log(Person.prototype.__proto__.__proto__ === null);  // true
-
 console.log(Person.prototype.__proto__);
-// {
-//   constructor: f Object(),
-//   toString: ...
-//   hasOwnProperty: ...
-//   isPrototypeOf: ...
-//   ...
-// }
+console.log(Object.prototype);
 ```
+
+![img](images/prototype2.jpg)
+
+```js
+// Person 的原型对象的构造函数是 Object
+console.log(Person.prototype.__proto__.constructor === Object);  // true
+console.log(Object.prototype.__proto__.constructor);
+```
+
+![img](images/prototype3.jpg)
+
+```js
+// 原型链都会终止于 Object 的原型对象, Object 原型的原型是 null
+console.log(Person.prototype.__proto__.__proto__ === null);  // true
+console.log(Person.prototype.__proto__.__proto__);
+console.log(Object.prototype.__proto__);
+```
+
+![img](images/prototype4.jpg)
 
 * 构造函数、原型对象、实例是 3 个完全不同的对象
 
@@ -1481,9 +1501,11 @@ console.log(person1 !== Person.prototype);  // true
 console.log(Person.prototype !== Person);  // true
 ```
 
-* 实例通过 `__proto__` 链接到原型对象，它实际上指向隐藏特性 `[[Prototype]]`。  
+* 实例通过 `__proto__` 链接到原型对象，它实际上指向隐藏特性 `[[Prototype]]`
 * 构造函数通过 `prototype` 属性链接到原型对象
-* 实例与构造函数没有直接联系，与原型对象有直接联系
+* 实例与构造函数没有直接联系，与原型对象有直接联系，
+  两个实例虽然都没有属性和方法，但实例可以调用构造函数原型上的属性和方法，
+  这是由于属性查找机制的原因
 
 ```js
 console.log(person1.__proto__ === Person.prototype);  // true
@@ -1496,7 +1518,6 @@ consoel.log(person1.__proto__.constructor === Person);  // true
 console.log(person1.__proto__ === person2.__proto__);  // true
 ```
 
-
 * `instanceof` 检查实例的原型链中是否包含指定的构造函数的原型
 
 ```js
@@ -1505,23 +1526,395 @@ console.log(person1 instanceof Object);  // true
 console.log(Person.prototype instanceof Object);  // true
 ```
 
+* 虽然不是所有实现都对外暴露了 `[[Prototype]]`，
+  但可以使用 `isPrototypeOf()` 方法确定两个对象之间的关系，
+  本质上，`isPrototypeOf()` 会在传入参数的 `[[Prototype]]` 指向调用它的对象时返回 true
+
+```js
+console.log(Person.prototype.isPrototypeOf(person1));  // true
+console.log(Person.prototype.isPrototypeOf(person2));  // true
+```
+
+* ECMAScript 的 Object 类型有一个方法 `Object.getPrototypeOf()`，
+  返回参数的内部特性 `[[Prototype]]` 的值。
+  使用 `Object.getPrototypeOf()` 可以方便地取得一个对象的原型，
+  而这在通过原型实现继承时显得尤为重要
+
+```js
+console.log(Object.getPrototypeOf(person1) == Person.prototype);  // true
+console.log(Object.getPrototypeOf(person2).name);  // Nicholas
+```
+
+* Object 类型还有一个 `setPrototypeOf()` 方法，
+  可以向实例的私有特性 `[[Prototype]]` 写入一个新值。
+  这样就可以重写一个对象的原型继承关系
+
+```js
+let biped = {
+    numLegs: 2
+};
+let person = {
+    name: "Matt"
+};
+
+Object.setPrototype(person, biped);
+console.log(person.name);  // Matt
+console.log(person.numLegs);  // 2
+console.log(Object.getPrototypeOf(person) == biped);  // true
+```
+
+* `Object.setPrototypeOf()` 可能会严重影响代码性能，
+  所以可以通过 `Object.create()` 来创建一个新对象，同时为其指定原型
+
+```js
+let biped = {
+    numLegs: 2
+};
+let person = Object.create(biped);
+person.name = "Matt";
+
+console.log(person.name);  // Matt
+console.log(person.numLegs);  // 2
+console.log(Object.getPrototypeOf(person) === biped);  // true
+```
 
 ### 原型层级
 
+在通过对象访问属性时，会按照这个属性的名称开始搜索。搜索开始于对象实例本身。
+如果在这个实例上发现了给定的名称，则返回该名称对应的值。如果没有找到这个属性，
+则搜索会沿着指针进入原型对象，然后在原型对象上找到属性后，再返回对应的值。
+
+> 例如：在调用 `person1.sayName()` 时，会发生两步搜索：
+> 
+> * 首先，JavaScript 引擎会问 “`person1` 实例有 `sayName` 属性吗？” 答案是没有
+> * 然后，继续搜索并问：“`person1` 的原型有 `sayName` 属性吗？” 答案是有。于是就返回保存在原型上的这个函数
+> 
+> 在调用 `person2.sayName()` 时，会发生同样的搜索过程，而且也会返回相同的结果。
+> 这就是原型用于在多个对象实例间共享属性和方法的原理
+
+* 虽然可以通过实例读取原型对象上的值，但不可能通过实例重写这些值。
+  如果在实例上添加了一个原型对象中同名的属性，那就会在实例上创建这个属性。
+  只要给对象实例添加一个属性，这个属性就会**遮蔽(shadow)**原型对象上的同名属性，
+  也就是虽然不会修改它，但会屏蔽对它的访问。即使在实例上把这个属性设置为 `null`，
+  也不会恢复它和原型的联系。不过，使用 `delete` 操作符可以完全删除实例上的这个属性
+
+```js
+function Person() {}
+
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+let person1 = new Person();
+let person2 = new Person();
+
+person1.name = "Greg";
+console.log(person1.name);  // "Greg"，来自实例
+console.log(person2.name);  // "Nicholas"，来自原型
+
+delete person1.name;
+console.log(person1.name);  // "Nicholas"，来自原型
+```
+
+* `hasOwnProperty()` 方法用于确定某个属性是在实例上还是在原型上。
+  这个方法是继承自 Object 的，会在属性存在于调用它的对象实例上返回 `true`
+
+```js
+function Person() {}
+
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+let person1 = new Person();
+let person2 = new Person();
+
+console.log(person1.hasOwnProperty("name"));  // false
+
+person1.name = "Greg";
+console.log(person1.name);  // "Greg"，来自实例
+console.log(person1.hasOwnProperty("name"));  // true
+
+console.log(person2.name);  // "Nicholas"，来自原型
+console.log(person2.hasOwnProperty("name"));  // false
+
+delete person1.name;
+console.log(person1.name);  // "Nicholas"，来自原型
+console.log(person1.hasOwnProperty("name"));  // false
+```
 
 ### 原型和 in 操作符
 
+有两种方式使用 `in` 操作符：
+
+* 单独使用
+* 在 `for-in` 循环中使用
+
+#### 单独使用
+
+在单独使用时，`in` 操作符会在可以通过对象访问指定属性时返回 `true`，
+无论该属性是在实例上还是在原型上
+
+```js
+function Person() {}
+
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+let person1 = new Person();
+let person2 = new Person();
+
+console.log(person1.name);  // Nicholas， 来自原型
+console.log(person1.hasOwnProperty("name"));  // false
+console.log("name" in person1);  // true
+
+person1.name = "Greg";
+console.log(person1.name);  // "Greg"，来自实例
+console.log(person1.hasOwnProperty("name"));  // true
+console.log("name" in person1);  // true
+
+console.log(person2.name);  // Nicholas， 来自原型
+console.log(person2.hasOwnProperty("name"));  // false
+consoel.log("name" in person2);  // true
+
+delete person1.name;
+console.log(person1.name);  // "Nicholas"，来自原型
+console.log(person1.hasOwnProperty("name"));  // false
+console.log("name" in person1);  // true
+```
+
+如果要确定某个属性是否存在于原型上，则可以同时使用 `hasOwnProperty()` 和 `in` 操作符
+
+```js
+function hasPrototypeProperty(object, name) {
+    return !object.hasOwnProperty(name) && (name in object);
+}
+```
+
+#### 在 for-in 循环中使用
+
+在 `for-in` 循环中使用 `in` 操作符，可以通过对象访问且可以被枚举的属性都会返回，
+包括实例属性和原型属性。遮蔽原型中不可枚举属性的实例属性也会在 `for-in` 循环中返回，
+因为默认情况下开发者定义的属性都是可枚举的
+
+要获得对象上所有可枚举的实例属性，可以使用 `Object.keys()` 方法。
+这个方法接收一个对象作为参数，返回包含该对象所有可枚举属性名字的字符串数组
+
+```js
+function Person() {}
+
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+let keys = Object.keys(Person.prototype);
+console.log(keys);  // "name, age, job, sayName"
+
+let person1 = new Person();
+person1.name = "Rob";
+person1.age = 31;
+
+let person1keys = Object.keys(person1);
+console.log(person1keys);  // "[name,age]"
+```
+
+如果想要列出所有实例属性，无论是否可以枚举，都可以使用 `Object.getOwnPropertyNames()`。
+`Objet.keys()` 和 `Object.getOwnPropertyNames()` 在适当的时候都可用来替代 `for-in` 循环
+
+```js
+let keys = Object.getOwnPropertyNames(Person.prototype);
+console.log(keys);  // "[constructor,name,age,job,sayName]"
+```
+
+在 ECMAScript 新增符号类型之后，相应地出现了增加一个 `Object.getOwnPropertyNames()` 的兄弟方法的需求，
+因为以符号为键的属性没有名称的概念。因此，`Object.getOwnPropertySymbols()` 方法就出现了，
+这个方法与 `Objcet.getOwnPropertyNames()` 类似，只是针对符号而已
+
+```js
+let k1 = Symbol("k1");
+let k2 = Symbol("k2");
+
+let o = {
+    [k1]: "k1",
+    [k2]: "k2",
+};
+
+console.log(Object.getOwnPropertySymbols(o));
+// [Symbol(k1), Symbol(k2)]
+```
 
 ### 属性枚举顺序
 
+在属性枚举顺序方面有很大的区别：
+
+* 不确定，取决于 JavaScript 引擎，可能因浏览器而异
+    - `for-in` 循环
+    - `Object.keys()` 
+* 枚举顺序是确定性的，先以升序枚举数值键，然后以插入顺序枚举字符和符号键 
+    - `Object.getOwnPropertyNames()`
+    - `Object.getOwnPropertySymbol()`
+    - `Object.assign()`
+
+在对象字面量中定义的键以它们逗号分隔的顺序插入
+
+
+```js
+let k1 = Symbol("k1");
+let k2 = Symbol("k2");
+let o = {
+    1: 1,
+    first: "first",
+    [k1]: "sym2",
+    second: "second",
+    0: 0
+};
+
+o[k2] = "sym2";
+o[3] = 3;
+o.third = "third";
+o[2] = 2;
+
+console.log(Object.getOwnPropertyNames(o));
+// ["0", "1", "2", "3", "first", "second", "third"]
+
+console.log(Object.getOwnPropertySymbols(o));
+// [Symbol(k1), Symbol(k2)]
+```
 
 ## 对象迭代
 
+在 JavaScript 有史以来的大部分时间内，迭代对象属性都是一个难题。
+
+ECMAScript 2017 新增了两个静态方法，用于将**对象内容**转换为**序列化的格式(可迭代的)**。
+这两个静态方法都接收一个对象，返回它们内容的数组。非字符串属性会被转换为字符串输出
+
+* `Object.values()`
+    - 返回对象值的数组
+* `Object.entries()`
+    - 返回键/值对的数组
+
+```js
+const o = {
+    foo: "bar",
+    baz: 1,
+    qux: {}
+};
+
+console.log(Object.values(o));
+// ["bar", 1, {}]
+
+console.log(Object.entries(o));
+// [["foo", "bar"], ["baz", 1], ["qux", {}]]
+```
+
+方法执行对象的浅复制:
+
+```js
+const o = {
+    qux: {}
+};
+
+console.log(Object.values(o)[0] === o.qux);  // true
+console.log(Object.entries(o)[0][1] === o.qux);  // true
+```
+
+符号属性会被忽略:
+
+```js
+const sym = Symbol();
+const o = {
+    [sym]: "foo"
+};
+
+console.log(Object.values(o));  // []
+console.log(Object.entries(o));  // []
+```
+
 ### 其他原型语法
 
+直接通过一个包含所有属性和方法的对象字面量来重写原型
 
+只有一个问题，这样重写之后，`Person.prototype` 的 `constructor` 属性就不指向 `Person` 了。
+
+在创建函数时，也会创建它的 `prototype` 对象，同时会自动给这个原型的 `constructor` 属性赋值。
+完全重写了默认的 `prototype` 对象，因此其 `constructor` 属性也指向了完全不同的新对象(Object 构造对象)，
+不再指向原来的构造函数。虽然 `instanceof` 操作符还能可靠地返回值，但不能再依靠 `constructor` 属性来识别类型了
+
+```js
+function Person() {}
+
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName() {
+        console.log(this.name);
+    }
+};
+
+let friend = new Person();
+console.log(friend instanceof Object);  // true
+console.log(friend instanceof Person);  // true
+console.log(friend.constructor == Person);  // false
+console.log(friend.constructor == Object);  // true
+```
+
+如果 `constructor` 的值很重要，可以在重写原型对象时专门设置一个值
+
+```js
+function Person() {}
+
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName() {
+        console.log(this.name);
+    }
+};
+```
+
+但要注意，已这种方式恢复 `constructor` 属性会创建一个 `[[Enumerable]]` 为 `true` 的属性。
+而原生 `constructor` 属性默认是不可枚举的。因此，如果使用的是兼容 ECMAScript 的 JavaScript 引擎，
+那可能会改为使用 `Object.defineProperty()` 方法来定义 `constructor` 属性
+
+```js
+function Person() {}
+
+Person.prototype = {
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName() {
+        console.log(this.name);
+    }
+};
+
+// 恢复 constructor 属性
+Object.defineProperty(Person.prototype, "constructor", {
+    enumerable: false,
+    value: Person
+});
+```
 
 ### 原型的动态性
+
+
 
 
 ### 原生对象类型
@@ -1543,10 +1936,6 @@ console.log(Person.prototype instanceof Object);  // true
 
 ## 原型链
 
-
-
-
-
 ## 盗用构造函数
 
 ## 组合继承
@@ -1558,16 +1947,12 @@ console.log(Person.prototype instanceof Object);  // true
 ## 寄生式组合继承
 
 
-
-
-
-
-
-
 # 类
 
-- ECMAScript 6 新引入的 class 关键字具有正式定义类的能力
-- 类(class) 是ECMAScirpt 中新的基础性语法糖结构，虽然 ECMAScript 6 类表面上看起来可以支持正式的面向对象编程，但实际上它背后使用的仍然是原型和构造函数的概念
+ECMAScript 6 新引入的 `class` 关键字具有正式定义类的能力。
+类(class) 是ECMAScirpt 中新的基础性语法糖结构，
+虽然 ECMAScript 6 类表面上看起来可以支持正式的面向对象编程，
+但实际上它背后使用的仍然是原型和构造函数的概念
 
 ## 类定义
 
