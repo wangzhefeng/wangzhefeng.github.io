@@ -108,6 +108,11 @@ details[open] summary {
     - [原型的问题](#原型的问题)
 - [继承](#继承)
   - [原型链](#原型链)
+    - [原型链的实现](#原型链的实现)
+    - [默认原型](#默认原型)
+    - [原型与继承关系](#原型与继承关系)
+    - [关于方法](#关于方法)
+    - [原型链的问题](#原型链的问题)
   - [盗用构造函数](#盗用构造函数)
   - [组合继承](#组合继承)
   - [原型式继承](#原型式继承)
@@ -142,13 +147,13 @@ ECMA-262 将对象定义为一组属性的无序集合。
 
 # 理解对象
 
-* `Object()`
-* `Object.defineProperty()`
-* `Object.defineProperties()`
-* `Object.getOwnPropertyDescriptor()`
-* `Object.getOwnPropertyDescriptors()`
-* `Object.assign()`
-* `Object.is()`
+* `Object()`: 创建对象
+* `Object.defineProperty()`: 获取对象属性特性，定义访问器属性
+* `Object.defineProperties()`: 定义对象的多个属性
+* `Object.getOwnPropertyDescriptor()`: 获取指定属性的属性特性描述符
+* `Object.getOwnPropertyDescriptors()`: 获取每个自有属性的特性描述符
+* `Object.assign()`: 合并对象
+* `Object.is()`: 对象标识及相等判定
 
 ## 创建对象
 
@@ -196,7 +201,9 @@ ECMA-262 使用一些**内部特性**来描述**属性的特征**。
 ### 数据属性
 
 数据属性包含一个保存数据值的位置。值会从这个位置读取，也会写入到这个位置。
-数据属性有 4 个特性描述它们的行为：
+数据属性有 4 个特性描述它们的行为。将属性显式添加到对象之后，
+`[[Configurable]]`、`[[Enumerable]]`、`[[Writable]]` 都会被设置为 `true`，
+而 `[[Value]]` 特性会被设置为指定的值
 
 * `[[Configurable]]`
     - 表示属性是否可以通过 `delete` 删除并重新定义，是否可以修改它的特性，
@@ -212,9 +219,6 @@ ECMA-262 使用一些**内部特性**来描述**属性的特征**。
         - `ture`：严格模式下会报错
 * `[[Value]]`
     - 包含属性实际的值。默认值为 `undefined`
-
-将属性显式添加到对象之后，`[[Configurable]]`、`[[Enumerable]]`、`[[Writable]]` 都会被设置为 `true`，
-而 `[[Value]]` 特性会被设置为指定的值
 
 要修改属性的默认特性，就必须使用 `Object.defineProperty()` 方法，这个方法接收 3 个参数：
 
@@ -295,6 +299,13 @@ Object.defineProperty(perosn, "name", {
 
 访问器属性是不能直接定义的，必需使用 `Object.defineProperty()`:
 
+* 获取函数和设置函数不一定都要定义，只定义获取函数意味着属性是只读的，
+  尝试修改属性会被忽略
+* 在严格模式下，尝试写入只定义了获取函数的属性会抛出错误。
+  类似地，只有一个设置函数的属性是不能读取的，非严格模式下读取会返回 `undefined`，
+  严格模式下回抛出错误
+* 在不支持 `Object.definedProperty()` 的浏览器中没有办法修改 `[[Configurable]]` 和 `[[Enumerable]]`
+
 ```js
 // 定义一个对象，包含私有成员 year_ 和公共成员 edition
 let book = {
@@ -320,13 +331,6 @@ Object.defineProperty(
 book.year = 2018;
 console.log(book.edition); // 2
 ```
-
-* 获取函数和设置函数不一定都要定义，只定义获取函数意味着属性是只读的，
-  尝试修改属性会被忽略。
-* 在严格模式下，尝试写入只定义了获取函数的属性会抛出错误。
-  类似地，只有一个设置函数的属性是不能读取的，非严格模式下读取会返回 `undefined`，
-  严格模式下回抛出错误
-* 在不支持 `Object.definedProperty()` 的浏览器中没有办法修改 `[[Configurable]]` 和 `[[Enumerable]]`
 
 ## 定义多个属性
 
@@ -377,7 +381,7 @@ Object.defineProperties(
 
 该方法返回值是一个对象:
 
-* 对于数据属性包含 configurable、enumerable、writable、value 属性， 
+* 对于数据属性包含 configurable、enumerable、writable、value 属性
 * 对于访问器属性包含 configurable、enumerable、get、set 属性
 
 ```js
@@ -1914,27 +1918,271 @@ Object.defineProperty(Person.prototype, "constructor", {
 
 ### 原型的动态性
 
+因为从原型上搜索值的过程是动态的，所以即使实例在修改原型之前已经存在，
+任何时候对原型对象所做的修改也会在实例上反映出来。之所以会这样，
+主要原因是实例域原型之间松散的联系
 
+* 在调用实例方法 `friend.sayHi()` 时，首先会从这个实例中搜索名为 `sayHi` 的属性。
+  在没有找到的情况下，运行时会继续搜索原型对象。因为实例和原型之间的链接就是简单的指针，
+  而不是保存的副本，所以会在原型上找到 `sayHi` 属性并返回这个属性保存的函数
 
+```js
+function Person() {}
+
+Person.prototype = {
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName() {
+        console.log(this.name);
+    }
+};
+
+// 实例 friend 在方法 sayHi()创建之前已经存在
+let friend = new Person();
+
+Person.prototype.sayHi = function() {
+    console.log("hi");
+};
+
+friend.sayHi();  // "hi"，没问题
+```
+
+* 虽然随时能给原型添加属性和方法，并能够立即反映在所有对象实例上，
+  但这跟重写整个原型是两回事。实例的 `[[Prototype]]` 指针是在调用构造函数时自动赋值的，
+  这个指针即使把原型修改为不同的对象也不会改变。重写整个原型会切断最初原型与构造函数的联系，
+  但实例引用的仍然是最初的原型。记住，实例只有指向原型的指针，没有指向构造函数的指针
+
+```js
+function Person() {}
+
+let friend = new Person();
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName() {
+        console.log(this.name);
+    }
+};
+
+friend.sayName();  // 错误
+```
+
+* 重写构造函数上的原型之后再创建的实例才会引用新的原型。
+  而在此之前创建的实例仍然会易用最初的原型 
 
 ### 原生对象类型
 
+原型模式之所以重要，不仅体现在自定义类型上，而且还因为它也是实现所有引用类型的模式。
+所有原生引用类型的构造函数(包括 Object、Array、String 等)都在原型上定义了实例方法
+
+```js
+console.log(typeof Array.prototype.sort);  // "function"
+console.log(typeof String.prototype.substring);  // "function"
+```
+
+通过原生对象的原型可以取得所有默认方法的引用，也可以给原生类型的实例定义新的方法。
+可以像修改自定义对象原型一样修改原生对象原型，因此随时可以添加方法。
+比如给 `String` 原始包装类型的实例添加一个 `startsWith()` 方法。
+尽管可以这么做，但不推荐在产品环境中修改原生对象原型，推荐的做法是创建一个自定义的类，
+继承原生类型
+
+```js
+String.prototype.startsWith = function(text) {
+    return this.indexOf(text) === 0;
+};
+
+let msg = "Hello world!";
+console.log(msg.startsWith("Hello"));  // true
+```
+
 ### 原型的问题
 
+* 首先，它弱化了构造函数传递初始化参数的能力，会导致所有实例默认都取得相同的属性值
+* 其次，原型的最主要问题源自它的共享特性。
+    - 原型上的所有属性是在实例见共享的，这对函数来说比较合适。另外包含原始值的属性
+    - 真正的问题来自包含引用值的属性
 
+```js
+function Person() {}
 
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    friends: ["Shelby", "Court"],
+    sayName() {
+        console.log(this.name);
+    }
+};
+
+let person1 = new Person();
+let person2 = new Person();
+
+person1.friends.push("Van");
+
+console.log(person1.friends);  // "Shelby, Court, Van"
+console.log(person2.friends);  // "Shelby, Court, Van"
+console.log(person1.friends === person2.friends);  // true
+```
 
 # 继承
+
+* `instanceof`
+* `isPrototypeOf()`
 
 很多面向对象语言都支持两种继承:
 
 * 接口继承: 只继承方法签名
+    - 接口继承在 ECMAScript 中是不可能的，因为函数没有签名 
 * 实现继承: 继承实际的方法
-
-接口继承在 ECMAScript 中是不可能的，因为函数没有签名。
-实现继承是 ECMAScript 唯一支持的继承方式，而这主要是通过原型链实现的
+    - 实现继承是 ECMAScript 唯一支持的继承方式，而这主要是通过原型链实现的
 
 ## 原型链
+
+ECMA-262 把原型链定义为 ECMAScript 的主要继承方法。
+其基本思想就是通过原型继承多个引用类型的属性和方法
+
+构造函数、原型、实例的关系：每个构造函数都有一个原型对象，原型有一个属性指回构造函数，
+而实例有一个内部指针指向原型
+
+如果原型是另一个类型的实例，那就意味着这个原型本身有一个内部指针指向另一个原型，
+相应地另一个原型也有一个指针指向另一个构造函数。这样就在实例和原型之间构造了一条原型链。
+这就是原型链的基本构想
+
+### 原型链的实现
+
+```js
+// SuperType 类型
+function SuperType() {
+    this.property = true;
+}
+SuperType.prototype.getSuperValue = function() {
+    return this.property
+}
+
+// SubType 类型
+function SubType() {
+    this.subproperty = false;
+}
+// 继承 SuperType
+SubType.prototype = new SuperType();
+SubType.prototype.getSubValue = function () {
+    return this.subproperty;
+};
+
+
+let instance = new SubType();
+console.log(instance.getSuperValue());  // true
+```
+![img](images/prototype_chain.jpg)
+
+### 默认原型
+
+实际上，原型链中还有一环。默认情况下，所有引用类型都继承自 Object，这也是通过原型链实现的。
+
+任何函数的默认原型都是一个 Object 的实例，这意味着这个实例有一个内部指针指向 `Object.prototype`。
+这也是为什么自定义类型能够继承包括 `toString()`、`valueOf()` 在内的所有默认方法的原因。
+
+前面的例子还有额外一层继承关系，下面展示了完整的原型链:
+
+* `SubType` 继承 `SuperType`，而 `SuperType` 继承 `Object`，
+  在调用 `instance.toString()` 时，实际上调用的是保存在 `Object.prototype` 上的方法
+
+![img](images/prototype_chain2.jpg)
+
+### 原型与继承关系
+
+原型与实例的关系可以通过两种方式来确定
+
+* 第一种方式是使用 `instanceof` 操作符，如果一个实例的原型链中出现过相应的构造函数，则 `instanceof` 返回 `true`
+
+```js
+console.log(instance instanceof Object);  // true
+console.log(instance instanceof SuperType);  // true
+console.log(instance instanceof SubType);  // true
+```
+
+* 第二种方式是使用 `isPrototypeOf()` 方法，原型链中的每个原型都可以调用这个方法
+
+```js
+console.log(Object.prototype.isPrototypeOf(instance));  // true
+console.log(SuperType.prototype.isPrototypeOf(instance));  // true
+console.log(SubType.prototype.isPrototype(instance));  // true
+```
+
+### 关于方法
+
+子类有时候需要覆盖父类的方法，或者增加父类没有的方法。为此，
+这些方法必须在原型赋值之后再添加到原型上
+
+```js
+// 类型 SuperType
+function SuperType() {
+    this.property = true;
+}
+SuperType.prototype.getSuperValue = function() {
+    return this.property;
+};
+
+// 类型 SubType
+function SubType() {
+    this.subproperty = false;
+}
+// SubType 继承 SuperType
+SubType.prototype = new SuperType();
+// 新方法
+SubType.prototype.getSubValue = function() {
+    return this.subproperty;
+};
+// 覆盖已有的方法
+SubType.prototype.getSuperValue = function() {
+    return false;
+};
+
+let instance = new SubType();
+console.log(instance.getSuperValue());  // false
+```
+
+以对象字面量方式创建原型方法会破坏之前的原型链，因为这相当于重写了原型链
+
+```js
+// 类型 SuperType
+function SuperType() {
+    this.propery = true;
+}
+SuperType.prototype.getSuperValue = function() {
+    return this.property;
+};
+
+// 类型 SubType
+function SubType() {
+    this.property = false;
+}
+// 继承
+SubType.prototype = new SuperType();
+// 通过对象字面量添加新方法，这会导致上一行无效
+SubType.prototype = {  // 子列的原型被一个对象字面量覆盖了
+    getSubValue() {
+        return this.subproperty;
+    },
+    someOtherMethod() {
+        return false;
+    }
+};
+
+let instance = new SubType();
+console.log(instance.getSuperValue());  // 出错！
+```
+
+### 原型链的问题
+
+
+
+
 
 ## 盗用构造函数
 
@@ -1945,6 +2193,13 @@ Object.defineProperty(Person.prototype, "constructor", {
 ## 寄生式继承
 
 ## 寄生式组合继承
+
+
+
+
+
+
+
 
 
 # 类
