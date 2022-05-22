@@ -114,6 +114,8 @@ details[open] summary {
     - [关于方法](#关于方法)
     - [原型链的问题](#原型链的问题)
   - [盗用构造函数](#盗用构造函数)
+    - [传递参数](#传递参数)
+    - [盗用构造函数的问题](#盗用构造函数的问题)
   - [组合继承](#组合继承)
   - [原型式继承](#原型式继承)
   - [寄生式继承](#寄生式继承)
@@ -2165,7 +2167,10 @@ function SubType() {
 // 继承
 SubType.prototype = new SuperType();
 // 通过对象字面量添加新方法，这会导致上一行无效
-SubType.prototype = {  // 子列的原型被一个对象字面量覆盖了
+// 子类的原型被一个对象字面量覆盖了，覆盖后的原型是一个 Object 的实例，
+// 而不再是 SuperType 的实例，因此之前的原型链就断了，
+// SubType 和 SuperType 之间也没有关系了
+SubType.prototype = {
     getSubValue() {
         return this.subproperty;
     },
@@ -2180,11 +2185,42 @@ console.log(instance.getSuperValue());  // 出错！
 
 ### 原型链的问题
 
+原型链虽然是实现继承的强大工具，但它也有问题。
 
+* 原型中包含的引用值会在所有实例间共享，这也是为什么属性通常会在构造函数中定义而不会定义在原型上的原因。
+  在使用原型实现继承时，原型实际上变成了另一个类型的实例。这意味着原先的实例属性摇身一变成为了原型属性
+* 原型链的第二个问题是，子类型在实例化时不能给父类型的构造函数传参。
+  事实上，我们无法在不影响所有对象实例的情况下把参数传进父类的构造函数。
+  再加上之前提到的原型中包含引用值的问题，就导致原型链基本不会被单独使用
 
+```js
+// 类型 SuperType
+function SuperType() {
+    this.colors = ["red", "blue", "green"]; // 引用值
+}
+// 类型 SubType
+function SubType() {}
+// 继承 SuperType
+SubType.prototype = new SuperType();
 
+let instance1 = new SubType();
+instance1.colors.push("black");
+console.log(instance1.colors);  // "red,blue,green,black"
+
+let instance2 = new SubType();
+console.log(instance2.colors);  // "red,blue,green,black"
+```
 
 ## 盗用构造函数
+
+为了解决原型包含引用值导致的继承问题，一种叫做“盗用构造函数”(constructor stealing)的技术在开发社区流行起来
+(这种技术有时也称作“对象伪装”或“经典继承”)。
+
+基本思路很简单：在子类构造函数中调用父类构造函数
+
+### 传递参数
+
+### 盗用构造函数的问题
 
 ## 组合继承
 
