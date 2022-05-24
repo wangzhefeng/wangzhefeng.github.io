@@ -118,14 +118,25 @@ details[open] summary {
     - [盗用构造函数的问题](#盗用构造函数的问题)
   - [组合继承](#组合继承)
   - [原型式继承](#原型式继承)
+    - [object()](#object)
+    - [Object.create()](#objectcreate)
   - [寄生式继承](#寄生式继承)
   - [寄生式组合继承](#寄生式组合继承)
+    - [组合继承的问题](#组合继承的问题)
+    - [寄生式组合继承](#寄生式组合继承-1)
 - [类](#类)
   - [类定义](#类定义)
-    - [类的定义](#类的定义)
+    - [类声明](#类声明)
+    - [类表达式](#类表达式)
     - [类的构成](#类的构成)
   - [类构造函数](#类构造函数)
     - [实例化](#实例化)
+      - [实例化原理](#实例化原理)
+      - [实例化示例](#实例化示例)
+      - [类构造函数 this 对象](#类构造函数-this-对象)
+      - [类构造函数与构造函数的区别](#类构造函数与构造函数的区别)
+      - [实例化后的类构造函数](#实例化后的类构造函数)
+    - [把类当做特殊函数](#把类当做特殊函数)
   - [实例、原型和类成员](#实例原型和类成员)
     - [实例成员](#实例成员)
     - [原型方法与访问器](#原型方法与访问器)
@@ -2272,148 +2283,371 @@ console.log(instance.age);  // 29
 ## 组合继承
 
 组合继承，有时候也叫伪经典继承，综合了原型链和盗用函数，将两者的优点集中了起来。
-基本的思路是使用原型链继承原型上的属性和方法，而通过盗用构造函数继承实例属性
+基本的思路是使用原型链继承原型上的属性和方法，而通过盗用构造函数继承实例属性。
+这样既可以把方法定义在原型上以实现重用，又可以让每个实例有自己的属性
+
+组合继承弥补了原型链和盗用构造函数的不足，是 JavaScript 中使用最多的继承模式。
+而且组合继承也保留了 `instanceof` 操作符和 `isPrototypeOf()` 方法识别合成对象的能力
+
+```js
+// 类型 SuperType
+function SuperType(name) {
+    this.name = name;
+    this.colors = ["red", "blue", "green"];
+}
+SuperType.prototype.sayName = function() {
+    console.log(this.name);
+};
 
 
+// 类型 SubType
+function SubType(name, age) {
+    // 继承属性
+    SuperType.call(this, name);
+    this.age = age;
+}
+// 继承方法
+SubType.prototype = new SuperType();
+SubType.prototype.sayAge = function () {
+    console.log(this.age);
+}
 
 
+let instance1 = new SubType("Nicholas", 29);
+instance1.colors.push("black");
+console.log(instance1.colors);  // "red,blue,green,black"
+instance1.sayName();  // "Nicholas"
+instance1.sayAge();  // 29
 
 
-
+let instance2 = new SubType("Greg", 27);
+console.log(instance2.colors);  // "red,blue,green"
+instance2.sayName();  // "Greg"
+instance2.sayAge();  // 27
+```
 
 ## 原型式继承
 
+### object()
+
+2006 年，Douglas Crockford 写了一篇文章:《JavaScript 中的原型式继承》(“Prototypal Inheritance in JavaScript”)。
+这篇文章介绍了一种不涉及严格意义上构造函数的继承方法。他的出发点是即使不自定义类型也可以通过原型实现对象之间的信息共享。
+
+文章最终给出了一个函数，这个 `object()` 函数会创建一个临时构造函数，
+将传入的对象赋值给这个构造函数的原型，然后返回这个临时类型的一个实例。
+本质上，`object()` 是对传入的对象执行了一次浅复制
+
+```js
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+
+let person = {
+    name: "Nicholas",
+    friends: ["Shelby", "Court", "Van"]
+};
+
+let anotherPerson = object(person);
+anotherPerson.name = "Greg";
+anotherPerson.friends.push("Rob");
+
+let yetAnotherPerson = object(person);
+yetAnotherPerson.name = "Linda";
+yetAnotherPerson.friends.push("Barbie");
+
+console.log(person.friends);
+// "Shelby,Court,Van,Rob,Barbie"
+```
+
+### Object.create()
+
+ECMAScript 5 通过增加 `Object.create()` 方法将原型式继承的概念规范化了。
+这个方法接收两个参数：
+
+* 作为新对象原型的对象
+* 给新对象定义额外属性的对象(可选)
+
+原型式继承非常适合不需要单独创建构造函数，但仍然需要在对象间共享信息的场合。
+但要记住，属性中包含的引用值始终会在相关对象间共享，跟使用原型模式是一样的
+
+
+在只有一个参数时，`Object.create()` 与 `object()` 方法效果相同
+
+```js
+let person = {
+    name: "Nicholas",
+    friends: ["Shelby", "Court", "Van"]
+};
+
+let anotherPerson = Object.create(person);
+anotherPerson.name = "Greg";
+anotherPerson.friends.push("Rob");
+
+let yetAnotherPerson = Object.create(person);
+yetAnotherPerson.name = "Linda";
+yetAnotherPerson.friends.push("Barbie");
+
+console.log(person.friends);  // "Shelby,Court,Van,Rob,Barbie"
+```
+
+`Object.create()` 的第二个参数与 `Object.defineProperties()` 的第二个参数一样：
+每个新增属性都通过各自的描述符来描述。以这种方式添加的属性会遮蔽原型对象上的同名属性
+
+```js
+let person = {
+    name: "Nicholas",
+    friends: ["Shelby", "Court", "Van"]
+};
+
+let anotherPerson = Object.create(person, {
+    name: {
+        value: "Greg"
+    }
+});
+
+console.log(anotherPerson.name);  // "Greg"
+```
+
 ## 寄生式继承
+
+与原型式继承比较接近的一种继承方式是 **寄生式继承(parasitic inheritance)**，
+也是 Crockford 首倡的一种模式。寄生式继承背后的思路类似于寄生构造函数和工厂模式：
+创建一个实现继承的函数，以某种方式增强对象，然后返回这个对象
+
+* 寄生式继承同样适合主要关注对象，而不在乎类型和构造函数的场景。
+  `object()` 函数不是寄生式继承所必需的，任何返回新对象的函数都可以使用
+* 通过寄生式继承给对象添加函数会导致函数难以重用，与构造函数模式类似
+
+基本的寄生继承模式如下:
+
+```js
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+
+
+function createAnother(original) {
+    let clone = object(original);  // 通过调用函数创建一个新对象
+    clone.sayHi = function() {  // 以某种方式增强这个对象
+        console.log("hi");
+    };
+    return clone;  // 返回这个对象
+}
+
+let person = {
+    name: "Nicholas",
+    friends: ["Shelby", "Court", "Van"]
+};
+
+let anotherPerson = createAnother(person);
+anotherPerson.sayHi();  // "hi"
+```
 
 ## 寄生式组合继承
 
+### 组合继承的问题
+
+组合继承其实也存在效率问题。最主要的效率问题就是父类构造函数始终会被调用两次: 
+
+* 一次在是创建子类原型时调用
+* 另一次是在子类构造函数中调用
+
+本质上，子类原型最终是要包含超类对象的所有实例属性，
+子类构造函数只要在执行时重写自己的原型就行了
 
 
+```js
+// 类型 SuperType
+function SuperType(name) {
+    this.name = name;
+    this.colors = ["red", "blue", "green"];
+}
+SuperType.prototype.sayName = function() {
+    console.log(this.name);
+};
 
 
+// 类型 SubType
+function SubType(name, age) {
+    // 继承属性
+    SuperType.call(this, name);  // 第二次调用 SuperType()
+    this.age = age;
+}
+// 继承方法
+SubType.prototype = new SuperType();  // 第一次调用 SuperType()
+SubType.prototype.constructor = SubType;
+SubType.prototype.sayAge = function() {
+    console.log(this.age);
+};
+```
 
+### 寄生式组合继承
 
+寄生式组合继承通过盗用构造函数继承属性，但使用混合式原型链继承方法。
+基本思路是不通过调用父类构造函数给子类原型赋值，而是取得父类原型的一个副本。
+说到底就是使用寄生式继承来继承父类原型，然后将返回的新对象赋值给子类原型。
+寄生式组合继承的基本模式如下所示
 
+```js
+function inheritPrototype(subType, superType) {
+    let prototype = object(superType.prototype);  // 创建对象
+    prototype.constructor = subType;   // 增强对象
+    subType.prototype = prototype;  // 赋值对象
+}
+
+// 类型 SuperType
+function SuperType(name) {
+    this.name = name;
+    this.colors = ["red", "blue", "green"];
+}
+SuperType.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+// 类型 SubType
+function SubType(name, age) {
+    SuperType.call(this, name);
+    this.age = age;
+}
+
+inheritPrototype(SubType, SuperType);   // 调用一次 SuperType 构造函数
+
+SubType.prototype.sayAge = function() {
+    console.log(this.age);
+};
+```
+这里只调用了一次 SuperType 构造函数，避免了 SubType.prototype 上不必要也用不到的属性，
+因此可以说这个例子的效率更高。而且，原型链仍然保持不变，因此 `instanceof` 操作符和 `isPrototypeOf()` 方法正常有效。
+寄生式组合继承可以算是引用类型继承的最佳模式
 
 # 类
 
 ECMAScript 6 新引入的 `class` 关键字具有正式定义类的能力。
-类(class) 是ECMAScirpt 中新的基础性语法糖结构，
+类(class) 是 ECMAScirpt 中新的基础性语法糖结构，
 虽然 ECMAScript 6 类表面上看起来可以支持正式的面向对象编程，
 但实际上它背后使用的仍然是原型和构造函数的概念
 
 ## 类定义
 
-### 类的定义
+与函数类型类似，定义类也有两种主要方式，这两种方式都使用 `class` 关键字加大括号
 
-与函数类型类似，定义类也有两种主要方式，这两种方式都使用 class 关键字加大括号
+### 类声明
 
-- 类声明
+* 定义类
 
-    - 定义类
+```js
+// 函数声明
+function Person() {}
+class Person {}
+```
 
-    ```js
-    // 函数声明
-    function Person() {}
-    class Person {}
-    ```
+* 与函数定义不同的是，虽然函数声明可以提升，但类定义不能
 
-    - 与函数定义不同的是，虽然函数声明可以提升，但类定义不能
+```js
+// 函数声明提升
+console.log(FunctionDeclaration); // FunctionDeclaration() {}
+function FunctionDeclaration() {}
+console.log(FunctionDeclaration); // FunctionDeclaration() {}
+```
 
-        - 函数声明提升
+```js
+// 类声明不能提升
+console.log(ClassDeclaration); // ReferenceError: ClassDeclaration is not defined
+class ClassDeclaration {}
+console.log(ClassDeclaration); // class ClassDeclaration {}
+```
 
-        ```js
-        console.log(FunctionDeclaration); // FunctionDeclaration() {}
-        function FunctionDeclaration() {}
-        console.log(FunctionDeclaration); // FunctionDeclaration() {}
-        ```
+* 与函数声明不同的还有，函数受函数作用域限制，而类受块作用域限制
 
-        - 类声明不能提升
+```js
+{
+    function FunctionDeclaration() {}
+    class ClassDeclaration {}
+}
 
-        ```js
-        console.log(ClassDeclaration); // ReferenceError: ClassDeclaration is not defined
-        class ClassDeclaration {}
-        console.log(ClassDeclaration); // class ClassDeclaration {}
-        ```
+console.log(FunctionDeclaration); // FunctionDeclaration() {}
+console.log(ClassDeclaration);    // ReferenceError: ClassDeclaration is not defined
+```
 
-    - 与函数声明不同的还有，函数受函数作用域限制，而类受块作用域限制
+### 类表达式
 
-    ```js
-    {
-        function FunctionDeclaration() {}
-        class ClassDeclaration {}
-    }
-    
-    console.log(FunctionDeclaration); // FunctionDeclaration() {}
-    console.log(ClassDeclaration);    // ReferenceError: ClassDeclaration is not defined
-    ```
+* 定义类
 
-- 类表达式
+```js
+// 函数表达式
+const Animal = function() {};
+const Animal = class {};
+```
 
-    - 定义类
+* 与函数表达式类似，类表达式在它们被求值前也不能引用
 
-    ```js
-    // 函数表达式
-    const Animal = function() {};
-    const Animal = class {};
-    ```
+```js
+// 函数表达式在定义前不能引用
+console.log(FunctionExpression); // undefined
+var FunctionExpression = function() {};
+console.log(FunctionExpression); // function() {}
+```
 
-    - 与函数表达式类似，类表达式在它们被求值前也不能引用
-
-        - 函数表达式在定义前不能引用
-
-        ```js
-        console.log(FunctionExpression); // undefined
-        var FunctionExpression = function() {};
-        console.log(FunctionExpression); // function() {}
-        ```
-
-        - 类表达式在定义前不能引用
-
-        ```js
-        console.log(ClassExpression); // undefined
-        var ClassExpression = class() {};
-        console.log(ClassExpression); // class {}
-        ```
+```js
+// 类表达式在定义前不能引用
+console.log(ClassExpression); // undefined
+var ClassExpression = class() {};
+console.log(ClassExpression); // class {}
+```
 
 ### 类的构成
 
-- 类可以包含下面的方法或函数，但这些都不是必需的，空的类定义照样有效。默认情况下，类定义中的代码都在严格模式下执行：
-  - 构造函数方法
-      - constructor() {}
-  - 实例方法
-  - 获取函数
-      - get
-  - 设置函数
-      - set
-  - 静态类方法
-      - 
-- 与函数构造函数一样，建议类名的首字母要大写，以区别与通过它创建的实例
-- 类表达式的名称是可选的。把类表达式赋值给变量后，可以通过 name 属性取得类表达式的名称字符串。但不能在类表达式作用域外部访问这个标识符
+类可以包含下面的方法或函数，但这些都不是必需的，空的类定义照样有效
+
+* 构造函数方法
+    - `constructor() {}`
+* 实例方法
+* 获取函数
+    - `get`
+* 设置函数
+    - `set`
+* 静态类方法
+
+默认情况下，类定义中的代码都在严格模式下执行。
+与函数构造函数一样，建议类名的首字母要大写，以区别与通过它创建的实例。
 
 ```js
 // 空类定义，有效
 class Foo {}
+
 // 有构造函数的类，有效
 class Bar {
     constructor() {}
 }
+
 // 实例方法
 class Bai {}
+
 // 获取函数
 class Baz {
     get myBaz() {}
 }
+
 // 设置函数
 class Bas {
     set MyBas() {}
 }
+
 // 有静态方法的类，有效
 class Qux {
     static myQux() {}
 }
+```
 
+类表达式的名称是可选的。把类表达式赋值给变量后，
+可以通过 `name` 属性取得类表达式的名称字符串。
+但不能在类表达式作用域外部访问这个标识符
 
+```js
 // PersonName 类
 let Person = class PersonName {
     identify() {
@@ -2429,16 +2663,34 @@ console.log(PersonName);  // ReferenceError: PersonName is not defined
 
 ## 类构造函数
 
-- constructor 关键字用于在类定义块内部创建类的构造函数
-    - constructor 会告诉解释器在使用 new 操作符创建类的新实例时，应该调用这个函数
-- 构造函数的定义不是必需的，不定义构造函数相当于将构造函数定义为空函数
+`constructor` 关键字用于在类定义块内部创建类的构造函数。
+方法名 `constructor` 会告诉解释器在使用 `new` 操作符创建类的新实例时，
+应该调用这个函数。构造函数的定义不是必需的，不定义构造函数相当于将构造函数定义为空函数
 
 ### 实例化
 
+#### 实例化原理
+
+使用 `new` 操作符实例化类的操作等于使用 `new` 调用其构造函数。唯一可感知的不同之处就是，
+JavaScript 解释器知道用 `new` 和类意味着应该使用 `constructor` 函数进行实例化
+
+使用 `new` 调用类的构造函数会执行如下操作
+
+1. 在内存中创建一个新对象
+2. 这个对象内部的 `[[Prototype]]` 指针被赋值为构造函数的 `prototype` 属性
+3. 构造函数内部的 `this` 被赋值为这个新对象(即 `this` 指向新对象)
+4. 执行改造函数内部的代码(给新对象添加属性)
+5. 如果构造函数返回非空对象，则返回该对象；否则，返回刚创建的新对象
+
+#### 实例化示例
+
+* 新建类
+
 ```js
-// 类
+// 类 Animal
 class Animal {}
-// 类
+
+// 类 Perosn
 class Person {
     constructor(name) {
         console.log(arguments.length);
@@ -2446,28 +2698,116 @@ class Person {
         console.log("person ctor");
     }
 }
-// 类
+
+// 类 Vegetable
 class Vegetable {
     constructor() {
         this.color = "orange";
     }
 }
+```
 
-// 实例化
+* 类实例化
+    - 类实例化时传入的参数会用作构造函数的参数，如果不需要参数，则类名后面的括号也是可选的
+
+```js
+// 类实例
 let a = new Animal();
 let p = new Person();
 let v = new Vegetable();
+
 console.log(v.color); // orange
 
 let p1 = new Person; // 0
 console.log(p1.name); // null
+
 let p2 = new Person(); // 0
+
 console.log(p2.name); // null
 let p3 = new Person("Jake"); // 1
 console.log(p3.name); // Jake
 ```
 
+#### 类构造函数 this 对象
+
+默认情况下，类构造函数会在执行之后返回 `this` 对象。
+构造函数返回的对象会被用作实例化的对象，
+如果没有什么引用新创建的 `this` 对象，
+那么这个对象会被销毁。不过，如果返回的不是 `this` 对象，
+而是其他对象，那么这个对象不会通过 `instanceof` 操作符检测出跟类有关联，
+因为这个对象的原型指针并没有被修改
+
+```js
+class Person {
+    constructor(override) {
+        this.foo = "foo";
+        if (override) {
+            return {
+                bar: "bar"
+            };
+        }
+    }
+}
+
+let p1 = new Person();
+let p2 = new Person(true);
+
+console.log(p1);  // Perosn{ foo: "foo" }
+console.log(p1 instanceof Perosn);  // true
+
+console.log(p2);  // { bar: "bar" }
+console.log(p2 instanceof Person);  // false
+```
+
+#### 类构造函数与构造函数的区别
+
+类构造函数与构造函数的主要区别是，调用类构造函数必须使用 `new` 操作符。
+而普通构造函数如果不使用 `new` 调用，那么就会以全局的 `this`(通常是 `window`)作为内部对象。
+调用类构造函数时如果忘了使用 `new` 则会抛出错误
+
+
+```js
+function Perosn() {}
+
+class Animal {}
+
+// 把 window 作为 this 来构建示例
+let p = Perosn();
+
+// 错误调用类构造函数
+let a = Animal();
+// TypeError: class constructor Animal cannot be invoked without 'new'
+```
+
+#### 实例化后的类构造函数
+
+类构造函数没有什么特殊之处，实例化之后，它会成为普通的实例方法(但作为类构造函数，仍然要使用 `new` 调用)。
+因此，实例化之后可以在实例上引用它
+
+```js
+class Person {}
+
+// 使用类创建一个新实例
+let p1 = new Person();
+
+p1.constructor();
+// TypeError: Class constructor Person cannot be invoked without 'new'
+
+// 使用对类构造函数的引用创建一个新实例
+let p2 = new p1.constructor();
+```
+
+
+### 把类当做特殊函数
+
+
+
+
 ## 实例、原型和类成员
+
+
+
+
 
 ### 实例成员
 
