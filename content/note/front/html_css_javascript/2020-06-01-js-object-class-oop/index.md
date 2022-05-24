@@ -2213,16 +2213,73 @@ console.log(instance2.colors);  // "red,blue,green,black"
 
 ## 盗用构造函数
 
-为了解决原型包含引用值导致的继承问题，一种叫做“盗用构造函数”(constructor stealing)的技术在开发社区流行起来
-(这种技术有时也称作“对象伪装”或“经典继承”)。
+为了解决原型包含引用值导致的继承问题，
+一种叫做 “盗用构造函数”(constructor stealing) 的技术在开发社区流行起来，
+这种技术有时也称作“对象伪装”或“经典继承”
 
-基本思路很简单：在子类构造函数中调用父类构造函数
+基本思路很简单：在子类构造函数中调用父类构造函数。
+因为毕竟函数就是在特定上下文中执行代码的简单对象，
+所以可以使用 `apply()` 和 `call()` 方法以新创建对象为上下文执行构造函数
+
+```js
+function SuperType() {
+    this.colors = ["red", "blue", "green"];
+}
+function SubType() {
+    // 继承 SuperType
+    SuperType.call(this);
+}
+
+let instance1 = new SubType();
+instance1.colors.push("black");
+console.log(instance1.colors);  // "red,blue,green,black"
+
+let instance2 = new SubType();
+console.log(instance2.colors);  // "red,blue,green"
+```
 
 ### 传递参数
 
+相比于使用原型链，盗用构造函数的一个优点就是可以在子类构造函数中向父类构造函数传参
+
+```js
+function SuperType(name) {
+    this.name = name;
+}
+
+function SubType() {
+    // 继承 SuperType 并传参
+    SuperType.call(this, "Nicholas");
+
+    // 实例属性
+    this.age = 29;
+}
+
+let instance = new SubType();
+console.log(instance.name);  // "Nicholas"
+console.log(instance.age);  // 29
+```
+
 ### 盗用构造函数的问题
 
+盗用构造函数的主要缺点，也是使用构造函数模式自定义类型的问题：
+
+* 必须在构造函数中定义方法，因此函数不能重用
+* 子类也不能访问父类原型上定义的方法，因此所有类型只能使用构造函数模式
+
+由于存在这些问题，盗用构造函数基本上也不能单独使用
+
 ## 组合继承
+
+组合继承，有时候也叫伪经典继承，综合了原型链和盗用函数，将两者的优点集中了起来。
+基本的思路是使用原型链继承原型上的属性和方法，而通过盗用构造函数继承实例属性
+
+
+
+
+
+
+
 
 ## 原型式继承
 
