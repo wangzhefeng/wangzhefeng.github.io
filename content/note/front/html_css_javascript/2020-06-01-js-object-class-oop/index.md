@@ -2765,7 +2765,6 @@ console.log(p2 instanceof Person);  // false
 而普通构造函数如果不使用 `new` 调用，那么就会以全局的 `this`(通常是 `window`)作为内部对象。
 调用类构造函数时如果忘了使用 `new` 则会抛出错误
 
-
 ```js
 function Perosn() {}
 
@@ -2796,7 +2795,6 @@ p1.constructor();
 // 使用对类构造函数的引用创建一个新实例
 let p2 = new p1.constructor();
 ```
-
 
 ### 把类当做特殊函数
 
