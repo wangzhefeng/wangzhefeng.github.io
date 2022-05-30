@@ -55,7 +55,11 @@ details[open] summary {
 
 - [Object](#object)
   - [创建 Object 实例](#创建-object-实例)
+    - [使用 new 操作符和 Object 构造函数](#使用-new-操作符和-object-构造函数)
+    - [使用对象字面量表示法](#使用对象字面量表示法)
   - [访问属性](#访问属性)
+    - [点语法](#点语法)
+    - [中括号](#中括号)
 - [Array](#array)
   - [创建数组](#创建数组)
     - [new 加 Array() 构造函数](#new-加-array-构造函数)
@@ -64,18 +68,39 @@ details[open] summary {
     - [Array 的 of() 方法](#array-的-of-方法)
   - [数组空位](#数组空位)
   - [数组索引](#数组索引)
+    - [数组索引基本使用方法](#数组索引基本使用方法)
+    - [数组长度自动扩展](#数组长度自动扩展)
+    - [数组的 length 属性](#数组的-length-属性)
   - [检测数组](#检测数组)
+    - [instanceof 操作符](#instanceof-操作符)
+    - [isArray() 方法](#isarray-方法)
   - [迭代器方法](#迭代器方法)
   - [复制和填充方法](#复制和填充方法)
+    - [复制方法 copyWithin()](#复制方法-copywithin)
+    - [填充数组方法 fill()](#填充数组方法-fill)
   - [转换方法](#转换方法)
+    - [数组本身](#数组本身)
+    - [valueOf() 方法](#valueof-方法)
+    - [toString() 方法](#tostring-方法)
+    - [toLocalString() 方法](#tolocalstring-方法)
+    - [join() 方法](#join-方法)
   - [栈方法](#栈方法)
+    - [push() 方法](#push-方法)
+    - [pop() 方法](#pop-方法)
   - [队列方法](#队列方法)
+    - [shift() 方法](#shift-方法)
+    - [unshift() 方法](#unshift-方法)
   - [排序方法](#排序方法)
+    - [reverse() 方法](#reverse-方法)
+    - [sort() 方法](#sort-方法)
   - [操作方法](#操作方法)
+    - [concat() 方法](#concat-方法)
+    - [slice() 方法](#slice-方法)
+    - [splice() 方法](#splice-方法)
   - [搜索和位置方法](#搜索和位置方法)
   - [迭代方法](#迭代方法)
   - [归并方法](#归并方法)
-- [定型数组](#定型数组)
+  - [定型数组](#定型数组)
   - [历史](#历史)
   - [ArrayBuffer](#arraybuffer)
   - [DataView](#dataview)
@@ -84,16 +109,42 @@ details[open] summary {
   - [Map 基本 API](#map-基本-api)
   - [顺序与迭代](#顺序与迭代)
   - [选择 Object 还是 Map](#选择-object-还是-map)
-- [WeakMap](#weakmap)
+  - [WeakMap](#weakmap)
 - [Set](#set)
   - [Set 基本 API](#set-基本-api)
   - [顺序与迭代](#顺序与迭代-1)
   - [定义正式集合操作](#定义正式集合操作)
-- [WeakSet](#weakset)
+  - [WeakSet](#weakset)
 - [迭代与扩展操作](#迭代与扩展操作)
 </p></details><p></p>
 
 
+JavaScript 中的对象是引用值，可以通过几种内置引用类型创建特定类型的对象
+
+* 引用类型与传统面向对象编程语言中的类相似，但实现不同
+* `Object` 类型是一个基础类型，所有引用类型都从它继承了基本的行为
+* `Array` 类型表示一组有序的值，并提供了操作和转换值的能力
+* 定型数组包含一套不同的引用类型，用于管理数值在内存中的类型
+* `Date` 类型提供了关于日期和时间的信息，包括当前日期和时间以及计算
+* `RegExp` 类型是 ECMAScript 支持的正则表达式的接口，
+  提供了大多数基本正则表达式以及一些高级正则表达式的能力
+
+JavaScript 比较独特的一点是，函数其实是 `Function` 类型的实例，这意味着函数也是对象。
+由于函数是对象，因此也就具有能够增强自身行为的方法。
+因为原始值包装类型的存在，所以 JavaScript 中的原始值可以拥有类似对象的行为。有 3 种原始值
+包装类型: `Boolean`、`Number` 和 `String`。它们都具有如下特点:
+
+* 每种包装类型都映射到同名的原始类型。
+* 在以读模式访问原始值时，后台会实例化一个原始值包装对象，通过这个对象可以操作数据
+* 涉及原始值的语句只要一执行完毕，包装对象就会立即销毁。
+
+JavaScript 还有两个在一开始执行代码时就存在的内置对象: `Global` 和 `Math`。
+其中，`Global` 对象在大多数 ECMAScript 实现中无法直接访问。
+不过浏览器将 `Global` 实现为 `window` 对象。所有全局变量和函数都是 `Global` 对象的属性。
+`Math` 对象包含辅助完成复杂数学计算的属性和方法
+
+ECMAScript 6 新增了一批引用类型: `Map`、`WeakMap`、`Set` 和 `WeakSet`。
+这些类型为组织应用程序 数据和简化内存管理提供了新能力
 
 # Object
 
@@ -102,7 +153,7 @@ Object 是 ECMAScript 中最常用的类型之一，
 
 ## 创建 Object 实例
 
-* 使用 `new` 操作符和 `Object` 构造函数
+### 使用 new 操作符和 Object 构造函数
 
 ```js
 let person = new Object();
@@ -110,11 +161,13 @@ person.name = "Nicholas";
 person.age = 29;
 ```
 
-* 使用**对象字面量**表示法
-    - 在 ECMAScript 中，**表达式上下文(expression context)** 指的是期待返回值的上下文。
-      赋值操作符表示后面要期待一个值，因此左大括号表示一个表达式的开始。
-      同样是左大括号，如果出现在语句上下文(statement context)中，
-      比如 if 语句的条件后面，则表示一个语句块的开始赋值草
+### 使用对象字面量表示法
+
+在 ECMAScript 中，**表达式上下文(expression context)** 指的是期待返回值的上下文。
+赋值操作符表示后面要期待一个值，因此左大括号表示一个表达式的开始
+
+同样是左大括号，如果出现在 **语句上下文(statement context)** 中，
+比如 `if` 语句的条件后面，则表示一个语句块的开始
 
 示例 1:
 
@@ -171,7 +224,7 @@ displayInfo({
 
 ## 访问属性
 
-* 点语法
+### 点语法
 
 ```js
 let person = {
@@ -182,7 +235,9 @@ let person = {
 console.log(person.name); // "Nicholas"
 ```
 
-* 中括号：优势在于可以通过变量访问属性
+### 中括号
+
+中括号的优势在于可以通过变量访问属性
 
 ```js
 let person = {
@@ -207,6 +262,8 @@ person["first name"] = "Nicholas";
 
 ECMAScript 数组是一组有序的数据，组中每个槽位可以存储任意类型的数据。
 ECMAScript 数组是动态大小的，会随着数据添加而自动增长
+
+注意: 与对象一样，在使用数组字面量表示法创建数组不会调用 `Array` 构造函数
 
 ## 创建数组
 
@@ -253,10 +310,13 @@ console.log(Array.from("Matt"));  // ["M", "a", "t", "t"]
 ```js
 const m = new Map().set(1, 2)
                    .set(3, 4);
+console.log(m);  // Map(2) {1 => 2, 3 => 4}
 const s = new Set().add(1)
                    .add(2)
                    .add(3)
                    .add(4);
+console.log(s);  // Set(4) {1, 2, 3, 4}
+
 console.log(Array.from(m)); // [[1, 2], [3, 4]]
 console.log(Array.from(s)); // [1, 2, 3, 4]
 ```
@@ -336,7 +396,8 @@ console.log(a3); // [1, 4, 9, 16]
 ### Array 的 of() 方法
 
 `Array.of()` 用于将一组参数转换为数组实例，
-用来替代 ES6 之前常用的 `Array.protytype.slice.call(arguments)`
+用来替代 ES6 之前常用的一种异常笨拙的将 `arguments` 对象转换为数组的写法:
+ `Array.protytype.slice.call(arguments)`
 
 ```js
 console.log(Array.of(1, 2, 3, 4)); // [1, 2, 3, 4]
@@ -345,16 +406,25 @@ console.log(Array.of(undefined));  // [undefined]
 
 ## 数组空位
 
-- 使用数组字面量初始化数组时，可以使用一串逗号来创建空位(hole)，ECMAScript 会将逗号之间相应索引位置的值当成空位，ES6 规范重新定义了该如何处理这些空位
-    - ES6 之前的方法会忽略这些空位，但具体的行为也会因方法而异
-    - ES6 新增的方法将普遍将这些空位当成存在的元素，只不过值是 undefined
-- 由于行为不一致和存在性能隐患，因此实践中要避免使用数组空位，如果确实需要空位，则可以显示地用 `undefined` 值代替
+使用数组字面量初始化数组时，可以使用一串逗号来创建空位(hole)，
+ECMAScript 会将逗号之间相应索引位置的值当成空位，
+ES6 规范重新定义了该如何处理这些空位
+
+- ES6 之前的方法会忽略这些空位，但具体的行为也会因方法而异
+- ES6 新增的方法将普遍将这些空位当成存在的元素，只不过值是 undefined
+
+由于行为不一致和存在性能隐患，因此实践中要避免使用数组空位，
+如果确实需要空位，则可以显示地用 `undefined` 值代替
+
+* 示例 1
 
 ```js
 const options = [,,,,,]; 	 // 创建包含 5 个元素的数组
 console.log(options.length); // 5
 console.log(options); 		 // [,,,,,]
 ```
+
+* 示例 2
 
 ```js
 const options = [1,,,,5];
@@ -367,18 +437,31 @@ for (const option of options) {
 // ture
 // ture
 // false
+```
 
+* 示例 3
 
-const a = Array.from(options);
+```js
+const a = Array.from([,,,]);
+
 for (const value of a) {
     console.log(value === undefined);
 }
 // true
 // true
 // true
+```
 
-
+* 示例 4
+ 
+```js
 alert(Array.of(...[,,,])); // [undefined, undefined, undefined]
+```
+
+* 示例 5
+
+```js
+const options = [1,,,,5];
 
 for (const [index, value] of options.entries()) {
     alert(value);
@@ -389,6 +472,8 @@ for (const [index, value] of options.entries()) {
 // undefined
 // 5
 ```
+
+* 示例 6
 
 ```js
 // ES6 之前的方法会忽略空位，但具体的行为也会因方法而异
@@ -403,98 +488,120 @@ console.log(options.join("-")); // "1----5"
 
 ## 数组索引
 
-- 要获得或设置数组的值，需要使用中括号 `[]` 并提供相应值的数字索引
+要获得或设置数组的值，需要使用中括号 `[]` 并提供相应值的数字索引
 
-    - 如果索引小于数组包含的元素数，则返回存储在相应位置的元素
+### 数组索引基本使用方法
 
-    ```js
-    let colors = ["red", "blue", "green"]; 
-    
-    // 访问数组
-    alert(colors[0]);  // "red"
-    
-    // 设置数组值
-    colors[2] = "black";
-    colors[3] = "brown";
-    console.log(colors);     // ["red", "blue", "black", "brown"]
-    ```
+- 如果索引小于数组包含的元素数，则返回存储在相应位置的元素
 
-    - 如果把一个值设置给超过数组最大索引的索引，则数组长度会自动扩展到该索引值加 1
+```js
+let colors = ["red", "blue", "green"]; 
 
-    ```js
-    // 数组长度扩展
-    let colors = ["red", "blue", "green"]; 
-    
-    color[4] = "yellow";
-    console.log(colors); // ["red", "blue", "green", undefined, "yellow"]
-    ```
+// 访问数组
+alert(colors[0]);  // "red"
 
-    - 数组 length 属性的独特之处在于，它不是只读的。通过修改 length 属性，可以从数组末尾删除或添加元素
-        - 数组最多可以包含  4 294 967 295 个元素，这对于大多数编程任务应该足够了。如果 尝试添加更多项，则会导致抛出错误。以这个最大值作为初始值创建数组，可能导致脚本 运行时间过长的错误
+// 设置数组值
+colors[2] = "black";
+colors[3] = "brown";
+console.log(colors);     // ["red", "blue", "black", "brown"]
+```
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    
-    colors.length = 2;
-    console.log(colors[2]); // undefined
-    console.log(colors);    // ["red", "blue"]
-    ```
+### 数组长度自动扩展
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    
-    colors.length = 4;
-    console.log(colors); // ["red", "blue", "green", undefined]
-    ```
+- 如果把一个值设置给超过数组最大索引的索引，则数组长度会自动扩展到该索引值加 1
 
-    ```js
-    // 数组中最后一个元素的索引始终是 length-1，因此下一个新增槽位的索引就是 length，每次在数组最后一个元素后面新增一项，数组的 length 属性都会自动更新，以反映变化
-    let colors = ["red", "blue", "green"];
-    
-    colors[colors.length] = "black";
-    colors[colors.length] = "brown";
-    console.log(colors); // ["red", "blue", "green", "black", "brown"]
-    ```
+```js
+// 数组长度扩展
+let colors = ["red", "blue", "green"]; 
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    
-    colors[99] = "black";
-    console.log(colors.length); // 100
-    ```
+color[4] = "yellow";
+console.log(colors); // ["red", "blue", "green", undefined, "yellow"]
+```
+
+### 数组的 length 属性
+
+数组 `length` 属性的独特之处在于，它不是只读的。
+通过修改 `length` 属性，可以从数组末尾删除或添加元素
+
+数组最多可以包含  4 294 967 295 个元素，这对于大多数编程任务应该足够了。
+如果尝试添加更多项，则会导致抛出错误。以这个最大值作为初始值创建数组，
+可能导致脚本运行时间过长的错误
+
+```js
+let colors = ["red", "blue", "green"];
+
+colors.length = 2;
+console.log(colors[2]); // undefined
+console.log(colors);    // ["red", "blue"]
+```
+
+```js
+let colors = ["red", "blue", "green"];
+
+colors.length = 4;
+console.log(colors); // ["red", "blue", "green", undefined]
+```
+
+数组中最后一个元素的索引始终是 `length-1`，
+因此下一个新增槽位的索引就是 `length`，
+每次在数组最后一个元素后面新增一项，
+数组的 length 属性都会自动更新，以反映变化
+
+```js
+let colors = ["red", "blue", "green"];
+
+colors[colors.length] = "black";
+colors[colors.length] = "brown";
+console.log(colors); // ["red", "blue", "green", "black", "brown"]
+```
+
+```js
+let colors = ["red", "blue", "green"];
+
+colors[99] = "black";
+console.log(colors.length); // 100
+```
 
 ## 检测数组
 
-- 一个经典的 ECMAScript 问题是判断一个对象是不是数组
+一个经典的 ECMAScript 问题是判断一个对象是不是数组
 
-    - 在只有一个网页(因而只有一个全局作用域)的情况下，使用 `instanceof` 操作就足矣
+### instanceof 操作符
 
-    ```js
-    if (value instanceof Array) {
-        // 操作数组
-    }
-    ```
+在只有一个网页(因而只有一个全局作用域)的情况下，使用 `instanceof` 操作就足矣
 
-- 使用 `instanceof` 的问题是：
+```js
+if (value instanceof Array) {
+    // 操作数组
+}
+```
 
-    - 假定只有一个全局执行上下文，如果网页里有多个框架，则可能涉及两个不同的全局执行上下文，因而就会有两个不同版本的 Array 构造函数。如果要把数组从一个框架传给另一个框架，则这个数组的构造函数就有别于在第二个框架内本地创建的数组
-    - 为了解决这个问题，ECMAScript 提供了 `Array.isArray()` 方法，这个方法的目的就是确定一个值是否为数组，而不管它是在哪个全局执行上下文中创建的
+### isArray() 方法
 
-    ```js
-    if (Array.isArray(value)) {    
-        // 操作数组
-    }
-    ```
+使用 `instanceof` 的问题是：
+
+- 假定只有一个全局执行上下文，如果网页里有多个框架，则可能涉及两个不同的全局执行上下文，
+  因而就会有两个不同版本的 `Array` 构造函数。如果要把数组从一个框架传给另一个框架，
+  则这个数组的构造函数就有别于在第二个框架内本地创建的数组
+- 为了解决这个问题，ECMAScript 提供了 `Array.isArray()` 方法，
+  这个方法的目的就是确定一个值是否为数组，而不管它是在哪个全局执行上下文中创建的
+
+```js
+if (Array.isArray(value)) {    
+    // 操作数组
+}
+```
 
 ## 迭代器方法
 
-- 在 ES6 中，Array 的原型上暴露了3个用于检索数组内容的方法
-    - `keys()`
-        - 返回数组索引的迭代器
-    - `values()`
-        - 返回数组元素的迭代器
-    - `entries()`
-        - 返回索引/值的迭代器
+在 ES6 中，`Array` 的原型上暴露了 3 个用于检索数组内容的方法:
+
+- `keys()`
+    - 返回数组索引的迭代器
+- `values()`
+    - 返回数组元素的迭代器
+- `entries()`
+    - 返回索引/值的迭代器
 
 ```js
 const a = ["foo", "bar", "baz", "qux"];
@@ -508,7 +615,7 @@ console.log(aValues);  // ["foo", "bar", "baz", "qux"]
 console.log(aEntries); // [[0, "foo"], [1, "var"], [2, "baz"], [3, "qux"]]
 ```
 
-- 使用 ES6 的**解构**可以非常容易地在循环中拆分键/值对
+使用 ES6 的**解构**可以非常容易地在循环中拆分键/值对
 
 ```js
 const a = ["foo", "bar", "baz", "qux"];
@@ -531,202 +638,229 @@ for (const [idx, element] of a.entries()) {
 
 ## 复制和填充方法
 
-- `copyWithin(insertStartIndex, copyStartIndex, copyEndIndex) `
 
-    - 批量复制
-    - 需要指定既有数组实例上的一个范围，包含开始索引，不包含结束索引
-    - 不会改变数组的大小
-    - 按照指定范围浅复制数组中的部分内容，然后将它们插入到指定索引开始的位置，开始索引和结束索引计算方法如下：
-        - 开始索引用于指定开始填充的位置，可选
-        - 如果不提供结束索引，则一直填充到数组末尾
-        - 负值索引从数组末尾开始计算，也可以将负索引想象成数组长度加上它得到一个正索引
-    
-    ```js
-    let ints;
-    let reset = () => ints = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    reset();
-    
-    // 从 ints 中复制索引0开始的内容，插入到索引5开始的位置，在源索引或目标索引到达数组边界时停止
-    ints.copyWithin(5);
-    console.log(ints); // [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
-    reset();
-    
-    // 从 ints 中复制索引5开始的内容，插入到索引0开始的位置
-    ints.copyWithin(0, 5);
-    console.log(ints); // [5, 6, 7, 8, 9, 5, 6, 7, 8, 9]
-    reset();
-    
-    // 从 ints 中复制索引0开始到索引3(不包含)结束的内容，插入到索引4开始的位置
-    ints.copyWithin(4, 0, 3);
-    console.log(ints); // [0, 1, 2, 3, 0, 1, 2, 3, 8, 9];
-    reset();
-    
-    // JavaScript 引擎在插值前会完整复制范围内的值，因此复制期间不存在重写的风险
-    ints.copyWithin(2, 0, 6);
-    console.log(ints); // [0, 1, 0, 1, 2, 3, 4, 5, 8, 9]
-    reset();
-    
-    // 支持负索引值，与 fill() 相对于数组末尾计算正向索引的过程是一样的
-    ints.copyWithin(-4, -7, -3);
-    console.log(ints); // [0, 1, 2, 3, 4, 5, 3, 4, 5, 6]
-    ```
-    
-    - 静默忽略超出边界、零长度及方向相反的索引范围
-    
-    ```js
-    let ints;
-    let reset = () => ints = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    reset();
-    
-    // 索引过低，忽略
-    ints.copyWithint(1, -15, -12);
-    console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    reset();
-    
-    // 索引过高，忽略
-    ints.copyWithint(1, 12, 15);
-    console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    reset();
-    
-    // 索引反向，忽略
-    ints.copyWithint(2, 4, 2);
-    console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    reset();
-    
-    // 索引部分可用，复制、填充可用部分
-    ints.copyWithint(4, 7, 10);
-    console.log(ints); // [0, 1, 2, 3, 7, 8, 9, 7, 8, 9]
-    ```
+### 复制方法 copyWithin()
 
-- `fill(fillValue, startIndex, endIndex)`
+`copyWithin(insertStartIndex, copyStartIndex, copyEndIndex) `
 
-    - 填充数组
-    - 需要指定既有数组实例上的一个范围，包含开始索引，不包含结束索引
-    - 不会改变数组的大小
-    - 可以向一个已有的数组插入全部或部分相同的值，开始索引和结束索引计算方法如下：
-        - 开始索引用于指定开始填充的位置，可选
-        - 如果不提供结束索引，则一直填充到数组末尾
-        - 负值索引从数组末尾开始计算，也可以将负索引想象成数组长度加上它得到一个正索引
+- 批量复制
+- 需要指定既有数组实例上的一个范围，包含开始索引，不包含结束索引
+- 不会改变数组的大小
+- 按照指定范围浅复制数组中的部分内容，然后将它们插入到指定索引开始的位置，开始索引和结束索引计算方法如下：
+    - 开始索引用于指定开始填充的位置，可选
+    - 如果不提供结束索引，则一直填充到数组末尾
+    - 负值索引从数组末尾开始计算，也可以将负索引想象成数组长度加上它得到一个正索引
 
-    ```js
-    const zeroes = [0, 0, 0, 0, 0];
-    
-    // 用 5 填充整个数组
-    zeroes.fill(5);
-    console.log(zeroes); // [5, 5, 5, 5, 5]
-    zeroes.fill(0);
-    
-    // 用6填充索引大于等于3的元素
-    zeroes.fill(6, 3);
-    console.log(zeroes); // [0, 0, 0, 6, 6]
-    zeroes.fill(0);
-    
-    // 用7填充索引大于等于1且小于3的元素
-    zeroes.fill(7, 1, 3);
-    console..log(zeroes); // [0, 7, 7, 0, 0]
-    zeroes.fill(0);
-    
-    // 用8填充索引大于等于1且小于4的元素
-    // method 1
-    zeroes.fill(8, 1, 4);
-    console.log(zeroes); // [0, 8, 8, 8, 0]
-    zeroes.fill(0);
-    // method 2
-    zeroes.fill(8, -4, -1);
-    console.log(zeroes); // [0, 8, 8, 8, 0]
-    zeroes.fill(0);
-    ```
+```js
+let ints;
+let reset = () => ints = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+reset();
 
-    - 静默忽略超出数组边界、零长度及方向相反的索引范围
+// 从 ints 中复制索引0开始的内容，插入到索引5开始的位置，
+// 在源索引或目标索引到达数组边界时停止
+ints.copyWithin(5);
+console.log(ints); // [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
+reset();
 
-    ```js
-    const zeroes = [0, 0, 0, 0, 0];
-    
-    // 索引过低，忽略
-    zeroes.fill(1, -10, -6);
-    console.log(zeroes); // [0, 0, 0, 0, 0]
-    
-    // 索引过高，忽略
-    zeroes.fill(1, 10, 15);
-    console.log(zeroes); // [0, 0, 0, 0, 0]
-    
-    // 索引反向，忽略
-    zeroes.fill(2, 4, 2);
-    console.log(zeroes); // [0, 0, 0, 0, 0]
-    
-    // 索引部分可用，填充可用部分
-    zeroes.fill(4, 3, 10);
-    console.log(zeroes); // [0, 0, 0, 4, 4]
-    ```
+// 从 ints 中复制索引5开始的内容，插入到索引0开始的位置
+ints.copyWithin(0, 5);
+console.log(ints); // [5, 6, 7, 8, 9, 5, 6, 7, 8, 9]
+reset();
+
+// 从 ints 中复制索引0开始到索引3(不包含)结束的内容，插入到索引4开始的位置
+ints.copyWithin(4, 0, 3);
+console.log(ints); // [0, 1, 2, 3, 0, 1, 2, 3, 8, 9];
+reset();
+
+// JavaScript 引擎在插值前会完整复制范围内的值，因此复制期间不存在重写的风险
+ints.copyWithin(2, 0, 6);
+console.log(ints); // [0, 1, 0, 1, 2, 3, 4, 5, 8, 9]
+reset();
+
+// 支持负索引值，与 fill() 相对于数组末尾计算正向索引的过程是一样的
+ints.copyWithin(-4, -7, -3);
+console.log(ints); // [0, 1, 2, 3, 4, 5, 3, 4, 5, 6]
+```
+
+- 静默忽略超出边界、零长度及方向相反的索引范围
+
+```js
+let ints;
+let reset = () => ints = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+reset();
+
+// 索引过低，忽略
+ints.copyWithint(1, -15, -12);
+console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+reset();
+
+// 索引过高，忽略
+ints.copyWithint(1, 12, 15);
+console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+reset();
+
+// 索引反向，忽略
+ints.copyWithint(2, 4, 2);
+console.log(ints); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+reset();
+
+// 索引部分可用，复制、填充可用部分
+ints.copyWithint(4, 7, 10);
+console.log(ints); // [0, 1, 2, 3, 7, 8, 9, 7, 8, 9]
+```
+
+### 填充数组方法 fill() 
+
+`fill(fillValue, startIndex, endIndex)`
+
+- 填充数组
+- 需要指定既有数组实例上的一个范围，包含开始索引，不包含结束索引
+- 不会改变数组的大小
+- 可以向一个已有的数组插入全部或部分相同的值，开始索引和结束索引计算方法如下：
+    - 开始索引用于指定开始填充的位置，可选
+    - 如果不提供结束索引，则一直填充到数组末尾
+    - 负值索引从数组末尾开始计算，也可以将负索引想象成数组长度加上它得到一个正索引
+
+```js
+const zeroes = [0, 0, 0, 0, 0];
+
+// 用 5 填充整个数组
+zeroes.fill(5);
+console.log(zeroes); // [5, 5, 5, 5, 5]
+zeroes.fill(0);
+
+// 用6填充索引大于等于3的元素
+zeroes.fill(6, 3);
+console.log(zeroes); // [0, 0, 0, 6, 6]
+zeroes.fill(0);
+
+// 用7填充索引大于等于1且小于3的元素
+zeroes.fill(7, 1, 3);
+console..log(zeroes); // [0, 7, 7, 0, 0]
+zeroes.fill(0);
+
+// 用8填充索引大于等于1且小于4的元素
+// method 1
+zeroes.fill(8, 1, 4);
+console.log(zeroes); // [0, 8, 8, 8, 0]
+zeroes.fill(0);
+// method 2
+zeroes.fill(8, -4, -1);
+console.log(zeroes); // [0, 8, 8, 8, 0]
+zeroes.fill(0);
+```
+
+- 静默忽略超出数组边界、零长度及方向相反的索引范围
+
+```js
+const zeroes = [0, 0, 0, 0, 0];
+
+// 索引过低，忽略
+zeroes.fill(1, -10, -6);
+console.log(zeroes); // [0, 0, 0, 0, 0]
+
+// 索引过高，忽略
+zeroes.fill(1, 10, 15);
+console.log(zeroes); // [0, 0, 0, 0, 0]
+
+// 索引反向，忽略
+zeroes.fill(2, 4, 2);
+console.log(zeroes); // [0, 0, 0, 0, 0]
+
+// 索引部分可用，填充可用部分
+zeroes.fill(4, 3, 10);
+console.log(zeroes); // [0, 0, 0, 4, 4]
+```
 
 ## 转换方法
 
-- 所有对象都有 `toLocaleString()`、`toString()`、`valueOf()` 方法
+所有对象都有 `toLocaleString()`、`toString()`、`valueOf()` 方法
 
-    - 数组本身
+注意: 如果数组中某一项是 `null` 或 `undefined`，则在 `join()`、`toLocaleString()`、
+`toString()` 和 `valueOf()` 返回的结果中会以空字符(`""`)串表示
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    console.log(colors); // Array(3) [ "red", "blue", "green" ]
-    ```
+### 数组本身
 
-    - `valueOf()` 返回数组本身
+```js
+let colors = ["red", "blue", "green"];
+console.log(colors); // Array(3) [ "red", "blue", "green" ]
+```
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    console.log(colors.valueOf()); // Array(3) [ "red", "blue", "green" ]
-    ```
+### valueOf() 方法
+ 
+* `valueOf()` 返回数组本身
 
-    - `toString()` 返回由数组中每个值的等效字符串拼接而成的一个逗号分隔符的字符串，也就是说，对数组的每个值都会调用其 `toString()` 方法，以得到最终的字符串
+```js
+let colors = ["red", "blue", "green"];
+console.log(colors.valueOf()); // Array(3) [ "red", "blue", "green" ]
+```
 
-    ```js
-    let colors = ["red", "blue", "green"];
-    console.log(colors.toString()); // "red, blue, green"
-    ```
+### toString() 方法
 
-    - `toLocaleString()` 也可能返回跟 `toString()` 和 `valueOf()` 相同的结果，但也不一定。在调用数组的 `toLocaleString()` 方法时，会得到一个逗号分隔的数组字符串。它与另外两个方法唯一的区别是，为了得到最终的字符串，会调用数组每个值的 `toLocaleString()` 方法，而不是 `toString()` 方法
+* `toString()` 返回由数组中每个值的等效字符串拼接而成的一个逗号分隔符的字符串，
+也就是说，对数组的每个值都会调用其 `toString()` 方法，以得到最终的字符串
 
-    ```js
-    let person1 = {
-        toLocaleString() {
-            return "Nikolaos";
-        },
-        toString() {
-            return "Nicholas";
-        }
-    };
-    
-    let person2 = {
-        toLocaleString() {
-            return "Grigrios";
-        },
-        toString() {
-            return "Greg";
-        }
-    };
-    
-    let people = [person1, person2];
-    console.log(people); // Nicholas,Greg
-    console.log(people.toString()); // Nicholas,Greg
-    console.log(people.toLocaleString()); // Nikolaos,Grigorios
-    ```
+```js
+let colors = ["red", "blue", "green"];
+console.log(colors.toString()); // "red, blue, green"
+```
 
-- 继承的方法 `toLocaleString()` 和 `toString()` 都返回了数组值的逗号分隔的字符串，如果想使用不同的分隔符，则可以使用 `join()` 方法
+### toLocalString() 方法
 
-    ```js
-    let colors = [ "red", "blue", "green" ];
-    
-    console.log(colors.join(",")); // red,green,blue
-    console.log(colors.join("|")); // red|green|blue
-    ```
+* `toLocaleString()` 也可能返回跟 `toString()` 和 `valueOf()` 相同的结果，但也不一定。
+在调用数组的 `toLocaleString()` 方法时，会得到一个逗号分隔的数组字符串。
+它与另外两个方法唯一的区别是，为了得到最终的字符串，会调用数组每个值的 `toLocaleString()` 方法，
+而不是 `toString()` 方法
 
-- 如果数组中某一项是 null 或 undefined，则在 join()、toLocaleString()、 toString() 和 valueOf() 返回的结果中会以空字符(`""`)串表示
+```js
+let person1 = {
+    toLocaleString() {
+        return "Nikolaos";
+    },
+    toString() {
+        return "Nicholas";
+    }
+};
+
+let person2 = {
+    toLocaleString() {
+        return "Grigrios";
+    },
+    toString() {
+        return "Greg";
+    }
+};
+
+let people = [person1, person2];
+console.log(people); // Nicholas,Greg
+console.log(people.toString()); // Nicholas,Greg
+console.log(people.toLocaleString()); // Nikolaos,Grigorios
+```
+
+### join() 方法
+
+* 继承的方法 `toLocaleString()` 和 `toString()` 都返回了数组值的逗号分隔的字符串，
+如果想使用不同的分隔符，则可以使用 `join()` 方法
+
+```js
+let colors = [ "red", "blue", "green" ];
+
+console.log(colors.join(",")); // red,green,blue
+console.log(colors.join("|")); // red|green|blue
+```
 
 ## 栈方法
 
-- ECMAScript 给数组提供几个方法，让它看起来像是另外一种数据结构。数组对象可以像栈一样， 也就是一种限制插入和删除项的数据结构。栈是一种后进先出(LIFO，Last-In-First-Out)的结构，也就是最近添加的项先被删除
-    - 数据项的插入(称为推入，push)和删除(称为弹出，pop)只在栈的一个 地方发生，即栈顶
-    - ECMAScript 数组提供了 push()和 pop()方法，以实现类似栈的行为
+ECMAScript 给数组提供几个方法，让它看起来像是另外一种数据结构。
+数组对象可以像栈一样，也就是一种限制插入和删除项的数据结构。
+
+栈是一种后进先出(LIFO，Last-In-First-Out)的结构，也就是最近添加的项先被删除
+
+- 数据项的插入(称为推入，push)和删除(称为弹出，pop)只在栈的一个 地方发生，即栈顶
+- ECMAScript 数组提供了 push()和 pop()方法，以实现类似栈的行为
+
+### push() 方法
+
 - `push()`方法接收任意数量的参数, 并将它们添加到数组末尾, 返回数组的最新长度
 
 ```js
@@ -739,6 +873,8 @@ count = colors.push("black"); // 再推入一项
 console.log(count); 		  // 3
 ```
 
+### pop() 方法
+
 - `pop()` 方法用于删除数组的最后一项, 同时减少数组的 length 值, 返回被删除的项
 
 ```js
@@ -749,198 +885,222 @@ console.log(colors.length);  // 2
 
 ## 队列方法
 
-- 队列以**先进先出(FIFO，First-In-First-Out)**形式限制访问。队列在列表末尾添加数据，但从列表开头获取数据
+队列以 **先进先出(FIFO，First-In-First-Out)** 形式限制访问。
+队列在列表末尾添加数据，但从列表开头获取数据
 
-    - 因为有了在数据末尾添加数据的 push() 方法，所以要模拟队列就差一个从数组开头取得数据的方法了
-    - 这个数组方法叫 `shift()`，它会删除数组的第一项并返回它，然后数组长度减 1。使用 shift()和 push()，可以把数组当成队列来使用
+### shift() 方法
 
-    ```js
-    let colors = new Array();
-    let count = colors.push("red", "green");
-    console.log(count);  // 2
-    
-    count = colors.push("black");
-    console.log(count);  //3
-    
-    let item = colors.shift();
-    console.log(item); // "red"
-    console.log(colors.length); // 2
-    ```
+- 因为有了在数据末尾添加数据的 `push()` 方法，所以要模拟队列就差一个从数组开头取得数据的方法了。
+  这个数组方法叫 `shift()`，它会删除数组的第一项并返回它，然后数组长度减 1。
+  使用 `shift()` 和 `push()`，可以把数组当成队列来使用
 
-    - ECMAScript 也为数组提供了 `unshift()` 方法，执行跟 `shift()` 相反的操作: 在数组开头添加任意多个值，然后返回新的数组长度。通过使用 `unshift()` 和 `pop()` ，可以在相反方向上模拟队列，即在数组开头添加数据，在数组末尾取得数据
+```js
+let colors = new Array();
+let count = colors.push("red", "green");
+console.log(count);  // 2
 
-    ```js
-    let colors = new Array();
-    
-    // 在数组开头推入两项
-    let count = colors.unshift("red", "green");
-    console.log(count); // 2
-    
-    //  再推入一项
-    count = colors.unshift("black");
-    console.log(count); // 3
-    
-    // 取得最后一项
-    let item = colors.pop();
-    console.log(item); // green
-    console.log(colors.length); // 2
-    ```
+count = colors.push("black");
+console.log(count);  //3
+
+let item = colors.shift();
+console.log(item); // "red"
+console.log(colors.length); // 2
+```
+
+### unshift() 方法
+
+- ECMAScript 也为数组提供了 `unshift()` 方法，执行跟 `shift()` 相反的操作: 
+  在数组开头添加任意多个值，然后返回新的数组长度。
+  通过使用 `unshift()` 和 `pop()` ，可以在相反方向上模拟队列，
+  即在数组开头添加数据，在数组末尾取得数据
+
+```js
+let colors = new Array();
+
+// 在数组开头推入两项
+let count = colors.unshift("red", "green");
+console.log(count); // 2
+
+//  再推入一项
+count = colors.unshift("black");
+console.log(count); // 3
+
+// 取得最后一项
+let item = colors.pop();
+console.log(item); // green
+console.log(colors.length); // 2
+```
 
 ## 排序方法
 
-- 数组有两个方法可以用来对元素重新排序,  并且都返回调用它们的数组的引用
+数组有两个方法可以用来对元素重新排序, 并且都返回调用它们的数组的引用
 
-  - `reverse()`
+### reverse() 方法 
 
-  ```js
-  let values = [1, 2, 3, 4, 5];
-  values.reverse();
-  console.log(values); // 5,4,3,2,1
-  ```
+```js
+let values = [1, 2, 3, 4, 5];
+values.reverse();
+console.log(values); // 5,4,3,2,1
+```
 
-  - `sort()`
-    - 默认情况下，sort() 会按照升序重新排列数组元素，即最小的值在前面，最大的值在后面，为此，sort() 会在每一项上调用 String() 转型函数，然后比较字符串来决定顺序。即使数组的元素都是数值也会把数组转换为字符串再比较、排序
+### sort() 方法
+    
+默认情况下，`sort()` 会按照升序重新排列数组元素，即最小的值在前面，最大的值在后面，
+为此，`sort()` 会在每一项上调用 `String()` 转型函数，然后比较字符串来决定顺序。
+即使数组的元素都是数值也会把数组转换为字符串再比较、排序
 
-    ```js
-    let values = [0, 1, 5, 10, 15];
-    values.sort();
-    console.log(values); // 0,1,10,15,5
-    ```
+```js
+let values = [0, 1, 5, 10, 15];
+values.sort();
+console.log(values); // 0,1,10,15,5
+```
 
-    - sort() 方法可以接收一个比较函数，用于判断哪个值应该排在前面，比较函数接收两个参数
-        - 如果第一个参数应该排在第二个参数前面，就返回负值
-        - 如果两个参数相等，就返回 0
-        - 如果第一个参数应该排在第二个参数后面，就返回正值
+`sort()` 方法可以接收一个比较函数，用于判断哪个值应该排在前面。
+比较函数接收两个参数:
 
-    ```js
-    function compare(value1, value2) {
-        if (value1 < value2) {
-            return -1;
-        } else if (value1 > value2) {
-            return 1;
-        } else {
-            return 0;
-        }
+- 如果第一个参数应该排在第二个参数前面，就返回负值
+- 如果两个参数相等，就返回 0
+- 如果第一个参数应该排在第二个参数后面，就返回正值
+
+```js
+// 按数值大小升序排序
+function compare(value1, value2) {
+    if (value1 < value2) {
+        return -1;
+    } else if (value1 > value2) {
+        return 1;
+    } else {
+        return 0;
     }
-    
-    let values = [0, 1, 5, 10, 15];
-    values.sort(compare);
-    console.log(values); // 0,1,5,10,15
-    
-    
-    function compare(value1, value2) {
-        if (value1 < value2) {
-            return 1;
-        } else if (value1 > value2) {
-            return -1;
-        } else {
-            return 0;
-        }
+}
+
+let values = [0, 1, 5, 10, 15];
+values.sort(compare);
+console.log(values); // 0,1,5,10,15
+```
+
+```js
+// 按数值大小降序排序
+function compare(value1, value2) {
+    if (value1 < value2) {
+        return 1;
+    } else if (value1 > value2) {
+        return -1;
+    } else {
+        return 0;
     }
-    
-    let values = [0, 1, 5, 10, 15];
-    values.sort(compare);
-    console.log(values); // 15,10,5,1,0
-    
-    
-    let values = [0, 1, 5, 10, 15];
-    values.sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
-    console.log(values); // 15,10,5,1,0
-    
-    // 如果数组的元素是数值，或者是其 valueOf()方法返回数值的对象(如 Date 对象)，这个比较函 数还可以写得更简单，因为这时可以直接用第二个值减去第一个值
-    function compare(value1, value2) {
-        return value2 - value1;
-    }
-    ```
+}
+
+let values = [0, 1, 5, 10, 15];
+values.sort(compare);
+console.log(values); // 15,10,5,1,0
+```
+
+```js
+// 箭头函数
+let values = [0, 1, 5, 10, 15];
+values.sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
+console.log(values); // 15,10,5,1,0
+```
+
+```js
+// 如果数组的元素是数值，或者是其 valueOf() 方法返回数值的对象(如 Date 对象)，
+// 这个比较函数还可以写得更简单，因为这时可以直接用第二个值减去第一个值
+function compare(value1, value2) {
+    return value2 - value1;
+}
+```
 
 
 ## 操作方法
 
-- `concat()`
-    
-    - 在现有数组全部元素基础上创建一个新数组。它首先会创建一个当前数组的副本，然后再把它的参数添加到副本末尾，最后返回这个新建的数组
-    - 如果传入一个或多个数组，则 `concat()` 会把这些数组的每一项都添加到结果数组
-    - 如果参数不是数组，则直接把它们添加到结果数组的末尾
-    
-    ```js
-    let colors = ["red", "green", "blue"];
-    let colors2 = colors.concat("yello", ["black", "brown"]);
-    console.log(colors); // ["red", "green", "blue"]
-    console.log(colors2); // ["red", "green", "blue", "yellow", "black", "brown"]
-    ```
-    
-    - 打平数组参数的行为可以重写，方法是在参数数组上指定一个特殊的符号 `Symbol.isConcatSpreadable`，这个符号能够阻止 `concat()` 打平参数数组，相反，这个值设置为 true 可以强制打平类数组对象
-    
-    ```js
-    let colors = ["red", "green", "blue"];
-    
-    let newColors = ["black", "brown"];
-    newColors[Symbol.isConcatSpreadable] = false;
-    
-    let moreNewColors = {
-        [Symbol.isConcatSpreadable]: true,
-        length: 2,
-        0: "pink",
-        1: "cyan"
-    };
-    
-    
-    // 强制不打平数组
-    let colors2 = colors.concat("yellow", newColors);
-    
-    // 强制打平类数组对象
-    let colors3 = colors.concat(moreNewColors);
-    
-    console.log(colors); // ["red", "green", "blue"]
-    console.log(colors2); // ["red", "green", "blue", "yellow", ["black", "brown"]]
-    console.log(colors3); // ["red", "green", "blue", "pink", "cyan"]
-    ```
+### concat() 方法
 
-- `slice()`
+- 在现有数组全部元素基础上创建一个新数组。它首先会创建一个当前数组的副本，
+  然后再把它的参数添加到副本末尾，最后返回这个新建的数组
+- 如果传入一个或多个数组，则 `concat()` 会把这些数组的每一项都添加到结果数组
+- 如果参数不是数组，则直接把它们添加到结果数组的末尾
 
-    - 用于创建一个包含原有数组中一个或多个元素的新数组，这个操作不影响原始数组
-    - 接收一个或两个参数：返回元素的开始索引和结束索引
-        - 如果只有一个参数，则 slice() 会返回该索引到数组末尾的所有元素
-        - 如果有两个参数，则 slice() 返回从开始索引到结束索引对应的所有元素，其中不包含结束索引对应的元素
+```js
+let colors = ["red", "green", "blue"];
+let colors2 = colors.concat("yello", ["black", "brown"]);
+console.log(colors); // ["red", "green", "blue"]
+console.log(colors2); // ["red", "green", "blue", "yellow", "black", "brown"]
+```
 
-    ```js
-    let colors = ["red", "green", "blue", "yellow", "purple"];
-    let colors2 = colors.slice(1);
-    let colors3 = colors.slice(1, 4);
-    
-    console.log(colors2); // green,blue,yellow,purple
-    console.log(colors3); // green,blue,yellow
-    ```
+- 打平数组参数的行为可以重写，方法是在参数数组上指定一个特殊的符号 `Symbol.isConcatSpreadable`，
+  这个符号能够阻止 `concat()` 打平参数数组，相反，这个值设置为 true 可以强制打平类数组对象
 
-- `splice()`
+```js
+let colors = ["red", "green", "blue"];
 
-    - 主要目的是在数组中插入元素，`splice()` 始终返回这样一个数组，它包含数组中被删除的元素(如果没有删除元素，则返回空数组)
-    - 有 3 总不同的方式使用这个方法
-        - 删除
-            - 需要给 splice()传 2 个参数:要删除的第一个元素的位置和要删除的元素数量。可以从 数组中删除任意多个元素，比如 splice(0, 2)会删除前两个元素
-        - 插入
-            - 需要给 splice()传 3 个参数:开始位置、0(要删除的元素数量)和要插入的元素，可 以在数组中指定的位置插入元素。第三个参数之后还可以传第四个、第五个参数，乃至任意多 个要插入的元素
-        - 替换
-            - splice()在删除元素的同时可以在指定位置插入新元素，同样要传入 3 个参数:开始位置、要删除元素的数量和要插入的任意多个元素。要插入的元素数量不一定跟删除的元素数量 一致
+let newColors = ["black", "brown"];
+newColors[Symbol.isConcatSpreadable] = false;
 
-    ```js
-    let colors = ["red", "green", "blue"];
-    
-    // 删除第一项
-    let removed = colors.splice(0, 1);
-    console.log(colors);  // green,blue
-    console.log(removed); // red
-    
-    // 在位置1插入两个元素
-    removed = colors.splice(1, 0, "yellow", "orange");
-    console.log(colors); // green,yellow,orange,blue
-    console.log(removed); // 空数组
-    
-    // 插入两个值，删除一个元素
-    removed = colors.splice(1, 1, "red", "purple");
-    console.log(colors);  // green,red,purple,orange,blue
-    console.log(removed); // yellow
-    ```
+let moreNewColors = {
+    [Symbol.isConcatSpreadable]: true,
+    length: 2,
+    0: "pink",
+    1: "cyan"
+};
+
+
+// 强制不打平数组
+let colors2 = colors.concat("yellow", newColors);
+
+// 强制打平类数组对象
+let colors3 = colors.concat(moreNewColors);
+
+console.log(colors); // ["red", "green", "blue"]
+console.log(colors2); // ["red", "green", "blue", "yellow", ["black", "brown"]]
+console.log(colors3); // ["red", "green", "blue", "pink", "cyan"]
+```
+
+### slice() 方法
+
+- 用于创建一个包含原有数组中一个或多个元素的新数组，这个操作不影响原始数组
+- 接收一个或两个参数：返回元素的开始索引和结束索引
+    - 如果只有一个参数，则 slice() 会返回该索引到数组末尾的所有元素
+    - 如果有两个参数，则 slice() 返回从开始索引到结束索引对应的所有元素，其中不包含结束索引对应的元素
+
+```js
+let colors = ["red", "green", "blue", "yellow", "purple"];
+let colors2 = colors.slice(1);
+let colors3 = colors.slice(1, 4);
+
+console.log(colors2); // green,blue,yellow,purple
+console.log(colors3); // green,blue,yellow
+```
+
+### splice() 方法
+
+- 主要目的是在数组中插入元素，`splice()` 始终返回这样一个数组，它包含数组中被删除的元素(如果没有删除元素，则返回空数组)
+- 有 3 总不同的方式使用这个方法
+    - 删除
+        - 需要给 splice()传 2 个参数:要删除的第一个元素的位置和要删除的元素数量。可以从 数组中删除任意多个元素，比如 splice(0, 2)会删除前两个元素
+    - 插入
+        - 需要给 splice()传 3 个参数:开始位置、0(要删除的元素数量)和要插入的元素，可 以在数组中指定的位置插入元素。第三个参数之后还可以传第四个、第五个参数，乃至任意多 个要插入的元素
+    - 替换
+        - splice()在删除元素的同时可以在指定位置插入新元素，同样要传入 3 个参数:开始位置、要删除元素的数量和要插入的任意多个元素。要插入的元素数量不一定跟删除的元素数量 一致
+
+```js
+let colors = ["red", "green", "blue"];
+
+// 删除第一项
+let removed = colors.splice(0, 1);
+console.log(colors);  // green,blue
+console.log(removed); // red
+
+// 在位置1插入两个元素
+removed = colors.splice(1, 0, "yellow", "orange");
+console.log(colors); // green,yellow,orange,blue
+console.log(removed); // 空数组
+
+// 插入两个值，删除一个元素
+removed = colors.splice(1, 1, "red", "purple");
+console.log(colors);  // green,red,purple,orange,blue
+console.log(removed); // yellow
+```
 
 ## 搜索和位置方法
 
@@ -1128,7 +1288,7 @@ let sum = values.reduceRight(function(prev, cur, index, array) {
 console.log(sum); // 15
 ```
 
-# 定型数组
+## 定型数组
 
 ## 历史
 
@@ -1317,7 +1477,7 @@ alert(keyObj); // {id: "newKey"}
     - 4.删除性能
         - 使用 delete 删除 Object 属性的性能一直以来饱受诟病，目前在很多浏览器中仍然如此。为此， 出现了一些伪删除对象属性的操作，包括把属性值设置为undefined或null。但很多时候，这都是一 种讨厌的或不适宜的折中。而对大多数浏览器引擎来说，Map 的 delete()操作都比插入和查找更快。 如果代码涉及大量删除操作，那么毫无疑问应该选择 Map。
 
-# WeakMap
+## WeakMap
 
 # Set
 
@@ -1329,7 +1489,7 @@ alert(keyObj); // {id: "newKey"}
 
 ## 定义正式集合操作
 
-# WeakSet
+## WeakSet
 
 # 迭代与扩展操作
 

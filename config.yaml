@@ -69,7 +69,7 @@ params:
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
   highlightjsLang: ["r", "yaml", "tex", "python", "bash", "shell", "cpp"]
-  highlightjsTheme: "atom-one-dark" # , github
+  highlightjsTheme: "github" # "atom-one-dark"
   highlightjsVersion: "9.12.0"
   
   # logo TODO
