@@ -53,6 +53,8 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
+- [集合引用类型概述](#集合引用类型概述)
 - [Object](#object)
   - [创建 Object 实例](#创建-object-实例)
     - [使用 new 操作符和 Object 构造函数](#使用-new-操作符和-object-构造函数)
@@ -115,43 +117,68 @@ details[open] summary {
     - [DataView](#dataview)
     - [定型数组](#定型数组-1)
 - [Map](#map)
-  - [Map 基本 API](#map-基本-api)
-    - [使用可迭代对象初始化实例](#使用可迭代对象初始化实例)
-    - [使用自定义迭代器初始化实例](#使用自定义迭代器初始化实例)
-    - [Map 实例方法](#map-实例方法)
+  - [基本 API](#基本-api)
+    - [创建映射](#创建映射)
+    - [has() 和 get() 方法以及 size 属性](#has-和-get-方法以及-size-属性)
+    - [set() 方法](#set-方法)
+    - [delete() 和 clear() 方法](#delete-和-clear-方法)
+    - [Map 可以包含任何 JavaScript 数据类型作为键](#map-可以包含任何-javascript-数据类型作为键)
+    - [严格相等](#严格相等)
   - [顺序与迭代](#顺序与迭代)
     - [entries() 方法或 Symbol.iterator 属性](#entries-方法或-symboliterator-属性)
-    - [扩展操作将 Map 转换为 Array](#扩展操作将-map-转换为-array)
+    - [扩展操作符](#扩展操作符)
     - [forEach() 方法](#foreach-方法-1)
     - [keys() 和 values() 方法](#keys-和-values-方法)
+    - [迭代过程中修改映射中键和值](#迭代过程中修改映射中键和值)
   - [选择 Object 还是 Map](#选择-object-还是-map)
     - [内存占用](#内存占用)
     - [插入性能](#插入性能)
     - [查找速度](#查找速度)
     - [删除性能](#删除性能)
   - [WeakMap](#weakmap)
-    - [基本 API](#基本-api)
+    - [基本 API](#基本-api-1)
     - [弱键](#弱键)
     - [不可迭代键](#不可迭代键)
     - [使用若映射](#使用若映射)
 - [Set](#set)
-  - [Set 基本 API](#set-基本-api)
+  - [基本 API](#基本-api-2)
+    - [创建集合](#创建集合)
+    - [add() 方法](#add-方法)
+    - [has() 方法](#has-方法)
+    - [size 属性](#size-属性)
+    - [delete() 和 clear() 方法](#delete-和-clear-方法-1)
+    - [Set 可以包含任何 JavaScript 数据类型作为值](#set-可以包含任何-javascript-数据类型作为值)
+    - [严格相等](#严格相等-1)
+    - [幂等操作](#幂等操作)
   - [顺序与迭代](#顺序与迭代-1)
+    - [values() 方法和 keys() 方法](#values-方法和-keys-方法)
+    - [扩展操作符](#扩展操作符-1)
+    - [entries() 方法](#entries-方法)
+    - [forEach() 方法](#foreach-方法-2)
+    - [修改集合中的值的属性](#修改集合中的值的属性)
   - [定义正式集合操作](#定义正式集合操作)
   - [WeakSet](#weakset)
-    - [基本 API](#基本-api-1)
+    - [基本 API](#基本-api-3)
     - [弱值](#弱值)
     - [不可迭代值](#不可迭代值)
     - [使用弱集合](#使用弱集合)
 - [迭代与扩展操作](#迭代与扩展操作)
   - [for-of 循环](#for-of-循环)
-  - [扩展操作符](#扩展操作符)
+  - [扩展操作符](#扩展操作符-2)
   - [复制](#复制)
   - [构建数组的部分元素](#构建数组的部分元素)
   - [浅复制](#浅复制)
   - [构建方法](#构建方法)
 </p></details><p></p>
 
+
+# TODO
+
+* [ ] 定型数组
+* [ ] WeakMap
+* [ ] WeakSet
+
+# 集合引用类型概述
 
 JavaScript 中的对象是引用值，可以通过几种内置引用类型创建特定类型的对象
 
@@ -1377,17 +1404,17 @@ console.log(sum); // 15
 ECMAScript 6 新增了 Map 这种新的集合类型，为这门语言带来了真正的键/值存储机制。
 Map 的大多数特性都可以通过 Object 类型实现，但二者之间还是存在一些细微的差异
 
-## Map 基本 API
+## 基本 API
 
-使用 `new` 关键字和 `Map` 构造函数创建 Map
+### 创建映射
+
+* 使用 `new` 关键字和 `Map` 构造函数创建空映射
 
 ```js
 const m = new Map();
 ```
 
-### 使用可迭代对象初始化实例
-
-创建的同时初始化实例，可以给 `Map` 构造函数传入一个可迭代对象，
+* 创建的同时初始化实例，可以给 `Map` 构造函数传入一个可迭代对象，
 需要包含键/值对数组，可迭代对象中的每个键/值对都会按照迭代顺序插入到新映射实例中
 
 ```js
@@ -1402,7 +1429,7 @@ console.log(m1);
 // Map(3) { 'key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3' }
 ```
 
-### 使用自定义迭代器初始化实例
+* 使用自定义迭代器初始化实例
 
 ```js
 // 使用自定义迭代器初始化映射
@@ -1423,28 +1450,22 @@ console.log(m3.has(undefined)); // true
 console.log(m3.get(undefined)); // undefined
 ```
 
-### Map 实例方法
+### has() 和 get() 方法以及 size 属性
 
-Map 实例初始化之后:
-
-- 可以使用 `set()` 方法再添加键/值对
-- 可以使用 `get()` 和 `has()` 进行查询
-- 可以通过 `size` 属性获取映射中的键/值对的数量
-- 可以使用 `delete()` 和 `clear()` 删除值
+- Map 实例初始化之后，可以使用 `get()` 和 `has()` 进行查询
+- Map 实例初始化之后，可以通过 `size` 属性获取映射中的键/值对的数量
 
 ```js
 const m = new Map();
-```
 
-* `has()` 和 `get()` 方法、`size` 属性
-
-```js
 console.log(m.has("firstName")); // false
 console.log(m.get("firstName")); // undefined
 console.log(m.size);  // 0
 ```
 
-* `set()` 方法
+### set() 方法
+
+- Map 实例初始化之后，可以使用 `set()` 方法再添加键/值对
 
 ```js
 m.set("firstName", "Matt") 
@@ -1466,33 +1487,33 @@ m.set("key2", "val2")
 console.log(m.size);  // 3
 ```
 
-* `delete()` 方法
+### delete() 和 clear() 方法
+
+* Map 实例初始化之后，可以使用 `delete()` 和 `clear()` 删除值
 
 ```js
 m.delete("firstName");  // 只删除一个键/值对
-```
 
-```js
 console.log(m.has("firstName"));  // false
 console.log(m.has("lastName"));  // true
 console.log(m.size);  // 1
 ```
 
-* `clear()` 方法
 
 ```js
 m.clear();  // 清除 Map 实例中的所有键/值对
-```
 
-```js
 console.log(m.has("firstName")); // false
 console.log(m.has("lastName"));  // false
 console.log(m.size);  // 0
 ```
 
+### Map 可以包含任何 JavaScript 数据类型作为键
+
 * 与 Object 只能使用数值、字符串或符号作为键不同，
   Map 可以使用任何 JavaScript 数据类型作为键
-    - Map 内部使用 SameValueZero 比较做操作符，基本上相当于使用严格对象相等的标准来检查键的匹配性
+* Map 内部使用 SameValueZero 比较做操作符，
+  基本上相当于使用严格对象相等的标准来检查键的匹配性
 
 ```js
 const m = new Map();
@@ -1513,7 +1534,10 @@ console.log(m.get(objcetKey));   // objectValue
 console.log(m.get(function() {})); // undefined
 ```
 
-- 与严格相等一样，在映射中用作键和值的对象及其他“集合”类型，在自己的内容或属性被修改时仍然保持不变
+### 严格相等
+
+- 与严格相等一样，在映射中用作键和值的对象及其他“集合”类型，
+  在自己的内容或属性被修改时仍然保持不变
 
 ```js
 const m = new Map();
@@ -1582,7 +1606,7 @@ for (let pair of m[Symbol.iterator]()) {
 // [key3, val3]
 ```
 
-### 扩展操作将 Map 转换为 Array
+### 扩展操作符
 
 - 因为 `entries()` 是默认迭代器，所以可以直接对 Map 实例使用扩展操作，把 Map 转换为 Array
 
@@ -1638,6 +1662,8 @@ for (let value of m.values()) {
 // val2
 // val3
 ```
+
+### 迭代过程中修改映射中键和值
 
 - 键和值在迭代器遍历时是可以修改的，但 Map 内部的引用则无法修改。
   当然，这并不妨碍修改作为键或值的对象内部的属性，因为这样并不影响它们在映射实例中的身份
@@ -1721,18 +1747,395 @@ Map 的 delete()操作都比插入和查找更快。 如果代码涉及大量删
 
 # Set
 
-ECMAScript 6 新增 `Set` 是一种新集合类型，
-`Set()` 在很多方面都像是加强的 `Map`，
+ECMAScript 6 新增 `Set` 是一种新集合类型，`Set()` 在很多方面都像是加强的 `Map`，
 这是因为它们的大多数 API 和行为都是共有的
 
-## Set 基本 API
+## 基本 API
 
+### 创建集合
+
+* 使用 `new` 关键字和 `Set` 构造函数创建空集合
+
+```js
+const m = new Set();
+```
+
+* 创建集合的同时初始化实例，可以给 `Set` 构造函数传入一个可迭代对象，
+  其中需要包含插入到新集合实例中的元素
+
+```js
+// 使用数组初始化集合
+const s1 = new Set(["val1", "val2", "val3"]);
+alert(s1.size);  // 3
+```
+
+* 使用自定义迭代器初始化集合
+
+```js
+const s2 = new Set({
+    [Symbol.iterator]: function*() {
+        yield "val1";
+        yield "val2";
+        yield "val3";
+    }
+});
+alert(s2.size);  // 3
+```
+
+### add() 方法
+
+* 初始化之后，可以使用 `add()` 方法增加值
+
+```js
+const s = new Set();
+
+alert(s.has("Matt"));  // false
+alert(s.size);  // 0
+
+s.add("Matt")
+ .add("Frisbie");
+
+alert(s.has("Matt"));  // true
+alert(s.size);  // 2
+```
+
+* `add()` 返回集合的实例，所以可以将多个添加操作连缀起来，包括初始化
+
+```js
+const s = new Set().add("val1");
+
+s.add("val2")
+ .add("val3");
+
+alert(s.size);  // 3
+```
+
+### has() 方法
+
+* 初始化之后，可以使用 `has()` 方法查询
+
+```js
+const s = new Set();
+
+alert(s.has("Matt"));  // false
+```
+
+### size 属性
+
+* 初始化之后，可以使用 `size` 属性取得元素数量
+
+
+```js
+const s = new Set();
+
+alert(s.size);  // 0
+```
+
+### delete() 和 clear() 方法
+
+* 初始化之后，可以使用 `delete()` 和 `clear()` 方法删除元素
+
+```js
+const s = new Set();
+
+alert(s.has("Matt"));  // false
+alert(s.size);  // 0
+
+s.add("Matt")
+ .add("Frisbie");
+
+alert(s.has("Matt"));  // true
+alert(s.size);  // 2
+
+s.delete("Matt");
+
+alert(s.has("Matt"));  // false
+alert(s.has("Frisbie"));  // true
+alert(s.size);  // 1
+
+s.clear();  // 销毁集合实例中的所有值
+
+alert(s.has("Matt"));  // false
+alert(s.has("Frisbie"));  // false
+alert(s.size);  // 0
+```
+
+### Set 可以包含任何 JavaScript 数据类型作为值
+
+与 Map 类似，Set 可以包含任何 JavaScript 数据类型作为值。
+集合也是用 `SameValueZero` 操作(ECMAScript 内部定义，无法在语言中使用)，
+基本上相当于使用严格对象相等的标准来检查值的匹配性
+
+```js
+const s = new Set();
+
+const functionVal = function() {};
+const symbolVal = Symbol();
+const objectVal = new Object();
+
+s.add(functionVal);
+s.add(symbolVal);
+s.add(objectVal);
+
+alert(s.has(functionVal));  // true
+alert(s.has(symbolVal));  // true
+alert(s.has(objectVal));  // true
+
+// SaveValeZero 检查意味着独立的实例不会冲突
+alert(s.has(function() {}));  // false
+```
+
+### 严格相等
+
+与严格相等一样，用作值的对象和其他“集合”类型在自己的内容或属性被修改时也不会改变
+
+```js
+const s = new Set();
+
+const objVal = {},
+      arrVal = [];
+    
+s.add(objVal);
+s.add(arrVal);
+
+objVal.bar = "bar";
+arrVal.push("bar");
+
+alert(s.has(objVal));  // true
+alert(s.has(arrVal));  // true
+```
+
+### 幂等操作
+
+`add()` 和 `delete()` 操作是幂等的
+
+* `delete()` 返回一个布尔值，表示集合中是否存在要删除的值
+
+```js
+const s = new set();
+
+s.add("foo");
+alert(s.size);  // 1
+
+s.add("foo");  // 1
+alert(s.size);  // 1
+
+// 集合里有这个值
+alert(s.delete("foo"));  // true
+
+// 集合里没有这个值
+alert(s.delete("foo"));  // false
+```
 
 ## 顺序与迭代
 
+Set 会维护值插入时的顺序，因此支持按顺序迭代
+
+### values() 方法和 keys() 方法
+
+* 集合实例可以提供一个迭代器(Iterator)，能以插入顺序生成集合内容。
+可以通过 `values()` 方法及其别名方法 `keys()`(或者 `Symbol.iterator` 属性，
+它引用 `values()`)取得这个迭代器
+
+```js
+const s = new Set(["val1", "val2", "val3"]);
+
+alert(s.values === s[Symbol.iterator]);  // true
+alert(s.keys === s[Symbol.iterator]);  // true
+
+for (let value of s.values()) {
+    alert(value);
+}
+// val1
+// val2
+// val3
+
+for (let value of s[Symbol.iterator]) {
+    alert(value);
+}
+// val1
+// val2
+// val3
+
+for (let key of s.keys()) {
+    alert(key);
+}
+// val1
+// val2
+// val3
+```
+
+### 扩展操作符
+
+* 因为 `values()` 是默认迭代器，所以可以直接对集合实例使用扩展操作，把集合转换为数组
+
+```js
+const s = new Set(["val1", "val2", "val3"]);
+console.log([...s]);  // ["val1","val2","val3"]
+```
+
+### entries() 方法
+
+* 集合的 `entries()` 方法返回一个迭代器，可以按照插入顺序产生包含两个元素的数组，
+这两个元素是集合中每个值的重复出现
+
+```js
+const s = new Set(["val1", "val2", "val3"]);
+
+for (let pair of s.entries()) {
+    console.log(pair);
+}
+// ["val1", "val1"]
+// ["val2", "val2"]
+// ["val3", "val3"]
+```
+
+### forEach() 方法
+
+* 如果不适用迭代器，而是使用回调函数，则可以调用集合的 `forEach()` 方法并传入回调，
+  依次迭代每个键/值对。出入的回调接收可选的第二个参数，这个参数用于重写回调内部 `this` 的值
+
+```js
+const s = new Set(["val1", "val2", "val3"]);
+
+s.forEach((val, dupVal) => alert(`${val} -> ${dupVal}`));
+// val1 -> val1
+// val2 -> val2
+// val3 -> val3
+```
+
+### 修改集合中的值的属性
+
+* 修改集合中值的属性不会影响其作为集合值的身份
+
+```js
+const s1 = new Set(["val1"]);
+
+// 字符串原始值作为值不会被修改
+for (let value of s1.values()) {
+    value = "newVal";
+    alert(value);  // newVal
+    alert(s1.has("val1"));  // true
+}
+```
+
+```js
+const valObj = {id: 1};
+const s2 = new Set([valObj]);
+
+// 修改值对象的属性，但对象仍然存在于集合中
+for (let value of s2.values()) {
+    value.id = "newval";
+    alert(value);  // {id: "newVal"}
+    alert(s2.has(valObj));  // true
+}
+alert(valObj);  // {id: "newVal"}
+```
 
 ## 定义正式集合操作
 
+从各方面来看，Set 跟 Map 都很相似，只是 API 稍有调整。唯一需要强调的就是集合的 API 对自身的简单操作。
+很多开发者都喜欢使用 Set 操作，但需要手动实现:或者是子类化 Set，或者是定义一个实用函数库。
+要把两种方式合二为一，可以在子类上实现静态方法，然后在实例方法中使用这些静态方法。
+在实现这些操作时，需要考虑几个地方。
+
+* 某些 Set 操作是有关联性的，因此最好让实现的方法能支持处理任意多个集合实例
+* Set 保留插入顺序，所有方法返回的集合必须保证顺序
+* 尽可能高效地使用内存。扩展操作符的语法很简洁，
+  但尽可能避免集合和数组间的相互转换能够节省对象初始化成本
+* 不要修改已有的集合实例。`union(a, b)` 或 `a.union(b)` 应该返回包含结果的新集合实例
+
+
+```js
+class XSet extends Set {
+    union(...sets) {
+        return XSet.union(this, ...sets)
+    }
+
+    intersection(...sets) {
+        return XSet.intersection(this, ...sets);
+    }
+
+    difference(set) {
+        return XSet.difference(this, set);
+    }
+
+    symmetricDifference(set) {
+        return XSet.symmetricDifference(this, set);
+    }
+
+    cartesianProduct(set) {
+        return XSet.cartesianProduct(this, set);
+    }
+
+    powerSet() {
+        return XSet.powerSet(this);
+    }
+
+    // 返回两个或更多集合的并集 
+    static union(a, ...bSets) {
+        const unionSet = new XSet(a);
+        for (const b of bSets) {
+            for (const bValue of b) {
+                unionSet.add(bValue);
+            } 
+        }
+       return unionSet;
+    }
+    
+    // 返回两个或更多集合的交集
+    static intersection(a, ...bSets) {
+        const intersectionSet = new XSet(a);
+        for (const aValue of intersectionSet) {
+            for (const b of bSets) {
+                if (!b.has(aValue)) {
+                    intersectionSet.delete(aValue);
+                }
+            }
+        }
+        return intersectionSet;
+    }
+    
+    // 返回两个集合的差集
+    static difference(a, b) {
+        const differenceSet = new XSet(a);
+        for (const bValue of b) {
+            if (a.has(bValue)) {
+               differenceSet.delete(bValue);
+            } 
+        }
+        return differenceSet;
+    }
+    
+    // 返回两个集合的对称差集
+    static symmetricDifference(a, b) {
+        // 按照定义，对称差集可以表达为
+        return a.union(b).difference(a.intersection(b));
+    }
+    
+    // 返回两个集合(数组对形式)的笛卡儿积
+    // 必须返回数组集合，因为笛卡儿积可能包含相同值的对 
+    static cartesianProduct(a, b) {
+        const cartesianProductSet = new XSet();
+        for (const aValue of a) {
+            for (const bValue of b) {
+                cartesianProductSet.add([aValue, bValue]);
+            } 
+        }
+        return cartesianProductSet;
+    }
+    // 返回一个集合的幂集 
+    static powerSet(a) {
+        const powerSet = new XSet().add(new XSet());
+        for (const aValue of a) {
+            for (const set of new XSet(powerSet)) {
+                powerSet.add(new XSet(set).add(aValue));
+            } 
+        }
+        return powerSet;
+    }
+}
+```
 
 ## WeakSet
 
