@@ -53,44 +53,71 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [1.代理基础](#1代理基础)
-  - [1.1 创建空代理](#11-创建空代理)
-  - [1.2 定义捕获器](#12-定义捕获器)
-  - [1.3 捕获器参数和反射 API](#13-捕获器参数和反射-api)
-  - [1.4 捕获器不变式](#14-捕获器不变式)
-  - [1.5 可撤销代理](#15-可撤销代理)
-  - [1.6 实用反射 API](#16-实用反射-api)
-  - [1.7 代理另一个代理](#17-代理另一个代理)
-  - [1.8 代理的问题与不足](#18-代理的问题与不足)
-- [2.代理捕获器与反射方法](#2代理捕获器与反射方法)
-- [3.代理模式](#3代理模式)
+- [代理基础](#代理基础)
+  - [创建空代理](#创建空代理)
+  - [定义捕获器](#定义捕获器)
+    - [捕获器](#捕获器)
+    - [get() 捕获器](#get-捕获器)
+  - [捕获器参数和反射 API](#捕获器参数和反射-api)
+    - [捕获器参数](#捕获器参数)
+    - [反射 Reflect API](#反射-reflect-api)
+  - [捕获器不变式](#捕获器不变式)
+  - [可撤销代理](#可撤销代理)
+  - [实用反射 API](#实用反射-api)
+  - [代理另一个代理](#代理另一个代理)
+  - [代理的问题与不足](#代理的问题与不足)
+- [代理捕获器与反射方法](#代理捕获器与反射方法)
+  - [get()](#get)
+  - [set()](#set)
+  - [has()](#has)
+  - [defineProperty()](#defineproperty)
+  - [deleteProperty()](#deleteproperty)
+  - [ownKeys()](#ownkeys)
+  - [getPrototypeOf()](#getprototypeof)
+  - [setPrototypeOf()](#setprototypeof)
+  - [isExtensible()](#isextensible)
+  - [preventExtensions()](#preventextensions)
+  - [apply()](#apply)
+  - [construct()](#construct)
+- [代理模式](#代理模式)
+  - [跟踪属性访问](#跟踪属性访问)
+  - [隐藏属性](#隐藏属性)
+  - [属性验证](#属性验证)
+  - [函数与构造函数验证](#函数与构造函数验证)
+  - [数据绑定与可观察对象](#数据绑定与可观察对象)
 </p></details><p></p>
 
 
-- ECMAScript 6 新增的代理和反射为开发者提供了 **拦截并向基本操作嵌入额外行为的能力**
-- 具体地说，可以给**目标对象**定义一个关联的**代理对象**，而这个代理对象可以作为抽象的目标对象来使用
-- 在对目标对象的各种操作影响目标对象之前，可以在代理对象中对这些操作加以控制
+ECMAScript 6 新增的代理和反射为开发者提供了 **拦截并向基本操作嵌入额外行为的能力**。
+具体地说，可以给**目标对象**定义一个关联的**代理对象**，而这个代理对象可以作为抽象的目标对象来使用。
+在对目标对象的各种操作影响目标对象之前，可以在代理对象中对这些操作加以控制
 
-## 1.代理基础
+# 代理基础
 
-- 代理是目标对象的抽象。从很多方面看，代理类似 C++指针，因为它可以 用作目标对象的替身，但又完全独立于目标对象。目标对象既可以直接被操作，也可以通过代理来操作。 但直接操作会绕过代理施予的行为
+代理是目标对象的抽象。从很多方面看，代理类似 C++ 指针，
+因为它可以用作目标对象的替身，但又完全独立于目标对象。
+目标对象既可以直接被操作，也可以通过代理来操作。
+但直接操作会绕过代理施予的行为
 
-### 1.1 创建空代理
+## 创建空代理
 
-- 最简单的代理是空代理，即除了作为一个抽象的目标对象，什么也不做
+最简单的代理是空代理，即除了作为一个抽象的目标对象，什么也不做
 
-- 默认情况下，代理对象上执行的所有操作都会无障碍地传播到目标对象，因此，在任何可以使用目标对象的地方，都可以通过同样的方式来使用与之关联的代理对象
+默认情况下，代理对象上执行的所有操作都会无障碍地传播到目标对象，
+因此，在任何可以使用目标对象的地方，都可以通过同样的方式来使用与之关联的代理对象
 
-- 代理是使用 `Proxy` 构造函数创建的，这个构造函数接收两个参数：
+代理是使用 `Proxy` 构造函数创建的，这个构造函数接收两个参数：
 
-	- 目标对象
-	- 处理程序对象
+* 目标对象
+* 处理程序对象
 
-	> - 缺少其中任何一个参数都会抛出 `TypeError`
-	>
-	> - 要创建空代理，可以传入一个简单的对象字面量作为处理程序对象，从而让所有操作畅通无阻地抵达目标对象
+缺少其中任何一个参数都会抛出 `TypeError`。要创建空代理，
+可以传入一个简单的对象字面量作为处理程序对象，
+从而让所有操作畅通无阻地抵达目标对象
 
-- 示例
+在代理对象上执行的任何操作实际上都会应用到目标对象。
+唯一可感知的不同就是代码中操纵的是代理对象
+
 
 ```js
 // 目标对象
@@ -105,48 +132,369 @@ const handler = {};
 const proxy = new Proxy(target, handler);
 
 // id 属性会访问同一个值
-console.log(target.id); // target
-console.log(proxy.id); // target
+console.log(target.id);  // target
+console.log(proxy.id);  // target
 
 // 给目标属性赋值会反映在两个对象上，因为两个对象访问的是同一个值
 target.id = "foo";
-console.log(target.id); // foo
-console.log(proxy.id); // foo
+console.log(target.id);  // foo
+console.log(proxy.id);  // foo
 
 // 给代理属性赋值会反映在两个对象上，因为这个赋值会转移到目标对象上
 proxy.id = "bar";
-console.log(target.id); // bar
-console.log(proxy.id); // bar
+console.log(target.id);  // bar
+console.log(proxy.id);  // bar
 
 // hasOwnProperty() 方法在两个地方都会应用到目标对象
 console.log(target.hasOwnProperty("id")); // true
 console.log(proxy.hasOwnProperty("id")); // true
 
 // Proxy.prototype 是 undefined，因此不能使用 instanceof 操作符
-console.log(target instanceof Proxy); // TypeError: Function has non-object prototype 9 'undefined' in instanceof check
-console.log(proxy instanceof Proxy); // TypeError: Function has non-object prototype 9 'undefined' in instanceof check
+console.log(target instanceof Proxy); 
+// TypeError: Function has non-object prototype 9 'undefined' in instanceof check
+console.log(proxy instanceof Proxy); 
+// TypeError: Function has non-object prototype 9 'undefined' in instanceof check
 
 // 严格相等可以用来区分代理和目标
 console.log(target === proxy); // false
 ```
 
-### 1.2 定义捕获器
+## 定义捕获器
 
-### 1.3 捕获器参数和反射 API
+### 捕获器
 
-### 1.4 捕获器不变式
+使用代理的主要目的是可以定义**捕获器(trap)**。
+捕获器就是在处理程序对象中定义的“基本操作的拦截器”。
 
-### 1.5 可撤销代理
+每个处理程序对象可以包含零个或多个捕获器，每个捕获器都对应一种基本操作，
+可以直接或间接在代理对象上调用。每次在代理对象上调用这些基本操作时，
+代理可以在这些操作传播到目标对象之前先调用捕获器函数，从而拦截并修改相应的行为
 
-### 1.6 实用反射 API
-
-### 1.7 代理另一个代理
-
-### 1.8 代理的问题与不足
-
+捕获器(trap)是从操作系统中借用的概念。在操作系统中，捕获器是程序流中的一个同步中断，
+可以暂停程序流，转而执行一段子例程，之后再返回原始程序流
 
 
-## 2.代理捕获器与反射方法
+### get() 捕获器
 
-## 3.代理模式
+定义一个 `get()` 捕获器，在 ECMAScript 操作以某种形式调用 `get()` 时触发。
+
+当通过代理对象执行 `get()` 操作时，就会触发定义的 `get()` 捕获器。
+当然，`get()` 不是 ECMAScript 对象可以调用的方法。
+这个操作在 JavaScript 代码中可以通过多种形式触发并被 `get()` 捕获器拦截到，
+
+下面的三种操作只要发生在代理对象上，都会触发基本的 `get()` 操作以获取属性：
+
+* `proxy[property]`
+* `proxy.property`
+* `Object.create(proxy)[property]`
+
+只有在代理对象上执行这些操作才会触发捕获器。在目标对象上执行这些操作仍然会产生正常的行为
+
+```js
+// 目标对象
+const target = {
+    foo: "bar"
+};
+
+// 处理程序对象、get() 捕获器
+const handler = {
+    // 捕获器在处理程序对象中以方法名为键
+    get() {
+        return 'handler override';
+    }
+};
+
+// 代理对象
+const proxy = new Proxy(target, handler);
+
+console.log(target.foo);  // bar
+console.log(proxy.foo);  // handler override
+
+console.log(target["foo"]);  // bar
+console.log(proxy["foo"]);  // handler override
+
+console.log(Object.create(target)["foo"]);  // bar
+console.log(Object.create(proxy)["foo"]);  // handler override
+```
+
+## 捕获器参数和反射 API
+
+所有捕获器都可以访问相应的参数，基于这些参数可以重建被捕获方法的原始行为
+
+### 捕获器参数
+
+* `get()` 捕获器会接收到目标对象、要查询和代理对象三个参数
+
+```js
+const target = {
+    foo: 'bar'
+};
+
+const handler = {
+    get(trapTarget, property, receiver) {
+        console.log(trapTarget === target);
+        console.log(property);
+        console.log(receiver === proxy);
+    }
+};
+
+const proxy = new Proxy(target, handler);
+
+proxy.foo;
+// true
+// foo
+// true
+```
+
+* 有了这些参数，就可以重建被捕获方法的原始行为
+
+```js
+const target = {
+    foo: "bar"
+};
+
+const handler = {
+    get(trapTarget, property, receiver) {
+        return trapTarget[property];
+    }
+};
+
+const proxy = new Proxy(target, handler);
+
+console.log(proxy.foo);  // bar
+console.log(target.foo);  // bar
+```
+
+### 反射 Reflect API
+
+所有捕获器都可以基于自己的参数重建原始操作，但并非所有捕获器行为都像 `get()` 那么简单。
+因此，通过手动写码如法炮制的想法是不现实的
+
+实际上，开发者并不需要手动重建原始行为，
+而是可以通过调用全局 `Reflect` 对象上(封装了原始行为)的同名方法来轻松重建
+
+处理程序对象中所有可以捕获的方法都有对应的反射(Reflect) API 方法，
+这些方法与捕获器拦截的方法具有相同的名称和函数签名，而且也具有与被拦截方法相同的行为。
+
+* 使用反射 API 也可以像下面定义出空代理对象
+
+```js
+const targt = {
+    foo: "bar"
+};
+
+const handler = {
+    get() {
+        return Reflect.get(...arguments);
+    }
+};
+
+const proxy = new Proxy(target, handler);
+
+console.log(proxy.foo);  // bar
+console.log(target.foo);  // bar
+```
+
+* 写得更简洁一些
+
+```js
+const target = {
+    foo: "bar"
+};
+
+const handler = {
+    get: Reflect.get
+};
+
+const proxy = new Proxy(target, handler);
+
+console.log(proxy.foo);  // bar
+console.log(target.foo);  // bar
+```
+
+* 如果真想创建一个可以捕获所有方法，然后将每个方法转发给对应反射 API 的空代理，
+  那么甚至不需要定义处理程序对象
+
+```js
+const target = {
+    foo: "bar"
+};
+
+const proxy = new Proxy(target, Reflect);
+
+console.log(proxy.foo);  // bar
+console.log(target.foo);  // bar
+```
+
+* 反射 API 为开发者准备好了样板代码，在此基础上开发者可以用最少的代码修改捕获的方法。
+  比如，下面的代码在某个属性被访问时，会对返回的值进行一番修饰
+
+```js
+const target = {
+    foo: "bar",
+    baz: "qux"
+};
+
+const handler = {
+    get(trapTarget, property, receiver) {
+        let decoration = "";
+        if (property === "foo") {
+            decoration = "!!!";
+        }
+
+        return Reflect.get(...arguments) + decoration;
+    }
+};
+
+const proxy = new Proxy(target, handler);
+
+console.log(proxy.foo);  // bar!!!
+console.log(target.foo);  // bar
+
+console.log(proxy.baz);  // qux
+console.log(target.baz);  // qux
+```
+
+## 捕获器不变式
+
+使用捕获器几乎可以改变所有基本方法的行为，但也不是没有限制。
+根据 ECMAScript 规范，每个捕获的方法都知道目标对象上下文、捕获函数签名，
+而捕获处理程序的行为都必须遵循“捕获器不变式”(trap invariant)。
+
+捕获器不变式因方法不同而异，但通常都会防止捕获器定义出现过于反常的行为。
+比如，如目标对象有一个不可配置且不可写的数据属性，那么在捕获器返回一个与该属性不同的值时，
+会抛出 `TypeError`
+
+```js
+const target = {};
+Object.defineProperty(target, "foo", {
+    configurable: false,
+    writable: false,
+    value: "bar"
+})
+
+const handler = {
+    get() {
+        return "qux";
+    }
+};
+
+const proxy = new Proxy(target, handler);
+
+console.log(proxy.foo);
+// TypeError
+```
+
+## 可撤销代理
+
+有时候可能需要中断代理对象与目标对象之间的联系。
+对于使用 `new Proxy()` 创建的普通代理来说，
+这种联系会在代理对象的生命周期内一直持续存在
+
+`Proxy` 也暴露了 `revocable()` 方法，这个方法支持撤销代理对象与目标对象的关联。
+撤销代理的操作是不可逆的。而且，撤销函数(`revoke()`)是幂等的，调用多少次的结果都一样。
+撤销代理之后再调用代理会抛出 `TypeError`。撤销函数和代理对象是在实例化时同时生成的
+
+```js
+const target = {
+    foo: "bar"
+};
+
+const handler = {
+    get() {
+        return "intercepted";
+    }
+};
+
+const { proxy, revoke } = Proxy.revocalbe(target, handler);
+
+console.log(proxy.foo);  // intercepted
+console.log(target.foo);  // bar
+
+
+revoke();
+
+console.log(proxy.foo);  // TypeError
+```
+
+## 实用反射 API
+
+
+
+
+
+
+
+## 代理另一个代理
+
+## 代理的问题与不足
+
+
+
+# 代理捕获器与反射方法
+
+## get()
+
+
+
+## set()
+
+
+## has()
+
+
+## defineProperty()
+
+
+
+## deleteProperty()
+
+
+
+## ownKeys()
+
+
+
+
+## getPrototypeOf()
+
+
+
+## setPrototypeOf()
+
+
+## isExtensible()
+
+
+
+## preventExtensions()
+
+
+## apply()
+
+
+
+## construct()
+
+
+
+
+
+# 代理模式
+
+## 跟踪属性访问
+
+
+## 隐藏属性
+
+
+## 属性验证
+
+
+## 函数与构造函数验证
+
+
+
+## 数据绑定与可观察对象
+
 
