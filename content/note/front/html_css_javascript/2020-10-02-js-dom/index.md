@@ -85,9 +85,13 @@ details[open] summary {
     - [元素后代](#元素后代)
   - [Text 类型](#text-类型)
   - [Comment 类型](#comment-类型)
+    - [Comment 类型](#comment-类型-1)
+    - [Comment 类型属性](#comment-类型属性)
+    - [浏览器不承认注释](#浏览器不承认注释)
   - [CDATASection 类型](#cdatasection-类型)
   - [DocumentType 类型](#documenttype-类型)
   - [Attr 类型](#attr-类型)
+    - [Attr 对象属性](#attr-对象属性)
 - [DOM 编程](#dom-编程)
   - [动态脚本](#动态脚本)
   - [动态样式](#动态样式)
@@ -519,20 +523,88 @@ if (element.tagName.toLowerCase() == "div") {
 
 ## Comment 类型
 
+### Comment 类型
+
+DOM 中的注释通过 `Comment` 类型表示。`Commont` 类型的节点具有以下特征：
+
+* `nodeType` 等于 8
+* `nodeName` 等于 `"#comment"`
+* `nodeValue` 值为注释的内容
+* `parentNode` 值为 `Document` 或 `Element` 对象
+* 不支持子节点
+
+
+### Comment 类型属性
+
+`Comment` 类型与 `Text` 类型继承同一个基类(`CharacterData`)，
+因此拥有除 `splitText()` 之外 `Text` 节点所有的字符串操作方法。
+与 `Text` 类型相似，注释的实际内容可以通过 `nodeValue` 或 `data` 属性获得
+
+* 注释节点可以作为父节点的子节点来访问
+
+```html
+<div id="myDiv">
+    <!-- A comment -->
+</div>
+```
+
+```js
+let div = document.getElementById("myDiv");
+let comment = div.firstChild;
+
+alert(comment.data);  // "A comment"
+```
+
+* 可以用 `document.createComment()` 方法创建注释节点，参数为注释文本
+
+```js
+let comment = document.createComment("A comment");
+```
+
+### 浏览器不承认注释
+
+显然，注释节点很少通过 JavaScript 创建和访问，因为注释几乎不涉及算法逻辑。
+此外，浏览器不承认结束的 `</html>` 标签之后的注释。如果要访问注释节点，
+则必须确定它们是 `<html>` 元素的后代
+
+
+
+
+
+
+
+
 ## CDATASection 类型
 
 ## DocumentType 类型
 
 ## Attr 类型
 
+元素数据在DOM 中通过 `Attr` 类型表示。`Attr` 类型构造函数和原型在所有浏览器中都可以直接访问。
+技术上讲，属性是存在于元素 `attributes` 属性中的节点。`Attr` 节点具有以下特征：
 
+* `nodeType` 等于 2
+* `nodeName` 值为属性名
+* `nodeValue` 值为属性值
+* `parentNode` 值为 `null`
+* 在 HTML 中不支持子节点
+* 在 XML 中子节点可以是 `Text` 或 `EntityReference`
 
+### Attr 对象属性
+
+* name
+* value
+* specified
 
 
 
 
 
 # DOM 编程
+
+很多时候，操作 DOM 是很直观的。通过 HTML 代码能实现的，也一样能通过 JavaScript 实现。
+但有时候，DOM 也没有看起来那么简单。浏览器能力的参差不齐和各种问题，
+也会导致 DOM 的某些方面会复杂一些
 
 ## 动态脚本
 
