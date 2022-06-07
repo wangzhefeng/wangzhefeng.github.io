@@ -94,6 +94,8 @@ details[open] summary {
     - [Attr 对象属性](#attr-对象属性)
 - [DOM 编程](#dom-编程)
   - [动态脚本](#动态脚本)
+    - [引入外部文件](#引入外部文件)
+    - [直接插入源代码](#直接插入源代码)
   - [动态样式](#动态样式)
   - [操作表格](#操作表格)
   - [使用 NodeList](#使用-nodelist)
@@ -607,6 +609,106 @@ let comment = document.createComment("A comment");
 也会导致 DOM 的某些方面会复杂一些
 
 ## 动态脚本
+
+动态脚本就是在页面初始加载时不存在，之后又通过 DOM 包含的脚本。
+与对应的 HTML 元素一样，有两种方式通过 `<script>` 动态为网页添加脚本
+
+### 引入外部文件
+
+可以通过 DOM 编程创建节点
+
+```js
+let script = document.createElement("script");
+script.src = "foo.js";
+document.body.appendChild(script);  // 把 <script> 元素添加到页面之前，是不会开始下载外部文件的
+```
+
+效果如下:
+
+```html
+<script src="foo.js"></script>
+```
+
+上面的过程可以抽象为一个函数:
+
+```js
+function loadScript(url) {
+  let script = document.createElement("script");
+  script.src = url;
+  document.body.appendChild(script);
+}
+
+loadScript("client.js");
+```
+
+### 直接插入源代码
+
+```html
+<script>
+    function sayHi() {
+        alert("hi");
+    }
+</script>
+```
+
+在 Firefox、Safari、Chrome 和 Opera 中使用 DOM 可以实现以下逻辑:
+
+```js
+let script = document.createElement("script");
+script.appendChild(
+    document.createTextNode("function sayHi() {alert('hi');}")
+);
+document.body.appendChild(script);
+```
+
+在旧版本的 IE 中可能会导致问题，需要使用 `<script>` 元素的 `text` 属性，
+修改后的代码能够在 IE、Firefox、Opera 和 Safari 3 及更高版本中运行：
+
+```js
+var script = document.createElement("script");
+script.text = "function sayHi() {alert('hi');}";
+document.body.appendChild(script);
+```
+
+对于早期的 Safari 版本，需要使用以下代码：
+
+```js
+var script = document.createElement("script");
+var code = "function sayHi() {alert('hi');}";
+
+try {
+    script.appendChild(document.createTextNode("code"));
+} catch (ex) {
+    script.text = "code";
+}
+
+document.body.appendChild(script);
+```
+
+抽象出一个跨浏览器的函数:
+
+```js
+function loadScriptString(code) {
+    var script = document.createElement("script");
+
+    script.type = "text/javascript";
+
+    try {
+        script.appendChild(document.createTextNode(code));
+    } catch (ex) {
+        script.text = code;
+    }
+
+    document.body.appendChild(script);
+}
+```
+
+
+通过 `innerHTML` 属性创建的 `<script>` 元素永远不会执行。
+浏览器会尽责地创建 `<script>` 元素，以及其中的脚本文本，
+但解析器会给这个 `<script>` 元素打上永不执行的标签。
+只要是使用 `innerHTML` 创建的 `<script>` 元素，以后也没有办法强制其执行
+
 
 
 ## 动态样式
