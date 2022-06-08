@@ -701,6 +701,8 @@ function loadScriptString(code) {
 
     document.body.appendChild(script);
 }
+
+loadScriptString("function sayHi() {alert('hi');}");
 ```
 
 
