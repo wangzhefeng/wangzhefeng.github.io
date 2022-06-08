@@ -89,6 +89,8 @@ details[open] summary {
     - [Comment 类型属性](#comment-类型属性)
     - [浏览器不承认注释](#浏览器不承认注释)
   - [CDATASection 类型](#cdatasection-类型)
+    - [CDATASection 类型的节点特征](#cdatasection-类型的节点特征)
+    - [XML 中的 CDATA 区块](#xml-中的-cdata-区块)
   - [DocumentType 类型](#documenttype-类型)
   - [Attr 类型](#attr-类型)
     - [Attr 对象属性](#attr-对象属性)
@@ -97,7 +99,11 @@ details[open] summary {
     - [引入外部文件](#引入外部文件)
     - [直接插入源代码](#直接插入源代码)
   - [动态样式](#动态样式)
+    - [引入外部文件](#引入外部文件-1)
+    - [直接嵌入 CSS 规则](#直接嵌入-css-规则)
   - [操作表格](#操作表格)
+    - [DOM 编程方式创建表格](#dom-编程方式创建表格)
+    - [HTML DOM 给表格元素添加的属性和方法](#html-dom-给表格元素添加的属性和方法)
   - [使用 NodeList](#使用-nodelist)
 - [DOM MutationObserver 接口](#dom-mutationobserver-接口)
   - [基本用法](#基本用法)
@@ -523,6 +529,9 @@ if (element.tagName.toLowerCase() == "div") {
 
 ## Text 类型
 
+
+
+
 ## Comment 类型
 
 ### Comment 类型
@@ -534,7 +543,6 @@ DOM 中的注释通过 `Comment` 类型表示。`Commont` 类型的节点具有�
 * `nodeValue` 值为注释的内容
 * `parentNode` 值为 `Document` 或 `Element` 对象
 * 不支持子节点
-
 
 ### Comment 类型属性
 
@@ -569,14 +577,30 @@ let comment = document.createComment("A comment");
 此外，浏览器不承认结束的 `</html>` 标签之后的注释。如果要访问注释节点，
 则必须确定它们是 `<html>` 元素的后代
 
-
-
-
-
-
-
-
 ## CDATASection 类型
+
+CDATASection 类型表示 XML 中特有的 CDATA 区块。
+CDATASection 类型继承 Text 类型，
+因此拥有包括 `splitText()` 在内的所有字符串操作方法。
+
+### CDATASection 类型的节点特征
+
+CDATASection 类型的节点具有以下特征：
+
+* `nodeType` 等于 4
+* `nodeName` 值为 `"#cdata-section"`
+* `nodeValue` 值为 CDATA 区块的内容
+* `parentNode` 值为 `Document` 或 `Element` 对象
+* 不支持子节点
+
+### XML 中的 CDATA 区块
+
+CDATA 区块只在 XML 文档中有效，
+因此某些浏览器比较陈旧的版本会错误地将 CDATA 区块解析为 `Comment` 或 `Element`
+
+
+
+
 
 ## DocumentType 类型
 
@@ -610,38 +634,45 @@ let comment = document.createComment("A comment");
 
 ## 动态脚本
 
+`<script>` 元素用于向网页中插入 JavaScript 代码，可以是 `src` 属性包含的外部文件，
+也可以是作为该元素内容的源代码。
+
 动态脚本就是在页面初始加载时不存在，之后又通过 DOM 包含的脚本。
 与对应的 HTML 元素一样，有两种方式通过 `<script>` 动态为网页添加脚本
 
 ### 引入外部文件
 
-可以通过 DOM 编程创建节点
-
-```js
-let script = document.createElement("script");
-script.src = "foo.js";
-document.body.appendChild(script);  // 把 <script> 元素添加到页面之前，是不会开始下载外部文件的
-```
-
-效果如下:
+`script` 引入外部文件:
 
 ```html
 <script src="foo.js"></script>
 ```
 
-上面的过程可以抽象为一个函数:
+DOM 编程:
+
+```js
+let script = document.createElement("script");
+script.src = "foo.js";
+
+document.body.appendChild(script);  // 把 <script> 元素添加到页面之前，是不会开始下载外部文件的
+```
+
+上面的 DOM 编程过程可以抽象为一个函数:
 
 ```js
 function loadScript(url) {
-  let script = document.createElement("script");
-  script.src = url;
-  document.body.appendChild(script);
+    let script = document.createElement("script");
+    script.src = url;
+    
+    document.body.appendChild(script);
 }
 
 loadScript("client.js");
 ```
 
 ### 直接插入源代码
+
+`<script>` 元素插入源代码:
 
 ```html
 <script>
@@ -651,13 +682,14 @@ loadScript("client.js");
 </script>
 ```
 
-在 Firefox、Safari、Chrome 和 Opera 中使用 DOM 可以实现以下逻辑:
+在 Firefox、Safari、Chrome 和 Opera 中使用 DOM 编程可以实现以下逻辑:
 
 ```js
 let script = document.createElement("script");
 script.appendChild(
     document.createTextNode("function sayHi() {alert('hi');}")
 );
+
 document.body.appendChild(script);
 ```
 
@@ -667,6 +699,7 @@ document.body.appendChild(script);
 ```js
 var script = document.createElement("script");
 script.text = "function sayHi() {alert('hi');}";
+
 document.body.appendChild(script);
 ```
 
@@ -675,7 +708,6 @@ document.body.appendChild(script);
 ```js
 var script = document.createElement("script");
 var code = "function sayHi() {alert('hi');}";
-
 try {
     script.appendChild(document.createTextNode("code"));
 } catch (ex) {
@@ -690,9 +722,7 @@ document.body.appendChild(script);
 ```js
 function loadScriptString(code) {
     var script = document.createElement("script");
-
     script.type = "text/javascript";
-
     try {
         script.appendChild(document.createTextNode(code));
     } catch (ex) {
@@ -705,18 +735,167 @@ function loadScriptString(code) {
 loadScriptString("function sayHi() {alert('hi');}");
 ```
 
-
 通过 `innerHTML` 属性创建的 `<script>` 元素永远不会执行。
 浏览器会尽责地创建 `<script>` 元素，以及其中的脚本文本，
 但解析器会给这个 `<script>` 元素打上永不执行的标签。
 只要是使用 `innerHTML` 创建的 `<script>` 元素，以后也没有办法强制其执行
 
-
-
 ## 动态样式
 
+CSS 样式在 HTML 页面中可以通过两个元素加载
+
+* `<link>` 元素用于包含 CSS 外部文件
+* `<style>` 元素用于添加嵌入样式
+
+动态样式在页面初始加载时病不存在，而是在之后才添加到页面中的
+
+### 引入外部文件
+
+通过外部文件加载样式是一个异步过程。因此，样式的加载和正执行的 JavaScript 代码并没有先后顺序。
+一般来说，也没有必要知道样式什么时候加载完成
+
+`<link>` 元素引入外部文件：
+
+```html
+<link rel="stylesheet" type="text/css" href="style.css">
+```
+
+DOM 编程：
+
+```js
+let link = document.createElement("link");
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = "style.css";
+
+let head = document.getElementsByTagName("head")[0];
+head.appendChild(link);
+```
+
+上面的 DOM 编程过程可以抽象为一个函数:
+
+```js
+function loadStyles(url) {
+    let link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = url;
+
+    let head = document.getElementsByTagName("head")[0];
+    head.appendChild(link);
+}
+
+loadStyles("style.css");
+```
+
+### 直接嵌入 CSS 规则
+
+使用 `<style>` 元素直接嵌入 CSS 规则:
+
+```html
+<style type="text/css">
+    body {
+        background-color: red;
+    }
+</style>
+```
+
+DOM 编程:
+
+```js
+let style = document.createElement("style");
+style.type = "text/css";
+style.appendChild(
+    document.createTextNode("body{background-color:red}");
+);
+
+let head = document.getElementsByTagName("head")[0];
+head.appendChild(style);
+```
+
+以上代码在 Firefox、Safari、Chrome 和 Opera 中都可以运行，但 IE 除外。
+IE 对 `<style>` 节点会施加限制，不允许访问其子节点，
+这一点与它对 `<script>` 元素施加的限制一样。
+事实上，IE 在执行到给 `<style>` 添加子节点的代码时，
+会抛出与给 `<script>` 添加子节点时同样的错误。
+
+对于 IE，解决方案是访问元素的 `styleSheet` 属性，这个属性又有一个 `cssText` 属性，
+然后给这个属性添加 CSS 代码
+
+```js
+let style = document.createElement("style");
+style.type = "text/css";
+try {
+    style.appendChild(
+        document.createTextNode("body{background-color:red}")
+    );
+} catch (ex) {
+    style.styleSheet.cssText = "body{background-color:red}";
+}
+
+let head = document.getElementsByTagName("head")[0];
+head.appendChild(style);
+```
+
+抽象为一个通用函数:
+
+```js
+function loadStyleString(css) {
+    let style = document.createElement("style");
+    style.type = "text/css";
+    try {
+        style.appendChild(
+            document.createTextNode(css)
+        );
+    } catch (ex) {
+        style.styleSheet.cssText = css;
+    }
+
+    let head = document.getElementsByTagName("head")[0];
+    head.appendChild(style);
+}
+
+loadStyleString("body{background-color:red}");
+```
 
 ## 操作表格
+
+表格是 HTML 中最复杂的结构之一。通过 DOM 编程 创建 `<table>` 元素，通常要涉及大量标签，
+包括表行、表元、表题，等等。因此，通过编程创建和修改表格时要写很多代码
+
+### DOM 编程方式创建表格
+
+
+`<table>` 元素创建表格:
+
+```html
+<table border="1" width="100%">
+    <tbody>
+        <tr>
+            <td>Cell 1,1</td>
+            <td>Cell 2,1</td>
+        </tr>
+        <tr>
+            <td>Cell 1,2</td>
+            <td>Cell 2,2</td>
+        </tr>
+    </tbody>
+</table>
+```
+
+DOM 编程:
+
+```js
+
+```
+
+### HTML DOM 给表格元素添加的属性和方法
+
+为了方便创建表格，HTML DOM 给 `<table>`、`<tbody>` 和 `<tr>` 元素添加了一些属性和方法
+
+
+
+
 
 
 ## 使用 NodeList
