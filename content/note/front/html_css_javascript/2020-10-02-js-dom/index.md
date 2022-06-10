@@ -886,14 +886,74 @@ loadStyleString("body{background-color:red}");
 DOM 编程:
 
 ```js
+// 创建表格
+let table = document.createElement("table");
+table.border = 1;
+table.width = "100%";
 
+
+// 创建表体
+let tbody = document.createElement("tbody");
+table.appendChild(tbody);
+
+
+// 创建第一行
+let row1 = document.createElement("tr");
+tbody.appendChild(row1);
+
+let cell1_1 = document.createElement("td");
+cell1_1.appendChild(document.createTextNode("Cell 1,1"));
+row1.appendChild(cell1_1);
+
+let cell2_1 = document.createElement("td");
+cell2_1.appendChild(document.createTextNode("Cell 2,1"));
+row1.appendChild(cell2_1);
+
+
+
+// 创建第二行
+let row2 = document.create("tr");
+tbody.appendChild(row2);
+
+let cell1_2 = document.createElement("td");
+cell1_2.appendChild(document.createTextNode("Cell 1,2"));
+row2.appendChild(cell1_2);
+
+let cell2_2 = document.createElement("td");
+cell2_2.appendChild(document.createTextNode("Cell 2,2"));
+row2.appendChild(cell2_2);
+
+
+// 把表格添加到文档主体
+document.body.appendChild(table);
 ```
 
 ### HTML DOM 给表格元素添加的属性和方法
 
 为了方便创建表格，HTML DOM 给 `<table>`、`<tbody>` 和 `<tr>` 元素添加了一些属性和方法
 
-
+* `<table>` 元素添加了以下属性和方法
+    - `caption`，指向 `<caption>` 元素的指针(如果存在)
+    - `tBodies`，指向 `<tbody>` 元素的 `HTMLCollection`
+    - `tFoot`，指向 `<tfoot>` 元素(如果存在)
+    - `tHead`，指向 `<thead>` 元素(如果存在)
+    - `rows`，包含表示所有行的 `HTMLCollection`
+    - `createTHead()`，创建 `<thead>` 元素，放到表格中，返回引用
+    - `createTFoot()`，创建 `<tfoot>` 元素，放到表格中，返回引用
+    - `createCaption()`，创建 `<caption>` 元素，放到表格中，返回引用
+    - `deleteTHead()`，创建 `<head>` 元素
+    - `deleteTFoot()`，创建 `<tfoot>` 元素
+    - `deleteCaption()`，删除 `<caption>` 元素
+    - `deleteRow(pos)`，删除给定位置的行
+    - `insertRow(pos)`，在行集合中给定位置插入一行
+* `<tbody>` 元素添加了一下属性和方法
+    - `rows`，包含 `<tbody>` 元素中所有行的 `HTMLCollection`
+    - `deleteRow(pos)`，删除给定位置的行
+    - `insertRow(pos)`，在行集合中给定位置插入一行，返回该行的引用
+* `<tr>` 元素添加了以下属性和方法
+    - `cells`，包含 `<tr>` 元素所有表元的 `HTMLCollection`
+    - `deleteCell(pos)`，删除给定位置的表元
+    - `insertCell(pos)`，在表元集合给定位置插入一个表元，返回该表元的引用
 
 
 
