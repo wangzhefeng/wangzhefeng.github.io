@@ -84,6 +84,12 @@ details[open] summary {
     - [创建元素](#创建元素)
     - [元素后代](#元素后代)
   - [Text 类型](#text-类型)
+    - [Text 节点类型](#text-节点类型)
+    - [Text 节点属性](#text-节点属性)
+    - [访问和修改文本节点](#访问和修改文本节点)
+    - [创建文本节点](#创建文本节点)
+    - [规范化文本节点](#规范化文本节点)
+    - [拆分文本节点](#拆分文本节点)
   - [Comment 类型](#comment-类型)
     - [Comment 类型](#comment-类型-1)
     - [Comment 类型属性](#comment-类型属性)
@@ -91,9 +97,15 @@ details[open] summary {
   - [CDATASection 类型](#cdatasection-类型)
     - [CDATASection 类型的节点特征](#cdatasection-类型的节点特征)
     - [XML 中的 CDATA 区块](#xml-中的-cdata-区块)
+    - [创建 CDATA 区块](#创建-cdata-区块)
   - [DocumentType 类型](#documenttype-类型)
+  - [DocumentFragment 类型](#documentfragment-类型)
+    - [DocumentFragment 节点特征](#documentfragment-节点特征)
+    - [创建 DocumentFragment 文档片段](#创建-documentfragment-文档片段)
+    - [DocumentFragment 方法](#documentfragment-方法)
   - [Attr 类型](#attr-类型)
     - [Attr 对象属性](#attr-对象属性)
+    - [创建 Attr 节点](#创建-attr-节点)
 - [DOM 编程](#dom-编程)
   - [动态脚本](#动态脚本)
     - [引入外部文件](#引入外部文件)
@@ -529,8 +541,154 @@ if (element.tagName.toLowerCase() == "div") {
 
 ## Text 类型
 
+### Text 节点类型
+
+`Text` 节点由 `Text` 类型表示，包含按字面解释的纯文本，
+也可能包含转义后的 HTML 字符，但不含 HTML 代码
+
+`Text` 类型的节点具有以下特征:
+
+* `nodeType` 等于 3
+* `nodeName` 值为 `"#text"`
+* `nodeValue` 值为节点中包含的文本
+* `parentNode` 值为 `Element` 对象
+* 不支持子节点
 
 
+### Text 节点属性
+
+`Text` 节点中包含的文本可以通过 `nodeValue` 属性访问，也可以通过 `data` 属性访问，
+这两个属性包含相同的值。修改 `nodeValue` 或 `data` 的值，也会在另一个属性反映出来
+
+文本节点暴露了以下操作文本的方法:
+
+* `appendData(text)`，向节点末尾添加文本 `text`
+* `deleteData(offset, count)`，从位置 `offset` 开始删除 `count` 个字符
+* `insertData(offset, text)`，在位置 `offset` 插入 `text`
+* `replaceData(offset, count, text)`，用 `text` 替换从位置 `offset` 到 `offset + count` 的文本
+* `splitText(offset)`，在位置 `offset` 将当前文本节点拆分为两个文本节点
+* `substringData(offset, count)`，提取从位置 `offset` 到 `offset + count` 的文本
+
+文本节点属性:
+
+* `length`，获取文本节点中包含的字符数量，这个值等于 `nodeValue.length` 和 `data.length`
+
+### 访问和修改文本节点
+
+默认情况下，包含文本内容的每个元素最多只能有一个文本节点
+
+```html
+<!-- 没有内容，因此没有文本节点 -->
+<div></div>
+
+<!-- 有空格，因此有一个文本节点 -->
+<div> </div>
+
+<!-- 有内容，因此有一个文本节点 -->
+<div>Hello World!</div>
+```
+
+访问文本节点
+
+```js
+let textNode = div.firstChild;
+
+// or 
+
+let textNode = div.childNodes[0];
+```
+
+修改文本节点:
+
+* 只要节点在当前的文档树中，这样的修改就会马上反映出来
+* 修改文本节点还有一点要注意，就是 HTML 或 XML 代码会被转换成实体编码，即小于号、大于号或引号会被转义
+
+```js
+div.firstChild.nodeValue = "Some other message";
+```
+
+```js
+div.firstChild.nodeValue = "Some <strong>other</strong> message";
+// 输出为 "Some &lt;strong&gt;other&lt;/strong&gt; message"
+```
+
+### 创建文本节点
+
+`document.createTextNode()` 可以用来创建文本节点，接收一个参数，即要插入节点的文本。
+跟设置已有文本节点的值一样，这些要插入的文本也会应用 HTML 或 XML 编码
+
+创建新文本节点后，其 `ownerDocument` 属性会被设置为 `document`。
+但在把这个节点添加到文档树之前，不会在浏览器中看到它
+
+一般来说，一个元素只包含一个文本子节点。不过，也可以让元素包含多个文本子节点。
+在将一个文本节点作为另一个文本节点的同胞插入后，两个文本节点的文本之间不会包含空格
+
+```js
+let element = document.createElement("div");
+element.className = "message";
+
+let textNode = document.createTextNode("Hello world!");
+element.appendChild(textNode);
+
+let anotherTextNode = document.createTextNode("Yippee!");
+element.appendChild(anotherTextNode);
+
+document.body.appendChild(element);
+```
+
+### 规范化文本节点
+
+DOM 文档中的同胞文本节点可能导致困惑，因为一个文本节点足以表示一个文本字符串。
+同样，DOM 文档中也经常会出现两个相邻文本节点。为此，有一个方法可以合并相邻的文本节点。
+这个方法叫 `normalize()`，是在 Node 类型中定义的(因此所有类型的节点上都有这个方法)
+
+在包含两个或多个相邻的文本节点的父节点上调用 `normalize()` 时，所有同胞文本节点会被合并为一个文本节点，
+这个文本节点的 `nodeValue` 就等于之前所有同胞节点 `nodeValue` 拼接在一起得到的字符串
+
+浏览器在解析文档时，永远不会创建同胞文本节点。同胞文本节点只会出现在 DOM 脚本生成的文档树中
+
+```js
+let element = document.createElement("div");
+element.className = "message";
+
+let textNode = document.createTextNode("Hello world!");
+element.appendChild(textNode);
+
+let anotherTextNode = document.createTextNode("Yippee!");
+element.appendChild(anotherTextNode);
+
+document.body.appendChild(element);
+
+alert(element.childNodes.length);  // 2
+
+element.normalize();
+alert(element.childNodes.length);  // 1
+alert(element.firstChild.nodeValue);  // "Hello world!Yippee!"
+```
+
+### 拆分文本节点
+
+Text 类型定义了一个与 `normalize()` 相反的方法 `splitText()`。
+这个方法可以在指定的偏移位置拆分 `nodeValue`，将一个文本节点拆分成两个文本节点。
+拆分之后，原来的文本节点包含开头到偏移位置前的文本，新文本节点包含剩下的文本。
+这个方法返回新的文本节点，具有与原来的文本节点相同的 `parentNode`
+
+拆分文本节点最常用于从文本节点中提取数据的 DOM 解析技术
+
+```js
+let element = document.createElement("div");
+element.className = "message";
+
+let textNode = document.createTextNode("Hello world!");
+element.appendChild(textNode);
+
+document.body.appendChild(element);
+
+let newNode = element.firstChild.splitText(5);
+alert(element.firstChild.nodeValue);  // "Hello"
+alert(newNode.nodeValue);  // " world!"
+alert(element.childNodes.length);  // 2
+```
 
 ## Comment 类型
 
@@ -581,7 +739,7 @@ let comment = document.createComment("A comment");
 
 CDATASection 类型表示 XML 中特有的 CDATA 区块。
 CDATASection 类型继承 Text 类型，
-因此拥有包括 `splitText()` 在内的所有字符串操作方法。
+因此拥有包括 `splitText()` 在内的所有字符串操作方法
 
 ### CDATASection 类型的节点特征
 
@@ -598,16 +756,106 @@ CDATASection 类型的节点具有以下特征：
 CDATA 区块只在 XML 文档中有效，
 因此某些浏览器比较陈旧的版本会错误地将 CDATA 区块解析为 `Comment` 或 `Element`
 
+### 创建 CDATA 区块
 
-
-
+在真正的 XML 文档中，可以使用 `document.createCDataSection()` 并传入节点内容来创建 CDATA 区块
 
 ## DocumentType 类型
 
+`DocumentType` 类型的节点包含文档的文档类型(`doctype`)信息，具有以下特征:
+
+* `nodeType` 等于 10
+* `nodeName` 值为文档类型的名称
+* `nodeValue` 值为 `null`
+* `parentNode` 值为 `Document` 对象
+* 不支持子节点
+
+`DocumentType` 对象在 DOM Level 1 中不支持动态创建，只能在解析文档代码时创建。
+对于支持这个类型的浏览器，`DocumentType` 对象保存在 `document.doctype` 属性中
+
+DOM Level 1 规定了 `DocumentType` 对象的 3 个属性:
+
+* `name`: 文档类型的名称
+* `entities`: 是这个文档类型描述的实体的 `NamedNodeMap`
+* `notations`: 是这个文档类型描述的表示法的 `NamedNodeMap`
+  
+因为浏览器中的文档通常是 HTML 或 XHTML 文档类型，所以 `entities` 和 `notations` 列表为空。
+(这个对象只包含行内声明的文档类型。) 无论如何，只有 `name` 属性是有用的。 
+这个属性包含文档类型的名称，即紧跟在 `<!DOCTYPE` 后面的那串文本
+
+比如下面的 HTML 4.01 严格文 档类型:
+
+```
+<!DOCTYPE HTML PUBLIC "-// W3C// DTD HTML 4.01// EN"
+    "http:// www.w3.org/TR/html4/strict.dtd">
+```
+
+对于这个文档类型，`name` 属性的值是 `"html"`: 
+
+```js
+alert(document.doctype.name); // "html"
+```
+
+## DocumentFragment 类型
+
+在所有的节点类型中，`DocumentFragment` 类型是唯一一个在标记中没有对应表示的类型。
+DOM 将文档片段定义为 “轻量级” 文档，能够包含和操作节点，却没有完整文档那样额外的消耗
+
+### DocumentFragment 节点特征
+
+`DocumentFragment` 节点具有以下特征:
+
+* `nodeType` 等于 11
+* `nodeName` 值为 `"#document-fragment"`
+* `nodeValue` 值为 `null`
+* `parentNode` 值为 `null`
+* 子节点可以是 `Element`、`ProcessingInstruction`、`Comment`、`Text`、`CDATASection` 或 `EntityReference`
+
+### 创建 DocumentFragment 文档片段
+
+不能直接把文档片段添加到文档。相反，文档片段的作用是充当其他要被添加到文档的节点的仓库。
+`document.createDocumentFragment()` 方法创建文档片段
+
+```js
+let fragment = document.createDocumentFragment();
+```
+
+### DocumentFragment 方法
+
+文档片段从 `Node` 类型继承了所有文档类型具备的可以执行 DOM 操作的方法
+
+如果文档中的一个节点被添加到一个文档片段，则该节点会从文档树中移除，不会再被浏览器渲染。
+添加到文档片段的新节点同样不属于文档树，不会被浏览器渲染
+
+可以通过 `appendChild()` 或 `insertBefore()` 方法将文档片段的内容添加到文档。
+在把文档片段作为参数传给这些方法时，这个文档片段的所有子节点会被添加到文档中相应的位置。
+文档片段本身永远不会被添加到文档树
+
+```html
+<ul id="myList"></ul>
+```
+
+```js
+// 这个<ul>元素添加 3 个列表项, 为避免多次渲染
+// 使用文档片段创建了所有列表项， 然后一次性将它们添加到了<ul>元素
+let fragment = document.createDocumentFragment();
+let ul = document.getElementById("myList");
+
+for (let i = 0; i< 3; ++i) {
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode(`Item ${i + 1}`));
+    fragment.appendChild(li);
+}
+
+ul.appendChild(fragment);
+```
+
 ## Attr 类型
 
-元素数据在DOM 中通过 `Attr` 类型表示。`Attr` 类型构造函数和原型在所有浏览器中都可以直接访问。
-技术上讲，属性是存在于元素 `attributes` 属性中的节点。`Attr` 节点具有以下特征：
+元素数据在 DOM 中通过 `Attr` 类型表示。`Attr` 类型构造函数和原型在所有浏览器中都可以直接访问。
+技术上讲，属性是存在于元素 `attributes` 属性中的节点
+
+`Attr` 节点具有以下特征：
 
 * `nodeType` 等于 2
 * `nodeName` 值为属性名
@@ -618,9 +866,26 @@ CDATA 区块只在 XML 文档中有效，
 
 ### Attr 对象属性
 
-* name
-* value
-* specified
+* `name`: 包含属性名，与 `nodeName` 一样
+* `value`: 包含属性值，与 `nodeValue` 一样
+* `specified`: 是一个布尔值，表示属性使用的是默认值还是被指定的值
+
+### 创建 Attr 节点
+
+可以使用 `document.createAttribute()` 方法创建新的 `Attr` 节点，参数为属性名
+
+属性节点尽管是节点，却不被认为是 DOM 文档树的一部分。`Attr` 节点很少直接被引用
+通常开发者更喜欢用 `getAttribute()`、`removeAttribute()` 和 `setAttribute()` 方法操作属性
+
+```js
+let attr = document.createAttribute("align");
+attr.value = "left";
+element.setAttrbuteNode(attr);
+
+alert(element.attributes["align"].value);  // "left"
+alert(element.getAttributeNode("align").value);  // "left"
+alert(element.getAttribute("align"));  // "left"
+```
 
 
 
@@ -911,7 +1176,7 @@ row1.appendChild(cell2_1);
 
 
 // 创建第二行
-let row2 = document.create("tr");
+let row2 = document.createElement("tr");
 tbody.appendChild(row2);
 
 let cell1_2 = document.createElement("td");
@@ -933,19 +1198,19 @@ document.body.appendChild(table);
 这些属性和方法极大地减少了创建表格所需的代码量
 
 * `<table>` 元素添加了以下属性和方法
-    - `caption`，指向 `<caption>` 元素的指针(如果存在)
     - `tBodies`，指向 `<tbody>` 元素的 `HTMLCollection`
-    - `tFoot`，指向 `<tfoot>` 元素(如果存在)
     - `tHead`，指向 `<thead>` 元素(如果存在)
+    - `tFoot`，指向 `<tfoot>` 元素(如果存在)
+    - `caption`，指向 `<caption>` 元素的指针(如果存在) 
     - `rows`，包含表示所有行的 `HTMLCollection`
     - `createTHead()`，创建 `<thead>` 元素，放到表格中，返回引用
     - `createTFoot()`，创建 `<tfoot>` 元素，放到表格中，返回引用
     - `createCaption()`，创建 `<caption>` 元素，放到表格中，返回引用
+    - `insertRow(pos)`，在行集合中给定位置插入一行
     - `deleteTHead()`，创建 `<head>` 元素
     - `deleteTFoot()`，创建 `<tfoot>` 元素
     - `deleteCaption()`，删除 `<caption>` 元素
     - `deleteRow(pos)`，删除给定位置的行
-    - `insertRow(pos)`，在行集合中给定位置插入一行
 * `<tbody>` 元素添加了一下属性和方法
     - `rows`，包含 `<tbody>` 元素中所有行的 `HTMLCollection`
     - `deleteRow(pos)`，删除给定位置的行
@@ -987,20 +1252,39 @@ tbody.rows[1].cells[1].appendChild(document.createTextNode("Cell 2,2"));
 document.body.appendChild(table);
 ```
 
-
-
-
-
 ## 使用 NodeList
 
+理解 `NodeList` 对象和相关的 `NameNodeMap`、`HTMLCollection` 是理解 DOM 编程的关键。
+这三个集合类型都是“实时的”，意味着文档结构的变化会实时地在它们身上反映出来，
+因此它们的值始终代表最新的状态
 
+实际上，`NodeList` 就是基于 DOM 文档的实时查询。任何时候要迭代 `NodeList`，
+最好再初始化一个变量保存当时查询时的长度，然后再循环变量与这个变量进行比较。
 
+一般来说，最好限制操作 `NodeList` 的次数。因为每次查询都会搜索整个文档，
+所以最好把查询到的 `NodeList` 缓存起来
 
+* 无穷循环
 
+```js
+let divs = document.getElementsByTagName("div");
 
+for (let i = 0; i < divs.length; ++i) {
+    let div = document.createElement("div");
+    document.body.appendChild(div);
+}
+```
 
+* 正常循环
 
+```js
+let divs = document.getElementsByTagName("div");
 
+for (let i = 0, len = divs.length; i < len; ++i) {
+    let div = document.createElement("div");
+    document.body.appendChild(div);
+}
+```
 
 # DOM MutationObserver 接口
 
