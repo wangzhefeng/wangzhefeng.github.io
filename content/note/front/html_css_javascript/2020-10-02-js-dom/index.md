@@ -910,7 +910,6 @@ cell2_1.appendChild(document.createTextNode("Cell 2,1"));
 row1.appendChild(cell2_1);
 
 
-
 // 创建第二行
 let row2 = document.create("tr");
 tbody.appendChild(row2);
@@ -930,7 +929,8 @@ document.body.appendChild(table);
 
 ### HTML DOM 给表格元素添加的属性和方法
 
-为了方便创建表格，HTML DOM 给 `<table>`、`<tbody>` 和 `<tr>` 元素添加了一些属性和方法
+为了方便创建表格，HTML DOM 给 `<table>`、`<tbody>` 和 `<tr>` 元素添加了一些属性和方法。
+这些属性和方法极大地减少了创建表格所需的代码量
 
 * `<table>` 元素添加了以下属性和方法
     - `caption`，指向 `<caption>` 元素的指针(如果存在)
@@ -954,6 +954,39 @@ document.body.appendChild(table);
     - `cells`，包含 `<tr>` 元素所有表元的 `HTMLCollection`
     - `deleteCell(pos)`，删除给定位置的表元
     - `insertCell(pos)`，在表元集合给定位置插入一个表元，返回该表元的引用
+
+```js
+// 创建表格
+let table = document.createElement("table");
+table.border = 1;
+table.width = "100%";
+
+
+// 创建表体
+let tbody = document.createElement("tbody");
+table.appendChild(tbody);
+
+
+// 创建第一行
+tbody.insertRow(0);
+tbody.rows[0].insertCell(0);
+tbody.rows[0].cells[0].appendChild(document.createTextNode("Cell 1,1"));
+tbody.rows[0].insertCell(1);
+tbody.rows[0].cells[1].appendChild(document.createTextNode("Cell 2,1"));
+
+
+// 创建第二行
+tbody.insertRow(1);
+tbody.rows[1].insertCell(0);
+tbody.rows[1].cells[0].appendChild(document.createTextNode("Cell 1,2"));
+tbody.rows[1].insertCell(1);
+tbody.rows[1].cells[1].appendChild(document.createTextNode("Cell 2,2"));
+
+
+// 把表格添加到文档主体
+document.body.appendChild(table);
+```
+
 
 
 
