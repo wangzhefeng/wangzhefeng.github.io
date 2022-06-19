@@ -73,9 +73,11 @@ details[open] summary {
     - [移除事件处理程序](#移除事件处理程序)
   - [DOM2 事件处理程序](#dom2-事件处理程序)
     - [DOM2 事件处理程序方法](#dom2-事件处理程序方法)
-    - [赋值事件处理程序](#赋值事件处理程序)
-    - [移除事件处理程序](#移除事件处理程序-1)
+    - [addEventListener()](#addeventlistener)
+    - [removeEventListener()](#removeeventlistener)
   - [IE 事件处理程序](#ie-事件处理程序)
+    - [attachEvent()](#attachevent)
+    - [detachEvent()](#detachevent)
   - [跨浏览器事件处理程序](#跨浏览器事件处理程序)
 - [事件对象](#事件对象)
   - [DOM 事件对象](#dom-事件对象)
@@ -459,7 +461,7 @@ DOM2 Events 为事件处理程序的赋值和移除定义了两个方法:
 把事件处理程序注册到捕获阶段通常用于在事件到达其指定目标之前拦截事件。
 如果不需要拦截，则不要使用事件捕获
 
-### 赋值事件处理程序
+### addEventListener()
 
 * 为按钮添加了会在时间冒泡阶段触发的 onclick 事件处理程序
 
@@ -487,7 +489,7 @@ btn.addEventListener("click", () => {
 }, false);
 ```
 
-### 移除事件处理程序
+### removeEventListener()
 
 通过 `addEventListener()` 添加的事件处理程序，
 只能使用 `removeEventListener()` 并传入与添加时同样的参数来移除。
@@ -522,9 +524,39 @@ btn.addEventListener("click", handler, false);
 btn.removeEventListener("click", handler, false);  // 有效果
 ```
 
-
-
 ## IE 事件处理程序
+
+IE 实现了与 DOM 类似的方法:
+
+* `attachEvent()`
+* `detachEvent()`
+
+这两个方法接收两个同样的参数:
+
+* 事件处理程序的名字
+* 事件处理函数
+
+### attachEvent()
+
+因为 IE8 及更早的版本只支持事件冒泡，
+所以使用 `attachEvent()` 添加的事件处理程序会添加到冒泡阶段
+
+在 IE 中使用 `attachEvent()` 与使用 DOM0 方式的主要区别是事件处理程序的作用域。
+使用 DOM0 方式时，事件处理程序中的 `this` 值等于目标元素，而使用 `attachEvent()` 时，
+事件处理程序是在全局作用域中运行的，因此 `this` 等于 `window`
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.attachEvent("onclick", function() {
+    console.log("Clicked");
+});
+```
+
+
+### detachEvent()
+
+
 
 ## 跨浏览器事件处理程序
 
