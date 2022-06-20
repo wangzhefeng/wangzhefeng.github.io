@@ -543,7 +543,13 @@ IE 实现了与 DOM 类似的方法:
 
 在 IE 中使用 `attachEvent()` 与使用 DOM0 方式的主要区别是事件处理程序的作用域。
 使用 DOM0 方式时，事件处理程序中的 `this` 值等于目标元素，而使用 `attachEvent()` 时，
-事件处理程序是在全局作用域中运行的，因此 `this` 等于 `window`
+事件处理程序是在全局作用域中运行的，因此 `this` 等于 `window`。
+理解这些差异对于编写跨浏览器代码时非常重要的
+
+与使用 `addEventListener()` 一样，使用 `attachEvent()` 方法也可以给一个元素添加多个事件处理程序。
+不过，与 DOM 方法不同，这里的事件处理程序会以添加它们的顺序方反向触发
+
+* 示例：给按钮添加 click 事件处理程序
 
 ```js
 var btn = document.getElementById("myBtn");
@@ -553,12 +559,64 @@ btn.attachEvent("onclick", function() {
 });
 ```
 
+* 示例：`attachEvent()` 事件处理程序中的 `this` 等于 `window`
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.attachEvent("onclick", function() {
+    console.log(this === window);  // true
+});
+```
+
+* 示例：添加多个事件处理程序
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.attachEvent("onclick", function() {
+    console.log("Clicked");
+});
+btn.attachEvent("onclick", function() {
+    console.log("Hello world!");
+});
+```
 
 ### detachEvent()
 
+与使用 DOM 方法类似，作为事件处理程序添加的匿名函数也无法移除。
+但只要传给 `detachEvent()` 方法相同的函数引用，就可以移除
 
+```js
+var btn = document.getElementById("myBtn");
+
+var handler = function() {
+    console.log("Clicked");
+};
+
+btn.attachEvent("onclick", handler);
+
+// 其他代码
+
+btn.detachEvent("onclick", handler);
+```
 
 ## 跨浏览器事件处理程序
+
+为了以跨浏览器兼容的方式处理事件，很多开发者会选择使用一个 JavaScript 库，
+其中抽象了不同浏览器的差异。有些开发者也可能会自己编写代码，以便使用最合适的事件处理手段。
+自己编写跨浏览器事件处理代码也很简单，主要依赖能力检测。
+要确保事件处理代码具有最大兼容性，只需要让代码在冒泡阶段运行即可
+
+1. 首先创建一个 `addHanler()` 方法
+    - 这个方法的任务是根据需要分别使用 DOM0 方式、DOM2 方式或 IE 方式来添加事件处理程序。
+      这个方法会在 `EventUtil` 对象上添加一个方法，以实现跨浏览器事件处理
+    - 添加的这个 `addHandler()` 方法接收 3 个参数
+        - 目标元素
+        - 事件名
+        - 事件处理函数
+2. 还要写一个也接收同样的 3 个参数的 `removeHandler()`
+    - 这个方法的任务是移除之前添加的事件处理程序，不管是通过何种方式添加的，默认为 DOM0 方式
 
 
 
