@@ -81,6 +81,9 @@ details[open] summary {
   - [跨浏览器事件处理程序](#跨浏览器事件处理程序)
 - [事件对象](#事件对象)
   - [DOM 事件对象](#dom-事件对象)
+    - [DOM event 事件对象](#dom-event-事件对象)
+    - [HTML 属性事件处理程序使用 event 引用事件对象](#html-属性事件处理程序使用-event-引用事件对象)
+    - [事件对象的公共属性和方法](#事件对象的公共属性和方法)
   - [IE 事件对象](#ie-事件对象)
   - [跨浏览器事件对象](#跨浏览器事件对象)
 - [事件类型](#事件类型)
@@ -618,14 +621,109 @@ btn.detachEvent("onclick", handler);
 2. 还要写一个也接收同样的 3 个参数的 `removeHandler()`
     - 这个方法的任务是移除之前添加的事件处理程序，不管是通过何种方式添加的，默认为 DOM0 方式
 
+```js
+var EventUtil = {
+    addHandler: function(element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
 
+    removeHandler: function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+        }
+    }
+};
+```
 
+这里的 `addHandler()` 和 `removeHandler()` 方法并没有解决所有跨浏览器一致性问题，
+比如 IE 的作用域问题、多个事件处理程序执行顺序问题等。
+不过，这两个方法已经实现了跨浏览器添加和移除事件处理程序。
+另外也要注意，DOM0 只支持给一个事件添加一个处理程序。
+好在 DOM0 浏览器已经很少有人使用了，所以影响应该不大
 
+```js
+let btn = document.getElementById("myBtn");
+
+let handler = function() {
+    console.log("Clicked");
+};
+
+EventUtil.addHandler(btn, "click", handler);
+
+// 其他代码
+
+EventUtil.removeHandler(btn, "click", handler);
+```
 
 # 事件对象
 
+在 DOM 中发生事件时，所有相关信息都会被收集并存储在一个名为 `event` 的对象中。
+这个对象包含了一些基本信息，比如导致事件的元素、发生的事件类型，以及可能与特定事件相关的任何其他数据。
+例如，鼠标操作导致的事件会生成鼠标位置信息，而键盘操作导致的事件会生成与被按下的键有关的信息。
+所有浏览器都支持这个 `event` 对象，尽管支持方式不同
+
 ## DOM 事件对象
 
+### DOM event 事件对象
+
+在 DOM 合规的浏览器中，`event` 对象是传给事件处理程序的唯一参数。
+不管以哪种方式，(DOM0 或 DOM2)指定事件处理程序，都会传入这个 `event` 对象
+
+* 示例
+
+```js
+let btn = document.getElementById("myBtn");
+
+btn.onclick = function(event) {
+    console.log(event.type);  // "click"
+};
+
+btn.addEventListener("click", (event) => {
+    console.log(event.type);  // "click"
+}, false);
+```
+
+### HTML 属性事件处理程序使用 event 引用事件对象
+
+在通过 HTML 属性指定的事件处理程序中，同样可以使用变量 `event` 引用事件对象。
+已这种方式提供 `event` 对象，可以让 HTML 属性中的代码实现与 JavaScript 函数同样的功能
+
+* 示例
+
+```html
+<input type="button" value="Click Me" onclick="console.log(event.type)">
+```
+
+### 事件对象的公共属性和方法
+
+事件对象包含与特定事件相关的属性和方法。不同的事件生成的事件对象也会包含不同的属性和方法。
+不过，所有事件对象都会包含一些公共属性和方法
+
+|属性/方法                   |类型          |读/写 |说明                                                                              |
+|---------------------------|-------------|-----|----------------------------------------------------------------------------------|
+|bubbles                    |布尔值        |只读  |表示事件是否冒泡                                                                    |
+|cancelable                 |布尔值        |只读  |表示是否可以取消事件的默认行为                                                         |
+|currentTarget              |元素          |只读  |当前事件处理程序所在的元素                                                            |
+|defaultPrevented           |布尔值        |只读  |ture 表示已经调用 preventDefault() 方法(DOM3 Events 中新增)                           |
+|detail                     |整数          |只读  |事件相关的其他信息                                                                   |
+|eventPhase                 |整数          |只读  |表示调用事件处理程序的阶段：1 代表捕获阶段，2 代表到达目标，3 代表冒泡阶段                    |
+|preventDefault()           |函数          |只读  |用于取消事件的默认行为。只有 cancelable 为 true 才可以调用这个方法                         |
+|stopImmediatePropagation() |函数          |只读  |于取消所有后续事件捕获或事件冒泡，并阻止调用任何后续事件处理程序(DOM3 Events 中新增)           |
+|stopPropagation()          |函数          |只读  |用于取消所有后续事件捕获或事件冒泡。只有 bubbles为 true 才可以调用这个方法                   |
+|target                     |元素          |只读  |事件目标                                                                            |
+|trusted                    |布尔值        |只读  |true 表示事件是由浏览器生成的。false 表示事件是开发者通过 JavaScript 创建的(DOM3 Event 新增) |
+|type                       |字符串        |只读  |被触发的事件类型                                                                      |
+|View                       |AbstractView |只读  |与事件相关的抽象视图。等于事件所发生的 window 对象                                        |
 
 
 
