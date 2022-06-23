@@ -85,6 +85,8 @@ details[open] summary {
     - [HTML 属性事件处理程序使用 event 引用事件对象](#html-属性事件处理程序使用-event-引用事件对象)
     - [事件对象的公共属性和方法](#事件对象的公共属性和方法)
   - [IE 事件对象](#ie-事件对象)
+    - [IE event 事件对象](#ie-event-事件对象)
+    - [事件对象的公共属性和方法](#事件对象的公共属性和方法-1)
   - [跨浏览器事件对象](#跨浏览器事件对象)
 - [事件类型](#事件类型)
   - [用户界面事件](#用户界面事件)
@@ -726,10 +728,123 @@ btn.addEventListener("click", (event) => {
 |View                       |AbstractView |只读  |与事件相关的抽象视图。等于事件所发生的 window 对象                                        |
 
 
+* 在事件处理程序内部，`this` 对象始终等于 `currentTarget` 的值，而 `target` 只包含事件的实际目标。
+  如果时间处理程序直接添加在了意图的目标，则 `this`、`currentTarget` 和 `target` 的值是一样的
+
+```js
+let btn = document.getElementById("myBtn");
+
+btn.onclick = function(event) {
+    console.log(event.currentTarget === this);  // true
+    console.log(event.target === this);  // true
+};
+```
+
+```js
+document.body.onclick = function(event) {
+    console.log(event.currentTarget === document.body);  // true
+    console.log(this === document.body);  // true
+    console.log(event.target === document.getElementById("myBtn"));  // true
+};
+```
+
+* `type` 属性在一个处理程序处理多个事件时很有用
+
+```js
+let btn = document.getElementById("myBtn");
+
+let handler = function(event) {
+    
+}
+```
+
+
+
+
 
 ## IE 事件对象
 
+### IE event 事件对象
+
+与 DOM 事件对象不同，IE 事件对象可以基于事件处理程序被指定的方式以不同方式来访问。
+如果事件处理程序是使用 DOM0 方式指定的，则 `event` 对象只是 `window` 对象的一个属性
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.onclick = function() {
+    let event = window.event;
+    console.log(event.type);  // "click"
+};
+```
+
+
+### 事件对象的公共属性和方法
+
+IE 事件对象也包含与导致其创建的特定
+
+
+|属性/方法     |类型    |读/写 |说明                                                                         |
+|-------------|-------|-----|-----------------------------------------------------------------------------|
+|cancelBubble |布尔值  |读/写 |默认为 false，设置为 true 可以取消冒泡(与 DOM 的 stopPropagation() 方法相同)       |
+|returnValue  |布尔值  |读/写 |默认为 true，设置为 false 可以取消事件默认行为(与 DOM 的 preventDefault() 方法相同) |
+|srcElement   |元素    |只读  |事件目标(与 DOM 的 target 属性相同)                                             |
+|type         |字符串  |只读  |触发的事件类型                                                                 |
+
+
 ## 跨浏览器事件对象
+
+虽然 DOM 和 IE 的事件对象并不相同，但他们有足够的相似性可以实现跨浏览器方案。
+DOM 事件对象中包含 IE 事件对象的所有信息和能力，只是形式不同。
+这些共性可让两种事件模型之间的映射称为可能
+
+```js
+var EventUtil = {
+    addHandler: function(element, type, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
+
+    getEvent: function(event) {
+        return event ? event : window.event;
+    },
+
+    getTarget: function(event) {
+        return event.target || event.srcElement;
+    },
+
+    preventDefault: function(event) {
+        if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    },
+
+    removeHandler: function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent) {
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+        }
+    },
+
+    stopPropagation: function(event) {
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        } else {
+            event.cancelBubble = true;
+        }
+    }
+};
+```
 
 
 
