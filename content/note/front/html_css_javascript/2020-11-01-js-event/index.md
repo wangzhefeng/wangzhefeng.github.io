@@ -54,6 +54,8 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
+- [事件概览](#事件概览)
 - [事件流](#事件流)
   - [事件冒泡](#事件冒泡)
     - [事件冒泡介绍](#事件冒泡介绍)
@@ -86,6 +88,7 @@ details[open] summary {
     - [事件对象的公共属性和方法](#事件对象的公共属性和方法)
   - [IE 事件对象](#ie-事件对象)
     - [IE event 事件对象](#ie-event-事件对象)
+    - [HTML 属性事件处理程序使用 event 引用事件对象](#html-属性事件处理程序使用-event-引用事件对象-1)
     - [事件对象的公共属性和方法](#事件对象的公共属性和方法-1)
   - [跨浏览器事件对象](#跨浏览器事件对象)
 - [事件类型](#事件类型)
@@ -108,8 +111,11 @@ details[open] summary {
 </p></details><p></p>
 
 
+# TODO
 
+* [ ] 事件对象的公共属性和方法
 
+# 事件概览
 
 JavaScript 与 HTML 的交互是通过事件实现的，
 事件代表文档或浏览器窗口中某个有意义的时刻。
@@ -766,23 +772,45 @@ let handler = function(event) {
 
 ### IE event 事件对象
 
-与 DOM 事件对象不同，IE 事件对象可以基于事件处理程序被指定的方式以不同方式来访问。
-如果事件处理程序是使用 DOM0 方式指定的，则 `event` 对象只是 `window` 对象的一个属性
+与 DOM 事件对象不同，IE 事件对象可以基于事件处理程序被指定的方式以不同方式来访问
+
+* 如果事件处理程序是使用 DOM0 方式指定的，则 `event` 对象只是 `window` 对象的一个属性
 
 ```js
 var btn = document.getElementById("myBtn");
 
 btn.onclick = function() {
     let event = window.event;
-    console.log(event.type);  // "click"
+    console.log(event.type);  // "click" 事件类型
 };
 ```
 
+* 如果事件处理程序是使用 `attachEvent()` 指定的，则 `event` 对象会作为唯一的参数传给处理函数。
+  `event` 对象仍然是 `window` 对象的属性，只是出于方便也将其作为参数传入
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.attachEvent("onclick", function(event) {
+    console.log(event.type);  // "click"
+});
+```
+
+### HTML 属性事件处理程序使用 event 引用事件对象
+
+如果是使用 HTML 属性方式指定的事件处理程序，则 `event` 对象同样可以通过变量 `event` 访问
+
+```html
+<input type="button" value="Click me" onclick="console.log(event.type)">
+```
 
 ### 事件对象的公共属性和方法
 
-IE 事件对象也包含与导致其创建的特定
+IE 事件对象也包含与导致其创建的特定事件相关的属性和方法，
+其中很多都与相关的 DOM 属性和方法对应
 
+与 DOM 事件对象一样，基于触发的事件类型不同，`event` 对象中包含的属性和方法也不一样。
+不过，所有 IE 事件对象都会包含下表所列的公共属性和方法
 
 |属性/方法     |类型    |读/写 |说明                                                                         |
 |-------------|-------|-----|-----------------------------------------------------------------------------|
@@ -791,12 +819,57 @@ IE 事件对象也包含与导致其创建的特定
 |srcElement   |元素    |只读  |事件目标(与 DOM 的 target 属性相同)                                             |
 |type         |字符串  |只读  |触发的事件类型                                                                 |
 
+* 由于事件处理程序的作用域取决于指定它的方式，因此 `this` 值并不总是等于事件目标。
+  为此，更好的方式是使用事件对象的 `scrElement` 属性代替 `this`
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.onclick = function() {
+    console.log(window.event.srcElement === this);  // true
+};
+
+btn.attachEvent("onclick", function(event)) {
+    console.log(event.srcElement === this);  // false
+}
+```
+
+* `returnValue` 属性等价于 DOM 的 `preventDefault()` 方法，
+  都是用于取消给定事件默认的行为
+
+```js
+var link = document.getElemenById("myLink");
+
+link.onclick = function() {
+    window.event.returnValue = false;
+};
+```
+
+* `cancelBubble` 属性与 DOM `stopPropagation()` 方法用途一样，都可以阻止事件冒泡。
+  因为 IE8 及更早版本不支持捕获阶段，所以只会取消冒泡
+
+```js
+var btn = document.getElementById("myBtn");
+
+btn.onclick = function() {
+    console.log("Clicked");
+    window.event.cancelBubble = true;
+};
+
+document.body.onclick = function() {
+    console.log("Body clicked");
+};
+```
+
+
+
 
 ## 跨浏览器事件对象
 
 虽然 DOM 和 IE 的事件对象并不相同，但他们有足够的相似性可以实现跨浏览器方案。
 DOM 事件对象中包含 IE 事件对象的所有信息和能力，只是形式不同。
 这些共性可让两种事件模型之间的映射称为可能
+
 
 ```js
 var EventUtil = {
@@ -846,6 +919,56 @@ var EventUtil = {
 };
 ```
 
+这里一共给 `EventUtil` 增加了 4 个新方法：
+
+* 方法 `getEvent()` 返回对 `event` 对象的引用。
+  IE 中事件对象的位置不同，而使用这个方法可以不用管事件处理程序是如何指定的，
+  都可以获取到 `event` 对象。使用这个方法的前提是，事件处理程序必须接收 `event` 对象，
+  并把它传给这个方法
+
+```js
+btn.onclick = function(event) {
+    event = EventUtil.getEvent(event);
+};
+```
+
+* 方法 `getTarget()` 返回事件目标。在这个方法中
+
+```js
+btn.onclick = function(event) {
+    event = EventUtil.getEvent(event) {
+        let target = EventUtil.getTarget(event);
+    }
+};
+```
+
+* 方法 `preventDefault()` 用于阻止事件的默认行为
+
+```js
+let link = document.getElementById("myLink");
+
+link.onclick = function(event) {
+    event = EventUtil.getEvent(event);
+    EventUtil.preventDefault(event);
+};
+```
+
+* 方法 `stopPropagation()` 用于检测用于停止事件流的 DOM 方法，
+  如果没有再使用 `cancelBubble` 属性
+
+```js
+let btn = document.getElementById("myBtn");
+
+btn.onclick = function(event) {
+    console.log("Clicked");
+    event = EventUtil.getEvent(event);
+    EventUtil.stopPropagation(event);
+};
+
+document.body.onclick = function(event) {
+    console.log("Body clicked");
+};
+```
 
 
 # 事件类型
