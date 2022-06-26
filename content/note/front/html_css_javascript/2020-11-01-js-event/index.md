@@ -93,12 +93,16 @@ details[open] summary {
   - [跨浏览器事件对象](#跨浏览器事件对象)
 - [事件类型](#事件类型)
   - [用户界面事件](#用户界面事件)
+    - [load 事件](#load-事件)
+    - [unload 事件](#unload-事件)
+    - [resize 事件](#resize-事件)
+    - [scroll 事件](#scroll-事件)
   - [焦点事件](#焦点事件)
   - [鼠标和滚轮事件](#鼠标和滚轮事件)
   - [键盘与输入事件](#键盘与输入事件)
   - [合成事件](#合成事件)
   - [变化事件](#变化事件)
-  - [HTML 事件](#html-事件)
+  - [HTML5 事件](#html5-事件)
   - [设备事件](#设备事件)
   - [触摸及手势事件](#触摸及手势事件)
   - [事件参考](#事件参考)
@@ -995,27 +999,136 @@ DOM3 Events 在 DOM2 Events 基础上重新定义了事件，并增加了新的�
 
 ## 用户界面事件
 
+用户界面事件或 UI 事件不一定跟用户操作有关。这类事件在 DOM 规范出现之前就已经以某种形式存在了，
+保留了它们是为了向后兼容。UI 事件主要有以下几种:
+
+* `DOMActivate`: 元素被用户通过鼠标或键盘操作激活时触发(比 `click 或 keydown 更通用`)。
+  这个事件在 DOM3 Events 中已经废弃。因此浏览器实现之间存在差异，所以不要使用它
+* `load`: 
+    - 在 window 上当页面加载完成后触发
+    - 在窗套(`<frameset>`)上当所有窗格(`<frame>`)都加载完成后触发
+    - 在 `<img>` 元素上当图片加载完成后触发
+* `unload`:
+    - 在 window 上当页面完全卸载后触发
+    - 在窗套(`<frameset>`)上当所有窗格(`<frame>`)都卸载完成后触发
+    - 在 `<object>` 元素上当相应对象卸载完成后触发
+* `abort`: 在 `<object>` 元素上当相应对象加载完成前被用户提前终止下载时触发
+* `error`: 
+    - 在 window 上当 JavaScript 报错时触发
+    - 在 `<img>` 元素上当无法加载指定图片时触发，
+    - 在 `<object>` 元素上当无法加载相应对象时触发
+    - 在窗套上当一个或多个窗格无法完成加载时触发
+* `select`: 在文本框(`<input>` 或 `textarea`)上当用户选择了一个或多个字符时触发
+* `resize`: 在 window 或窗格上当窗口或窗格被缩放时触发
+* `scroll`: 
+    - 当用户滚动包含滚动条的元素时在元素上触发
+    - `<body>` 元素包含已加载页面的滚动条
+
+大多数 HTML 事件与 `window` 对象和表单控件有关。除了 `DOMActivate`，
+这些事件在 DOM2 Events 中都被归为 HTML Events(`DOMActivate` 在 DOM2 中仍旧是 UI 事件)
+
+### load 事件
+
+`load` 事件可能是 JavaScript 中最常用的事件。在 `window` 对象上，
+`load` 事件会在整个页面(包括外部资源如图片、JavaScript 文件和 CSS 文件)加载完成后触发。
+可以通过两种方式指定 `load` 事件处理程序
+
+* JavaScript 方式
+
+```js
+window.addEventListener("load", (event) => {
+    console.log("Loaded!");
+});
+```
+
+* 指定 `load` 事件处理程序的方式是向 `<body>` 元素添加 `onload` 属性
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Load Event Example</title>
+    </head>
+    <body onload="console.log('Loaded!')">
+    
+    </body>
+</html>
+```
+
+### unload 事件
+
+
+### resize 事件
+
+
+### scroll 事件
 
 ## 焦点事件
 
+焦点事件在页面元素获得或失去焦点时触发。
+这些事件可以与 `document.hasFocus()` 和 `document.activeElement` 一起为开发者提供用户在页面中导航的信息。
+焦点事件有以下 6 种:
+
+* blur
+* DOMFocusIn
+* DOMFocusOut
+* focus
+* focusin
+* focusout
+  
+当焦点从页面中的一个元素移到另一个元素上时，会一次发生如下事件:
+
+* focusout 在失去焦点的元素上触发
+* focusin 在获得焦点的元素上触发
+* blur 在失去焦点的元素上触发
+* DOMFocusOut 在失去焦点的元素上触发
+* focus 在获得焦点的元素上触发
+* DOMFocusIn 在获得焦点的元素上触发
+
 
 ## 鼠标和滚轮事件
+
+鼠标事件是 Web 开发中最常用的一组事件，这是因为鼠标是用户的主要定位设备。
+DOM3 Events 定义了 9 种鼠标事件:
+
+* click
+* dblclick
+* mousedwon
+* mouseenter
+* mouseleave
+* mousemove
+* mouseout
+* mouseover
+* mouseup
+
 
 ## 键盘与输入事件
 
 ## 合成事件
 
+
 ## 变化事件
 
-## HTML 事件
+## HTML5 事件
+
 
 ## 设备事件
+
+
+
+
+
+
+
+
+
+
 
 ## 触摸及手势事件
 
 ## 事件参考
 
-
+- [ ] TODO
 
 
 
@@ -1024,6 +1137,11 @@ DOM3 Events 在 DOM2 Events 基础上重新定义了事件，并增加了新的�
 ## 事件委托
 
 ## 删除事件处理程序
+
+
+
+
+
 
 
 # 模拟事件
