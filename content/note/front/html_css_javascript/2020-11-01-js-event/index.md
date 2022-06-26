@@ -103,14 +103,30 @@ details[open] summary {
   - [合成事件](#合成事件)
   - [变化事件](#变化事件)
   - [HTML5 事件](#html5-事件)
+    - [contextmenu 事件](#contextmenu-事件)
+    - [beforeunload 事件](#beforeunload-事件)
+    - [DOMContentLoaded 事件](#domcontentloaded-事件)
+    - [readystatechange 事件](#readystatechange-事件)
+    - [pageshow 与 pagehide 事件](#pageshow-与-pagehide-事件)
+    - [hashchange 事件](#hashchange-事件)
   - [设备事件](#设备事件)
+    - [orientationchange 事件](#orientationchange-事件)
+    - [deviceorientation 事件](#deviceorientation-事件)
+    - [devicemotion 事件](#devicemotion-事件)
   - [触摸及手势事件](#触摸及手势事件)
+    - [触摸事件](#触摸事件)
+    - [手势事件](#手势事件)
+    - [触摸事件与手势事件的联系](#触摸事件与手势事件的联系)
   - [事件参考](#事件参考)
 - [内存与性能](#内存与性能)
   - [事件委托](#事件委托)
   - [删除事件处理程序](#删除事件处理程序)
 - [模拟事件](#模拟事件)
   - [DOM 事件模拟](#dom-事件模拟)
+    - [模拟鼠标事件](#模拟鼠标事件)
+    - [模拟键盘事件](#模拟键盘事件)
+    - [模拟其他事件](#模拟其他事件)
+    - [自定义 DOM 事件](#自定义-dom-事件)
   - [IE 事件模拟](#ie-事件模拟)
 </p></details><p></p>
 
@@ -127,6 +143,21 @@ JavaScript 与 HTML 的交互是通过事件实现的，
 
 在传统软件工程领域，这个模型叫做“观察者模式”，
 其能够做到页面行为(在 JavaScript 中定义)与页面展示(在 HTML 和 CSS 中定义)的分离
+
+事件是 JavaScript 与网页结合的主要方式。最常见的事件是在 DOM3 Events 规范或 HTML5 中定义的。
+虽然基本的事件都有规范定义，但很多浏览器在规范之外实现了自己专有的事件，
+以方便开发者更好地满足用户交互需求，其中一些专有事件直接与特殊的设备相关。
+
+围绕着使用事件，需要考虑内存与性能问题。例如:
+
+* 最好限制一个页面中事件处理程序的数量，因为它们会占用过多内存，导致页面响应缓慢
+* 利用事件冒泡，事件委托可以解决限制事件处理程序数量的问题
+* 最好在页面卸载之前删除所有事件处理程序
+
+使用 JavaScript 也可以在浏览器中模拟事件。DOM2 Events 和 DOM3 Events 规范提供了模拟方法，
+可以模拟所有原生 DOM 事件。键盘事件一定程度上也是可以模拟的，有时候需要组合其他技术。
+IE8 及更早版本也支持事件模拟，只是接口与 DOM 方式不同。
+事件是 JavaScript 中最重要的主题之一，理解事件的原理及其对性能的影响非常重要
 
 # 事件流
 
@@ -1104,37 +1135,220 @@ DOM3 Events 定义了 9 种鼠标事件:
 
 ## 键盘与输入事件
 
+键盘事件是用户操作键盘时触发的。DOM2 Events 最初定义了键盘事件，但该规范在最终发布前删除了相应内容。
+因此，键盘事件很大程度上是基于原始的 DOM0 实现的
+
+DOM3 Events 为键盘事件提供了一个首先再 IE9 中完全实现的规范。
+其他浏览器也开始实现改规范，但仍然存在很多遗留的实现
+
+键盘事件包含 3 个事件:
+
+* keydown
+* keypress
+* textInput
+* keyup
+
 ## 合成事件
+
+合成事件是 DOM3 Events 中新增的，用于处理通常使用 IME 输入时的复杂输入序列。
+IME 可以让用户输入物理键盘上没有的字符。例如，使用拉丁字母键盘的用户还可以使用 IME 输入日文。
+
+IME 通常需要同时按下多个键才能输入一个字符。合成事件用于检测和控制这种输入。
+
+合成事件在很多方面与输入事件很类似。
+在合成事件触发时，事件目标是接收文本的输入字段。
+唯一增加的事件属性是 `data`，其中包含的值视情况而异
+
+与文本事件类似，合成事件可以用来在必要时过滤输入内容
+
+合成事件有以下 3 种:
+
+* compositionstart
+    - 在 `compositionstart` 事件中，包含正在编辑的文本(例如，已经选择了文本但还没替换)
+* compositionupdate
+    - 在 `compositionupdate` 事件中，包含要插入的新字符
+* compositionend
+    - 在 `compositionend` 事件中，包含本次合成过程中输入的全部内容
+
+```js
+let textbox = document.getElementById("myText");
+
+textbox.addEventListener("compositionstart", (event) => {
+    console.log(event.data);
+});
+
+textbox.addEventListener("compositionupdate", (event) => {
+    console.log(event.data);
+});
+
+textbox.addEventListener("compositionend", (event) => {
+    console.log(event.data);
+})
+```
 
 
 ## 变化事件
 
+DOM2 的变化事件(Mutation Events)是为了在 DOM 发生变化时提供通知
+
+这些事件已经被废弃，浏览器已经在有计划地停止对它们的支持。
+变化事件已经被 Mutation Observers 所取代
+
 ## HTML5 事件
+
+DOM 规范并未涵盖浏览器都支持的所有事件。很多浏览器根据特定的用户需求或使用场景实现了自定义事件。
+
+HTML5 详尽地列出了浏览器支持的所有事件，这里列出 HTML5 中得到浏览器较好支持的一些事件。
+注意这些并不是浏览器支持的所有事件
+
+### contextmenu 事件
+
+
+
+### beforeunload 事件
+
+
+
+### DOMContentLoaded 事件
+
+
+### readystatechange 事件
+
+
+### pageshow 与 pagehide 事件
+
+
+### hashchange 事件
 
 
 ## 设备事件
 
 
+随着只能手机和平板计算机的出现，用户与浏览器交互的新方式应运而生。
+为此，一批新事件别发明出来
 
+设备事件可以用于确定用户使用设备的方式。W3C 在 2011 年就开始起草一份新规范，
+用于定义新设备及设备相关的事件
 
+### orientationchange 事件
 
+### deviceorientation 事件
 
-
-
-
+### devicemotion 事件
 
 
 ## 触摸及手势事件
+
+Safari 为 iOS 定制了一些专有事件，以方便开发者。因为 iOS 设备没有鼠标和键盘，
+所以常规的鼠标和键盘事件不足以创建具有完整交互能力的网页
+
+同时，WebKit 也为 Android 定制了很多专有事件，成为了事实标准，
+并被纳入 W3C 的 Touch Events 规范
+
+### 触摸事件
+
+iPhone 3G 发布时，iOS 2.0 内置了新版本的 Safari。
+这个新的移动 Safari 支持一些与触摸交互有关的新事件。
+后来的 Android 浏览器也实现了同样的事件。
+当手指放在屏幕上、在屏幕上滑动或从屏幕移开时，触摸事件即会触发
+
+触摸事件有如下几种:
+
+* `touchstart`
+    - 手指放到屏幕上时触发(即使有一个手指已经放在了屏幕上)
+* `touchmove`
+    - 手指在屏幕上滑动时连续触发。在这个事件中调用 `preventDefault()` 可以阻止滚动
+* `touchend`
+    - 手指从屏幕上移开时触发
+* `touchcancel`
+    - 系统停止跟踪触摸时触发。文档中并未明确什么情况下停止跟踪
+
+这些事件都会冒泡，也都可以被取消。尽管触摸事件不属于 DOM 规范，
+但浏览器仍然以兼容 DOM 的方式实现了它们。
+因此，每个触摸事件的 event 对象都提供了鼠标事件的公共属性: 
+
+* `bubbles`
+* `cancelable`
+* `view`
+* `clientX`
+* `clientY`、
+* `screenX`
+* `screenY`
+* `detail`
+* `altKey`
+* `shiftKey`
+* `ctrlKey`
+* `metaKey`
+
+除了这些公共的 DOM 属性，触摸事件还提供了以下 3 个属性用于跟踪触点:
+
+* touches
+* targetTouches
+* changedTouches
+
+每个 `Touch` 对象都包含下列属性:
+
+* clientX
+    - 触点在视口中的 x 坐标
+* clientY
+    - 触点在视口中的 y 坐标
+* identifier
+    - 触点 ID
+* pageX
+    - 触点在页面上的 x 坐标
+* pageY
+    - 触点在页面上的 y 坐标
+* screenX
+    - 触点在屏幕上的 x 坐标
+* screenY
+    - 触点在屏幕上的 y 坐标
+* target
+    - 触摸事件的事件目标
+
+
+### 手势事件
+
+iOS 2.0 中的 Safari 还增加了一种手势事件。
+手势事件会在两个手指触碰屏幕且相对距离或旋转角度变化时触发
+
+只有在两个手指同时接触事件接收者时，这些事件才会触发。在一个元素上设置事件处理程序，
+意味着两个手指必须都在元素边界以内才能触发手势事件(这个元素就是事件目标)。
+因为这些事件会冒泡，所以也可以把事件处理程序放到文档级别，从而可以处理所有手势事件。
+使用这种方式时，事件的目标就是两个手指均位于其边界内的元素
+
+手势事件有以下 3 种:
+
+* `gesturestart`
+    - 一个手指已经放在屏幕上，再把另一个手指放到屏幕上时触发
+* `gesturechange`
+    - 任何一个手指在屏幕上的位置发生变化时触发
+* `gestureend`
+    - 其中一个手指离开屏幕时触发
+
+### 触摸事件与手势事件的联系
+
+触摸
+
 
 ## 事件参考
 
 - [ ] TODO
 
-
-
 # 内存与性能
 
+因为事件处理程序在现代 Web 应用中可以实现交互，所以很多开发者会错误地在页面中大量使用它们。
+在创建 GUI 的语言如 C# 中，通常会给 GUI 上的每个按钮设置一个 `onclick` 事件处理程序。
+这样做不会有什么性能损耗。
+
+在 JavaScript 中，页面中事件处理程序的数量与页面整体性能直接相关。
+原因有很多
+
+* 首先，每个函数都是对象，都占用内存空间
+
 ## 事件委托
+
+
+
 
 ## 删除事件处理程序
 
@@ -1148,6 +1362,20 @@ DOM3 Events 定义了 9 种鼠标事件:
 
 ## DOM 事件模拟
 
+### 模拟鼠标事件
+
+
+### 模拟键盘事件
+
+### 模拟其他事件
+
+
+### 自定义 DOM 事件
+
 
 ## IE 事件模拟
+
+
+
+
 
