@@ -561,13 +561,39 @@ $ git branch -d tinker
 
 ### 基本要求
 
-* 第一行应该少于 50 个字，随后是一个空行。第一行的标题可以写成: `Fix issue #8976`
-* 喜欢用 vim 的可以把下面这行代码加入到 .vimrc 文件中，来检查和自动换行
+* 永远不要在 `git commit` 上增加 `-m <msg>` 或 `--message=<msg>` 参数，
+  要单独编写 commit message
+    - 一个不好的例子: `git commit -m "Fix login bug"`
+    - 一个推荐的 commit message
+    
+    ```bash
+    $ git commit
+    ```
+
+    ```
+    Redirect user to the requested page after login
+
+    https://trello.com/path/to/relevant/card
+
+    Users were being redirected to the home page after login, which is less
+    useful than redirecting to the page they had originally requested before
+    being redirected to the login form.
+
+    * Store requested path in a session variable
+    * Redirect to the stored location after successfully logging in the user
+    ```
+
+* 第一行应该少于 50 个字，随后是一个空行
+* 用空行来分割 commit message，让它在某些软件里面更容易读
+* 使用 fix, add, change 而不是 fixed, added, changed
+* 注释最好包含一个连接指向项目的 `issue/story/card`，一个完整的 issue numbers 更好
+* commit message 中包含一个简短的故事，能让别人更容易理解你的项目
+* 请将每次提交限定于完成一次逻辑功能。并且可能的话，适当地分解为多次小更新，以便每次小型提交都更易于理解
+* 喜欢用 vim 的可以把下面这行代码加入到 `.vimrc` 文件中，来检查和自动换行
 
 ```js
 autocmd Filetype gitcommit setlocal spell textwidth=72
 ```
-
 
 
 
@@ -579,7 +605,7 @@ pull request 是自己修改源代码后, 请求对方仓库采纳的一种行�
 ## Fork
 
 找到想要 `pull request` 的项目 `test` , 然后点击 `fork`
-按钮, 此时自己的仓库中就会有一个别人的项目仓库, 名字为:  `you_github_name/test`\ . 
+按钮, 此时自己的仓库中就会有一个别人的项目仓库, 名字为:  `you_github_name/test` . 
 
 ## Clone
 
@@ -615,7 +641,7 @@ git checkout -b feature_a master
 
 ### 修改项目代码
 
-在创建的 `feature_a`\ 分支下对 `fork`\ 的项目内容进行修改. 
+在创建的 `feature_a` 分支下对 `fork` 的项目内容进行修改. 
 
 ### 提交修改
 
