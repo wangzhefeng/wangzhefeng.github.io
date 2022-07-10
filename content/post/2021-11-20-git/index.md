@@ -793,6 +793,16 @@ $ git merge branch_a
 // git merge 分支名称
 ```
 
+如果在 merge 的过程中报错: `fatal: refusing to merge unrelated histories`，
+则需要使用如下命令及参数
+
+```bash
+$ git merge --allow-unrelated-history
+```
+
+
+
+
 ## Git Merge 其他使用场景
 
 * TODO
