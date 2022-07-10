@@ -9,7 +9,6 @@ tags:
   - article
 ---
 
-
 <style>
 h1 {
   background-color: #2B90B6;
