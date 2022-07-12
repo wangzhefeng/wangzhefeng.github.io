@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-05-06'
 slug: pydocs-sphinx
 categories:
-  - doc
+  - python
 tags:
   - tool
 ---

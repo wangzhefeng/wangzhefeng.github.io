@@ -5,11 +5,14 @@ disable_mathjax: true
 disable_highlight: true
 ---
 
+
+## 简介
+
 这是王哲峰的个人主页。2017 年我从上海大学数学系毕业。开始了在上海工作的日子。
 除了工作就是在家听音乐、看书、睡觉。偶尔看看 Dota2，内心很想玩游戏，但是怕累。
 所以写写文章，写写笔记，记录生活，记录学习。
 
-喜欢的诗句：
+<!-- 喜欢的诗句：
 
 > * 江头未是风波恶，别有人间行路难。--《鹧鸪天·送人》【辛弃疾】
 > * 此曲只应天上有，人间能得几回闻。 -- 《赠花卿》【杜甫】
@@ -26,6 +29,8 @@ disable_highlight: true
 > * “每个人都是带着成见来看待世界的，如果你不带着成见，那你对世界根本就没有看待方式。” -- 《十三邀》许知远
 > * “倦怠总会袭来，你渴望新的感受。一条从未踏足的小径，一个突然到来的朋友，或是一个意外的句子。但旧与新从来是紧密的链条。唯内在笃定才不断激发内在探索，因为你始终知道，爱是一切的源头。新道路，总因它意外浮现，唯爱和生命不可辜负。” -- 《十三邀》
 
+-->
+
 <!-- 喜欢的一段视频：
 <div class="plyr__video-embed" id="player" width="100%">
   <iframe
@@ -36,16 +41,18 @@ disable_highlight: true
     width="100%"
     height="400px"
   ></iframe>
-</div> -->
+</div>
+-->
 
 <!-- 喜欢的一张图片：
-<image src="images/background.jpg" width="100%" height="350px"> -->
+<image src="images/background.jpg" width="100%" height="350px"> 
+-->
 
-<!-- ### TODO
+### TODO
 
 * :white_check_mark: 评论在一些页面不启用
 * :white_check_mark: 集成 Disqus 和 Utterances 到评论区
-* :black_square_button: Disqus 评论功能出现广告，暂时不知道咋回事，先启用 utteranc 功能
+* :black_square_button: Disqus 评论功能出现广告，暂时不知道怎么回事，先启用 utteranc 功能
 * :white_check_mark: 首页内容更新
 * :black_square_button: 弄懂后台 JS、HTML、CSS 的原理
 * :white_check_mark: 处理页面中标题的字体样式
@@ -57,10 +64,10 @@ disable_highlight: true
 * :white_check_mark: 图片的保存问题处理
 * :black_square_button: 加载速度问题处理
     - [ ] 图片加载速度问题
-* :black_square_button: 微信屏蔽问题处理
+* :white_check_mark: 微信屏蔽问题处理
     - [x] 申请恢复访问
-    - [ ] 部署相关文件
-* :white_check_mark: 添加 favicon.ico -->
+    - [x] 部署相关文件
+* :white_check_mark: 添加 favicon.ico
 
 ### 本站架构
 

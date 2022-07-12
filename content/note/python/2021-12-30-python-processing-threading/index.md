@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2021-12-30'
 slug: python-processing-threading
 categories:
-  - pyhton
+  - python
 tags:
   - note
 ---
