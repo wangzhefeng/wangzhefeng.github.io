@@ -2,7 +2,7 @@
 title: Python pip
 author: 王哲峰
 date: '2022-07-10'
-slug: pip
+slug: python-pip
 categories:
   - python
 tags:
