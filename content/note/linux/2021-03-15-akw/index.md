@@ -1,5 +1,5 @@
 ---
-title: Akw 脚本工具、Bash 脚本
+title: Akw 脚本工具
 author: 王哲峰
 date: '2021-03-15'
 slug: akw

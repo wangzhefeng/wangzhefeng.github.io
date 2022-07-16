@@ -82,6 +82,7 @@ details[open] summary {
   - [pipenv](#pipenv)
   - [pyenv](#pyenv)
     - [安装 pyenv](#安装-pyenv)
+    - [安装、卸载 Python](#安装卸载-python)
     - [切换 Python 版本](#切换-python-版本)
     - [构建 Python 虚拟环境](#构建-python-虚拟环境)
     - [使用多个 Python 环境](#使用多个-python-环境)
@@ -292,7 +293,7 @@ $ which pip3        # 软连接路径
 $ pip3 --version
 ```
 
-- 若更换python版本后出现 `No module named "apt_pkg"`\ : 
+- 若更换python版本后出现 `No module named "apt_pkg"`: 
 
 ```bash
 $ sudo apt-get remove --purge python-apt
@@ -573,8 +574,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
-3.5.2 安装、卸载 Python
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### 安装、卸载 Python
 
 1. 查看使用 pyenv 可以安装的 Python 版本
 

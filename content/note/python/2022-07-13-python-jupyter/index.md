@@ -9,7 +9,6 @@ tags:
   - tool
 ---
 
-
 <style>
 h1 {
   background-color: #2B90B6;
@@ -61,10 +60,6 @@ details[open] summary {
 - [JupyterLab 1.0](#jupyterlab-10)
 - [Jupyter 插件](#jupyter-插件)
 </p></details><p></p>
-
-
-
-
 
 # Install Jupyter
 
