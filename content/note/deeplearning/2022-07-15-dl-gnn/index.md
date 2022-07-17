@@ -1,11 +1,12 @@
 ---
-title: CNN-图像分割
+title: GNN
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-cnn-image-segment
+slug: dl-gnn
 categories:
   - deeplearning
 tags:
-  - model
+  - tool
 ---
+
 

@@ -1,8 +1,8 @@
 ---
 title: RNN-GRU
 author: 王哲峰
-date: '2022-07-13'
-slug: dl-yolo
+date: '2022-07-15'
+slug: dl-rnn-gru
 categories:
   - deeplearning
 tags:

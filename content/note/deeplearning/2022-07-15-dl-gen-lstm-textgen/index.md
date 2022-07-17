@@ -1,8 +1,8 @@
 ---
 title: LSTM 生成文本
 author: 王哲峰
-date: '2022-07-13'
-slug: dl-yolo
+date: '2022-07-15'
+slug: dl-gen-lstm-textgen
 categories:
   - deeplearning
 tags:

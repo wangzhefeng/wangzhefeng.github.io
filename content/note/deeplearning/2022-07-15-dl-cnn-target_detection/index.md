@@ -1,15 +1,13 @@
 ---
 title: CNN-目标检测
 author: 王哲峰
-date: '2022-07-13'
-slug: dl-yolo
+date: '2022-07-15'
+slug: dl-cnn-target-detection
 categories:
   - deeplearning
 tags:
   - model
 ---
-
-
 
 ## 从 R-CNN 到 yoloi
 

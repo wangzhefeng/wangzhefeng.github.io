@@ -1,8 +1,8 @@
 ---
 title: CNN-图像分类
 author: 王哲峰
-date: '2022-07-13'
-slug: dl-yolo
+date: '2022-07-15'
+slug: dl-cnn-classification
 categories:
   - deeplearning
 tags:
