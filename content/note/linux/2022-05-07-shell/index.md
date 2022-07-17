@@ -1,8 +1,8 @@
 ---
-title: Linux Shell
+title: Shell
 author: 王哲峰
 date: '2022-05-07'
-slug: linux-shell
+slug: shell
 categories:
   - Linux
 tags:

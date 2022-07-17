@@ -5,6 +5,7 @@ date: '2021-03-15'
 slug: awk
 categories:
   - Linux
+  - Shell
 tags:
   - tool
 ---
