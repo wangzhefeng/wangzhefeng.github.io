@@ -5,13 +5,14 @@
     min-height: 100vh;
     border-right: 3px solid #ddd;
     background: #fafafa;
-    width: 400px;
+    width: 200px;
     padding: 2em 1em;
   }
   .main {
     margin-left: calc(50% - 250px);
   }
 }
+
 body {
   width: auto;
   padding: 0;
