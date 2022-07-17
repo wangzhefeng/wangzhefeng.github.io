@@ -98,7 +98,7 @@ LSTM 生成文本
    用于表示采样概率分布的熵, 即表示所选择的下一个字符会有多么出人意料或多么可预测。给定一个 `temperature` 值, 
    按照下列方法对原始概率分布(即模型的 softmax 输出)进行加权, 计算得到一个新的概率值。
 
-   .. code-block:: python
+   ```python
 
       import numpy as np
 

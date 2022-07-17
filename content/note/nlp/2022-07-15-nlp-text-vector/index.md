@@ -138,14 +138,14 @@ NLP--文本向量化
 
    1. 文本语料
 
-      .. code-block:: python
+      ```python
       
          John likes to watch moives, Mary likes too.
          John also likes to watch football games.
    
    2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
 
-      .. code-block:: python
+      ```python
          
          {
             "John": 1, 
@@ -162,7 +162,7 @@ NLP--文本向量化
 
    3. 文本 One-Hot
 
-      .. code-block:: python
+      ```python
       
          # John likes to watch movies, Mary likes too.
 
@@ -177,7 +177,7 @@ NLP--文本向量化
          Mary:     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
          too:      [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
-      .. code-block:: python
+      ```python
       
          # John also likes to watch football games.
 
@@ -194,7 +194,7 @@ NLP--文本向量化
 
 - One-Hot 算法 Python 实现
 
-   .. code-block:: python
+   ```python
 
       import os
       import numpy as np
@@ -239,7 +239,7 @@ NLP--文本向量化
          print(onehot)
 
 
-   .. code-block:: python
+   ```python
 
       from sklearn import DictVectorizer
 
@@ -258,14 +258,14 @@ NLP--文本向量化
 
    1. 文本语料
 
-      .. code-block:: python
+      ```python
         
          John likes to watch movies, Mary likes too.
          John also likes to watch football games.
 
    2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
 
-      .. code-block:: python
+      ```python
 
          {
             "John": 1, 
@@ -282,7 +282,7 @@ NLP--文本向量化
 
    3. 上面词典中包含 10 个单词, 每个单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
 
-      .. code-block:: python
+      ```python
 
          John likes to watch movies, Mary likes too.  ->  [1, 2, 1, 1, 1, 0, 0, 0, 1, 1]
          John also likes to watch football games.     ->  [1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
@@ -311,7 +311,7 @@ NLP--文本向量化
 
 - 词袋模型 Python 实现
 
-   .. code-block:: python
+   ```python
 
       from sklearn import CountVectorizer
       
@@ -335,14 +335,14 @@ NLP--文本向量化
 
    1. 文本语料
 
-      .. code-block:: python
+      ```python
         
          John likes to watch movies, Mary likes too.
          John also likes to watch football games.
 
    2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
 
-      .. code-block:: python
+      ```python
 
          {
             "John likes": 1,
@@ -359,7 +359,7 @@ NLP--文本向量化
 
    3. 上面词典中包含 10 组单词, 每组单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
 
-      .. code-block:: python
+      ```python
 
          John likes to watch movies. Mary likes too.  -> [1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
          John also likes to watch football games.     -> [0, 1, 1, 0, 0, 0, 1, 1, 1, 1]
@@ -374,7 +374,7 @@ NLP--文本向量化
 
 - Bi-gram、N-gram 算法 Python 实现
 
-   .. code-block:: python
+   ```python
 
       from . import .
 
@@ -424,7 +424,7 @@ NLP--文本向量化
 
 - TF-IDF 算法 Python 实现
 
-   .. code-block:: python
+   ```python
 
       from sklearn import TfidfVectorizer
       from sklearn import HashingVectorizer
@@ -463,7 +463,7 @@ NLP--文本向量化
 
    1. 文本语料
 
-      .. code-block:: python
+      ```python
 
          John likes to watch movies.
          John likes to play basketball.
@@ -484,7 +484,7 @@ NLP--文本向量化
 
 - 共现矩阵算法 Python 实现
 
-   .. code-block:: python
+   ```python
 
       from . import .
 
@@ -785,7 +785,7 @@ NLP--文本向量化
 
             - 大概等待 15min 左右, 得到 280819 行文本, 每行对应一个网页
 
-            .. code-block:: python
+            ```python
 
                from gensim.corpora import WikiCorpus
 
@@ -844,7 +844,7 @@ NLP--文本向量化
       - (4)训练样本准备好之后即可定义 skip-gram 模型网络结构, 损失函数和优化计算过程
       - (5)最后保存训练好的词向量即可
 
-.. code-block:: python
+```python
 
    import collections
    import math
@@ -1021,7 +1021,7 @@ NLP--文本向量化
    
    - 示例:
 
-      .. code-block:: python
+      ```python
 
          classifier = fasttext.supervised(input_file, output, label_prefix = "__label__")
          result = classifier.test(test_file)

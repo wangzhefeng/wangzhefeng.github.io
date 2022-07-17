@@ -139,7 +139,7 @@ NLP--命名实体识别
       - "m": 数字
       - "t": 时间
 
-   .. code-block:: python
+   ```python
 
       import re
       from datetime import datetime, timedelta
@@ -353,7 +353,7 @@ NLP--命名实体识别
          - CRF++ 的训练数据要求一定的格式, 一般是一行一个 token, 一句话由多行 token 组成, 多个句子之间用空行分开。
            其中每行又分成多列, 除最后一列之外, 其他列表示特征。因此一般至少需要两列, 最后一列表示要预测的标签("B", "E", "M", "S", "O")。
 
-         .. code-block:: python
+         ```python
 
             pass
             

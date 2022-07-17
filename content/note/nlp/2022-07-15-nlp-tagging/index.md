@@ -147,7 +147,7 @@ NLP--词性标注
 
       - 1.首先,基于正则表达式进行汉字判断, 正则表达式如下: 
       
-         .. code-block:: python
+         ```python
 
             import re
             
@@ -162,7 +162,7 @@ NLP--词性标注
 3.2 jieba 词性标注示例
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   .. code-block:: python
+   ```python
 
       # -*- coding: utf-8 -*-
       

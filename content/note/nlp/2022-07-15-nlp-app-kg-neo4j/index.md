@@ -1156,7 +1156,7 @@ String          用于表示字符串
 
 - 使用
 
-    .. code-block:: python
+    ```python
 
         from py2neo import Graph
 
@@ -1174,7 +1174,7 @@ String          用于表示字符串
 2.1 py2neo.database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+```python
 
     from py2neo import Graph
 

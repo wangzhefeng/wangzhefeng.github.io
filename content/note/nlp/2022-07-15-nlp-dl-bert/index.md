@@ -125,7 +125,7 @@ NLP--BERT
 3.3.3 调用 BERT 进行应用
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        .. code-block:: python
+        ```python
 
             from bert_serving.client import BertClient
             bc = BertClient(ip = "localhost", check_version = False, check_length = False)

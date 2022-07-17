@@ -171,7 +171,7 @@ NLP-情感分析
 
       - 数据加载
 
-         .. code-block:: python
+         ```python
 
             # -*- coding: utf-8 -*-
 
@@ -289,7 +289,7 @@ NLP-情感分析
 
       - 数据可视化
 
-         .. code-block:: python
+         ```python
 
             def data_visual(num_words):
                import matplotlib as mpl

@@ -80,7 +80,7 @@ NLP--分词
 
    - 正向最大匹配法示例:
 
-      .. code-block:: python
+      ```python
          
          # -*- coding: utf-8 -*-
          
@@ -129,7 +129,7 @@ NLP--分词
 
    - 逆向最大匹配法示例:
 
-      .. code-block:: python
+      ```python
 
          # -*- coding: utf-8 -*-
 
@@ -178,7 +178,7 @@ NLP--分词
 
    - 双向最大匹配法示例:
 
-      .. code-block:: python
+      ```python
          
          # -*- coding: utf-8 -*-
 
@@ -420,7 +420,7 @@ NLP--分词
 
    - 示例
 
-      .. code-block:: python
+      ```python
 
          import sys
          import jieba
@@ -451,7 +451,7 @@ NLP--分词
 
    - 示例
 
-      .. code-block:: python
+      ```python
 
          string = "如果放到旧字典中将出错。"
          seg_list = jieba.cut(string, HMM = False)
@@ -526,7 +526,7 @@ NLP--分词
 
    - 示例
 
-      .. code-block:: python
+      ```python
 
          
 
