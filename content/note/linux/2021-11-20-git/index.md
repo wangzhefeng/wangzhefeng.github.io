@@ -789,7 +789,7 @@ $ git checkout branch_B
 5. 合并两个分支
 
 ```bash
-$ git merge branch_a
+$ git merge branch_A_B
 // git merge 分支名称
 ```
 
@@ -797,7 +797,7 @@ $ git merge branch_a
 则需要使用如下命令及参数
 
 ```bash
-$ git merge --allow-unrelated-history
+$ git merge branch_A_B --allow-unrelated-histories
 ```
 
 

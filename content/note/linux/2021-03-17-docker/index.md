@@ -205,6 +205,22 @@ Docker 是一个客户端-服务器应用程序, 具有以下组件:
 
 ## Docker 架构
 
+docker中有这样几个概念：
+
+* dockerfile
+* image
+* container
+
+实际上你可以简单的把image理解为可执行程序，container就是运行起来的进程。
+
+那么写程序需要源代码，那么“写”image就需要dockerfile，
+dockerfile就是image的源代码，docker就是"编译器"。
+
+因此我们只需要在dockerfile中指定需要哪些程序、依赖什么样的配置，
+之后把dockerfile交给“编译器”docker进行“编译”，也就是docker build 命令，
+生成的可执行程序就是image，之后就可以运行这个image了，这就是docker run命令，
+image运行起来后就是docker container。
+
 ### Docker 架构概述
 
 Docker 使用客户端-服务器架构:
@@ -1199,3 +1215,4 @@ Kubernetes 的客户端命令是 `kubectl`
 kubectl config get-contexts
 kubectl config user-context docker-desktop
 ```
+
