@@ -58,20 +58,28 @@ details[open] summary {
   - [pandas](#pandas)
   - [Dask](#dask)
   - [datatable](#datatable)
+  - [rapids](#rapids)
   - [参考资料](#参考资料)
 - [Python 主流数据存储格式](#python-主流数据存储格式)
+  - [csv](#csv)
+  - [csv 格式转换为 pickle/feather/parquet/jay/h5](#csv-格式转换为-picklefeatherparquetjayh5)
+  - [pickle](#pickle)
+  - [feather](#feather)
+  - [parquet](#parquet)
+  - [jay](#jay)
   - [参考资料](#参考资料-1)
 - [pandas](#pandas-1)
+  - [参考资料](#参考资料-2)
 - [datatable](#datatable-1)
   - [安装](#安装)
   - [核心概念](#核心概念)
   - [核心方法](#核心方法)
   - [最佳实践](#最佳实践)
-  - [参考资料](#参考资料-2)
+  - [参考资料](#参考资料-3)
 - [Dask](#dask-1)
   - [安装](#安装-1)
-  - [参考资料](#参考资料-3)
-- [RAPIDS](#rapids)
+  - [参考资料](#参考资料-4)
+- [RAPIDS](#rapids-1)
 - [tqdm](#tqdm)
 - [PySpark](#pyspark)
 </p></details><p></p>
@@ -102,6 +110,7 @@ details[open] summary {
 ## pandas
 
 ```python
+# jupyter lab/notebook
 import pandas as pd
 
 %%time
@@ -118,12 +127,15 @@ dtypes = {
     "prior_question_had_explanation": "boolean"
 }
 
-df = pd.read_csv("../data/train.csv", dtype = dtypes) 
+df = pd.read_csv("data/train.csv", dtype = dtypes)
+print("Train size:", df.shape)
+df.head()
 ```
 
 ## Dask
 
 ```python
+# jupyter lab/notebook
 import dask.dataframe as dd
 
 %%time
@@ -134,28 +146,48 @@ dtypes = {
     "content_id": "int16",
     "content_type_id": "boolean",
     "task_container_id": "int16",
-    "user_answer": "int8", 
+    "user_answer": "int8",
+    "answered_correctly": "int8",
+    "prior_question_elapsed_time": "float32", 
+    "prior_question_had_explanation": "boolean"
 }
 
-df = dd.read_csv("../data/train.csv", dtype = dtypes).compute()
+df = dd.read_csv("data/train.csv", dtype = dtypes).compute()
+print("Train size:", data.shape)
+df.head()
 ```
 
 ## datatable
 
 ```python
+# jupyter lab/notebook
 import datatable as dt
 
 %%time
-df = dt.fread("../data/train.csv") 
-print("Train size:", data.shape)
+df = dt.fread("data/train.csv") 
+print("Train size:", df.shape)
+df.head()
 ```
 
+## rapids
+
 ```python
+# jupyter lab/notebook
+
+# rapids installation (make sure to turn on GPU)
+import sys
+!cp ../input/rapids/rapids.0.16.0 /opt/conda/envs/rapids.tar.gz
+!cd /opt/conda/envs/ && tar -xzvf rapids.tar.gz > /dev/null
+sys.path = ["/opt/conda/envs/rapids/lib/python3.7/site-packages"] + sys.path
+sys.path = ["/opt/conda/envs/rapids/lib/python3.7"] + sys.path
+sys.path = ["/opt/conda/envs/rapids/lib"] + sys.path
+
 import cudf
 
 %%time
-df = cudf.read_csv("../data/train.csv") 
-print("Train size:", data.shape)
+df = cudf.read_csv("data/train.csv") 
+print("Train size:", df.shape)
+df.head()
 ```
 
 ## 参考资料
@@ -185,16 +217,98 @@ print("Train size:", data.shape)
       Python 对象可以以 pickle 文件的形式存储，pandas 可以直接读取 pickle 文件。
       注意，pickle 模块不安全。最好只 unpickle 你信任的数据
 
+## csv
+
+```python
+# jupyter lab/notebook
+import pandas as pd
+
+%%time
+train_df = pd.read_csv("data/train.csv")
+train_df.info
+```
+
+## csv 格式转换为 pickle/feather/parquet/jay/h5
+
+```python
+import pandas as pd
+import datatable as dt
+
+# train_df = dt.fread("data/train.csv").to_pandas()
+train_df.to_csv("data/train.csv", index = False)
+train_df.to_pickle("data/train.pkl.gzip")
+train_df.to_feather("data/train.feather")
+train_df.to_parquet("data/train.parquet")
+dt.Frame(train_df).to_jay("data/train.jay")
+train_df.to_hdf("data/train.h5", "train")
+dt.Frame(train_df).to_jay("data/train.jay")
+```
+
+## pickle
+
+```python
+# jupyter lab/notebook
+import pandas as pd
+
+%%time
+train_pickle = pd.read_pickle("data/train.pkl.gzip")
+train_pickle.info()
+```
+
+## feather
+
+```python
+# jupyter lab/notebook
+import pandas as pd
+
+%%time
+train_feather = pd.read_feather("data/train.feather")
+train_feather.info()
+```
+
+## parquet
+
+```python
+# jupyter lab/notebook
+import pandas as pd
+
+%%time
+train_parquet = pd.read_parquet("data/train.parquet")
+train_parquet.info()
+```
+
+## jay
+
+```python
+# jupyter lab/notebook
+import pandas as pd
+
+%%time
+train_jay = dt.fread("data/train.jay")
+train.jay.shape
+```
+
 
 ## 参考资料
 
 - https://www.kaggle.com/code/pedrocouto39/fast-reading-w-pickle-feather-parquet-jay
 
 
+
+
+
+
+
+
+
+
+
 # pandas
 
 
+## 参考资料
 
+* https://www.kaggle.com/code/sohier/competition-api-detailed-introduction/notebook
 
 
 # datatable
