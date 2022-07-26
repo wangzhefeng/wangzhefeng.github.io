@@ -9,7 +9,6 @@ tags:
   - tool
 ---
 
-
 <style>
 h1 {
   background-color: #2B90B6;
@@ -61,7 +60,7 @@ details[open] summary {
   - [datatable](#datatable)
   - [参考资料](#参考资料)
 - [Python 主流数据存储格式](#python-主流数据存储格式)
-- [参考资料](#参考资料-1)
+  - [参考资料](#参考资料-1)
 - [pandas](#pandas-1)
 - [datatable](#datatable-1)
   - [安装](#安装)
@@ -100,7 +99,6 @@ details[open] summary {
 * RAPIDS
     - Rapids 将数据的处理迁移到了 GPU 上面，所以在速度上得到了大大的提升
 
-
 ## pandas
 
 ```python
@@ -122,7 +120,6 @@ dtypes = {
 
 df = pd.read_csv("../data/train.csv", dtype = dtypes) 
 ```
-
 
 ## Dask
 
@@ -188,7 +185,8 @@ print("Train size:", data.shape)
       Python 对象可以以 pickle 文件的形式存储，pandas 可以直接读取 pickle 文件。
       注意，pickle 模块不安全。最好只 unpickle 你信任的数据
 
-# 参考资料
+
+## 参考资料
 
 - https://www.kaggle.com/code/pedrocouto39/fast-reading-w-pickle-feather-parquet-jay
 
