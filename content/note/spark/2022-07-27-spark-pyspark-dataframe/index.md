@@ -1,8 +1,8 @@
 ---
-title: PySpark 快速入门
+title: PySpark DataFrame
 author: 王哲峰
 date: '2022-07-27'
-slug: spark-pyspark-quickstart
+slug: spark-pyspark-dataframe
 categories:
   - spark
 tags:
@@ -56,11 +56,11 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [DataFrame 创建](#dataframe-创建)
-- [DataFrame 数据查看](#dataframe-数据查看)
-- [筛选数据](#筛选数据)
-- [Apply](#apply)
-- [Grouping](#grouping)
-- [Getting Data in/out](#getting-data-inout)
+- [DataFrame 查看](#dataframe-查看)
+- [DataFrame 筛选](#dataframe-筛选)
+- [DataFrame Apply](#dataframe-apply)
+- [DataFrame Grouping](#dataframe-grouping)
+- [Getting data in/out](#getting-data-inout)
 - [Working with SQL](#working-with-sql)
 </p></details><p></p>
 
@@ -102,19 +102,19 @@ df = spark.createDataFrame(pandas_df)
 df
 ```
 
+# DataFrame 查看
 
+# DataFrame 筛选
 
-# DataFrame 数据查看
+# DataFrame Apply
 
-# 筛选数据
+# DataFrame Grouping
 
-# Apply
-
-# Grouping
-
-# Getting Data in/out
+# Getting data in/out
 
 # Working with SQL
+
+
 
 
 

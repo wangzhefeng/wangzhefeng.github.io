@@ -2,7 +2,7 @@
 title: PySpark Cheet Sheet -- RDD Basic
 author: 王哲峰
 date: '2022-07-27'
-slug: spark-pyspark-useage
+slug: spark-pyspark-cheet-sheet
 categories:
   - spark
 tags:
