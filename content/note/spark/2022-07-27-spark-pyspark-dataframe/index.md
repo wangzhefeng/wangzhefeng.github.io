@@ -509,14 +509,26 @@ df1.groupby("id").cogroup(df2.groupby("id")).applyInPandas(
 ## 相关 API
 
 * csv
-    * `DataFrame.write.csv()`
-    * `spark.read.csv()`
+    - `DataFrame.write.csv()`
+    - `spark.read.csv()`
 * parquet
+    - `DataFrame.write.parquet()`
+    - `spark.read.parquet()`
 * ORC
+    - `DataFrame.write.orc()`
+    - `spark.read.orc()` 
 * JDBC
+    - ``
+    - ``
 * text
+    - ``
+    - ``
 * binaryFile
+    - ``
+    - ``
 * Avro
+    - ``
+    - ``
 
 
 ## CSV
