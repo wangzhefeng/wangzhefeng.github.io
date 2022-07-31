@@ -1,5 +1,6 @@
 ---
-title: PySpark Cheet Sheet -- RDD Basic
+title: PySpark Cheet Sheet
+subtitle: RDD Basic
 author: 王哲峰
 date: '2022-07-27'
 slug: spark-pyspark-cheet-sheet
