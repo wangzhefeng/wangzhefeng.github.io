@@ -1,5 +1,5 @@
 ---
-title: PySpark Pandas API
+title: PySpark Pandas API on Spark
 author: 王哲峰
 date: '2022-07-27'
 slug: spark-pyspark-pandas-api
@@ -11,50 +11,57 @@ tags:
 
 <style>
 h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 }
 h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 }
-
-
+h3 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
     padding: .5em .5em 0;
 }
-
 summary {
     font-weight: bold;
     margin: -.5em -.5em 0;
     padding: .5em;
 }
-
 details[open] {
     padding: .5em;
 }
-
 details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
+- [Options 和 setings](#options-和-setings)
+  - [getting and setting options](#getting-and-setting-options)
+    - [属性](#属性)
+    - [方法](#方法)
 - [数据对象](#数据对象)
   - [pandas-on-Spark Series](#pandas-on-spark-series)
   - [pandas-on-Spark DataFrame](#pandas-on-spark-dataframe)
@@ -76,6 +83,7 @@ details[open] summary {
 - [数据操作](#数据操作)
   - [Stats](#stats)
   - [Spark Configurations](#spark-configurations)
+  - [transform and apply a function](#transform-and-apply-a-function)
 - [Grouping](#grouping)
 - [Plotting](#plotting)
   - [pandas-on-Spark Series](#pandas-on-spark-series-1)
@@ -84,6 +92,9 @@ details[open] summary {
   - [CSV](#csv)
   - [Parquet](#parquet)
   - [Spark IO](#spark-io)
+- [Type support and hints](#type-support-and-hints)
+- [最佳实践](#最佳实践)
+- [支持的 pandas API](#支持的-pandas-api)
 </p></details><p></p>
 
 ```python
@@ -92,6 +103,49 @@ import numpy as np
 import pyspark.pandas as ps
 from pyspark.sql import SparkSession
 ```
+
+# Options 和 setings
+
+属性:
+
+* `pyspark.pandas.options.display.max_rows`
+* `pyspark.pandas.options.display.max_columns`
+
+方法:
+
+* `get_option("option_name")`
+* `set_option("option_name", new_value)`
+* `reset_option()`
+* `option_context("option_name", option_value, "option_name", option_value, ...)`
+
+API 均在 `pandas_on_spark` 命名空间有效
+
+## getting and setting options
+
+### 属性
+
+```python
+>>> import pyspark.pandas as ps
+>>> ps.options.display.max_rows
+1000
+>>> ps.options.display.max_rows = 10
+>>> ps.options.display.max_rows
+10
+```
+
+### 方法
+
+```python
+>>> import pyspark.pandas as pd
+>>> ps.get_option("display.max_rows")
+1000
+>>> ps.set_option("display.max_rows", 10)
+>>> ps.get_option("display.max_rows")
+10
+```
+
+
+
 
 # 数据对象
 
@@ -222,6 +276,9 @@ psdf1.dropna(how = "any")
 psdf1.fillna(value = 5)
 ```
 
+
+
+
 # 数据操作
 
 ## Stats
@@ -262,6 +319,13 @@ spark.conf.set("spark.sql.execution.arrow.pyspark.enable", True)
 ps.reset_option("compute.default_index_type")
 spark.conf.set("spark.sql.execution.arrow.pyspark.enable", prev)
 ```
+
+## transform and apply a function
+
+
+
+
+
 
 # Grouping
 
@@ -330,3 +394,17 @@ ps.read_parquet("bar.parquet").head(10)
 psdf.to_spark_io("zoo.orc", format = "orc")
 ps.read_spark_io("zoo.orc", format = "orc").head(10)
 ```
+
+
+# Type support and hints
+
+
+
+
+
+# 最佳实践
+
+
+# 支持的 pandas API
+
+

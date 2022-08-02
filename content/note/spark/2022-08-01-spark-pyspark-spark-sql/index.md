@@ -12,22 +12,31 @@ tags:
 
 <style>
 h1 {
-background-color: #2B90B6;
-background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-background-size: 100%;
--webkit-background-clip: text;
--moz-background-clip: text;
--webkit-text-fill-color: transparent;
--moz-text-fill-color: transparent;
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 }
 h2 {
-background-color: #2B90B6;
-background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-background-size: 100%;
--webkit-background-clip: text;
--moz-background-clip: text;
--webkit-text-fill-color: transparent;
--moz-text-fill-color: transparent;
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+h3 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 }
 details {
     border: 1px solid #aaa;
@@ -48,7 +57,6 @@ details[open] summary {
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [Apache Arrow in PySpark](#apache-arrow-in-pyspark)
@@ -58,6 +66,7 @@ details[open] summary {
     - [安装方式](#安装方式)
 - [启用与 Pandas 之间的转换](#启用与-pandas-之间的转换)
 - [Pandas UDFs](#pandas-udfs)
+  - [Series to Series](#series-to-series)
 - [Pandas Function APIs](#pandas-function-apis)
 </p></details><p></p>
 
@@ -125,6 +134,43 @@ print(f"Pandas DataFrame result statistics:\n{str(result_pdf.descrive())}\n")
 ```
 
 # Pandas UDFs
+
+Pandas UDF 是用户定义的函数，由 Spark 执行并使用 Arrow 转换数据，使用 Pandas 处理数据，允许向量化操作。
+Pandas UDF 使用 `pandas_udf()` 作为装饰器或包装函数来定义，不需要额外的配置。
+Pandas UDF 通常表现为常规的 PySpark 函数 API。
+
+从由 Python 3.6 构建额 Spark 3.0 开始，可以使用 Python 类型提示。
+在所有情况下，当只有一个变量时类型提示应该使用 `pandas.Series`，
+当输出或输出列的类型为 `StructType` 时应该使用`pandas.DataFrame`  
+
+```python
+import pandas as pd
+from pyspark.sql.functions import pandas_udf
+
+@pandas_udf("col1 string, col2 long")  # type: ignore[call-overload]
+def func(s1: pd.Series, s2: pd.Series, s3: pd.DataFrame) -> pd.DataFrame:
+    s3["col2"] = s1 + s2.str.len()
+    return s3
+
+df = spark.createDataFrame([
+    [1, "a string", ("a nested string",)]
+], schema = "long_col long, string_col string, struct_col struct<col1:string>")
+
+df.printSchema()
+# root
+# |-- long_column: long (nullable = true)
+# |-- string_column: string (nullable = true)
+# |-- struct_column: struct (nullable = true)
+# |    |-- col1: string (nullable = true)
+
+df.select(func("long_col", "string_col", "struct_col")).printSchema()
+# |-- func(long_col, string_col, struct_col): struct (nullable = true)
+# |    |-- col1: string (nullable = true)
+# |    |-- col2: long (nullable = true)
+```
+
+## Series to Series
+
 
 
 
