@@ -573,6 +573,10 @@ ArrayType(DoubleType, true)
 ## Type Hints
 
 
+
+
+
+
 # From/to others DBMSes
 
 Pandas API on Spark 中与其他 DBMS 交互的 API 与 pandas 中的 API 略有不同，
@@ -717,7 +721,6 @@ ps.read_sql(
 $ ./bin/spark-shell --driver-class-path postgresql-8.4.1207.jar --jars postgresql-9.4.1207.jar
 ```
 
-
 # 最佳实践
 
 ## 利用 PySpark API
@@ -773,35 +776,252 @@ import pyspark.pandas as ps
 
 ## 检查执行计划
 
+因为 Pandas API on Spark 是惰性计算的，
+所以可以通过在实际计算之前使用 `pyspark.pandas.DataFrame.spark.explain()` 预测高消耗操作
 
+```python
+>>> import pyspark.pandas as ps
+
+>>> psdf = ps.DataFrame({
+...     "id": range(10)
+... })
+>>> psdf = psdf[psdf.id > 5]
+>>> psdf.spark.explain()
+== Physical Plan ==
+*(1) Filter (id#1L > 5)
++- *(1) Scan ExistingRDD[__index_level_0__#0L,id#1L]
+```
 
 ## 使用 checkpoint
 
+在 Spark 对象上对 pandas API 进行大量操作后，由于庞大而复杂的计划，
+底层 Spark 计划程序可能会变慢。如果 Spark 计划变得庞大或计划需要很长时间,
+`pyspark.pandas.DataFrame.spark.checkpoint()` 或者 
+`pyspark.pandas.DataFrame.spark.local_checkpoint()` 会有所帮助
 
+```python
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "id": range(10)
+... })
+>>> psdf["id"] = psdf["id"] + (10 * psdf["id"] + psdf["id"])
+>>> psdf = psdf.groupby("id").head(2)
+>>> psdf.spark.explain()
+== Physical Plan ==
+*(3) Project [__index_level_0__#0L, id#31L]
++- *(3) Filter (isnotnull(__row_number__#44) AND (__row_number__#44 <= 2))
+   +- Window [row_number() windowspecdefinition(__groupkey_0__#36L, __natural_order__#16L ASC NULLS FIRST, specifiedwindowframe(RowFrame, unboundedpreceding$(), currentrow$())) AS __row_number__#44], [__groupkey_0__#36L], [__natural_order__#16L ASC NULLS FIRST]
+      +- *(2) Sort [__groupkey_0__#36L ASC NULLS FIRST, __natural_order__#16L ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(__groupkey_0__#36L, 200), true, [id=#33]
+            +- *(1) Project [__index_level_0__#0L, (id#1L + ((id#1L * 10) + id#1L)) AS __groupkey_0__#36L, (id#1L + ((id#1L * 10) + id#1L)) AS id#31L, __natural_order__#16L]
+               +- *(1) Project [__index_level_0__#0L, id#1L, monotonically_increasing_id() AS __natural_order__#16L]
+                  +- *(1) Filter (id#1L > 5)
+                     +- *(1) Scan ExistingRDD[__index_level_0__#0L,id#1L]
+
+
+>>> psdf = psdf.spark.local_checkpoint()  # or psdf.spark.checkpoint()
+>>> psdf.spark.explain()
+== Physical Plan ==
+*(1) Project [__index_level_0__#0L, id#31L]
++- *(1) Scan ExistingRDD[__index_level_0__#0L,id#31L,__natural_order__#59L]
+```
+
+在 `psdf.spark.explain()` 设置之前，之前的 Spark 计划被删除，
+并从一个简单的计划开始。调用时将上一个 DataFrame 的结果存储在配置的文件系统 
+`pyspark.pandas.DataFrame.spark.checkpoint()` 中，
+或者 `pyspark.pandas.DataFrame.spark.local_checkpoint()`
 
 ## 避免 shuffling
 
+一些操作，例如 `sort_values` 在并行或分布式环境中比在单台机器上的内存中更难完成，
+因为它需要将数据发送到其他节点，并通过网络在多个节点之间交换数据
+
+```python
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "id": range(10)
+... }).sort_values(by = "id")
+>>> psdf.spark.explain()
+== Physical Plan ==
+*(2) Sort [id#9L ASC NULLS LAST], true, 0
++- Exchange rangepartitioning(id#9L ASC NULLS LAST, 200), true, [id=#18]
+   +- *(1) Scan ExistingRDD[__index_level_0__#8L,id#9L]
+```
 
 ## 避免在单个分区上计算
 
+目前, `DataFrame.rank` 等一些 API 使用 PySpark 的 Window 而不指定分区规范。
+这会将所有数据移动到单个机器中的单个分区中，并可能导致严重的性能下降。
+对于非常大的数据集，应避免使用此类 API. 相反，可以使用 `GroupBy.rank`，因为它成本较低，
+可以为每个组分配和计算数据
+
+```python
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "id": range(10)
+... })
+>>> psdf.rank().spark.explain()
+== Physical Plan ==
+*(4) Project [__index_level_0__#16L, id#24]
++- Window [avg(cast(_w0#26 as bigint)) windowspecdefinition(id#17L, specifiedwindowframe(RowFrame, unboundedpreceding$(), unboundedfollowing$())) AS id#24], [id#17L]
+   +- *(3) Project [__index_level_0__#16L, _w0#26, id#17L]
+      +- Window [row_number() windowspecdefinition(id#17L ASC NULLS FIRST, specifiedwindowframe(RowFrame, unboundedpreceding$(), currentrow$())) AS _w0#26], [id#17L ASC NULLS FIRST]
+         +- *(2) Sort [id#17L ASC NULLS FIRST], false, 0
+            +- Exchange SinglePartition, true, [id=#48]
+               +- *(1) Scan ExistingRDD[__index_level_0__#16L,id#17L]
+```
 
 ## 避免使用保留列名
 
+带有前缀 `__` 和后缀 `__` 的列名是在 Pandas API on Spark 中保留的。
+为了处理诸如索引之类的内部行为，Pandas API on Spark 使用了一些内部列名。
+因此，不鼓励使用此类列名，并且不能保证它们有效
 
 ## 不要使用重复列名
 
+Spark SQL 不允许使用重复列名，同样，Pandas API on Spark 继承了这种行为
+
+```python
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "a": [1, 2],
+...     "b": [3, 4],
+... })
+>>> psdf.columns = ["a", "b"]
+...
+Reference 'a' is ambiguous, could be: a, a.;
+```
+
+另外，强烈建议不要使用区分大小写的列名。Pandas API on Spark 默认不允许它。
+但是，可以用配置项 `spark.sql.casSenstive` 在 Spark 配置中打开，但风险很大
+
+```python
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "a": [1, 2],
+...     "A": [3, 4],
+... })
+...
+Reference 'a' is ambiguous, could be: a, a.;
+```
+
+```python
+>>> from pyspark.sql. import SparkSession
+>>> builder = SparkSession.builder
+...     .appName("pandas-on-spark")
+...     .config("spark.sql.caseSensitive", "true")
+...     .getOrCreate()
+
+>>> import pyspark.pandas as ps
+>>> psdf = ps.DataFrame({
+...     "a": [1, 2],
+...     "A": [3, 4],
+... })
+>>> psdf
+   a  A
+0  1  3
+1  2  4
+```
 
 ## 在从 Saprk DataFrame 转换为 pandas-on-Spark DataFrame 时明确指定索引列名
 
-
-
+当 pandas-on-Spark Dataframe 从 Spark DataFrame 转换时，它会丢失索引信息，
+这导致在 Spark DataFrame 上使用 pandas API 中的默认索引。
+与显式指定索引列相比，默认索引通常效率低下。尽可能指定索引列
 
 ## 使用 distributed 或者 distributed-sequence 默认索引
 
+pandas-on-Spark 用户面临的一个常见问题是默认索引导致性能下降。
+当索引未知时，Pandas API on Spark 会附加一个默认索引，
+例如 Spark DataFrame 直接转换为 pandas-on-Spark DataFrame
+
+`sequence` 需要在单个分区上进行计算，不鼓励这么做，如果计划在生产环境中处理大量数据，
+建议使用 `distributed`、`distributed-sequence` 使用分布式计算
+
 ## 减少在不同 DataFrame/Seris 上的数据操作
+
+Pandas API on Spark 默认不允许对不同 DataFrame（或 Series）进行操作，
+以防止昂贵的操作。它在内部执行一个连接操作，这通常会很昂贵，这是不鼓励的。
+只要有可能，就应该避免这种操作
 
 ## 尽可能直接使用 Pandas API on Spark
 
+尽管 Pandas API on Spark 具有大部分与 pandas 等效的 API，但仍有一些 API 尚未实现或明确不受支持
+
+Spark 上的 pandas API 没有实现 `__iter__()` 阻止用户将所有数据从整个集群收集到客户端(驱动程序)端。
+不幸的是，许多外部 API，例如 Python 内置函数，例如 min、max、sum 等，都要求给定参数是可迭代的。
+对于 pandas，它开箱即用
+
+```python
+>>> import pandas as pd
+>>> max(pd.Series([1, 2, 3]))
+3
+>>> min(pd.Series([1, 2, 3]))
+1
+>>> sum(pd.Series([1, 2, 3]))
+6
+```
+
+pandas 数据集存在于单台机器中，自然可以在同一台机器内进行本地迭代。
+但是，pandas-on-Spark 数据集存在于多台机器上，并且它们是以分布式方式计算的。
+很难在本地迭代，很可能用户在不知情的情况下将整个数据收集到客户端。
+因此，最好坚持使用 pandas-on-Spark API
+
+```python
+>>> import pyspark.pandas as ps
+>>> ps.Series([1, 2, 3]).max()
+3
+>>> ps.Series([1, 2, 3]).min()
+1
+>>> ps.Series([1, 2, 3]).sum()
+6
+```
+
+pandas 用户的另一个常见模式可能是依赖列表解析式或生成器表达式。
+但是，它还假设数据集在引擎盖下是本地可迭代的。因此，它可以在 pandas 中无缝运行
+
+* pandas API
+
+```python
+>>> import pandas as pd
+>>> data = []
+>>> countries = ["London", "New York", "Helsinki"]
+>>> pser = pd.Series([20., 21., 12.], index = countries)
+for temperatures in pser:
+    assert temperature > 0
+    if temperature > 1000:
+        temperature = None
+    data.append(temperature ** 2)
+
+>>> pd.Series(data, index = countries)
+London      400.0
+New York    441.0
+Helsinki    144.0
+dtype: float64
+```
+
+* Pandas API on Spark
+
+```python
+>>> import pyspark.pandas as ps
+>>> import numpy as np
+>>> countries = ['London', 'New York', 'Helsinki']
+>>> psser = ps.Series([20., 21., 12.], index=countries)
+>>> def square(temperature) -> np.float64:
+...     assert temperature > 0
+...     if temperature > 1000:
+...         temperature = None
+...     return temperature ** 2
+...
+>>> psser.apply(square)
+London      400.0
+New York    441.0
+Helsinki    144.0
+dtype: float64
+```
+
 # 支持的 pandas API
 
+所有在 Pandas API on Spark 实现支持的 Pandas API 都通过分布式执行计算数据，
+除了那些需要设计本地执行的数据。例如，`DataFrame.to_numpy()` 需要将数据收集到驱动端
 
