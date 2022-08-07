@@ -17,8 +17,8 @@ slug: "about"
 | 年龄             | 80后                  |
 | 职业             | 算法工程师             |
 | 居住地           | 上海                   |
-| 是否常去星巴克     | 常去星巴克             |
-| 常去城市          | 平遥                  |
+| 是否常去星巴克     | 偶尔             |
+| 常去城市          | 平遥,佛山,西安,天津,黄山,无锡,太原,兖州,潍坊,青岛                |
 | 常住酒店水平       | 中低档                |
 | 使用的通信运营商    | 中国联通,4G,高流量用户 |
 | 住房情况           | 自由住房             |
@@ -30,13 +30,12 @@ slug: "about"
 | 使用银行          | 中国工商银行           |
 | 是否炒股          | 不炒                  |
 | 是否爱打扮        | 不爱打扮               |
-| 喜欢的化妆品品牌   | 欧莱雅                 |
+| 喜欢的化妆品品牌   | six god                 |
 | 看电影           | 喜欢看电影              |
 | 是否有孩子        | 否                    |
 | 孩子年龄          | 0                    |
 | 运动             | 慢跑                  |
-| 作息情况          | 早9点,晚12点           | -->
-
+| 作息情况          | 早8点,晚12点           | -->
 
 ## 写作原则
 
@@ -65,47 +64,37 @@ slug: "about"
 - Spark：了解大数据的窗口
 - Shell：可能某一天会有用
 - Markdown[^markdown]: 写文档专用
-- slidev: 炫酷吊炸天的 PPT
+- slidev: PPT
 
 ### 软件
 
-- 写作
-    
-    * Python Sphinx(vscode)
-    * Typora[^markdown]
-    * RStudio
-    * VimR
-
-- 工作
-
-    * 飞书
-    * Notion
-
-- 事件管理
-
-    * 滴答清单
-
-- 日记
-
-    * 格致
-
-- 作图
-    
-    * ProcessOn
-    * draw.io
-
+* 写作
+    - Python Sphinx(vscode)
+    - Typora[^markdown]
+    - RStudio
+    - VimR
+* 工作
+    - 飞书
+    - Notion
+* 事件管理
+    - 滴答清单
+* 日记
+    - 格致
+* 作图
+    - ProcessOn
+    - draw.io
 * PPT
-  
     - slidev
     - RStudio
   
-
 ### 书籍
 
+* 《中国思想史》
 * 《简明世界历史读本》
 * 《女士品茶》
 * 《贝叶斯博弈》
 * 《随机漫步的傻瓜》
+* 《哲学的故事》
 
 ### 纪录片
 
@@ -119,7 +108,7 @@ slug: "about"
 > - 江头未是风波恶，别有人间行路难！-- 《鹧鸪天·送人》【辛弃疾】
 > - 此曲只应天上有，人间能得几回闻。 -- 《赠花卿》【杜甫】
 
-### 节目
+### 电视
 
 - 《十三邀》
     - 许知远是当代知识分子的灯塔！
@@ -149,6 +138,7 @@ slug: "about"
 
 - 坂本龙一
 - 胡波涛
+- 徐鲤
 - 关大洲
 - 周杰伦
 
@@ -165,14 +155,8 @@ slug: "about"
 
 ## 养过的猫
 
-<p>
-    <center>
-        Tomster
-    </center>
-</p>
-
 <img src="/images/tomster1.jpeg" width=50% height="250px" />
-
+<p><center>Tomster</center></p>
 
 <!-- 
 <img src="/images/tomster2.jpeg" width=49% height="270px" />

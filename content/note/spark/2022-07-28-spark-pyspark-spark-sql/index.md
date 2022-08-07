@@ -2,7 +2,7 @@
 title: PySpark Spark SQL
 subtitle: Apache Arrow in PySpark
 author: 王哲峰
-date: '2022-08-01'
+date: '2022-07-28'
 slug: spark-pyspark-spark-sql
 categories:
   - spark
