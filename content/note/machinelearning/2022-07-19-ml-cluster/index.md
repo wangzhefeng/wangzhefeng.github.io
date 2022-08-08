@@ -1,12 +1,13 @@
 ---
-title: cluster
+title: Cluster
 author: 王哲峰
 date: '2022-07-19'
-slug: cluster
+slug: ml-cluster
 categories:
   - machinelearning
 tags:
   - model
+  - ml
 ---
 
 <style>
