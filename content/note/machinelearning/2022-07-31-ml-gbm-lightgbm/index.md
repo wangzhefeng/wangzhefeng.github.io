@@ -61,14 +61,14 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [LightGBM 资源](#lightgbm-资源)
-- [LightGBM 简介](#lightgbm-简介)
+- [LightGBM 模型理论](#lightgbm-模型理论)
   - [LightGBM 特点](#lightgbm-特点)
   - [LightGBM vs XGBoost](#lightgbm-vs-xgboost)
-- [LightGBM 模型理论](#lightgbm-模型理论)
   - [LightGBM 性能优化原理](#lightgbm-性能优化原理)
-  - [LightGBM Histogram 算法](#lightgbm-histogram-算法)
-  - [GOSS 算法](#goss-算法)
-  - [EFB 算法](#efb-算法)
+    - [LightGBM 优化策略](#lightgbm-优化策略)
+    - [Histogram 算法](#histogram-算法)
+    - [GOSS 算法](#goss-算法)
+    - [EFB 算法](#efb-算法)
 - [LightGBM 安装](#lightgbm-安装)
   - [CLI(Command Line Interface) 安装](#clicommand-line-interface-安装)
     - [Homebrew](#homebrew)
@@ -112,7 +112,7 @@ details[open] summary {
 - [Doc](https://lightgbm.readthedocs.io/en/latest/>)
 - [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
 
-# LightGBM 简介
+# LightGBM 模型理论
 
 ## LightGBM 特点
 
@@ -127,7 +127,7 @@ It is designed to be distributed and efficient with the following advantages:
 
 ## LightGBM vs XGBoost
 
-LightGBM 可以看成是 XGBoost 的升级加强版本
+LightGBM 可以看成是 XGBoost 的升级加强版本:
 
 * 模型精度
     - XGBoost 和 LightGBM 相当
@@ -141,9 +141,9 @@ LightGBM 可以看成是 XGBoost 的升级加强版本
     - XGBoost 不支持类别特征，需要 OneHot 编码预处理
     - LightGBM 直接支持类别特征
 
-# LightGBM 模型理论
+LightGBM 和 XGBoost 的关系可以用一个简单公式来说明:
 
-## LightGBM 性能优化原理
+`$$LightGBM = XGBoost + Histogram + GOSS + EFB$$`
 
 LightGBM 在 XGBoost 上主要有三方面的优化:
 
@@ -152,17 +152,83 @@ LightGBM 在 XGBoost 上主要有三方面的优化:
 3. EFB 算法: 互斥特征捆绑算法
 
 
+## LightGBM 性能优化原理
 
+### LightGBM 优化策略
 
-## LightGBM Histogram 算法
+由于 XGBoost 采用的基模型是二叉树，因此生产每片叶子需要分裂一次。
+而每次分裂，都要遍历素有特征上所有候选分裂点位，
+计算按照这些候选分裂点分裂后的全部样本的目标函数增益，
+找到最大的那个增益赌赢的特征和候选分裂点位，从而生产一片新叶子
 
+* XGBoost 模型训练的总体的复杂度可以粗略估计为:
 
-## GOSS 算法
+`$$训练复杂度 = 树的棵树 \times 每棵树上叶子的数量 \times 生成每片叶子的复杂度$$`
 
+* 生成一片叶子的复杂度可以粗略估计为:
 
-## EFB 算法
+`$$生成一片叶子的复杂度 = 特征数量 \times 候选分裂点数量 \times 样本的数量$$`
 
+LightGBM 使用的 Histogram 算法的主要作用就是减少候选分裂点数量，
+GOSS 算法的作用是减少样本的数量，EFB 算法的作用是减少特征的数量。
+通过引入这三个算法，LightGBM 生成的一片叶子需要的复杂度大大降低，
+从而极大节约了时间。同时，Histogram 算法还将特征由浮点数转换为 0~255 位的整数进行存储，
+从而极大节了内存存储
 
+### Histogram 算法
+
+Histogram 算法是替代 XGBoost 的预排序(Pre-sorted)算法的:
+
+* 预排序算法
+    - 首先，将样本按照特征取值排序
+    - 然后，从全部特征取值中找到最优的分裂点位，该算法的候选分裂点数量与样本数量成正比
+
+![img](images/pre_sorted.jpg)
+
+* Histogram 算法
+    - 通过将连续特征值离散化到固定数量(如 255 个)的 bins 上，
+      使得候选点位为常数个(num_bin - 1)
+    - 此外，Histogram 算法还能够作直方图差加速。
+      当节点分裂成两个时，右边叶子节点的直方图等于其父节点的直方图减去左边叶子节点的直方图，
+      从而大大减少构建直方图的计算量
+
+![img](images/histogram.jpg)
+![img](images/histogram_speed.jpg)
+
+### GOSS 算法
+
+GOSS 算法，Gradient-based One-Side Sampling，基于梯度的单边采样算法
+
+* 主要思想
+    - 通过对样本采样的方法来减少计算目标函数增益时候的复杂度。
+      但如果对全部样本进行随机采样，势必会对目标函数增益的计算精度造成较大的影响
+* GOSS 算法的创新之处
+    - 只对梯度绝对值较小的样本按照一定比例进行采样，
+      而保留了梯度绝对值较大的样本，这就是所谓的单边采样。
+      由于目标函数增益主要来自梯度绝对值较大的样本，
+      因此这种方法在计算性能和计算精度之间取得了很好的平衡
+
+![img](images/goss.jpg)
+
+### EFB 算法
+
+EFB 算法，Exclusive Feature Bunding，互斥特征绑定算法
+
+EFB 算法可以有效减少用于构建直方图的特征数量，从而降低计算复杂度，
+尤其是特征中包含大量稀疏特征的时候。
+在许多应用场景下，数据集中会有大量的稀疏特征，这些稀疏特征大部分样本都取值为 0，
+只有少数样本取值非 0。
+通常可以认为这些稀疏特征是互斥的，即它们几乎不会同时取非零值
+
+利用这种特性，可以通过对某些特征的取值重新编码，
+将多个这样互斥的特征捆绑称为一个新的特征。
+有趣的是，对于类别特征，如果转换成 one-hot 编码，
+则这些 one-hot 编码后的多个特征相互之间是互斥的，
+从而可以被捆绑成为一个特征。因此，对于指定为类别特征的特征，
+LightGBM 可以直接将每个类别取值和一个 bin 关联，从而自动地处理它们，
+而无需预处理成 one-hot 编码
+
+![img](images/efb.jpg)
 
 # LightGBM 安装
 
@@ -681,3 +747,6 @@ create_tree_digraph(booster, tree_index, ...)
 
 ## 示例 2
 
+```python
+
+```
