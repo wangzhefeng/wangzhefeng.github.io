@@ -59,7 +59,8 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [XGBoost 模型特点](#xgboost-模型特点)
+- [XGBoost 资源](#xgboost-资源)
+- [XGBoost 简介](#xgboost-简介)
   - [XGBoost 特点](#xgboost-特点)
   - [XGBoost 优势](#xgboost-优势)
   - [XGBoost 缺点(LightGBM 的出发点)](#xgboost-缺点lightgbm-的出发点)
@@ -95,8 +96,16 @@ details[open] summary {
   - [参数调优步骤](#参数调优步骤)
 </p></details><p></p>
 
+# XGBoost 资源
 
-# XGBoost 模型特点
+- [原始算法论文]()
+- [GitHub-Python-Package])
+- [GitHub-R-Package]()
+- [GitHub-Microsoft]()
+- [Doc]()
+- [Python 示例]()
+
+# XGBoost 简介
 
 ## XGBoost 特点
 

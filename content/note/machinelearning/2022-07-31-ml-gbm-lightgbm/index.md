@@ -60,8 +60,15 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [LightGBM 特点](#lightgbm-特点)
 - [LightGBM 资源](#lightgbm-资源)
+- [LightGBM 简介](#lightgbm-简介)
+  - [LightGBM 特点](#lightgbm-特点)
+  - [LightGBM vs XGBoost](#lightgbm-vs-xgboost)
+- [LightGBM 模型理论](#lightgbm-模型理论)
+  - [LightGBM 性能优化原理](#lightgbm-性能优化原理)
+  - [LightGBM Histogram 算法](#lightgbm-histogram-算法)
+  - [GOSS 算法](#goss-算法)
+  - [EFB 算法](#efb-算法)
 - [LightGBM 安装](#lightgbm-安装)
   - [CLI(Command Line Interface) 安装](#clicommand-line-interface-安装)
     - [Homebrew](#homebrew)
@@ -96,8 +103,18 @@ details[open] summary {
   - [示例 2](#示例-2)
 </p></details><p></p>
 
+# LightGBM 资源
 
-# LightGBM 特点
+- [原始算法论文](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf>)
+- [GitHub-Python-Package](https://github.com/Microsoft/LightGBM/tree/master/python-package>)
+- [GitHub-R-Package](https://github.com/Microsoft/LightGBM/tree/master/R-package>)
+- [GitHub-Microsoft](https://github.com/Microsoft/LightGBM>)
+- [Doc](https://lightgbm.readthedocs.io/en/latest/>)
+- [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
+
+# LightGBM 简介
+
+## LightGBM 特点
 
 LightGBM is a gradient boosting framework that uses tree based learning algorithms. 
 It is designed to be distributed and efficient with the following advantages:
@@ -108,14 +125,44 @@ It is designed to be distributed and efficient with the following advantages:
 - Support of parallel and GPU learning.
 - Capable of handling large-scale data.
 
-# LightGBM 资源
+## LightGBM vs XGBoost
 
-- [原始算法论文](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf>)
-- [GitHub-Python-Package](https://github.com/Microsoft/LightGBM/tree/master/python-package>)
-- [GitHub-R-Package](https://github.com/Microsoft/LightGBM/tree/master/R-package>)
-- [GitHub-Microsoft](https://github.com/Microsoft/LightGBM>)
-- [Doc](https://lightgbm.readthedocs.io/en/latest/>)
-- [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
+LightGBM 可以看成是 XGBoost 的升级加强版本
+
+* 模型精度
+    - XGBoost 和 LightGBM 相当
+* 训练速度
+    - LightGBM 远快于 XGBoost
+* 内存消耗
+    - LightGBM 远小于 XGBoost
+* 缺失值特征
+    - XGBoost 和 LightGBM 都可以自动处理特征缺失值
+* 类别特征
+    - XGBoost 不支持类别特征，需要 OneHot 编码预处理
+    - LightGBM 直接支持类别特征
+
+# LightGBM 模型理论
+
+## LightGBM 性能优化原理
+
+LightGBM 在 XGBoost 上主要有三方面的优化:
+
+1. Histogram 算法: 直方图算法
+2. GOSS 算法: 基于梯度的单边采样算法
+3. EFB 算法: 互斥特征捆绑算法
+
+
+
+
+## LightGBM Histogram 算法
+
+
+## GOSS 算法
+
+
+## EFB 算法
+
+
 
 # LightGBM 安装
 
