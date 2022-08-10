@@ -1,5 +1,5 @@
 ---
-title: 朴素贝叶斯(Navie Bayes)
+title: Navie Bayes
 author: 王哲峰
 date: '2022-08-08'
 slug: ml-navie-bayes
