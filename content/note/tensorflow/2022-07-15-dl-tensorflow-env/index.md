@@ -153,7 +153,7 @@ $ docker run -it -p 8888:8888 tensorflow/tensorflow:latest-py3-jupyter
 - 也可以使用 ``conda install tensorflow`` 或者 ``conda install tensorflow-gpu`` 命令安装 TensorFlow，
   不过 conda 源的版本往往更新较慢，难以在第一时间获得最新的 TensorFlow 版本
 - 从 TensorFlow 2.1 开始，pip 包 tensorflow 同时包含 GPU 支持，无须通过特定的 pip 包 tensorflow-gpu 安装 GPU 版本。
-  如果对 pip 包的大小敏感，可使用 tensorflow-cpu 包安装仅支持 CPU 的 Tensorflow 版本
+  如果对 pip 包的大小敏感，可使用 tensorflow-cpu 包安装仅支持 CPU 的 TensorFlow 版本
 - 在 Windows 系统下，需要打开 “开始” 菜单中的 “Anaconda Prompt” 进入 Anaonda 的命令行环境
 
 

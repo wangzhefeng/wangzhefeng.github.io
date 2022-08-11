@@ -255,13 +255,13 @@ details[open] summary {
    5. Python
       
       - Scikit-learn
-      - Tensorflow
+      - TensorFlow
       - keras
       - pytorch
       - YOLOv5
       - deeplearning 部署框架
          
-         - Tensorflow Lite
+         - TensorFlow Lite
          - NCNN
          - MNN
          - TensorRT

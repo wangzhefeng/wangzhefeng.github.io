@@ -1,5 +1,5 @@
 ---
-title: Tensorflow Serving
+title: TensorFlow Serving
 author: 王哲峰
 date: '2022-08-12'
 slug: dl-tensorflow-serving

@@ -33,8 +33,8 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [需要掌握的内容](#需要掌握的内容)
-  - [Tensorflow 新手](#tensorflow-新手)
-  - [Tensorflow 专家](#tensorflow-专家)
+  - [TensorFlow 新手](#tensorflow-新手)
+  - [TensorFlow 专家](#tensorflow-专家)
   - [TensorFlow 库和扩展程序](#tensorflow-库和扩展程序)
 - [TODO](#todo)
   - [多输入模型](#多输入模型)
@@ -52,13 +52,13 @@ details[open] summary {
 
 # 需要掌握的内容
 
-## Tensorflow 新手
+## TensorFlow 新手
 
 * [x] 快速入门
 * [ ] Keras 机器学习基础知识
 * [ ] 加载和预处理数据
 
-## Tensorflow 专家
+## TensorFlow 专家
 
 * [x] 快速入门
 * [ ] 自定义层、训练循环

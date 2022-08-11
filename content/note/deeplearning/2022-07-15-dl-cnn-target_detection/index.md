@@ -44,7 +44,7 @@ R-CNN 作为将深度学习引入目标检测算法的开山之作, 在目标检
 
 
 - 论文:Rich feature hierarchies for accurate object detection and semantic segmentation
-- R-CNN Tensorflow实现参考: https://github.com/yangxue0827/RCNN
+- R-CNN TensorFlow实现参考: https://github.com/yangxue0827/RCNN
 
 ### SPP-Net
 
@@ -60,7 +60,7 @@ SPP-Net 的缺点在于经过空间金字塔层的处理后, 虽然 CNN
 的输入尺寸一致了, 但候选框的感受野因而也变得很大, 使得卷积神经网络在训练时无法有效更新模型权重。
 
 - 论文:Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition
-- SPP-Net Tensorflow 实现参考: https://github.com/chengjunwen/spp_net
+- SPP-Net TensorFlow 实现参考: https://github.com/chengjunwen/spp_net
 
 ### Fast-CNN
 
@@ -101,7 +101,7 @@ yolo 算法系列的主要思想就是直接从输入图像得到目标物体的
 ### SSD
 
 - 论文:SSD: Single Shot MultiBox Detector
-- SSD Tensorflow 源码参考:https://github.com/balancap/SSD-Tensorflow
+- SSD TensorFlow 源码参考:https://github.com/balancap/SSD-TensorFlow
 
 ### yolo v2/yolo9000
 

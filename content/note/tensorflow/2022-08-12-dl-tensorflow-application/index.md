@@ -1,5 +1,5 @@
 ---
-title: TensorAlow Application
+title: TensorFlow Application
 author: 王哲峰
 date: '2022-08-12'
 slug: dl-tensorflow-application

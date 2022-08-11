@@ -1,5 +1,5 @@
 ---
-title: Tensorflow 数据集
+title: TensorFlow 数据集
 author: 王哲峰
 date: '2022-08-12'
 slug: dl-tensorflow-dataset
@@ -156,7 +156,7 @@ for image, label in mnist_dataset.take(1):
     plt.show()
 ```
 
-3. TensorFlow Datasets 提供了一系列可以和 Tensorflow 配合使用的数据集, 
+3. TensorFlow Datasets 提供了一系列可以和 TensorFlow 配合使用的数据集, 
    它负责下载和准备数据, 以及构建 `tf.data.Dataset`
 
 - 每一个数据集(dataset) 都实现了抽象基类 tfds.core.DatasetBuilder 来构建
@@ -185,7 +185,7 @@ for example in dataset1.take(1):
 
 # TensorFlow 内置 Dataset
 
-- TensorFlow Datasets 提供了一系列可以和 Tensorflow 配合使用的数据集, 它负责下载和准备数据, 以及构建 `tf.data.Dataset`
+- TensorFlow Datasets 提供了一系列可以和 TensorFlow 配合使用的数据集, 它负责下载和准备数据, 以及构建 `tf.data.Dataset`
 - 每一个数据集(dataset) 都实现了抽象基类 tfds.core.DatasetBuilder 来构建
 
 - 官方文档
