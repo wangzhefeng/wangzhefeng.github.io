@@ -1,7 +1,7 @@
 ---
 title: TensorFlow 模型构建
 author: 王哲峰
-date: '2022-08-12'
+date: '2022-07-15'
 slug: dl-tensorflow-model-building
 categories:
   - deeplearning
