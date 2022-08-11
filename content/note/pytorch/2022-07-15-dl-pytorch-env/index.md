@@ -5,6 +5,7 @@ date: '2022-07-15'
 slug: dl-pytorch-env
 categories:
   - deeplearning
+  - pytorch
 tags:
   - tool
 ---
