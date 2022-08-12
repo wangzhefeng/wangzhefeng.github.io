@@ -11,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -63,14 +36,17 @@ details[open] summary {
 - [XGBoost 简介](#xgboost-简介)
   - [XGBoost 特点](#xgboost-特点)
   - [XGBoost 优势](#xgboost-优势)
-  - [XGBoost 缺点(LightGBM 的出发点)](#xgboost-缺点lightgbm-的出发点)
+  - [XGBoost 缺点](#xgboost-缺点)
 - [XGBoost 模型理论](#xgboost-模型理论)
   - [模型目标函数](#模型目标函数)
   - [模型目标](#模型目标)
-  - [模型损失函数定义](#模型损失函数定义)
-  - [模型正则项定义](#模型正则项定义)
+  - [模型损失函数](#模型损失函数)
+  - [模型正则项](#模型正则项)
   - [模型目标函数求解](#模型目标函数求解)
+  - [树节点分裂策略](#树节点分裂策略)
   - [模型中决策树节点分裂算法](#模型中决策树节点分裂算法)
+    - [贪心算法(Exact Greedy Algorithm for split finding)](#贪心算法exact-greedy-algorithm-for-split-finding)
+    - [近似算法(Approximate Algorithm for split finding)](#近似算法approximate-algorithm-for-split-finding)
   - [自定义损失函数](#自定义损失函数)
 - [XGBoost 使用](#xgboost-使用)
   - [下载安装 xgboost 库](#下载安装-xgboost-库)
@@ -80,6 +56,8 @@ details[open] summary {
   - [导入 xgboost 库](#导入-xgboost-库)
   - [数据接口](#数据接口)
   - [参数设置](#参数设置)
+    - [通用参数](#通用参数)
+  - [任务参数](#任务参数)
   - [模型训练](#模型训练)
   - [模型预测](#模型预测)
   - [模型结果可视化](#模型结果可视化)
@@ -99,7 +77,7 @@ details[open] summary {
 # XGBoost 资源
 
 - [原始算法论文]()
-- [GitHub-Python-Package])
+- [GitHub-Python-Package]()
 - [GitHub-R-Package]()
 - [GitHub-Microsoft]()
 - [Doc]()
@@ -109,20 +87,24 @@ details[open] summary {
 
 ## XGBoost 特点
 
-- 弱学习器
-   - 传统的 GBDT 以 CART 作为基函数(base learner,b ase classifier, base
-      function), 而 XGBoost 除了可以使用 CART, 还支持线性分类器 (linear
-      classifier, linear regression, logistic regression)
-   - 基于预排序(pre_sorted)方法构建决策树
-      - 优点: 精确地找到分割点
-      - 缺点: 内存消耗大, 时间消耗大, 对cache优化不友好
-      - 首先, 对所有特征都按照特征的数值进行排序；
-      - 其次, 在遍历分割点的时候用O(#data)的代价找到一个特征上的最好分割点；
-      - 最后找到一个特征的分割点后, 将数据分裂成左右子节点；
-- 梯度
-   - 传统的 GBDT 在优化时只用到一阶导数信息(负梯度), XGBoost
-      则对代价函数进行了二阶泰勒展开, 同时用到一阶和二阶导数. 且 XGBoost
-      工具支持自定义代价函数, 只要函数可一阶和二阶求导
+弱学习器:
+
+* 传统的 GBDT 以 CART 作为基函数(base learner, base classifier, base function), 
+  而 XGBoost 除了可以使用 CART, 还支持线性分类器 (linear classifier, linear regression, logistic regression)
+* 基于预排序(pre-sorted)方法构建决策树
+    - 算法基本原理
+        - 首先, 对所有特征都按照特征的数值进行排序
+        - 其次, 在遍历分割点的时候用 `$O(\#data)$` 的代价找到一个特征上的最好分割点
+        - 最后, 找到一个特征的分割点后, 将数据分裂成左右子节点
+    - 优缺点
+        - 优点: 精确地找到分割点
+        - 缺点: 内存消耗大, 时间消耗大, 对 cache 优化不友好
+
+梯度:
+
+* 传统的 GBDT 在优化时只用到一阶导数信息(负梯度), 
+  XGBoost 则对损失函数进行了二阶泰勒展开, 同时用到一阶和二阶导数. 
+* 且 XGBoost 支持自定义损失函数, 只要函数可一阶和二阶求导
 
 ## XGBoost 优势
 
@@ -137,19 +119,30 @@ details[open] summary {
 - 可扩展性强
 - 为稀疏数据设计的决策树训练方法
 - 理论上得到验证的加权分位数粗略图法
-- 分布式计算
+- 并行和分布式计算
 - 设计高效核外计算, 进行 cache-aware 数据块处理
 
-## XGBoost 缺点(LightGBM 的出发点)
+## XGBoost 缺点
 
-- 每轮迭代时, 都需要遍历整个训练数据多次. 如果把整个训练数据装进内存则会限制训练数据的大小；
-  如果不装进内存, 反复地读写训练数据又会消耗非常大的时间
-- 预排序方法(pre-sorted): 首先, 空间消耗大. 这样的算法需要保存数据的特征值, 
-  还保存了特征排序的结果(例如排序后的索引, 为了后续快速的计算分割点), 这里需要消耗训练数据两倍的内存. 其次时间上也有较大的开销, 在遍历每一个分割点的时候, 都需要进行分裂增益的计算, 消耗的代价大
-- 对 cache 优化不友好. 在预排序后, 特征对梯度的访问是一种随机访问, 
-  并且不同的特征访问的顺序不一样, 无法对 cache 进行优化. 同时, 在每一层长树的时候, 
-  需要随机访问一个行索引到叶子索引的数组, 并且不同特征访问的顺序也不一样, 
-  也会造成较大的 cache miss
+> XGBoost 的缺点也是LightGBM 的出发点
+
+每轮迭代时, 都需要遍历整个训练数据集多次:
+
+* 如果把整个训练数据装进内存则会限制训练数据的大小
+* 如果不装进内存, 反复地读写训练数据又会消耗非常大的时间
+
+预排序方法(pre-sorted): 
+
+* 首先, 空间消耗大. 这样的算法需要保存数据的特征值, 
+  还保存了特征排序的结果(例如排序后的索引, 为了后续快速地计算分割点), 
+  这里需要消耗训练数据两倍的内存 
+* 其次时间上也有较大的开销, 在遍历每一个分割点的时候, 都需要进行分裂增益的计算, 消耗的代价大
+
+对 cache 优化不友好:
+
+* 在预排序后, 特征对梯度的访问是一种随机访问, 并且不同的特征访问的顺序不一样, 
+  无法对 cache 进行优化. 同时, 在每一层长树的时候, 需要随机访问一个行索引到叶子索引的数组, 
+  并且不同特征访问的顺序也不一样, 也会造成较大的 cache miss
 
 # XGBoost 模型理论
 
@@ -159,156 +152,260 @@ details[open] summary {
 
 其中: 
 
-- `$L(\cdot)$` : 目标函数；
+- `$L(\cdot)$` : 目标函数
 - `$l(\cdot)$` : 经验损失(误差)函数, 通常是凸函数. 
-  用于刻画预测值`$\hat{y_i}$` 和真实值`$y_i$` 之间的差异, 即模型对训练数据的拟合程度
-- `$\Omega(\cdot)$` : 模型的正则项. 用于降低模型的复杂度, 减轻过拟合问题
+  用于刻画预测值 `$\hat{y_i}$` 和真实值 `$y_i$` 之间的差异, 即模型对训练数据的拟合程度
+- `$\Omega(\cdot)$` : 模型的正则化项. 用于降低模型的复杂度, 减轻过拟合
    - 决策树的叶子节点数量
    - 决策树的树深度
-   - 决策树的叶节点权重得分的L1, L2正则
-- `$f_k$` : 第 `$k$` 棵树
-- `$y_i$` : 目标变量
-- `$\hat{y_i}=\sum_{k=1}^{K}f_k(x_i), f_k \in F$`
+   - 决策树的叶节点权重得分的 L1, L2 正则
+- `$y_i$` : 第 `$i$` 个样本的目标变量，即样本的真实观测值
+- `$\hat{y_i}=\sum_{k=1}^{K}f_k(x_i), f_k \in F$`, 第 `$i$` 个样本的模型输出预测值:
    - 回归: 预测得分
    - 分类: 预测概率
    - 排序: 排序得分
+- `$f_k$` : 第 `$k$` 棵树
+- `$n$`: 样本数量
+- `$K$`: 树的数量
 
 ## 模型目标
 
-`$$\min L(\phi)$$`
+找到一组树，使得 `$L(\phi)$` 最小:
 
-## 模型损失函数定义
+`$$\min L(\phi) = \min \bigg[\sum_{i=1}^{n} l(y_i, \hat{y_i}) + \sum_{k=1}^{K} \Omega(f_k)\bigg]$$`
 
-根据 Gradient Boosting 思想, 假设第 `$t$` 轮迭代的目标函数: 
+这个模型目标函数是由经验(样本)损失和模型复杂度惩罚项(正则项)组成
 
-`$$L^{(t)} = \sum_{i=1}^{n} l \bigg(y_i, \hat{y_i}^{(t-1)} + f_t(x_i) \bigg) + \Omega(f_t) + constant$$`
+## 模型损失函数
+
+Additive Training Boosting 核心思想是，在已经训练好了 `$t-1$` 棵树后不再调整前 `$t-1$` 棵树，
+即第 `$t$` 轮迭代的目标函数不对前 `$t-1$` 轮迭代的结果进行修改，
+那么根据 GBM(Gradient Boosting Modeling) 思想, 假设第 `$t$` 棵树可以表示为: 
+
+`$$\hat{y}_{i}^{(t)}=\sum_{k=1}^{t}f_{k}(x_{i})=\hat{y}_{i}^{(t-1)}+f_{t}(x_{i})$$`
+
+那么，可以假设第 `$t$` 轮迭代的目标函数为: 
+
+`$$\eqalign{
+& {\tilde L}^{(t)} 
+= \sum_{i=1}^{n} l(y_i, \hat{y_i}) + \sum_{k=1}^{K} \Omega(f_k) \cr
+& \;\;\;\;\;{\rm{ 
+= }} \sum_{i=1}^{n} l \bigg(y_i, \hat{y_i}^{(t-1)} + f_t(x_i) \bigg) + \Omega(f_t) + \sum_{i=1}^{t-1}\Omega(f_{i}) \cr
+} $$`
+
+其中:
+
+* `$\sum_{i=1}^{t-1}\Omega(f_{i})$`: 这部分在前 `$t-1$` 棵树已知的情况下为常数
 
 对目标函数 `$L^{(t)}$` 在 `$\hat{y_i}^{(t-1)}$`
 处进行二阶泰勒展开, 可以加速优化过程, 得到目标函数的近似: 
 
-`$$L^{(t)} \simeq \sum_{i=1}^{n} [l(y_i, \hat{y_i}^{(t-1)}) + g_i f_t (x_i) + \frac{1}{2} h_i f_t^2 (x_i)]+ \Omega(f_t) + constant$$`
+`$$L^{(t)} \simeq \sum_{i=1}^{n} \bigg[l(y_i, \hat{y_i}^{(t-1)}) + g_i f_t (x_i) + \frac{1}{2} h_i f_t^2 (x_i)\bigg]+ \Omega(f_t) + constant$$`
 
-- 函数 `$f(x)$` 在 `$x_0$` 处的二阶泰勒展开式: 
+具体推导过程如下:
 
-`$$f(x) = f(x_0) + f' (x_0)(x - x_0) + f''(x_0)(x - x_0)^2$$`
+> > 函数 `$f(x)$` 在 `$x_0$` 处的二阶泰勒展开式: 
+> > 
+> > `$$f(x) = f(x_0) + f' (x_0)(x - x_0) + f''(x_0)(x - x_0)^2$$`
+> 
+> 目标函数 `$l(y_i, x)$` 在 `$\hat{y_i}^{(t-1)}$` 处的二阶泰勒展开式: 
+> 
+> `$$l(y_i, x) = l(y_i, \hat{y_i}^{(t - 1)}) + \frac{\partial l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}} (x - \hat{y_i}^{(t - 1)}) + \frac{1}{2} \frac{{\partial ^{2}} l(y_i, \hat{y_i}^{(t - 1)}) } {\partial \hat{y_i}^{(t - 1)}} (x - \hat{y_i}^{(t - 1)})^2$$`
+> 
+> 令 `$x= \hat{y_i}^{(t-1)} + f_t (x_i)$`, 
+> 
+> 记一阶导数为
+> 
+> `$$g_i = \frac{\partial l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}}$$`
+> 
+> 记二阶导数为
+> 
+> `$$h_i = \frac{{\partial ^{2}} l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}}$$` 
+> 
+> 可以得到
+> 
+> `$$l(y_i, \hat{y}^{(t-1)} + f_t(x_i)) = l(y_i, \hat{y}^{(t - 1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2 (x_i)$$`
 
-- 目标函数 `$l(y_i, x)$` 在 `$\hat{y_i}^{(t-1)}$`
-  处的二阶泰勒展开式: 
+上面的目标函数 `$L^{(t)}$` 中, 由于前 `$t-1$` 棵树已知，则第一项 `$l(y_i, \hat{y_i}^{(t-1)})$` 也为常数项，
+以及 `$constant$` 为常数项, 在优化问题中可直接删除，因此模型损失函数为:
 
-`$$l(y_i, x) = l(y_i, \hat{y_i}^{(t - 1)}) + \frac{\partial l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}} (x - \hat{y_i}^{(t - 1)}) + \frac{1}{2} \frac{{\partial ^{2}} l(y_i, \hat{y_i}^{(t - 1)}) } {\partial \hat{y_i}^{(t - 1)}} (x - \hat{y_i}^{(t - 1)})^2$$`
+`$${\tilde L}^{(t)} = \sum_{i=1}^{n} \bigg[g_{i}f_{t}(x_i) + \frac{1}{2}h_{i}f_{t}^{2}(x_i) \bigg]  + \Omega (f_t)$$`
 
-- 令 `$x= \hat{y_i}^{(t-1)} + f_t (x_i)$`, 记一阶导数为
+## 模型正则项
 
-`$$g_i = \frac{\partial l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}}$$` , 
+假设待训练的第 `$t$` 棵树有 `$T$` 个叶子节点，叶子节点的输出向量(叶子节点权重得分向量)表示为:
 
-记二阶导数为
+`$$[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]$$`
 
-`$$h_i = \frac{{\partial ^{2}} l(y_i, \hat{y_i}^{(t - 1)})}{\partial \hat{y_i}^{(t - 1)}}$$` ；
+假设样本 `$x \in R^{d}$` 到叶子节点的索引值 `$\{1, 2, \ldots, T\}$` 的映射表示为:
 
-可以得到
+`$$q(x): R^d \rightarrow \{1, 2, \ldots, T\}$$`
 
-`$$l(y_i, \hat{y}^{(t-1)} + f_t(x_i)) = l(y_i, \hat{y}^{(t - 1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2 (x_i)$$`
+通过叶子节点的权重得分和叶子节点的索引值(树结构)定义第 `$t$` 棵树:
 
-上面的目标函数 `$L^{(t)}$` 中, 第一项 `$l(y_i, \hat{y_i}^{(t-1)})$` 以及 `$constant$` 为常数项, 
-在优化问题中可直接删除: 
-
-`$${\tilde L}^{(t)} = \sum_{i=1}^{n} [g_{i}f_{t}(x_i) + \frac{1}{2}h_{i}f_{t}^{2}(x_i)]  + \Omega (f_t)$$`
-
-## 模型正则项定义
-
-通过 `叶子节点的权重得分` 和 `叶子节点的索引值(结构)` 定义一棵树: 
-
-`$$f_t(x) = \omega_{q(x)}, \omega \in R^T, q: R^d \rightarrow \{1, 2, \ldots, T\}$$`
+`$$f_t(x) = \omega_{q(x)}, \omega \in R^{T}, q(x): R^d \rightarrow \{1, 2, \ldots, T\}$$`
 
 其中: 
 
 - `$\omega$`: 叶子节点权重得分向量
-
-- `$q(\cdot)$`: 树结构
+- `$q(\cdot)$`: 叶子节点的索引值，树结构
+- `$T$`: 叶节点数量
+- `$x$`: 样本向量
+- `$d$`: 样本特征数量
+- `$t$`: 模型的迭代轮数，构建的第 `$t$` 棵树
 
 定义正则项(可以使其他形式): 
 
-`$\Omega(f_t)=\gamma T + \frac{1}{2}\lambda\sum_{j=1}^{T}\omega_j^2$`
+`$$\Omega(f_t)=\gamma T + \frac{1}{2}\lambda\sum_{j=1}^{T}\omega_j^2$$`
 
 其中: 
 
-- `$T$` 是 叶节点的个数
-
-- `$\omega_j^2$` 是叶子节点权重得分的L2范数
+- `$T$`: 叶节点数量
+- `$\omega_j^2$`: 叶子节点权重得分向量的 L2 范数
+- `$\gamma$`: 叶节点数量的正则化参数 
+- `$\lambda$`: 叶子节点权重得分向量的正则化参数
 
 记决策树每个叶节点上的样本集合为: 
 
-`${I_j} = \{ {i | q(x_i) = j} \}$`
+`$${I_j} = \{ {i | q(x_i) = j} \}$$`
 
 将正则项 `$\Omega(f_t)$` 展开: 
 
-`$\eqalign{
+`$$\eqalign{
 & {\tilde L}^{(t)} 
-= \sum_{i=1}^{n}[g_i f_t(x_i) + \frac{1}{2}h_i f_{t}^{2}(X_I)] + \Omega(f_t) \cr 
+= \sum_{i=1}^{n} \bigg[g_i f_t(x_i) + \frac{1}{2}h_i f_{t}^{2}(X_I)\bigg] + \Omega(f_t) \cr 
 & \;\;\;\;\;{\rm{ 
-= }} \sum_{i=1}^{n}[g_i \omega_{q(x_i)} + \frac{1}{2} h_i \omega_{q(x_i)}^{2}] + \gamma T + \frac{1}{2} \lambda \sum_{j = 1}^{T} w_j^2   \cr 
+= }} \sum_{i=1}^{n} \bigg[g_i \omega_{q(x_i)} + \frac{1}{2} h_i \omega_{q(x_i)}^{2} \bigg] + \gamma T + \frac{1}{2} \lambda \sum_{j = 1}^{T} w_j^2 \cr 
 & \;\;\;\;\;{\rm{ 
-= }} \sum_{j = 1}^{T}[(\sum_{i \in I_j} g_i ) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 ]  + \gamma T \cr}$`
+= }} \sum_{j = 1}^{T} \bigg[(\sum_{i \in I_j} g_i ) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
+}$$`
 
 记 `$G_j=\sum_{i\in I_j}g_i$` ,  `$H_j=\sum_{i\in I_j}h_i$`
 
-`$\eqalign{
-& {\tilde L}^(t) 
-= \sum{j = 1}^{T} [(\sum_{i \in {I_j}} g_i) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 ]  + \gamma T \cr
+`$$\eqalign{
+& {\tilde L}^{(t)} 
+= \sum_{j = 1}^{T} \bigg[(\sum_{i \in {I_j}} g_i) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
 & \;\;\;\;\;{\rm{ 
-= }} \sum_{j = 1}^{T} [G_j w_j + \frac{1}{2} (H_j  + \lambda ) w_j^2 ]  + \gamma T \cr
-}$`
+= }} \sum_{j = 1}^{T} \bigg[G_j w_j + \frac{1}{2} (H_j  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
+}$$`
 
 ## 模型目标函数求解
 
-对于固定的树结构 `$q(x)$` , 对 `$\omega_j$`
-求导等于0, 得到目标函数的解析解 `$\omega_{j}^{\star}$` : 
+对下面的目标函数进行优化求解:
 
-`$w_{j}^{\star} = \frac{\sum\limits_{i \in I_j} g_i}{\sum\limits_{i \in I_j} h_i + \lambda}$`
+`$$\underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} {\tilde L}^{(t)} = \underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} \bigg( \sum_{j = 1}^{T} \bigg[G_j w_j + \frac{1}{2} (H_j  + \lambda ) w_j^2 \bigg]  + \gamma T \bigg)$$`
 
-即
+易知，上述目标函数是一个累加的二次函数形式 `$f(x)=ax + bx^{2} +c$`，
+因此根据二次函数最小值的解析解形式 `$x=-\frac{b}{2a}$`，
+对于固定的树结构 `$q(x)$`, 对目标函数关于 `$\omega_j$` 求导等于 0, 
+得到目标函数的解析解 `$\omega_{j}^{\star}$`:
 
-`$w_{j}^{\star} = -\frac{G_j}{H_j+\lambda} $`
+`$$w_{j}^{\star} = \frac{\sum\limits_{i \in I_j} g_i}{\sum\limits_{i \in I_j} h_i + \lambda}$$`
+
+即目标函数的最优参数:
+
+`$$w_{j}^{\star} = -\frac{G_j}{H_j+\lambda}$$`
 
 将上面得到的解析解带入目标函数: 
 
-`${{\tilde L}^{( t )}}=-\frac{1}{2}\sum_{j=1}^{T}\frac{G_j^2}{H_j+\lambda} + \gamma T$`
+`$${{\tilde L}^{(t)}_{min}}=-\frac{1}{2}\sum_{j=1}^{T}\frac{G_j^2}{H_j+\lambda} + \gamma T$$`
 
-   这里的 `${{\tilde L}^{( t )}}$`
-   代表了当指定一个树结构时, 在目标函数上最多减少多少, 这里叫做 `结构分数(structure score)` ；这个分数越小, 代表这个树的结构越好；
+上式可以作为分裂节点的打分，形式上很像 CART 树纯度打分的计算，区别在于它是从目标函数中推导而得
 
-## 模型中决策树节点分裂算法
+这里的 `${{\tilde L}^{(t)}_{min}}$` 代表了当指定一个树结构时, 
+在目标函数上最多减少多少, 这里叫做 **结构分数(structure score)**，
+这个分数越小, 代表这个树的结构越好
 
-(1)贪心算法(Exact Greedy Algorithm for split finding)
+## 树节点分裂策略
 
-每次尝试对已有叶节点进行一次分割, 分割的规则: 
+实践中，很难去穷举每一棵树进行打分，再选出最好的。通常采用贪心的方式，逐层选择最佳的分裂节点。
+假设 `$I_{L}$` 和 `$I_{R}$` 为分裂节点的左右节点，记 `$I=I_{L} \cup I_{R}$`。
+每次尝试对已有叶节点进行一次分割, 分割的规则如下，即选择此节点分裂的增益为：
 
-`$Gain = \frac{1}{2}\Bigg[\frac{G_{L}^{2}}{H_K + \lambda} + \frac{G_{R}^{2}}{H_R + \lambda} - \frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}\Bigg] - \gamma$`
+`$$Gain = \frac{1}{2}\Bigg[\frac{G_{L}^{2}}{H_K + \lambda} + \frac{G_{R}^{2}}{H_R + \lambda} - \frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}\Bigg] - \gamma$$`
 
 其中: 
 
-- `$\frac{G_{L}^{2}}{H_K + \lambda}$` : 左子树分数；
+- `$\frac{G_{L}^{2}}{H_K + \lambda}$`: 左子树分数
+- `$\frac{G_{R}^{2}}{H_R + \lambda}$`: 右子树分数
+- `$\frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}$`: 不分割可以得到的分数
+- `$\gamma$`: 假如新的子节点引入的复杂度代价
 
-- `$\frac{G_{R}^{2}}{H_R + \lambda}$` : 右子树分数；
+对树的每次扩展, 都要枚举所有可能的分割方案，并且对于某次分割, 
+都要计算每个特征值左边和右边的一阶和二阶导数和, 从而计算这次分割的增益 `$Gain$`
 
-- `$\frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}$` : 
-   不分割可以得到的分数；
+对于上面的分割增益 `$Gain$`, 要判断分割每次分割对应的 `$Gain$` 的大小, 
+并且进行优化, 取最小的 `$Gain$`, 直到当新引入一个分割带来的增益小于某个阈值时, 
+就去掉这个分割. 这里的优化, 相当于对树进行剪枝
 
-- `$\gamma$` : 假如新的子节点引入的复杂度代价；
+## 模型中决策树节点分裂算法
 
-对树的每次扩展, 都要枚举所有可能的分割方案；并且对于某次分割, 都要计算每个特征值左边和右边的一阶和二阶导数和, 从而计算这次分割的增益
-`$Gain$` ； 对于上面的分割增益
-`$Gain$` , 都要判断分割每次分割对应的 `$Gain$`
-的大小, 并且进行优化, 取最小的
-`$Gain$` , 直到当新引入一个分割带来的增益小于某个阈值时, 就去掉这个分割. 这里的优化, 相当于对树进行剪枝. 
+之前假设是已知前 `$t-1$` 棵树，因此现在来探讨怎么生成树。
+根据决策树的生成策略，在每次分裂节点的时候需要考虑能使得损失函数减小最快的节点，
+也就是分裂后损失函数的结构分数减去分裂前损失函数的结构分数，称之为增益(Gain)。
+Gain 越大，越能说明分裂后目标函数值减少越多
 
-(2)近似算法(Approximate Algorithm for split finding)
+### 贪心算法(Exact Greedy Algorithm for split finding)
 
-   针对数据量大的情况, 不能直接计算
+在决策树(CART)里面，使用的是精确贪心算法(Basic Exact Greedy Algorithm), 
+也就是将所有特征的所有取值排序(耗时耗内存巨大)，遍历所有特征中可能的分裂点位置，
+根据节点分裂的增益公式计算增益，然后比较每一个点的 Gini 指数，找出变化最大的节点。
+
+当特征是连续特征时，对连续值离散化，取两点的平均值为分割节点。
+可以看到，这里的排序算法需要花费大量的时间，因为要遍历整个样本所有特征，而且还要排序
+
+XGBoost 使用贪心算法:
+
+> `$
+  \eqalign{
+    & Split\_Finding(): \cr
+    & Input:I,instance\;set\;of\;current\;node  \cr 
+    & Input:d,feature\;dimension  \cr 
+    & gain \leftarrow 0  \cr 
+    & G \leftarrow \sum\limits_{i \in I} {{g_i}} ,H \leftarrow \sum\limits_{i \in I} {{h_i}}   \cr 
+    & for\;k = 1\;to\;m\;do  \cr 
+    & \;\;\;\;{G_L} \leftarrow 0,{H_L} \leftarrow 0  \cr 
+    & \;\;\;\;for\;j\;in\;sorted\left( {I,by\;{{\bf{x}}_{jk}}} \right)\;do  \cr 
+    & \;\;\;\;\;\;\;\;{G_L} \leftarrow {G_L} + {g_j},{H_L} \leftarrow {H_L} + {h_j}  \cr 
+    & \;\;\;\;\;\;\;\;{G_R} \leftarrow G - {G_L},{H_R} \leftarrow H - {H_L}  \cr 
+    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_L^2} \over {{H_L} + \lambda }} + {{G_R^2} \over {{H_R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
+    & \;\;\;\;end  \cr 
+    & end \cr
+    & Output:\; split\_value\; with\; max \; score}
+  $`
+
+
+### 近似算法(Approximate Algorithm for split finding)
+
+如果数据不能一次读入内存，使用贪心算法效率较低。
+在 XGBoost 里面使用的是近似算法(Approximate Algorithm)。
+
+该算法首先根据特征分布的百分位数(percentiles)提出候选分裂点，
+将连续特征映射到由这些候选点分割的桶中，
+汇总统计信息并根据汇总的信息在提案中找到最佳解决方案。
+
+对于某个特征 `$x_{k}$`，算法首先根据特征分布的分位数找到特征切割点的候选集合 `$S_{k}=\{S_{k_{1}}, S_{k_{2}}, \ldots, S_{k_{l}} \}$`,
+然后将特征 `$x_{k}$` 的值根据集合 `$S_{k}$` 将样本进行分桶，
+接着对每个桶内的样本统计值 `$G$`、`$H$` 进行累加，
+记为分界点 `$v$` 的统计量，`$v$` 满足 `$\{{\bf x}_{kj}=s_{kv}\}$`。 
+最后在分界点集合上调用上面的贪心算法进行贪心查找，得到的结果为最佳分裂点的近似。具体如下
+
+> `$
+  \eqalign{
+  & for\;k = 1\;to\;m\;do  \cr 
+  & \;\;\;\;Propose\;{S_k} = \left\{ {{s_{k1}},{s_{k2}},...,{s_{kl}}} \right\}\;by\;percentile\;on\;feature\;k  \cr 
+  & \;\;\;\;Propose\;can\;be\;done\;per\;tree\left( {global} \right),or\;per\;split\left( {local} \right)  \cr 
+  & end  \cr 
+  & for\;k = 1\;to\;m\;do  \cr 
+  & \;\;\;\;{G_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{g_j}}   \cr 
+  & \;\;\;\;{H_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{h_j}}   \cr 
+  & end  \cr 
+  & call\;Split\_Finding\left( {} \right) \cr}
+  $`
 
 ## 自定义损失函数
 
-
+* TODO
 
 # XGBoost 使用
 
@@ -414,6 +511,80 @@ import xgboost as xgb
 ## 数据接口
 
 ## 参数设置
+
+### 通用参数
+
+* booster:使用哪个弱学习器训练，默认gbtree，可选gbtree，gblinear 或dart
+* nthread：用于运行XGBoost的并行线程数，默认为最大可用线程数
+* verbosity：打印消息的详细程度。有效值为0（静默），1（警告），2（信息），3（调试）。
+* Tree Booster的参数：
+    - eta（learning_rate）：learning_rate，在更新中使用步长收缩以防止过度拟合，默认= 0.3，范围：[0,1]；典型值一般设置为：0.01-0.2
+    - gamma（min_split_loss）：默认= 0，分裂节点时，损失函数减小值只有大于等于gamma节点才分裂，gamma值越大，算法越保守，越不容易过拟合，但性能就不一定能保证，需要平衡。范围：[0，∞]
+    - max_depth：默认= 6，一棵树的最大深度。增加此值将使模型更复杂，并且更可能过度拟合。范围：[0，∞]
+    - min_child_weight：默认值= 1，如果新分裂的节点的样本权重和小于min_child_weight则停止分裂 。这个可以用来减少过拟合，但是也不能太高，会导致欠拟合。范围：[0，∞]
+    - max_delta_step：默认= 0，允许每个叶子输出的最大增量步长。如果将该值设置为0，则表示没有约束。如果将其设置为正值，
+      则可以帮助使更新步骤更加保守。通常不需要此参数，但是当类极度不平衡时，它可能有助于逻辑回归。将其设置为1-10的值可能有助于控制更新。范围：[0，∞]
+    - subsample：默认值= 1，构建每棵树对样本的采样率，如果设置成0.5，XGBoost会随机选择一半的样本作为训练集。范围：（0,1]
+    - sampling_method：默认= uniform，用于对训练实例进行采样的方法。
+        - uniform：每个训练实例的选择概率均等。通常将subsample> = 0.5 设置 为良好的效果。
+        - gradient_based：每个训练实例的选择概率与规则化的梯度绝对值成正比，具体来说就是 图片 ，subsample可以设置为低至0.1，而不会损失模型精度。
+    - colsample_bytree：默认= 1，列采样率，也就是特征采样率。范围为（0，1]
+    - lambda（reg_lambda）：默认=1，L2正则化权重项。增加此值将使模型更加保守。
+    - alpha（reg_alpha）：默认= 0，权重的L1正则化项。增加此值将使模型更加保守。
+    - tree_method：默认=auto，XGBoost中使用的树构建算法。
+        - auto：使用启发式选择最快的方法。
+            - 对于小型数据集，exact将使用精确贪婪（）。
+            - 对于较大的数据集，approx将选择近似算法（）。它建议尝试hist，gpu_hist，用大量的数据可能更高的性能。（gpu_hist）支持。external memory外部存储器。
+        - exact：精确的贪婪算法。枚举所有拆分的候选点。
+        - approx：使用分位数和梯度直方图的近似贪婪算法。
+        - hist：更快的直方图优化的近似贪婪算法。（LightGBM也是使用直方图算法）
+        - gpu_hist：GPU hist算法的实现。
+    - scale_pos_weight:控制正负权重的平衡，这对于不平衡的类别很有用。Kaggle竞赛一般设置sum(negative instances) / sum(positive instances)，
+      在类别高度不平衡的情况下，将参数设置大于0，可以加快收敛。
+    - num_parallel_tree：默认=1，每次迭代期间构造的并行树的数量。此选项用于支持增强型随机森林。
+    - monotone_constraints：可变单调性的约束，在某些情况下，如果有非常强烈的先验信念认为真实的关系具有一定的质量，则可以使用约束条件来提高模型的预测性能。
+     （例如params_constrained['monotone_constraints'] = "(1,-1)"，(1,-1)我们告诉XGBoost对第一个预测变量施加增加的约束，对第二个预测变量施加减小的约束。）
+* Linear Booster的参数：
+    - lambda（reg_lambda）：默认= 0，L2正则化权重项。增加此值将使模型更加保守。归一化为训练示例数。
+    - alpha（reg_alpha）：默认= 0，权重的L1正则化项。增加此值将使模型更加保守。归一化为训练示例数。
+    - updater：默认= shotgun。
+        - shotgun：基于shotgun算法的平行坐标下降算法。使用“ hogwild”并行性，因此每次运行都产生不确定的解决方案。
+        - coord_descent：普通坐标下降算法。同样是多线程的，但仍会产生确定性的解决方案。
+    - feature_selector：默认= cyclic。特征选择和排序方法
+        - cyclic：通过每次循环一个特征来实现的。
+        - shuffle：类似于cyclic，但是在每次更新之前都有随机的特征变换。
+        - random：一个随机(有放回)特征选择器。
+       -  greedy：选择梯度最大的特征。（贪婪选择）
+       -  thrifty：近似贪婪特征选择（近似于greedy）
+    - top_k：要选择的最重要特征数（在greedy和thrifty内）
+
+
+## 任务参数
+
+- objective：默认=reg:squarederror，表示最小平方误差
+    - reg:squarederror,最小平方误差
+    - reg:squaredlogerror,对数平方损失
+    - reg:logistic,逻辑回归
+    - reg:pseudohubererror,使用伪Huber损失进行回归，这是绝对损失的两倍可微选择
+    - binary:logistic,二元分类的逻辑回归，输出概率
+    - binary:logitraw：用于二进制分类的逻辑回归，逻辑转换之前的输出得分
+    - binary:hinge：二进制分类的铰链损失。这使预测为0或1，而不是产生概率。（SVM就是铰链损失函数）
+    - count:poisson –计数数据的泊松回归，泊松分布的输出平均值
+    - survival:cox：针对正确的生存时间数据进行Cox回归（负值被视为正确的生存时间）
+    - survival:aft：用于检查生存时间数据的加速故障时间模型
+    - aft_loss_distribution：survival:aft和aft-nloglik度量标准使用的概率密度函数
+    - multi:softmax：设置XGBoost以使用softmax目标进行多类分类，还需要设置num_class（类数）
+    - multi:softprob：与softmax相同，但输出向量，可以进一步重整为矩阵。结果包含属于每个类别的每个数据点的预测概率
+    - rank:pairwise：使用LambdaMART进行成对排名，从而使成对损失最小化
+    - rank:ndcg：使用LambdaMART进行列表式排名，使标准化折让累积收益（NDCG）最大化
+    - rank:map：使用LambdaMART进行列表平均排名，使平均平均精度（MAP）最大化
+    - reg:gamma：使用对数链接进行伽马回归。输出是伽马分布的平均值
+    - reg:tweedie：使用对数链接进行Tweedie回归
+    - 自定义损失函数和评价指标
+- eval_metric：验证数据的评估指标，将根据目标分配默认指标（回归均方根，分类误差，排名的平均平均精度），用户可以添加多个评估指标
+    - rmse，均方根误差；rmsle：均方根对数误差；mae：平均绝对误差；mphe：平均伪Huber错误；logloss：负对数似然；error：二进制分类错误率
+    - merror：多类分类错误率；mlogloss：多类logloss；auc：曲线下面积；aucpr：PR曲线下的面积；ndcg：归一化累计折扣；map：平均精度
+- seed ：随机数种子，[默认= 0]
 
 ```python
 # dict
@@ -656,10 +827,19 @@ xgb.plot_importance(booster,
 
 # XGBoost调参
 
+参数调优的一般步骤：
+
+1. 确定（较大）学习速率和提升参数调优的初始值
+2. max_depth 和 min_child_weight 参数调优
+3. gamma参数调优
+4. subsample 和 colsample_bytree 参数优
+5. 正则化参数alpha调优
+6. 降低学习速率和使用更多的决策树
+
 ## 参数类型
 
 - 通用参数
-   - 控制整个模型的通用性能；
+   - 控制整个模型的通用性能
    - `booster` : 基本学习器类型
       - `gbtree` : 基于树的模型
       - `gblinear` : 线性模型
@@ -668,7 +848,7 @@ xgb.plot_importance(booster,
       - 1: 不会打印训练过程中的信息
    - `nthread` : 模型并行化使用系统的核数
 - Booster参数
-   - 控制每步迭代中每个基学习器(树/线性模型)；
+   - 控制每步迭代中每个基学习器(树/线性模型)
    - `eta` : learning rate
       - 0.3
       - 0.01 ` 0.2
@@ -683,11 +863,11 @@ xgb.plot_importance(booster,
    - `max_leaf_nodes`
       - 树中叶节点的最大数量
    - `gamma`
-      - 当分裂结果使得损失函数减少时, 才会进行分裂, 指定了节点进行分裂所需的最小损失函数量；
+      - 当分裂结果使得损失函数减少时, 才会进行分裂, 指定了节点进行分裂所需的最小损失函数量
    - `max_delta_step`
       - 每棵树的权重估计, 不常用
    - `subsample`
-      - 定义了构建每棵树使用的样本数量, 比较低的值会使模型保守, 防止过拟合；太低的值会导致模型欠拟合；
+      - 定义了构建每棵树使用的样本数量, 比较低的值会使模型保守, 防止过拟合太低的值会导致模型欠拟合
       - 0.5 ` 1
    - `colsample_bytree`
       - 类似于GBM中的 `max_features` , 定义了用来构建每棵树时使用的特征数
@@ -696,14 +876,14 @@ xgb.plot_importance(booster,
       - 定义了树每次分裂时的特征比例, 不常用, 用 `colsample_bytree`
    - `lambda`
       - 叶节点权重得分的l2正则参数
-      - 不常使用, 一般用来控制过拟合；
+      - 不常使用, 一般用来控制过拟合
    - `alpha`
       - 叶节点权重得分的l1正则参数
       - 适用于高维数据中, 能使得算法加速
    - `scale_pos_weight`
-      - 用在高度不平衡数据中, 能够使算法快速收敛；
+      - 用在高度不平衡数据中, 能够使算法快速收敛
 - 学习任务参数
-   - 控制模型优化的表现；
+   - 控制模型优化的表现
    - `objective`
       - `binary:logistic` : Logistic Regression(二分类), 返回分类概率
       - `multi:softmax` : 利用 `softmax` 目标函数的多分类, 返回分类标签
@@ -720,14 +900,14 @@ xgb.plot_importance(booster,
 
 ## 参数调优的一般策略
 
-1. 首先, 选择一个相对较大的 `learning rate` , 比如:0.1 (一般分为在: 0.05-0.3). 根据这个选定的 `learning rate` 对树的数量 `number of tree` 进行CV调优；
-2. 调节树参数:  `max_depth`, `min_child_weight`, `gamma`, `subsample`, `colsample_bytree` ；
-3. 调节正则化参数 `lambda`, `alpha` ；
-4. 减小 `learning rate` , 并且优化其他参数；
+1. 首先, 选择一个相对较大的 `learning rate` , 比如:0.1 (一般分为在: 0.05-0.3). 根据这个选定的 `learning rate` 对树的数量 `number of tree` 进行CV调优
+2. 调节树参数:  `max_depth`, `min_child_weight`, `gamma`, `subsample`, `colsample_bytree` 
+3. 调节正则化参数 `lambda`, `alpha` 
+4. 减小 `learning rate` , 并且优化其他参数
 
 ## 参数调优步骤
 
-- 选择一个初始化的 `learning_rate` 和 `n_estimators` , 利用CV对 `n_estimators` 进行调优, 选择一个最优的 `n_estimators` ；
+- 选择一个初始化的 `learning_rate` 和 `n_estimators` , 利用CV对 `n_estimators` 进行调优, 选择一个最优的 `n_estimators` 
    - 对其他模型参数进行初始化(选择一个合理的值): 
       - `max_depth = 5`
          - 3 - 10
