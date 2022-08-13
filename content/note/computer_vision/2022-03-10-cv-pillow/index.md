@@ -5,6 +5,7 @@ date: '2022-03-10'
 slug: cv-pillow
 categories:
   - deeplearning
+  - computer vision
 tags:
   - tool
 ---

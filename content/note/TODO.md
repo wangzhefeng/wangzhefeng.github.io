@@ -2,10 +2,6 @@
 title: 跳进的和正准备跳的坑
 author: 王哲峰
 date: '2022-12-31'
-categories:
-  - 整理
-tags:
-  - project
 slug: projects
 ---
 

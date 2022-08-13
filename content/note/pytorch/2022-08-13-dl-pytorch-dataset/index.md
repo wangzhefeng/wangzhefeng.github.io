@@ -44,12 +44,21 @@ details[open] summary {
     - [构建 DataLoader 训练数据集](#构建-dataloader-训练数据集)
   - [torch.utils.data API](#torchutilsdata-api)
     - [API](#api)
+    - [数据加载顺序和 Sampler](#数据加载顺序和-sampler)
+    - [自动内存锁定](#自动内存锁定)
   - [参考](#参考)
 - [PyTorch 数据预处理](#pytorch-数据预处理)
   - [Transforms 示例](#transforms-示例)
   - [torchvision transforms](#torchvision-transforms)
+    - [常用转换](#常用转换)
   - [torchtext transforms](#torchtext-transforms)
   - [torchaudio transforms](#torchaudio-transforms)
+- [内置数据类型](#内置数据类型)
+  - [内置数据集](#内置数据集)
+    - [torchvision.datasets](#torchvisiondatasets)
+    - [torchtext.datasets](#torchtextdatasets)
+    - [torchaudio.datasets](#torchaudiodatasets)
+  - [自定义数据集的基本类](#自定义数据集的基本类)
 </p></details><p></p>
 
 # PyTorch 数据读取构建
@@ -106,8 +115,8 @@ test_data = datasets.FashionMNIST(
 batch_size = 64
 
 # create data loaders
-train_dataloader = DataLoader(trianing_data, batch_size = batch_size)
-test_dataloader = DataLoader(test_data, batch_size = batch_size)
+train_dataloader = DataLoader(trianing_data, batch_size = batch_size, shuffle = True)
+test_dataloader = DataLoader(test_data, batch_size = batch_size, shuffle = True)
 
 for X, y in test_dataloader:
     print(f"Shape of X [N, C, H, W]: {X.shape}")
@@ -176,7 +185,7 @@ from torch.utils.data import DataLoader
 ### 创建 Dataset 类
 
 ```python
-class CustomImage(Dataset):
+class CustomImageDataset(Dataset):
 
     def __init__(self, 
                  annotations_file, 
@@ -189,17 +198,29 @@ class CustomImage(Dataset):
         self.target_transform = target_transform
 
     def __len__(self):
+        """
+        return the number of samples in dataset
+        """
         return len(self.img_labels)
     
     def __getitem__(self, idx):
+        """
+        loads and returns a sample from 
+        the dataset at the given index `idx`
+        """
+        # image path
         img_path = os.path.join(
             self.img_dir, 
             self.img_labels.iloc[idx, 0]
         )
+        # image tensor
         image = read_image(img_path)
+        # image label
         label = self.img_labels.iloc[idx, 1]
+        # image transform
         if self.transform:
             image = self.transform(image)
+        # image label transform
         if self.target_transform:
             label = self.target_transform(label)
 
@@ -209,13 +230,13 @@ class CustomImage(Dataset):
 ### 构建 DataLoader 训练数据集
 
 ```python
-training_data = CustomImage(
+training_data = CustomImageDataset(
     annotations_file = "",
     img_dir = "",
     transform = ToTensor(),
     target_transform = ToTensor(),
 )
-test_data = CustomImage(
+test_data = CustomImageDataset(
     annotations_file = "",
     img_dir = "",
     transform = ToTensor(),
@@ -266,15 +287,71 @@ DataLoader(
     prefetch_factor=2,
     persistent_workers=False
 )
-```
+``` 
 
+### 数据加载顺序和 Sampler
+
+* 对于可迭代(iterable-style)数据集，数据加载顺序完全由用户定义的方式迭代控制。
+  这允许更容易实现块读取和动态批量大小
+* 对于 map-style 的情况，`torch.utils.data.Sampler` 类用于指定数据加载中使用 key/value 的顺序。
+
+
+
+
+
+
+### 自动内存锁定
+
+对于数据加载，给 `DataLoader` 传递 `pin_memory = True` 将自动将获取的 tensor 放入固定内存中，
+从而更快地将数据传输到支持 CUDA 的 GPU
+
+```python
+class SimpleCustomBatch:
+    
+    def __init__(self, data):
+        transposed_data = list(zip(*data))
+        self.inp = torch.stack(transposed_data[0], 0)
+        self.tgt = torch.stack(transposed_data[1], 0)
+    
+    def pin_memory(self):
+        self.inp = self.inp.pin_memory()
+        self.tgt = self.tgt.pin_memory()
+        return self
+    
+def collate_wrapper(batch):
+    return SimpleCustomBatch(batch)
+
+# data
+inps = torch.arange(10 * 5, dtype = torch.float32).view(10, 5)
+tgts = torch.arange(10 * 5, dtype = torch.float32).view(10, 5)
+dataset = TensorDataset(inps, tgts)
+
+# data loader
+loader = DataLoader(
+    dataset, 
+    batch_size = 2,
+    collate_fn = collate_wrapper,
+    pin_memory = True,
+)
+
+for batch_ndx, sample in enumerate(loader):
+    print(sample.inp.is_pinned())
+    print(sample.tgt.is_pinned())
+```
 
 ## 参考
 
 - [DataLoader & Dataset](https://pytorch.org/docs/stable/data.html#)
 
 
+
+
+
+
+
 # PyTorch 数据预处理
+
+可以使用 transforms 对数据集进行转换操作，使得数据集可以作为机器学习算法可以使用的形式
 
 * `torchvision.transforms`
 * `torchtext.transforms`
@@ -305,6 +382,23 @@ test_data = datasets.FashionMNIST(
 
 ## torchvision transforms
 
+所有的 TorchVision datasets 都有两个接受包含转换逻辑的可调用对象的参数:
+
+* transform
+    - 修改特征
+* target_transform
+    - 修改标签
+
+`torchvision.transform` 模块提供了多个常用转换
+
+* ToTensor()
+    - 将 PIL 格式图像或 Numpy `ndarra` 转换为 `FloatTensor`
+    - 将图像的像素强度值(pixel intensity values)缩放在 `[0, 1]` 范围内
+* Lambda 换换
+    - 可以应用任何用户自定义的 lambda 函数
+
+### 常用转换
+
 * Scriptable transforms
 * Compositions of transforms
 * Transforms on PIL Image and torch.*Tensor
@@ -320,4 +414,74 @@ test_data = datasets.FashionMNIST(
 
 
 ## torchaudio transforms
+
+
+
+# 内置数据类型
+
+Torchvision 在模块 `torchvision.datasets` 中提供了很多内置数据集，
+以及一些用于构建自定义数据集的使用功能类
+
+## 内置数据集
+
+内置的数据集都是 `torch.utils.data.Dataset` 的子类，
+所以它们都具有 `__getitem__` 和 `__len__` 实现方法，
+因此，它们都可以被传递给可以使用 `torch.multiprocessing` 
+多进程的 `torch.utils.data.DataLoader` 并行加载多个样本的
+
+这些数据集都有类似的 API，它们都有两个共同的转换参数:
+
+* `transform()`
+* `target_transform()`
+
+### torchvision.datasets
+
+```python
+import torch
+from torchvision import datasets
+
+imagenet_data = datasets.ImageNet("path/to/imagenet_root/") 
+data_loader = torch.utils.data.DataLoader(
+    imagenet_data,
+    batch_size = 4,
+    shuffle = True,
+    num_workers = args.nThreads,
+)
+```
+
+### torchtext.datasets
+
+```python
+from torchtext.datasets import IMDB
+
+train_iter = IMDB(split = "train")
+
+def tokenize(label, line):
+    return line.split()
+
+tokens = []
+for label, line in train_iter:
+    tokens += tokenize(label, line)
+```
+
+### torchaudio.datasets
+
+```python
+import torch
+from torchaudio import datasets
+
+yesno_data = datasets.YESNO(".", download = True)
+data_loader = torch.utils.data.DataLoader(
+    yesno_data,
+    batch_size = 1,
+    shuffle = True,
+    num_workers = args.nThreads,
+)
+```
+
+## 自定义数据集的基本类
+
+* `DatasetFolder(root, loader, Any],...)`
+* `ImageFolder(root, transform,...)`
+* `VisionDataset(root, transforms, transform,...)`
 
