@@ -1,7 +1,7 @@
 ---
 title: 跳进的和正准备跳的坑
 author: 王哲峰
-date: '2022-02-28'
+date: '2022-12-31'
 categories:
   - 整理
 tags:
@@ -10,25 +10,6 @@ slug: projects
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -61,7 +42,7 @@ details[open] summary {
     - [Image Processing](#image-processing)
   - [Spark](#spark)
   - [C++](#c)
-  - [data visualization](#data-visualization)
+  - [Data Visualization](#data-visualization)
   - [go](#go)
   - [Java](#java)
   - [Julia](#julia)
@@ -72,9 +53,9 @@ details[open] summary {
 - [其他](#其他)
 - [技能管理](#技能管理)
 - [算法工程师技能列表](#算法工程师技能列表)
-  - [1.岗位行业](#1岗位行业)
-  - [2.算法栈](#2算法栈)
-  - [3.技术栈](#3技术栈)
+  - [岗位行业](#岗位行业)
+  - [算法栈](#算法栈)
+  - [技术栈](#技术栈)
 </p></details><p></p>
 
 
@@ -86,24 +67,21 @@ details[open] summary {
 ### machine learning
 
 - 方法
-
   * classification
   * regression
   * ranking
   * timeseries
+  * recommended system
+- risk control
   * model deploy
-
 - 工具
-
   * numpy 
   * pandas
   * scikit-learn
 
-
 ### deeplearning
 
 - 方法
-
   - Computer Vision
   - Natural Language Processing
   - Structured Data
@@ -112,31 +90,28 @@ details[open] summary {
   - Generative Deep Learning
   - Reinforcement Learning
   - Graph Data
-
 - 工具
-
   - Keras
   - TensorFlow
   - Pytorch
 
-
 ### Image Processing
 
 - 工具
-
   - OpenCV
   - Pillow
 
 ## Spark
 
-* Scala(TODO)
+* Scala
+* Spark
 * PySpark
 
 ## C++
 
 - 《C++ Primer》
 
-## data visualization
+## Data Visualization
 
 - R 语言
 - Python
@@ -181,23 +156,15 @@ details[open] summary {
 * CSS
 * WeChat
 
-
 # 其他
 
 - Docker
 - drawio
-  
   - https://www.diagrams.net/
   - https://app.diagrams.net/
   - https://viewer.diagrams.net/#Uhttps%3A%2F%2Fviewer.diagrams.net%2Fshortcuts.svg
   - https://www.diagrams.net/doc/faq/configure-diagram-editor
   - https://baijiahao.baidu.com/s?id=1711955037467050478&wfr=spider&for=pc
-
-- reading
-- recommended system
-- risk control
-
-
 - markdown
     * slidev
     * markdeep
@@ -211,87 +178,76 @@ details[open] summary {
     * 六西格玛
 - 项目管理
 
-
 # 算法工程师技能列表
 
-## 1.岗位行业
+## 岗位行业
 
-   - 搜索推荐
-   - 广告
-   - 数据挖掘
-   - 机器学习
-   - 信息检索
-   - 推荐系统
+- 搜索推荐
+- 广告
+- 数据挖掘
+- 机器学习
+- 信息检索
+- 推荐系统
 
-## 2.算法栈
+## 算法栈
 
-   1. 数据结构和算法
-   2. 图像分类
-   3. 图像识别
-   4. 目标检测
-   5. 目标分类
-   6. 目标跟踪
-   7. 目标分割
-   8. 通用 OCR
-   9. 语义分割
-   10. 实例分割
-   11. 语音分析
-      
-      - 情感分析
-      - 话题分析
-      - 话题摘要
-      - 观点识别
-      - 语义理解
-
-   12. 多模态情感计算
+1. 数据结构和算法
+2. 图像分类
+3. 图像识别
+4. 目标检测
+5. 目标分类
+6. 目标跟踪
+7. 目标分割
+8. 通用 OCR
+9. 语义分割
+10. 实例分割
+11. 语音分析
+    - 情感分析
+    - 话题分析
+    - 话题摘要
+    - 观点识别
+    - 语义理解
+12. 多模态情感计算
    
 
-## 3.技术栈
+## 技术栈
 
-   1. C++
-   2. Java
-   3. SQL
-   4. NoSQL
-   5. Python
-      
-      - Scikit-learn
-      - TensorFlow
-      - keras
-      - pytorch
-      - YOLOv5
-      - deeplearning 部署框架
-         
-         - TensorFlow Lite
-         - NCNN
-         - MNN
-         - TensorRT
-         - Tengine
-         - OpenVINO
-         - NCNN
-      - Python 单元测试框架
-      - Python 文档框架
-      - Python 包构建与分发经验
-    
-   6. CUDA编程
-   7. OPENCL编程
-      
-   8. Linux
-         
-      - 嵌入式开发
-      
-   9. 神经网络
-      
-      - ResNet
-      - EfficientNet
-      - Yolo
-      - Mask-RCNN
-      - RetinaNet
-      - DeepLab
-
-   10. Spark
-   11. Hadoop
-   12. OpenCV
-   13. PCL
-   14. git
-   15. adb
-   16. shell
+1. C++
+2. Java
+3. SQL
+4. NoSQL
+5. Python
+  - Scikit-learn
+  - TensorFlow
+  - keras
+  - pytorch
+  - YOLOv5
+  - deeplearning 部署框架
+      - TensorFlow Lite
+      - NCNN
+      - MNN
+      - TensorRT
+      - Tengine
+      - OpenVINO
+      - NCNN
+  - Python 单元测试框架
+  - Python 文档框架
+  - Python 包构建与分发经验
+6. CUDA编程
+7. OPENCL编程
+8. Linux
+  - 嵌入式开发
+9. 神经网络
+  - ResNet
+  - EfficientNet
+  - Yolo
+  - Mask-RCNN
+  - RetinaNet
+  - DeepLab
+10. Spark
+11. Hadoop
+12. OpenCV
+13. PCL
+14. git
+15. adb
+16. shell

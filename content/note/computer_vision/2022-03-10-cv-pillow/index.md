@@ -2,7 +2,7 @@
 title: Pillow 图像处理
 author: 王哲峰
 date: '2022-03-10'
-slug: image-pillow
+slug: cv-pillow
 categories:
   - deeplearning
 tags:
@@ -53,6 +53,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [图像处理基本操作](#图像处理基本操作)
 - [Pillow 概览](#pillow-概览)
 - [Pillow 安装](#pillow-安装)
 - [Pillow 核心](#pillow-核心)

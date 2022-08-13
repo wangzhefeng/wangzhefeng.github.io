@@ -2,7 +2,7 @@
 title: OpenCV 图像处理
 author: 王哲峰
 date: '2022-03-10'
-slug: image-opencv
+slug: cv-opencv
 categories: 
   - deeplearning
 tags:
