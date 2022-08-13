@@ -1,8 +1,8 @@
 ---
-title: PyTorch 基础
+title: PyTorch tensor
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-pytorch
+slug: dl-pytorch-tensor
 categories:
   - deeplearning
   - pytorch
@@ -32,23 +32,18 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [需要掌握的内容](#需要掌握的内容)
-- [PyTorch tensor 的创建](#pytorch-tensor-的创建)
-  - [tensor 的介绍](#tensor-的介绍)
-  - [tensor 的创建](#tensor-的创建)
+- [TODO](#todo)
+- [PyTorch tensor](#pytorch-tensor)
+  - [tensor 介绍](#tensor-介绍)
+  - [tensor API](#tensor-api)
+    - [tensor 创建 API](#tensor-创建-api)
+    - [tensor 操作 API](#tensor-操作-api)
+  - [tensor 创建](#tensor-创建)
     - [直接创建](#直接创建)
     - [依数值创建](#依数值创建)
-  - [tensor 的操作](#tensor-的操作)
-- [PyTorch 数据读取与预处理](#pytorch-数据读取与预处理)
-  - [Dataset 和 DataLoader](#dataset-和-dataloader)
-    - [使用 TorchVision, TorchText, TorchAudio dataset](#使用-torchvision-torchtext-torchaudio-dataset)
-    - [使用文件创建自定义的 Dataset](#使用文件创建自定义的-dataset)
-    - [2.1.3 torch.utils.data API](#213-torchutilsdata-api)
-- [PyTorch 数据预处理](#pytorch-数据预处理)
-  - [Transforms 示例](#transforms-示例)
-  - [torchvision transforms](#torchvision-transforms)
-  - [torchtext transforms](#torchtext-transforms)
-  - [torchaudio transforms](#torchaudio-transforms)
+    - [依概率分布创建](#依概率分布创建)
+  - [tensor 操作](#tensor-操作)
+  - [cuda tensor](#cuda-tensor)
 - [PyTorch 数据并行](#pytorch-数据并行)
   - [让模型跑在 GPU 上](#让模型跑在-gpu-上)
   - [让模型跑在多个 GPU 上](#让模型跑在多个-gpu-上)
@@ -63,7 +58,7 @@ details[open] summary {
   - [Data Utilities](#data-utilities)
 </p></details><p></p>
 
-# 需要掌握的内容
+# TODO
 
 * [ ] Get Stated
     - [ ] Start Locally
@@ -104,59 +99,21 @@ details[open] summary {
     - [ ] https://github.com/pytorch/pytorch
     - [ ] https://github.com/onnx/tutorials
 
-# PyTorch tensor 的创建
+# PyTorch tensor
 
-* 1.tensor 的简介及创建
-   - tensor 是多维数组
-   - tensor 的创建
-      - 直接创建
-         - `torch.tensor()`
-         - `torch.from_numpy()`
-      - 依数值创建
-         - `torch.empty()`
-         - `torch.ones()`
-         - `torch.zeros()`
-         - `torch.eye()`
-         - `torch.full()`
-         - `torch.arange()`
-         - `torch.linspace()`
-      - 依概率分布创建
-         - `torch.normal()`
-         - `torch.randn()`
-         - `torch.rand()`
-         - `torch.randint()`
-         - `torch.randperm()`
-* 2.tensor 的操作
-   - tensor 的基本操作
-      - tensor 的拼接
-         - `torch.cat()`
-         - `torch.stack()`
-      - tensor 的切分
-         - `torch.chunk()`
-         - `torch.split()`
-      - tensor 的索引
-         - `index_select()`
-         - `masked_select()`
-      - tensor 的变换
-         - `torch.reshape()`
-         - `torch.transpose()`
-         - `torch.t`
-   - tensor 的数学运算
-      - `add(input, aplha, other)`
+## tensor 介绍
 
-## tensor 的介绍
-
-tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程, 
+tensor 是 PyTorch 中最基本的概念, 其参与了整个运算过程, 
 这里主要介绍 tensor 的概念和属性, 如 data, variable, device 等,
-并且介绍 tensor 的基本创建方法, 如直接创建、依属主创建、依概率分布创建等
+并且介绍 tensor 的基本创建方法, 如直接创建、依数值创建、依概率分布创建等
 
 - tensor
     - tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
-- tensor 与 variable 
+- tensor 与 variable
     - 在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor, 
       但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
       variable 是 `torch.autograd` 中的数据类型. 
-      variable(`torch.autograd.variable`) 有 5 个属性, 
+    - variable(`torch.autograd.variable`) 有 5 个属性, 
       这些属性都是为了 tensor 的自动求导而设置的:
         - `data`
         - `grad`
@@ -166,7 +123,11 @@ tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程,
     - tensor(`torch.tensor`) 有 8 个属性:
         - 与数据本身相关
             - `data`: 被包装的 tensor
-            - `dtype`: tensor 的数据类型, 如 `torch.floattensor`, `torch.cuda.floattensor`, `float32`, `int64(torch.long)`
+            - `dtype`: tensor 的数据类型, 如 
+                - `torch.floattensor`
+                - `torch.cuda.floattensor`
+                - `float32`
+                - `int64(torch.long)`
             - `shape`: tensor 的形状
             - `device`: tensor 所在的设备, gpu/cup, tensor 放在 gpu 上才能使用加速
         - 与梯度求导相关
@@ -175,7 +136,48 @@ tensor 是 PyTorch 中最基本的概念,其参与了整个运算过程,
             - `grad_fn`: fn 表示 function 的意思，记录创建 tensor 时用到的方法
             - `is_leaf`: 是否是叶子节点(tensor)
 
-## tensor 的创建
+## tensor API
+
+### tensor 创建 API
+
+- 直接创建
+    - `torch.tensor()`
+    - `torch.from_numpy()`
+- 依数值创建
+    - `torch.empty()`
+    - `torch.ones()`
+    - `torch.zeros()`
+    - `torch.eye()`
+    - `torch.full()`
+    - `torch.arange()`
+    - `torch.linspace()`
+- 依概率分布创建
+    - `torch.normal()`
+    - `torch.randn()`
+    - `torch.rand()`
+    - `torch.randint()`
+    - `torch.randperm()`
+
+### tensor 操作 API
+
+- tensor 的基本操作
+    - tensor 的拼接
+        - `torch.cat()`
+        - `torch.stack()`
+    - tensor 的切分
+        - `torch.chunk()`
+        - `torch.split()`
+    - tensor 的索引
+        - `index_select()`
+        - `masked_select()`
+    - tensor 的变换
+        - `torch.reshape()`
+        - `torch.transpose()`
+        - `torch.t`
+- tensor 的数学运算
+    - `add(input, aplha, other)`
+
+## tensor 创建
 
 ```python
 from __future__ import print_function
@@ -185,7 +187,7 @@ import torch
 
 ### 直接创建
 
-1. torch.tensor(): 从 data 创建 tensor api
+1. 从 data 创建 tensor api
 
 - API
 
@@ -195,7 +197,7 @@ import torch
         dtype = none,
         device = none,
         requires_grad = false,
-        pin_memory = false      # 是否存于锁页内存
+        pin_memory = false,      # 是否存于锁页内存
     )
     ```
 
@@ -208,7 +210,7 @@ import torch
     print(t)
     ```
 
-2. 通过 numpy array 来创建 tensor api
+2. 通过 numpy array 创建 tensor api
 
 > 创建的 tensor 与原 ndarray 共享内存，当修改其中一个数据的时候，另一个也会被改动
 
@@ -250,11 +252,11 @@ import torch
     ```python
     torch.zeros(
         *size,
-        out = none,             # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
+        out = none,  # 输出张量，就是把这个张量赋值给另一个张量，但这两个张量一样，指的是同一个内存地址
         dtype = none,
-        layout = torch.strided, # 内存的布局形式
+        layout = torch.strided,  # 内存的布局形式
         device = none,
-        requires_grad = false
+        requires_grad = false,
     )
     ```
 
@@ -267,7 +269,11 @@ import torch
     print(id(out_t), id(t), id(t) == id(out_t))
     ```
 
-## tensor 的操作
+### 依概率分布创建
+
+* TODO
+
+## tensor 操作
 
 > * 相加
 >   - `+`
@@ -339,7 +345,7 @@ import torch
     print(x.item()) # python number
     ```
 
-- torch tensor 2 numpy array
+- torch tensor To numpy array
 
     ```python
     import torch
@@ -354,7 +360,7 @@ import torch
     print(b)
     ```
 
-- numpy array 2 torch tensor
+- numpy array To torch tensor
 
     ```python
     import numpy as np
@@ -367,247 +373,20 @@ import torch
     print(b)
     ```
 
-##cuda tensor
+## cuda tensor
+
+* CUDA 可用
+* 使用 `torch.device` 对象将 tensors 移出或放入 GPU
 
 ```python
-# let us run this cell only if cuda is available
-# we will use `torch.device` objects to move tensors in and out of gpu
 x = torch.tensor([1])
 if torch.cuda.is_available():
-   device = torch.device("cuda")            # a cuda device object
-
-   y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
-   
-   x = x.to(device)                         # or just use strings `.to("cuda")`
-   
-   z = x + y
-   z.to("cpu", torch.double)                # `.to` can also change dtype together!
+    device = torch.device("cuda")  # a cuda device object
+    y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
+    x = x.to(device)  # or just use strings `.to("cuda")`
+    z = x + y
+    z.to("cpu", torch.double)  # `.to` can also change dtype together!
 ```
-
-
-
-
-# PyTorch 数据读取与预处理
-
-## Dataset 和 DataLoader
-
-> - Dataset 保存了数据的样本和标签
-> - DataLoader 将 Dataset 封装为可迭代对象, 便于访问样本
-
-### 使用 TorchVision, TorchText, TorchAudio dataset
-
-* 加载相关库
-
-```python
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-```
-
-* 下载、读取数据
-
-```python
-training_data = datasets.FashionMNIST(
-    root = "data",
-    trian = True,
-    download = True,
-    transform = ToTensor(),
-)
-
-test_data = datasets.FashionMNIST(
-    root = "data",
-    train = False,
-    download = True,
-    transform = ToTensor(),
-)
-```
-
-* 生成数据加载器
-
-```python
-batch_size = 64
-
-# create data loaders
-train_dataloader = DataLoader(trianing_data, batch_size = batch_size)
-test_dataloader = DataLoader(test_data, batch_size = batch_size)
-
-for X, y in test_dataloader:
-    print(f"Shape of X [N, C, H, W]: {X.shape}")
-    print(f"Shape of y: {y.shape} {y.dtype}")
-    break
-
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0].squeeze()
-label = train_labels[0]
-plt.imshow(img, cmap="gray")
-plt.show()
-print(f"Label: {label}")
-```
-
-### 使用文件创建自定义的 Dataset
-
-> * `Dataset` 类需要实现以下方法
->     - `__init__`
->     - `__len__`
->     - `__getitem__`
-
-* 记载相关库
-
-```python
-import os
-import pandas as pd
-import torchvision.io import read_image
-# TODO import torchtext.iop import *
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
-```
-
-* 创建 Dataset 类
-
-    - 文件所在目录结构如下 TODO
-
-    ```
-    - img_dir
-        - 
-        - labels.csv
-            tshirt1.jpg, 0
-            tshirt2.jpg, 0
-            ...
-            ankleboot999.jpg, 9
-    ```
-
-```python
-class CustomImage(Dataset):
-
-    def __init__(self, annotations_file, img_dir, transform = None, target_transform = None):
-        self.img_labels = pd.read_csv(annotations_file)
-        self.img_dir = img_dir
-        self.transform = transform
-        self.target_transform = target_transform
-
-    def __len__(self):
-        return len(self.img_labels)
-    
-    def __getitem__(self, idx):
-        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-        image = read_image(img_path)
-        label = self.img_labels.iloc[idx, 1]
-        if self.transform:
-            image = self.transform(image)
-        if self.target_transform:
-            label = self.target_transform(label)
-        return image, label
-```
-
-* 使用 DataLoader 准备训练数据集
-
-```python
-training_data = CustomImage(
-    annotations_file = "",
-    img_dir = "",
-    transform = ToTensor(),
-    target_transform = ToTensor(),
-)
-test_data = CustomImage(
-    annotations_file = "",
-    img_dir = "",
-    transform = ToTensor(),
-    target_transform = ToTensor(),
-)
-
-train_dataloader = DataLoader(training_data, batch_size = 64, shuffle = True)
-test_dataloader = DataLoader(test_data, batch_size = 64, shuffle = True)
-
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0].squeeze()
-label = train_labels[0]
-plt.imshow(img, cmap="gray")
-plt.show()
-print(f"Label: {label}")
-```
-
-### 2.1.3 torch.utils.data API
-
-* torch.utils
-    - torch.utils.benchmark
-    - torch.utils.bottleneck
-    - torch.utils.checkpoint
-    - torch.utils.cpp_extension
-    - **torch.utils.data**
-    - torch.utils.dlpack
-    - torch.utils.mobile_optimizer
-    - torch.utils.model_zoo
-    - torch.utils.tensorboard
-
-
-
-
-
-# PyTorch 数据预处理
-
-* torchvision.transforms
-* torchtext.transforms
-* torchaudio.transforms
-
-## Transforms 示例
-
-```python
-import torch
-from torchvision import datasets
-from torchvision import ToTensor, Lambda
-
-training_data = datasets.FashionMNIST(
-    root = "data",
-    train = True,
-    download = True,
-    transform = ToTensor(),
-    target_transform = Lambda(
-        lambda y: torch.zeros(10, dtype = torch.float)
-                       .scatter_(dim = 0, torch.tensor(y), value = 1)
-    )
-)
-test_data = datasets.FashionMNIST(
-    root = "data",
-    train = False,
-    download = True,
-    transform = ToTensor(),
-    target_transform = Lambda(
-        lambda y: torch.zeros(10, dtype = torch.float)
-                       .scatter_(dim = 0, torch.tensor(y), value = 1)
-    )
-)
-```
-
-## torchvision transforms
-
-* Scriptable transforms
-* Compositions of transforms
-* Transforms on PIL Image and torch.*Tensor
-* Transforms on PIL Image only
-* Transforms on torch.*Tensor only
-* Conversion transforms
-* Generic transforms
-* Automatic Augmentation transforms
-* Functional transforms
-
-## torchtext transforms
-
-
-
-## torchaudio transforms
-
-
-
-
-
-
 
 # PyTorch 数据并行
 
@@ -638,7 +417,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-# Parameters and DataLoaders
+# Parameters
 input_size = 5
 output_size = 2
 
@@ -648,6 +427,8 @@ data_size = 100
 # Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+
+# data 
 class RandomDataset(Dataset):
 
     def __init__(self, size, length):
@@ -662,10 +443,11 @@ class RandomDataset(Dataset):
 
 rand_loader = DataLoader(
     dataset = RandomDataset(input_size, data_size), 
-	batch_size = batch_size, 
+    batch_size = batch_size, 
     shuffle = True
 )
 
+# model
 class Model(nn.Module):
 
     def __init__(self, input_size, output_size):
@@ -681,51 +463,38 @@ class Model(nn.Module):
 
 model = Model(input_size, output_size)
 if torch.cuda.device_count() > 1:
-print("Let's use", torch.cuda.device_count(), "GPUs!")
-model = nn.DataParallel(model)
+    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    model = nn.DataParallel(model)
 
 model.to(device)
 
 
 for data in rand_loader:
-	input = data.to(device)
-	output = model(input)
-	print("Outside: input size", input.size(),
-		"output_size", output.size())
+    input = data.to(device)
+    output = model(input)
+    print("Outside: input size", input.size(),
+        "output_size", output.size())
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 # PyTorch 动态图、自动求导
 
-- 4.1 计算图
+- 计算图
    - 描述运算的有向无环图
-      - Tensor 的 is_leaf 属性
-      - Tensor 的 grad_fn 属性
-- 4.2 PyTorch 动态图机制
+      - Tensor 的 `is_leaf` 属性
+      - Tensor 的 `grad_fn` 属性
+- PyTorch 动态图机制
    - 动态图与静态图
-- 4.3 PyTorch 自动求导机制
-   - torch.autograd.backward() 方法自动求取梯度
-   - torch.autograd.grad() 方法可以高阶求导
-   - note
-      - 梯度不自动清零
-      - 依赖叶节点的节点, requires_grad 默认为 True
-      - 叶节点不能执行原位操作
+- PyTorch 自动求导机制
+   - `torch.autograd.backward()` 方法自动求取梯度
+   - `torch.autograd.grad(  )` 方法可以高阶求导
+
+**Note**
+
+- 梯度不自动清零
+- 依赖叶节点的节点, `requires_grad` 默认为 True
+- 叶节点不能执行原位操作
 
 ## 计算图
 

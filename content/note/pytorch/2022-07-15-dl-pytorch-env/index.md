@@ -95,7 +95,7 @@ $ conda install pytorch torchvision -c pytorch
 ## 使用 Docker 安装 PyTorch
 
 ```bash
-$ test test
+$ 
 ```
 
 # Ubuntu 安装 Pytorch
@@ -115,7 +115,7 @@ $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 ## 使用 Docker 安装 PyTorch
 
 ```bash
-$ test test
+$ 
 ```
 
 # Building from source
