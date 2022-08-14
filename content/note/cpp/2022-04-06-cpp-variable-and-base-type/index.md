@@ -4,19 +4,56 @@ author: 王哲峰
 date: '2022-04-06'
 slug: cpp-variable-and-base-type
 categories:
-  - C++
+  - c++
 tags:
   - tool
 ---
 
-# 2.变量和基本类型
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
-## 2.1 基本内置类型
+<details><summary>目录</summary><p>
 
-### 2.1.1 算术类型
+- [基本内置类型](#基本内置类型)
+  - [算术类型](#算术类型)
+  - [类型转换](#类型转换)
+  - [字面值常量](#字面值常量)
+- [变量](#变量)
+</p></details><p></p>
 
-### 2.1.2 类型转换
 
-### 2.1.3 字面值常量
+# 基本内置类型
 
-## 2.2 变量
+
+
+## 算术类型
+
+
+
+## 类型转换
+
+
+
+## 字面值常量
+
+
+
+# 变量
+

@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-04-06'
 slug: cpp-function
 categories:
-  - C++
+  - c++
 tags:
   - tool
 ---
