@@ -1,5 +1,5 @@
 ---
-title: PyTorch 动态图、自动求导
+title: PyTorch 自动微分
 author: 王哲峰
 date: '2022-08-13'
 slug: dl-pytorch-autograd
