@@ -9,28 +9,7 @@ tags:
   - tool
 ---
 
-
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -53,7 +32,6 @@ details[open] summary {
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [安装 Spark](#安装-spark)
@@ -70,6 +48,8 @@ details[open] summary {
   - [pyspark 依赖库](#pyspark-依赖库)
     - [py4j](#py4j)
     - [Note](#note)
+  - [云端环境](#云端环境)
+- [PySpark 使用示例](#pyspark-使用示例)
 - [ERROR](#error)
   - [pyspark 版本问题](#pyspark-版本问题)
 - [PySpark 资料](#pyspark-资料)
@@ -93,7 +73,8 @@ PySpark 包含在 Apache Spark 网站上提供的 Spark 官方版本中。
 ### 普通安装
 
 ```bash
-pip install pyspark
+$ pip install pyspark
+$ pip install findspark
 ```
 
 ![pyspark_install](images/pyspark_install.png)
@@ -101,13 +82,13 @@ pip install pyspark
 ### 支持 Spark SQL
 
 ```bash
-pip install "spark[sql]"
+$ pip install "spark[sql]"
 ```
 
 ### pandas API on Spark
 
 ```bash
-pip install "pyspark[pandas_on_spark]" plotly
+$ pip install "pyspark[pandas_on_spark]" plotly
 ```
 
 ## 针对特定的 Hadoop 版本
@@ -117,7 +98,6 @@ pip install "pyspark[pandas_on_spark]" plotly
     - `without`: Spark pre-built with user-provided Apache Hadoop
     - `2`: Spark pre-built for Apache Hadoop 2.7
     - `3`: Spark pre-built for Apache Hadoop 3.3 and later (default)
-
 
 ### 查看 Hadoop 版本
 
@@ -189,6 +169,32 @@ $ export PYTHONPATH==$(ZIPS=("$SPARK_HOME"/python/lib/*.zip); IFS=:; echo "${ZIP
 $ pip install "pyarrow>=4.0.0" --prefer-binary
 ```
 
+## 云端环境
+
+- [kesci](https://www.kesci.com/home/project)
+    - 可以直接在 notebook 中运行 pyspark
+
+# PySpark 使用示例
+
+```python
+import pyspark
+from pyspark import SparkContext, SparkConf
+from pyspark.sql import SparkSession
+import findspark
+
+# 指定 spark_home，指定 Python 路径
+spark_home = "/Users/zfwang/.pyenv/versions/3.7.10/envs/pyspark/lib/python3.7/site-packages/pyspark"
+python_path = "/Users/zfwang/.pyenv/versions/3.7.10/envs/pyspark/bin/python"
+findspark.init(spark_home, python_path)
+
+conf = SparkConf().setAppName("test").setMaster("local[4]")
+sc = SparkContext(conf = conf)
+
+print("spark version:", pyspark.__version__)
+rdd = sc.parallelize(["hello", "spark"])
+print(rdd.reduce(lambda x,y: x + '' + y))
+```
+
 # ERROR
 
 ## pyspark 版本问题
@@ -202,7 +208,7 @@ py4j.protocol.Py4JError: org.apache.spark.api.python.PythonUtils.getEncryptionEn
 - 解决方法：
 
 ```bash
-pip install pyspark=="2.4.7"
+$ pip install pyspark=="2.4.7"
 ```
 
 # PySpark 资料
