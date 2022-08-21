@@ -1,5 +1,5 @@
 ---
-title: 时间序列分析--baseline 示例
+title: 时间序列分析-baseline
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-baseline
@@ -9,12 +9,40 @@ tags:
   - ml
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
+- [baseline 特点](#baseline-特点)
+- [数据](#数据)
+- [baseline 模型](#baseline-模型)
+  - [数据转换](#数据转换)
+  - [建立训练集和测试集](#建立训练集和测试集)
+  - [算法](#算法)
+  - [预测并评估预测结果](#预测并评估预测结果)
+  - [预测结果可视化](#预测结果可视化)
+</p></details><p></p>
 
 
 # baseline 特点
-
 
 - Simple: A method that requires little or no training or intelligence.
 - Fast: A method that is fast to implement and computationally trivial to make a prediction.
@@ -22,13 +50,11 @@ tags:
 
 # 数据
 
-
 ```python
 import pandas as pd 
 import matplotlib.pyplot as plt 
 from sklearn.metrics import mean_squared_error
 ```
-
 
 ```python
 def parser(x):
@@ -79,7 +105,6 @@ print(df.head(5))
 
 ## 建立训练集和测试集
 
-
 ```python
 # split into train and test sets
 X = df.values
@@ -99,7 +124,6 @@ def model_persistence(x):
 
 ## 预测并评估预测结果
 
-
 ```python
 # walk-forward validation
 predictions = list()
@@ -112,7 +136,6 @@ print("Test MSE: %.3f" % test_score)
 
 ## 预测结果可视化
 
-
 ```python
 # plot predictions and expected results
 plt.plot(train_y)
@@ -120,3 +143,4 @@ plt.plot([None for i in train_y] + [x for x in test_y])
 plt.plot([None for i in train_y] + [x for x in predictions])
 plt.show()
 ```
+
