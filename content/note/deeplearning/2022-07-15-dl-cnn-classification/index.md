@@ -1,5 +1,5 @@
 ---
-title: CNN-图像分类
+title: CNN-图像分类--从 LeNet5 到 ResNet
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-cnn-classification
@@ -9,58 +9,91 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [LeNet5](#lenet5)
+  - [LeNet5 的提出](#lenet5-的提出)
+  - [LeNet-5 的网络结构](#lenet-5-的网络结构)
+- [AlexNet](#alexnet)
+  - [AlexNet 的提出](#alexnet-的提出)
+  - [AlexNet 的网络结构](#alexnet-的网络结构)
+- [ZFNet](#zfnet)
+- [VGG-Net(VGG16, VGG19)](#vgg-netvgg16-vgg19)
+- [GoogLeNet](#googlenet)
+- [ResNet](#resnet)
+</p></details><p></p>
 
 
-# CNN 图像分类 —— 从 LeNet5 到 ResNet
+# LeNet5
+
+## LeNet5 的提出
+
+在神经网络的和深度学习领域, Yann LeCun 在 1998 年在 IEEE 上发表了 (Gradient-based learning applied to document recognition, 1998), 文中首次提出了 **卷积-池化-全连接** 的神经网络结构, 
+由 LeCun 提出的七层网络命名为 LeNet-5, 因而也为他赢得了 CNN 之父的美誉.
+
+## LeNet-5 的网络结构
+
+![img](images/LeNet-5.png)
+
+LeNet-5 共有5层(输入输出层不计入层数, 池化层与卷积层算1层). 
+每层都有一定的训练参数, 其中三个卷积层的训练参数较多, 
+每层都有多个滤波器(特征图), 每个滤波器都对上一层的输出提取不同的像素特征:
+
+`$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积(全连接) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
 
 
-
-## LeNet5
-
-- **LeNet5 的提出:**
-
-    在神经网络的和深度学习领域, Yann LeCun 在 1998 年在 IEEE 上发表了 (Gradient-based learning applied to document recognition, 1998), 
-    文中首次提出了 **卷积-池化-全连接** 的神经网络结构, 由 LeCun 提出的七层网络命名为 LeNet-5, 因而也为他赢得了 CNN 之父的美誉.
-
-- **LeNet-5 的网络结构:**
-
-    ![img](images/LeNet-5.png)
-
-    LeNet-5 共有5层(输入输出层不计入层数, 池化层与卷积层算1层). 每层都有一定的训练参数, 其中三个卷积层的训练参数较多, 每层都有多个滤波器(特征图), 每个滤波器都对上一层的输出提取不同的像素特征:
-    
-    `$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积(全连接) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
-
-作为标准的卷积网络结构, LeNet-5 对后世的影响深远, 以至于在 16 年后, 谷歌提出 Inception 网络时也将其命名为 GoogLeNet, 
-以致敬 Yann LeCun 对卷积神经网络发展的贡献。然而 LeNet-5 提出后的十几年里, 由于神经网络的可解释性问题和计算资源的限制, 
+作为标准的卷积网络结构, LeNet-5 对后世的影响深远, 以至于在 16 年后, 
+谷歌提出 Inception 网络时也将其命名为 GoogLeNet, 
+以致敬 Yann LeCun 对卷积神经网络发展的贡献。
+然而 LeNet-5 提出后的十几年里, 由于神经网络的可解释性问题和计算资源的限制, 
 神经网络的发展一直处于低谷.
 
+# AlexNet
+
+## AlexNet 的提出
+
+2012年, 深度学习三巨头之一的 Geoffrey Hinton 的学生 Alex Krizhevsky 率先提出了 
+AlexNet (ImageNet Classification with Deep Convolutional Neural Networks, 2012), 
+并在当年度的 ILSVRC(ImageNet大规模视觉挑战赛)以显著的优势获得当届冠军, top-5 的错误率降至了 16.4%, 
+相比于第二名 26.2% 的错误率有了极大的提升。这一成绩引起了学界和业界的极大关注, 
+计算机视觉也开始逐渐进入深度学习主导的时代.
+
+## AlexNet 的网络结构
+
+AlexNet 共有 8 层(输入输出层不计入层数, 池化层与卷积层算1层):
+
+`$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积 \rightarrow 卷积 \rightarrow (卷积-池化) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
+
+AlexNet 继承了 LeNet-5 的思想, 将卷积神经网络发展到很宽很深的网络中, 相较 LeNet-5 的 6 万个参数, 
+AlexNet 包含了 6 亿 3 千万条连接, 6 千万个参数和 65 万个神经元.
 
 
-## AlexNet
-
-- **AlexNet 的提出:**
-
-    2012年, 深度学习三巨头之一的 Geoffrey Hinton 的学生 Alex Krizhevsky 率先提出了 
-    AlexNet (ImageNet Classification with Deep Convolutional Neural Networks, 2012), 
-    并在当年度的 ILSVRC(ImageNet大规模视觉挑战赛)以显著的优势获得当届冠军, top-5 的错误率降至了 16.4%, 
-    相比于第二名 26.2% 的错误率有了极大的提升。这一成绩引起了学界和业界的极大关注, 
-    计算机视觉也开始逐渐进入深度学习主导的时代.
-
-- **AlexNet 的网络结构:**
-
-    AlexNet 共有 8 层(输入输出层不计入层数, 池化层与卷积层算1层):
-    `$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积 \rightarrow 卷积 \rightarrow (卷积-池化) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
-
-    AlexNet 继承了 LeNet-5 的思想, 将卷积神经网络发展到很宽很深的网络中, 相较 LeNet-5 的 6 万个参数, 
-    AlexNet 包含了 6 亿 3 千万条连接, 6 千万个参数和 65 万个神经元.
-
-
-## ZFNet
+# ZFNet
 
 在 2013 年的 ILSVRC 大赛中, Zeiler 和 Fergus 在 AlexNet 的基础上对其进行了微调提出了 ZFNet, 
 使得 top5 的错误率下降到 11.2%, 夺得当年的第一.
 
-## VGG-Net(VGG16, VGG19)
+# VGG-Net(VGG16, VGG19)
 
 到了 2014 年, 不断的积累实践和日益强大的计算能力使得研究人员敢于将神经网络的结构推向更深层。
 在 2014 年提出的 VGG-Net (Very Deep Convolutional Networks for Large-Scale Image Recognition, 2014 )中, 
@@ -82,7 +115,7 @@ VGG 的网络结构非常规整, 2-2-3-3-3的卷积结构也非常利于编程�
 也就是前文提到的致敬 LeNet-5 的 GoogLeNet.
 
 
-## GoogLeNet
+# GoogLeNet
 
 GoogLeNet  (Going Deeper with Convolutions, 2014) 在借鉴此前 1x1 卷积思想的基础上, 
 通过滤波器组合构建 Inception 模块, 使得网络可以走向更深且表达能力更强。从 2014 年获得当届 ILSVRC 
@@ -99,7 +132,7 @@ GoogLeNet  (Going Deeper with Convolutions, 2014) 在借鉴此前 1x1 卷积思�
 
 构建好 Inception 模块后, 将多个类似结构的Inception模块组合起来便是一个Inception 网络, 如下图所示:
 
-## ResNet
+# ResNet
 
 深度卷积网络一开始面临的最主要的问题是梯度消失和梯度爆炸。那什么是梯度消失和梯度爆炸呢？所谓梯度消失, 
 就是在深层神经网络的训练过程中, 计算得到的梯度越来越小, 使得权值得不到更新的情形, 这样算法也就失效了。
