@@ -9,6 +9,37 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [RNN 简介](#rnn-简介)
+- [RNN 网络架构](#rnn-网络架构)
+  - [RNN 基本结构](#rnn-基本结构)
+  - [RNN 单元结构](#rnn-单元结构)
+  - [RNN 变种结构模型](#rnn-变种结构模型)
+- [RNN 示例](#rnn-示例)
+- [参考文章](#参考文章)
+</p></details><p></p>
+
 # RNN 简介
 
 循环神经网路(Recurrent Neural Networks, RNNs) 是一种专门用来序列数据的神经网络. 

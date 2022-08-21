@@ -9,18 +9,46 @@ tags:
   - tool
 ---
 
-# 1.深度强化学习
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [深度强化学习](#深度强化学习)
+- [强化学习示例](#强化学习示例)
+  - [开发环境](#开发环境)
+  - [CartPole 示例](#cartpole-示例)
+</p></details><p></p>
+
+# 深度强化学习
 
 强化学习(Reinforcement learning, RL)强调如何基于环境而行动, 以取得最大化的预期利益。
 结合了深度学习技术后的强化学习更是如虎添翼。近两年广为人知的 AlphaGo 既是深度强化学习(DRL)的典型应用。
 
-# 2.强化学习示例
+# 强化学习示例
 
 以下示例使用深度强化学习玩 CartPole(倒立摆)游戏, 倒立摆是控制论中的经典问题, 
 在这个游戏中, 一根杆的底部与一个小车通过轴相连, 而杆的重心在轴之上, 因此是一个不稳定的系统。
 在重力的作用下, 杆很容易倒下。需要控制小车在水平的轨道上进行左右运动, 使得杆一直保持竖直平衡状态。
 
-## 2.1 开发环境
+## 开发环境
 
 - OpenAI 推出的 Gym 环境库中的 CartPole 游戏环境
     - 和 Gym 的交互过程很像一个回合制游戏：
@@ -54,7 +82,7 @@ while True:
         break
 ```
 
-## 2.2 CartPole 示例
+## CartPole 示例
 
 - 任务
 

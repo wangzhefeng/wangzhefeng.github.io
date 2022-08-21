@@ -105,6 +105,9 @@ details[open] summary {
       - [Batch Normalization 对于在线学习不友好](#batch-normalization-对于在线学习不友好)
       - [Batch Normalization 对循环神经网络不友好](#batch-normalization-对循环神经网络不友好)
     - [Batch Normalization 的可替代方法](#batch-normalization-的可替代方法)
+- [Batch Normalization](#batch-normalization-1)
+  - [Batch Normalization原理](#batch-normalization原理)
+  - [Batch Normalization优点](#batch-normalization优点)
 </p></details><p></p>
 
 # 过拟合
@@ -536,4 +539,43 @@ NVIDIA 和卡耐基梅隆大学进行的实验结果表明，
 - Group Normalization (+ weight standardization)
 - Synchronous Batch Normalization
 
+# Batch Normalization
+
+- 设定合适的权重初始值, 各层的激活值分布就会有适当地广度, 从而可以顺利地进行学习
+- 为了使各层拥有适当的广度, Batch Normalization 方法“强制性”地调整激活值的分布
+
+## Batch Normalization原理
+
+ - Batch Normalization 的思路是调整各层的激活值分布使其拥有适当的广度。
+   为此, 要向神经网络中插入对数据分布进行的正规化层, 即 Batch Normalization 层
+
+Batch Normalization, 顾名思义, 以进行学习时的 mini-batch 为单位, 按 mini-batch 进行正规化。
+具体来说, 就是对 mini-batch 数据进行数据分布的均值为 0, 方差为 1 的正规化, 数学表示如下:
+
+`$$\mu_B \leftarrow \frac{1}{m}\sum_{i=1}^{m}x_i$$`
+
+`$$\sigma_{B}^{2} \leftarrow \frac{1}{m}\sum_{i=1}^{m}(x_i - \mu_B)^2$$`
+
+`$$\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma_{B}^{2} + \epsilon}}$$`
+
+这里对 mini-batch 的 `$m$` 个输入数据的集合 `$B=\{x_1, x_2, \ldots, x_m\}$` 求均值 `$\mu_B$` 和方差 `$\sigma_B^{2}$`
+然后对输入数据进行均值为 0, 方差为 1 的正规化。其中 `$\epsilon$` 取一个较小的值 `$10e-7$`。
+即将 mini-batch 的输入数据 `$\{x_1, x_2, \ldots, x_m\}$` 变换为均值为 0, 
+方差为 1 的数据 `$\{\hat{x_1}, \hat{x_2}, \ldots, \hat{x_m}\}$`。
+通过将这个处理插入到激活函数的前面或后面, 可以减小数据分布的偏向
+
+接着 Batch Normalization 层会对正规化后的数据进行缩放和平移的变换, 数学表示如下:
+
+`$$y_i \leftarrow \gamma \hat{x_i} + \beta$$`
+
+其中:
+
+- `$\gamma$` 和 `$\beta$` : 是参数, 初始值一般设为 `$\gamma=1$`, `$\beta=0$`, 
+  然后通过学习整合到合适的值; 
+
+## Batch Normalization优点
+
+- 可以使学习快速进行(可以增大学习率)
+- 不那么依赖初始值(对初始值不敏感)
+- 抑制过拟合(降低Dropout等的必要性)
 

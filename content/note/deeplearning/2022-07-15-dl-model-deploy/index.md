@@ -10,25 +10,34 @@ tags:
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
 }
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
 }
 </style>
+
+<details><summary>目录</summary><p>
+
+- [模型部署简介](#模型部署简介)
+- [部署一个模型](#部署一个模型)
+  - [创建 PyTorch 模型](#创建-pytorch-模型)
+  - [中间表示 -- ONNX](#中间表示----onnx)
+  - [推理引擎 -- ONNX Runtime](#推理引擎----onnx-runtime)
+- [总结](#总结)
+</p></details><p></p>
 
 # 模型部署简介
 
@@ -39,12 +48,6 @@ h2 {
 - 推理引擎 ONNX Runtime、TensorRT 的使用方法
 - 部署流水线 PyTorch => ONNX => ONNX Runtime/TensorRT 的示例及常见部署问题的解决方法
 - MMDeploy C/C++ 推理 SDK
-
-
-
-
-
-
 
 # 部署一个模型
 

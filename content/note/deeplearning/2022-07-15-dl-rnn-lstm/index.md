@@ -9,7 +9,41 @@ tags:
   - model
 ---
 
-LSTM-让RNN具备更好的记忆机制
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [RNN 网络](#rnn-网络)
+- [LSTM 网络](#lstm-网络)
+- [LSTML 核心思想](#lstml-核心思想)
+  - [LSTM cell state](#lstm-cell-state)
+  - [LSTM 分步分解](#lstm-分步分解)
+- [LSTM 变形](#lstm-变形)
+  - [LSTM + peephole connections](#lstm--peephole-connections)
+  - [LSTM + coupled & input gates](#lstm--coupled--input-gates)
+  - [GRU, Gated Recurrent Unit](#gru-gated-recurrent-unit)
+- [参考文章](#参考文章)
+</p></details><p></p>
+
+LSTM - 让 RNN 具备更好的记忆机制
 
 # RNN 网络
 

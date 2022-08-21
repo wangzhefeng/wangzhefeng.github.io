@@ -9,6 +9,42 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [GRU](#gru)
+- [GRU 结构](#gru-结构)
+  - [GRU 神经元](#gru-神经元)
+  - [GRU Update gate 和 Reset gate](#gru-update-gate-和-reset-gate)
+  - [GRU 层次结构](#gru-层次结构)
+    - [GRU 重置记忆](#gru-重置记忆)
+    - [GRU 更新记忆](#gru-更新记忆)
+- [GRU 结构2](#gru-结构2)
+  - [Update gate](#update-gate)
+  - [Reset gate](#reset-gate)
+  - [Current memery content](#current-memery-content)
+  - [Final memory at current time step](#final-memory-at-current-time-step)
+</p></details><p></p>
+
 # GRU
 
 GRU (Gate Recurrent Unit) 是循环神经网络的一种变体。和 LSTM 一样, GRU 也是为了解

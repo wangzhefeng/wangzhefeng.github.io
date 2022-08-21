@@ -83,7 +83,7 @@ disable_highlight: true
     - [x] 部署相关文件
 * :white_check_mark: 添加 favicon.ico -->
 
-### 本站架构
+###
 
 [<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.png" width="7%" />](images/github.png) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
 <!-- [<img src="images/github.svg" width="6%" />](https://github.com) -->

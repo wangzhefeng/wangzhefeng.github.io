@@ -9,7 +9,37 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
+
+- [计算图(computational graph)](#计算图computational-graph)
+- [链式法则(chain rule)](#链式法则chain-rule)
+- [反向传播](#反向传播)
+- [梯度爆炸与梯度消失](#梯度爆炸与梯度消失)
+  - [梯度爆炸与梯度消失的问题提出](#梯度爆炸与梯度消失的问题提出)
+  - [梯度爆炸与梯度消失现象解释](#梯度爆炸与梯度消失现象解释)
+  - [梯度爆炸和梯度消失出现的机制](#梯度爆炸和梯度消失出现的机制)
+  - [梯度爆炸与梯度消失的解决方法](#梯度爆炸与梯度消失的解决方法)
+</p></details><p></p>
 
 # 计算图(computational graph)
 
@@ -20,7 +50,8 @@ tags:
 - 构建计算图; 
 - 在计算图上从左到右进行计算(正向传播, forward propagation); 
 - 在计算图上从右到左进行计算(反向传播, backward propagation); 
-   - 将上游传过来的值E乘以节点的局部导数 `$\frac{\partial y}{\partial x}$`, 然后将结果传递给下一个节点
+   - 将上游传过来的值E乘以节点的局部导数 `$\frac{\partial y}{\partial x}$`, 
+     然后将结果传递给下一个节点
 
 计算图的优点:
 
@@ -94,7 +125,8 @@ tags:
 
 ## 梯度爆炸与梯度消失的解决方法
 
-那么梯度爆炸和梯度消失怎么解决呢？梯度爆炸并不麻烦, 在实际训练的时候对梯度进行修剪即可, 但是梯度消失的处
-理就比较麻烦了, 由上述的分析我们知道梯度消失一个关键在于激活函数。sigmoid 激活函数本身就更容易产生这种幺蛾子, 
-所以一般而言, 我们换上更加鲁棒的 ReLu 激活函数以及给神经网络加上归一化激活函数层, 一般问题都能得到很好的解决, 
+那么梯度爆炸和梯度消失怎么解决呢？梯度爆炸并不麻烦, 在实际训练的时候对梯度进行修剪即可, 
+但是梯度消失的处理就比较麻烦了, 由上述的分析我们知道梯度消失一个关键在于激活函数。
+sigmoid 激活函数本身就更容易产生这种幺蛾子, 所以一般而言, 
+我们换上更加鲁棒的 ReLu 激活函数以及给神经网络加上归一化激活函数层, 一般问题都能得到很好的解决, 
 但也不是任何情形下都管用, 比如说咱们的 RNN 网络。
