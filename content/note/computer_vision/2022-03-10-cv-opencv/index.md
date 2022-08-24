@@ -42,6 +42,7 @@ details[open] summary {
     - [使用非官方的 Python 预构建 OpenCV 包](#使用非官方的-python-预构建-opencv-包)
   - [OpenCV-Python 调用](#opencv-python-调用)
 - [OpenCV 图像基本操作](#opencv-图像基本操作)
+  - [OpenCV 常用 API](#opencv-常用-api)
   - [图像读取](#图像读取)
   - [图像显示](#图像显示)
     - [Jupyter Notebook](#jupyter-notebook)
@@ -52,12 +53,27 @@ details[open] summary {
     - [直线](#直线)
     - [矩形](#矩形)
     - [圆圈](#圆圈)
-  - [图像翻转](#图像翻转)
   - [在图像上写文字](#在图像上写文字)
-- [OpenCV 收集图片数据](#opencv-收集图片数据)
+  - [图像混合](#图像混合)
+  - [图像变换](#图像变换)
+    - [图像翻转](#图像翻转)
+  - [图像预处理](#图像预处理)
+  - [图像特征检测与描述](#图像特征检测与描述)
+  - [图像边缘检测](#图像边缘检测)
+  - [图像轮廓](#图像轮廓)
+  - [视频分析](#视频分析)
+  - [机器学习](#机器学习)
+  - [计算摄影学](#计算摄影学)
+  - [目标检测](#目标检测)
+- [OpenCV-Python Binding](#opencv-python-binding)
+- [OpenCV 收集图片数据集](#opencv-收集图片数据集)
   - [初始化](#初始化)
   - [示例](#示例)
-- [TODO](#todo)
+- [OpenCV 图像投影变换](#opencv-图像投影变换)
+  - [投影变换(仿射变换)](#投影变换仿射变换)
+    - [投影变换矩阵](#投影变换矩阵)
+    - [投影变换](#投影变换)
+  - [示例](#示例-1)
 </p></details><p></p>
 
 
@@ -96,6 +112,8 @@ details[open] summary {
 
 # OpenCV-Python
 
+OpenCV-Python 是用于 OpenCV 的 Python API，结合了 OpenCV C++ API 和 Python 的最佳特性
+
 OpenCV-Python 依赖于 Numpy 库，所有的 OpenCV 数组结构都能够与 Numpy 数组相互转换，
 这也使得使用 OpenCV 与 Numpy 的其他库的集成变得更加容易
 
@@ -110,6 +128,7 @@ OpenCV-Python 依赖于 Numpy 库，所有的 OpenCV 数组结构都能够与 Nu
 
 ### 使用预构建的二进制文件和源代码
 
+- [Ubuntu doc](https://mp.weixin.qq.com/s?__biz=MzU2NTUwNjQ1Mw==&mid=2247484077&idx=1&sn=f8ac89b218addfe8b4110b8dfa121938&scene=19#wechat_redirect)
 - [Windows doc](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_setup/py_setup_in_windows/py_setup_in_windows.html)
 - [macOS doc](https://www.pyimagesearch.com/2016/12/19/install-opencv-3-on-macos-with-homebrew-the-easy-way/)
 
@@ -139,29 +158,34 @@ print(cv.__version__)
 
 # OpenCV 图像基本操作
 
-API:
+## OpenCV 常用 API
 
-- `cv.imread(img_path, img_mode)`
-	- `cv.IMREAD_COLOR`
+- `cv2.imread(img_path, img_mode)`
+	- `cv2.IMREAD_COLOR`
     	- 加载彩色图像
     	- 任何图像的透明度都会被忽视，默认
     	- 参数编码：`1`
-	- `cv.IMREAD_GRAYSCALE`
+	- `cv2.IMREAD_GRAYSCALE`
     	- 以灰度模式加载图像
     	- 参数编码：`0`
-	- `cv.IMREAD_UNCHANGED`
+	- `cv2.IMREAD_UNCHANGED`
     	- 加载图像，包括 alpha 通道
     	- 参数编码：`-1`
-- `cv.imshow('window_name', img_obj)`
-- `cv.imwrite()`
+- `cv2.imshow('window_name', img_obj)`
+- `cv2.imwrite()`
+- `cv2.waitKey()` 
+    - 一个键盘绑定函数，它的参数是以毫秒为单位的时间
+    - 该函数等待任何键盘事件的指定毫秒，如果在那段时间内按任意键，程序将继续
+    - 如果传递参数为 0，它将无限期得等待一次敲击键
+    - 也可以设置参数为检测特定的按键，例如: 如果按下键 `a` 等
+- 键盘上的 Escape 键(`0xFF == 27`)
+    - 如果按下了退出键，则循环将中断并且程序停止
+- `cv2.destroyAllWindows()` 
+    - 简单地销毁创建的所有窗口
+- `cv2.destoryAllWindow()`
+    - 如果要销毁任何特定窗口，将确切的窗口名称作为参数传递
 
-依赖:
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
-```
 
 ## 图像读取
 
@@ -205,8 +229,11 @@ print(img.shape)
 # opencv
 import cv2
 
-img = cv2.imread("img.jpg")
-cv2.imshow("image", img)
+# 读取图像
+img_bgr = cv2.imread("img.jpg")
+cv2.imshow("image", img_bgr)
+cv2.waitKey(0)
+cv2.destoryAllWindows()
 ```
 
 ```python
@@ -214,24 +241,14 @@ cv2.imshow("image", img)
 import matplotlib.pyplot as plt
 import cv2
 
-img = cv2.imread("img.jpg")
-
+# 读取图像
+img_bgr = cv2.imread("img.jpg")
 # 将 opencv 图像转换为 matplotlib 的形式
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-plt.imshow("image", img)
+img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+plt.imshow("image", img_rgb)
 ```
 
 ### Python Script
-
-- `cv2.waitKey()` 
-    - 一个键盘绑定函数，它的参数是以毫秒为单位的时间
-    - 该函数等待任何键盘事件的指定毫秒，如果在那段时间内按任意键，程序将继续
-- 键盘上的 Escape 键(`0xFF == 27`)
-    - 如果按下了退出键，则循环将中断并且程序停止
-- `cv2.destroyAllWindows()` 
-    - 简单地销毁我们创建的所有窗口
-    - 如果要销毁任何特定窗口，将确切的窗口名称作为参数传递
 
 ```python
 import cv2
@@ -256,34 +273,44 @@ cv2.imwrite("final_image.png", img)
 
 ## 在图像上绘图
 
-
 ### 基本流程
 
-1. 创建一个黑色图像作为模板
+1. 读取或创建一个图像作为模板
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
-image_blank = np.zeros(shape = (512, 512, 3), dtype = np.int16)
+img_blank = np.zeros(shape = (512, 512, 3), dtype = np.int16)
 plt.imshow(img_blank)
+plt.show()
+
+img_bgr = cv2.imread("img.jpg")
+img_rgb = cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+plt.imshow(img_rgb)
+plt.show()
 ```
+
+![img](images/img_blank.png)
 
 2. 功能与属性
 
-在图像上绘制形状的通用函数是 `cv2.shape()`, 其参数如下:
-
-- `cv.shape`: shape 可以是 line, rectangle, ...
-- `image`: 被绘制形状的图像
-- `Pt1`, `Pt2`: 形状从左下角(Pt1)到右下角(Pt2)的坐标
-- `color`: 要绘制的形状的颜色, 如 (255, 0, 0) 表示灰度
-- `thickness`: 几何图形的厚度
+在图像上绘制形状的通用函数是 `cv2.shape()`:
 
 ```python
 import cv2
 
-cv2.shape(image, Pt1, Pt2, color, thickness)
+cv2.shape(img, pt1, pt2, color, thickness, lineType)
 ```
+
+参数:
+
+- `cv2.shape()`: shape 可以是 line, rectangle, ...
+- `img`: 被绘制形状的图像
+- `pt1`, `pt2`: 形状从左下角(pt1)到右下角(pt2)的坐标
+- `color`: 要绘制的形状的颜色, 如 (255, 0, 0) 表示灰度
+- `thickness`: 几何图形的厚度
+- `lineType`: 线类型
 
 ### 直线
 
@@ -291,9 +318,19 @@ cv2.shape(image, Pt1, Pt2, color, thickness)
 import matplotlib.pyplot as plt
 import cv2
 
-line_red = cv2.line(img, (0, 0), (511, 511), (255, 0, 0), 5)
-plt.imshow(lien_reg)
+img_line = cv2.line(
+    img = img_blank, 
+    pt1 = (0, 0), 
+    pt2 = (511, 511), 
+    color = (255, 0, 0), 
+    thickness = 5, 
+    lineType = 8
+)
+plt.imshow(img_line)
+plt.show()
 ```
+
+![img](images/img_line.png)
 
 ### 矩形
 
@@ -301,9 +338,19 @@ plt.imshow(lien_reg)
 import matplotlib.pyplot as plt
 import cv2
 
-rectangle = cv2.rectangle(img, (384, 0), (510, 128), (0, 0, 255), 5)
-plt.imshow(rectangle)
+img_rectangle = cv2.rectangle(
+    img = img_blank, 
+    pt1 = (384, 0),
+    pt2 = (510, 128), 
+    color = (0, 0, 255), 
+    thickness = 5,
+    lineType = 8,
+)
+plt.imshow(img_rectangle)
+plt.show()
 ```
+
+![img](images/img_rectangle.png)
 
 ### 圆圈
 
@@ -311,11 +358,71 @@ plt.imshow(rectangle)
 import matplotlib.pyplot as plt
 import cv2
 
-circle = cv2.circle(img, (447, 63), 63, (0, 0, 255), -1)
-plt.imshow(circle)
+img_circle = cv2.circle(
+    img = img_blank, 
+    center = (447, 63), 
+    radius = 63, 
+    color = (0, 0, 255), 
+    thickness = -1,
+    lineType = 8,
+)
+plt.imshow(img_circle)
+plt.show()
 ```
 
-## 图像翻转
+![img](images/img_circle.png)
+
+## 在图像上写文字
+
+API:
+
+* `cv2.putText(img, text, org, fontFace, fontScale, color, thickness, lineType)`
+
+主要参数：
+
+- `img`: 文字背景图像
+- `text`: 文字内容
+- `org`: 文字的坐标，从左下角开始
+- `fontFace`: 文字字体
+- `fontScale`: 文字大小比例
+- `color`: 文字颜色
+- `thickness`: 文字字体粗细
+- `lineType`: 文字线条类型
+
+```python
+import matplotlib.pyplot as plt
+import cv2
+
+font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
+img_text = cv2.putText(
+    img = img_blank,             # 图像
+    text = "OpenCV",             # 文字内容
+    org = (150, 200),              # 文字坐标
+    fontFace = font,             # 文字字体
+    fontScale = 2,               # 文字比例
+    color = (255, 255, 255),     # 文字颜色
+    thickness = 5,               # 文字字体粗细
+    lineType = cv2.LINE_AA,      # 文字线条类型
+)
+plt.imshow(img_text)
+plt.show()
+```
+
+![img](images/img_text.png)
+
+## 图像混合
+
+## 图像变换
+
+图像变换包括:
+
+* 平移
+* 旋转
+* 缩放
+* 裁剪
+* 翻转
+
+### 图像翻转
 
 ```python
 import matplotlib.pyplot as plt
@@ -325,54 +432,42 @@ img = cv2.imread("img.jpg")
 cv2.flip()
 ```
 
-## 在图像上写文字
+## 图像预处理
 
-API:
+## 图像特征检测与描述
 
-* `cv2.putText()`
+## 图像边缘检测
 
-主要参数：
+## 图像轮廓
 
-- 文字内容
-- 文字的坐标，从左下角开始
-- 文字字体
-- 文字大小比例
-- 文字颜色
-- 文字字体粗细
-- 文字线条类型
+## 视频分析
 
-```python
-import matplotlib.pyplot as plt
-import cv2
+## 机器学习
 
-img = cv2.imread("img.jpg")
-font = cv2.FONT_HERSHEY_SIMPLEX
-text = cv2.putText(
-    img,                         # 图像
-    "OpenCV",                    # 文字内容
-    (10, 50),                    # 文字坐标
-    font,                        # 文字字体
-    4,                           # 文字比例
-    (255, 255, 255),             # 文字颜色
-    2,                           # 文字字体粗细
-    lineType = cv2.LINE_AA,      # 文字线条类型
-)
-plt.show(text)
-```
+## 计算摄影学
+
+## 目标检测
+
+# OpenCV-Python Binding
 
 
 
 
-# OpenCV 收集图片数据
 
-通过
-图像来创建图像数据集
-收集和格式化图像数据的最简单方法之一
+
+
+
+
+
+
+# OpenCV 收集图片数据集
+
+通过视频截取图像来创建图像数据集是收集和格式化图像数据的最简单方法之一。
 建议在有一面空白墙壁来收集数据，以确保框架中没有外部噪音
 
 ## 初始化
 
-创建一个 VideoCapture 对象，该对象从系统的网络摄像头实时捕获视频，TODO
+创建一个 VideoCapture 对象，该对象从系统的网络摄像头实时捕获视频
 
 * `flag_collecting`：这是一个布尔变量，用作暂停/恢复按钮
 * `images_collected`：这是一个整数变量，用于指示系统中收集和保存的图像数量
@@ -439,10 +534,169 @@ cap.release()
 cv2.destoryAllWindows()
 ```
 
+# OpenCV 图像投影变换
 
+## 投影变换(仿射变换)
 
+在数学中，线性变换是将一个向量空间映射到另一个向量空间的函数，通常由矩阵实现。
+如果映射保留向量加法和标量乘法，则映射被认为是线性变换
 
+要将线性变换应用于向量(即，一个点的坐标，在图像中就是像素的 `$x$` 和 `$y$`值)，
+需要将该向量乘以表示线性变换的矩阵。作为输出，将获得一个坐标转换后的向量
 
-# TODO
+### 投影变换矩阵
 
-- [ ] 添加效果图
+投影变换可以用下面的矩阵表示
+
+`$$
+\left[
+    \begin{array}{c}
+        a_{1} & a_{2} & b_{1}\\
+        a_{3} & a_{4} & b_{2}\\
+        c_{1} & c_{2} & 1\\
+    \end{array}
+\right]$$`
+
+其中:
+
+`$$
+\left[
+    \begin{array}{c}
+        a_{1} & a_{2}\\
+        a_{3} & a_{4}\\
+    \end{array}
+\right]$$`
+
+是一个旋转矩阵，该矩阵定义了将要执行的变换类型: 缩放、旋转等
+
+`$$
+\left[
+    \begin{array}{c}
+        b_{1}\\
+        b_{2}\\
+    \end{array}
+\right]$$`
+
+是一个平移向量，它只移动点
+
+`$$
+\left[
+    \begin{array}{c}
+        c_{1} & c_{2}\\
+    \end{array}
+\right]$$`
+
+是投影向量，对于仿射变换，该向量的所有元素始终等于 0
+
+### 投影变换
+
+如果 `$x$` 和 `$y$` 是一个点的坐标，则可以通过简单的乘法进行变换
+
+`$$
+\left[
+    \begin{array}{c}
+        a_{1} & a_{2} & b_{1}\\
+        a_{3} & a_{4} & b_{2}\\
+        c_{1} & c_{2} & 1\\
+    \end{array}
+\right] \times
+\left[
+    \begin{array}{c}
+        x\\
+        y\\
+        1\\
+    \end{array}
+\right] =
+\left[
+    \begin{array}{c}
+        x^{'}\\
+        y^{'}\\
+        1\\
+    \end{array}
+\right]$$`
+
+其中: `$x^{'}$` 和 `$y^{'}$` 是变换点的坐标
+
+## 示例
+
+1. 读取源图像并获取源图像的大小
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+
+# 源图像
+img_src = cv2.imread("source_image.jpg", cv2.IMREAD_COLOR)
+
+# 源图像大小参数
+h, w, c = img_src.shape
+
+# 获取源图像的参数: [[left,top], [left,bottom], [right, top], [right, bottom]]
+img_src_coordinate = np.array([
+    [0, 0],
+    [0, h],
+    [w, 0],
+    [w, h],
+])
+```
+
+2. 读取目标图像
+
+```python
+img_dest = cv2.imread("dest_image.jpg", cv2.IMREAD_COLOR)
+img_dest_copy = img_dest.copy()
+```
+
+3. 获取目标图像中的坐标，源图像将被粘贴到改坐标
+
+```python
+def get_paste_position(img_dest_copy, event, x, y, flags, paste_coorinate_list):
+    """
+    点击目标图像中的四个点后，将四个点保存到一个列表中
+    """
+    cv2.imshow("collect coordinate", img_dest_copy)
+    if event == cv2.EVENT_LBUTTONUP:
+        # draw circle right in click position
+        cv2.circle(img_dest_copy, (x, y), 2, (0, 0, 225), -1)
+        # append new clicked coordinate to paste_coordinate_list
+        paste_coordinate_list.append([x, y])
+
+# 获取目标图像中的坐标
+paste_coordinate = []
+cv2.namedWindow("collect coordinate")
+cv2.setMouseCallback(
+    "collect coordinate", 
+    get_paste_position, 
+    paste_coordinate
+)
+while True:
+    cv2.waitKey(1)
+    if len(paste_coordinate) == 4:
+        break
+paste_coordinate = np.array(paste_coordinate)
+
+# 计算投影变换矩阵
+matrix, _ = cv2.findHomography(img_src_coordinate, paste_coordinate, 0)
+print(f"matrix: {matrix}")
+
+# 将源图像转换为具有目标图像大小的透视图像
+perspective_img = cv2.warpPerspective(
+    img_src, 
+    matrix, 
+    (img_dest.shape[1], img_dest.shape[0]),
+)
+cv2.imshow("img", perspective_img)
+
+# 将源图像粘贴到目标图像中的选定坐标中
+cv2.copyTo(
+    src = perspective_img, 
+    mask = np.tile(perspective_img, 1), 
+    dst = img_dest
+)
+cv2.imshow("result", img_dest)
+
+cv2.waitKey()
+cv2.destoryAllWindows()
+```
+
