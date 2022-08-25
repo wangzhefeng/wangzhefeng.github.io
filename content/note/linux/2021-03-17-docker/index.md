@@ -15,25 +15,6 @@ output:
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -111,25 +92,6 @@ details[open] summary {
     - [docker 安装 ES + Kibana](#docker-安装-es--kibana)
 - [Docker 镜像](#docker-镜像)
 - [容器数据卷](#容器数据卷)
-- [DockerFile](#dockerfile)
-  - [变量](#变量)
-  - [FROM](#from)
-  - [RUN](#run)
-  - [CMD](#cmd)
-  - [LABEL](#label)
-  - [EXPOSE](#expose)
-  - [ENV](#env)
-  - [ADD](#add)
-  - [COPY](#copy)
-  - [ENTRYPOINT](#entrypoint)
-  - [VOLUME](#volume)
-  - [ARG](#arg)
-  - [ONBUILD](#onbuild)
-  - [STOPSIGNAL](#stopsignal)
-  - [HEALTHCHECK](#healthcheck)
-  - [SHELL](#shell)
-  - [WORKDIR](#workdir)
-  - [USER](#user)
 - [Docker 网络原理](#docker-网络原理)
 - [Docker Compose](#docker-compose)
 - [Docker Swarm](#docker-swarm)
@@ -142,7 +104,6 @@ details[open] summary {
   - [Docker 安装 PyTorch](#docker-安装-pytorch)
 - [Docker 使用示例](#docker-使用示例)
   - [公司工作站环境](#公司工作站环境)
-- [Kubernetes](#kubernetes)
 </p></details><p></p>
 
 
@@ -1009,100 +970,6 @@ $ docker
 
 
 
-# DockerFile
-
-- https://mp.weixin.qq.com/s?__biz=MzAwMjg1NjY3Nw==&mid=2247518419&idx=2&sn=2e25da85a7dcf19fe6ca80484128deb3&chksm=9ac6cb59adb1424f76071ee35d0a01ba9635490b422b239290693851fc2f099bd3414af7792c&scene=132#wechat_redirect
-- Docker 可以通过读取 Dockerfile 中的指令自动构建镜像.
-- Dockerfile 是一个文本文档, 其中包含了用户创建镜像的所有命令和说明.
-
-## 变量
-
-变量用 `$variable_name` 或者 `${variable_name} 表示:
-
-- `${variable:-word}` 表示如果 `variable` 设置, 则结果将是该值, 如果 `variable` 未设置,  `word` 则将是结果
-- `${variabel:+word}` 表示如果 `variable` 设置, 则为 `word` 结果, 否则为 空字符串
-
-变量前加 `\` 可以转义成普通字符串: `\$foo` 或者 `\${foo}` 表示转换为 `$foo` 和 `${foo}` 文本
-
-## FROM
-
-初始化一个新的构建阶段, 并设置基础镜像:
-
-```bash
-FROM [--platform=<platform>] <image> [AS <name>]
-FROM [--platform=<platform>] <image>[:<tag>] [AS <name>]
-FROM [--platform=<platform>] <image>[@digest] [AS <name>]
-```
-
-- 单个 Dockfile 可以多次出现 `FROM` , 以使用之前的构建阶段作为另一个构建阶段的依赖项
-- `AS <name>` 表示为构建阶段命名, 在后续 `FROM` 和 `COPY --from=` 说明中可以使用这个名词, 
- 引用此阶段构建的镜像
-- `digest` 其实就是根据镜像内容产生的一个 ID, 只要要镜像的内容不变 `digest` 也不会变
-- `tag` 或 `digest` 值是可选的. 
-  - 如果省略其中任何一个, 构建器默认使用一个 `latest` 标签
-  - 如果找不到该 `tag` 值, 构建器将返回错误
-- `--platform` 标志可用于在 `FROM` 引用多平台镜像的情况下指定平台. 
- 例如, `linux/amd64`、 `linux/arm64` 、 或 `windows/amd64`
-
-## RUN
-
-## CMD
-
-## LABEL
-
-
-## EXPOSE
-
-
-
-## ENV
-
-
-
-## ADD
-
-
-
-## COPY
-
-
-
-## ENTRYPOINT
-
-
-## VOLUME
-
-
-## ARG
-
-
-## ONBUILD
-
-
-## STOPSIGNAL
-
-
-## HEALTHCHECK
-
-
-## SHELL
-
-
-
-## WORKDIR
-
-
-
-## USER
-
-设置用户名(或 UID) 和可选的用户组(或 GID)
-
-```bash
-USER <user>[:<group>]
-# or
-USER <UID>[:GID]
-```
-
 # Docker 网络原理
 
 
@@ -1201,18 +1068,4 @@ $ Ctrl + P + Q
 - torch 环境的 docker, name 是 torch_env, 已运行 jupyter notebook, 192.168.0.66:6666
 - 初次进入需要密码
 - 挂载的目录都是 /workspace/dataSets 挂载宿主机 /mnt/dataSets
-
-# Kubernetes
-
-Docker Desktop 包含一个可以在 Mac 上运行的 Kubernetes 服务器, 
-因此可以在 Kubernetes 上部署 Docker 工作负载.
-
-Kubernetes 的客户端命令是 `kubectl`
-
-- 将 Kubernetes 指向 docker-desktop:
-
-```bash
-kubectl config get-contexts
-kubectl config user-context docker-desktop
-```
 
