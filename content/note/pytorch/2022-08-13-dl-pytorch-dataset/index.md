@@ -32,6 +32,10 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [PyTorch 数据管道构建](#pytorch-数据管道构建)
+  - [结构化数据管道](#结构化数据管道)
+  - [图像数据管道](#图像数据管道)
+  - [文本数据管道](#文本数据管道)
 - [PyTorch 数据读取构建](#pytorch-数据读取构建)
   - [Dataset 和 DataLoader](#dataset-和-dataloader)
     - [使用 TorchVision datasets](#使用-torchvision-datasets)
@@ -60,6 +64,25 @@ details[open] summary {
     - [torchaudio.datasets](#torchaudiodatasets)
   - [自定义数据集的基本类](#自定义数据集的基本类)
 </p></details><p></p>
+
+
+# PyTorch 数据管道构建
+
+## 结构化数据管道
+
+
+## 图像数据管道
+
+PyTorch 中构建图像数据管道通常有两种方法:
+
+* 使用 `torchvision` 中的 `datasets.ImageFolder` 来读取图像，然后用  `DataLoader` 进行加载
+* 通过继承 `torch.utils.data.Dataset` 实现用户自定义读取逻辑，然后用 `DataLoader` 来并行加载
+    * 这种方法是读取用户自定义数据集的通用方法，即可以读取图像数据集，也可以读取文本数据集
+
+
+## 文本数据管道
+
+
 
 # PyTorch 数据读取构建
 

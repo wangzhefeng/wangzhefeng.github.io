@@ -61,7 +61,6 @@ details[open] summary {
 * 继承 nn.Module 基类构建自定义模型
 * 继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装
 
-
 ## 模型训练设备
 
 ```python
