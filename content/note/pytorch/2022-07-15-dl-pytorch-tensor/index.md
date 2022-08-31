@@ -1,5 +1,5 @@
 ---
-title: PyTorch tensor
+title: PyTorch 张量数据结构
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-pytorch-tensor
@@ -43,6 +43,11 @@ details[open] summary {
     - [依概率分布创建](#依概率分布创建)
   - [tensor 操作](#tensor-操作)
   - [cuda tensor](#cuda-tensor)
+  - [tensor 数据结构](#tensor-数据结构)
+  - [tensor 结构操作](#tensor-结构操作)
+  - [tensor 数学运算](#tensor-数学运算)
+    - [标量运算](#标量运算)
+    - [广播机制](#广播机制)
 - [PyTorch 数据并行](#pytorch-数据并行)
   - [让模型跑在 GPU 上](#让模型跑在-gpu-上)
   - [让模型跑在多个 GPU 上](#让模型跑在多个-gpu-上)
@@ -336,6 +341,38 @@ if torch.cuda.is_available():
     z = x + y
     z.to("cpu", torch.double)  # `.to` can also change dtype together!
 ```
+
+## tensor 数据结构
+
+
+
+## tensor 结构操作
+
+
+## tensor 数学运算
+
+tensor 数学运算主要有:
+
+* 标量运算
+* 向量运算
+* 矩阵运算
+* 爱因斯坦求和函数 `torch.einsum()` 进行任意阶张量运算
+* 广播机制
+
+### 标量运算
+
+
+
+
+### 广播机制
+
+PyTorch 的广播规则和 Numpy 是一样的:
+
+* 如果张量的维度不同，将维度较小的张量进行扩展，直到两个张量的维度都一样
+* 如果两个张量在某个维度上的长度是相同的，或者其中一个张量在该维度上的长度为 1，那么就说这两个张量在该维度上是相容的
+* 如果两个张量在所有维度上都是相容的，它们就能使用广播
+* 广播之后，每个维度的长度将取两个张量在该维度长度的较大值
+* 在任何一个维度上，如果一个张量的长度为 1，另一个张量的长度大于 1，那么在该维度上，就好像是对第一个张量进行了复制
 
 # PyTorch 数据并行
 

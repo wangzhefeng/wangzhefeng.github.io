@@ -39,9 +39,11 @@ details[open] summary {
 - [回调函数-Callbacks](#回调函数-callbacks)
 </p></details><p></p>
 
-- Sequential API
-- Functional API
-- Subclassing API
+使用 Keras 接口有以下 3 种方式构建模型:
+
+* 使用 Sequential(Sequential API) 按层顺序构建模型
+* 使用函数式 API(Functional API) 构建任意结构模型
+* 继承 Model 基类(Subclassing API)构建自定义模型
 
 # 模型共有的方法和属性
 

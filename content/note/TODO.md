@@ -89,7 +89,7 @@ details[open] summary {
 - 工具
   - Keras
   - TensorFlow
-  - Pytorch
+  - PyTorch
 
 ### Image Processing
 

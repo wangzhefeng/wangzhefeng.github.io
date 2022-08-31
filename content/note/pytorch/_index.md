@@ -28,7 +28,6 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [TensorFlow 和 PyTorch](#tensorflow-和-pytorch)
-- [Keras 和 tensorflow.keras](#keras-和-tensorflowkeras)
 - [文档](#文档)
 </p></details><p></p>
 
@@ -51,21 +50,6 @@ details[open] summary {
 3. TensorFlow 和 PyTorch 实际上整体风格已经非常相似了，学会了其中一个，
    学习另外一个将比较容易。两种框架都掌握的话，能够参考的开源模型案例更多，
    并且可以方便地在两种框架之间切换
-
-# Keras 和 tensorflow.keras
-
-关于 Keras 和 tensorflow.keras，听说的经验：
-
-* Keras 可以看成是一种深度学习框架的高阶接口规范，它帮助用户以更简洁的形式定义和训练深度学习网络模型。
-  使用 pip 安装的 Keras 库同时在 TenforFlow、Theano、CNTK 等后端基础上进行了这种高阶接口规范的实现
-* tensorflow.keras 是在 TensorFlow 中以 TensorFlow 低阶 API 为基础实现的高阶接口，
-  它是 TensorFlow 的一个子模块。tensorflow.keras 绝大部分功能和兼容多种后端的 Keras 库用法完全一样，但并非全部，
-  它和 TensorFlow 之间的结合更为紧密
-
-结论：
-
-* 随着谷歌对 Keras 的收购，Keras 库 2.3.0 版本后也将不再进行更新，
-  用户应当使用 tensorflow.keras，而不是使用 pip 安装的 Keras
 
 
 # 文档

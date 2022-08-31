@@ -32,6 +32,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [模型训练](#模型训练)
 - [损失函数](#损失函数)
   - [常用损失函数](#常用损失函数)
   - [损失函数的使用——compile() & fit()](#损失函数的使用compile--fit)
@@ -60,6 +61,15 @@ details[open] summary {
 ```python
 model.compile(loss, optimizer, metrics)
 ```
+
+# 模型训练
+
+TensorFlow 训练模型通常有 3 种方法:
+
+* 内置 `fit()` 方法
+* 内置 `train_on_batch()` 方法
+* 自定义训练循环
+
 
 # 损失函数
 

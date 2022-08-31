@@ -38,7 +38,7 @@ details[open] summary {
   - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch)
   - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch)
   - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch)
-- [Ubuntu 安装 Pytorch](#ubuntu-安装-pytorch)
+- [Ubuntu 安装 PyTorch](#ubuntu-安装-pytorch)
   - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-1)
   - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-1)
   - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-1)
@@ -98,7 +98,7 @@ $ conda install pytorch torchvision -c pytorch
 $ 
 ```
 
-# Ubuntu 安装 Pytorch
+# Ubuntu 安装 PyTorch
 
 ## 使用 pip 安装 PyTorch
 
