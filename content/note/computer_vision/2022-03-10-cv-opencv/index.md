@@ -69,6 +69,7 @@ details[open] summary {
 - [OpenCV 收集图片数据集](#opencv-收集图片数据集)
   - [初始化](#初始化)
   - [示例](#示例)
+  - [参考](#参考)
 - [OpenCV 图像投影变换](#opencv-图像投影变换)
   - [投影变换(仿射变换)](#投影变换仿射变换)
     - [投影变换矩阵](#投影变换矩阵)
@@ -533,6 +534,10 @@ print(images_collected, "images saved to directory")
 cap.release()
 cv2.destoryAllWindows()
 ```
+
+## 参考
+
+- https://mp.weixin.qq.com/s/R9uBQaVl2Zlr2rZ5kaq4Rw
 
 # OpenCV 图像投影变换
 
