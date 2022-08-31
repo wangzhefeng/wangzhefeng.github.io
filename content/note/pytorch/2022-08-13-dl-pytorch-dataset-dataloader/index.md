@@ -1,8 +1,8 @@
 ---
-title: PyTorch 数据集
+title: PyTorch 数据管道
 author: 王哲峰
 date: '2022-08-13'
-slug: dl-pytorch-dataset
+slug: dl-pytorch-dataset-dataloader
 categories:
   - deeplearning
   - pytorch

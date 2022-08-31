@@ -2,7 +2,7 @@
 title: PyTorch 模型保存和加载
 author: 王哲峰
 date: '2022-08-13'
-slug: dl-pytorch-model-save
+slug: dl-pytorch-model-save-load
 categories:
   - deeplearning
   - pytorch
