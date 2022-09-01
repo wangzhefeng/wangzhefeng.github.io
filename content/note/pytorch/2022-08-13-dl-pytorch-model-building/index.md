@@ -33,20 +33,19 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [PyTorch 模型的创建](#pytorch-模型的创建)
-  - [模型训练设备](#模型训练设备)
-  - [使用 nn.Sequential 按层顺序构建模型](#使用-nnsequential-按层顺序构建模型)
-  - [继承 nn.Module 基类构建自定义模型](#继承-nnmodule-基类构建自定义模型)
-    - [模型类](#模型类)
-    - [模型层](#模型层)
-    - [模型参数](#模型参数)
-  - [继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装](#继承-nnmodule-基类构建面模型并辅助应用模型容器进行封装)
-- [PyTorch 模型容器](#pytorch-模型容器)
+- [使用 nn.Sequential 按层顺序构建模型](#使用-nnsequential-按层顺序构建模型)
+  - [用 add_module() 方法](#用-add_module-方法)
+  - [使用变长参数](#使用变长参数)
+  - [使用 OrderedDict](#使用-ordereddict)
+- [继承 nn.Module 基类构建自定义模型](#继承-nnmodule-基类构建自定义模型)
+  - [模型类](#模型类)
+  - [模型层](#模型层)
+  - [模型参数](#模型参数)
+- [继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装](#继承-nnmodule-基类构建面模型并辅助应用模型容器进行封装)
+  - [Sequential](#sequential)
+  - [ModuleList](#modulelist)
+  - [ModuleDict](#moduledict)
 </p></details><p></p>
-
-
-* [torch.nn](https://pytorch.org/docs/stable/nn.html)
-* [torch.nn.Module](https://pytorch.org/docs/stable/generated/torch.nn.Module.html)
-
 
 # PyTorch 模型的创建
 
@@ -55,26 +54,76 @@ details[open] summary {
 * 使用 nn.Sequential 按层顺序构建模型
 * 继承 nn.Module 基类构建自定义模型
 * 继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装
+    - `nn.Sequential`
+    - `nn.ModuleList`
+    - `nn.ModuleDict`
 
-## 模型训练设备
+# 使用 nn.Sequential 按层顺序构建模型
+
+使用 `nn.Sequential` 按层顺序构建模型无需定义 `forward` 方法，仅仅适用于简单的模型
+
+## 用 add_module() 方法
 
 ```python
-import torch
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using {device} device")
+net = nn.Sequential()
+net.add_module("conv1",nn.Conv2d(in_channels=3,out_channels=32,kernel_size = 3))
+net.add_module("pool1",nn.MaxPool2d(kernel_size = 2,stride = 2))
+net.add_module("conv2",nn.Conv2d(in_channels=32,out_channels=64,kernel_size = 5))
+net.add_module("pool2",nn.MaxPool2d(kernel_size = 2,stride = 2))
+net.add_module("dropout",nn.Dropout2d(p = 0.1))
+net.add_module("adaptive_pool",nn.AdaptiveMaxPool2d((1,1)))
+net.add_module("flatten",nn.Flatten())
+net.add_module("linear1",nn.Linear(64,32))
+net.add_module("relu",nn.ReLU())
+net.add_module("linear2",nn.Linear(32,1))
+print(net)
 ```
 
-## 使用 nn.Sequential 按层顺序构建模型
+## 使用变长参数
 
+* 不能给每个层指定名称
 
+```python
+net = nn.Sequential(
+    nn.Conv2d(in_channels=3,out_channels=32,kernel_size = 3),
+    nn.MaxPool2d(kernel_size = 2,stride = 2),
+    nn.Conv2d(in_channels=32,out_channels=64,kernel_size = 5),
+    nn.MaxPool2d(kernel_size = 2,stride = 2),
+    nn.Dropout2d(p = 0.1),
+    nn.AdaptiveMaxPool2d((1,1)),
+    nn.Flatten(),
+    nn.Linear(64,32),
+    nn.ReLU(),
+    nn.Linear(32,1)
+)
 
+print(net)
+```
 
+## 使用 OrderedDict
 
+```python
+from collections import OrderedDict
 
-## 继承 nn.Module 基类构建自定义模型
+net = nn.Sequential(OrderedDict(
+          [("conv1",nn.Conv2d(in_channels=3,out_channels=32,kernel_size = 3)),
+            ("pool1",nn.MaxPool2d(kernel_size = 2,stride = 2)),
+            ("conv2",nn.Conv2d(in_channels=32,out_channels=64,kernel_size = 5)),
+            ("pool2",nn.MaxPool2d(kernel_size = 2,stride = 2)),
+            ("dropout",nn.Dropout2d(p = 0.1)),
+            ("adaptive_pool",nn.AdaptiveMaxPool2d((1,1))),
+            ("flatten",nn.Flatten()),
+            ("linear1",nn.Linear(64,32)),
+            ("relu",nn.ReLU()),
+            ("linear2",nn.Linear(32,1))
+          ])
+        )
+print(net)
+```
 
-### 模型类
+# 继承 nn.Module 基类构建自定义模型
+
+## 模型类
 
 ```python
 from torch import nn
@@ -112,7 +161,7 @@ y_pred = pred_probab.argmax(1)
 print(f"Predicted class: {y_pred}")
 ```
 
-### 模型层
+## 模型层
 
 * 三个图像
 
@@ -178,7 +227,7 @@ softmax = nn.Softmax(dim = 1)
 pred_probab = softmax(logits)
 ```
 
-### 模型参数
+## 模型参数
 
 ```python
 print(f"Model structure: {model}\n\n")
@@ -187,10 +236,22 @@ for name, param in model.named_parameters():
     print(f"Layer: {name} | Size: {param.size()} | Values: {param[:2]}\n")
 ```
 
-## 继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装
+# 继承 nn.Module 基类构建面模型并辅助应用模型容器进行封装
+
+当模型的结构比较复杂时，可以应用模型容器 `nn.Sequential`、`nn.ModuleList`、
+`nn.ModuleDict` 对模型的部分结构进行封装。
+这样做会让模型整体更加有层次感，有时候也能减少代码量。
+模型容器的使用是非常灵活的，可以在一个模型中任意组合任意嵌套使用。
+
+## Sequential
 
 
-# PyTorch 模型容器
+## ModuleList
+
+
+## ModuleDict
+
+
 
 
 

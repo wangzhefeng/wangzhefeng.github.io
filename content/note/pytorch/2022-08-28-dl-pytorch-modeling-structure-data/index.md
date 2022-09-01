@@ -2,11 +2,12 @@
 title: PyTorch 结构化数据建模
 author: 王哲峰
 date: '2022-08-28'
-slug: dl-pytorch-structure-data-classification
+slug: dl-pytorch-modeling-structure-data
 categories:
+  - deeplearning
   - pytorch
 tags:
-  - ml
+  - tool
 ---
 
 <style>

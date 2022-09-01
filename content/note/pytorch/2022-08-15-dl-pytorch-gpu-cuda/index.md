@@ -1,5 +1,5 @@
 ---
-title: PyTorch CUDA
+title: PyTorch GPU训练 和 CUDA
 author: 王哲峰
 date: '2022-08-15'
 slug: dl-pytorch-gup-cuda
