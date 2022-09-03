@@ -32,8 +32,14 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [低阶 API](#低阶-api)
+  - [线性回归示例](#线性回归示例)
+  - [DNN 二分类示例](#dnn-二分类示例)
 - [中阶 API](#中阶-api)
+  - [线性回归示例](#线性回归示例-1)
+  - [DNN 二分类示例](#dnn-二分类示例-1)
 - [高阶 API](#高阶-api)
+  - [线性回归示例](#线性回归示例-2)
+  - [DNN 二分类示例](#dnn-二分类示例-2)
 - [torch.nn.functional 和 torch.nn.Module](#torchnnfunctional-和-torchnnmodule)
   - [torch.nn.functional](#torchnnfunctional)
   - [torch.nn.Module](#torchnnmodule)
@@ -50,6 +56,163 @@ PyTorch 低阶 API 主要包括:
 * 自动微分
 
 
+## 线性回归示例
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import torch
+from torch import nn
+from torchkeras.utils.utils_log import printbar
+
+# ------------------------------
+# data
+# ------------------------------
+# 样本数量
+num_sample = 400
+# 生成测试用数据集
+X = 10 * torch.rand([n, 2]) - 5.0  # torch.rand 是均匀分布
+w0 = torch.tensor(
+    [[2.0], 
+     [-3.0]]
+)
+b0 = torch.tensor(
+    [[10.0]]
+)
+Y = X@w0 + b0 + torch.normal(0.0, 2.0, size = [num_sample, 1])
+
+# ------------------------------
+# 构建数据管道迭代器
+# ------------------------------
+def data_iter(features, labels, batch_size):
+    num_examples = len(features)
+    indices = list(range(num_examples))
+    np.random.shuffle(indices)
+    for i in range(0, num_examples, batch_size):
+        indexs = torch.LongTensor(indices[i:min(i + batch_size, num_examples)])
+        yield features.index_select(0, indexs), labels.index_select(0, indexs)
+
+# ------------------------------
+# 定义模型
+# ------------------------------
+class LinearRegression:
+    
+    def __init__(self):
+        self.w = torch.randn_like(w0, requires_grad = True)
+        self.b = torch.zeros_like(b0, requires_grad = True)
+    
+    def forward(self, x):
+        return x@self.w + self.b
+    
+    def loss_fn(self, y_pred, y_true):
+        return torch.mean((y_pred - y_true) ** 2 / 2)
+
+model = LinearRegression()
+
+# ------------------------------
+# 训练模型
+# ------------------------------
+def train_step(model, features, labels, lr):
+    # 正向传播
+    preds = model.forward(features)
+    loss = model.loss_fn(preds, labels)
+
+    # 反向
+    loss.backward()
+
+    # 使用 torch.no_grad() 避免梯度记录
+    # 也可以通过操作 model.w.data 实现避免梯度记录
+    with torch.no_grad():
+        # 梯度下降算法更新参数
+        model.w -= lr * model.w.grad
+        model.b -= lr * model.b.grad
+        # 梯度清零
+        model.w.grad_zero_()
+        model.b.grad_zero_()
+     
+    return loss
+
+
+def train_model(X, Y, model, batch_size, epochs, lr):
+    for epoch in range(1, epochs + 1):
+        for features, labels in data_iter(
+            features = X, 
+            labels = Y, 
+            batch_size = batch_size):
+            loss = train_step(
+                model = model, 
+                features = features, 
+                labels = labels, 
+                lr = lr
+            )
+        
+        if epoch % 20 == 0:
+            printbar()
+            print("epoch = ", epoch, "loss = ", loss.item())
+            print("model.w = ", model.w.data)
+            print("model.b = ", model.b.data)
+
+batch_size = 10
+epochs = 200
+lr = 0.001
+train_model(X, Y, model, batch_size, epochs, lr)
+
+# ------------------------------
+# 结果可视化
+# ------------------------------
+def plot_linearreg_metrics(X, Y, preds, feature_idx, subplot_idx, xlabel, ylabel):
+    plt.figure(figsize = (8, 8))
+    ax = plt.subplot(subplot_idx)
+    ax.scatter(
+        X[:, feature_idx].numpy(), 
+        Y[:, 0].numpy(), 
+        c = "b", 
+        label = "samples"
+    )
+    ax.plot(
+        X[:, feature_idx].numpy(), 
+        preds, 
+        c = "-r", 
+        linewidth = 5.0, 
+        label = "model"
+    )
+    ax.legend()
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel, rotation = 0)
+
+plot_linearreg_metrics(
+    X = X, 
+    Y = Y, 
+    preds = (model.w[0].data * X[:, 0] + model.b[0].data).numpy(), 
+    feature_idx = 0,
+    subplot_idx = 121, 
+    xlabel = "x1", 
+    ylabel = "y"
+)
+plot_linearreg_metrics(
+    X = X, 
+    Y = Y, 
+    preds = (model.w[1].data * X[:, 1] + model.b[0].data).numpy(), 
+    feature_idx = 1,
+    subplot_idx = 122, 
+    xlabel = "x2", 
+    ylabel = "y"
+)
+```
+
+## DNN 二分类示例
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+```
+
+
 # 中阶 API
 
 PyTorch 中阶 API 主要包括
@@ -59,10 +222,23 @@ PyTorch 中阶 API 主要包括
 * 优化器
 * 数据管道
 
+## 线性回归示例
+
+
+
+## DNN 二分类示例
+
 
 # 高阶 API
 
 PyTorch 没有官方的高阶 API，一般需要用户自己实现训练循环、验证循环、预测循环
+
+
+## 线性回归示例
+## DNN 二分类示例
+
+
+
 
 
 # torch.nn.functional 和 torch.nn.Module
