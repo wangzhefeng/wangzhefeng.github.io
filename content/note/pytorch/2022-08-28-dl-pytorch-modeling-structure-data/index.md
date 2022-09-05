@@ -120,7 +120,7 @@ print(df_train_raw.info())
 RangeIndex: 712 entries, 0 to 711
 Data columns (total 12 columns):
  #   Column       Non-Null Count  Dtype  
----  ------       --------------  -----  
+--- ------      -------------- ----- 
  0   PassengerId  712 non-null    int64  
  1   Survived     712 non-null    int64  
  2   Pclass       712 non-null    int64  

@@ -35,10 +35,23 @@ details[open] summary {
 - [PyTorch 使用 GPU 训练模型](#pytorch-使用-gpu-训练模型)
   - [GPU 训练模型示例](#gpu-训练模型示例)
   - [多 GPU 训练模型示例](#多-gpu-训练模型示例)
+  - [GPU 相关操作](#gpu-相关操作)
+    - [查看 GPU 信息](#查看-gpu-信息)
+    - [将张量在 GPU 和 CPU 之间移动](#将张量在-gpu-和-cpu-之间移动)
+    - [将模型中的全部张量移动到 GPU 上](#将模型中的全部张量移动到-gpu-上)
+    - [创建支持多个 GPU 数据并行的模型](#创建支持多个-gpu-数据并行的模型)
   - [矩阵乘法示例](#矩阵乘法示例)
+    - [使用 CPU](#使用-cpu)
+    - [使用 GPU](#使用-gpu)
   - [线性回归示例](#线性回归示例)
+    - [使用 CPU](#使用-cpu-1)
+    - [使用 GPU](#使用-gpu-1)
   - [图片分类示例](#图片分类示例)
+    - [使用 CPU 训练](#使用-cpu-训练)
+    - [使用 GPU 训练](#使用-gpu-训练)
   - [训练循环中使用 GPU](#训练循环中使用-gpu)
+    - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
+    - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
 - [PyTorch CUDA](#pytorch-cuda)
   - [CUDA 语义](#cuda-语义)
   - [torch.cuda](#torchcuda)
@@ -96,7 +109,7 @@ model.fit()
 # 移动数据到 CUDA
 # ------------------------------
 features = features.to(device)
-labels = labels.to(deivce)
+labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
 ```
 
@@ -146,28 +159,688 @@ model.fit()
 # 移动数据到 CUDA
 # ------------------------------
 features = features.to(device)
-labels = labels.to(deivce)
+labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
+```
+
+## GPU 相关操作
+
+### 查看 GPU 信息
+
+```python
+import torch
+from torch import nn
+
+if_cuda = torch.cuda.is_available()
+print("if_cuda=")
+
+gup_count = torch.cuda.device_count()
+print(f"gpu_count = {gpu_count}")
+```
+
+###  将张量在 GPU 和 CPU 之间移动
+
+```python
+import torch
+from torch import nn
+
+# tensor
+tensor = torch.rand((100, 100))
+
+# tensor on gpu
+tensor_gpu = tensor.to("cuda:0")  # or tensor_gpu = tensor.cuda()
+print(tensor_gpu.device)
+print(tensor_gpu.is_cuda)
+
+# tensor on cpu
+tensor_cpu = tensor_gpu.to("cpu")  # or tensor_cpu = tensor_gpu.cup()
+print(tensor_cpu.device)
+print(tensor_cpu.is_cuda)
+```
+
+### 将模型中的全部张量移动到 GPU 上
+
+```python
+import tensor
+from torch import nn
+
+net = nn.linear(2, 1)
+print(next(net.parameters()).is_cuda)
+print(next(net.parameters()).device)
+
+# 注意: 无需重新赋值为 net= = net.to("cuda:0")
+net.to("cuda:0")
+print(next(net.parameters()).is_cuda)
+print(next(net.parameters()).device)
+```
+
+### 创建支持多个 GPU 数据并行的模型
+
+```python
+linear = nn.Linear(2, 1)
+print(next(linear.parameters()).is_cuda)
+print(next(linear.parameters()).device)
+
+model = nn.DataParallel(linear)
+print(model.device_ids)
+print(next(model.module.parameters()).device)
+
+# 保存参数时要指定保存 model.module 的参数
+torch.save(model.module.state_dict(), "model_parameter.pt")
+# 加载模型
+linear = nn.Linear(2, 1)
+linear.load_state_dict(torch.load("model_parameter.pt"))
 ```
 
 ## 矩阵乘法示例
 
+分别使用 CPU 和 GPU 做矩阵乘法，并比较其计算效率
 
+### 使用 CPU
 
+```python
+import time
+import torch
+from torch import nn
 
+a = torch.rand((10000, 200))
+b = torch.rand((200, 10000))
+tic = time.time()
+c = torch.matmul(a, b)
+toc = time.time()
+print(toc - tic)
+print(a.device)
+print(b.device)
+```
+
+### 使用 GPU
+
+```python
+import time
+import torch
+from torch import nn
+
+# 设备
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(f"Using {device} device")
+
+a = torch.rand((10000, 200), device = device)
+b = torch.rand((200, 10000))
+b = b.to(device)  # or b = b.cuda() if torch.cuda.is_available() else b
+tic = time.time()
+c = torch.matmul(a, b)
+toc = time.time()
+print(toc - tic)
+print(a.device)
+print(b.device)
+```
 
 ## 线性回归示例
 
+使用 CPU 和 GPU 训练一个线性回归模型的效率
 
+### 使用 CPU
+
+```python
+import torch
+from torch import nn
+
+# data
+n = 1000000  # 样本数量
+X = 10 * torch.rand([n, 2]) - 5
+w0 = torch.tensor([2.0, -3.0])
+b0 = torch.tensor([10.0])
+Y = X@w0.t() + b0 + torch.normal(0.0, 2.0, size = [n, 1])
+
+# 定义模型
+class LinearRegression(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+        self.w = nn.Parameter(torch.randn_like(w0))
+        self.b = nn.Parameter(torch.zeros_like(b0))
+    
+    def forward(self, x):
+        return x@self.w.t() + self.b
+    
+linear = LinearRegression()
+
+# 训练模型
+optimizer = torch.optim.Adam(linear.parameters(), lr = 0.1)
+loss_fn = nn.MSELoss()
+
+def train(epoches):
+    tic = time.time()
+    for epoch in range(epoches):
+        optimizer.zero_grad()
+        # 正向传播
+        Y_pred = linear(X)
+        # 损失函数
+        loss = loss_fn(Y_pred, Y)
+        # 反向传播
+        loss.backward()
+        # 更新权重参数
+        optimizer.step()
+        if epoch % 50 == 0:
+            print(f"epoch: {epoch}, loss: {loss.item()}")
+    toc = time.time()
+    print(f"time used: {toc - tic}")
+
+train(500)
+```
+
+### 使用 GPU
+
+```python
+import torch
+from torch import nn
+
+# 设备
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(f"Using {device} device")
+
+# 数据
+n = 1000000  # 样本数量
+X = 10 * torch.rand([n, 2]) - 5
+w0 = torch.tensor([2.0, -3.0])
+b0 = torch.tensor([10.0])
+Y = X@w0.t() + b0 + torch.normal(0.0, 2.0, size = [n, 1])
+
+# 数据移动到 GPU 上
+print(f"torch.cuda.is_available() = {torch.cuda.is_available()}")
+X = X.cuda()
+Y = Y.cuda()
+print(f"X.device: {X.device}")
+print(f"Y.device: {Y.device}")
+
+# 定义模型
+class LinearRegression(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+        self.w = nn.Parameter(torch.randn_like(w0))
+        self.b = nn.Parameter(torch.zeros_like(b0))
+    
+    def forward(self, x):
+        return x@self.w.t() + self.b
+    
+linear = LinearRegression()
+
+# 模型移动到 GPU 上
+linear.to(device)
+print(f"if on cuda: {next(linear.parameters()).is_cuda}")
+
+# 训练模型
+optimizer = torch.optim.Adam(linear.parameters(), lr = 0.1)
+loss_fn = nn.MSELoss()
+
+def train(epoches):
+    tic = time.time()
+    for epoch in range(epoches):
+        optimizer.zero_grad()
+        # 正向传播
+        Y_pred = linear(X)
+        # 损失函数
+        loss = loss_fn(Y_pred, Y)
+        # 反向传播
+        loss.backward()
+        # 更新权重参数
+        optimizer.step()
+        if epoch % 50 == 0:
+            print(f"epoch: {epoch}, loss: {loss.item()}")
+    toc = time.time()
+    print(f"time used: {toc - tic}")
+
+train(500)
+```
 
 ## 图片分类示例
 
+```python
+import torch
+from torch import nn
+import torchvision
+from torchvision import transforms
+
+# data
+transform = transforms.Compose([transforms.ToTensor()])
+
+ds_train = torchvision.datasetes.MNIST(
+    root = "mnist/",
+    train = True,
+    download = True,
+    transform = transform,
+)
+ds_val = torchvision.datasets.MNIST(
+    root = "mnist/",
+    train = False,
+    download = True,
+    transform = transform,
+)
+
+dl_train = torch.utils.data.DataLoader(
+    ds_train,
+    batch_size = 128,
+    shuffle = True,
+    num_workers = 4,
+)
+dl_val = torch.utils.data.DataLoader(
+    ds_val,
+    batch_size = 128,
+    shuffle = False,
+    num_workers = 4,
+)
+
+# 模型构建
+def create_net():
+    net = nn.Sequential()
+    net.add_module("conv1", nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3))
+    net.add_module("pool1", nn.MaxPool2d(kernel_size = 2, stride = 2))
+    net.add_module("conv2", nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5))
+    net.add_module("pool2", nn.MaxPool2d(kernel_size = 2, stride = 2))
+    net.add_module("dropout", nn.Dropout2d(p = 0.1))
+    net.add_module("adaptive_pool", nn.AdaptiveMaxPool2d((1, 1)))
+    net.add_module("flatten", nn.Flatten())
+    net.add_module("linear1", nn.Linear(64, 32))
+    net.add_module("relu", nn.ReLU())
+    net.add_module("linear2", nn.Linear(32, 10))
+    return net
+
+net = create_net()
+print(net)
+```
+
+### 使用 CPU 训练
+
+```python
+import os
+import sys
+import time
+import numpy as np
+import pandas as pd
+import datetime
+from tqdm import tqdm
+from copy import deepcopy
+
+import torch
+from torch import nn 
+from torchmetrics import Accuracy
+#注：多分类使用torchmetrics中的评估指标，二分类使用torchkeras.metrics中的评估指标
+
+def printlog(info):
+    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("\n"+"=========="*8 + "%s"%nowtime)
+    print(str(info)+"\n")
+    
+
+net = create_net() 
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
+metrics_dict = {
+    "acc": Accuracy()
+}
+
+epochs = 20 
+ckpt_path = 'checkpoint.pt'
+
+# early_stopping 相关设置
+monitor = "val_acc"
+patience = 5
+mode = "max"
+
+history = {}
+for epoch in range(1, epochs + 1):
+    printlog("Epoch {0} / {1}".format(epoch, epochs))
+    # 1，train ------------------------------------------------- 
+    net.train()    
+    total_loss,step = 0,0    
+    loop = tqdm(enumerate(dl_train), total =len(dl_train))
+    train_metrics_dict = deepcopy(metrics_dict) 
+    for i, batch in loop: 
+        features,labels = batch
+        #forward
+        preds = net(features)
+        loss = loss_fn(preds,labels)
+        #backward
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()    
+        #metrics
+        step_metrics = {
+            "train_" + name: metric_fn(preds, labels).item() 
+                       for name,metric_fn in train_metrics_dict.items()
+        }
+        step_log = dict({
+            "train_loss": loss.item()
+        }, **step_metrics)
+        total_loss += loss.item()
+        step += 1
+        if i != len(dl_train) - 1:
+            loop.set_postfix(**step_log)
+        else:
+            epoch_loss = total_loss/step
+            epoch_metrics = {
+                "train_" + name: metric_fn.compute().item() 
+                           for name,metric_fn in train_metrics_dict.items()
+            }
+            epoch_log = dict({
+                "train_loss": epoch_loss
+            }, **epoch_metrics)
+            loop.set_postfix(**epoch_log)
+            for name, metric_fn in train_metrics_dict.items():
+                metric_fn.reset()                
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # 2，validate -------------------------------------------------
+    net.eval()    
+    total_loss,step = 0,0
+    loop = tqdm(enumerate(dl_val), total =len(dl_val))    
+    val_metrics_dict = deepcopy(metrics_dict)     
+    with torch.no_grad():
+        for i, batch in loop: 
+            features,labels = batch            
+            #forward
+            preds = net(features)
+            loss = loss_fn(preds,labels)
+            #metrics
+            step_metrics = {
+                "val_" + name: metric_fn(preds, labels).item() 
+                         for name,metric_fn in val_metrics_dict.items()
+            }
+            step_log = dict({
+                "val_loss":loss.item()
+            }, **step_metrics)
+            total_loss += loss.item()
+            step9 += 1
+            if i != len(dl_val) - 1:
+                loop.set_postfix(**step_log)
+            else:
+                epoch_loss = (total_loss / step)
+                epoch_metrics = {
+                    "val_" + name: metric_fn.compute().item() 
+                             for name,metric_fn in val_metrics_dict.items()
+                }
+                epoch_log = dict({
+                    "val_loss": epoch_loss
+                }, **epoch_metrics)
+                loop.set_postfix(**epoch_log)
+                for name, metric_fn in val_metrics_dict.items():
+                    metric_fn.reset()
+    epoch_log["epoch"] = epoch           
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # 3，early-stopping -------------------------------------------------
+    arr_scores = history[monitor]
+    best_score_idx = np.argmax(arr_scores) if mode == "max" else np.argmin(arr_scores)
+    if best_score_idx == len(arr_scores) - 1:
+        torch.save(net.state_dict(), ckpt_path)
+        print("<<<<<< reach best {0} : {1} >>>>>>".format(monitor, arr_scores[best_score_idx]), file = sys.stderr)
+    if len(arr_scores) - best_score_idx > patience:
+        print("<<<<<< {} without improvement in {} epoch, early stopping >>>>>>".format(monitor,patience), file = sys.stderr)
+        break
+    net.load_state_dict(torch.load(ckpt_path))
+
+dfhistory = pd.DataFrame(history)
+```
+
+### 使用 GPU 训练
+
+```python
+import os
+import sys
+import time
+import numpy as np
+import pandas as pd
+import datetime 
+from tqdm import tqdm
+from copy import deepcopy
+
+import torch
+from torch import nn 
+from torchmetrics import Accuracy
+#注：多分类使用torchmetrics中的评估指标，二分类使用torchkeras.metrics中的评估指标
+
+def printlog(info):
+    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("\n" + "==========" * 8 + "%s" % nowtime)
+    print(str(info) + "\n")
+    
+net = create_net() 
+
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer= torch.optim.Adam(net.parameters(), lr = 0.01)   
+metrics_dict = {
+    "acc": Accuracy()
+}
+
+
+# =========================移动模型到GPU上==============================
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+net.to(device)
+loss_fn.to(device)
+for name, fn in metrics_dict.items():
+    fn.to(device)
+# ====================================================================
+epochs = 20 
+ckpt_path = 'checkpoint.pt'
+
+#early_stopping相关设置
+monitor = "val_acc"
+patience = 5
+mode = "max"
+
+history = {}
+for epoch in range(1, epochs + 1):
+    printlog("Epoch {0} / {1}".format(epoch, epochs))
+
+    # 1，train ------------------------------------------------- 
+    net.train()    
+    total_loss,step = 0, 0    
+    loop = tqdm(enumerate(dl_train), total = len(dl_train))
+    train_metrics_dict = deepcopy(metrics_dict) 
+    
+    for i, batch in loop:     
+        features, labels = batch    
+        # =========================移动数据到GPU上==============================
+        features = features.to(device)
+        labels = labels.to(device)
+        # ====================================================================
+        #forward
+        preds = net(features)
+        loss = loss_fn(preds, labels)
+        #backward
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+        #metrics
+        step_metrics = {
+            "train_" + name: metric_fn(preds, labels).item() 
+                       for name, metric_fn in train_metrics_dict.items()
+        }
+        step_log = dict({
+            "train_loss": loss.item()
+        }, **step_metrics)
+        total_loss += loss.item()
+        step += 1
+        if i != len(dl_train) - 1:
+            loop.set_postfix(**step_log)
+        else:
+            epoch_loss = total_loss / step
+            epoch_metrics = {
+                "train_" + name: metric_fn.compute().item() 
+                           for name, metric_fn in train_metrics_dict.items()
+            }
+            epoch_log = dict({
+                "train_loss": epoch_loss
+            }, **epoch_metrics)
+            loop.set_postfix(**epoch_log)
+
+            for name, metric_fn in train_metrics_dict.items():
+                metric_fn.reset()
+                
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # 2，validate -------------------------------------------------
+    net.eval()
+
+    total_loss, step = 0,0
+    loop = tqdm(enumerate(dl_val), total = len(dl_val))
+    val_metrics_dict = deepcopy(metrics_dict) 
+    with torch.no_grad():
+        for i, batch in loop: 
+            features, labels = batch
+            # =========================移动数据到GPU上==============================
+            features = features.to(device)
+            labels = labels.to(device)
+            # ====================================================================
+            #forward
+            preds = net(features)
+            loss = loss_fn(preds, labels)
+            #metrics
+            step_metrics = {
+                "val_" + name: metric_fn(preds, labels).item() 
+                         for name, metric_fn in val_metrics_dict.items()
+            }
+
+            step_log = dict({
+                "val_loss": loss.item()
+            }, **step_metrics)
+
+            total_loss += loss.item()
+            step += 1
+            if i != len(dl_val) - 1:
+                loop.set_postfix(**step_log)
+            else:
+                epoch_loss = (total_loss / step)
+                epoch_metrics = {
+                    "val_" + name: metric_fn.compute().item() 
+                             for name, metric_fn in val_metrics_dict.items()}
+                epoch_log = dict({
+                    "val_loss": epoch_loss
+                }, **epoch_metrics)
+                loop.set_postfix(**epoch_log)
+
+                for name, metric_fn in val_metrics_dict.items():
+                    metric_fn.reset()
+                    
+    epoch_log["epoch"] = epoch           
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # 3，early-stopping -------------------------------------------------
+    arr_scores = history[monitor]
+    best_score_idx = np.argmax(arr_scores) if mode == "max" else np.argmin(arr_scores)
+    if best_score_idx == len(arr_scores) - 1:
+        torch.save(net.state_dict(), ckpt_path)
+        print("<<<<<< reach best {0} : {1} >>>>>>".format(monitor, arr_scores[best_score_idx]), file = sys.stderr)
+    if len(arr_scores) - best_score_idx > patience:
+        print("<<<<<< {} without improvement in {} epoch, early stopping >>>>>>".format(monitor, patience), file = sys.stderr)
+        break 
+    net.load_state_dict(torch.load(ckpt_path))
+
+dfhistory = pd.DataFrame(history)
+```
 
 ## 训练循环中使用 GPU
 
+在 PyTorch 中使用 GPU 并不复杂，但模型和数据移动还是很麻烦的，
+不小心忘记了移动某些数据或者 Module，就会导致报错
 
+### torchkeras.KerasModel 中使用 GPU
 
+```python
+# pip install torchkeras
 
+import accelerate
+from torchkeras import KerasModel
+from torchmetrics import Accuracy
+
+accelerator = accelerate.Accelerator()
+print(accelerator.device)
+
+# 模型
+net = create_net()
+
+# 模型配置
+model = KerasModel(
+    net = net,
+    loss_fn = nn.CrossEntropyLoss(),
+    metrics_dict = {
+        "acc": Accuracy(),
+    },
+    optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
+)
+
+# 模型训练
+model.fit(
+    train_data = dl_train,
+    val_data = dl_val,
+    epochs = 10,
+    patience = 3,
+    monitor = "val_acc",
+    mode = "max",
+)
+```
+
+### torchkeras.LightModel 中使用 GPU
+
+```python
+import pytorch_lightning as pl
+from torchmetrics import Accuracy
+
+from torchkeras import Lightmodel
+
+# 模型
+net = create_net()
+
+# 模型配置
+model = LightModel(
+    net = net,
+    loss_fn = nn.CrossEntropyLoss(),
+    metrics_dict = {
+        "acc": Accuracy(),
+    },
+    optimizer = torch.optim.Adam(net.parameters(), lr = 0.01),
+)
+
+# 设置回调函数
+model_ckpt = pl.callbacks.ModelCheckpoint(
+    monitor = "val_acc",
+    save_top_k = 1,
+    mode = "max",
+)
+
+# 早停
+early_stopping = pl.callbacks.EarlyStopping(
+    monitor = "val_acc",
+    patience = 3,
+    mode = "max",
+)
+
+# 设置训练参数
+# gpus=0: 使用 cpu 训练
+# gpus=1: 使用 1 个 gpu 训练
+# gpus=2: 使用 2 个 gpu 训练
+# gpus=-1 使用所有 gpu 训练
+# gpus=[0,1]: 指定使用 0 号和 1 号 gpu 训练
+# gpus="0,1,2,3": 使用 0,1,2,3 号 gpu 训练
+# tpus=1: 使用 1 个 tpu 训练
+trainer = pl.Trainer(
+    logger = True,
+    min_epochs = 3,
+    max_epochs = 20,
+    gpus = 1,
+    callbacks = [
+        model_ckpt, 
+        early_stopping,
+    ],
+    enable_progress_bar = True,
+)
+
+# 启动训练循环
+trainer.fit(model, dl_train, dl_val)
+```
 
 
 

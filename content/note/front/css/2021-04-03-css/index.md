@@ -58,12 +58,12 @@ CSS 被分为不同等级：
 # CSS 样式
 
 *  CSS ``background``
-     -  background
-     -  background-color
-     -  background-image
-     -  background-repeat
-     -  background-attachment
-     -  background-position
+     - background
+     - background-color
+     - background-image
+     - background-repeat
+     - background-attachment
+     - background-position
 *  CSS ``text``
 *  CSS ``fonts``
 *  CSS ``link``

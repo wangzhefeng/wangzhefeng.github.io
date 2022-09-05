@@ -67,7 +67,7 @@ details[open] summary {
 ## TensorFlow 库和扩展程序
 
 * [ ] TensorBoard
-* [ ] TensorFLow Hub
+* [ ] TensorFlow Hub
 * [ ] 数据集
 * [ ] 模型优化
 * [ ] 概率

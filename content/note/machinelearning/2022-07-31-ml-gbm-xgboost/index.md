@@ -554,8 +554,8 @@ import xgboost as xgb
         - cyclic：通过每次循环一个特征来实现的。
         - shuffle：类似于cyclic，但是在每次更新之前都有随机的特征变换。
         - random：一个随机(有放回)特征选择器。
-       -  greedy：选择梯度最大的特征。（贪婪选择）
-       -  thrifty：近似贪婪特征选择（近似于greedy）
+       - greedy：选择梯度最大的特征。（贪婪选择）
+       - thrifty：近似贪婪特征选择（近似于greedy）
     - top_k：要选择的最重要特征数（在greedy和thrifty内）
 
 

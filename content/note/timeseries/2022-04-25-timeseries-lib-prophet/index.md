@@ -464,19 +464,19 @@ model = Prophet(holidays = holidays, holidays_prior_scale = 10.0)
 
 # Prophet 介绍
 
--  Prophet is a procedure for forecasting time series data based on
+- Prophet is a procedure for forecasting time series data based on
    an additive model where non-linear trends are fit with yearly,
    weekly, and daily seasonality, plus holiday effects. It works best
    with time series that have strong seasonal effects and serveal
    seasons of historical data. Prophet is robust to missing data and
    shifts in the trend, and typically handles outiles well.
--  Prophet 是 Facebook Core Data Science team 开发的开源软件, 包括对
+- Prophet 是 Facebook Core Data Science team 开发的开源软件, 包括对
    R 和 Python 的支持, 可以在 CRAN 和 PyPI 上下载.
--  Prophet 的优点: 
-   -  Accurate and fast
-   -  Fully automatic
-   -  Tunable forecasts
-   -  Available in R or Python
+- Prophet 的优点: 
+   - Accurate and fast
+   - Fully automatic
+   - Tunable forecasts
+   - Available in R or Python
 
 # Prophet 安装
 
@@ -491,21 +491,21 @@ install.packages("prophet", type = "source")
 
 (1) 安装 `pystan`:
 
--  Windows
-   -  compiler
-      -  python
-      -  C++ compiler
-      -  PyStan
--  Linux
-   -  compilers:
-      -  gcc(gcc64 on Red Hat)
-      -  g++(gcc64-c++ on Red Hat)
-      -  build-essential
-   -  Python development tools
-      -  python-dev
-      -  python3-dev
--  Anaconda
-   -  `conda install gcc`
+- Windows
+   - compiler
+      - python
+      - C++ compiler
+      - PyStan
+- Linux
+   - compilers:
+      - gcc(gcc64 on Red Hat)
+      - g++(gcc64-c++ on Red Hat)
+      - build-essential
+   - Python development tools
+      - python-dev
+      - python3-dev
+- Anaconda
+   - `conda install gcc`
 
 ```bash
 # Windows
@@ -546,8 +546,8 @@ help(Prophet.fit)
 
 **Example:**
 
--  Question:
-   -  [Wikipedia page for Peyton Manning](https://en.wikipedia.org/wiki/Peyton_Manning)
+- Question:
+   - [Wikipedia page for Peyton Manning](https://en.wikipedia.org/wiki/Peyton_Manning)
 - [data](https://github.com/facebook/prophet/blob/master/examples/example_wp_log_peyton_manning.csv)
 
 导入工具库: 
@@ -592,10 +592,10 @@ fig1 = m.plot(forecast)
 
 forecast 组件可视化: 
 
--  trend
--  yearly seasonlity
--  weekly seasonlity
--  holidays
+- trend
+- yearly seasonlity
+- weekly seasonlity
+- holidays
 
 ```python
 fig2 = m.plot_components(forecast)
@@ -612,18 +612,18 @@ py.iplot(fig)
 
 # Python APIs
 
--  APIs:
-   -  `Prophet`
-      -  `fit`
-      -  `predict`
--  Input:
-   -  dataframe with two columns
-      -  `ds`
-         -  datestamp: `YYYY-MM-DD`
-         -  timestamp: `YYYY-MM-DD HH:MM:SS`
-      -  `y`
-         -  numeric
-         -  measurement of forecast
+- APIs:
+   - `Prophet`
+      - `fit`
+      - `predict`
+- Input:
+   - dataframe with two columns
+      - `ds`
+         - datestamp: `YYYY-MM-DD`
+         - timestamp: `YYYY-MM-DD HH:MM:SS`
+      - `y`
+         - numeric
+         - measurement of forecast
 
 
 
@@ -635,13 +635,13 @@ py.iplot(fig)
 
 ### Forecasting Growth
 
--  By default, Prophet uses a **linear model** for its forecast. When
+- By default, Prophet uses a **linear model** for its forecast. When
    **forecasting growth**, there is usually some maximum achievable
    point: total market size, total population size, etc. This is called
    the **carrying capacity**, and the forecast should **saturate** at
    this point.
 
--  Prophet allows you to make forecasts using a **logistic growth trend
+- Prophet allows you to make forecasts using a **logistic growth trend
    model**, with a specified carrying capacity.
 
 ```python
@@ -668,9 +668,9 @@ fig = m.plot(forecast)
 
 ### Staturating Minimum
 
--  Staturating Capacity
-   -  staturating maximum
-   -  staturating minimum(maximum必须设定)
+- Staturating Capacity
+   - staturating maximum
+   - staturating minimum(maximum必须设定)
 
 ```python
 # data

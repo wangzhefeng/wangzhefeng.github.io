@@ -191,13 +191,13 @@ $ pip uninstall SomePackage
 将 pipy 的 pip 源更改为国内 pip 源
 
 * 国内 pip 源列表
-    -  阿里云【较快】
+    - 阿里云【较快】
         - `Simple Index <http://mirrors.aliyun.com/pypi/simple>`__
-    -  清华大学
+    - 清华大学
         - `Simple Index](https://pypi.tuna.tsinghua.edu.cn/simple/>`__
-    -  中国科学技术大学
+    - 中国科学技术大学
         - `Simple Index](https://pypi.mirrors.ustc.edu.cn/simple/>`__
-    -  豆瓣【较快】
+    - 豆瓣【较快】
         - `Simple Index <http://pypi.douban.com/simple/>`__
 
 * 临时更改 PyPi pip 源

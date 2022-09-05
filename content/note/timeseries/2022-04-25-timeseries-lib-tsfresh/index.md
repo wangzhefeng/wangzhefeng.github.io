@@ -48,9 +48,9 @@ $ pip install tsfresh
 
 输入数据格式: 
 
-   -  Flat DataFrame
-   -  Stacked DataFrame
-   -  dictionary of flat DataFrame
+   - Flat DataFrame
+   - Stacked DataFrame
+   - dictionary of flat DataFrame
 
 | column_id | column_value | column_sort | column_kind |
 |-----------|--------------|-------------|-------------|

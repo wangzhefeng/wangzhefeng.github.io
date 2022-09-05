@@ -116,21 +116,21 @@ details[open] summary {
 2.Linux基础
 -----------
 
--  文件及目录管理
+- 文件及目录管理
 
--  文本处理
+- 文本处理
 
--  磁盘管理
+- 磁盘管理
 
--  进程管理工具
+- 进程管理工具
 
--  性能监控
+- 性能监控
 
--  网络工具
+- 网络工具
 
--  用户管理工具
+- 用户管理工具
 
--  系统管理及IPC资源管理
+- 系统管理及IPC资源管理
 
 
 
@@ -260,9 +260,9 @@ details[open] summary {
    # 递归当前目录及子目录删除所有.o文件
    $ find ./ -name "*.o" -exec rm {} \;
 
--  find是实时查找, 如果需要更快的查询, 需要使用\ ``locate``\ ; 
+- find是实时查找, 如果需要更快的查询, 需要使用\ ``locate``\ ; 
 
--  locate不是实时查找, locate为文件系统建立索引数据库, 如果有文件更新, 需要定期执行更新命令来更新索引库, 以获得最新的文件索引信息; 
+- locate不是实时查找, locate为文件系统建立索引数据库, 如果有文件更新, 需要定期执行更新命令来更新索引库, 以获得最新的文件索引信息; 
 
 .. code:: 
 
@@ -277,15 +277,15 @@ details[open] summary {
 2.1.8 查看文件内容
 ^^^^^^^^^^^^^^^^^^
 
--  cat
+- cat
 
--  vi
+- vi
 
--  head
+- head
 
--  tail
+- tail
 
--  more
+- more
 
 .. code:: shell
 
@@ -312,9 +312,9 @@ details[open] summary {
 给文件创建别名
 ^^^^^^^^^^^^^^
 
--  创建符号链接/硬链接
+- 创建符号链接/硬链接
 
-   -  硬链接
+   - 硬链接
 
 .. code:: shell
 
@@ -335,11 +335,11 @@ details[open] summary {
 3.环境变量
 ----------
 
-   -  Linux环境变量按照变量的生存周期来划分有两类: 
+   - Linux环境变量按照变量的生存周期来划分有两类: 
 
-      -  永久的: 需要修改配置文件, 变量永久生效; 
+      - 永久的: 需要修改配置文件, 变量永久生效; 
 
-      -  临时的: 使用\ ``export``\ 命令声明即可, 变量在关闭shell时失效; 
+      - 临时的: 使用\ ``export``\ 命令声明即可, 变量在关闭shell时失效; 
 
 
 
@@ -348,7 +348,7 @@ Linux环境变量设置
 
 **1.在\ ``/etc/.profile``\ 文件中添加变量**
 
--  变量对Linux下所有用户生效, 并且是永久有效的; 
+- 变量对Linux下所有用户生效, 并且是永久有效的; 
 
 .. code:: shell
 
@@ -363,7 +363,7 @@ Linux环境变量设置
 
 **2.在用户目录下的\ ``/home/wangzhefeng/.bash_profile``\ 文件中添加变量**
 
--  变量对当前用户生效, 并且是永久有效的; 
+- 变量对当前用户生效, 并且是永久有效的; 
 
 .. code:: shell
 
@@ -379,7 +379,7 @@ Linux环境变量设置
 
 **3.直接运行\ ``export``\ 命令定义变量**
 
--  变量只对当前shell(bash)及其子shell(bash)生效, 临时有效; 
+- 变量只对当前shell(bash)及其子shell(bash)生效, 临时有效; 
 
 .. code:: shell
 
@@ -421,80 +421,80 @@ Linux环境变量删除
 Linux常用环境变量
 ~~~~~~~~~~~~~~~~~
 
--  PATH
+- PATH
 
-   -  决定了shell将到哪些目录中寻找命令或程序
+   - 决定了shell将到哪些目录中寻找命令或程序
 
--  HOME
+- HOME
 
-   -  当前用户主目录
+   - 当前用户主目录
 
--  HISTSIZE
+- HISTSIZE
 
-   -  历史记录数
+   - 历史记录数
 
--  LOGNAME
+- LOGNAME
 
-   -  当前用户的登录名
+   - 当前用户的登录名
 
--  HOSTNAME
+- HOSTNAME
 
-   -  指主机的名称
+   - 指主机的名称
 
--  SHELL
+- SHELL
 
-   -  当前用户Shell类型
+   - 当前用户Shell类型
 
--  LANGUGE
+- LANGUGE
 
-   -  语言相关的环境变量, 多语言可以修改此环境变量
+   - 语言相关的环境变量, 多语言可以修改此环境变量
 
--  MAIL
+- MAIL
 
-   -  当前用户的邮件存放目录
+   - 当前用户的邮件存放目录
 
--  PS1
+- PS1
 
-   -  基本提示符, 对于root用户是#, 对于普通用户是$
+   - 基本提示符, 对于root用户是#, 对于普通用户是$
 
 
 
 2.2 文本处理
 ~~~~~~~~~~~~
 
--  find文件查找
+- find文件查找
 
--  ``grep``\ 文本搜索
+- ``grep``\ 文本搜索
 
--  ``xargs``\ 命令行参数转换
+- ``xargs``\ 命令行参数转换
 
--  ``sort``\ 排序
+- ``sort``\ 排序
 
--  ``uniq``\ 消除重复行
+- ``uniq``\ 消除重复行
 
 
 
 2.3 磁盘管理
 ~~~~~~~~~~~~
 
--  查看磁盘空间
+- 查看磁盘空间
 
--  压缩包
+- 压缩包
 
-   -  打包/压缩
+   - 打包/压缩
 
-   -  解包/解压缩
+   - 解包/解压缩
 
 
 
 2.3.1 查看磁盘空间
 ^^^^^^^^^^^^^^^^^^
 
--  命令行参数
+- 命令行参数
 
-   -  ``-h``:人性化显示
+   - ``-h``:人性化显示
 
-   -  ``-s`` 递归整个目录的大小
+   - ``-s`` 递归整个目录的大小
 
 **1.查看磁盘空间利用大小:**
 
@@ -534,15 +534,15 @@ or
 
 **基本概念:**
 
--  打包: 将一些文件或目录变成一个总的文件; 
+- 打包: 将一些文件或目录变成一个总的文件; 
 
--  压缩: 将一个大的问津通过压缩算法变成一个小文件; 
+- 压缩: 将一个大的问津通过压缩算法变成一个小文件; 
 
--  解包: 
+- 解包: 
 
--  解压缩: 压缩的反过程, 将一个通过软件压缩的文档、文件等各种东西恢复到压缩之前的样子; 
+- 解压缩: 压缩的反过程, 将一个通过软件压缩的文档、文件等各种东西恢复到压缩之前的样子; 
 
--  打包与压缩: 在Linux中很多
+- 打包与压缩: 在Linux中很多
 
 **压缩包文件格式:**
 
@@ -581,17 +581,17 @@ or
 2.3.2.1 打包/压缩
 '''''''''''''''''
 
--  打包命令行\ ``tar -cvf``\ 参数
+- 打包命令行\ ``tar -cvf``\ 参数
 
-   -  ``-c``: 打包选项
+   - ``-c``: 打包选项
 
-   -  ``-v``: 显示打包进度
+   - ``-v``: 显示打包进度
 
-   -  ``-f``: 使用档案文件
+   - ``-f``: 使用档案文件
 
--  压缩命令行参数
+- 压缩命令行参数
 
-   -  ``gzip``: 压缩为\ ``.gz``\ 文件
+   - ``gzip``: 压缩为\ ``.gz``\ 文件
 
 **打包:**
 
@@ -601,7 +601,7 @@ or
 
 **压缩:**
 
--  生成\ ``demo.txt.gz``
+- 生成\ ``demo.txt.gz``
 
 .. code:: shell
 
@@ -612,25 +612,25 @@ or
 2.3.2.2 解包/解压缩
 '''''''''''''''''''
 
--  解包命令行\ ``tar -xvf``\ 参数
+- 解包命令行\ ``tar -xvf``\ 参数
 
-   -  ``-x``: 解包选项
+   - ``-x``: 解包选项
 
-   -  ``-v``: 显示打包进度
+   - ``-v``: 显示打包进度
 
-   -  ``-f``: 使用档案文件
+   - ``-f``: 使用档案文件
 
-   -  ``-zxvf``: 解压gz文件
+   - ``-zxvf``: 解压gz文件
 
-   -  ``-jxvf``: 解压bz2文件
+   - ``-jxvf``: 解压bz2文件
 
-   -  ``-Jxvf``: 解压xz文件
+   - ``-Jxvf``: 解压xz文件
 
--  解压缩命令行参数
+- 解压缩命令行参数
 
-   -  ``bzip2 -d``: decompose解压缩
+   - ``bzip2 -d``: decompose解压缩
 
-   -  ``gunzip -d``: 解压缩
+   - ``gunzip -d``: 解压缩
 
 1.对格式\ ``.tar``\ 的包进行解包: 
 
@@ -699,20 +699,20 @@ or
 4.运行代码时常用信息查看命令
 ----------------------------------------
 
--  ``cat``: 显示文本的内容
+- ``cat``: 显示文本的内容
 
 .. code:: shell
 
    cat <filename>
 
--  ``wc``: 查看文本行数、词数、字节数
+- ``wc``: 查看文本行数、词数、字节数
 
 .. code:: shell
 
    wc <filename>
    wc -l <filename>
 
--  ``vi/vim``: 编辑文本
+- ``vi/vim``: 编辑文本
 
 .. code:: shell
 
@@ -722,39 +722,39 @@ or
    :q! # 强制退出
    :wq # 表示写入内存, 再退出, 即保存退出
 
--  ``more/less``: 从文本的前面/后面显示
+- ``more/less``: 从文本的前面/后面显示
 
 .. code:: shell
 
    more <filename>
    less <filename>
 
--  ``head/tail``: 显示最前/后面的内容
+- ``head/tail``: 显示最前/后面的内容
 
 .. code:: shell
 
    head <filename>
    tail -f <filename> # 显示不断更新的内容
 
--  ``file``: 显示文本的编码
+- ``file``: 显示文本的编码
 
 .. code:: shell
 
    file <filename>
 
--  ``doc2unix``: 将 windows 的换行 ``/r/n`` 变换为 ``/n``
+- ``doc2unix``: 将 windows 的换行 ``/r/n`` 变换为 ``/n``
 
 .. code:: shell
 
    doc2unix <filename>
 
--  ``grep``: 用于查找文件里符合条件的字符串
+- ``grep``: 用于查找文件里符合条件的字符串
 
 .. code:: shell
 
    grep 正则字符串 <filename>
 
--  ``awk``: 按指定分隔符列输出
+- ``awk``: 按指定分隔符列输出
 
 默认按空格或 TAB 键为分隔符
 
@@ -763,9 +763,9 @@ or
    awk '{print 想要输出的列}' <filename>
    awk -F, 'print 想要的列' <filename>
 
--  ``nohup`` 后台挂起
+- ``nohup`` 后台挂起
 
-   -  如果运行很长时间的代码, 一般都会放在后台运行
+   - 如果运行很长时间的代码, 一般都会放在后台运行
 
 .. code:: shell
 
@@ -774,9 +774,9 @@ or
 ``2>1&``: 是将标准错误流重定向到标准输出流 ``2>``: 标准错误重定向
 ``&1``: 标准输出 ``&`` 让前面的命令在后台执行
 
--  ``top``: 查看 CPU, 进程, 内存
+- ``top``: 查看 CPU, 进程, 内存
 
--  ``kill/pkill``
+- ``kill/pkill``
 
 .. code:: shell
 
@@ -786,15 +786,15 @@ or
 
    pkill <name> # nohup 挂起的进程, 根据 nohup 给的 ID 也能直接杀掉
 
--  ``>/>>``: 输出到文件
+- ``>/>>``: 输出到文件
 
-   -  如果文件不存在, 则创建
+   - 如果文件不存在, 则创建
 
-   -  如果文件存在, 则
+   - 如果文件存在, 则
 
-      -  ``>`` 表示覆盖写入
+      - ``>`` 表示覆盖写入
 
-      -  ``>>`` 表示 append 写入
+      - ``>>`` 表示 append 写入
 
 
 
@@ -811,48 +811,48 @@ or
 5.1.1 命令格式
 ^^^^^^^^^^^^^^
 
--  ``$crontab [-u user] file crontab [-u user] [-e|-l|-r|-i]``
+- ``$crontab [-u user] file crontab [-u user] [-e|-l|-r|-i]``
 
 
 
 5.1.2 crontab文件格式
 ^^^^^^^^^^^^^^^^^^^^^
 
--  ``分 时 日 月 星期 要运行的命令``
+- ``分 时 日 月 星期 要运行的命令``
 
--  设置crontab文件编辑器环境变量
+- 设置crontab文件编辑器环境变量
 
-   -  cd ~
+   - cd ~
 
-   -  sudo gedit .profile
+   - sudo gedit .profile
 
-   -  EDITOR=gedit; export EDITOR
+   - EDITOR=gedit; export EDITOR
 
--  创建crontab文件
+- 创建crontab文件
 
-   -  crontab文件存放位置: "/var/spool/cron/wangzhefengcron"
+   - crontab文件存放位置: "/var/spool/cron/wangzhefengcron"
 
-   -  ``* * * * * /bin/echo 'date' > /dev/console``
+   - ``* * * * * /bin/echo 'date' > /dev/console``
 
--  提交crontab任务进程(新创建文件的一个副本放在/var/spool/cron中)
+- 提交crontab任务进程(新创建文件的一个副本放在/var/spool/cron中)
 
-   -  ``crontab tinkercron``
+   - ``crontab tinkercron``
 
--  列出crontab文件
+- 列出crontab文件
 
-   -  ``crontab -l``
+   - ``crontab -l``
 
-   -  在$HOME目录中对crontab文件做一备份
+   - 在$HOME目录中对crontab文件做一备份
 
-      -  ``cron -l > $HOME/mycron``
+      - ``cron -l > $HOME/mycron``
 
--  编辑crontab文件
+- 编辑crontab文件
 
-   -  ``crontab -e``
+   - ``crontab -e``
 
--  删除crontab文件
+- 删除crontab文件
 
-   -  ``crontab -r``
+   - ``crontab -r``
 
 
 
@@ -861,97 +861,97 @@ or
 
 1.  每分钟执行一次myCommand
 
-    -  ``$* * * * * myCommand``
+    - ``$* * * * * myCommand``
 
 2.  每小时的第3和第15分钟执行
 
-    -  ``$3,15 * * * * myCommand``
+    - ``$3,15 * * * * myCommand``
 
 3.  在上午8点到11点的第三和第15分钟执行
 
-    -  ``$3,15 8-11 * * * myCommand``
+    - ``$3,15 8-11 * * * myCommand``
 
 4.  每隔两天的上午8点到11点的第3和第15分钟执行
 
-    -  ``$3,15 8-11 */2 * * myCommand``
+    - ``$3,15 8-11 */2 * * myCommand``
 
 5.  每周一上午8点到11点的第3和第15分钟执行
 
-    -  ``$3,15 8-11 * * 1 myCommand``
+    - ``$3,15 8-11 * * 1 myCommand``
 
 6.  每晚的21:30重启smb
 
-    -  ``$30 21 * * * /etc/init.d/smb restart``
+    - ``$30 21 * * * /etc/init.d/smb restart``
 
 7.  每月1、10、22日的4 : 45重启smb
 
-    -  ``$45 4 1,10,22 * * /etc/init.d/smb restart``
+    - ``$45 4 1,10,22 * * /etc/init.d/smb restart``
 
 8.  每周六、周日的1 : 10重启smb
 
-    -  ``$10 1 * * 6,0 /ect/init.d/smb restart``
+    - ``$10 1 * * 6,0 /ect/init.d/smb restart``
 
 9.  每天18 : 00至23 : 00之间每隔30分钟重启smb
 
-    -  ``$0,30 18-23 * * * /etc/init.d/smb restart``
+    - ``$0,30 18-23 * * * /etc/init.d/smb restart``
 
 10. 每星期六的晚上11 : 00 pm重启smb
 
-    -  ``$0 23 * * 6 /etc/init.d/smb restart``
+    - ``$0 23 * * 6 /etc/init.d/smb restart``
 
 11. 每一小时重启smb
 
-    -  ``$* */1 * * * /etc/init.d/smb restart``
+    - ``$* */1 * * * /etc/init.d/smb restart``
 
 12. 晚上11点到早上7点之间, 每隔一小时重启smb
 
-    -  ``$0 23-7 * * * /etc/init.d/smb restart``
+    - ``$0 23-7 * * * /etc/init.d/smb restart``
 
 
 
 5.3 系统级任务调度和用户级任务调度
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  可以将用户级任务调度放到系统级任务调度来完成(不建议这么做), 但是反过来却不行
+- 可以将用户级任务调度放到系统级任务调度来完成(不建议这么做), 但是反过来却不行
 
--  root用户任务调度
+- root用户任务调度
 
-   -  ``$crontab -uroot -e``
+   - ``$crontab -uroot -e``
 
 
 
 5.4 log位置
 ~~~~~~~~~~~
 
--  ``/etc/init.d/crond restart``
+- ``/etc/init.d/crond restart``
 
--  ``$tail -f /var/log/cron``
+- ``$tail -f /var/log/cron``
 
 
 
 5.5 特殊字符
 ~~~~~~~~~~~~
 
--  ``%``
+- ``%``
 
--  转义
+- 转义
 
-   -  ``%%``
+   - ``%%``
 
 
 
 5.6 重启cron
 ~~~~~~~~~~~~
 
--  ``$service cron restart``
+- ``$service cron restart``
 
 
 
 5.7 ubuntu启动, 停止, 重启cron
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  ``$sudo /etc/init.d/cron start``
+- ``$sudo /etc/init.d/cron start``
 
--  ``$sudo /etc/init.d/cron stop``
+- ``$sudo /etc/init.d/cron stop``
 
--  ``$sudo /etc/init.d/cron restart``
+- ``$sudo /etc/init.d/cron restart``
