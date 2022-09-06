@@ -1,5 +1,6 @@
 ---
-title: PySpark Python Package Management
+title: PySpark Python 包管理
+subtitle: PySpark Python Package Management
 author: 王哲峰
 date: '2022-12-31'
 slug: spark-pyspark-python-package-management
