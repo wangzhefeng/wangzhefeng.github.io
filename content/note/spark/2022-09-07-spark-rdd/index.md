@@ -48,17 +48,30 @@ details[open] summary {
       - [PySpark](#pyspark-1)
   - [操作 RDD](#操作-rdd)
     - [常用 Transformation 操作](#常用-transformation-操作)
+      - [map](#map)
+      - [filter](#filter)
+      - [flatMap](#flatmap)
+      - [sample](#sample)
+      - [distinct](#distinct)
+      - [subtract](#subtract)
+      - [union](#union)
+      - [intersection](#intersection)
+      - [cartesian](#cartesian)
+      - [sortBy](#sortby)
+      - [zip](#zip)
+      - [zipWithIndex](#zipwithindex)
+      - [sort](#sort)
+      - [Random Splits](#random-splits)
     - [常用 Action 操作](#常用-action-操作)
       - [collect](#collect)
       - [take](#take)
-      - [reduce](#reduce)
-      - [count](#count)
-      - [countApprox](#countapprox)
-      - [countApproxDistinct](#countapproxdistinct)
-      - [countByValue](#countbyvalue)
-      - [countByValueApprox](#countbyvalueapprox)
+      - [takeSample](#takesample)
       - [first](#first)
-      - [max/min](#maxmin)
+      - [count](#count)
+      - [reduce](#reduce)
+      - [foreach](#foreach)
+      - [countByKey](#countbykey)
+      - [saveAsTextFile](#saveastextfile)
     - [Saving Files](#saving-files)
     - [Caching](#caching)
     - [Checkpointing](#checkpointing)
@@ -254,16 +267,24 @@ rdd.collect()
 
 ### 常用 Transformation 操作
 
-* distinct 
+#### map
 
 ```scala
-// in Scala
-words
-.distinct()
-.count()
+val words2 = words.map(word => (word, word(0), word.startsWith("S")))
+words2
+    .filter(record => record._3)
+    .take(5)
 ```
 
-* filter
+```python
+# in Python
+words2 = words.map(lambda word: (word, word[0], word.startsWith("S")))
+words2 \
+    .filter(lambda record: record[2]) \
+    .take(5)
+```
+
+#### filter
 
 ```scala
 // in Scala
@@ -287,24 +308,9 @@ words \
     .collect()
 ```
 
-* map
 
-```scala
-val words2 = words.map(word => (word, word(0), word.startsWith("S")))
-words2
-    .filter(record => record._3)
-    .take(5)
-```
 
-```python
-# in Python
-words2 = words.map(lambda word: (word, word[0], word.startsWith("S")))
-words2 \
-    .filter(lambda record: record[2]) \
-    .take(5)
-```
-
-* flatMap
+#### flatMap
 
 ```scala
 // in Scala
@@ -320,13 +326,62 @@ words \
     .take()
 ```
 
-* sort
+#### sample
+
+
+#### distinct 
 
 ```scala
 // in Scala
 words
-.sortBy(word => word.length() * -1)
-.take(2)
+.distinct()
+.count()
+```
+
+
+#### subtract
+
+
+#### union
+
+#### intersection
+
+
+#### cartesian
+
+
+#### sortBy
+
+#### zip
+
+
+#### zipWithIndex
+
+将 RDED 和一个从 0 开始的递增序列按照拉链方式连接
+
+```python
+rdd_name = sc.parallelize(["LiLei", "Hanmeimei", "Lily", "Lucy", "Ann", "Dachui", "RuHua"])
+rdd_index = rdd_name.zipWithIndex()
+print(rdd_index.collect())
+```
+
+```
+[('LiLei', 0), 
+ ('Hanmeimei', 1), 
+ ('Lily', 2), 
+ ('Lucy', 3), 
+ ('Ann', 4), 
+ ('Dachui', 5), 
+ ('RuHua', 6)]
+```
+
+#### sort
+
+```scala
+// in Scala
+words
+    .sortBy(word => word.length() * -1)
+    .take(2)
 ```
 
 ```python
@@ -336,7 +391,7 @@ words \
     .take(2)
 ```
 
-* Random Splits
+#### Random Splits
 
 ```scala
 // in Scala
@@ -370,49 +425,35 @@ all_data
 
 take 操作将前若干个数据汇集到 Driver，相比 collect 安全
 
-
-
-
-
-#### reduce
-
-```scala
-spark.sparkContext.parallelize(1 to 20)
-    .reduce(_ + _) 
+```python
+rdd = sc.parallelize(range(10), 5)
+part_data = rdd.take(4)
+part_data
 ```
+
+```
+[0, 1, 2, 3]
+```
+
+#### takeSample
+
+takeSample 可以随机取若干个到 Driver，第一个参数设置是否放回抽样
 
 ```python
-spark.sparkContext.parallelize(range(1, 21)) \
-    .reduce(lambda x, y: x + y)
+rdd = sc.parallelize(range(10), 5)
+sample_data = rdd.takeSample(False, 10, 0)
+sample_data
 ```
 
-
-#### count
-
-
-
-
-#### countApprox
-
-
-
-
-#### countApproxDistinct
-
-
-
-
-#### countByValue
-
-
-
-
-#### countByValueApprox
-
-
-
+```
+[7, 8, 1, 5, 3, 4, 2, 0, 9, 6]
+```
 
 #### first
+
+first 取第一个数据
+
+* Spark
 
 ```scala
 // in Scala
@@ -424,11 +465,99 @@ words.first()
 words.first()
 ```
 
-#### max/min
+* PySpark
 
+```python
+rdd = sc.parallelize(range(10), 5)
+first_data = rdd.first()
+print(first_dasta)
+```
 
+```
+0
+```
 
+#### count
 
+count 查看 RDD 元素数量
+
+```python
+rdd = sc.parallelize(range(10), 5)
+data_count = rdd.count()
+print(data_count)
+```
+
+```
+10
+```
+
+#### reduce
+
+reduce 利用二元函数对数据进行规约
+
+* Spark
+
+```scala
+spark.sparkContext.parallelize(1 to 20)
+    .reduce(_ + _) 
+```
+
+```python
+spark.sparkContext.parallelize(range(1, 21)) \
+    .reduce(lambda x, y: x + y)
+```
+
+* PySpark
+
+```python
+rdd = sc.parallelize(range(10), 5)
+rdd.reduce(lambda x, y: x + y)
+```
+
+#### foreach
+
+foreach 对每一个元素执行某种操作，不生成新 RDD
+
+```python
+# 累加法用法需要参考共享变量
+accum = sc.accumulator(0)
+
+rdd = sc.parallelize(range(10), 5)
+rdd.foreach(lambda x: accum.add(x))
+print(accum.value)
+```
+
+```
+45
+```
+
+#### countByKey
+
+countByKey 对 Pair RDD 按 key 统计数量
+
+```python
+pairRdd = sc.parallelize([(1, 1), (1, 4), (3, 9), (2, 16)])
+pairRdd.countByKey()
+```
+
+#### saveAsTextFile
+
+saveAsTextFile 保存 rdd 成 text 文件到本地
+
+```python
+text_file = "./data/rdd.txt"
+
+rdd = sc.parallelize(range(5))
+rdd.saveAsTextFile(text_file)
+
+# 重新读入会被解析为文本
+rdd_loaded = sc.textFile(text_file)
+rdd_loaded.collect()
+```
+
+```
+['2', '3', '4', '1', '0']
+```
 
 ### Saving Files
 
