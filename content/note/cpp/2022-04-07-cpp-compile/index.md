@@ -1,7 +1,7 @@
 ---
 title: C++ 编译
 author: 王哲峰
-date: '2022-04-06'
+date: '2022-04-07'
 slug: cpp-compile
 categories:
   - c++

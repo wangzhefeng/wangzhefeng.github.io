@@ -9,16 +9,48 @@ tags:
   - tool
 ---
 
-# 1.环境配置
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
-## 1.1 Windows
+<details><summary>目录</summary><p>
 
-## 1.2 Linux
+- [环境配置](#环境配置)
+  - [Windows](#windows)
+  - [Linux](#linux)
+  - [macOS](#macos)
+- [IDE](#ide)
+  - [VSCode](#vscode)
+  - [CLion](#clion)
+</p></details><p></p>
 
-## 1.3 macOS
+# 环境配置
 
-# 2.IDE
+## Windows
 
-## 2.1 VSCode
+## Linux
 
-## 2.2 CLion
+## macOS
+
+
+# IDE
+
+## VSCode
+
+## CLion

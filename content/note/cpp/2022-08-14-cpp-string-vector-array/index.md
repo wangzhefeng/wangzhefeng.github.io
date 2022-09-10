@@ -1,8 +1,8 @@
 ---
-title: C++ 变量和基本类型
+title: C++ 字符串、向量、数组
 author: 王哲峰
-date: '2022-04-06'
-slug: cpp-variable-and-base-type
+date: '2022-08-14'
+slug: cpp-string-vector-array
 categories:
   - c++
 tags:
@@ -31,29 +31,8 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [基本内置类型](#基本内置类型)
-  - [算术类型](#算术类型)
-  - [类型转换](#类型转换)
-  - [字面值常量](#字面值常量)
-- [变量](#变量)
+- [TODO](#TODO)
 </p></details><p></p>
 
 
-# 基本内置类型
-
-
-
-## 算术类型
-
-
-
-## 类型转换
-
-
-
-## 字面值常量
-
-
-
-# 变量
 

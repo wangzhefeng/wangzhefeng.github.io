@@ -1,7 +1,7 @@
 ---
 title: C++ 语句
 author: 王哲峰
-date: '2022-08-13'
+date: '2022-08-30'
 slug: cpp-statement
 categories:
   - c++
@@ -49,13 +49,20 @@ details[open] summary {
 - [迭代语句](#迭代语句)
   - [while 语句](#while-语句)
     - [while 语句语法](#while-语句语法)
+    - [使用 while 循环](#使用-while-循环)
   - [传统的 for 语句](#传统的-for-语句)
+    - [语法](#语法)
+    - [执行流程](#执行流程)
+  - [省略 for 语句头的某些部分](#省略-for-语句头的某些部分)
   - [范围 for 语句](#范围-for-语句)
+    - [语法](#语法-1)
   - [do while 语句](#do-while-语句)
+    - [语法](#语法-2)
 - [跳转语句](#跳转语句)
   - [break 语句](#break-语句)
   - [continue 语句](#continue-语句)
   - [goto 语句](#goto-语句)
+  - [return 语句](#return-语句)
 - [try 语句和异常处理](#try-语句和异常处理)
   - [throw 表达式](#throw-表达式)
   - [try 语句块](#try-语句块)
@@ -100,7 +107,7 @@ while (cin >> s && s != sought)
 ***
 **Note:**
 
-* 使用空语句时应该加上注释，从而令读这段代码的人知道该语句是有意沈略的
+* 使用空语句时应该加上注释，从而令读这段代码的人知道该语句是有意省略的
 ***
 
 ## 别漏写分号也别多写分号
@@ -141,7 +148,7 @@ while (iter != svec.end()) ;  // while 循环体是那条空语句
 ***
 **Note:**
 
-* 块不一分号作为结束
+* 块不以分号作为结束
 ***
 
 # 语句作用域
@@ -150,8 +157,9 @@ while (iter != svec.end()) ;  // while 循环体是那条空语句
 定义在控制结构当中的变量只在相应语句的内部可见，一旦语句结束，变量也就超出其作用范围了
 
 ```c++
-while (int i = get_num())  // 每次迭代时创建并初始化 i
+while (int i = get_num()) {  // 每次迭代时创建并初始化 i
     cout << i << endl;
+}
 
 i = 0;  // 错误: 在循环外部无法访问 1
 ```
@@ -161,11 +169,13 @@ i = 0;  // 错误: 在循环外部无法访问 1
 ```cpp
 // 寻找第一个负值元素
 auto beg = v.begin();
-while (beg != v.end() && *beg >= 0)
+while (beg != v.end() && *beg >= 0) {
     ++beg;
+}
 
-if (beg == v.end())
+if (beg == v.end()) {
     // 此时我们知道 v 中的所有元素都大于等于 0
+}
 ```
 
 # 条件语句
@@ -210,7 +220,7 @@ else
 这时问题出现了: 我们怎么知道某个给定的 `else` 是和哪个 `if` 匹配呢？
 
 这个问题通常称为垂悬 else(dangling else)，
-在那些既有 `if` 语句又有 `if else` 汉语句的编程语言中是个普遍存在的问题。
+在那些既有 `if` 语句又有 `if else` 语句的编程语言中是个普遍存在的问题。
 不同语言解决该问题的思路也不同，就 C++ 而言，
 它规定 `else` 与离它最近的尚未匹配的 `if` 匹配，从而消除了程序的二叉性。
 可以使用花括号控制执行路径
@@ -308,17 +318,118 @@ while (condition)
     statement
 ```
 
+* `while` 的条件部分可以是一个表达式或者是一个带初始化的变量声明
+* 定义在 `while` 条件部分或者 `while` 循环体内的变量每次迭代都经历从创建到销毁的过程
+
+### 使用 while 循环
+
+* 当不确定到底要迭代多少次时，使用 `while` 循环比较合适，比如读取输入的内容
+* 想在循环结束后访问循环控制变量时，也应该使用 `while` 循环
+
+```cpp
+// 重复读入数据，直至到达文件末尾或者遇到其他输入问题
+vector<int> v;
+int i;
+while (cin >> i) {
+    v.push_back(i);
+}
+```
+
+```cpp
+// 寻找第一个负值元素
+auto beg = v.begin();
+while (beg != v.end() && *beg >= 0) {
+    ++beg;
+}
+
+if (beg == v.end()) {
+    // v 中所有元素都大于等于 0
+}
+```
+
 ## 传统的 for 语句
 
+### 语法
+
+```cpp
+for (init-statement; condition; expression)
+    statement
+```
+
+### 执行流程
+
+* `init-statement` 负责初始化一个值，这个值随着循环的进行而改变
+* `condition` 作为循环控制的条件，只要 `condition` 为真，就执行一次 `statement`，
+  如果 `condition` 第一次求值的结果就是 `false`，则 `statement` 一次也不会执行
+* `expression` 负责修改 `init-statement` 初始化的变量，
+  这个变量正好就是 `condition` 检查的对象，修改发生在每次循环迭代之后
+
+`for` 语句头中的多重定义:
+
+* `init-statement` 可以定义多个对象，但是 `init-statement` 只能有一条声明语句，
+  因此，所有变量的基础类型必须相同
+
+## 省略 for 语句头的某些部分
+
+* `for` 语句头能省略掉 `init-statement`、`condition`、`expression` 中的任何一个(或者全部)
+* 如果无需初始化，可以使用一条空语句作为 `init-statement`
+
+```cpp
+auto beg = v.begin();
+for ( /* 空语句 */; beg != v.end() && *beg >= 0; ++beg) {
+    ;
+}
+```
+
+* 省略 `condition` 的效果等价于在条件部分写了一个 `true`
+
+```cpp
+for (int i = 0; /* 空语句 */; ++i) {
+    // 对 i 进行处理，循环内部的代码必须负责终止迭代过程
+}
+```
+
+* 省略 `expression` 后，要求 `condition` 部分或者循环体内必须改变迭代变量的值
+
+```cpp
+vector<int> v;
+for (int i; cin >> i; /* 表达式为空 */) {
+    v.push_back(i);
+}
+```
 
 ## 范围 for 语句
+
+C++11 新标准引入了一种更简单的 `for` 语句，这种语句可以遍历容器或其他序列的所有元素
+
+### 语法
+
+```cpp
+for (declaration : expression) 
+    statement
+```
+
+
+
+
 
 
 ## do while 语句
 
+### 语法
+
+```cpp
+do
+    statement
+while (condition);
+```
+
+
 
 
 # 跳转语句
+
+
 
 ## break 语句
 
@@ -326,6 +437,9 @@ while (condition)
 ## continue 语句
 
 ## goto 语句
+
+
+## return 语句
 
 # try 语句和异常处理
 

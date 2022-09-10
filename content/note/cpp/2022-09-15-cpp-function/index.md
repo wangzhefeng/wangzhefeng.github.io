@@ -1,7 +1,7 @@
 ---
 title: C++ 函数
 author: 王哲峰
-date: '2022-04-06'
+date: '2022-09-15'
 slug: cpp-function
 categories:
   - c++
