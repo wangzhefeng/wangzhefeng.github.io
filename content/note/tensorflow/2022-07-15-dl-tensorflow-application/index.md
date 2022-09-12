@@ -32,134 +32,224 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [目前可用模型](#目前可用模型)
+- [预训练模型下载](#预训练模型下载)
+- [图像分类模型](#图像分类模型)
+  - [模型](#模型)
+  - [API](#api)
 - [示例](#示例)
+  - [图像分类模型使用示例](#图像分类模型使用示例)
 </p></details><p></p>
 
-# 目前可用模型
+# 预训练模型下载
 
-Keras Applications(`keras.applications`) 提供了预训练好的深度学习模型, 
-这些模型可以用于预测、特征提取等. 当初始化一个模型时就会自动下载, 
-默认下载的路径是: `~/.keras.models/`.
+Keras Applications(`tensorflow.keras.applications`) 提供了预训练好的深度学习模型, 
+这些模型可以用于预测、特征提取等
+
+当初始化一个模型时就会自动下载, 默认下载的路径是: `~/.keras/models/`
+
+![img](images/keras_models.png)
+
+# 图像分类模型
+
+## 模型
 
 在 ImageNet 数据上预训练过的用于图像分类的模型
 
-- Xception
-- VGG16
-- VGG19
-- ResNet, ResNetV2, ResNeXt
-- InceptionV3
-- InceptionResNet2
-- MobileNet
-- MobileNetV2
-- DenseNet
-- NASNet
+* Xception
+* VGG16
+* VGG19
+* ResNet, ResNetV2, ResNeXt
+* InceptionV3
+* InceptionResNet2
+* MobileNet
+* MobileNetV2
+* DenseNet
+* NASNet
+
+## API
 
 ```python
-from keras.applications.xception import Xception
-from keras.applications.vgg16 import VGG16
-from keras.applications.vgg19 import VGG19
-from keras.applications.resnet50 import ResNet50
-from keras.applications.inception_v3 import InceptionV3
-from keras.applications.inception_resnet_v2 import InceptionResNetV2
-from keras.applications.mobilenet import MobileNet
-from keras.applications.densenet import DenseNet121
-from keras.applications.densenet import DenseNet169
-from keras.applications.densenet import DenseNet201
-from keras.applications.nasnet import NASNetLarge
-from keras.applications.nasnet import NASNetMobile
-from keras.applications.mobilenet_v2 import MobileNetV2
+from tensorflow.keras.applications.xception import Xception
 
 # channels_last only; 299x299
-xception_model = Xception(include_top = True,
-                           weights = "imagenet",
-                           input_tensor = None, 
-                           input_shape = None,
-                           pooling = None,
-                           classes = 1000)
-# channels_first and channels_last; 224x224
-vgg16_model = VGG16(include_top = True,
-                     weights = "imagenet",
-                     input_tensor = None, 
-                     input_shape = None,
-                     pooling = None,
-                     classes = 1000)
-vgg19_model = VGG19(include_top = True, 
-                     weights = 'imagenet',
-                     input_tensor = None, 
-                     input_shape = None, 
-                     pooling = None, 
-                     classes = 1000)
-resnet50_model = ResNet50(include_top = True, 
-                           weights = 'imagenet', 
-                           input_tensor = None, 
-                           input_shape = None, 
-                           pooling = None, 
-                           classes = 1000)
-inception_v3_model = InceptionV3(include_top = True, 
-                                 weights = 'imagenet', 
-                                 input_tensor = None, 
-                                 input_shape = None, 
-                                 pooling = None, 
-                                 classes = 1000)
-inception_resnet_v2_model = InceptionResNetV2(include_top = True, 
-                                                weights = 'imagenet', 
-                                                input_tensor = None, 
-                                                input_shape = None, 
-                                                pooling = None, 
-                                                classes = 1000)
-mobilenet_model = MobileNet(input_shape = None, 
-                              alpha = 1.0, 
-                              depth_multiplier = 1, 
-                              dropout = 1e-3, 
-                              include_top = True, 
-                              weights = 'imagenet', 
-                              input_tensor = None, 
-                              pooling = None, 
-                              classes = 1000)
-densenet_model = DenseNet121(include_top = True, 
-                              weights = 'imagenet', 
-                              input_tensor = None, 
-                              input_shape = None, 
-                              pooling = None, 
-                              classes = 1000)
-densenet_model = DenseNet169(include_top = True, 
-                              weights = 'imagenet', 
-                              input_tensor = None, 
-                              input_shape = None, 
-                              pooling = None, 
-                              classes = 1000)
-densenet_model = DenseNet201(include_top = True, 
-                              weights = 'imagenet', 
-                              input_tensor = None, 
-                              input_shape = None, 
-                              pooling = None, 
-                              classes = 1000)
-nasnet_model = NASNetLarge(input_shape = None, 
-                           include_top = True, 
-                           weights = 'imagenet', 
-                           input_tensor = None, 
-                           pooling = None, 
-                           classes = 1000)
-nasnet_model = NASNetMobile(input_shape = None, 
-                              include_top = True, 
-                              weights = 'imagenet', 
-                              input_tensor = None, 
-                              pooling = None, 
-                              classes = 1000)
-mobilenet_v2_model = MobileNetV2(input_shape = None, 
-                                 alpha = 1.0, 
-                                 depth_multiplier = 1, 
-                                 include_top = True, 
-                                 weights = 'imagenet', 
-                                 input_tensor = None, 
-                                 pooling = None, 
-                                 classes = 1000)
+xception_model = Xception(
+    include_top = True,
+    weights = "imagenet",
+    input_tensor = None, 
+    input_shape = None,
+    pooling = None,
+    classes = 1000,
+)
 ```
+
+
+```python
+from tensorflow.keras.applications.vgg16 import VGG16
+
+# channels_first and channels_last; 224x224
+vgg16_model = VGG16(
+    include_top = True,
+    weights = "imagenet",
+    input_tensor = None, 
+    input_shape = None,
+    pooling = None,
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.vgg19 import VGG19
+
+vgg19_model = VGG19(
+    include_top = True, 
+    weights = 'imagenet',
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.resnet50 import ResNet50
+
+resnet50_model = ResNet50(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+
+```python
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+
+inception_v3_model = InceptionV3(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.inception_resnet_v2 import InceptionResNetV2
+
+inception_resnet_v2_model = InceptionResNetV2(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.mobilenet import MobileNet
+
+mobilenet_model = MobileNet(
+    input_shape = None, 
+    alpha = 1.0, 
+    depth_multiplier = 1, 
+    dropout = 1e-3, 
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.densenet import DenseNet121
+
+densenet_model = DenseNet121(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.densenet import DenseNet169
+
+densenet_model = DenseNet169(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.densenet import DenseNet201
+
+densenet_model = DenseNet201(
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    input_shape = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.nasnet import NASNetLarge
+
+nasnet_model = NASNetLarge(
+    input_shape = None, 
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.nasnet import NASNetMobile
+
+nasnet_model = NASNetMobile(
+    input_shape = None, 
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
+```python
+from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2
+
+mobilenet_v2_model = MobileNetV2(
+    input_shape = None, 
+    alpha = 1.0, 
+    depth_multiplier = 1, 
+    include_top = True, 
+    weights = 'imagenet', 
+    input_tensor = None, 
+    pooling = None, 
+    classes = 1000,
+)
+```
+
 
 # 示例
 
-- 图像分类模型使用示例
+## 图像分类模型使用示例
 
 ```python
 from keras.preprocessing import image
