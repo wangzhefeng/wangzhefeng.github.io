@@ -1,7 +1,7 @@
 ---
 title: TensorFlow Keras 后端
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-09-10'
 slug: dl-tensorflow-keras-backend
 categories:
   - deeplearning

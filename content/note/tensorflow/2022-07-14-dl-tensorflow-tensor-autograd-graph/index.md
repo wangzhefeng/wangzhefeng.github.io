@@ -1,7 +1,7 @@
 ---
 title: TensorFlow 张量、自动微分机制和计算图
 author: 王哲峰
-date: '2022-09-10'
+date: '2022-07-14'
 slug: dl-tensorflow-tensor-autograd-graph
 categories:
   - deeplearning
@@ -57,6 +57,10 @@ details[open] summary {
     - [广播机制](#广播机制)
 - [自动微分机制](#自动微分机制)
   - [利用梯度磁带求导数](#利用梯度磁带求导数)
+    - [变量张量求导](#变量张量求导)
+    - [常量张量求导](#常量张量求导)
+    - [求二阶导数](#求二阶导数)
+    - [在 Autograph 中使用梯度磁带求导](#在-autograph-中使用梯度磁带求导)
   - [利用梯度磁带和优化器求最小值](#利用梯度磁带和优化器求最小值)
 - [计算图](#计算图)
   - [静态计算图](#静态计算图)
@@ -642,8 +646,94 @@ TensorFlow 一般使用地图磁带 `tf.GradientTape` 来记录正向运算过�
 
 ## 利用梯度磁带求导数
 
+* 求 `$f(x) = a \times x^{2} + b \times x + c$` 的导数
+
 ```python
+import tensorflow as tf
+import numpy as np
+
+x = tf.Variable(0.0, name = "x", dtype = tf.float32)
+a = tf.constant(1.0)
+b = tf.constant(-2.0)
+c = tf.constant(1.0)
 ```
+
+### 变量张量求导
+
+```python
+with tf.GradientTape() as tape:
+    y = a * tf.pow(x, 2) + b * x + c
+
+dy_dx = tape.gradient(y, x)
+print(dy_dx)
+```
+
+```
+tf.Tensor(-2.0, shape=(), dtype=float32)
+```
+
+### 常量张量求导
+
+对常量张量也可以求导，需要增加 watch
+
+```python
+with tf.GradientTape() as tape:
+    tape.watch([a, b, c])
+    y = a * tf.pow(x, 2) + b * x + c
+
+dy_dx, dy_da, dy_db, dy_dc = tape.gradient(y, [x, a, b, c])
+print(dy_da)
+print(dy_db)
+print(dy_dc)
+```
+
+```
+tf.Tensor(0.0, shape=(), dtype=float32)
+
+tf.Tensor(1.0, shape=(), dtype=float32)
+```
+
+### 求二阶导数
+
+```python
+with tf.GradientTape() as tape2:
+    with tf.GradientTape() as tape1:
+        y = a * tf.pow(x, 2) + b * x + c
+    dy_dx = tape1.gradient(y, x)
+dy2_dx2 = tape2.gradient(dy_dx, x)
+
+print(dy2_dx2)
+```
+
+```
+tf.Tensor(2.0, shape=(), dtype=float32)
+```
+
+### 在 Autograph 中使用梯度磁带求导
+
+```python
+@tf.function
+def f(x):
+    a = tf.constant(1.0)
+    b = tf.constant(-2.0)
+    c = tf.constant(1.0)
+
+    # 自变量转换成 tf.float32
+    x = tf.cast(x, tf.float32)
+    with tf.GradientTape() as tape:
+        tap.watch(x)
+        y = a * tf.pow(x, 2) + b * x + c
+    dy_dx = tape.gradient(y, x)
+
+    return ((dy_dx, y))
+
+tf.print(f(tf.constant(0.0)))
+tf.print(f(tf.constant(1.0)))
+```
+
+
+
+
 
 
 ## 利用梯度磁带和优化器求最小值

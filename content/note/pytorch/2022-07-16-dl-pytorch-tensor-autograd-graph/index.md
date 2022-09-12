@@ -1,7 +1,7 @@
 ---
 title: PyTorch 张量、自动微分机制与动态计算图机制
 author: 王哲峰
-date: '2022-08-13'
+date: '2022-07-16'
 slug: dl-pytorch-tensor-autograd-graph
 categories:
   - deeplearning

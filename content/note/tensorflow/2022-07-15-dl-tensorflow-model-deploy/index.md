@@ -1,8 +1,8 @@
 ---
-title: TensorFlow Serving
+title: TensorFlow 模型部署
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-tensorflow-serving
+slug: dl-tensorflow-model-deploy
 categories:
   - deeplearning
   - tensorflow
@@ -30,7 +30,6 @@ details[open] summary {
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [TensorFlow Serving 模型部署介绍](#tensorflow-serving-模型部署介绍)
@@ -43,7 +42,6 @@ details[open] summary {
   - [Linux 的 curl 命令发送请求](#linux-的-curl-命令发送请求)
   - [Python 的 requests 库发送请求](#python-的-requests-库发送请求)
 </p></details><p></p>
-
 
 
 # TensorFlow Serving 模型部署介绍

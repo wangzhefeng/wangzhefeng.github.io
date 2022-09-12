@@ -1,8 +1,8 @@
 ---
-title: TensorFlow 模型保存
+title: TensorFlow 模型保存和加载
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-tensorflow-model-save
+slug: dl-tensorflow-model-save-load
 categories:
   - deeplearning
   - tensorflow

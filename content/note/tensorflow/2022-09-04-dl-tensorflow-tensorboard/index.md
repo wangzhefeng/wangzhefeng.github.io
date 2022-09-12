@@ -1,7 +1,7 @@
 ---
 title: TensorFlow TensorBoard
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-09-04'
 slug: dl-tensorflow-tensorboard
 categories:
   - deeplearning
