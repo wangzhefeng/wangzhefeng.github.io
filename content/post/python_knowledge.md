@@ -9,6 +9,35 @@ tags:
   - tool
 ---
 
+<style>
+details {
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	padding: .5em .5em 0;
+}
+summary {
+	font-weight: bold;
+	margin: -.5em -.5em 0;
+	padding: .5em;
+}
+details[open] {
+	padding: .5em;
+}
+details[open] summary {
+	border-bottom: 1px solid #aaa;
+	margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [Python 库](#python-库)
+- [Python 单元测试](#python-单元测试)
+- [Python 代码规范](#python-代码规范)
+- [Python 库源码阅读](#python-库源码阅读)
+	- [TODO](#todo)
+- [习惯](#习惯)
+</p></details><p></p>
 
 # Python 库
 
@@ -18,27 +47,7 @@ tags:
 
 # Python 单元测试
 
-
-
-
-
-
-
-
-
-
-
 # Python 代码规范
-
-1. 
-
-
-
-
-
-
-
-
 
 # Python 库源码阅读
 
@@ -46,7 +55,6 @@ tags:
 
 - darts
 	- https://github.com/unit8co/darts
-
 - autots
 	- https://github.com/winedarksea/AutoTS
 - kats
@@ -56,5 +64,4 @@ tags:
 
 1. 数据验证
 	- 类型验证
-
-1. 使用 `isinstance(, ())`
+2. 使用 `isinstance(, ())`

@@ -744,7 +744,7 @@ holiday = pd.concat([playoffs, superbowls])
    print(holiday)
 ```
 
-![img](images/holiday_df.)
+![img](images/holiday_df.png)
 
 2.通过使用 ``holidays`` 参数传递节假日影响因素
 

@@ -12,12 +12,13 @@ tags:
 # 参考文章:
 
 - LSTNet
-   - `blog <https://zhuanlan.zhihu.com/p/61795416>`__
-   - `paper <https://arxiv.org/pdf/1703.07015.pdf>`__
-   - `code <https://github.com/Lorne0/LSTNet_keras>`__
+    - [blog](https://zhuanlan.zhihu.com/p/61795416)
+    - [paper](https://arxiv.org/pdf/1703.07015.pdf)
+    - [code](https://github.com/Lorne0/LSTNet_keras)
 - TPA-LSTM
-   - `blog <https://zhuanlan.zhihu.com/p/63134630>`__
-   - `paper <https://arxiv.org/pdf/1809.04206v2.pdf>`__
-   - `code <https://github.com/gantheory/TPA-LSTM>`__
+    - [blog](https://zhuanlan.zhihu.com/p/63134630)
+    - [paper](https://arxiv.org/pdf/1809.04206v2.pdf)
+    - [code](https://github.com/gantheory/TPA-LSTM)
 - LSTM
-   - `blog <https://cloud.tencent.com/developer/article/1041442>`__
+   - [blog](https://cloud.tencent.com/developer/article/1041442)
+
