@@ -2,7 +2,7 @@
 title: NLP--seq2seq
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-seq2seq
 categories:
   - NLP
 tags:

@@ -2,7 +2,7 @@
 title: NLP-问答系统
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-qa-system
 categories:
   - NLP
 tags:

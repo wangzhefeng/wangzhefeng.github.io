@@ -2,51 +2,32 @@
 title: NLP--特征提取
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-feature-extraction
 categories:
   - NLP
 tags:
   - tool
 ---
 
-NLP--特征提取
-===============
+- feature_extraction.text.CountVectorizer
+- feature_extraction.text.HasingVectorizer
+- feature_extraction.text.TfidfTransformer
+- feature_extraction.text.TfidfVectorizer
 
-    Text feature extraction
+# Bag of Words
 
-   - API
+scikit-learn 提供的工具
 
-      - feature_extraction.text.CountVectorizer
-      - feature_extraction.text.HasingVectorizer
-      - feature_extraction.text.TfidfTransformer
-      - feature_extraction.text.TfidfVectorizer
+- tokenizing
+- counting
+- normalizing
 
-1.Bag of Words
------------------------------
+# Sparsity
 
-- scikit-learn 提供的工具
+# Common Vectorizer usage
 
-   - tokenizing
-   - counting
-   - normalizing
-
-2.Sparsity
------------------------------
+# TF-IDF term weighting
 
 
-   ```python
+# Decoding text files
 
-      test
-
-3.Common Vectorizer usage
-----------------------------
-
-
-4.TF-IDF term weighting
-----------------------------
-
-
-
-
-5.Decoding text files
-----------------------------

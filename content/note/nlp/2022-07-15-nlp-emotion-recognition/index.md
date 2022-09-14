@@ -2,7 +2,7 @@
 title: NLP-情感分析
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-emotion-recognition
 categories:
   - NLP
 tags:

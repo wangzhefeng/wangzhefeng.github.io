@@ -2,7 +2,7 @@
 title: NLP--文本分类
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-ml-text-classification
 categories:
   - NLP
 tags:

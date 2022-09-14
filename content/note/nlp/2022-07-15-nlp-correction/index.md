@@ -2,7 +2,7 @@
 title: NLP--纠错
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-correction
 categories:
   - NLP
 tags:

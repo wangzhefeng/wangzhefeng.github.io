@@ -2,7 +2,7 @@
 title: NLP--关键词提取
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-keyword-extraction
 categories:
   - NLP
 tags:

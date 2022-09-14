@@ -2,7 +2,7 @@
 title: NLP--句法分析
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-utils-spacy
+slug: nlp-syntax-parsing 
 categories:
   - NLP
 tags:
