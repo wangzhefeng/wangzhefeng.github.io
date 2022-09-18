@@ -37,6 +37,8 @@ details[open] summary {
 - [Python 库源码阅读](#python-库源码阅读)
 	- [TODO](#todo)
 - [习惯](#习惯)
+- [Python 路径管理](#python-路径管理)
+- [Python Pandas groupby](#python-pandas-groupby)
 </p></details><p></p>
 
 # Python 库
@@ -65,3 +67,10 @@ details[open] summary {
 1. 数据验证
 	- 类型验证
 2. 使用 `isinstance(, ())`
+
+
+# Python 路径管理
+
+
+# Python Pandas groupby
+
