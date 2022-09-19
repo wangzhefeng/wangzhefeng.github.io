@@ -1,7 +1,7 @@
 ---
 title: TensorFlow Env
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-07-01'
 slug: dl-tensorflow-env
 categories:
   - deeplearning

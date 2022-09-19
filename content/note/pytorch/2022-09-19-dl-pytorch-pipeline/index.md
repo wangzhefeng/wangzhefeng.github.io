@@ -1,7 +1,7 @@
 ---
 title: PyTorch Pipeline
 author: 王哲峰
-date: '2022-07-14'
+date: '2022-09-19'
 slug: dl-pytorch-pipeline
 categories:
   - deeplearning
