@@ -343,7 +343,6 @@ print(id(v))
 5276259888
 ```
 
-
 ## 张量数据操作
 
 ### 创建张量
@@ -351,15 +350,6 @@ print(id(v))
 张量创建的许多方法和 Numpy 中创建 array 的方法很像
 
 #### 张量创建
-
-* tf.constant
-* tf.range
-* tf.linspace
-* tf.zeros
-* tf.zeros_like
-* tf.ones
-* tf.ones_like
-* tf.fill
 
 ```python
 import tensorflow as tf
@@ -441,8 +431,8 @@ tf.print(t)
 * 对于 `tf.Variable`，可以通过索引和切片对部分元素进行修改
 * 对于提取张量的连续子区域，可使用 `tf.slice`
 * 对于不规则的切片提取，可以使用 `tf.gather`、`tf.gather_nd`、`tf.boolean_mask`
-* `tf.boolean_mask` 功能最为强大，它可以实现 `tf.gather`、`tf.gather_nd` 的功能，
-  并且 `tf.boolean_mask` 还可以实现布尔索引
+    - `tf.boolean_mask` 功能最为强大，它可以实现 `tf.gather`、`tf.gather_nd` 的功能，
+      并且 `tf.boolean_mask` 还可以实现布尔索引
 * 如果要通过修改张量的某些元素得到新的张量，可以使用 `tf.where`、`tf.scatter_nd`
 
 ```python
@@ -481,6 +471,57 @@ tf.print(x)
 tf.print(a[..., 1])
 ```
 
+```python
+# 考虑班级成绩册的例子，有4个班级，每个班级10个学生，每个学生7门科目成绩。
+# 可以用一个4×10×7的张量来表示
+scores = tf.random.uniform((4, 10, 7), minval = 0, maxval = 100 , dtype = tf.int32)
+tf.print(scores)
+
+# #抽取每个班级第0个学生，第5个学生，第9个学生的全部成绩
+p = tf.gather(scores, [0, 5, 9], axis = 1)
+tf.print(p)
+# or
+p = tf.boolean_mask(
+    scores, 
+    [True, False, False, False, False, 
+     True, False, False, False, True], 
+axis = 1
+)
+tf.print(p)
+
+# 抽取每个班级第0个学生，第5个学生，第9个学生的第1门课程，第3门课程，第6门课程成绩
+q = tf.gather(tf.gather(scores, [0, 5, 9], axis = 1), [1, 3, 6], axis = 2)
+tf.print(q)
+
+# 抽取第0个班级第0个学生，第2个班级的第4个学生，第3个班级的第6个学生的全部成绩
+# indices的长度为采样样本的个数，每个元素为采样位置的坐标
+s = tf.gather_nd(scores, indices = [(0, 0), (2, 4), (3, 6)])
+s
+
+#抽取第0个班级第0个学生，第2个班级的第4个学生，第3个班级的第6个学生的全部成绩
+s = tf.boolean_mask(scores,
+    [[True,False,False,False,False,False,False,False,False,False],
+     [False,False,False,False,False,False,False,False,False,False],
+     [False,False,False,False,True,False,False,False,False,False],
+     [False,False,False,False,False,False,True,False,False,False]])
+tf.print(s)
+
+
+# 利用tf.boolean_mask可以实现布尔索引
+# 找到矩阵中小于0的元素
+c = tf.constant([[-1,1,-1],[2,2,-2],[3,-3,3]],dtype=tf.float32)
+tf.print(c,"\n")
+
+tf.print(tf.boolean_mask(c,c<0),"\n") 
+tf.print(c[c<0]) #布尔索引，为boolean_mask的语法糖形式
+```
+
+
+
+
+
+
+
 ### 维度变换
 
 维度变换相关的函数有:
@@ -494,9 +535,65 @@ tf.print(a[..., 1])
 * tf.transpose
     - 交换维度
 
+`tf.reshape` 可以改变张量的形状，但是其本质上不会改变张量元素的存储顺序，
+所以，该操作实际上非常迅速，并且是可逆的
+
+```python
+a = tf.random.uniform(
+    shape = [1, 3, 3, 2],
+    minval = 0,
+    maxval = 255,
+    dtype = tf.int32,
+)
+tf.print(a.shape)
+tf.print(a)
+```
+
+```python
+# 改成 (3, 6) 形状
+b = tf.reshape(a, [3, 6])
+tf.print(b.shape)
+tf.print(b)
+```
+
+```python
+# 改成 [1, 3, 3, 2] 形状的张量
+c = tf.reshape(b, [1, 3, 3, 2])
+tf.print(c)
+```
+
+如果张量在某个维度上只有一个元素，利用 `tf.squeeze` 可以消除这个维度，
+和 `tf.reshape` 相似，它本质上不会改变张量元素的存储顺序。
+张量的各个元素在内存中是线性存储的，其一般规律是，同一层级中的相邻元素的物理地址也相邻
+
+```python
+s = tf.squeeze(a)
+tf.print(s.shape)
+tf.print(s)
+```
+
+在第 0 维插入长度为 1 的一个维度
+
+```python
+d = tf.expand_dims(s, axis = 0)
+d
+```
 
 
+`tf.transpose` 可以交换张量的维度，与 `tf.reshape` 不同，它会改变张量元素的存储顺序。
+`tf.transpose` 常用于图片存储格式的变换上
 
+```python
+# Batch, Height, Width, Channel
+a = tf.random.uniform(shape = [100, 600, 600, 4], minval = 0, maxval = 255, dtype = tf.int32)
+tf.print(a.shape)
+```
+
+```python
+# Channel, Height, Width, Batch
+s = tf.transpose(a, perm = [3, 1, 2, 0])
+tf.print(s.shape)
+```
 
 
 
@@ -891,10 +988,7 @@ tf.print(v, "\n")
 tf.print(u@tf.linalg.diag(s)@tf.transpose(v))
 ```
 
-
-
 ### 广播机制
-
 
 TensorFlow 的广播规则和 Numpy 是一样的:
 
