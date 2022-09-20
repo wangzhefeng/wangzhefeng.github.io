@@ -43,19 +43,28 @@ details[open] summary {
   - [深度前馈网络概念](#深度前馈网络概念)
   - [线性模型的局限性及克服](#线性模型的局限性及克服)
 - [基于梯度的学习](#基于梯度的学习)
-  - [代价函数/损失函数](#代价函数损失函数)
-  - [输出层的设计](#输出层的设计)
-    - [输出层激活函数](#输出层激活函数)
-      - [恒等函数](#恒等函数)
-      - [Softmax 函数](#softmax-函数)
-    - [输出层的神经元数量](#输出层的神经元数量)
+- [损失函数](#损失函数)
+- [输出层的设计](#输出层的设计)
+  - [输出层激活函数](#输出层激活函数)
+    - [恒等函数](#恒等函数)
+    - [Softmax 函数](#softmax-函数)
+  - [输出层的神经元数量](#输出层的神经元数量)
 - [隐藏单元](#隐藏单元)
   - [隐藏单元设计介绍](#隐藏单元设计介绍)
   - [隐藏层激活函数](#隐藏层激活函数)
-    - [ReLU](#relu)
     - [Sigmoid](#sigmoid)
-    - [双曲正切函数](#双曲正切函数)
-    - [其他激活函数](#其他激活函数)
+    - [Softmax](#softmax)
+    - [ReLU](#relu)
+    - [tanh](#tanh)
+    - [Leaky ReLU](#leaky-relu)
+    - [ELU](#elu)
+    - [SELU](#selu)
+    - [swish](#swish)
+    - [GELU](#gelu)
+  - [在模型中使用激活函数](#在模型中使用激活函数)
+    - [TensorFlow](#tensorflow)
+    - [PyTorch](#pytorch)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -254,7 +263,11 @@ y = 0, \text{if} (\sum_{i=1}^{p} \omega_{i} x_{i} + b) \leq \theta
   训练神经网络和训练其他任何模型并没有太大的区别。只是, 计算梯度对于神经网络会略微复杂一些, 但仍然可以很高效而精确地实现
 ***
 
-## 代价函数/损失函数
+
+
+
+
+# 损失函数
 
 为了使用基于梯度的学习方法, 必须选择一个代价函数, 并且必须选择如何表示模型的输出。
 
@@ -270,20 +283,23 @@ y = 0, \text{if} (\sum_{i=1}^{p} \omega_{i} x_{i} + b) \leq \theta
 * 用于训练神经网络的完整的代价函数, 通常在基本代价函数的基础上集合一个正则项
 ***
 
-## 输出层的设计
+
+
+
+# 输出层的设计
 
 - 神经网络可以用在分类和回归问题上, 不过需要根据情况改变输出层的激活函数
 - 一般而言,回归问题用 `恒等函数`, 分类问题用 `softmax` 函数
 
-### 输出层激活函数
+## 输出层激活函数
 
-#### 恒等函数
+### 恒等函数
 
 恒等函数的形式
 
 `$$\sigma(x) = x$$`
 
-#### Softmax 函数
+### Softmax 函数
 
 softmax函数的形式
 
@@ -299,10 +315,16 @@ softmax函数针对 `溢出` 问题的改进
 
 `$$y_k = \frac{e^{a_k+C}}{\sum_{n}^{i=1}e^{a_i+C}}$$`
 
-### 输出层的神经元数量
+## 输出层的神经元数量
 
 - 输出层的神经元数量需要根据待解决的问题决定
 - 对于分类问题, 输出层的神经元数量一般设定为类别的数量
+
+
+
+
+
+
 
 # 隐藏单元
 
@@ -334,11 +356,47 @@ softmax函数针对 `溢出` 问题的改进
 
 ## 隐藏层激活函数
 
+激活函数在深度学习中扮演着非常重要的角色，它给神经网络赋予了非线性，
+从而使得神经网络能够拟合任意复杂的函数。如果没有激活函数，无论多么复杂的网络，
+都等价于单一的线性变换，无法对非线性函数进行拟合
+
+目前，深度学习中最流行的激活函数是 ReLU，但也有新推出的激活函数，例如 swish、GELU，
+据称效果优于 ReLU 激活函数
+
+### Sigmoid
+
+神经网络中用 Sigmoid 函数作为激活函数, 进行信号的转换, 转换后的信号被传送给下一个神经元。
+将实数压缩到 `$(0, 1)$` 区间内，一般只在二分类的最后输出层使用，主要缺陷为存在梯度消失问题，
+计算复杂度高，输出不以 0 为中心
+
+`$$h(x) = \frac{1}{1+e^{-x}}, 其中: e是纳皮尔常数 2.7182...$$`
+
+![img](images/sigmoid.png)
+
+### Softmax
+
+Sigmoid 的多分类扩展，一般只在多分类问题的最后输出层使用
+
+Softmax 函数的形式
+
+`$$y_k = \frac{e^{a_{k}}}{\sum_{i=1}^{n}e^{a_i}}$$`
+
+其中:
+
+- `$n$`: 是输出层神经元的个数
+- `$k$`: 是指第 `$k$` 个神经元
+- `$a$`: 是输入信号
+
+Softmax 函数针对 `溢出` 问题的改进
+
+`$$y_k = \frac{e^{a_k+C}}{\sum_{n}^{i=1}e^{a_i+C}}$$`
+
 ### ReLU
 
-在神经网络发展的历史上, Sigmoid 激活函数很早就开始使用了, 而在现代神经网络中, 
-默认推荐的是使用 **ReLU(Rectified Linear Unitm 整流线性单元)** 
-函数(Jarrett et al., 2009b; Nair and Hinton, 2010a;Glorot et al., 2011a).
+在神经网络发展的历史上, Sigmoid 激活函数很早就开始使用了, 
+而在现代神经网络中, 默认推荐的是使用 ReLU(Rectified Linear Unit 整流线性单元)函数
+
+主要缺陷是：输出不以 0 为中心，输入小于 0 时存在梯度消失的问题(死亡 ReLU)
 
 `$$h(x)=max\{0, x\} = \left \{
 \begin{array}{rcl}
@@ -346,28 +404,112 @@ x    &      & {x > 0}    \\
 0    &      & {x \leq 0} \\
 \end{array} \right.$$`
 
-***
-**Note:**
+![img](images/relu.png)
 
 - 整流线性激活函数 (ReLU) 是被推荐用于大多数前馈神经网络的默认激活函数。
   将此函数用于线性变换的输出将产生非线性变换。
   然而, 函数仍然非常接近线性, 在这种意义上它是具有两个线性部分的分段线性函数。
 - 由于 ReLU 几乎是线性的, 因此他们保留了许多使得线性模型易于使用基于梯度的方法进行优化的属性。
-  它们还保留了许多使得线性模型能够泛化良好的属性。
+  它们还保留了许多使得线性模型能够泛化良好的属性
 - 计算机科学的一个公共原则是, 可以从最小的组件构建最复杂的系统, 
   就像图灵机的内存只需要能够存储 0 或 1 的状态, 
   可以从整流线性函数构建一万个函数近似器
-***
 
-### Sigmoid
 
-神经网络中用 Sigmoid 函数作为激活函数, 进行信号的转换, 转换后的信号被传送给下一个神经元.
+### tanh
 
-`$$h(x) = \frac{1}{1+e^{-x}}, 其中: e是纳皮尔常数 2.7182...$$`
 
-### 双曲正切函数
+tanh，双曲正切函数，将实数压缩到 `$[-1, 1]$` 区间内，输出期望为 0。
+主要缺陷为存在梯度消失问题，计算复杂度高
 
 `$$h(x) = tanh(x) = $$`
 
-### 其他激活函数
+![img](images/tanh.png)
 
+
+### Leaky ReLU
+
+Leaky ReLU，对修正线性单元的改进，解决了死亡 ReLU 问题
+
+`$$Leaky ReLU(x) = max(0.1 * x, x$$`
+
+![img](images/leaky_relu.png)
+
+### ELU
+
+ELU，指数线性单元，对 ReLU 的改进，能够缓解死亡 ReLU 问题
+
+`$$ELU(x) = \left \{
+\begin{array}{rcl}
+x    &      & {x > 0}    \\
+\alpha (e^{x} - 1)   &      & {x \leq 0} \\
+\end{array} \right.$$`
+
+![img](images/elu.png)
+
+### SELU
+
+SELU，扩展型指数线性单元，在权重用 `tf.keras.initializers.lecun_normal` 初始化的前提下能够对神经网络进行自归一化。不可能出现梯度爆炸或者梯度消失问题。需要和 Dropout 的变种 AlphaDropout 一起使用
+
+`$$SELU(x) = \lambda \left \{
+\begin{array}{rcl}
+x    &      & {x > 0}    \\
+\alpha (e^{x} - 1)    &      & {x \leq 0} \\
+\end{array} \right.$$`
+
+![img](images/selu.png)
+
+### swish
+
+swish，自门控激活函数，谷歌出品，相关研究指出用 swish 替代 ReLU 将获得轻微效果提升
+
+`$$\sigma(x) = \frac{x}{1 + e^{-x}}$$`
+
+![img](images/swish.png)
+
+TensorFlow API:
+
+```python
+tf.nn.swith
+```
+
+### GELU
+
+GELU，高斯误差线性单元激活函数，在 Transformer 中表现最好
+
+`$$GELU(x) = 0.5 x \Big(1 + tanh(\sqrt{\frac{2}{\pi}} (x + 0.044715 x^{3}))\Big)$$`
+
+![img](images/gelu.png)
+
+
+## 在模型中使用激活函数
+
+### TensorFlow
+
+在 Keras 模型中使用激活函数一般有两种方式
+
+* 作为某系层的 `activation` 参数指定
+* 显式添加 `tf.keras.layers.Activation` 激活层
+
+```python
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras import layers, models
+
+tf.keras.backend.clear_session()
+
+model = models.Sequential()
+model.add(layers.Dense(32, input_shape = (None, 16), activation = tf.nn.relu))
+model.add(layers.Dense(10))
+model.add(layers.Activation(tf.nn.softmax))
+model.summary()
+```
+
+### PyTorch
+
+
+# 参考
+
+- https://zhuanlan.zhihu.com/p/98472075
+- https://zhuanlan.zhihu.com/p/98863801

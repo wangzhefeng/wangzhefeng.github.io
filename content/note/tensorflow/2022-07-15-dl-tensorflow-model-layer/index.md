@@ -32,104 +32,48 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [自定义层](#自定义层)
-- [Keras Layers 共有的方法](#keras-layers-共有的方法)
-  - [Keras Layers](#keras-layers)
+- [内置模型层](#内置模型层)
+  - [模型层共有的方法](#模型层共有的方法)
+  - [常用内置模型层](#常用内置模型层)
+- [自定义模型层](#自定义模型层)
+  - [编写 tf.keras.Lambda 层](#编写-tfkeraslambda-层)
+  - [继承 tf.keras.layers.Layer 基类](#继承-tfkeraslayerslayer-基类)
+  - [线性层示例](#线性层示例)
 - [Keras Layers 配置](#keras-layers-配置)
-  - [Activation Function](#activation-function)
-  - [可用的 activations](#可用的-activations)
-  - [Keras 参数初始化(Initializers)](#keras-参数初始化initializers)
-  - [Keras 正则化(Regularizers)](#keras-正则化regularizers)
-  - [Keras 约束(Constraints)](#keras-约束constraints)
+  - [激活函数](#激活函数)
+    - [模型可用的激活函数](#模型可用的激活函数)
+    - [在模型中使用激活函数](#在模型中使用激活函数)
+  - [参数初始化](#参数初始化)
+  - [正则化](#正则化)
+  - [约束](#约束)
 </p></details><p></p>
 
-# 自定义层
+深度学习模型一般由各种模型层组合而成，`tf.keras.layers` 内置了非常丰富的各种功能的模型层，
+如果这些内置模型层不能够满足需求，
+可以通过编写 `tf.keras.Lambda` 匿名模型层或继承 `tf.keras.layers.Layer` 基类构建自定义的模型层，
+其中，`tf.keras.Lambda` 匿名模型层只适用于构造没有学习参数的模型层
 
-- 自定义层需要继承 `tf.keras.layers.Layers` 类, 并重写 `__init__`、`build`、`call` 三个方法
+# 内置模型层
 
-```python
-import numpy as np
-import tensorflow as tf
+## 模型层共有的方法
 
-class MyLayer(tf.keras.layers.Layer):
-    def __init__(self):
-        super().__init__()
-        # 初始化代码
-    
-    def build(self, input_shape): # input_shape 是一个 TensorShape 类型对象, 提供输入的形状
-        # 在第一次使用该层的时候调用该部分代码, 在这里创建变量可以使得变量的形状自适应输入的形状
-        # 而不需要使用者额外指定变量形状
-        # 如果已经可以完全确定变量的形状, 也可以在 __init__ 部分创建变量
-        self.variable_0 = self.add_weight(...)
-        self.variable_1 = self.add_weight(...)
-    
-    def call(self, inputs):
-        # 模型调用的代码(处理输入并返回输出)
-        return output
-```
+- layer`.get_weights()`
+- layer`.set_weights(weights)`
+- layer`.get_config()`
+   - `tf.keras.layer.Dense.from_config(config)`
+   - `tf.keras.layer.deserialize({"class_name": , "config": config})`
+- 如果 Layer 是单个节点(不是共享 layer), 可以使用以下方式获取 layer 的属性:
+   - layer.`input`
+   - layer.`output`
+   - layer.`input_shape`
+   - layer.`output_shape`
+- 如果 Layer 具有多个节点(共享 layer), 可以使用以下方式获取 layer 的属性:
+   - layer.`getinputat(note_index)`
+   - layer.`getoutputat(note_index)`
+   - layer.`getinputshapeat(noteindex)`
+   - layer.`getoutputshaepat(noteindex)`
 
-- 线性层示例
-
-```python
-import numpy as np
-import tensorflow as tf
-
-class LinearLayer(tf.keras.layers.Layer):
-    def __init__(self, units):
-        super.__init__()
-        self.units = units
-    
-    def build(self, input_shape):
-        self.w = self.add_variable(
-            name = "w", 
-            shape = [input_shape[-1], self.units],  # [n, 1]
-            initializer = tf.zeros_initializer()
-        )
-        self.b = self.add_variable(
-            name = "b",
-            shape = [self.units],                   # [1]
-            initializer = tf.zeros_initializer()
-        )
-    
-    def call(self, inputs):
-        y_pred = tf.matmul(inputs, self.w) + self.b
-        return y_pred
-
-class LinearModel(tf.keras.Model):
-    def __init__(self):
-        super().__init__()
-        self.layer = LinearLayer(untis = 1)
-    
-    def call(self, inputs):
-        output = self.layer(inputs)
-        return output
-```
-
-# Keras Layers 共有的方法
-
-```python
-from keras import layers
-```
-
-- layer.get_weights()
-- layer.set_weights(weights)
-- layer.get_config()
-   - keras.layer.Dense.from_config(config)
-   - keras.layer.deserialize({"class_name": , "config": config})
-- 如果 Layer 是单个节点(不是共享 layer), 可以使用以下方式获取 layer
-   的属性:
-   - layer.input
-   - layer.output
-   - layer.input_shape
-   - layer.output_shape
-- 如果 Layer 具有多个节点(共享 layer), 可以使用以下方式获取 layer
-   的属性:
-   - layer.getinputat(note_index)
-   - layer.getoutputat(note_index)
-   - layer.getinputshapeat(noteindex)
-   - layer.getoutputshaepat(noteindex)
-
-## Keras Layers
+## 常用内置模型层
 
 - **Core Layers**
    - Dense
@@ -138,7 +82,7 @@ from keras import layers
    - Flatten
    - Input
    - Reshape
-      - `keras.layers.Reshape(target_shape)`
+      - `tf.keras.layers.Reshape(target_shape)`
    - Permute
    - RepeatVector
    - Lambda
@@ -146,14 +90,14 @@ from keras import layers
    - Masking
    - SpatialDropout1D
    - SpatialDropout2D
-   - SpatialDropout3D`
+   - SpatialDropout3D
 - **Convolutional Layers**
    - 卷积层
       - Conv1D
       - Conv2D
       - Conv3D
       - SeparableConv1D
-         - `keras.layers.SeparableConv1D(rate)`
+         - `tf.keras.layers.SeparableConv1D(rate)`
       - SeparableConv2D
       - DepthwiseConv3D
    - Transpose
@@ -208,7 +152,6 @@ from keras import layers
 - **Embedding Layers**
    - `Embedding()`
 - **Merge Layers**
-
    - `Add()`
    - `Subtract()`
    - `Multiply()`
@@ -249,55 +192,108 @@ from keras import layers
       - `compute_output_shape(input_shape)`
 
 
+# 自定义模型层
+
+
+
+## 编写 tf.keras.Lambda 层
+
+## 继承 tf.keras.layers.Layer 基类
+
+自定义层需要继承 `tf.keras.layers.Layers` 类, 并重写 `__init__`、`build`、`call` 三个方法
+
+```python
+import numpy as np
+import tensorflow as tf
+
+class MyLayer(tf.keras.layers.Layer):
+    def __init__(self):
+        super().__init__()
+        # 初始化代码
+    
+    def build(self, input_shape): # input_shape 是一个 TensorShape 类型对象, 提供输入的形状
+        # 在第一次使用该层的时候调用该部分代码, 在这里创建变量可以使得变量的形状自适应输入的形状
+        # 而不需要使用者额外指定变量形状
+        # 如果已经可以完全确定变量的形状, 也可以在 __init__ 部分创建变量
+        self.variable_0 = self.add_weight(...)
+        self.variable_1 = self.add_weight(...)
+    
+    def call(self, inputs):
+        # 模型调用的代码(处理输入并返回输出)
+        return output
+```
+
+## 线性层示例
+
+```python
+import numpy as np
+import tensorflow as tf
+
+class LinearLayer(tf.keras.layers.Layer):
+    def __init__(self, units):
+        super.__init__()
+        self.units = units
+    
+    def build(self, input_shape):
+        self.w = self.add_variable(
+            name = "w", 
+            shape = [input_shape[-1], self.units],  # [n, 1]
+            initializer = tf.zeros_initializer()
+        )
+        self.b = self.add_variable(
+            name = "b",
+            shape = [self.units],                   # [1]
+            initializer = tf.zeros_initializer()
+        )
+    
+    def call(self, inputs):
+        y_pred = tf.matmul(inputs, self.w) + self.b
+        return y_pred
+
+class LinearModel(tf.keras.Model):
+    def __init__(self):
+        super().__init__()
+        self.layer = LinearLayer(untis = 1)
+    
+    def call(self, inputs):
+        output = self.layer(inputs)
+        return output
+```
+
+
+
+
+
 # Keras Layers 配置
 
 ```python
 model.add(Layer(
-      # 输出、输出
-      output_dim,
-      input_dim,
-      # 参数初始化
-      kernel_initializer,
-      bias_initializer,
-      # 参数正则化
-      kernel_regularizer,
-      activity_regularizer,
-      # 参数约束
-      kernel_constraint,
-      bias_constraint,
-      # 层激活函数
-      activation,
+    # 输出、输出
+    output_dim,
+    input_dim,
+    # 参数初始化
+    kernel_initializer,
+    bias_initializer,
+    # 参数正则化
+    kernel_regularizer,
+    activity_regularizer,
+    # 参数约束
+    kernel_constraint,
+    bias_constraint,
+    # 层激活函数
+    activation,
 ))
+
 # 输出
 input_s = Input()
+
 # 激活函数
 model.add(Activation)
 ```
 
-## Activation Function
+## 激活函数
 
-- Keras Activations
-   - `Activation` layer
-   - `activation` argument supported by all forward layers
-
-**调用方法:**
-
-```python
-from keras.layers import Activation, Dense
-from keras import backend as K
-
-# method 1
-model.add(Dense(64))
-model.add(Activation("tanh"))
-
-# method 2
-model.add(Dense(64, activation = "tanh"))
-
-# method 3
-model.add(Dense(64, activation = K.tanh))
-```
-
-## 可用的 activations
+### 模型可用的激活函数
 
 - softmax: Softmax activation function
    - x =>
@@ -315,16 +311,36 @@ model.add(Dense(64, activation = K.tanh))
    - `keras.activations.linear(x)`
 
 
-## Keras 参数初始化(Initializers)
+### 在模型中使用激活函数
+
+在 TensorFlow Keras 模型中使用激活函数一般有两种方式
+
+* 作为某系层的 `activation` 参数指定
+* 显式添加 `tf.keras.layers.Activation` 激活层
+
+```python
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras import layers, models
+
+tf.keras.backend.clear_session()
+
+model = models.Sequential()
+model.add(layers.Dense(32, input_shape = (None, 16), activation = tf.nn.relu))
+model.add(layers.Dense(10))
+model.add(layers.Activation(tf.nn.softmax))
+model.summary()
+```
+
+## 参数初始化
 
 **Initializers 的使用方法:**
 
    初始化定义了设置 Keras Layer 权重随机初始的方法
 
 - `kernel_initializer` param
-
    - "random_uniform"
-
 - `bias_initializer` param
 
 **可用的 Initializers:**
@@ -354,7 +370,7 @@ model.add(Dense(64, activation = K.tanh))
    distribution = "normal", seed = None)
    - 根据权值的尺寸调整其规模
 - keras.initializers.Orthogonal(gain = 1.0, seed = None)
-   - `随机正交矩阵 <http://arxiv.org/abs/1312.6120>`__
+   - [随机正交矩阵](http://arxiv.org/abs/1312.6120)
 - keras.initializers.Identity(gain = 1.0)
    - 生成单位矩阵的初始化器。仅用于 2D 方阵
 - keras.initializers.lecun_normal()
@@ -384,8 +400,8 @@ model.add(Dense(64, activation = K.tanh))
       是权值张量中的输入单位的数量
 - keras.initializers.he_uniform()
    - He 均匀分布方差缩放初始化器
-   - 它从 :math:`[-limit, limit]` 中的均匀分布中抽取样本,  其中
-      :math:`limit` 是 :math:`sqrt(6 / fan_in)`\ ,  其中 fan_in
+   - 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中
+      `limit` 是 `$sqrt(6 / fan_in)$`,  其中 fan_in
       是权值张量中的输入单位的数量
 - 自定义 Initializer
 
@@ -398,7 +414,7 @@ def my_init(shape, dtype = None):
 model.add(Dense(64, kernel_initializer = my_init))
 ```
 
-## Keras 正则化(Regularizers)
+## 正则化
 
 正则化器允许在优化过程中对\ `层的参数`\ 或\ `层的激活函数`\ 情况进行惩罚, 并且神经网络优化的损失函数的惩罚项也可以使用
 
@@ -420,7 +436,7 @@ Conv3D 这些层具有统一的 API
 - 自定义的 Regularizer:
    - `def l1_reg: pass`
 
-## Keras 约束(Constraints)
+## 约束
 
 `constraints` 模块的函数允许在优化期间对网络参数设置约束(例如非负性)。
 

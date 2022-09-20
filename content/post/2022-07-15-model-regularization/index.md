@@ -1,5 +1,5 @@
 ---
-title: ML 和 DL Regularization
+title: 模型正则化
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-model-regularization
