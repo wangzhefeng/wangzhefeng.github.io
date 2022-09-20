@@ -1,5 +1,5 @@
 ---
-title: TensorFlow Keras 网络层
+title: TensorFlow 网络层
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-tensorflow-model-layer

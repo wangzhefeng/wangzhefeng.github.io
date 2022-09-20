@@ -1,7 +1,7 @@
 ---
-title: PyTorch API
+title: PyTorch 三阶 API
 author: 王哲峰
-date: '2022-08-28'
+date: '2022-07-06'
 slug: dl-pytorch-api
 categories:
   - pytorch
@@ -54,7 +54,6 @@ PyTorch 低阶 API 主要包括:
 * 张量操作
 * 计算图
 * 自动微分
-
 
 ## 线性回归示例
 

@@ -1,7 +1,7 @@
 ---
 title: TensorFlow 数据集
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-07-05'
 slug: dl-tensorflow-dataset
 categories:
   - deeplearning
