@@ -1,5 +1,5 @@
 ---
-title: database-hbase
+title: HBase
 author: 王哲峰
 date: '2022-09-12'
 slug: database-hbase

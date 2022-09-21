@@ -63,11 +63,22 @@ details[open] summary {
 - [MySQL 游标](#mysql-游标)
   - [游标的使用](#游标的使用)
 - [MySQL 变量](#mysql-变量)
+- [TODO](#todo)
+- [Pivot](#pivot)
+  - [多个字段求最大值](#多个字段求最大值)
 </p></details><p></p>
 
+MySQL是一个关系型数据库管理系统, 也是最流行的关系型数据库管理系统之一, 
+在 WEB 应用方面, MySQL 是最好的 RDBMS(Relational Database Management System, 关系数据库管理系统) 应用软件
 
-MySQL是一个关系型数据库管理系统, 也是最流行的关系型数据库管理系统之一, 在 WEB 应用方面, MySQL是最好的 RDBMS (Relational Database Management System, 关系数据库管理系统) 应用软件. 
+```bash
+$ $ mysql -u root -p 1234567
+```
 
+```sql
+show databases;
+use db_name;
+```
 
 # MySQL 建立表
 
@@ -391,3 +402,222 @@ end$
 
 
 # MySQL 变量
+
+
+
+
+
+# TODO
+
+```sql
+YEAR()
+MONTH()
+DAY()
+WEEK()
+WEEKDAY()
+```
+
+```sql
+-- ============================================================
+-- 开窗函数
+-- oracle, MySQL(>=8.0)
+-- ============================================================
+-- 分组排序
+row_number() over(partition by order by) as rankid
+
+-- 排序
+rank() over(partition by var1 order by var1)
+dense_dense() over(partition by var2 order by var2)
+
+
+
+
+-- ============================================================
+-- 创建临时表
+-- ============================================================
+-- SQL Server 临时表
+-- ----------------
+IF OBJECTID tab IS NOT NOT NULL BEGIN DROP TABLE tab END
+-- ...
+DROP TABLE tab
+
+-- MySQL
+-- ----------------
+CREATE TEMPORARY TABLE tab (
+	-- ...
+);
+DROP TABLE tab;
+
+-- Oracle
+-- ----------------
+WITH temp1 as (
+	-- ...
+)
+,temp2 as (
+	-- ...
+)
+
+
+-- ============================================================
+-- 多表查询: 笛卡尔积
+-- ============================================================
+select *
+from temp1 a, temp2 b
+WHERE A.var1 = b.var2
+
+
+
+-- ============================================================
+-- MySQL 实现row_number() over(partition by var1 order by var2)
+-- ============================================================
+-- 添加行号字段
+SET @row_number = 0;
+SELECT 
+	(@row_number:=@row_number + 1) AS rankid,
+	a.firstName,
+	a.lastName
+FROM test a
+LIMIT 5;
+
+SELECT 
+	(@row_number:=@row_number+1) AS rankid,
+	a.firstName,
+	a.lastName
+FROM test (SELECT @row_number:=0) AS t
+
+
+-- ================================================
+-- 实现 row_number() over(partition by var1 order by varr2) 
+SELECT 
+	@row_number:=CASE WHEN @customer_no = customerNumber THEN @row_number + 1 ELSE 1 END AS num, 
+	@customer_no:=customerNumber as customerNumber,
+	paymentDate,
+	amount
+FROM payments, (SELECT @row_number:=0, @customer_no=0) as t
+ORDER BY customerNumber
+```
+
+
+# Pivot
+
+```sql
+SELECT 
+	A.YEARS,
+    SUM(ORDERCOUNT_1) AS 第一季度,
+    SUM(ORDERCOUNT_2) AS 第二季度,
+    SUM(ORDERCOUNT_3) AS 第三季度,
+    SUM(ORDERCOUNT_4) AS 第四季度
+FROM (
+	SELECT 
+		A.YEARS,
+		A.SEASON,
+		CASE WHEN A.SEASON = '一季度' THEN A.ORDERCOUNT END AS ORDERCOUNT_1,
+		CASE WHEN A.SEASON = '二季度' THEN A.ORDERCOUNT END AS ORDERCOUNT_2,
+		CASE WHEN A.SEASON = '三季度' THEN A.ORDERCOUNT END AS ORDERCOUNT_3,
+		CASE WHEN A.SEASON = '四季度' THEN A.ORDERCOUNT END AS ORDERCOUNT_4
+	FROM tinker.year_season_ordercount A
+) A
+GROUP BY 
+	A.YEARS;
+
+
+SELECT
+	A.YEARS,
+    SUM(IF(A.SEASON = '一季度', A.ORDERCOUNT, NULL)) AS '第一季度',
+    SUM(IF(A.SEASON = '二季度', A.ORDERCOUNT, NULL)) AS '第二季度',
+    SUM(IF(A.SEASON = '三季度', A.ORDERCOUNT, NULL)) AS '第三季度',
+    SUM(IF(A.SEASON = '四季度', A.ORDERCOUNT, NULL)) AS '第四季度'
+FROM tinker.year_season_ordercount A
+GROUP BY A.YEARS;
+```
+
+
+```sql
+-- ==================================================
+-- 创建索引
+-- ==================================================
+USE classicmodels;
+
+EXPLAIN SELECT 
+	a.employeeNumber,
+    a.lastName,
+    a.firstName
+FROM employees as a
+WHERE a.jobTitle = "Sales Rep";
+
+CREATE INDEX jobTitle ON employees (jobTitle);
+
+EXPLAIN SELECT 
+	a.employeeNumber,
+    a.lastName,
+    a.firstName
+FROM employees as a
+WHERE a.jobTitle = "Sales Rep";
+
+SHOW INDEXES FROM employees;
+
+
+-- ==================================================
+-- 删除索引
+-- ==================================================
+CREATE TEMPORARY TABLE leads (
+	lead_id INT auto_increment,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    information_source VARCHAR(255),
+    INDEX name(first_name, last_name),
+    UNIQUE email(email),
+    PRIMARY KEY(lead_id)
+);
+
+-- 删除索引
+DROP INDEX name ON leads;
+
+DROP INDEX email ON leads
+ALGORITHM = COPY
+LOCK DEFAULT;
+
+-- 删除主键
+DROP INDEX `PRIMARY` ON leads;
+
+SHOW INDEXES FROM leads;
+```
+
+## 多个字段求最大值
+
+```sql
+create table #Demo(
+    Guid varchar(50) not null default newid() primary key,
+    Date1 datetime null,
+    Date2 datetime null,
+    Date3 datetime null
+)
+insert into #Demo(Date1,Date2,Date3) values
+('2016-9-5','2016-8-6','2016-10-9'),
+('2015-5-6','2015-8-6','2015-6-3'),
+('2016-10-6','2015-6-6','2016-9-6')
+select * from #Demo
+
+-- ***********************************************************
+-- method 1 
+-- ***********************************************************
+select 
+	Guid,
+	(
+	 select Max(NewDate) 
+	 from (values (Date1), (Date2), (Date3)) as #temp (NewDate)
+	 ) as MaxDate 
+from #Demo
+
+-- ***********************************************************
+-- method 1 
+-- ***********************************************************
+select 
+	Guid, 
+	max(NewDate) MaxDate 
+from #Demo 
+unpivot (NewDate for DateVal in (Date1, Date2, Date3)) as u 
+group by Guid
+
+```
