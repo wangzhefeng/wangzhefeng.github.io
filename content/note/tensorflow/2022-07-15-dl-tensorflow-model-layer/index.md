@@ -35,17 +35,43 @@ details[open] summary {
 - [内置模型层](#内置模型层)
   - [模型层共有的方法](#模型层共有的方法)
   - [常用内置模型层](#常用内置模型层)
+    - [核心层](#核心层)
+    - [Convolutional Layers](#convolutional-layers)
+    - [Pooling Layers](#pooling-layers)
+    - [Locally-connected Layers](#locally-connected-layers)
+    - [Recurrent Layers](#recurrent-layers)
+    - [Embedding Layers](#embedding-layers)
+    - [Merge Layers](#merge-layers)
+    - [Advanced Activations Layers](#advanced-activations-layers)
+    - [Normalization Layers](#normalization-layers)
+    - [Nosise Layers](#nosise-layers)
+    - [Others Layers](#others-layers)
 - [自定义模型层](#自定义模型层)
   - [编写 tf.keras.Lambda 层](#编写-tfkeraslambda-层)
   - [继承 tf.keras.layers.Layer 基类](#继承-tfkeraslayerslayer-基类)
   - [线性层示例](#线性层示例)
-- [Keras Layers 配置](#keras-layers-配置)
+- [模型层配置](#模型层配置)
+  - [输入](#输入)
+  - [输出](#输出)
   - [激活函数](#激活函数)
     - [模型可用的激活函数](#模型可用的激活函数)
     - [在模型中使用激活函数](#在模型中使用激活函数)
   - [参数初始化](#参数初始化)
+    - [Initializers 的使用方法](#initializers-的使用方法)
+    - [常数初始化器](#常数初始化器)
+    - [分布初始化器](#分布初始化器)
+    - [矩阵初始化器](#矩阵初始化器)
+    - [LeCun 分布初始化器](#lecun-分布初始化器)
+    - [Glorot 分布初始化器](#glorot-分布初始化器)
+    - [He 正态分布和均匀分布初始化器](#he-正态分布和均匀分布初始化器)
+    - [自定义初始化器](#自定义初始化器)
   - [正则化](#正则化)
+    - [Regularizers 的使用方法](#regularizers-的使用方法)
+    - [可用的 Regularizers](#可用的-regularizers)
+    - [自定义的 Regularizer](#自定义的-regularizer)
   - [约束](#约束)
+    - [Constraints 的使用方法](#constraints-的使用方法)
+    - [可用的 Constraints](#可用的-constraints)
 </p></details><p></p>
 
 深度学习模型一般由各种模型层组合而成，`tf.keras.layers` 内置了非常丰富的各种功能的模型层，
@@ -75,126 +101,144 @@ details[open] summary {
 
 ## 常用内置模型层
 
-- **Core Layers**
-   - Dense
-   - Activation
-   - Drop
-   - Flatten
-   - Input
-   - Reshape
-      - `tf.keras.layers.Reshape(target_shape)`
-   - Permute
-   - RepeatVector
-   - Lambda
-   - ActivityRegularization
-   - Masking
-   - SpatialDropout1D
-   - SpatialDropout2D
-   - SpatialDropout3D
-- **Convolutional Layers**
-   - 卷积层
-      - Conv1D
-      - Conv2D
-      - Conv3D
-      - SeparableConv1D
-         - `tf.keras.layers.SeparableConv1D(rate)`
-      - SeparableConv2D
-      - DepthwiseConv3D
-   - Transpose
-      - Conv2DTranspose
-      - Conv3DTranspose
-   - Cropping
-      - Cropping1D
-      - Cropping2D
-      - Cropping3D
-   - UnSampling
-      - UnSampling1D
-      - UnSampling2D
-      - UnSampling3D
-   - ZeroPadding
-      - ZeroPadding1D
-      - ZeroPadding2D
-      - ZeroPadding3D
-- **Pooling Layers**
-   - 最大池化
-      - `MaxPolling1D()`
-      - `MaxPolling2D()`
-      - `MaxPolling3D()`
-      - `GlobalMaxPolling1D()`
-      - `GlobalMaxPolling2D()`
-      - `GlobalMaxPolling3D()`
-   - 平均池化
-      - `AveragePolling1D()`
-      - `AveragePolling2D()`
-      - `AveragePolling3D()`
-      - `GlobalAveragePolling1D()`
-      - `GlobalAveragePolling2D()`
-      - `GlobalAveragePolling3D()`
-- **Locally-connected Layers**
-   - `LocallyConnected1D()`
-   - `LocallyConnected2D()`
-- **Recurrent Layers**
-   - RNN
-      - `RNN()`
-      - `SimpleRNN()`
-      - `SimpleRNNCell()`
-   - GRU
-      - `GRU()`
-      - `GRUCell()`
-   - LSTM
-      - `LSTM()`
-      - `LSTMCell()`
-      - `ConvLSTM2D()`
-      - `ConvLSTM2DCell()`
-   - CuDNN
-      - `CuDNNGRU()`
-      - `CuDNNLSTM()`
-- **Embedding Layers**
-   - `Embedding()`
-- **Merge Layers**
-   - `Add()`
-   - `Subtract()`
-   - `Multiply()`
-   - `Average()`
-   - `Maximum()`
-   - `Minimum()`
-   - `Concatenate()`
-   - `Dot()`
-   - `add()`
-   - `subtract()`
-   - `multiply()`
-   - `average()`
-   - `maximum()`
-   - `minimum()`
-   - `concatenate()`
-   - `dot()`
-- **Advanced Activations Layers**
-   - `LeakyReLU()`
-   - `PReLU()`
-   - `ELU()`
-   - `ThresholdedReLU()`
-   - `Softmax()`
-   - `ReLU()`
-   - Activation Functions
-- **Normalization Layers**
-   - `BatchNormalization()`
-- **Nosise Layers**
-   - `GaussianNoise()`
-   - `GaussianDropout()`
-   - `AlphaDropout()`
-- **Others**
-   - Layer wrapper
-      - `TimeDistributed()`
-      - `Bidirectional()`
-   - Writting Customilize Keras Layers
-      - `build(input_shape)`
-      - `call(x)`
-      - `compute_output_shape(input_shape)`
+### 核心层
 
+- `Dense`
+- `Drop`
+- `Flatten`
+- `Input`
+- `Reshape`
+- `Permute`
+- `RepeatVector`
+- `Lambda`
+- `Masking`
+- `SpatialDropout1D`
+- `SpatialDropout2D`
+- `SpatialDropout3D`
+- `Activation`
+- `ActivityRegularization`
+
+### Convolutional Layers
+
+- 卷积层
+    - `Conv1D`
+    - `Conv2D`
+    - `Conv3D`
+    - `SeparableConv1D`
+    - `SeparableConv2D`
+    - `DepthwiseConv3D`
+- Transpose
+    - `Conv2DTranspose`
+    - `Conv3DTranspose`
+- Cropping
+    - `Cropping1D`
+    - `Cropping2D`
+    - `Cropping3D`
+- UnSampling
+    - `UnSampling1D`
+    - `UnSampling2D`
+    - `UnSampling3D`
+- ZeroPadding
+    - `ZeroPadding1D`
+    - `ZeroPadding2D`
+    - `ZeroPadding3D`
+
+### Pooling Layers
+
+- 最大池化
+    - `MaxPolling1D()`
+    - `MaxPolling2D()`
+    - `MaxPolling3D()`
+    - `GlobalMaxPolling1D()`
+    - `GlobalMaxPolling2D()`
+    - `GlobalMaxPolling3D()`
+- 平均池化
+    - `AveragePolling1D()`
+    - `AveragePolling2D()`
+    - `AveragePolling3D()`
+    - `GlobalAveragePolling1D()`
+    - `GlobalAveragePolling2D()`
+    - `GlobalAveragePolling3D()`
+
+### Locally-connected Layers
+
+- `LocallyConnected1D()`
+- `LocallyConnected2D()`
+
+### Recurrent Layers
+
+- RNN
+    - `RNN()`
+    - `SimpleRNN()`
+    - `SimpleRNNCell()`
+- GRU
+    - `GRU()`
+    - `GRUCell()`
+- LSTM
+    - `LSTM()`
+    - `LSTMCell()`
+    - `ConvLSTM2D()`
+    - `ConvLSTM2DCell()`
+- CuDNN
+    - `CuDNNGRU()`
+    - `CuDNNLSTM()`
+
+### Embedding Layers
+
+- `Embedding()`
+
+### Merge Layers
+
+- `Add()`
+- `Subtract()`
+- `Multiply()`
+- `Average()`
+- `Maximum()`
+- `Minimum()`
+- `Concatenate()`
+- `Dot()`
+
+
+- `add()`
+- `subtract()`
+- `multiply()`
+- `average()`
+- `maximum()`
+- `minimum()`
+- `concatenate()`
+- `dot()`
+  
+### Advanced Activations Layers
+
+- `LeakyReLU()`
+- `PReLU()`
+- `ELU()`
+- `ThresholdedReLU()`
+- `Softmax()`
+- `ReLU()`
+- Activation Functions
+
+### Normalization Layers
+
+- `BatchNormalization()`
+
+### Nosise Layers
+
+- `GaussianNoise()`
+- `GaussianDropout()`
+- `AlphaDropout()`
+
+### Others Layers
+
+- Layer wrapper
+    - `TimeDistributed()`
+    - `Bidirectional()`
+- Writting Customilize Keras Layers
+    - `build(input_shape)`
+    - `call(x)`
+    - `compute_output_shape(input_shape)`
 
 # 自定义模型层
-
-
 
 ## 编写 tf.keras.Lambda 层
 
@@ -260,11 +304,7 @@ class LinearModel(tf.keras.Model):
         return output
 ```
 
-
-
-
-
-# Keras Layers 配置
+# 模型层配置
 
 ```python
 model.add(Layer(
@@ -291,6 +331,12 @@ input_s = Input()
 model.add(Activation)
 ```
 
+## 输入
+
+
+## 输出
+
+
 ## 激活函数
 
 ### 模型可用的激活函数
@@ -309,7 +355,6 @@ model.add(Activation)
 - linear: Linear activation function
    - x => x
    - `keras.activations.linear(x)`
-
 
 ### 在模型中使用激活函数
 
@@ -335,129 +380,138 @@ model.summary()
 
 ## 参数初始化
 
-**Initializers 的使用方法:**
+### Initializers 的使用方法
 
-   初始化定义了设置 Keras Layer 权重随机初始的方法
+初始化定义了设置 Keras Layer 权重随机初始的方法
 
 - `kernel_initializer` param
    - "random_uniform"
 - `bias_initializer` param
 
-**可用的 Initializers:**
+### 常数初始化器
 
 - keras.initializers.Initializer()
-   - 基类
+    - 基类
 - keras.initializers.Zeros()
-   - `0`
+    - `0`
 - keras.initializers.Ones()
-   - `1`
+    - `1`
 - keras.initializers.Constant()
-   - keras.initializers.Constant(value = 0)
-      - `0`
-   - keras.initializers.Constant(value = 1)
-      - `1`
-- keras.initializers.RandomNormal(mean = 0.0, stddev = 0.05, seed =
-   None)
+    - keras.initializers.Constant(value = 0)
+        - `0`
+    - keras.initializers.Constant(value = 1)
+        - `1`
+
+### 分布初始化器
+
+`tf.keras.initializers.RandomNormal(mean = 0.0, stddev = 0.05, seed = None)`
    - 正态分布
-- keras.initializers.RandomUniform(minval = 0.05, maxval = 0.05, seed =
-   None)
+`tf.keras.initializers.RandomUniform(minval = 0.05, maxval = 0.05, seed = None)`
    - 均匀分布
-- keras.initializers.TruncatedNormal(mean = 0.0, stddev = 0.05, seed =
-   None)
-   - 截尾正态分布:生成的随机值与 `RandomNormal`
-      生成的类似, 但是在距离平均值两个标准差之外的随机值将被丢弃并重新生成。这是用来生成神经网络权重和滤波器的推荐初始化器
-- keras.initializers.VarianveScaling(scale = 1.0, mode = "fan_in",
-   distribution = "normal", seed = None)
-   - 根据权值的尺寸调整其规模
-- keras.initializers.Orthogonal(gain = 1.0, seed = None)
-   - [随机正交矩阵](http://arxiv.org/abs/1312.6120)
-- keras.initializers.Identity(gain = 1.0)
-   - 生成单位矩阵的初始化器。仅用于 2D 方阵
-- keras.initializers.lecun_normal()
-   - LeCun 正态分布初始化器
-   - 它从以 0 为中心, 标准差为 stddev = sqrt(1 / fanin)
-      的截断正态分布中抽取样本,  其中 fanin
-      是权值张量中的输入单位的数量
-- keras.initializers.lecun_uniform()
-   - LeCun 均匀初始化器
-   - 它从 [-limit, limit] 中的均匀分布中抽取样本,  其中 limit 是 sqrt(3
-      / fanin),  fanin 是权值张量中的输入单位的数量
-- keras.initializers.glorot_normal()
-   - Glorot 正态分布初始化器, 也称为 Xavier 正态分布初始化器
-   - 它从以 0 为中心, 标准差为 stddev = sqrt(2 / (fan*in + fanout))
-      的截断正态分布中抽取样本,  其中 fanin
-      是权值张量中的输入单位的数量,  fanout
-      是权值张量中的输出单位的数量
-- keras.initializers.glorot_uniform()
-   - Glorot 均匀分布初始化器, 也称为 Xavier 均匀分布初始化器
-   - 它从 [-limit, limit] 中的均匀分布中抽取样本,  其中 limit 是 sqrt(6
-      / (fan*in + fanout)),  fanin 是权值张量中的输入单位的数量, 
-      fanout 是权值张量中的输出单位的数量
-- keras.initializers.he_normal()
-   - He 正态分布初始化器
-   - 它从以 0 为中心, 标准差为 stddev = sqrt(2 / fanin)
-      的截断正态分布中抽取样本,  其中 fanin
-      是权值张量中的输入单位的数量
-- keras.initializers.he_uniform()
-   - He 均匀分布方差缩放初始化器
-   - 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中
-      `limit` 是 `$sqrt(6 / fan_in)$`,  其中 fan_in
-      是权值张量中的输入单位的数量
-- 自定义 Initializer
+`tf.keras.initializers.TruncatedNormal(mean = 0.0, stddev = 0.05, seed = None)`
+    - 截尾正态分布:生成的随机值与 `RandomNormal` 生成的类似, 
+      但是在距离平均值两个标准差之外的随机值将被丢弃并重新生成。
+      这是用来生成神经网络权重和滤波器的推荐初始化器
 
-```python
-from keras import backend as K
+### 矩阵初始化器
 
-def my_init(shape, dtype = None):
-      return K.random_normal(shape, dtype = dtype)
+`tf.keras.initializers.VarianveScaling(scale = 1.0, mode = "fan_in", distribution = "normal", seed = None)`
+    - 根据权值的尺寸调整其规模
+`tf.keras.initializers.Orthogonal(gain = 1.0, seed = None)`
+    - [随机正交矩阵](http://arxiv.org/abs/1312.6120)
+`tf.keras.initializers.Identity(gain = 1.0)`
+    - 生成单位矩阵的初始化器。仅用于 2D 方阵
 
-model.add(Dense(64, kernel_initializer = my_init))
-```
+### LeCun 分布初始化器
+
+`tf.keras.initializers.lecun_normal()`
+
+- LeCun 正态分布初始化器
+- 它从以 0 为中心, 标准差为 `stddev = \sqrt{\frac{1}{fanin}}` 的截断正态分布中抽取样本,  
+  其中 `fanin` 是权值张量中的输入单位的数量
+
+`tf.keras.initializers.lecun_uniform()`
+
+- LeCun 均匀初始化器
+- 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{3}{fanin}}$`，
+  其中 `fanin` 是权值张量中的输入单位的数量
+
+### Glorot 分布初始化器
+
+`tf.keras.initializers.glorot_normal()`
+
+- Glorot 正态分布初始化器, 也称为 Xavier 正态分布初始化器
+- 它从以 0 为中心, 标准差为 `$stddev = \sqrt{{2}{fanin + fanout}}$` 的截断正态分布中抽取样本, 
+  其中 `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
+
+
+`tf.keras.initializers.glorot_uniform()`
+
+- Glorot 均匀分布初始化器, 也称为 Xavier 均匀分布初始化器
+- 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{6}{fanin + fanout}}$`， 
+  `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
+
+### He 正态分布和均匀分布初始化器
+
+`tf.keras.initializers.he_normal()`: He 正态分布初始化器
+
+* 从以 0 为中心, 标准差为 `$stddev = \sqrt{\frac{2}{fanin}}$` 的截断正态分布中抽取样本, 
+  其中 `fanin` 是权值张量中的输入单位的数量
+
+`tf.keras.initializers.he_uniform()`: He 均匀分布方差缩放初始化器
+
+* 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 `limit` 是 `$\sqrt{\frac{6}{fan\_in}}$`，
+ 其中 `fan_in` 是权值张量中的输入单位的数量
+
+### 自定义初始化器
+
 
 ## 正则化
 
-正则化器允许在优化过程中对\ `层的参数`\ 或\ `层的激活函数`\ 情况进行惩罚, 并且神经网络优化的损失函数的惩罚项也可以使用
+正则化器允许在优化过程中对层的参数或层的激活函数情况进行惩罚, 
+并且神经网络优化的损失函数的惩罚项也可以使用
 
 惩罚是以层为对象进行的。具体的 API 因层而异, 但 Dense, Conv1D, Conv2D 和
 Conv3D 这些层具有统一的 API
 
-**Regularizers 的使用方法:**
+### Regularizers 的使用方法
 
 - [class] keras.regularizers.Regularizer
    - [instance] `kernel_regularizer` param
    - [instance] `bias_regularizer` param
    - [instance] `activity_regularizer` param
 
-**可用的 Regularizers:**
+### 可用的 Regularizers
 
 - keras.regularizers.l1(0.)
 - keras.regularizers.l2(0.)
 - keras.regularizers.l1_l2(l1 = 0.01, l2 = 0.01)
-- 自定义的 Regularizer:
-   - `def l1_reg: pass`
+
+
+
+### 自定义的 Regularizer
+
 
 ## 约束
 
-`constraints` 模块的函数允许在优化期间对网络参数设置约束(例如非负性)。
+`constraints` 模块的函数允许在优化期间对网络参数设置约束(例如非负性)
 
 约束是以层为对象进行的。具体的 API 因层而异, 但 Dense, Conv1D, Conv2D 和
 Conv3D 这些层具有统一的 API
 
-**Constraints 的使用方法:**
+### Constraints 的使用方法
 
-- kernel_constraint
-- bias_constraint
+* kernel_constraint
+* bias_constraint
 
-**可用的 Constraints:**
+### 可用的 Constraints
 
-- keras.constraints.MaxNorm(max_value = 2, axis = 0)
-   - 最大范数权值约束
-- keras.constraints.NonNeg()
-   - 权重非负的约束
-- keras.constraints.UnitNorm()
-   - 映射到每个隐藏单元的权值的约束, 使其具有单位范数
-- keras.constraints.MinMaxNorm(minvalue = 0, maxvalue = 1.0, rate
-   = 1.0, axis = 0)
-   - 最小/最大范数权值约束:映射到每个隐藏单元的权值的约束, 使其范数在上下界之间
-
+* `tf.keras.constraints.MaxNorm(max_value = 2, axis = 0)`
+    - 最大范数权值约束
+* `tf.keras.constraints.NonNeg()`
+    - 权重非负的约束
+* `tf.keras.constraints.UnitNorm()`
+    - 映射到每个隐藏单元的权值的约束, 使其具有单位范数
+* `tf.keras.constraints.MinMaxNorm(minvalue = 0, maxvalue = 1.0, rate = 1.0, axis = 0)`
+    - 最小/最大范数权值约束: 映射到每个隐藏单元的权值的约束, 使其范数在上下界之间
 
