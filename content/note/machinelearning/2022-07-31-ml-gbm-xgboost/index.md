@@ -308,11 +308,11 @@ Additive Training Boosting 核心思想是，在已经训练好了 `$t-1$` 棵�
 
 将上面得到的解析解带入目标函数: 
 
-`$${{\tilde L}^{(t)}_{min}}=-\frac{1}{2}\sum_{j=1}^{T}\frac{G_j^2}{H_j+\lambda} + \gamma T$$`
+`$$\tilde{L}^{(t)}_{min}=-\frac{1}{2}\sum_{j=1}^{T}\frac{G_j^2}{H_j+\lambda} + \gamma T$$`
 
 上式可以作为分裂节点的打分，形式上很像 CART 树纯度打分的计算，区别在于它是从目标函数中推导而得
 
-这里的 `${{\tilde L}^{(t)}_{min}}$` 代表了当指定一个树结构时, 
+这里的 `$\tilde{L}^{(t)}_{min}$` 代表了当指定一个树结构时, 
 在目标函数上最多减少多少, 这里叫做 **结构分数(structure score)**，
 这个分数越小, 代表这个树的结构越好
 
