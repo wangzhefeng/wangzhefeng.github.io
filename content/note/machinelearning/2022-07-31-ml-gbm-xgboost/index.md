@@ -368,7 +368,7 @@ XGBoost 使用贪心算法:
     & \;\;\;\;for\;j\;in\;sorted\left( {I,by\;{{\bf{x}}_{jk}}} \right)\;do  \cr 
     & \;\;\;\;\;\;\;\;{G_L} \leftarrow {G_L} + {g_j},{H_L} \leftarrow {H_L} + {h_j}  \cr 
     & \;\;\;\;\;\;\;\;{G_R} \leftarrow G - {G_L},{H_R} \leftarrow H - {H_L}  \cr 
-    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_L^2} \over {{H_L} + \lambda }} + {{G_R^2} \over {{H_R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
+    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_{L}^{2}} \over {{H_L} + \lambda }} + {{G_R^2} \over {{H_R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
     & \;\;\;\;end  \cr 
     & end \cr
     & Output:\; split\_value\; with\; max \; score}
