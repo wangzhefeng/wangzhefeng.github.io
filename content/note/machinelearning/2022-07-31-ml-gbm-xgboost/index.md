@@ -280,20 +280,20 @@ Additive Training Boosting 核心思想是，在已经训练好了 `$t-1$` 棵�
 = }} \sum_{j = 1}^{T} \bigg[(\sum_{i \in I_j} g_i ) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
 }$$`
 
-记 `$G_j=\sum_{i\in I_j}g_i$` ,  `$H_j=\sum_{i\in I_j}h_i$`
+记 `$g_{j}=\sum_{i\in I_j}g_i$` ,  `$h_{j}=\sum_{i\in I_j}h_i$`
 
 `$$\eqalign{
 & {\tilde L}^{(t)} 
 = \sum_{j = 1}^{T} \bigg[(\sum_{i \in {I_j}} g_i) w_j + \frac{1}{2} (\sum_{i \in {I_j}} h_i  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
 & \;\;\;\;\;{\rm{ 
-= }} \sum_{j = 1}^{T} \bigg[G_j w_j + \frac{1}{2} (H_j  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
+= }} \sum_{j = 1}^{T} \bigg[g_{j} w_j + \frac{1}{2} (h_{j}  + \lambda ) w_j^2 \bigg]  + \gamma T \cr
 }$$`
 
 ## 模型目标函数求解
 
 对下面的目标函数进行优化求解:
 
-`$$\underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} {\tilde L}^{(t)} = \underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} \bigg( \sum_{j = 1}^{T} \bigg[G_j w_j + \frac{1}{2} (H_j  + \lambda ) w_j^2 \bigg]  + \gamma T \bigg)$$`
+`$$\underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} {\tilde L}^{(t)} = \underset{[\omega_{1}, \omega_{2}, \ldots, \omega_{T}]}{argmin} \bigg( \sum_{j = 1}^{T} \bigg[g_{j} w_j + \frac{1}{2} (h_{j}  + \lambda ) w_j^2 \bigg]  + \gamma T \bigg)$$`
 
 易知，上述目标函数是一个累加的二次函数形式 `$f(x)=ax + bx^{2} +c$`，
 因此根据二次函数最小值的解析解形式 `$x=-\frac{b}{2a}$`，
@@ -304,11 +304,11 @@ Additive Training Boosting 核心思想是，在已经训练好了 `$t-1$` 棵�
 
 即目标函数的最优参数:
 
-`$$w_{j}^{\star} = -\frac{G_j}{H_j+\lambda}$$`
+`$$w_{j}^{\star} = -\frac{g_{j}}{h_{j}+\lambda}$$`
 
 将上面得到的解析解带入目标函数: 
 
-`$$\tilde{L}^{(t)}_{min}=-\frac{1}{2}\sum_{j=1}^{T}\frac{G_j^2}{H_j+\lambda} + \gamma T$$`
+`$$\tilde{L}^{(t)}_{min}=-\frac{1}{2}\sum_{j=1}^{T}\frac{g_{j}^2}{h_{j}+\lambda} + \gamma T$$`
 
 上式可以作为分裂节点的打分，形式上很像 CART 树纯度打分的计算，区别在于它是从目标函数中推导而得
 
@@ -359,16 +359,16 @@ XGBoost 使用贪心算法:
 > `$
   \eqalign{
     & Split\_Finding(): \cr
-    & Input:I,instance\;set\;of\;current\;node  \cr 
-    & Input:d,feature\;dimension  \cr 
+    & Input: I, instance \; set \; of \; current \; node  \cr 
+    & Input: d, feature \; dimension  \cr 
     & gain \leftarrow 0  \cr 
-    & G \leftarrow \sum\limits_{i \in I} {{g_i}} ,H \leftarrow \sum\limits_{i \in I} {{h_i}}   \cr 
-    & for\;k = 1\;to\;m\;do  \cr 
-    & \;\;\;\;{G_L} \leftarrow 0,{H_L} \leftarrow 0  \cr 
-    & \;\;\;\;for\;j\;in\;sorted\left( {I,by\;{{\bf{x}}_{jk}}} \right)\;do  \cr 
-    & \;\;\;\;\;\;\;\;{G_L} \leftarrow {G_L} + {g_j},{H_L} \leftarrow {H_L} + {h_j}  \cr 
-    & \;\;\;\;\;\;\;\;{G_R} \leftarrow G - {G_L},{H_R} \leftarrow H - {H_L}  \cr 
-    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_{L}^{2}} \over {{H_L} + \lambda }} + {{G_R^2} \over {{H_R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
+    & G \leftarrow \sum \limits_{i \in I} g_{i}, H \leftarrow \sum \limits_{i \in I} h_{i}   \cr 
+    & for \; k = 1 \; to \; m \; do  \cr 
+    & \;\;\;\; G_{L} \leftarrow 0, H_{L} \leftarrow 0  \cr 
+    & \;\;\;\;for\;j\;in\;sorted \left( {I, by \; {{\bf{x}}_{jk}}} \right)\;do  \cr 
+    & \;\;\;\;\;\;\;\;G_{L} \leftarrow G_{L} + {g_{j}},H_{L} \leftarrow H_{L} + {h_{j}}  \cr 
+    & \;\;\;\;\;\;\;\;{G_R} \leftarrow G - G_{L},H_{R} \leftarrow H - H_{L}  \cr 
+    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_{L}^{2}} \over {H_{L} + \lambda }} + {G_{R}^{2} \over {H_{R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
     & \;\;\;\;end  \cr 
     & end \cr
     & Output:\; split\_value\; with\; max \; score}
@@ -397,8 +397,8 @@ XGBoost 使用贪心算法:
   & \;\;\;\;Propose\;can\;be\;done\;per\;tree\left( {global} \right),or\;per\;split\left( {local} \right)  \cr 
   & end  \cr 
   & for\;k = 1\;to\;m\;do  \cr 
-  & \;\;\;\;{G_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{g_j}}   \cr 
-  & \;\;\;\;{H_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{h_j}}   \cr 
+  & \;\;\;\;{G_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{g_{j}}}   \cr 
+  & \;\;\;\;{H_{kv}} \leftarrow  = \sum\limits_{j \in \left\{ {j|{s_{k,v}} \ge {x_{jk}} > {s_{k,v - 1}}} \right\}} {{h_{j}}}   \cr 
   & end  \cr 
   & call\;Split\_Finding\left( {} \right) \cr}
   $`
