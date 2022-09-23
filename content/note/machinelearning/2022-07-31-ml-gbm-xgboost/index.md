@@ -322,13 +322,13 @@ Additive Training Boosting 核心思想是，在已经训练好了 `$t-1$` 棵�
 假设 `$I_{L}$` 和 `$I_{R}$` 为分裂节点的左右节点，记 `$I=I_{L} \cup I_{R}$`。
 每次尝试对已有叶节点进行一次分割, 分割的规则如下，即选择此节点分裂的增益为：
 
-`$$Gain = \frac{1}{2}\Bigg[\frac{G_{L}^{2}}{H_K + \lambda} + \frac{G_{R}^{2}}{H_R + \lambda} - \frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}\Bigg] - \gamma$$`
+`$$Gain = \frac{1}{2}\Bigg[\frac{G_{L}^{2}}{H_K + \lambda} + \frac{G_{R}^{2}}{H_R + \lambda} - \frac{(G_L + G_{R})^{2}}{H_L + H_R + \lambda}\Bigg] - \gamma$$`
 
 其中: 
 
 - `$\frac{G_{L}^{2}}{H_K + \lambda}$`: 左子树分数
 - `$\frac{G_{R}^{2}}{H_R + \lambda}$`: 右子树分数
-- `$\frac{(G_L + G_R)^{2}}{H_L + H_R + \lambda}$`: 不分割可以得到的分数
+- `$\frac{(G_L + G_{R})^{2}}{H_L + H_R + \lambda}$`: 不分割可以得到的分数
 - `$\gamma$`: 假如新的子节点引入的复杂度代价
 
 对树的每次扩展, 都要枚举所有可能的分割方案，并且对于某次分割, 
@@ -367,8 +367,8 @@ XGBoost 使用贪心算法:
     & \;\;\;\; G_{L} \leftarrow 0, H_{L} \leftarrow 0  \cr 
     & \;\;\;\;for\;j\;in\;sorted \left( {I, by \; {{\bf{x}}_{jk}}} \right)\;do  \cr 
     & \;\;\;\;\;\;\;\;G_{L} \leftarrow G_{L} + {g_{j}},H_{L} \leftarrow H_{L} + {h_{j}}  \cr 
-    & \;\;\;\;\;\;\;\;{G_R} \leftarrow G - G_{L},H_{R} \leftarrow H - H_{L}  \cr 
-    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( {score,{{G_{L}^{2}} \over {H_{L} + \lambda }} + {G_{R}^{2} \over {H_{R} + \lambda }} - {{{G^2}} \over {H + \lambda }}} \right)  \cr 
+    & \;\;\;\;\;\;\;\;{G_{R}} \leftarrow G - G_{L}, H_{R} \leftarrow H - H_{L}  \cr 
+    & \;\;\;\;\;\;\;\;score \leftarrow \max \left( score, \frac{G_{L}^{2}}{H_{L} + \lambda} + \frac{G_{R}^{2}}{H_{R} + \lambda} - \frac{G^2}{H + \lambda} \right)  \cr 
     & \;\;\;\;end  \cr 
     & end \cr
     & Output:\; split\_value\; with\; max \; score}
