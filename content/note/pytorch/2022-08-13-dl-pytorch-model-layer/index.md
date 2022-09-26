@@ -79,7 +79,9 @@ details[open] summary {
 
 # PyTorch 模型层简介
 
-`torch.nn` 中内置了非常丰富的各种模型层，它们都属于 `torch.nn.Module` 的子类，具备参数管理功能。
+`torch.nn` 中内置了非常丰富的各种模型层，
+它们都属于 `torch.nn.Module` 的子类，具备参数管理功能
+
 如果这些内置的模型层不能满足需求，也可以通过继承 `torch.nn.Module` 基类构建自定义的模型层。
 实际上 PyTorch 不区分模型和模型层，都是通过继承 `torch.nn.Module` 进行构建，
 因此，只要继承 `torch.nn.Module` 基类并实现 `forward` 方法即可自定义模型层

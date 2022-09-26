@@ -61,9 +61,6 @@ details[open] summary {
     - [SELU](#selu)
     - [swish](#swish)
     - [GELU](#gelu)
-  - [在模型中使用激活函数](#在模型中使用激活函数)
-    - [TensorFlow](#tensorflow)
-    - [PyTorch](#pytorch)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -366,10 +363,17 @@ softmax函数针对 `溢出` 问题的改进
 ### Sigmoid
 
 神经网络中用 Sigmoid 函数作为激活函数, 进行信号的转换, 转换后的信号被传送给下一个神经元。
-将实数压缩到 `$(0, 1)$` 区间内，一般只在二分类的最后输出层使用，主要缺陷为存在梯度消失问题，
-计算复杂度高，输出不以 0 为中心
+将实数压缩到 `$(0, 1)$` 区间内
 
-`$$h(x) = \frac{1}{1+e^{-x}}, 其中: e是纳皮尔常数 2.7182...$$`
+一般只在二分类的最后输出层使用，主要缺陷为存在梯度消失问题，计算复杂度高，输出不以 0 为中心
+
+Sigmoid 函数形式:
+
+`$$h(x) = \frac{1}{1+e^{-x}}$$`
+
+其中:
+
+* `$e$` 是纳皮尔常数 `$2.7182...$`
 
 ![img](images/sigmoid.png)
 
@@ -377,26 +381,40 @@ softmax函数针对 `溢出` 问题的改进
 
 Sigmoid 的多分类扩展，一般只在多分类问题的最后输出层使用
 
-Softmax 函数的形式
+Softmax 函数形式:
 
 `$$y_k = \frac{e^{a_{k}}}{\sum_{i=1}^{n}e^{a_i}}$$`
 
 其中:
 
-- `$n$`: 是输出层神经元的个数
-- `$k$`: 是指第 `$k$` 个神经元
-- `$a$`: 是输入信号
+* `$n$`: 是输出层神经元的个数
+* `$k$`: 是指第 `$k$` 个神经元
+* `$a$`: 是输入信号
 
-Softmax 函数针对 `溢出` 问题的改进
+Softmax 函数针对溢出问题的改进:
 
 `$$y_k = \frac{e^{a_k+C}}{\sum_{n}^{i=1}e^{a_i+C}}$$`
+
+<!-- TODO -->
+![img](images/)
 
 ### ReLU
 
 在神经网络发展的历史上, Sigmoid 激活函数很早就开始使用了, 
 而在现代神经网络中, 默认推荐的是使用 ReLU(Rectified Linear Unit 整流线性单元)函数
 
+* 整流线性激活函数 (ReLU) 是被推荐用于大多数前馈神经网络的默认激活函数。
+  将此函数用于线性变换的输出将产生非线性变换。
+  然而, 函数仍然非常接近线性, 在这种意义上它是具有两个线性部分的分段线性函数
+* 由于 ReLU 几乎是线性的, 因此他们保留了许多使得线性模型易于使用基于梯度的方法进行优化的属性。
+  它们还保留了许多使得线性模型能够泛化良好的属性
+* 计算机科学的一个公共原则是, 可以从最小的组件构建最复杂的系统, 
+  就像图灵机的内存只需要能够存储 0 或 1 的状态, 
+  可以从整流线性函数构建一万个函数近似器
+
 主要缺陷是：输出不以 0 为中心，输入小于 0 时存在梯度消失的问题(死亡 ReLU)
+
+ReLU 函数形式:
 
 `$$h(x)=max\{0, x\} = \left \{
 \begin{array}{rcl}
@@ -406,29 +424,24 @@ x    &      & {x > 0}    \\
 
 ![img](images/relu.png)
 
-- 整流线性激活函数 (ReLU) 是被推荐用于大多数前馈神经网络的默认激活函数。
-  将此函数用于线性变换的输出将产生非线性变换。
-  然而, 函数仍然非常接近线性, 在这种意义上它是具有两个线性部分的分段线性函数。
-- 由于 ReLU 几乎是线性的, 因此他们保留了许多使得线性模型易于使用基于梯度的方法进行优化的属性。
-  它们还保留了许多使得线性模型能够泛化良好的属性
-- 计算机科学的一个公共原则是, 可以从最小的组件构建最复杂的系统, 
-  就像图灵机的内存只需要能够存储 0 或 1 的状态, 
-  可以从整流线性函数构建一万个函数近似器
-
-
 ### tanh
 
-tanh，双曲正切函数，将实数压缩到 `$[-1, 1]$` 区间内，输出期望为 0。
+tanh(Hyperbolic tangent)，双曲正切函数，
+将实数压缩到 `$[-1, 1]$` 区间内，输出期望为 0
+
 主要缺陷为存在梯度消失问题，计算复杂度高
+
+tanh 函数形式:
 
 `$$h(x) = tanh(x) = $$`
 
 ![img](images/tanh.png)
 
-
 ### Leaky ReLU
 
 Leaky ReLU，对修正线性单元的改进，解决了死亡 ReLU 问题
+
+Leaky ReLU 函数形式:
 
 `$$Leaky ReLU(x) = max(0.1 * x, x$$`
 
@@ -437,6 +450,8 @@ Leaky ReLU，对修正线性单元的改进，解决了死亡 ReLU 问题
 ### ELU
 
 ELU，指数线性单元，对 ReLU 的改进，能够缓解死亡 ReLU 问题
+
+ELU 函数形式:
 
 `$$ELU(x) = \left \{
 \begin{array}{rcl}
@@ -448,7 +463,10 @@ x    &      & {x > 0}    \\
 
 ### SELU
 
-SELU，扩展型指数线性单元，在权重用 `tf.keras.initializers.lecun_normal` 初始化的前提下能够对神经网络进行自归一化。不可能出现梯度爆炸或者梯度消失问题。需要和 Dropout 的变种 AlphaDropout 一起使用
+SELU，扩展型指数线性单元，在权重用 LeCun Normal 初始化的前提下能够对神经网络进行自归一化。
+不可能出现梯度爆炸或者梯度消失问题。需要和 Dropout 的变种 AlphaDropout 一起使用
+
+ELU 函数形式:
 
 `$$SELU(x) = \lambda \left \{
 \begin{array}{rcl}
@@ -462,50 +480,22 @@ x    &      & {x > 0}    \\
 
 swish，自门控激活函数，谷歌出品，相关研究指出用 swish 替代 ReLU 将获得轻微效果提升
 
+swish 函数形式:
+
 `$$\sigma(x) = \frac{x}{1 + e^{-x}}$$`
 
 ![img](images/swish.png)
-
-TensorFlow API:
-
-```python
-tf.nn.swith
-```
 
 ### GELU
 
 GELU，高斯误差线性单元激活函数，在 Transformer 中表现最好
 
+GELU 函数形式:
+
 `$$GELU(x) = 0.5 x \Big(1 + tanh(\sqrt{\frac{2}{\pi}} (x + 0.044715 x^{3}))\Big)$$`
 
 ![img](images/gelu.png)
 
-
-## 在模型中使用激活函数
-
-### TensorFlow
-
-在 Keras 模型中使用激活函数一般有两种方式
-
-* 作为某系层的 `activation` 参数指定
-* 显式添加 `tf.keras.layers.Activation` 激活层
-
-```python
-import numpy as np
-import pandas as pd
-import tensorflow as tf
-from tensorflow.keras import layers, models
-
-tf.keras.backend.clear_session()
-
-model = models.Sequential()
-model.add(layers.Dense(32, input_shape = (None, 16), activation = tf.nn.relu))
-model.add(layers.Dense(10))
-model.add(layers.Activation(tf.nn.softmax))
-model.summary()
-```
-
-### PyTorch
 
 
 # 参考

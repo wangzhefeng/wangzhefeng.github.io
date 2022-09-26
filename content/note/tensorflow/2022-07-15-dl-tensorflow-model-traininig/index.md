@@ -86,7 +86,12 @@ details[open] summary {
     - [get_weights](#get_weights)
     - [set_weights](#set_weights)
   - [TensorFlow 优化器共有参数](#tensorflow-优化器共有参数)
+- [回调函数](#回调函数)
 - [模型训练](#模型训练)
+  - [使用 GPU 训练模型](#使用-gpu-训练模型)
+    - [使用单 GPU 训练模型](#使用单-gpu-训练模型)
+    - [使用多 GPU 训练模型](#使用多-gpu-训练模型)
+  - [使用 TPU 训练模型](#使用-tpu-训练模型)
 - [参考资料](#参考资料)
 </p></details><p></p>
 
@@ -1122,6 +1127,11 @@ sgd = optimizers.SGD(lr = 0.01, clipnorm = 1)
 sgd = optimizers.SGD(lr = 0.01, clipvalue = 0.5)
 ```
 
+# 回调函数
+
+
+
+
 # 模型训练
 
 TensorFlow 训练模型通常有 3 种方法:
@@ -1132,6 +1142,24 @@ TensorFlow 训练模型通常有 3 种方法:
 
 
 
+
+
+## 使用 GPU 训练模型
+
+### 使用单 GPU 训练模型
+
+
+
+### 使用多 GPU 训练模型
+
+
+## 使用 TPU 训练模型
+
+
+
+
+
 # 参考资料
 
 - [Focal Loss](https://zhuanlan.zhihu.com/p/80594704)
+
