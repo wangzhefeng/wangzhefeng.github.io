@@ -453,3 +453,4 @@ EXPLAIN ...;
 # 参考资料
 
 - [Hive Cheet Sheet](http://hortonworks.com/wp-content/uploads/2016/05/Hortonworks.CheatSheet.SQLtoHive.pdf)
+

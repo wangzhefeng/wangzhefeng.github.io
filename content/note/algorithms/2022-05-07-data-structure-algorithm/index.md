@@ -4,10 +4,44 @@ author: 王哲峰
 date: '2022-05-07'
 slug: data-structure-algorithm
 categories:
-  - 整理
+  - algorithms
 tags:
   - algorithm
 ---
+
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [复杂度](#复杂度)
+  - [什么是复杂度分析](#什么是复杂度分析)
+  - [为什么要进行复杂度分析](#为什么要进行复杂度分析)
+  - [常用的复杂度分析方法](#常用的复杂度分析方法)
+  - [时间复杂度](#时间复杂度)
+  - [空间复杂度](#空间复杂度)
+  - [其他复杂度](#其他复杂度)
+- [算法](#算法)
+  - [内容](#内容)
+  - [排序算法](#排序算法)
+</p></details><p></p>
 
 # 复杂度
 
