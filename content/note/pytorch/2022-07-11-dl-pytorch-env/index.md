@@ -1,7 +1,7 @@
 ---
 title: PyTorch Env
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-07-11'
 slug: dl-pytorch-env
 categories:
   - deeplearning

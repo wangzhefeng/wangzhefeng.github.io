@@ -1,7 +1,7 @@
 ---
 title: PyTorch 数据管道
 author: 王哲峰
-date: '2022-08-13'
+date: '2022-08-11'
 slug: dl-pytorch-dataset-dataloader
 categories:
   - deeplearning

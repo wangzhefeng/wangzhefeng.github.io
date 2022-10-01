@@ -1,7 +1,7 @@
 ---
 title: PyTorch 三阶 API
 author: 王哲峰
-date: '2022-07-06'
+date: '2022-07-16'
 slug: dl-pytorch-api
 categories:
   - pytorch
