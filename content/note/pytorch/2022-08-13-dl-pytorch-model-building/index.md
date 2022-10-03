@@ -393,9 +393,8 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.layers_dict = nn.ModuleDict({
             "conv1": nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3),
-            "pool1": nn.MaxPool2d(kernel_size = 2, stride = 2),
+            "pool": nn.MaxPool2d(kernel_size = 2, stride = 2),
             "conv2": nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5),
-            "pool2": nn.MaxPool2d(kernel_size = 2, stride = 2),
             "dropout": nn.Dropout2d(p = 0.1),
             "adaptive": nn.AdaptiveMaxPool2d((1, 1)),
             "flatten": nn.Flatten(),
@@ -407,9 +406,9 @@ class Net(nn.Module):
     def forward(self, x):
         layers = [
             "conv1",
-            "pool1",
+            "pool",
             "conv2",
-            "pool2",
+            "pool",
             "dropout",
             "adaptive",
             "flatten",
