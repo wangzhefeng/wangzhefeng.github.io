@@ -309,13 +309,12 @@ probplot(df["feature"], dist = stats.norn, plot = ax)
 
 ### Yeo-Johnson 转换
 
-`$$\begin{split}
-x_i^{(\lambda)} =
+`$$\begin{split}x_{i}^{(\lambda)} =
 \begin{cases}
-[(x_i + 1)^\lambda - 1] / \lambda & \text{if } \lambda \neq 0, x_i \geq 0, \\\\
-\ln{(x_i) + 1} & \text{if } \lambda = 0, x_i \geq 0 \\\\
--[(-x_i + 1)^{2 - \lambda} - 1] / (2 - \lambda) & \text{if } \lambda \neq 2, x_i < 0, \\\\
-- \ln (- x_i + 1) & \text{if } \lambda = 2, x_i < 0
+[(x_{i} + 1)^{\lambda} - 1] / \lambda & \text{if } \lambda \neq 0, x_{i} \geq 0, \\\\
+\ln{(x_{i}) + 1} & \text{if } \lambda = 0, x_{i} \geq 0 \\\\
+-[(- x_{i} + 1)^{2 - \lambda} - 1] / (2 - \lambda) & \text{if } \lambda \neq 2, x_{i} < 0, \\\\
+-\ln (- x_{i} + 1) & \text{if } \lambda = 2, x_{i} < 0
 \end{cases}\end{split}$$`
 
 ```python
@@ -327,10 +326,10 @@ featureTrans = pt.fit_transform(feature)
 
 ### Box-Cox 转换
 
-`$$\begin{split}x_i^{(\lambda)} =
+`$$\begin{split}x_{i}^{(\lambda)} =
 \begin{cases}
-\dfrac{x_i^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0, \\\\
-\ln{(x_i)} & \text{if } \lambda = 0,
+\dfrac{x_{i}^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0, \\\\
+\ln{(x_{i})} & \text{if } \lambda = 0,
 \end{cases}\end{split}$$`
 
 ```python
