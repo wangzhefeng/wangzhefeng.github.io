@@ -32,64 +32,93 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [PyTorch 支持的硬件平台](#pytorch-支持的硬件平台)
-- [PyTorch 系统要求](#pytorch-系统要求)
+- [Windows 安装 PyTorch](#windows-安装-pytorch)
+  - [CPU version](#cpu-version)
+    - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch)
+    - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch)
+    - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch)
+  - [GPU/CUDA version](#gpucuda-version)
+    - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-1)
+    - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-1)
+    - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-1)
 - [macOS 安装 PyTorch](#macos-安装-pytorch)
-  - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch)
-  - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch)
-  - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch)
+  - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-2)
+  - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-2)
+  - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-2)
 - [Ubuntu 安装 PyTorch](#ubuntu-安装-pytorch)
-  - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-1)
-  - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-1)
-  - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-1)
-- [Building from source](#building-from-source)
-  - [macOS](#macos)
-  - [Ubuntu](#ubuntu)
+  - [CPU version](#cpu-version-1)
+    - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-3)
+    - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-3)
+    - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-3)
+  - [GPU/CUDA version](#gpucuda-version-1)
+    - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-4)
+    - [使用 Anaconda 安装 PyTorch](#使用-anaconda-安装-pytorch-4)
+    - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-4)
 - [Verification](#verification)
 </p></details><p></p>
 
 
-# PyTorch 支持的硬件平台
 
-- PC
-	- CPU
-	- GPU
-	- Cloud TPU(张量)
-- Mobile
-	- Android 
-	- iOS
-	- Embedded Devices
+# Windows 安装 PyTorch
 
-# PyTorch 系统要求
+## CPU version
 
-- Linux distributions that use glibc >= v2.17
-    - Arch Linux, minimum version 2012-07-15
-    - CentOS, minimum version 7.3-1611
-    - Debian, minimum version 8.0
-    - Fedora, minimum version 24
-    - Mint, minimum version 14
-    - OpenSUSE, minimum version 42.1
-    - PCLinuxOS, minimum version 2014.7
-    - Slackware, minimum version 14.2
-    - Ubuntu, minimum version 13.04
-- macOS 10.10(Yosemite) or above
-- Windows
-    - Windows 7 and greater; Windows 10 or greater recommended.
-    - Windows Server 2008 r2 and greater
+### 使用 pip 安装 PyTorch
+
+```bash
+$ pip3 install torch torchvision torchaudio
+```
+
+### 使用 Anaconda 安装 PyTorch
+
+```bash
+$ conda install pytorch torchvision torchaudio cpuonly -c pytorch
+```
+
+### 使用 Docker 安装 PyTorch
+
+```bash
+$ 
+```
+
+## GPU/CUDA version
+
+### 使用 pip 安装 PyTorch
+
+```bash
+# CUDA 11.3
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+# CUDA 11.6
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+```
+
+### 使用 Anaconda 安装 PyTorch
+
+```bash
+# CUDA 11.3
+$ conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+# CUDA 11.6
+$ conda install pytorch torchvision torchaudio cudatoolkit=11.6 -c pytorch -c conda-forge
+```
+
+### 使用 Docker 安装 PyTorch
+
+```bash
+$ 
+```
 
 # macOS 安装 PyTorch
 
 ## 使用 pip 安装 PyTorch
 
 ```bash
-$ pip install numpy
-$ pip install torch torchvision
+$ pip3 install torch torchvision torchaudio
 ```
 
 ## 使用 Anaconda 安装 PyTorch
 
 ```bash
-$ conda install pytorch torchvision -c pytorch
+$ conda install pytorch torchvision torchaudio -c pytorch
 ```
 
 ## 使用 Docker 安装 PyTorch
@@ -100,50 +129,56 @@ $
 
 # Ubuntu 安装 PyTorch
 
-## 使用 pip 安装 PyTorch
+## CPU version
+
+### 使用 pip 安装 PyTorch
 
 ```bash
-$ pip install torch==1.8.0+cpu torchvision==0.9.0+cpu torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 ```
 
-## 使用 Anaconda 安装 PyTorch
+### 使用 Anaconda 安装 PyTorch
 
 ```bash
 $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 ```
 
-## 使用 Docker 安装 PyTorch
+### 使用 Docker 安装 PyTorch
 
 ```bash
 $ 
 ```
 
-# Building from source
+## GPU/CUDA version
 
-## macOS
-
-- Prerequisites
-    - Install Anaconda
-    - Install CUDA, if your machine has a CUDA-enabled GPU.
-    - Install optional dependencies:
+### 使用 pip 安装 PyTorch
 
 ```bash
-$ export CMAKE_PREFIX_PATH=[anaconda root directory]
-$ conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
+# CUDA 10.2
+$ pip3 install torch torchvision torchaudio
+# CUDA 11.3
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+# CUDA 11.6
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+# ROCm 5.1.1
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/rocm5.1.1
 ```
 
+### 使用 Anaconda 安装 PyTorch
+
 ```bash
-$ git clone --recursive https://github.com/pytorch/pytorch
-$ cd pytorch
-$ MACOSX_DEPLOYMENT_TARGET=10.9 CC=clang CXX=clang++ python setup.py install
+# CUDA 10.2
+$ conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+# CUDA 11.3
+$ conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+# CUDA 11.6
+$ conda install pytorch torchvision torchaudio cudatoolkit=11.6 -c pytorch -c conda-forge
 ```
 
-- 当前，仅可以通过从源码构建 PyTorch 来获得 macOS 的 CUDA 支持
-
-## Ubuntu
+### 使用 Docker 安装 PyTorch
 
 ```bash
-$ git clone 
+$ 
 ```
 
 # Verification
@@ -166,8 +201,8 @@ tensor([[0.3380, 0.3845, 0.3217],
 
 - GPU dirver 和 CUDA:
 
-```bash
-import torch
-torch.cuda.is_available()
+```python
+>>> import torch
+>>> torch.cuda.is_available()
 ```
 

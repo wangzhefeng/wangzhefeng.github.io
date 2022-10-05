@@ -41,7 +41,7 @@ details[open] summary {
   - [Loss and Optimizer](#loss-and-optimizer)
   - [Model Training](#model-training)
 - [Model Saving](#model-saving)
-- [Model loading](#model-loading)
+- [Model Loading](#model-loading)
 - [PyTorch Cheat Sheet](#pytorch-cheat-sheet)
   - [Imports](#imports)
   - [Tensors](#tensors)
@@ -53,7 +53,9 @@ details[open] summary {
 
 ```python
 import torch
-from torch.utils.data import DataLoader
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
+
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 ```
@@ -157,8 +159,9 @@ def train(dataloader, model, loss_fn, optimizer):
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+```
 
-
+```python
 def test(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
@@ -166,16 +169,21 @@ def test(dataloader, model, loss_fn):
     test_loss, correct = 0, 0
     with torch.no_grad():
         for X, y in dataloader:
+            # data
             X, y = X.to(device), y.to(device)
-
             # Compute prediction error
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
-
+            correct += (pred.argmax(1) == y) \
+                            .type(torch.float) \
+                            .sum() \
+                            .item() \
+    # 计算评价指标
     test_loss /= num_batches
-    currect /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    correct /= size
+    print(f"Test Error: \n")
+    print(f"Accuracy: {(100 * correct):>0.1f}")
+    print(f"Avg loss: {test_loss:>8f}\n")
 ```
 
 ```py
@@ -194,7 +202,7 @@ torch.save(model.state_dict(), "model.pth")
 print("Saved PyTorch Model State to model.pth")
 ```
 
-# Model loading
+# Model Loading
 
 ```python
 model = NeuralNetwork()
@@ -219,7 +227,7 @@ x, y = test_data[0][0], test_data[0][1]
 with torch.no_grad():
     pred = model(x)
     predicted, actual = classes[pred[0].argmax(0)], classes[y]
-    print(f"Predicted: '{predicted}', Actual: {actual}")
+    print(f"Predicted: {predicted}, Actual: {actual}")
 ```
 
 

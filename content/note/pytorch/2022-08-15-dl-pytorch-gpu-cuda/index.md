@@ -32,6 +32,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [PyTorch 数据并行](#pytorch-数据并行)
+  - [让模型跑在 GPU 上](#让模型跑在-gpu-上)
+  - [让模型跑在多个 GPU 上](#让模型跑在多个-gpu-上)
 - [GPU 训练模型示例](#gpu-训练模型示例)
   - [设备](#设备)
   - [定义模型](#定义模型)
@@ -94,6 +97,93 @@ details[open] summary {
     - [Jiterator](#jiterator)
 </p></details><p></p>
 
+# PyTorch 数据并行
+
+## 让模型跑在 GPU 上
+
+```python
+import torch
+
+# 让模型在 GPU 上运行
+device = torch.device("cuda:0")
+model.to(device)
+
+# 将 tensor 复制到 GPU 上
+my_tensor = torch.ones(2, 2, dtype = torch.double)
+mytensor = my_tensor.to(device)
+```
+
+## 让模型跑在多个 GPU 上
+
+> * PyTorch 默认使用单个 GPU 执行运算
+
+```python
+model = nn.DataParallel(model)
+```
+
+```python
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+
+# Parameters
+input_size = 5
+output_size = 2
+
+batch_size = 30
+data_size = 100
+
+# Device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+
+# data 
+class RandomDataset(Dataset):
+
+    def __init__(self, size, length):
+        self.len = length
+        self.data = torch.randn(length, size)
+
+    def __len__(self):
+        return self.len
+    
+    def __getitem__(self, index):
+        return self.data[index]
+
+rand_loader = DataLoader(
+    dataset = RandomDataset(input_size, data_size), 
+    batch_size = batch_size, 
+    shuffle = True
+)
+
+# model
+class Model(nn.Module):
+
+    def __init__(self, input_size, output_size):
+        super(Model, self)__init__()
+        self.fc = nn.Linear(input_size, output_size)
+
+    def forward(self, input):
+        output = self.fc(input)
+        print("\tIn Model: input size", input.size(),
+                "output size", output.size())
+
+        return output
+
+model = Model(input_size, output_size)
+if torch.cuda.device_count() > 1:
+    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    model = nn.DataParallel(model)
+
+model.to(device)
+
+
+for data in rand_loader:
+    input = data.to(device)
+    output = model(input)
+    print("Outside: input size", input.size(),
+        "output_size", output.size())
+```
 
 # GPU 训练模型示例
 
