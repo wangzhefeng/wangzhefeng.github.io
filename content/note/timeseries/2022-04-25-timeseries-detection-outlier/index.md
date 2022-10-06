@@ -1,5 +1,5 @@
 ---
-title: 时间序列异常值检测
+title: 时间序列异常值检测与处理
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-outlier-detection
@@ -9,9 +9,32 @@ tags:
   - ml
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
-
+- [基于滑动窗口预测的水文时间序列异常检测](#基于滑动窗口预测的水文时间序列异常检测)
+  - [水文时间序列(Hydrological Time Series)](#水文时间序列hydrological-time-series)
+  - [异常值检测算法](#异常值检测算法)
+</p></details><p></p>
 
 # 基于滑动窗口预测的水文时间序列异常检测
 

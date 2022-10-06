@@ -32,7 +32,9 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [baseline 特点](#baseline-特点)
-- [数据](#数据)
+- [baseline 数据](#baseline-数据)
+  - [数据读取](#数据读取)
+  - [数据查看](#数据查看)
 - [baseline 模型](#baseline-模型)
   - [数据转换](#数据转换)
   - [建立训练集和测试集](#建立训练集和测试集)
@@ -44,33 +46,35 @@ details[open] summary {
 
 # baseline 特点
 
-- Simple: A method that requires little or no training or intelligence.
-- Fast: A method that is fast to implement and computationally trivial to make a prediction.
-- Repeatable: A method that is deterministic, meaning that it produces an expected output given the same input.
+* Simple: A method that requires little or no training or intelligence.
+* Fast: A method that is fast to implement and computationally trivial to make a prediction.
+* Repeatable: A method that is deterministic, 
+  meaning that it produces an expected output given the same input.
 
-# 数据
+# baseline 数据
 
 ```python
 import pandas as pd 
-import matplotlib.pyplot as plt 
-from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
 ```
 
-```python
-def parser(x):
-   return pd.datetime.strptime("190" + x, "%Y-%m")
+## 数据读取
 
+```python
 series = pd.read_csv(
-   "https://raw.githubusercontent.com/jbrownlee/Datasets/master/shampoo.csv",
-   header = 0,
-   parse_dates = [0],
-   index_col = 0,
-   squeeze = True,
-   date_parser = parser
+    "https://raw.githubusercontent.com/jbrownlee/Datasets/master/shampoo.csv",
+    header = 0,
+    parse_dates = [0],
+    index_col = 0,
+    squeeze = True,
+    date_parser = lambda dates: pd.datetime.strptime("190" + dates, "%Y-%m")
 )
+```
+
+## 数据查看
+
+```python
 print(series.head())
-series.plot()
-plt.show()
 ```
 
 ```
@@ -83,15 +87,20 @@ Month
 Name: Sales, dtype: float64
 ```
 
-![img](images/shampoo.png)
+```python
+series.plot()
+plt.show()
+```
+
+![img](images/shampoo2.png)
 
 # baseline 模型
 
-- 将单变量时间序列数据转换为监督学习问题
-- 建立训练集和测试集
-- 定义持久化模型
-- 进行预测并建立 baseline 性能
-- 查看完整的示例并绘制输出
+* 将单变量时间序列数据转换为监督学习问题
+* 建立训练集和测试集
+* 定义持久化模型
+* 进行预测并建立 baseline 性能
+* 查看完整的示例并绘制输出
 
 ## 数据转换
 
@@ -100,7 +109,7 @@ Name: Sales, dtype: float64
 values = pd.DataFrame(series.values)
 df = pd.concat([values.shift(1), values], axis = 1)
 df.columns = ["t-1", "t+1"]
-print(df.head(5))
+print(df.head())
 ```
 
 ## 建立训练集和测试集
@@ -119,17 +128,19 @@ test_X, test_y = test[:, 0], test[:, 1]
 ```python
 # persistence model
 def model_persistence(x):
-   return x
+    return x
 ```
 
 ## 预测并评估预测结果
 
 ```python
+from sklearn.metrics import mean_squared_error
+
 # walk-forward validation
 predictions = list()
 for x in test_X:
-   yhat = model_persistence(x)
-   predictions.append(yhat)
+    yhat = model_persistence(x)
+    predictions.append(yhat)
 test_score = mean_squared_error(test_y, predictions)
 print("Test MSE: %.3f" % test_score)
 ```
