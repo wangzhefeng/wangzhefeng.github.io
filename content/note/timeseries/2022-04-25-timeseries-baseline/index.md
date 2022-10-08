@@ -92,7 +92,7 @@ series.plot()
 plt.show()
 ```
 
-![img](images/shampoo2.png)
+![img](images/shampoo.png)
 
 # baseline 模型
 

@@ -9,6 +9,40 @@ tags:
   - ml
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [时间序列插值](#时间序列插值)
+- [Pandas 插值算法](#pandas-插值算法)
+  - [Pandas 中缺失值的处理](#pandas-中缺失值的处理)
+  - [缺失值插值算法 API](#缺失值插值算法-api)
+    - [pandas.DataFrame.interpolate](#pandasdataframeinterpolate)
+- [Scipy 插值算法](#scipy-插值算法)
+  - [1-D interpolation](#1-d-interpolation)
+  - [Multivariate data interpolation](#multivariate-data-interpolation)
+  - [Spline interpolation](#spline-interpolation)
+  - [Using radial basis functions for smoothing/interpolate](#using-radial-basis-functions-for-smoothinginterpolate)
+</p></details><p></p>
+
 # 时间序列插值
 
 # Pandas 插值算法
