@@ -77,7 +77,6 @@ details[open] summary {
   - [Index](#index)
   - [Missing value](#missing-value)
   - [Window Functions](#window-functions)
-  - [Resample/频率变换](#resample频率变换)
   - [Difference](#difference)
   - [Move Average](#move-average)
   - [Random Walk](#random-walk)
@@ -406,21 +405,6 @@ K-means 聚类是一种无监督机器学习算法，经常用于检测时间序
 
 - rolling window
 - expanding window
-
-## Resample/频率变换
-    
-- 上采样
-    - `ts.resample().ffill()`
-    - `ts.resample().bfill()`
-    - `ts.resample().pad()`
-    - `ts.resample().asfreq()`
-    - `ts.resample().interpolate()`
-- 降采样
-    - `ts.resample()`
-    - `ts.resample().apply()`
-    - `ts.resample().aggregate()`
-    - `ts.resample().transform()`
-    - `ts.resample().pipe()`
 
 ## Difference
 
