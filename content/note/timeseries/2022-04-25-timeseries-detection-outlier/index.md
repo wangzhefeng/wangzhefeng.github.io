@@ -32,22 +32,37 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [时间序列异常检测介绍](#时间序列异常检测介绍)
-- [异常分类](#异常分类)
+- [时间序列异常检测挑战](#时间序列异常检测挑战)
+- [时间序列异常值分类](#时间序列异常值分类)
   - [传统分类](#传统分类)
     - [点异常值](#点异常值)
     - [上下文异常值](#上下文异常值)
     - [集体异常值](#集体异常值)
   - [深度方法分类](#深度方法分类)
     - [点(Point)异常值](#点point异常值)
-    - [模式(Pattern)异常](#模式pattern异常)
-- [异常检测挑战](#异常检测挑战)
-- [异常检测模型](#异常检测模型)
-  - [基于统计方法和机器学习的方法](#基于统计方法和机器学习的方法)
-    - [异常的定义](#异常的定义)
-    - [基于统计](#基于统计)
-    - [基于度量](#基于度量)
-    - [基于深度学习](#基于深度学习)
-    - [多变量时间序列](#多变量时间序列)
+    - [模式(Pattern)异常值](#模式pattern异常值)
+- [时间序列异常检测模型](#时间序列异常检测模型)
+  - [基于统计分布方法](#基于统计分布方法)
+    - [3-sigma](#3-sigma)
+    - [Z-score](#z-score)
+    - [boxplot](#boxplot)
+    - [Grubbs 检验](#grubbs-检验)
+  - [基于距离的方法](#基于距离的方法)
+    - [KNN](#knn)
+  - [基于密度的方法](#基于密度的方法)
+    - [Local Outlier Factor(LOF)](#local-outlier-factorlof)
+    - [Connectivity-Based Outlier Factor(COF)](#connectivity-based-outlier-factorcof)
+    - [Stochastic Outlier Selection(SOS)](#stochastic-outlier-selectionsos)
+  - [基于聚类的方法](#基于聚类的方法)
+    - [K-means 聚类](#k-means-聚类)
+    - [DBSCAN](#dbscan)
+    - [GMM](#gmm)
+  - [基于树的方法](#基于树的方法)
+    - [Isolation Forest 孤立森林](#isolation-forest-孤立森林)
+    - [RRCF](#rrcf)
+  - [基于降维的方法](#基于降维的方法)
+  - [基于分类的方法](#基于分类的方法)
+  - [基于预测的方法](#基于预测的方法)
   - [基于神经网络方法](#基于神经网络方法)
     - [特征提取](#特征提取)
     - [通用常态特征表征学习](#通用常态特征表征学习)
@@ -65,19 +80,19 @@ details[open] summary {
 
 # 时间序列异常检测介绍
 
-异常检测(Outlier Detection)也称为异常挖掘或异常检测, 
-是从大量数据中提取隐含在其中的人们事先不知道的但又是潜在的有用的信息和知识的过程
-
 异常检测需要解决两个主要问题: 
 
 * 在给定的数据集合中定义什么样的数据是异常的
 * 找到一个有效的方法来检测这样的异常数据
-  
-按异常在时间序列中的不同表现形式, 时间序列异常可以分为3种: 
 
-* 序列异常
-* 点异常
-* 模式异常
+按异常在时间序列中的不同表现形式, 时间序列异常一般可以分为 3 种，但也有其他角度的分类方法: 
+
+* 点异常值
+    - 相对于全局其他数据的异常实例
+* 上下文异常值
+    - 上下文异常通常在它们自己的上下文中具有相对较大/较小的值，但不是全局的
+* 集体异常值
+    - 相对于整个数据集异常的相关异常数据实例的集合
 
 时间序列异常检测方法主要包括: 
 
@@ -87,51 +102,7 @@ details[open] summary {
 4. 基于支持向量机的方法
 5. 基于聚类的方法
 
-# 异常分类
-
-## 传统分类
-
-传统分类方法因为异常值与正常值的上下文定义边界模糊，
-导致集体异常值和上下文异常值的定义边界也模糊。
-上下文异常值的上下文在不同的文献中通常非常不同，它们可以是一个小窗口，
-包含相邻点或在季节性方法具有相似相对位置的点
-
-![img](images/tranditional_type.png)
-
-![img](images/tranditional_type3.png)
-
-### 点异常值
-
-相对于全局其他数据的异常实例
-
-### 上下文异常值
-
-上下文异常通常在它们自己的上下文中具有相对较大/较小的值，但不是全局的
-
-### 集体异常值
-
-相对于整个数据集异常的相关异常数据实例的集合
-
-
-## 深度方法分类
-
-
-
-![img](images/deep_type.png)
-
-### 点(Point)异常值
-
-* Global
-* Contextual
-
-### 模式(Pattern)异常
-
-* Shapelet
-* Seasonal
-* Trend
-
-
-# 异常检测挑战
+# 时间序列异常检测挑战
 
 * 异常检测召回率低
     - 由于异常非常罕见且异质，因此很难识别所有异常
@@ -147,88 +118,499 @@ details[open] summary {
 * 异常解释
     - 在许多安全关键领域中，如果将异常检测模型直接用作黑盒模型，则可能存在一些重大风险
 
-# 异常检测模型
+# 时间序列异常值分类
+
+## 传统分类
+
+传统分类方法因为异常值与正常值的上下文定义边界模糊，
+导致集体异常值和上下文异常值的定义边界也模糊。
+上下文异常值的上下文在不同的文献中通常非常不同，它们可以是一个小窗口，
+包含相邻点或在季节性方法具有相似相对位置的点
+
+![img](images/tranditional_type.png)
+
+![img](images/tranditional_type3.png)
+
+### 点异常值
+
+* 相对于全局其他数据的异常实例。某些点与全局大多数都不一样
+
+### 上下文异常值
+
+* 上下文异常通常在它们自己的上下文中具有相对较大/较小的值，但不是全局的。
+  即某个时间点的表现与前后时间段内存在较大差异
+
+### 集体异常值
+
+* 相对于整个数据集异常的相关异常数据实例的集合。
+  即个体不存在异常, 但是个体同时出现表现出异常状态
+
+## 深度方法分类
+
+![img](images/deep_type.png)
+
+<img src="images/deep_point_type.png" width="40%" /><img src="images/deep_pattern_type.png" width="60%" />
+
+### 点(Point)异常值
+
+* Global
+* Contextual
+
+### 模式(Pattern)异常值
+
+* Shapelet
+* Seasonal
+* Trend
+
+关于三类 Pattern 异常，可以基于 shapelet 函数来定义:
+
+`$$X_{i,j} = \rho(2 \pi \omega T_{i,j}) + \tau(T_{i,j})$$`
+
+其中:
+
+* `$X$` 是由多个不同频率的波的值相加得到的
+* `$\rho(2 \pi T,\omega) = \sum_{n}[A \sin(2 \pi \omega_{n} T) + B \cos(2 \pi \omega_{n} T)]$`
+* `$\tau(\cdot)$` 为趋势项，例如：线性函数 `$\tau(T) = T$`
+
+如果 `$s$` 为相似相度量函数，那么以上三种异常类型可以分别定义为：
+
+* Shapelet outliers(异常的局部子序列)
+    - `$s(\rho(\cdot), \hat{\rho}(\cdot)) > \delta$`，其中，`$\delta$` 为异常判定的阈值
+* Seasonal outliers(异常周期性的局部子序列)
+    - `$s(\omega, \hat{\omega}) > \delta$`，其中，`$\delta$` 为异常判定的阈值
+* Trend outliers(异常趋势的局部子序列)
+    - `$s(\tau(\cdot), \hat{\tau}(\cdot)) > \delta$`，其中，`$\delta$` 为异常判定的阈值
+
+# 时间序列异常检测模型
 
 ![img](images/models.png)
 
-## 基于统计方法和机器学习的方法
-
 ![img](images/models_standard.png)
 
+## 基于统计分布方法
 
-### 异常的定义 
+基于统计的方法最直观，适用于几乎所有类型的时间序列。
+在这种方法中，异常值的上限和下限是根据特定的统计量创建的，
+例如：均值、标准差、Z 统计量、T 统计量、分布的百分位数
 
-在时间序列中, 异常是指在一个或多个信号的模式发生意料之外的变化. 
-主要可以分为一下三种异常:
+### 3-sigma
 
-* 点异常(point anomalies): 某些点与全局大多数都不一样
-* 上下文异常(contextual anomalies) 某个时间点的表现与前后时间段内存在较大差异
-* 集合异常(collective anomalies) 个体不存在异常, 但是个体同时出现表现出异常状态
+基于正态分布，3sigma 准则认为值在 `$(\mu - 3\sigma, \mu + 3\sigma)$` 区间的概率为 99.74%, 
+当数据分布超过这个区间时即认为是异常数据, 为提升准确率可采用同环比策略
 
-### 基于统计
+取整个序列的均值和标准差是不可取的，因为在这种情况下，边界将是静态的。
+边界应该在滚动窗口的基础上创建，就像考虑一组连续的观察来创建边界，
+然后转移到另一个窗口。该方法是一种高效、简单的离群点检测方法
 
-基于统计的方法最直观，适用于几乎所有类型的时间序列。在这种方法中，
-上限和下限时根据特定的统计量创建的，例如：均值、标准差、Z 统计量、T 统计量、分布的百分位数
+![img](images/3sigma.png)
 
-- 基于统计置信检验
-    - 3-sigma: 值在 `$(\mu - 3\sigma, \mu + 3\sigma)$` 区间的概率为 99.74%, 
-        当数据分布超过这个区间时即认为是异常数据, 为提升准确率可采用同环比策略
-        - 取整个序列的均值和标准差是不可取的，因为在这种情况下，边界将是静态的。
-          边界应该在滚动窗口的基础上创建，就像考虑一组连续的观察来创建边界，
-          然后转移到另一个窗口。该方法是一种高效、简单的离群点检测方法
-    - t 检验
-    - f 检验
-    - 卡方检验
-- ARIMA 系列模型
-- 基于极值优化
+Python 实现异常检测的边界阈值:
 
-### 基于度量
+```python
+def three_sigma(s):
+    mu, std = np.means(s), np.std(s)
+    lower, upper = mu - 3 * std, mu + 3 * std
 
-- 基于距离
-    - kNN
-- 基于密度
-- 基于聚类 
-    - k-means
-    - DBSCAN
-    - GMM
+    return lower, upper
+```
+
+### Z-score
+
+Z-score 为标准分数，测量数据点和平均值的距离，若测量值与平均值相差 2 个标准差，Z-score 为 2。
+当把 Z-score = 3 作为阈值去提出异常点时，便相当于 3sigma
+
+Python 实现 Z-score 计算:
+
+```python
+def z_score(s):
+    z_score = (s - np.mean(s)) / np.std(s)
+
+    return z_score
+```
+
+### boxplot
+
+箱线图是基于四分位距(IQR)检测异常点的
+
+![img](images/boxplot.png)
+
+Python 实现异常检测的边界阈值:
+
+```python
+def boxplot(s):
+    q1, q3 = s.quantile(0.25), s.quantile(0.75)
+    iqr = q3 - q1
+    lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+
+    return lower, upper
+```
+
+### Grubbs 检验
+
+Grubbs 检验常被用来检验服从正态分布的单变量数据集(univariate dataset) 中的单个异常值。
+若有异常值，则其必为数据集中的最大值或最小值
+
+Grubbs 检验的原假设与备择假设如下：
+
+* H0: 数据集中没有异常值
+* H1: 数据集中有一个异常值
+
+Grubbs 检验需要总体是正态分布。算法流程如下：
+
+1. 样本从小到大排序
+2. 求样本的均值 mean 和标准差 std
+3. 计算 min/max 与 mean 的差距，更大的那个为可疑值
+4. 求可疑值的 Z-score(standard score)，如果大于 Grubbs 临界值，那么就是异常值
+5. 排除异常值，对剩余序列循环做 1-4 步骤
+
+Grubbs 临界值可以查表得到，它由两个值决定：
+
+* 检出水平 `$\alpha$`(越严格越小)
+* 样本数量 `$n$`
+
+Grubbs 检验方法的局限：
+
+* 只能检测单维度数据
+* 无法精确的输出正常区间
+* 它的判断机制是“逐一剔除”，所以每个异常值都要单独计算整个步骤，数据量大吃不消
+* 需假定数据服从正态分布或近正态分布
+
+Python 实现 Grubbs 异常检测示例:
+
+```python
+from outliers import smirnov_grubbs as grubbs
+
+print(grubbs.test([8, 9, 10, 1, 9], alpha = 0.05))
+print(grubbs.min_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
+print(grubbs.max_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
+print(grubbs.max_test_indices([8, 9, 10, 50, 9], alpha = 0.05))
+```
+
+## 基于距离的方法
+
+### KNN
+
+KNN 依次计算每个样本与它最近的 `$K$` 个样本的平均距离，
+再利用计算的距离与阈值进行比较，如果大于阈值，则认为是异常值
+
+* 优点是不需要假设数据的分布
+* 缺点是仅可以找出全局异常点，无法找到局部异常点
+
+Python 实现 KNN 异常检测示例:
+
+```python
+from pyod.models.knn import KNN
+
+# 初始化检测器 clf
+clf = KNN(method = "mean", n_neighbors = 3)
+clf.fit(X_train)
+
+# 返回训练数据上的分类标签(0: 正常值, 1:异常值)
+y_train_pred = clf.labels_
+
+# 返回训练数据上的异常值(分数越大越异常)
+y_train_scores = clf.decision_scores_
+```
+
+## 基于密度的方法
+
+### Local Outlier Factor(LOF)
+
+LOF 是基于密度的经典算法，通过给每个数据点都分配一个依赖于邻域密度的离群因子 LOF，
+进而判断该数据点是否为离群点。它的好处在于可以量化每个数据点的异常程度(outlierness)
+
+**数据点 P 的局部相对密度(局部异常因子)** 
+
+`$$LOF_{k}(P) = \frac{\sum_{N_{k}(P) \in O}\frac{lrd_{k}(O)}{lrd_{k}(P)}}{|N_{k}(P)|} \\
+              = \frac{\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}}{lrd_{k}(P)}$$`
+
+其中:
+
+* `$\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}$`：数据点 P 在 `$k$` 邻域内点的平均局部可达密度
+* `$lrd_{k}(P)$`：数据点 P 的局部可达密度，是数据点 P 最近邻的平均可达距离的倒数。距离越大，密度越小
+
+`$$lrd_{k}(P) = \frac{1}{\frac{\sum_{N_{k}(P) \in O} reach\_dist_{k}(O, P)}{|N_{k}(P)|}}$$`
+
+其中:
+
+* `$reach\_dist_{k}(O, P)$`: 点 P 到点 O 的第 `$k$` 可达距离
+
+`$$reach\_dist_{k}(O, P) = max\{d_{k}(O), d(O, P)\}$$`
+
+其中:
+
+* `$d_{k}(O)$`: 点 O 的 `$k$` 近邻距离，即第 `$k$` 个最近的点跟点 O 之间的距离
+* `$d(O, P)$`: 点 P 到点 O 的距离
+
+![img](images/LOF.png)
+
+整体来说，LOF 算法流程如下：
+
+* 对于每个数据点，计算它与其他所有点的距离，并按从近到远排序
+* 对于每个数据点，找到它的 K-Nearest-Neighbor，计算 LOF 得分
+
+Python 实现 LOF 算法示例：
+
+```python
+from sklearn.neighbors import LocalOutlierFactor as LOF
+
+X = [[-1.1],
+     [0.2],
+     [100.1],
+     [0.3]]
+
+clf = LOF(n_neighbors = 2)
+
+res = clf.fit_predict(X)
+print(res)
+
+print(clf.negative_outlier_factor_)
+```
+
+### Connectivity-Based Outlier Factor(COF)
+
+COF 是 LOF 的变种，相比于 LOF，COF 可以处理低密度下的异常值，
+COF 的局部密度是基于平均链式距离计算得到。
+在一开始的时候一样会先计算出每个点的 k-nearest neighbor。
+而接下来会计算每个点的 Set Based Nearest Path，如下图
+
+![img](images/COF.png)
+
+假使 `$k=5$`，所以 F 的 neighbor 为 B、C、D、E、G。而对于 F 离他最近的点为 E，
+所以 SBN Path 的第一个元素是 F、第二个是 E。离 E 最近的点为 D 所以第三个元素为 D，
+接下来离 D 最近的点为 C 和 G，所以第四和五个元素为 C 和 G，最后离 C 最近的点为 B，
+第六个元素为 B。所以整个流程下来，F 的 SBN Path 为 `$\{F, E, D, C, G, C, B\}$`。
+而对于 SBN Path 所对应的距离 `$e=\{e_1, e_2, e_3,\ldots,e_k\}$`，依照上面的例子 `$e=\{3,2,1,1,1\}$`
+
+所以可以说假使想计算 p 点的 SBN Path，
+只要直接计算 p 点和其 neighbor 所有点所构成的 graph 的 minimum spanning tree，
+之后再以 p 点为起点执行 shortest path 算法，就可以得到 SBN Path。
+有了 SBN Path 后，接下来就会计算 p 点的链式距离
+
+`$$ac\_distance(p) = \sum_{i=1}^{k}\frac{2(k+1-i)}{k(k+1)}dist(e_{i})$$`
+
+有了 `$ac\_distance$` 后，就可以计算 COF：
+
+`$$COF(p) = \frac{ac\_distance(p)}{\frac{1}{k} \sum_{o \in N_{k}(p)} ac\_distance(o)}$$`
+
+Python 实现 COF 异常检测示例：
+
+```python
+from pyod.models.cof import COF
+
+cof = COF(
+    contamination = 0.06,  # 异常值所占的比例
+    n_neighbors = 20,  # 近邻数量
+)
+
+cof_label = cof.fit_predict(iris.values)
+print(f"检测出的异常值数量为：{np.sum(cof_label == 1)}")
+```
+
+### Stochastic Outlier Selection(SOS)
+
+SOS 的思想是：当一个点和其它所有点的关联度(affinity)都很小的时候，它就是一个异常点。
+将特征矩阵(feature martrix)或者相异度矩阵(dissimilarity matrix)输入给 SOS 算法，
+会返回一个异常概率值向量(每个点对应一个)
+
+![img](images/SOS.png)
+
+SOS 算法的流程：
+
+1. 计算相异度矩阵 `$D$`
+    - 相异度矩阵(dissimilarity matrix)是各样本两两之间的度量距离，比如欧式距离或汉明距离等
+2. 计算关联度矩阵 `$A$`
+    - 关联度矩阵(affinity matrix)反映的是度量距离方差，如图：点 `$x_{5}$` 的密度最大，方差最小； 
+      `$x_{6}$` 的密度最小，方差最大
+
+![img](images/affinity_matrix.png)
+
+3. 计算关联概率矩阵 `$B$`
+    - 关联概率矩阵(binding probability matrix)就是把关联矩阵(affinity matrix)按行归一化得到的
+
+![img](images/binding_prob_matrix.png)
+
+4. 算出异常概率向量
+    - 得到了关联概率矩阵，每个点的异常概率值就用如下的公式计算，
+      当一个点和其它所有点的关联度(affinity)都很小的时候，它就是一个异常点
+
+    `$$p(x_{i} \in C_{0}) = \prod_{j \neq i}(1 - b_{ji})$$`
+
+
+Python 实现 SOS 异常检测算法示例：
+
+```python
+import pandas as pd
+from sksos import SOS
+
+# data
+iris = pd.read_csv("http://bit.ly/iris-csv")
+X = iris.drop("Name", axis = 1).values
+
+# model
+detector = SOS()
+iris["score"] = detector.predict(X)
+iris.sort_values("score", ascending = False).head(10)
+```
+
+## 基于聚类的方法
+
+### K-means 聚类
 
 K-means 聚类是一种无监督机器学习算法，经常用于检测时间序列数据中的异常值。
 该算法查看数据集中的数据点，并将相似的数据点分组为 K 个聚类。
 通过测量数据点到其最近质心的距离来区分异常。
-如果距离大于某个阈值，则将该数据点标记为异常。K-Means 算法使用欧几里得距离进行比
+如果距离大于某个阈值，则将该数据点标记为异常。
+K-Means 算法使用欧几里得距离进行比
 
-- 基于树
-    - iForest: 孤立森林
-    - RRCF
+### DBSCAN
 
+DBSCAN 算法(Density-Based Spatial Clustering of Applications with Noise)的输入和输出如下，
+对于无法形成聚类簇的孤立点，即为异常点(噪声点)
+
+DBSCAN 输入：
+
+* 数据集，邻域半径 Eps，邻域中数据对象数目阈值 MinPts
+
+DBSCAN 输出：
+
+* 密度联通簇
+
+DBSCAN 中的三种点的类别:
+
+![img](images/dbscan_point.png)
+
+DBSCAN 中的四种点的关系:
+
+![img](images/dbscan_relation.png)
+
+DBSCAN 的算法实现步骤:
+
+![img](images/dbscan_algorithms.png)
+
+DBSCAN 算法具体处理流程如下:
+
+1. 从数据集中任意选取一个数据对象点 p
+2. 如果对于参数 Eps 和 MinPts，所选取的数据对象点 p 为核心点，则找出所有从 p 密度可达的数据对象点，形成一个簇
+3. 如果选取的数据对象点 p 是边缘点，选取另一个数据对象点
+4. 重复以上 2、3 步，直到所有点被处理
+
+Python 实现 DBSCAN 异常检测示例:
+
+```python
+from sklearn.cluster import DBSCAN
+import numpy as np
+
+# 数据
+X = np.array(
+    [[1, 2],
+     [2, 2],
+     [2, 3],
+     [8, 7],
+     [8, 8],
+     [25, 80]]
+)
+
+# 聚类
+clustering = DBSCAN(eps = 3, min_samples = 2).fit(X)
+clustering.lables_
+```
+
+```
+array([ 0,  0,  0,  1,  1, -1])
+# 0，,0，,0：表示前三个样本被分为了一个群
+# 1, 1：中间两个被分为一个群
+# -1：最后一个为异常点，不属于任何一个群
+```
+
+### GMM
+
+
+
+## 基于树的方法
+
+### Isolation Forest 孤立森林
+
+孤立森林(Isolation Forest, iForest)中的 “孤立” (isolation) 指的是 “把异常点从所有样本中孤立出来”，
+论文中的原文是 “separating an instance from the rest of the instances”。
 
 孤立森林是一种基于决策树的异常检测机器学习算法。它通过使用决策树的分区隔离给定特征集上的数据点来工作。
 换句话说，它从数据集中取出一个样本，并在该样本上构建树，直到每个点都被隔离。
-为了隔离数据点，通过选择该特征的最大值和最小值之间的分割来随机进行分区，直到每个点都被隔离。
-特征的随机分区将为异常数据点在树中创建更短的路径，
-从而将它们与其余数据区分开来
+为了隔离数据点，随机选择 m 个特征，通过在所选特征的最大值和最小值之间随机选择一个值来分割数据点。
+观察值的划分递归地重复，直到所有的观察值被孤立。
+特征的随机分区将为异常数据点在树中创建更短的路径，从而将它们与其余数据区分开来
+
+用一个随机超平面对一个数据空间进行切割，切一次可以生成两个子空间。
+接下来，再继续随机选取超平面，来切割第一步得到的两个子空间，以此循环下去，
+直到每子空间里面只包含一个数据点为止。可以发现，那些密度很高的簇要被切很多次才会停止切割，
+即每个点都单独存在于一个子空间内，但那些分布稀疏的点，大都很早就停到一个子空间内了。
+所以，整个孤立森林的算法思想：异常样本更容易快速落入叶子结点或者说，异常样本在决策树上，距离根节点更近
+
+![img](images/iForest.png)
+
+获得 `$t$` 个孤立树后，单棵树的训练就结束了。接下来就可以用生成的孤立树来评估测试数据了，
+即计算异常分数 `$s$`。对于每个样本 `$x$`，需要对其综合计算每棵树的结果，
+通过下面的公式计算异常得分： 
+
+`$$s(x, n) = 2^{-\frac{E(h(x))}{c(n)}}$$`
+
+其中:
+
+* `$h(x)$`：样本在 iTree 上的 PathLength
+* `$E(h(x))$`：样本在 `$t$` 棵 iTree 的 PathLength 的均值
+* `$c(n)$` `$n$` 个样本构建一个二叉搜索数 BST 中的未成功搜索平均路径长度(均值 `$h(x)$` 对外部节点终端的估计等同于 BST 的未成功搜索)，
+  `$E(h(x))/c(n)$` 是对样本 `$x$` 的路径长度 `$h(x)$` 进行标准化处理。
+  `$H(n-1)$` 是调和数，可使用 `$\ln(n-1) + 0.5772156649$`(欧拉常数)估算
+
+  `$$c(n) = 2H(n-1) - \frac{2(n-1)}{n} = 2[ln(n-1) + 0.5772156649] - \frac{2(n-1)}{n}$$`
+
+异常分数 `$s$` 指数部分值域为 `$(-\infty, 0)$`，因此 `$s$` 值域为 `$(0, 1)$`。
+当 PathLength 越小，`$s$` 越接近 1，此时样本为异常值的概率越大
+
+Python 实现 iForest 异常检测示例：
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.ensemble import IsolationForest
+
+data = load_iris(as_frame = True)
+X, y = data.data, data.target
+df = data.frame
+
+# 模型初始化
+iforest = IsolationForest(
+    n_estimators = 100,
+    max_samples = "auto",
+    contamination = 0.05,
+    max_features = 4,
+    bootstrap = False,
+    n_jobs = -1,
+    random_state = 1,
+)
+
+# 模型训练、预测
+df["label"] = iforest.fit_predict(X)
+
+# 模型预测
+df["scores"] = iforest.decision_function(X)
+```
+
+### RRCF
+
+## 基于降维的方法
 
 
 
-- 基于谱
-- 基于单分类
 
-### 基于深度学习
-
-- CNN 系列
-- AutoEncoder 系列
-- Attention 系列
-
-### 多变量时间序列
-
-- 基于线性回归
-    - VAR
-    - VARMA
-    - VARMAX
-- AutoEncoder 系列
-- 图神经网络系列
+## 基于分类的方法
 
 
+## 基于预测的方法
+
+对于单条时序数据，根据其预测出来的时序曲线和真实的数据相比，求出每个点的残差，
+并对残差序列建模，利用 KSigma 或者分位数等方法便可以进行异常检测。具体的流程如下
+
+![img](images/predict_method.png)
 
 ## 基于神经网络方法
 
@@ -329,7 +711,7 @@ K-means 聚类是一种无监督机器学习算法，经常用于检测时间序
 
 ## SEQ
 
-基于 shapelet 函数，我们可以获取 35 个合成数据集(可称 NeurlIPS-TS synthestic datasets or SEQ),
+基于 shapelet 函数，可以获取 35 个合成数据集(可称 NeurlIPS-TS synthestic datasets or SEQ),
 其中 20 个单变量，15 个多变量数据集。该数据集覆盖各类异常数据
 
 ## 其他
@@ -341,7 +723,7 @@ K-means 聚类是一种无监督机器学习算法，经常用于检测时间序
 ## PyOD
 
 * [GitHub](https://github.com/yzhao062/Pyod)
-* [Doc][https://pyod.readthedocs.io/en/latest/]
+* [Doc](https://pyod.readthedocs.io/en/latest/)
 * [知乎](https://www.zhihu.com/people/breaknever/posts?page=3)
 * [Resources](https://github.com/yzhao062/anomaly-detection-resources)
 * https://www.andrew.cmu.edu/user/yuezhao2/
@@ -366,6 +748,22 @@ K-means 聚类是一种无监督机器学习算法，经常用于检测时间序
 
 # 参考
 
-* https://mp.weixin.qq.com/s/KNeSAPx-6B-wo5jzCM17YQ
-* https://zhuanlan.zhihu.com/p/419161328
-* 
+* [[1]时序异常检测综述整理](https://mp.weixin.qq.com/s/KNeSAPx-6B-wo5jzCM17YQ)
+* [[2]Revisiting Time Series Outlier Detection:Definitions and Benchmarks](https://openreview.net/pdf?id=r8IvOsnHchr)
+* [[2]异常检测综述：Deep Learning for Anomaly Detection: A Review](https://zhuanlan.zhihu.com/p/419161328)
+* [[3]异常检测方法总结](https://mp.weixin.qq.com/s/rD229uPGuMCAhAnVfrN6Sg)
+* [[4]时序预测竞赛之异常检测算法综述](https://zhuanlan.zhihu.com/p/336944097)
+* [[5]剔除异常值栅格计算器_数据分析师所需的统计学：异常检测](https://blog.csdn.net/weixin_39974030/article/details/112569610)
+* [[6]异常检测算法之(KNN)-K Nearest Neighbors](https://zhuanlan.zhihu.com/p/501691799)
+* [[7]一文读懂异常检测 LOF 算法(Python代码)](https://zhuanlan.zhihu.com/p/448276009)
+* [5] Nowak-Brzezińska, A., & Horyń, C. (2020). Outliers in rules-the comparision of LOF, COF and KMEANS algorithms. *Procedia Computer Science*, *176*, 1420-1429.
+* [6] 機器學習_學習筆記系列(98)：基於連接異常因子分析(Connectivity-Based Outlier Factor) - 劉智皓 (Chih-Hao Liu)
+* [[7] 异常检测之SOS算法](https://zhuanlan.zhihu.com/p/34438518)
+* [[8]SOS GitHub](https://github.com/jeroenjanssens/scikit-sos)
+* [[8]DBSCAN算法详解](https://zhuanlan.zhihu.com/p/515268801)
+* [[9] 异常检测算法 -- 孤立森林（Isolation Forest）剖析](https://zhuanlan.zhihu.com/p/74508141)
+* [[10]孤立森林(isolation Forest)-一个通过瞎几把乱分进行异常检测的算法](https://zhuanlan.zhihu.com/p/484495545)
+* [[11]孤立森林阅读](https://blog.csdn.net/MarkAustralia/article/details/120181899)
+* [Python——数据异常值检测算法](https://zhuanlan.zhihu.com/p/362358580)
+* [[17]时间序列异常检测](https://mp.weixin.qq.com/s/9TimTB_ccPsme2MNPuy6uA)
+
