@@ -2,7 +2,7 @@
 title: 时间序列分析-机器学习
 author: 王哲峰
 date: '2022-04-25'
-slug: timeseries-machinelearning
+slug: timeseries-forecast_ml
 categories:
   - timeseries
 tags:

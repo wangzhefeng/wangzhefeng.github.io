@@ -2,7 +2,7 @@
 title: 时间序列分析-深度学习
 author: 王哲峰
 date: '2022-04-25'
-slug: timeseries-model-dl
+slug: timeseries-forecast-dl
 categories:
   - timeseries
 tags:

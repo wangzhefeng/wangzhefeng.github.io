@@ -9,6 +9,48 @@ tags:
   - ml
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [滤波算法](#滤波算法)
+  - [限幅滤波(程序判断滤波法)](#限幅滤波程序判断滤波法)
+  - [中位数滤波](#中位数滤波)
+  - [算法平均滤波](#算法平均滤波)
+  - [递推平均滤波(滑动平均滤波)](#递推平均滤波滑动平均滤波)
+  - [中位数平均滤波(防脉冲干扰平均滤波)](#中位数平均滤波防脉冲干扰平均滤波)
+  - [限幅平均滤波](#限幅平均滤波)
+  - [一阶滞后滤波](#一阶滞后滤波)
+  - [加权递推平均滤波](#加权递推平均滤波)
+  - [消抖滤波](#消抖滤波)
+  - [限幅滤波](#限幅滤波)
+  - [低通滤波](#低通滤波)
+  - [高通滤波](#高通滤波)
+  - [带通滤波](#带通滤波)
+  - [带阻滤波](#带阻滤波)
+  - [卡尔曼滤波](#卡尔曼滤波)
+- [参考](#参考)
+- [滤波算法 Python 实现](#滤波算法-python-实现)
+</p></details><p></p>
+
 # 滤波算法
 
 ## 限幅滤波(程序判断滤波法)

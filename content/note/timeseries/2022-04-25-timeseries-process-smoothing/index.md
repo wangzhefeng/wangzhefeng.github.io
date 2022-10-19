@@ -34,10 +34,14 @@ details[open] summary {
 - [时间序列平滑简介](#时间序列平滑简介)
 - [差分运算、变化率](#差分运算变化率)
   - [差分运算](#差分运算)
+    - [p 阶差分](#p-阶差分)
+    - [k 步差分](#k-步差分)
+    - [差分运算 API](#差分运算-api)
   - [百分比变化率](#百分比变化率)
-- [移动索引](#移动索引)
+  - [移动索引](#移动索引)
 - [移动平均、指数平滑](#移动平均指数平滑)
-  - [API](#api)
+  - [时间序列预测](#时间序列预测)
+  - [描述趋势特征](#描述趋势特征)
   - [简单移动平均](#简单移动平均)
   - [加权移动平均](#加权移动平均)
   - [指数加权移动/指数平滑](#指数加权移动指数平滑)
@@ -50,8 +54,8 @@ details[open] summary {
 
 # 时间序列平滑简介
 
-数据平滑通常是为了消除一些极端值或测试误差. 即使有些极端值本身是真实的, 
-但是并没有反映出潜在的数据模式, 仍需处理
+数据平滑通常是为了消除一些极端值或测试误差. 
+即使有些极端值本身是真实的, 但是并没有反映出潜在的数据模式, 仍需处理
 
 * 数据平滑方法
     - 移动平均(weighted averaging, moving average), 既可以给定时间窗口内样本点相同权重, 或邻近点指定更高权重
@@ -70,42 +74,42 @@ details[open] summary {
     - 日历调增
     - 数学变换
 * 数据平滑工具
-    - .diff()
-    - .shift()
-    - .rolling()
-    - .expanding()
-    - .ewm()
-    - .pct_change()
+    - `.diff()`
+    - `.shift()`
+    - `.rolling()`
+    - `.expanding()`
+    - `.ewm()`
+    - `.pct_change()`
 
 # 差分运算、变化率
 
 ## 差分运算
 
-`$p$` 阶差分:
+### p 阶差分
 
 相距一期的两个序列值至之间的减法运算称为 `$1$` 阶差分运算; 对
 `$1$` 阶差分后序列在进行一次 `$1$` 阶差分运算称为 `$2$`
 阶差分; 以此类推, 对 `$p-1$` 阶差分后序列在进行一次 `$1$`
 阶差分运算称为 `$p$` 阶差分.
 
-`$\Delta x_{t} = x_{t-1} - x_{t-1}$`
+`$$\Delta x_{t} = x_{t-1} - x_{t-1}$$`
 
-`$\Delta^{2} x_{t} = \Delta x_{t} - \Delta x_{t-1}$`
+`$$\Delta^{2} x_{t} = \Delta x_{t} - \Delta x_{t-1}$$`
 
-`$\Delta^{p} x_{t} = \Delta^{p-1} x_{t} - \Delta^{p-1} x_{t-1}$`
+`$$\Delta^{p} x_{t} = \Delta^{p-1} x_{t} - \Delta^{p-1} x_{t-1}$$`
 
-`$k$` 步差分: 
+### k 步差分
 
-相距 $k$ 期的两个序列值之间的减法运算称为 $k$ 步差分运算.
+相距 `$k$` 期的两个序列值之间的减法运算称为 `$k$` 步差分运算.
 
-`$\Delta_{k}x_{t} = x_{t} - x_{t-k}$`
+`$$\Delta_{k}x_{t} = x_{t} - x_{t-k}$$`
 
-差分运算 API:
+### 差分运算 API
 
-- pandas.Series.diff
-- pandas.DataFrame.diff
-- pandas.DataFrame.percent
-- pandas.DataFrame.shift
+* pandas.Series.diff
+* pandas.DataFrame.diff
+* pandas.DataFrame.percent
+* pandas.DataFrame.shift
 
 ```python
 # 1 阶差分、1步差分
@@ -133,157 +137,38 @@ DataFrame/Series.pct_change(periods = 1,
                **kwargs)
 ```
 
-   - periods
-   - fill_method
-   - limit
-   - freq
+- periods
+- fill_method
+- limit
+- freq
 
-# 移动索引
+
+
+## 移动索引
 
 ```python
 pandas.DataFrame.shift(periods, freq, axis, fill_value)
 ```
 
+
+
+
+
 # 移动平均、指数平滑
-  
+
+移动平均作为时间序列中最基本的预测方法，计算虽然简单但却很实用。
+不仅可以用于预测，还有一些其他的重要作用，比如平滑序列波动，
+揭示时间序列的趋势特征
+
 * 移动平均(moving average, SMA)
 * 加权移动平均(weighted moving average, WMA)
 * 指数加权移动平均(exponential weighted moving average, EMA, EWMA)
 
-## API
+## 时间序列预测
 
-- Standard moving window functions
-  - ts.rolling(window, min_periods, center).count()
-  - ts.rolling(window, min\ *periods, center, win*\ type).sum()
-     - win_type
-        - boxcar
-        - triang
-        - blackman
-        - hamming
-        - bartlett
-        - parzen
-        - bohman
-        - blackmanharris
-        - nuttall
-        - barthann
-        - kaiser (needs beta)
-        - gaussian (needs std)
-        - general_gaussian (needs power, width)
-        - slepian (needs width)
-        - exponential (needs tau)
-  - ts.rolling(window, min\ *periods, center, win*\ type).mean()
-     - win_type
-        - boxcar
-        - triang
-        - blackman
-        - hamming
-        - bartlett
-        - parzen
-        - bohman
-        - blackmanharris
-        - nuttall
-        - barthann
-        - kaiser (needs beta)
-        - gaussian (needs std)
-        - general_gaussian (needs power, width)
-        - slepian (needs width)
-        - exponential (needs tau)
-  - ts.rolling(window, min_periods, center).median()
-  - ts.rolling(window, min_periods, center).var()
-  - ts.rolling(window, min_periods, center).std()
-  - ts.rolling(window, min_periods, center).min()
-  - ts.rolling(window, min_periods, center).max()
-  - ts.rolling(window, min_periods, center).corr()
-  - ts.rolling(window, min_periods, center).cov()
-  - ts.rolling(window, min_periods, center).skew()
-  - ts.rolling(window, min_periods, center).kurt()
-  - ts.rolling(window, min_periods, center).apply(func)
-  - ts.rolling(window, min_periods, center).aggregate()
-  - ts.rolling(window, min_periods, center).quantile()
-  - ts.window().mean()
-  - ts.window().sum()
-- Standard expanding window functions
-  - ts.expanding(window, min_periods, center).count()
-  - ts.expanding(window, min\ *periods, center, win*\ type).sum()
-     - win_type
-        - boxcar
-        - triang
-        - blackman
-        - hamming
-        - bartlett
-        - parzen
-        - bohman
-        - blackmanharris
-        - nuttall
-        - barthann
-        - kaiser (needs beta)
-        - gaussian (needs std)
-        - general_gaussian (needs power, width)
-        - slepian (needs width)
-        - exponential (needs tau)
-  - ts.expanding(window, min\ *periods, center, win*\ type).mean()
-     - win_type
-        - boxcar
-        - triang
-        - blackman
-        - hamming
-        - bartlett
-        - parzen
-        - bohman
-        - blackmanharris
-        - nuttall
-        - barthann
-        - kaiser (needs beta)
-        - gaussian (needs std)
-        - general_gaussian (needs power, width)
-        - slepian (needs width)
-        - exponential (needs tau)
-  - ts.expanding(window, min_periods, center).median()
-  - ts.expanding(window, min_periods, center).var()
-  - ts.expanding(window, min_periods, center).std()
-  - ts.expanding(window, min_periods, center).min()
-  - ts.expanding(window, min_periods, center).max()
-  - ts.expanding(window, min_periods, center).corr()
-  - ts.expanding(window, min_periods, center).cov()
-  - ts.expanding(window, min_periods, center).skew()
-  - ts.expanding(window, min_periods, center).kurt()
-  - ts.expanding(window, min_periods, center).apply(func)
-  - ts.expanding(window, min_periods, center).aggregate()
-  - ts.expanding(window, min_periods, center).quantile()
-- Exponentially-weighted moving window functions
-  - ts.ewm(window, min\ *periods, center, win*\ type).mean()
-     - win_type
-        - boxcar
-        - triang
-        - blackman
-        - hamming
-        - bartlett
-        - parzen
-        - bohman
-        - blackmanharris
-        - nuttall
-        - barthann
-        - kaiser (needs beta)
-        - gaussian (needs std)
-        - general_gaussian (needs power, width)
-        - slepian (needs width)
-        - exponential (needs tau)
-  - ts.ewm(window, min_periods, center).std()
-  - ts.ewm(window, min_periods, center).var()
-  - ts.ewm(window, min_periods, center).corr()
-  - ts.ewm(window, min_periods, center).cov()
 
-* Rolling
-```python
-s = pd.Series(
-   np.random.randn(1000),
-   index = pd.date_range("1/1/2000", periods = 1000)
-)
-s = s.cumsum()
-r = s.rolling(window = 60)
-```
+## 描述趋势特征
 
-* Expanding
 
 ## 简单移动平均
 
