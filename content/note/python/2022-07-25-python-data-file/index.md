@@ -9,6 +9,38 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [打开文件](#打开文件)
+- [使用文件](#使用文件)
+- [文件工具](#文件工具)
+  - [Python 3.X 中的文本和二进制文件](#python-3x-中的文本和二进制文件)
+  - [在文件中存储并解析 Python 对象](#在文件中存储并解析-python-对象)
+  - [用 pickle 存储 Python 原生对象](#用-pickle-存储-python-原生对象)
+  - [文件中打包二进制数据的存储与解析](#文件中打包二进制数据的存储与解析)
+  - [文件上下文管理](#文件上下文管理)
+  - [其他工具](#其他工具)
+</p></details><p></p>
 
 内置 `open` 函数会创建一个 **Python 文件对象**, 可以作为计算机上的一个文件链接. 
 在调用 `open` 之后, 你可以通过调用返回文件对象的方法来读写相关外部文件. 
