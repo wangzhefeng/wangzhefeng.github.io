@@ -37,9 +37,9 @@ menu:
     - name: "简历"
       url: "/resume/"
       weight: 8
-    # - name: "主题"
-    #   url: "/Ivy/"
-    #   weight: 8
+    - name: "主题"
+      url: "/Ivy/"
+      weight: 9
     # - name: "标签"
       # url: "/tags/"
       # weight: 9
@@ -56,7 +56,7 @@ menu:
   #   - name: "Demo"
   #     url: "/javascript/demo/"
   #     weight: 3
-    
+
 
 params:
   description: ""
@@ -84,6 +84,10 @@ params:
     repo: wangzhefeng/blog_comment
     issueTerm: pathname
     theme: github-light
+
+blackfriday:
+    extensionsmask: ["noIntraEmphasis"]
+    fractions: false
 
 # HTML 渲染
 markup:

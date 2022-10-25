@@ -4,7 +4,6 @@ disable_mathjax: true
 disable_highlight: true
 ---
 
-
 ##
 
 2017 年我从上海大学数学系毕业。开始了在上海工作的日子。

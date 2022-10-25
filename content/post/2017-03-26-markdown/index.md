@@ -2,7 +2,7 @@
 title: RMarkdown、Rmd、Markdown
 author: 王哲峰
 date: '2017-03-26'
-slug: rmarkdown-rmd-markdown
+slug: markdown
 categories:
   - markdown
 tags:
@@ -71,6 +71,7 @@ details[open] summary {
   - [代码高亮](#代码高亮)
   - [Blog Markdown](#blog-markdown)
     - [数学公式](#数学公式)
+  - [插入 HTML](#插入-html)
 - [RMarkdwon](#rmarkdwon)
 - [参考资料](#参考资料)
 </p></details><p></p>
@@ -523,6 +524,10 @@ $a^{2}+b^{2} = c^{2}$
 - RMarkdown
 
   - $a^{2}+b^{2} = c^{2}$
+
+## 插入 HTML
+
+<iframe allowtransparency="yes" frameborder="0" width="100%" height="300" src="click.html"></iframe>
 
 # RMarkdwon
 
