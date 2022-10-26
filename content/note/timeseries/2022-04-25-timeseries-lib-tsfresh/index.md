@@ -31,12 +31,17 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [时间序列特征工程](#时间序列特征工程)
 - [tsfresh 安装](#tsfresh-安装)
 - [tsfresh 数据格式](#tsfresh-数据格式)
   - [Flat DataFrame](#flat-dataframe)
   - [Stacked DataFrame](#stacked-dataframe)
   - [Dictionary of flat DataFrame](#dictionary-of-flat-dataframe)
 </p></details><p></p>
+
+# 时间序列特征工程
+
+* [时间序列特征工程](../../feature_engine/2022-09-13-feature-engine-type-timeseries/index.md)
 
 # tsfresh 安装
 
@@ -48,9 +53,9 @@ $ pip install tsfresh
 
 输入数据格式: 
 
-   - Flat DataFrame
-   - Stacked DataFrame
-   - dictionary of flat DataFrame
+* Flat DataFrame
+* Stacked DataFrame
+* dictionary of flat DataFrame
 
 | column_id | column_value | column_sort | column_kind |
 |-----------|--------------|-------------|-------------|
@@ -75,33 +80,32 @@ $ pip install tsfresh
 
 ## Dictionary of flat DataFrame
 
-{ "x”:
-
-| id | time | value    |
-|----|------|----------|
-| A  | t1   | x(A, t1) |
-| A  | t2   | x(A, t2) |
-| A  | t3   | x(A, t3) |
-| B  | t1   | x(B, t1) |
-| B  | t2   | x(B, t2) |
-| B  | t3   | x(B, t3) |
-
-, "y”:
-
-| id | time | value    |
-|----|------|----------|
-| A  | t1   | y(A, t1) |
-| A  | t2   | y(A, t2) |
-| A  | t3   | y(A, t3) |
-| B  | t1   | y(B, t1) |
-| B  | t2   | y(B, t2) |
-| B  | t3   | y(B, t3) |
-
+```
+{ 
+    "x”:
+        | id | time | value    |
+        |----|------|----------|
+        | A  | t1   | x(A, t1) |
+        | A  | t2   | x(A, t2) |
+        | A  | t3   | x(A, t3) |
+        | B  | t1   | x(B, t1) |
+        | B  | t2   | x(B, t2) |
+        | B  | t3   | x(B, t3) |
+  , "y”:
+        | id | time | value    |
+        |----|------|----------|
+        | A  | t1   | y(A, t1) |
+        | A  | t2   | y(A, t2) |
+        | A  | t3   | y(A, t3) |
+        | B  | t1   | y(B, t1) |
+        | B  | t2   | y(B, t2) |
+        | B  | t3   | y(B, t3) |
 }
+```
 
 输出数据格式: 
 
-| id | x\ *feature*\ 1 | … | x\ *feature*\ N | y\ *feature*\ 1 | … | y\ *feature*\ N |
+| id | x feature 1 | … | x feature N | y feature 1 | `$\ldots$` | y feature N |
 |----|-----------------|---|-----------------|-----------------|---|-----------------|
 | A  | …               | … | …               | …               | … | …               |
 | B  | …               | … | …               | …               | … | …               |
