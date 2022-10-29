@@ -34,9 +34,14 @@ details[open] summary {
 - [时间序列特征工程](#时间序列特征工程)
 - [tsfresh 安装](#tsfresh-安装)
 - [tsfresh 数据格式](#tsfresh-数据格式)
-  - [Flat DataFrame](#flat-dataframe)
-  - [Stacked DataFrame](#stacked-dataframe)
-  - [Dictionary of flat DataFrame](#dictionary-of-flat-dataframe)
+  - [输入数据格式](#输入数据格式)
+    - [Flat DataFrame](#flat-dataframe)
+    - [Stacked DataFrame](#stacked-dataframe)
+    - [Dictionary of flat DataFrame](#dictionary-of-flat-dataframe)
+  - [输出数据格式](#输出数据格式)
+- [scikit-learn Transformers](#scikit-learn-transformers)
+  - [Feature extraction](#feature-extraction)
+  - [Feature selection](#feature-selection)
 </p></details><p></p>
 
 # 时间序列特征工程
@@ -51,7 +56,7 @@ $ pip install tsfresh
 
 # tsfresh 数据格式
 
-输入数据格式: 
+## 输入数据格式 
 
 * Flat DataFrame
 * Stacked DataFrame
@@ -61,7 +66,13 @@ $ pip install tsfresh
 |-----------|--------------|-------------|-------------|
 | id        | value        | sort        | kind        |
 
-## Flat DataFrame
+
+适合的 API:
+
+* `tsfresh.extract_features()`
+* `tsfresh.`
+
+### Flat DataFrame
 
 | id       | time     | x        | y        |          |          |          |          |          |    | A  | t1  | x(A, t1) | y(A, t1) |
 |----------|----------|----------|----------|----------|----------|----------|----------|----------|----|----|----|----|----|
@@ -69,7 +80,7 @@ $ pip install tsfresh
 | x(B, t1) | y(B, t1) | B        | t2       | x(B, t2) | y(B, t2) | B        | t3       | x(B, t3) |    |    |     |          |          |
 | y(B, t3) |          |          |          |          |          |          |          |          |    |    |     |          |          |
 
-## Stacked DataFrame
+### Stacked DataFrame
 
 | id | time | kind | value    |   |    |   |          |   |   | A | t1       | x | x(A, t1) |
 |----|------|------|----------|---|----|---|----------|---|---|---|----------|---|----------|
@@ -78,7 +89,7 @@ $ pip install tsfresh
 | B  | t2   | x    | x(B, t2) | B | t3 | x | x(B, t3) | B |t1 |y  | y(B, t1) |   |          |
 | B  | t2   | y    | y(B, t2) | B | t3 | y | y(B, t3) |   |   |   |          |   |          |
 
-## Dictionary of flat DataFrame
+### Dictionary of flat DataFrame
 
 ```
 { 
@@ -103,9 +114,21 @@ $ pip install tsfresh
 }
 ```
 
-输出数据格式: 
+## 输出数据格式
 
 | id | x feature 1 | … | x feature N | y feature 1 | `$\ldots$` | y feature N |
 |----|-----------------|---|-----------------|-----------------|---|-----------------|
 | A  | …               | … | …               | …               | … | …               |
 | B  | …               | … | …               | …               | … | …               |
+
+
+# scikit-learn Transformers
+
+## Feature extraction
+
+* `tsfresh.FeatureAugmenter`
+
+## Feature selection
+
+* `tsfresh.FeatureSelector`
+
