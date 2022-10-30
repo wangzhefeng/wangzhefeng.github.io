@@ -1,7 +1,7 @@
 ---
-title: 时间序列分类及分类库 pyts
+title: Lib pyts 时间序列分类
 author: 王哲峰
-date: '2022-10-26'
+date: '2022-04-25'
 slug: timeseries-lib-pyts
 categories:
   - timeseries

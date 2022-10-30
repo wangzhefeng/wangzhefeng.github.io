@@ -1,5 +1,5 @@
 ---
-title: Lib tsfresh
+title: Lib tsfresh 时间序列特征工程
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-lib-tsfresh
@@ -42,6 +42,11 @@ details[open] summary {
 - [scikit-learn Transformers](#scikit-learn-transformers)
   - [Feature extraction](#feature-extraction)
   - [Feature selection](#feature-selection)
+    - [Feature extraction and selection](#feature-extraction-and-selection)
+- [大数据](#大数据)
+  - [Dask](#dask)
+  - [PySpark](#pyspark)
+- [Rolling 和 时间序列预测](#rolling-和-时间序列预测)
 </p></details><p></p>
 
 # 时间序列特征工程
@@ -132,3 +137,42 @@ $ pip install tsfresh
 
 * `tsfresh.FeatureSelector`
 
+### Feature extraction and selection
+
+* `tsfresh.RelevantFeatureAugmenter`
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
+from tsfresh.examples import load_robot_execution_failures
+from tsfresh.transformers import RelevantFeatureAugmenter
+import pandas as pd
+
+# download data
+from tsfresh.examples.robot_execution_failures import download_robot_execution_failures
+download_robot_execution_failures()
+
+pipeline = Pipeline([
+    ("augmenter", RelevantFeatureAugmenter(column_id = "id", column_sort = "time")),
+    ("classifier", RandomForestClassifier()),
+])
+
+df_ts, y = load_robot_execution_failures()
+X = pd.DataFrame(index = y.index)
+
+pipeline.set_params(augmenter__timeseries_container = df_ts)
+pipeline.fit(X, y)
+```
+
+
+# 大数据
+
+## Dask
+
+
+## PySpark
+
+# Rolling 和 时间序列预测
+
+
+![img](images/rolling_mechanism_1.png)

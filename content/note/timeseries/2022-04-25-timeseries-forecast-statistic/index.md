@@ -1,5 +1,5 @@
 ---
-title: 时间序列分析-统计模型
+title: 时间序列预测-统计模型
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-forecast-statistic
