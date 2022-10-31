@@ -31,15 +31,6 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [传统时间序列建模概述](#传统时间序列建模概述)
-  - [简介](#简介)
-  - [优缺点及意义](#优缺点及意义)
-    - [优点](#优点)
-    - [缺点](#缺点)
-    - [意义](#意义)
-  - [自回归](#自回归)
-    - [一般回归问题](#一般回归问题)
-    - [自回归问题](#自回归问题)
 - [平稳时间序列分析](#平稳时间序列分析)
   - [AR 模型](#ar-模型)
     - [AR(`$p$`) 模型](#arp-模型)
@@ -91,9 +82,8 @@ details[open] summary {
     - [TODO](#todo-5)
   - [VARMAX](#varmax)
     - [TODO](#todo-6)
+- [参考](#参考)
 </p></details><p></p>
-
-# 传统时间序列建模概述
 
 ## 简介
 
@@ -697,3 +687,6 @@ print(y_hat)
 
 ### TODO
 
+# 参考
+
+* [[1]时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)

@@ -48,6 +48,7 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
+
 # 时间序列基本面规则法介绍
 
 要预测一个时间序列，我们首先需要发现其变化的规律。最基本的方法，就是通过人工经验，
@@ -271,3 +272,4 @@ plt.show()
 
 * https://www.jianshu.com/p/31e20f00c26f?spm=5176.12282029.0.0.36241491UUhnZE
 * https://codeantenna.com/a/8Daz78MfDp
+* [[1]时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
