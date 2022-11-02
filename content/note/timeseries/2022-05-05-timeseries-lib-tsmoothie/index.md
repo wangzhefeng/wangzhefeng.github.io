@@ -1,7 +1,7 @@
 ---
 title: Lib tsmoothie 时间序列光滑和异常检测
 author: 王哲峰
-date: '2022-04-25'
+date: '2022-05-05'
 slug: timeseries-lib-tsmoothie
 categories:
   - timeseries

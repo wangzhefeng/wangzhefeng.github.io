@@ -1,7 +1,7 @@
 ---
 title: Lib tslearn 时间序列预测
 author: 王哲峰
-date: '2022-04-25'
+date: '2022-05-04'
 slug: timeseries-lib-tslearn
 categories:
   - timeseries

@@ -1,7 +1,7 @@
 ---
 title: Lib tsfresh 时间序列特征工程
 author: 王哲峰
-date: '2022-04-25'
+date: '2022-05-03'
 slug: timeseries-lib-tsfresh
 categories:
   - timeseries
