@@ -35,6 +35,10 @@ details[open] summary {
   - [加法模型](#加法模型)
   - [乘法模型](#乘法模型)
   - [加法乘法混合模型](#加法乘法混合模型)
+- [时间序列分解实现示例](#时间序列分解实现示例)
+  - [时序数据](#时序数据)
+  - [时序乘法模型分解](#时序乘法模型分解)
+  - [时序加法模型分解](#时序加法模型分解)
 - [时间序列的分解方法](#时间序列的分解方法)
   - [使用移动平均法分离出显性的周期性波动](#使用移动平均法分离出显性的周期性波动)
   - [将业务周期性波动效应和随机波动进行分解](#将业务周期性波动效应和随机波动进行分解)
@@ -146,11 +150,112 @@ details[open] summary {
 * `$\sum_{t=1}^{k}S_{t} = k$`，`$k$` 为季节性周期长度
 * `$I_{t}$` 是独立随机变量序列，服从正态分布
 
+
+# 时间序列分解实现示例
+
+有多种算法和方法可以将时间序列分解为三个分量。以下的经典方法，经常会使用并且非常直观。
+
+1. 使用移动/滚动平均值计算趋势分量 T
+2. 对序列进行去趋势处理，Y-T 用于加法模型，Y/T 用于乘法模型
+3. 通过取每个季节的去趋势序列的平均值来计算季节分量 S
+4. 残差分量 R 的计算公式为：对于加法模型 R = Y-T-R，对于乘法模型 R = Y/(TR)
+
+还有其他几种可用于分解的方法，例如 STL、X11 和 SEATS。这些是先进的方法，
+是对经典方法的基本方法的补充，并改进了它的缺点
+
+## 时序数据
+
+```python
+# 使用1948年至1961年的美国航空客运量数据集
+# https://www.kaggle.com/datasets/ashfakyeafi/air-passenger-data-for-time-series-analysis
+
+import plotly.express as px
+import pandas as pd
+
+# Read in the data
+data = pd.read_csv('AirPassengers.csv', index_col = 0)
+data.index = pd.to_datetime(data.index)
+
+# Plot the data
+fig = px.line(
+    data, 
+    x = data.index, 
+    y = '#Passengers',
+    labels = ({
+        '#Passengers': 'Passengers', 
+        'Month': 'Date'
+    })
+)
+fig.update_layout(
+    template = "simple_white", 
+    font = dict(size = 18),
+    title_text = 'Airline Passengers', 
+    width = 650, 
+    title_x = 0.5, 
+    height = 400
+)
+fig.show()
+```
+
+从图中我们观察到趋势是增加的，每年也有季节性。波动的大小随着时间的推移而增加，因此我们可以说这是一个乘法模型
+
+## 时序乘法模型分解
+
+```python
+from statsmodels.tsa.seasonal import seasonal_decompose
+import matplotlib.pyplot as plt
+
+# Plot the decomposition for multiplicative series
+data.rename(
+    columns = {
+        '#Passengers': 'Multiplicative Decomposition'
+    }, 
+    inplace = True
+)
+decomposition_plot_multi = seasonal_decompose(
+    data['Multiplicative Decomposition'],
+    model = 'multiplicative'
+)
+decomposition_plot_multi.plot()
+plt.show()
+```
+
+从上图中可以看到，该函数确实成功地捕获了这三个组成部分
+
+## 时序加法模型分解
+
+通过应用 Scipy 的函数 boxcox ，可以使用 Box-Cox 变换稳定方差，这样可以将序列转换为一个加法模型
+
+```python
+# Import packages
+from statsmodels.tsa.seasonal import seasonal_decompose
+import matplotlib.pyplot as plt
+from scipy.stats import boxcox
+
+# Apply boxcox to acquire additive model
+data['Additive Decomposition'], lam = boxcox(data['#Passengers'])
+
+# Plot the decomposition for additive series
+decomposition_plot_add = seasonal_decompose(
+    data['Additive Decomposition'],
+    model = 'additive'
+)
+decomposition_plot_add.plot()
+plt.show()
+```
+
+这个函数也很好地捕获了这三个组件。但是我们看到残差在早期和后期具有更高的波动性。
+所以在为这个时间序列构建预测模型时，需要考虑到这一点
+
+
+
+
+
 # 时间序列的分解方法
 
 时间序列数据的预测值就是:
 
-长期趋势(线性回归估计值) + 循环效应(循环周期各位置的均值) + 周期效应(业务周期各位置的均值)
+> 长期趋势(线性回归估计值) + 循环效应(循环周期各位置的均值) + 周期效应(业务周期各位置的均值)
 
 就意味着，能通过时间长度和所在周期的位置给出一个未知时间点的预测值
 
@@ -276,11 +381,11 @@ details[open] summary {
 
 一般而言, 时间序列周期性分为三种: 
 
-- 符号性周期: 表示只有一个以上的符号是周期性的, 并且部分地出现
+* 符号性周期: 表示只有一个以上的符号是周期性的, 并且部分地出现
     - 例如序列 `f` bcn `f` kgb `f` ops 中的 `f` 有周期性, 它的周期是 4, 可以用 CONV 方法检测
-- 部分周期性: 表示有一个以上的符号是周期性的, 并且部分地出现
+* 部分周期性: 表示有一个以上的符号是周期性的, 并且部分地出现
     - 例如序列 ansd `cd` mn `cd` ca `cd` as `cd` mc 中 `cd` 具有周期性, 周期从位置 4 开始, 可以用 PARPER 方法检测
-- 分段周期性: 整个序列被表示为一个周期模式
+* 分段周期性: 整个序列被表示为一个周期模式
 
 ## 傅里叶变换
 
