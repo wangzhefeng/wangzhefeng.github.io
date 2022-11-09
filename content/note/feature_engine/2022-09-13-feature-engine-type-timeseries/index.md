@@ -44,13 +44,12 @@ details[open] summary {
   - [时间特征(维度特征)](#时间特征维度特征)
     - [特征分类](#特征分类)
     - [特征解释](#特征解释)
-    - [Python API](#python-api)
   - [历史特征(统计特征)](#历史特征统计特征)
     - [特征解释](#特征解释-1)
-    - [Python API](#python-api-1)
+    - [Python API](#python-api)
   - [窗口特征](#窗口特征)
   - [交叉特征](#交叉特征)
-    - [Python API](#python-api-2)
+    - [Python API](#python-api-1)
   - [转换特征](#转换特征)
     - [统计转换特征](#统计转换特征)
     - [高维空间转换特征](#高维空间转换特征)
@@ -61,13 +60,14 @@ details[open] summary {
     - [基于神经网络的特征工程](#基于神经网络的特征工程)
   - [分类特征](#分类特征)
     - [字典特征(BoP)](#字典特征bop)
-    - [形态特征](#形态特征)
+    - [形态特征(Shapelet)](#形态特征shapelet)
   - [隐蔽特征](#隐蔽特征)
     - [基于线性模型的特征](#基于线性模型的特征)
   - [元特征](#元特征)
     - [元特征抽取](#元特征抽取)
     - [预测](#预测)
 - [时间序列特征构造基本准则](#时间序列特征构造基本准则)
+- [参考](#参考)
 </p></details><p></p>
 
 # 时间序列预处理
@@ -109,7 +109,6 @@ details[open] summary {
 
 `$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
 
-
 ### 什么时候用归一化？什么时候用标准化？
 
 * 如果对输出结果范围有要求，用归一化
@@ -132,7 +131,6 @@ details[open] summary {
 \end{cases}$$`
 
 也可以设计更多的规则，进行多值化的处理
-
 
 # 时间序列特征
 
@@ -198,59 +196,6 @@ details[open] summary {
     - 基本特征
 - 高峰时段、是否上班、是否营业、是否双休日
     - 主要根据业务场景进行挖掘
-
-### Python API
-
-```python
-# 年、季度、季节、月、星期、日、时、分、秒等
-data_df['date'] = pd.to_datetime(data_df['date'], format = '%m/%d/%y')
-
-data_df['year'] = data_df['date'].dt.year
-data_df['quarter'] = data_df['date'].dt.quarter
-data_df['month'] = data_df['date'].dt.month
-data_df['day'] = data_df['date'].dt.day
-data_df['hour'] = data_df['date'].dt.hour
-data_df['minute'] = data_df['date'].dt.minute
-data_df['second'] = data_df['date'].dt.second
-data_df['dayofweek'] = data_df['date'].dt.dayofweek
-data_df['weekofyear'] = data_df['date'].dt.week
-
-data_df['is_year_start'] = data_df['date'].dt.is_year_start
-data_df['is_year_end'] = data_df['date'].dt.is_year_end
-data_df['is_quarter_start'] = data_df['date'].dt.is_quarter_start
-data_df['is_quarter_end'] = data_df['date'].dt.is_quarter_end
-data_df['is_month_start'] = data_df['date'].dt.is_month_start
-data_df['is_month_end'] = data_df['date'].dt.is_month_end
-
-# 是否是一天的高峰时段 8-10
-data_df['day_high'] = data_df['hour'].apply(lambda x: 0 if 0 < x < 8 else 1)
-
-# 构造时间特征
-def get_time_fe(data, col, n, one_hot = False, drop = True):
-    '''
-    data: DataFrame
-    col: column name
-    n: 时间周期
-    '''
-    data[col + '_sin'] = round(np.sin(2*np.pi / n * data[col]), 6)
-    data[col + '_cos'] = round(np.cos(2*np.pi / n * data[col]), 6)
-    if one_hot:
-        ohe = OneHotEncoder()
-        X = OneHotEncoder().fit_transform(data[col].values.reshape(-1, 1)).toarray()
-        df = pd.DataFrame(X, columns=[col + '_' + str(int(i)) for i in range(X.shape[1])])
-        data = pd.concat([data, df], axis=1)
-        if drop:
-            data = data.drop(col, axis=1)
-
-    return data
-
-    data_df = get_time_fe(data_df, 'hour', n=24, one_hot=False, drop=False)
-    data_df = get_time_fe(data_df, 'day', n=31, one_hot=False, drop=True)
-    data_df = get_time_fe(data_df, 'dayofweek', n=7, one_hot=True, drop=True)
-    data_df = get_time_fe(data_df, 'season', n=4, one_hot=True, drop=True)
-    data_df = get_time_fe(data_df, 'month', n=12, one_hot=True, drop=True)
-    data_df = get_time_fe(data_df, 'weekofyear', n=53, one_hot=False, drop=True)
-```
 
 ## 历史特征(统计特征)
 
@@ -482,8 +427,7 @@ Encoder 的输出可以当做一个输入被“压缩”的向量，那么当网
 
 ![img](images/dict.png)
 
-
-### 形态特征
+### 形态特征(Shapelet)
 
 形态方法旨在捕捉时间序列分类任务中作为分类依据的有代表性的子序列形状。
 2012 年提出的 Shapelet 方法就是搜索这些候选的子序列形状以找到分类的依据，
@@ -569,3 +513,9 @@ residual = np.mean(np.abs(y - preds))
 * 离散化对 xgboost 效果的提升也很显著
 * 对标签做个平滑效果可能会显著提升
 * 多做数据分析, 多清洗数据
+
+
+# 参考
+
+* [时间序列特征工程](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247485154&idx=1&sn=e2b24a279902b6ddee1c3b83a9e3dd56&chksm=cecef317f9b97a01b86245fc7a8797b7618d752fdf6a589733bef3ddd07cb70a30f78b538899&cur_album_id=1588681516295979011&scene=189#wechat_redirect)
+* [主成分分析](https://mp.weixin.qq.com/s?__biz=MjM5MjAxMDM4MA==&mid=2651890105&idx=1&sn=3c425c538dacd67b1732948c5c015b46&scene=21#wechat_redirect)
