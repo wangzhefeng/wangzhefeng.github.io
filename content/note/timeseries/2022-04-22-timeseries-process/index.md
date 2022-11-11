@@ -65,12 +65,10 @@ details[open] summary {
       - [差分运算 API](#差分运算-api)
     - [百分比变化率](#百分比变化率)
     - [移动索引](#移动索引)
-  - [移动平均、指数平滑](#移动平均指数平滑)
-    - [时间序列预测](#时间序列预测)
-    - [描述趋势特征](#描述趋势特征)
-    - [简单移动平均](#简单移动平均)
+  - [移动平均和指数平滑](#移动平均和指数平滑)
+    - [移动平均](#移动平均)
     - [加权移动平均](#加权移动平均)
-    - [指数加权移动/指数平滑](#指数加权移动指数平滑)
+    - [指数加权移动平均/指数平滑](#指数加权移动平均指数平滑)
       - [一次指数平滑](#一次指数平滑)
       - [二次指数平滑](#二次指数平滑)
       - [三次指数平滑](#三次指数平滑)
@@ -95,7 +93,7 @@ details[open] summary {
     - [参考](#参考)
     - [滤波算法 Python 实现](#滤波算法-python-实现)
 - [时间序列降噪](#时间序列降噪)
-  - [移动平均](#移动平均)
+  - [移动平均](#移动平均-1)
   - [傅里叶变换](#傅里叶变换)
   - [小波分析](#小波分析)
 </p></details><p></p>
@@ -617,18 +615,13 @@ ynew5 = f5(xnew)
 即使有些极端值本身是真实的, 但是并没有反映出潜在的数据模式, 仍需处理
 
 * 数据平滑方法
-    - 移动平均(weighted averaging, moving average), 既可以给定时间窗口内样本点相同权重, 或邻近点指定更高权重
-    - 指数平滑(exponential smoothing), 所有的指数平滑法都要更新上一时间步长的计算结果, 
-      并使用当前时间步长的数据中包含的新信息. 通过"混合"新信息和旧信息来实现, 
-      而相关的新旧信息的权重由一个可调整的参数来控制
-        - 一次指数平滑(exponential smoothing)   
-            - 从最邻近到最早的数据点的权重呈现指数型下降的规律, 针对没有趋势和季节性的序列
-        - 二次指数平滑(Holt exponential smoothing)   
-            - 通过引入一个额外的系数来解决指数平滑无法应用于具有趋势性数据的问题, 
-              针对有趋势但没有季节性的序列
-        - 三次指数平滑(Holt-Winters exponential smoothing)
-            - 通过再次引入一个新系数的方式同时解决了二次平滑无法解决具有季节性变化数据的不足
     - 差分运算
+    - 移动平均
+    - 加权移动平均
+    - 指数加权移动平均/指数平滑
+        - 一次指数平滑
+        - 二次指数平滑
+        - 三次指数平滑
     - 时间序列分解
     - 日历调增
     - 数学变换
@@ -689,7 +682,8 @@ pandas.DataFrame.diff(periods = -1, axis = 0)
 当前值与前一个值之间的百分比变化
 
 ```python
-DataFrame/Series.pct_change(periods = 1, 
+DataFrame/Series.pct_change(
+    periods = 1, 
                fill_method = 'pad', 
                limit = None, 
                freq = None, 
@@ -701,8 +695,6 @@ DataFrame/Series.pct_change(periods = 1,
 - limit
 - freq
 
-
-
 ### 移动索引
 
 ```python
@@ -713,55 +705,43 @@ pandas.DataFrame.shift(periods, freq, axis, fill_value)
 
 
 
-## 移动平均、指数平滑
-
-移动平均作为时间序列中最基本的预测方法，计算虽然简单但却很实用。
-不仅可以用于预测，还有一些其他的重要作用，比如平滑序列波动，
-揭示时间序列的趋势特征
-
-* 移动平均(moving average, SMA)
-* 加权移动平均(weighted moving average, WMA)
-* 指数加权移动平均(exponential weighted moving average, EMA, EWMA)
-
-### 时间序列预测
 
 
-### 描述趋势特征
+## 移动平均和指数平滑
 
+* 移动平均(Moving Average, MA)
+    - 给定时间窗口内样本点相同权重
+* 加权移动平均(Weighted Moving Average, WMA)
+    - 给邻近点指定更高权重
+* 指数加权移动平均/指数平滑(Exponential Weighted Moving Average, EWMA)/(Exponential Smoothing, ES)
+    - 所有的指数平滑法都要更新上一时间步长的计算结果, 
+      并使用当前时间步长的数据中包含的新信息. 通过"混合"新信息和旧信息来实现, 
+      而相关的新旧信息的权重由一个可调整的参数来控制 
+    - 一次指数平滑(Simple Exponential Smoothing, SES)
+        - 从最邻近到最早的数据点的权重呈现指数型下降的规律, 针对没有趋势和季节性的序列
+    - 二次指数平滑(Holt/Double Exponential Smoothing, HES/DES)
+        - 通过引入一个额外的系数来解决指数平滑无法应用于具有趋势性数据的问题, 
+          针对有趋势但没有季节性的序列
+    - 三次指数平滑(Holt-Winters/Triple Exponential Smoothing, HWES/TES)
+        - 通过再次引入一个新系数的方式同时解决了二次平滑无法解决具有季节性变化数据的不足
 
-### 简单移动平均
+### 移动平均
 
-`$$m_t = \frac{1}{k}\sum_{i=1}^{k}y_{t-i}$$`
+`$$m_{t} = \frac{1}{k}\sum_{i=1}^{k}y_{t-i}$$`
 
 ### 加权移动平均
 
-`$$m_t = \sum_{i=1}^{k}\omega_{i}y_{t-i}$$`
+`$$m_{t} = \sum_{i=1}^{k}\omega_{i}y_{t-i}$$`
 
-### 指数加权移动/指数平滑
+### 指数加权移动平均/指数平滑
 
-- 产生背景: 
-    - 指数平滑由布朗提出、他认为时间序列的态势具有稳定性或规则性, 所以时间序列可被合理地顺势推延; 
-      他认为最近的过去态势, 在某种程度上会持续的未来, 所以将较大的权数放在最近的资料. 
-    - 指数平滑是在 20 世纪 50 年代后期提出的, 并激发了一些十分成功的预测方法. 
-      使用指数平滑方法生成的预测是过去观测值的加权平均值, 并且随着过去观测值离预测值的距离的增大,
-      权重呈指数型衰减. 换句话说, 观测值越近, 相应的权重越高. 该框架能够快速生成可靠的预测结果, 
-      并且适用于广泛的时间序列, 这是一个巨大的优势并且对于工业应用来说非常重要.
-- 基本原理: 
-    - 移动平均(weighted averaging, moving average)
-         - 既可以给定时间窗口内样本点相同权重, 或邻近点指定更高权重
-    - 指数平滑(exponential smoothing), 所有的指数平滑法都要更新上一时间步长的计算结果, 
-      并使用当前时间步长的数据中包含的新信息. 通过"混合"新信息和旧信息来实现, 
-      而相关的新旧信息的权重由一个可调整的参数来控制
-        - 一次指数平滑(exponential smoothing)
-            - 从最邻近到最早的数据点的权重呈现指数型下降的规律, 针对没有趋势和季节性的序列
-        - 二次指数平滑(Holt exponential smoothing) 
-            - 通过引入一个额外的系数来解决指数平滑无法应用于具有趋势性数据的问题, 
-              针对有趋势但没有季节性的序列
-        - 三次指数平滑(Holt-Winters exponential smoothing)
-            - 通过再次引入一个新系数的方式同时解决了二次平滑无法解决具有季节性变化数据的不足
-- 方法应用: 
-    - 指数平滑法是生产预测中常用的一种方法. 也用于中短期经济发展趋势预测, 
-      所有预测方法中, 指数平滑是用得最多的一种. 
+指数平滑由布朗提出、他认为时间序列的态势具有稳定性或规则性, 所以时间序列可被合理地顺势推延; 
+他认为最近的过去态势, 在某种程度上会持续的未来, 所以将较大的权数放在最近的资料 
+
+指数平滑是在 20 世纪 50 年代后期提出的, 并激发了一些十分成功的预测方法. 
+使用指数平滑方法生成的预测是过去观测值的加权平均值, 并且随着过去观测值离预测值的距离的增大,
+权重呈指数型衰减. 换句话说, 观测值越近, 相应的权重越高. 该框架能够快速生成可靠的预测结果, 
+并且适用于广泛的时间序列, 这是一个巨大的优势并且对于工业应用来说非常重要
 
 #### 一次指数平滑
 
@@ -805,6 +785,47 @@ S_{i} &= \alpha x_{i}+(1-\alpha) S_{i-1} \\
 
 * `$s_{i}$` 表示最后一个时间点对应的值
 * `$h=1$` 表示下个预测值
+
+示例:
+
+```python
+import itertools
+import warnings
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from sklearn.metrics import mean_absolute_error
+
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing
+from statsmodels.tsa.seasonal import seasonal_decompose
+import statsmodels.tsa.api as smt
+
+warnings.filterwarnings("ignore")
+
+
+# ------------------------------
+# 数据
+# ------------------------------
+# resolution = 1week
+data = sm.datasets.co2.load_pandas()
+y = data.data
+print(y)
+
+# resolution = 1month
+y = y["co2"].resample("MS").mean()
+# y.isnull().sum()
+
+# 缺失值填充(平均前后值填充)
+y = y.fillna(y.bfill())
+y.isnull().sum()
+y.plot(figsize = (10, 7))
+plt.show()
+```
+
+
 
 #### 二次指数平滑
 
@@ -881,6 +902,15 @@ c_{t} = \frac{\alpha^{2}}{2(1 - \alpha)^{2}}(S^{(1)}_{t} - 2S^{(2)}_{t} + S^{(3)
 
 * 如果时间序列长度大于 20, 看情况调整第一项的值, 一般取第一项就行, 
   因为数据多, `$y^{*}_{0}$` 的取值对最后的预测结果影响不大
+
+
+
+
+
+
+
+
+
 
 
 ## 滤波算法
@@ -1310,6 +1340,11 @@ if __name__ == "__main__":
    plt.plot(result)
    plt.show()
 ```
+
+
+
+
+
 
 # 时间序列降噪
 
