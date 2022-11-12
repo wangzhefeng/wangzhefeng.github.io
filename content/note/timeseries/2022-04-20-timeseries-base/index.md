@@ -910,7 +910,6 @@ variance1=53.911003, variance2=126.866920
 * Box-Pierce 检验
 * Ljung-Box 检验
 
-
 ### 自相关图
 
 白噪声完全无自相关性，除 0 阶自相关系数为 1 外，理想情况下 `$\forall k(k > 0)$`，

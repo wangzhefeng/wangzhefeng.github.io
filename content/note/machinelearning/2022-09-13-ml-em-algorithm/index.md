@@ -15,4 +15,7 @@ tags:
 
 ## 高斯混合模型
 
+* https://mp.weixin.qq.com/s/9qRGoDS9npqyLwAfKRu-zQ
+
+
 ## EM算法的推广

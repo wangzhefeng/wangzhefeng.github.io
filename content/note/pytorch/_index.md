@@ -28,6 +28,9 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [TensorFlow 和 PyTorch](#tensorflow-和-pytorch)
+- [PyTorch 技巧](#pytorch-技巧)
+  - [指定 GPU 编号](#指定-gpu-编号)
+  - [查看模型每层输出详情](#查看模型每层输出详情)
 - [文档](#文档)
 </p></details><p></p>
 
@@ -51,6 +54,35 @@ details[open] summary {
    学习另外一个将比较容易。两种框架都掌握的话，能够参考的开源模型案例更多，
    并且可以方便地在两种框架之间切换
 
+# PyTorch 技巧
+
+* [参考地址](https://mp.weixin.qq.com/s?__biz=MzkyMzI3MTA0Mw==&mid=2247530314&idx=1&sn=0a6a3ff0f81eee0652e8d7d0072badb1&chksm=c1e59da6f69214b032d9482642dfd823f1cae931609af927c48b61a2413e879f219911df683a&scene=132#wechat_redirect)
+
+
+## 指定 GPU 编号
+
+设置当前使用的 GPU 设备仅为 0 号设备，设备名称为 `/gpu:0`
+
+```python
+os.environ["CUDA_VISIBLE_DEIVCES"] = "0"
+```
+
+设置当前使用的 GPU 设备为 0、1 号两个设备，名称依次为 `/gpu:0`、`/gpu:1`。
+根据顺序表示优先使用 0 号设备，然后使用 1 号设备
+
+```python
+os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
+```
+
+## 查看模型每层输出详情
+
+* https://github.com/sksq96/pytorch-summary
+
+```python
+from torchsummary import summary
+
+summary(model, input_size = (channels, H, W))
+```
 
 # 文档
 

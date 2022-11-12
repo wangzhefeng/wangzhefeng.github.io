@@ -57,6 +57,7 @@ details[open] summary {
 ### Tools
 
 - [ ] feedly 查看 https://feedly.com/i/welcome
+* [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
 
 ### Linux
 
