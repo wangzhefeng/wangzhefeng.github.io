@@ -2,7 +2,7 @@
 title: LSTM 时间序列预测
 author: 王哲峰
 date: '2022-09-17'
-slug: dl-rnn-lstm-app-timeseries
+slug: timeseriesl-lstm-app
 categories:
   - deeplearning
 tags:
@@ -31,49 +31,22 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [时间序列分析](#时间序列分析)
-  - [单变量时间序列](#单变量时间序列)
-  - [多元时间序列](#多元时间序列)
-- [LSTM](#lstm)
-  - [LSTM 简介](#lstm-简介)
-  - [LSTM 实现时间序列](#lstm-实现时间序列)
-    - [Python 依赖](#python-依赖)
-    - [数据](#数据)
-    - [训练数据分割](#训练数据分割)
-    - [数据规范化](#数据规范化)
-    - [数据处理](#数据处理)
-    - [超参数调优](#超参数调优)
-    - [模型预测](#模型预测)
+- [目标](#目标)
+- [Python 依赖](#python-依赖)
+- [数据](#数据)
+- [训练数据分割](#训练数据分割)
+- [数据规范化](#数据规范化)
+- [数据处理](#数据处理)
+- [超参数调优](#超参数调优)
+- [模型预测](#模型预测)
 </p></details><p></p>
 
-# 时间序列分析
-
-时间序列分析表示基于时间顺序的一系列数据。它可以是秒、分钟、小时、天、周、月、年。
-未来的数据将取决于它以前的值
-
-## 单变量时间序列
-
-对于单变量时间序列数据，将使用单列进行预测，因此即将到来的未来值将仅取决于它之前的值
-
-## 多元时间序列
-
-在多元变量中将有多个列来对目标值进行预测，目标列的预测值不仅取决于它以前的值，还取决于其他特征。
-因此，要预测即将到来的目标值，必须包括目标在内的所有列对目标值进行预测
-
-# LSTM 
-
-## LSTM 简介
-
-
-## LSTM 实现时间序列
-
-目标:
+# 目标
 
 * CSV 文件中包含了谷歌从 2001-01-25 到 2021-09-29 的股票数据，数据是按照天数频率的
 * 预测 Open 列的未来值
 
-
-### Python 依赖
+# Python 依赖
 
 ```python
 import numpy as np
@@ -82,12 +55,12 @@ from matplotlib.pyplot as plt
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
-from sklearn.preprocessing import MinMaxScaler
 from keras.wrappers.scikit_learn import KerasRegressor
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
 ```
 
-### 数据
+# 数据
 
 ```python
 df = pd.read_csv("train.csv", parse_dates = ["Date"], index_col = [0])
@@ -96,7 +69,7 @@ df.tail()
 df.shape
 ```
 
-### 训练数据分割
+# 训练数据分割
 
 ```python
 test_split = round(len(df) * 0.2)
@@ -108,7 +81,7 @@ print(df_train)
 print(df_test)
 ```
 
-### 数据规范化
+# 数据规范化
 
 ```python
 scaler = MinMaxScaler(feature_range = (0, 1))
@@ -119,7 +92,7 @@ df_test_scaled = scaler.transform(df_test)
 print(df_train_scaled)
 ```
 
-### 数据处理
+# 数据处理
 
 ```python
 def create_x_y(data, n_past):
@@ -149,8 +122,6 @@ print(f"train_y[0]: {train_y[0]}")
 
 (1011, 30, 5)
 (1011,)
-
-
 ```
 
 * `n_past` 是在预测下一个目标值时，使用的过去的数据样本数，
@@ -161,7 +132,7 @@ print(f"train_y[0]: {train_y[0]}")
     - `[2:32, 0:5]` -- `[32, 0]` 
     - ...
 
-### 超参数调优
+# 超参数调优
 
 ```python
 def build_model(optimizer):
@@ -201,7 +172,7 @@ grid_search = grid_search.fit(train_x, train_y)
 grid_search.best_params_
 ```
 
-### 模型预测
+# 模型预测
 
 ```python
 # 训练好的模型
@@ -218,7 +189,5 @@ prediction_copy_array = np.repeat(prediction, 5, axis = -1)
 pred = scaler.inver_transform(prediction_copy_array)
 ```
 
-
-
-- https://mp.weixin.qq.com/s?__biz=MzU1MjYzNjQwOQ==&mid=2247499754&idx=1&sn=183c8aa1156023a19b061c27a0be8407&chksm=fbfda57ccc8a2c6a60f630b2cd9b2d587d345ea002c8af81b5059154c97398589a6c86e15bfd&scene=132#wechat_redirect
-- https://github.com/sksujan58/Multivariate-time-series-forecasting-using-LSTM
+* [公众号](https://mp.weixin.qq.com/s?__biz=MzU1MjYzNjQwOQ==&mid=2247499754&idx=1&sn=183c8aa1156023a19b061c27a0be8407&chksm=fbfda57ccc8a2c6a60f630b2cd9b2d587d345ea002c8af81b5059154c97398589a6c86e15bfd&scene=132#wechat_redirect)
+* [GitHub](https://github.com/sksujan58/Multivariate-time-series-forecasting-using-LSTM)

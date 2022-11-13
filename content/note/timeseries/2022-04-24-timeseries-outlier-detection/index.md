@@ -41,8 +41,8 @@ details[open] summary {
   - [深度方法分类](#深度方法分类)
     - [点(Point)异常值](#点point异常值)
     - [模式(Pattern)异常值](#模式pattern异常值)
-- [时间序列异常检测模型](#时间序列异常检测模型)
-  - [基于统计分布方法](#基于统计分布方法)
+- [时间序列异常检测方法](#时间序列异常检测方法)
+  - [基于统计分布的方法](#基于统计分布的方法)
     - [3-sigma](#3-sigma)
     - [Z-score](#z-score)
     - [boxplot](#boxplot)
@@ -61,12 +61,18 @@ details[open] summary {
     - [Isolation Forest 孤立森林](#isolation-forest-孤立森林)
     - [RRCF](#rrcf)
   - [基于降维的方法](#基于降维的方法)
+    - [PCA](#pca)
+    - [AutoEncoder](#autoencoder)
   - [基于分类的方法](#基于分类的方法)
+    - [One-Class SVM](#one-class-svm)
   - [基于预测的方法](#基于预测的方法)
+    - [ARIMA](#arima)
   - [基于神经网络方法](#基于神经网络方法)
     - [特征提取](#特征提取)
-    - [通用常态特征表征学习](#通用常态特征表征学习)
-    - [依赖异常度量的特征表征学习](#依赖异常度量的特征表征学习)
+      - [预训练模型](#预训练模型)
+    - [学习常态特征表征](#学习常态特征表征)
+      - [通用常态特征表征学习](#通用常态特征表征学习)
+      - [依赖异常度量的特征表征学习](#依赖异常度量的特征表征学习)
     - [端对端异常分数学习](#端对端异常分数学习)
     - [深度相关的代表性模型](#深度相关的代表性模型)
 - [异常检测数据集](#异常检测数据集)
@@ -96,11 +102,15 @@ details[open] summary {
 
 时间序列异常检测方法主要包括: 
 
-1. 基于窗口的方法
+1. 基于统计分布的方法
 2. 基于距离的方法
 3. 基于密度的方法
-4. 基于支持向量机的方法
-5. 基于聚类的方法
+4. 基于聚类的方法
+5. 基于树的方法
+6. 基于降维的方法
+7. 基于分类的方法
+8. 基于预测的方法
+9. 基于神经网络方法
 
 # 时间序列异常检测挑战
 
@@ -153,22 +163,22 @@ details[open] summary {
 
 ### 点(Point)异常值
 
-* Global
-* Contextual
+* Global：全局异常
+* Contextual：上下文异常
 
 ### 模式(Pattern)异常值
 
-* Shapelet
-* Seasonal
-* Trend
+* Shapelet：形状异常
+* Seasonal：季节性/周期性异常
+* Trend：趋势异常
 
 关于三类 Pattern 异常，可以基于 shapelet 函数来定义:
 
-`$$X_{i,j} = \rho(2 \pi \omega T_{i,j}) + \tau(T_{i,j})$$`
+`$$X_{i,j} = \rho(2 \pi T_{i,j}, \omega) + \tau(T_{i,j})$$`
 
 其中:
 
-* `$X$` 是由多个不同频率的波的值相加得到的
+* `$X_{i,j}$` 是由多个不同频率的波的值相加得到的
 * `$\rho(2 \pi T,\omega) = \sum_{n}[A \sin(2 \pi \omega_{n} T) + B \cos(2 \pi \omega_{n} T)]$`
 * `$\tau(\cdot)$` 为趋势项，例如：线性函数 `$\tau(T) = T$`
 
@@ -181,13 +191,13 @@ details[open] summary {
 * Trend outliers(异常趋势的局部子序列)
     - `$s(\tau(\cdot), \hat{\tau}(\cdot)) > \delta$`，其中，`$\delta$` 为异常判定的阈值
 
-# 时间序列异常检测模型
+# 时间序列异常检测方法
 
 ![img](images/models.png)
 
 ![img](images/models_standard.png)
 
-## 基于统计分布方法
+## 基于统计分布的方法
 
 基于统计的方法最直观，适用于几乎所有类型的时间序列。
 在这种方法中，异常值的上限和下限是根据特定的统计量创建的，
@@ -257,11 +267,11 @@ Grubbs 检验的原假设与备择假设如下：
 
 Grubbs 检验需要总体是正态分布。算法流程如下：
 
-1. 样本从小到大排序
-2. 求样本的均值 mean 和标准差 std
-3. 计算 min/max 与 mean 的差距，更大的那个为可疑值
+1. 序列样本从小到大排序
+2. 求序列样本的均值 mean 和标准差 std
+3. 计算 min 和 max 与 mean 的差距，更大的那个为可疑值
 4. 求可疑值的 Z-score(standard score)，如果大于 Grubbs 临界值，那么就是异常值
-5. 排除异常值，对剩余序列循环做 1-4 步骤
+5. 排除序列中的异常值，对剩余序列循环做 1-4 步骤
 
 Grubbs 临界值可以查表得到，它由两个值决定：
 
@@ -319,21 +329,23 @@ y_train_scores = clf.decision_scores_
 LOF 是基于密度的经典算法，通过给每个数据点都分配一个依赖于邻域密度的离群因子 LOF，
 进而判断该数据点是否为离群点。它的好处在于可以量化每个数据点的异常程度(outlierness)
 
-**数据点 P 的局部相对密度(局部异常因子)** 
+![img](images/LOF.png)
+
+**数据点 P 的局部相对密度(局部异常因子, LOF)：** 
 
 `$$LOF_{k}(P) = \frac{\sum_{N_{k}(P) \in O}\frac{lrd_{k}(O)}{lrd_{k}(P)}}{|N_{k}(P)|} \\
               = \frac{\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}}{lrd_{k}(P)}$$`
 
-其中:
+**数据点 P 在 `$k$` 邻域内点的平均局部可达密度：**
 
-* `$\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}$`：数据点 P 在 `$k$` 邻域内点的平均局部可达密度
-* `$lrd_{k}(P)$`：数据点 P 的局部可达密度，是数据点 P 最近邻的平均可达距离的倒数。距离越大，密度越小
+`$$\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}$$`
+
+**数据点 P 的局部可达密度(数据点 P 最近邻的平均可达距离的倒数。距离越大，密度越小)：**
 
 `$$lrd_{k}(P) = \frac{1}{\frac{\sum_{N_{k}(P) \in O} reach\_dist_{k}(O, P)}{|N_{k}(P)|}}$$`
 
-其中:
+**点 P 到点 O 的第 `$k$` 可达距离：**
 
-* `$reach\_dist_{k}(O, P)$`: 点 P 到点 O 的第 `$k$` 可达距离
 
 `$$reach\_dist_{k}(O, P) = max\{d_{k}(O), d(O, P)\}$$`
 
@@ -341,8 +353,6 @@ LOF 是基于密度的经典算法，通过给每个数据点都分配一个依�
 
 * `$d_{k}(O)$`: 点 O 的 `$k$` 近邻距离，即第 `$k$` 个最近的点跟点 O 之间的距离
 * `$d(O, P)$`: 点 P 到点 O 的距离
-
-![img](images/LOF.png)
 
 整体来说，LOF 算法流程如下：
 
@@ -599,11 +609,219 @@ df["scores"] = iforest.decision_function(X)
 
 ## 基于降维的方法
 
+### PCA
 
+PCA 在异常检测方面的做法，大体有两种思路：
+
+* 将数据映射到低维特征空间，然后在特征空间不同维度上查看每个数据点跟其它数据的偏差
+* 将数据映射到低维特征空间，然后由低维特征空间重新映射回原空间，
+  尝试用低维特征重构原始数据，看重构误差的大小
+
+PCA 在做特征值分解，会得到：
+
+* 特征向量：反应了原始数据方差变化程度的不同方向
+* 特征值：数据在对应方向上的方差大小
+
+所以，最大特征值对应的特征向量为数据方差最大的方向，最小特征值对应的特征向量为数据方差最小的方向。
+原始数据在不同方向上的方差变化反应了其内在特点。如果单个数据样本跟整体数据样本表现出的特点不太一致，
+比如在某些方向上跟其它数据样本偏离较大，可能就表示该数据样本是一个异常点
+
+在前面提到第一种做法中，样本 `$x_i$` 的异常分数为该样本在所有方向上的偏离程度： 
+
+`$$Score(x_{i}) = \sum_{j=1}^{n}d_{ij} = \sum_{j=1}^{n}\frac{(x_{i}^{T}) \cdot e_{j}}{}$$`
+
+其中，  为样本在重构空间里离特征向量的距离。若存在样本点偏离各主成分越远，  会越大，意味偏移程度大，异常分数高。  是特征值，用于归一化，使不同方向上的偏离程度具有可比性。
+
+
+在计算异常分数时，关于特征向量（即度量异常用的标杆）选择又有两种方式：
+
+* 考虑在前 k 个特征向量方向上的偏差：前 k 个特征向量往往直接对应原始数据里的某几个特征，
+  在前几个特征向量方向上偏差比较大的数据样本，往往就是在原始数据中那几个特征上的极值点
+* 考虑后 r 个特征向量方向上的偏差：后 r 个特征向量通常表示某几个原始特征的线性组合，
+  线性组合之后的方差比较小反应了这几个特征之间的某种关系。在后几个特征方向上偏差比较大的数据样本，
+  表示它在原始数据里对应的那几个特征上出现了与预计不太一致的情况得分大于阈值 C 则判断为异常
+
+第二种做法，PCA 提取了数据的主要特征，如果一个数据样本不容易被重构出来，
+表示这个数据样本的特征跟整体数据样本的特征不一致，那么它显然就是一个异常的样本： 
+
+
+其中，是基于k维特征向量重构的样本。
+
+基于低维特征进行数据样本的重构时，舍弃了较小的特征值对应的特征向量方向上的信息。
+换一句话说，重构误差其实主要来自较小的特征值对应的特征向量方向上的信息。
+基于这个直观的理解，PCA 在异常检测上的两种不同思路都会特别关注较小的特征值对应的特征向量。
+所以，我们说 PCA 在做异常检测时候的两种思路本质上是相似的，
+当然第一种方法还可以关注较大特征值对应的特征向量
+
+
+```python
+from sklearn.decomposition import PCA
+pca = PCA()
+pca.fit(centered_training_data)
+transformed_data = pca.transform(training_data)
+y = transformed_data
+
+# 计算异常分数
+lambdas = pca.singular_values_
+M = ((y*y)/lambdas)
+
+# 前k个特征向量和后r个特征向量
+q = 5
+print "Explained variance by first q terms: ", sum(pca.explained_variance_ratio_[:q])
+q_values = list(pca.singular_values_ < .2)
+r = q_values.index(True)
+
+# 对每个样本点进行距离求和的计算
+major_components = M[:,range(q)]
+minor_components = M[:,range(r, len(features))]
+major_components = np.sum(major_components, axis=1)
+minor_components = np.sum(minor_components, axis=1)
+
+# 人为设定c1、c2阈值
+components = pd.DataFrame({'major_components': major_components, 
+                               'minor_components': minor_components})
+c1 = components.quantile(0.99)['major_components']
+c2 = components.quantile(0.99)['minor_components']
+
+# 制作分类器
+def classifier(major_components, minor_components):  
+    major = major_components > c1
+    minor = minor_components > c2    
+    return np.logical_or(major,minor)
+
+results = classifier(major_components=major_components, minor_components=minor_components)
+```
+
+
+### AutoEncoder
+
+PCA 是线性降维，AutoEncoder 是非线性降维。根据正常数据训练出来的 AutoEncoder，
+能够将正常样本重建还原，但是却无法将异于正常分布的数据点较好地还原，导致还原误差较大。
+因此如果一个新样本被编码，解码之后，它的误差超出正常数据编码和解码后的误差范围，
+则视作为异常数据。需要注意的是，AutoEncoder 训练使用的数据是正常数据（即无异常值），
+这样才能得到重构后误差分布范围是多少以内是合理正常的。所以 AutoEncoder 在这里做异常检测时，
+算是一种有监督学习的方法
+
+```python
+import tensorflow as tf
+from keras.models import Sequential
+from keras.layers import Dense
+
+# 标准化数据
+scaler = preprocessing.MinMaxScaler()
+X_train = pd.DataFrame(scaler.fit_transform(dataset_train),
+                              columns=dataset_train.columns,
+                              index=dataset_train.index)
+# Random shuffle training data
+X_train.sample(frac=1)
+X_test = pd.DataFrame(scaler.transform(dataset_test),
+                             columns=dataset_test.columns,
+                             index=dataset_test.index)
+
+tf.random.set_seed(10)
+act_func = 'relu'
+# Input layer:
+model=Sequential()
+# First hidden layer, connected to input vector X.
+model.add(Dense(10,activation=act_func,
+                kernel_initializer='glorot_uniform',
+                kernel_regularizer=regularizers.l2(0.0),
+                input_shape=(X_train.shape[1],)
+               )
+         )
+model.add(Dense(2,activation=act_func,
+                kernel_initializer='glorot_uniform'))
+model.add(Dense(10,activation=act_func,
+                kernel_initializer='glorot_uniform'))
+model.add(Dense(X_train.shape[1],
+                kernel_initializer='glorot_uniform'))
+model.compile(loss='mse',optimizer='adam')
+print(model.summary())
+
+# Train model for 100 epochs, batch size of 10:
+NUM_EPOCHS=100
+BATCH_SIZE=10
+history=model.fit(np.array(X_train),np.array(X_train),
+                  batch_size=BATCH_SIZE,
+                  epochs=NUM_EPOCHS,
+                  validation_split=0.05,
+                  verbose = 1)
+
+plt.plot(history.history['loss'],
+         'b',
+         label='Training loss')
+plt.plot(history.history['val_loss'],
+         'r',
+         label='Validation loss')
+plt.legend(loc='upper right')
+plt.xlabel('Epochs')
+plt.ylabel('Loss, [mse]')
+plt.ylim([0,.1])
+plt.show()
+
+# 查看训练集还原的误差分布如何，以便制定正常的误差分布范围
+X_pred = model.predict(np.array(X_train))
+X_pred = pd.DataFrame(X_pred,
+                      columns=X_train.columns)
+X_pred.index = X_train.index
+
+scored = pd.DataFrame(index=X_train.index)
+scored['Loss_mae'] = np.mean(np.abs(X_pred-X_train), axis = 1)
+plt.figure()
+sns.distplot(scored['Loss_mae'],
+             bins = 10,
+             kde= True,
+            color = 'blue')
+plt.xlim([0.0,.5])
+
+# 误差阈值比对，找出异常值
+X_pred = model.predict(np.array(X_test))
+X_pred = pd.DataFrame(X_pred,
+                      columns=X_test.columns)
+X_pred.index = X_test.index
+threshod = 0.3
+scored = pd.DataFrame(index=X_test.index)
+scored['Loss_mae'] = np.mean(np.abs(X_pred-X_test), axis = 1)
+scored['Threshold'] = threshod
+scored['Anomaly'] = scored['Loss_mae'] > scored['Threshold']
+scored.head()
+```
 
 
 ## 基于分类的方法
 
+### One-Class SVM
+
+One-Class SVM 算法的思路非常简单，就是寻找一个超平面将样本中的正例圈出来，
+预测就是用这个超平面做决策，在圈内的样本就认为是正样本，在圈外的样本是负样本，
+用在异常检测中，负样本可看做异常样本。它属于无监督学习，所以不需要标签
+
+One-Class SVM 又一种推导方式是 SVDD(Support Vector Domain Description，支持向量域描述)，
+对于 SVDD 来说，我们期望所有不是异常的样本都是正类别，同时它采用一个超球体，
+而不是一个超平面来做划分，该算法在特征空间中获得数据周围的球形边界，
+期望最小化这个超球体的体积，从而最小化异常点数据的影响
+
+假设产生的超球体参数为中心 `$o$` 和对应的超球体半径 `$r>0$`，超球体体积 `$V(r)$` 被最小化，
+中心 `$o$` 是支持行了的线性组合；跟传统 SVM 方法相似，可以要求所有训练数据点 `$x_{i}$` 到中心的距离严格小于 `$r$`。
+但是同时构造一个惩罚系数为 C 的松弛变量 `$\zeta_{i}$`，优化问题入下所示：
+
+`$$\underbrace{min}_{r,\rho} V(r) + C\sum_{i=1}^{m}\zeta_{i}$$`
+
+`$$||x_{i} - o||_{2} \leq r + \xi_{i}, i = 1,2,\ldots,m$$`
+`$$\xi_{i} \geq 0, i = 1,2,\ldots,m$$`
+
+C 是调节松弛变量的影响大小，说的通俗一点就是，给那些需要松弛的数据点多少松弛空间，
+如果 C 比较小，会给离群点较大的弹性，使得它们可以不被包含进超球体
+
+```python
+from sklearn import svm
+
+clf = svm.OneClassSVM(nu = 0.1, kernel = "rfb", gamma = 0.1)
+clf.fit(X)
+
+y_pred = clf.predict(X)
+n_error_outlier = y_pred[y_pred == -1].size
+```
 
 ## 基于预测的方法
 
@@ -611,6 +829,9 @@ df["scores"] = iforest.decision_function(X)
 并对残差序列建模，利用 KSigma 或者分位数等方法便可以进行异常检测。具体的流程如下
 
 ![img](images/predict_method.png)
+
+### ARIMA
+
 
 ## 基于神经网络方法
 
@@ -641,11 +862,15 @@ df["scores"] = iforest.decision_function(X)
 * 预训练的深度模型通常仅限于特定类型的数据。(感觉更适用于图像，
   因为图像可以做分类预训练，个人对时序预训练了解的不是很多)
 
-### 通用常态特征表征学习
+#### 预训练模型
+
+### 学习常态特征表征
+
+#### 通用常态特征表征学习
 
 这类方法最优化一个特征学习目标函数，该函数不是为异常检测而设计的，
 但学习到的高级特征能够用于异常检测，因为这些高级特征包含了数据的隐藏规律。
-例如：AutoEncoder、GAN、预测模型。
+例如：AutoEncoder、GAN、预测模型(LSTM)。
 
 优点：
 
@@ -664,7 +889,7 @@ df["scores"] = iforest.decision_function(X)
 * 都假设训练集是正常样本，但若训练集中混入噪声或异常值，会给模型表征学习能力带来偏差
 * 没有将异常评价纳入到模型优化的目标当中，最后检测的结果可能是次优的
 
-### 依赖异常度量的特征表征学习
+#### 依赖异常度量的特征表征学习
 
 该类方法直接将现有的异常评价指标嵌入表征学习的优化目标中，
 解决了通用常态特征表征学习中第二个共性问题。
@@ -745,25 +970,29 @@ df["scores"] = iforest.decision_function(X)
 * 新颖的应用和设置
     - 例如分布外(OOD)检测、curiosity learning 等
 
-
 # 参考
 
 * [[1]时序异常检测综述整理](https://mp.weixin.qq.com/s/KNeSAPx-6B-wo5jzCM17YQ)
 * [[2]Revisiting Time Series Outlier Detection:Definitions and Benchmarks](https://openreview.net/pdf?id=r8IvOsnHchr)
-* [[2]异常检测综述：Deep Learning for Anomaly Detection: A Review](https://zhuanlan.zhihu.com/p/419161328)
-* [[3]异常检测方法总结](https://mp.weixin.qq.com/s/rD229uPGuMCAhAnVfrN6Sg)
-* [[4]时序预测竞赛之异常检测算法综述](https://zhuanlan.zhihu.com/p/336944097)
-* [[5]剔除异常值栅格计算器_数据分析师所需的统计学：异常检测](https://blog.csdn.net/weixin_39974030/article/details/112569610)
-* [[6]异常检测算法之(KNN)-K Nearest Neighbors](https://zhuanlan.zhihu.com/p/501691799)
-* [[7]一文读懂异常检测 LOF 算法(Python代码)](https://zhuanlan.zhihu.com/p/448276009)
-* [5] Nowak-Brzezińska, A., & Horyń, C. (2020). Outliers in rules-the comparision of LOF, COF and KMEANS algorithms. *Procedia Computer Science*, *176*, 1420-1429.
-* [6] 機器學習_學習筆記系列(98)：基於連接異常因子分析(Connectivity-Based Outlier Factor) - 劉智皓 (Chih-Hao Liu)
-* [[7] 异常检测之SOS算法](https://zhuanlan.zhihu.com/p/34438518)
-* [[8]SOS GitHub](https://github.com/jeroenjanssens/scikit-sos)
-* [[8]DBSCAN算法详解](https://zhuanlan.zhihu.com/p/515268801)
-* [[9] 异常检测算法 -- 孤立森林（Isolation Forest）剖析](https://zhuanlan.zhihu.com/p/74508141)
-* [[10]孤立森林(isolation Forest)-一个通过瞎几把乱分进行异常检测的算法](https://zhuanlan.zhihu.com/p/484495545)
-* [[11]孤立森林阅读](https://blog.csdn.net/MarkAustralia/article/details/120181899)
-* [Python——数据异常值检测算法](https://zhuanlan.zhihu.com/p/362358580)
-* [[17]时间序列异常检测](https://mp.weixin.qq.com/s/9TimTB_ccPsme2MNPuy6uA)
+* [[3]异常检测综述：Deep Learning for Anomaly Detection: A Review](https://zhuanlan.zhihu.com/p/419161328)
+* [[4]异常检测方法总结](https://mp.weixin.qq.com/s/rD229uPGuMCAhAnVfrN6Sg)
+* [[5]时序预测竞赛之异常检测算法综述](https://zhuanlan.zhihu.com/p/336944097)
+* [[6]剔除异常值栅格计算器](https://blog.csdn.net/weixin_39974030/article/details/112569610)
+* [[7]异常检测算法之(KNN)-K Nearest Neighbors](https://zhuanlan.zhihu.com/p/501691799)
+* [[8]一文读懂异常检测 LOF 算法(Python代码)](https://zhuanlan.zhihu.com/p/448276009)
+* [[9]Nowak-Brzezińska, A., & Horyń, C. (2020). Outliers in rules-the comparision of LOF, COF and KMEANS algorithms. *Procedia Computer Science*, *176*, 1420-1429.]()
+* [[10]機器學習_學習筆記系列(98)：基於連接異常因子分析(Connectivity-Based Outlier Factor) - 劉智皓 (Chih-Hao Liu)]()
+* [[11]异常检测之SOS算法](https://zhuanlan.zhihu.com/p/34438518)
+* [[12]SOS GitHub](https://github.com/jeroenjanssens/scikit-sos)
+* [[13]DBSCAN算法详解](https://zhuanlan.zhihu.com/p/515268801)
+* [[14]异常检测算法--孤立森林（Isolation Forest）剖析](https://zhuanlan.zhihu.com/p/74508141)
+* [[15]孤立森林(isolation Forest)-一个通过瞎几把乱分进行异常检测的算法](https://zhuanlan.zhihu.com/p/484495545)
+* [[16]孤立森林阅读](https://blog.csdn.net/MarkAustralia/article/details/120181899)
+* [[17]数据异常值检测算法](https://zhuanlan.zhihu.com/p/362358580)
+* [[18]时间序列异常检测](https://mp.weixin.qq.com/s/9TimTB_ccPsme2MNPuy6uA)
+* [[19]One Class SVM](http://t.zoukankan.com/wj-1314-p-10701708.html)
+* [[20]单类 SVM: SVDD](https://zhuanlan.zhihu.com/p/65617987)
+* [[21]AutoEncoder](https://zhuanlan.zhihu.com/p/260882741)
+* [[22]利用 Autoencoder 进行无监督异常检测](https://zhuanlan.zhihu.com/p/46188296)
+* [[23]自编码器 AutoEncoder 解决异常检测问题](https://zhuanlan.zhihu.com/p/260882741)
 

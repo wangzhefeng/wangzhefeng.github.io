@@ -551,4 +551,7 @@ $ git push -u origin main
 
 # 参考
 
-- <https://packaging.python.org/en/latest/tutorials/packaging-projects/>
+- [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
+* [开源 Python 项目详细指南](https://mp.weixin.qq.com/s/zYpEXK6YTkZ5C6uU2kkexQ)
+* [介绍 4 个 Python 项目管理与构建工具](https://mp.weixin.qq.com/s/ouSQrrAgsY7Hm-e7KqxDxg)
+
