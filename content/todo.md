@@ -27,7 +27,7 @@ details[open] summary {
 
 - [TODO](#todo)
   - [Timeseries](#timeseries)
-  - [TensorFlow, Keras](#tensorflow-keras)
+  - [Deeplearning](#deeplearning)
   - [Tools](#tools)
   - [Linux](#linux)
   - [Audio](#audio)
@@ -40,19 +40,10 @@ details[open] summary {
 ### Timeseries
 
 * [ ] AutoTS 源码、文档阅读 
-    - [ ] [源码](https://github.com/winedarksea/AutoTS)
-    - [x] [Wechat 文章](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247501901&idx=1&sn=78cb68a8dc6ff1a8b55a755fbdb0c52a&chksm=c32ad1c2f45d58d4352933b8893cbd2b716d35b0cd9fcbc40716c88a6aa92b86af5198eca086&mpshare=1&scene=1&srcid=0322yWYLiNwQY3gK2WjPf6f7&sharer_sharetime=1647940260625&sharer_shareid=8a087f62787015e5101dd2920243fdb8&version=3.1.23.70088&platform=mac#rd)
-    - [ ] [文章](https://towardsdatascience.com/train-multiple-time-series-forecasting-models-in-one-line-of-python-code-615f2253b67a)
 * [ ] Darts 库源码、文档阅读
+* [ ] PyOD 库
 
-### TensorFlow, Keras
-
-* [ ] Keras 例子查看
-    - [ ] [cat_vs_dog 分类](https://github.com/wangzhefeng/dogs_vs_cats)
-    - [ ] mnist 分类
-    - [ ] flower 分类
-    - [ ] [leaf 分类](https://www.kaggle.com/code/abhmul/keras-convnet-lb-0-0052-w-visualization/notebook)
-    - [ ] timeseries 相关； **优先级提升**
+### Deeplearning
 
 ### Tools
 
