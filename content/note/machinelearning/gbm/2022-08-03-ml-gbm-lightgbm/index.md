@@ -1,7 +1,7 @@
 ---
 title: LightGBM
 author: 王哲峰
-date: '2022-07-31'
+date: '2022-08-03'
 slug: ml-gbm-lightgbm
 categories:
   - machinelearning
@@ -11,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -57,50 +30,35 @@ details[open] summary {
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [LightGBM 资源](#lightgbm-资源)
-- [LightGBM 模型理论](#lightgbm-模型理论)
+- [LightGBM 简介](#lightgbm-简介)
   - [LightGBM 特点](#lightgbm-特点)
   - [LightGBM vs XGBoost](#lightgbm-vs-xgboost)
-  - [LightGBM 性能优化原理](#lightgbm-性能优化原理)
-    - [LightGBM 优化策略](#lightgbm-优化策略)
-    - [Histogram 算法](#histogram-算法)
-    - [GOSS 算法](#goss-算法)
-    - [EFB 算法](#efb-算法)
-- [LightGBM 安装](#lightgbm-安装)
-  - [CLI(Command Line Interface) 安装](#clicommand-line-interface-安装)
-    - [Homebrew](#homebrew)
-    - [使用 CMake 从 GitHub 上构建](#使用-cmake-从-github-上构建)
-    - [使用 gcc 从 GitHub 上构建](#使用-gcc-从-github-上构建)
-  - [Python Package 安装](#python-package-安装)
-    - [pip 安装](#pip-安装)
-    - [从源码构建](#从源码构建)
-- [LightGBM 数据接口](#lightgbm-数据接口)
-  - [加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件](#加载-libsvmzero-based-文本文件lightgbm-二进制文件)
-  - [加载 Numpy 2 维数组](#加载-numpy-2-维数组)
-  - [加载 scipy.sparse.csr_matrix 数组](#加载-scipysparsecsr_matrix-数组)
-  - [保存数据为 LightGBM 二进制文件](#保存数据为-lightgbm-二进制文件)
-  - [创建验证数据](#创建验证数据)
-  - [在数据加载时标识特征名称和类别特征](#在数据加载时标识特征名称和类别特征)
-  - [有效利用内存空间](#有效利用内存空间)
-- [LightGBM 设置参数](#lightgbm-设置参数)
+- [LightGBM 模型理论](#lightgbm-模型理论)
+  - [LightGBM 优化策略](#lightgbm-优化策略)
+  - [Histogram 算法](#histogram-算法)
+  - [GOSS 算法](#goss-算法)
+  - [EFB 算法](#efb-算法)
+- [LightGBM 参数](#lightgbm-参数)
   - [Booster 参数](#booster-参数)
-- [LightGBM 应用](#lightgbm-应用)
-  - [训练、保存、加载模型](#训练保存加载模型)
-  - [交叉验证](#交叉验证)
-  - [提前停止](#提前停止)
-  - [预测](#预测)
+  - [LightGBM 调参技巧](#lightgbm-调参技巧)
 - [LightGBM API](#lightgbm-api)
-  - [Data Structure API](#data-structure-api)
+  - [LightGBM 安装](#lightgbm-安装)
+  - [核心数据结构](#核心数据结构)
+    - [数据接口](#数据接口)
+    - [加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件](#加载-libsvmzero-based-文本文件lightgbm-二进制文件)
+    - [加载 Numpy 2 维数组](#加载-numpy-2-维数组)
+    - [加载 scipy.sparse.csr\_matrix 数组](#加载-scipysparsecsr_matrix-数组)
+    - [保存数据为 LightGBM 二进制文件](#保存数据为-lightgbm-二进制文件)
+    - [创建验证数据](#创建验证数据)
+    - [在数据加载时标识特征名称和类别特征](#在数据加载时标识特征名称和类别特征)
+    - [有效利用内存空间](#有效利用内存空间)
   - [Training API](#training-api)
   - [Scikit-learn API](#scikit-learn-api)
   - [Callbacks](#callbacks)
   - [Plotting](#plotting)
-- [LightGBM 示例](#lightgbm-示例)
-  - [示例 1: 常用操作总结](#示例-1-常用操作总结)
-  - [示例 2](#示例-2)
 </p></details><p></p>
 
 # LightGBM 资源
@@ -112,7 +70,7 @@ details[open] summary {
 - [Doc](https://lightgbm.readthedocs.io/en/latest/>)
 - [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
 
-# LightGBM 模型理论
+# LightGBM 简介
 
 ## LightGBM 特点
 
@@ -152,9 +110,11 @@ LightGBM 在 XGBoost 上主要有三方面的优化:
 3. EFB 算法: 互斥特征捆绑算法
 
 
-## LightGBM 性能优化原理
+# LightGBM 模型理论
 
-### LightGBM 优化策略
+> LightGBM 性能优化原理
+
+## LightGBM 优化策略
 
 由于 XGBoost 采用的基模型是二叉树，因此生产每片叶子需要分裂一次。
 而每次分裂，都要遍历素有特征上所有候选分裂点位，
@@ -175,7 +135,7 @@ GOSS 算法的作用是减少样本的数量，EFB 算法的作用是减少特�
 从而极大节约了时间。同时，Histogram 算法还将特征由浮点数转换为 0~255 位的整数进行存储，
 从而极大节了内存存储
 
-### Histogram 算法
+## Histogram 算法
 
 Histogram 算法是替代 XGBoost 的预排序(Pre-sorted)算法的:
 
@@ -195,7 +155,7 @@ Histogram 算法是替代 XGBoost 的预排序(Pre-sorted)算法的:
 ![img](images/histogram.jpg)
 ![img](images/histogram_speed.jpg)
 
-### GOSS 算法
+## GOSS 算法
 
 GOSS 算法，Gradient-based One-Side Sampling，基于梯度的单边采样算法
 
@@ -210,7 +170,7 @@ GOSS 算法，Gradient-based One-Side Sampling，基于梯度的单边采样算�
 
 ![img](images/goss.jpg)
 
-### EFB 算法
+## EFB 算法
 
 EFB 算法，Exclusive Feature Bunding，互斥特征绑定算法
 
@@ -230,92 +190,64 @@ LightGBM 可以直接将每个类别取值和一个 bin 关联，从而自动地
 
 ![img](images/efb.jpg)
 
-# LightGBM 安装
+# LightGBM 参数
 
-- CLI 版本
-    - Win
-    - Linux
-    - OSX
-    - Docker
-    - Build MPI 版本
-    - Build GPU 版本
-- Python library
-    - 安装依赖库
-    - 安装 `lightgbm`
+* 参数设置方式: 
+    - 命令行参数
+    - 参数配置文件
+    - Python 参数字典
+* 参数类型:
+    - 核心参数
+    - 学习控制参数
+    - IO 参数
+    - 目标参数
+    - 度量参数
+    - 网络参数
+    - GPU 参数
+    - 模型参数
+    - 其他参数
 
-## CLI(Command Line Interface) 安装
+## Booster 参数
 
-MacOS 上安装 LightGBM(CLI) 有以下三种方式:
-
-- Apple Clang
-    - Homebrew
-    - CMake
-    - Build from GitHub
-- gcc
-    - Build from GitHub
-
-### Homebrew
-
-安装 LightGBM:
-
-```bash
-$ brew install lightgbm
+```python
+param = {
+   'num_levels': 31,
+   'num_trees': 100,
+   'objective': 'binary',
+   'metirc': ['auc', 'binary_logloss']
+}
 ```
 
-### 使用 CMake 从 GitHub 上构建
+## LightGBM 调参技巧
 
-(1)安装 CMake(3.16 or higher)
+* 人工调参
+* 提高速度
+   - Use bagging by setting `bagging_fraction` and `bagging_freq`
+   - Use feature sub-sampling by setting `feature_fraction`
+   - Use small `max_bin`
+   - Use `save_binary` to speed up data loading in future learning
+   - Use parallel learning, refer to Parallel Learning Guide
+* 提高准确率
+    - Use large `max_bin` (may be slower)
+    - Use small learning_rate with large num_iterations
+    - Use large num_leaves (may cause over-fitting)
+    - Use bigger training data
+    - Try `dart`
+* 处理过拟合
+    - Use small `max_bin`
+    - Use small `num_leaves`
+    - Use `min_data_in_leaf` and `min_sum_hessian_in_leaf`
+    - Use bagging by set `bagging_fraction` and `bagging_freq`
+    - Use feature sub-sampling by set `feature_fraction`
+    - Use bigger training data
+    - Try `lambda_l1`, `lambda_l2` and `min_gain_to_split` for regularization
+    - Try `max_depth` to avoid growing deep tree
+    - Try `extra_trees`
+    - Try increasing `path_smooth`
 
-```bash
-$ brew install cmake
-```
+# LightGBM API
 
-(2)安装 OpenMP
-
-```bash
-$ brew install libomp
-```
-
-(3)构建 LightGBM
-
-```bash
-$ git clone --recursive https://github.com/microsoft/LightGBM
-$ cd LightGBM
-$ cmake ..
-$ make -j4
-```
-
-### 使用 gcc 从 GitHub 上构建
-
-(1)安装 CMake(3.2 or higher)
-
-```bash
-$ brew install cmake
-```
-
-(2)安装 gcc
-
-```bash
-$ brew install gcc
-```
-
-(3)构建 LightGBM
-
-```bash
-$ git clone --recursive https://github.com/microsoft/LightGBM
-$ cd LightGBM
-$ export CXX=g++-7 CC=gcc-7  # replace "7" with version of gcc installed on your machine
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make -j4
-```
-
-## Python Package 安装
-
-### pip 安装
-
-- 安装 `lightgbm`:
+## LightGBM 安装
 
 ```bash
 # 默认版本
@@ -328,47 +260,23 @@ $ pip install lightgbm --install-option=--mpi
 $ pip install lightgbm --install-option=--gpu
 ```
 
-- 约定成俗的库导入:
+## 核心数据结构
 
-```python
-import lightgbm as lgb
-```
+- `Dataset(data, label, reference, weight, ...)`
+- `Booster(params, train_set, model_file, ...)`
 
-### 从源码构建
+### 数据接口
 
-```bash
-$ git clone --recursive https://github.com/microsoft/LightGBM
-$ cd LightGBM
-$ mkdir build
-$ cd build
-$ cmake ..
+* LibSVM(zero-based), TSV, CSV, TXT 文本文件
+* Numpy 2 维数组
+* pandas DataFrame
+* H2O DataTable’s Frame
+* SciPy sparse matrix
+* LightGBM 二进制文件
 
-# 开启MPI 通信机制, 训练更快
-$ cmake -DUSE_MPI=ON ..
+> 数据保存在 `lightgbm.Dataset` 对象中
 
-# GPU 版本, 训练更快
-$ cmake -DUSE_GPU=1 ..
-$ make -j4
-```
-
-
-
-# LightGBM 数据接口
-
-数据接口:
-
-- LibSVM(zero-based), TSV, CSV, TXT 文本文件
-- Numpy 2 维数组
-- pandas DataFrame
-- H2O DataTable’s Frame
-- SciPy sparse matrix
-- LightGBM 二进制文件
-
-**Note:**
-
-- 数据保存在 `Dataset` 对象中.
-
-## 加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件
+### 加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件
 
 ```python
 import lightgbm as lgb
@@ -386,7 +294,7 @@ train_svm_data = lgb.Dataset('train.svm')
 train_bin_data = lgb.Dataset('train.bin')
 ```
 
-## 加载 Numpy 2 维数组
+### 加载 Numpy 2 维数组
 
 ```python
 import liggtgbm as lgb
@@ -396,7 +304,7 @@ label = np.random.randint(2, size = 500)
 train_array = lgb.Dataset(data, label = label)
 ```
 
-## 加载 scipy.sparse.csr_matrix 数组
+### 加载 scipy.sparse.csr_matrix 数组
 
 ```python
 import lightgbm as lgb
@@ -406,7 +314,7 @@ csr = scipy.sparse.csr_matirx((dat, (row, col)))
 train_sparse = lgb.Dataset(csr)
 ```
 
-## 保存数据为 LightGBM 二进制文件
+### 保存数据为 LightGBM 二进制文件
 
 ```python
 import lightgbm as lgb
@@ -415,12 +323,9 @@ train_data = lgb.Dataset("train.svm.txt")
 train_data.save_binary('train.bin')
 ```
 
-**Note:**
+> 将数据保存为 LightGBM 二进制文件会使数据加载更快
 
-- 将数据保存为 LightGBM 二进制文件会使数据加载更快
-
-
-## 创建验证数据
+### 创建验证数据
 
 ```python
 import lightgbm as lgb
@@ -434,11 +339,9 @@ validation_data = train_data.create_vaild('validation.svm')
 validation_data = lgb.Dataset('validation.svm', reference = train_data)
 ```
 
-**Note:**
+> 在 LightGBM 中, 验证数据应该与训练数据一致(格式)
 
-- 在 LightGBM 中, 验证数据应该与训练数据一致(格式)
-
-## 在数据加载时标识特征名称和类别特征
+### 在数据加载时标识特征名称和类别特征
 
 ```python
 import numpy as np
@@ -463,7 +366,7 @@ train_data.set_init_score()
 train_data.set_group()
 ```
 
-## 有效利用内存空间
+### 有效利用内存空间
 
 The Dataset object in LightGBM is very memory-efficient, 
 it only needs to save discrete bins. However, Numpy/Array/Pandas object is memory expensive. 
@@ -473,104 +376,6 @@ If you are concerned about your memory consumption, you can save memory by:
 - 2.Explicitly set `raw_data=None` after the Dataset has been constructed
 - Call `gc`
 
-# LightGBM 设置参数
-
-- 参数设置方式: 
-    - 命令行参数
-    - 参数配置文件
-    - Python 参数字典
-- 参数类型:
-    - 核心参数
-    - 学习控制参数
-    - IO参数
-    - 目标参数
-    - 度量参数
-    - 网络参数
-    - GPU参数
-    - 模型参数
-    - 其他参数
-
-
-## Booster 参数
-
-```python
-param = {
-   'num_levels': 31,
-   'num_trees': 100,
-   'objective': 'binary',
-   'metirc': ['auc', 'binary_logloss']
-}
-```
-
-
-# LightGBM 应用
-
-## 训练、保存、加载模型
-
-```python
-# 训练模型
-
-import lightgbm as lgb
-
-# 训练数据
-train_data = lgb.Dataset("train.csv")
-
-# 验证数据
-validation_data = train_data.create_vaild('validation.svm')
-
-# 参数
-param = {
-   'num_levels': 31,
-   'num_trees': 100,
-   'objective': 'binary',
-   'metirc': ['auc', 'binary_logloss']
-}
-num_round = 10
-
-# 模型训练
-bst = lgb.train(param, train_data, num_round, vaild_sets = [validation_data])
-
-# 保存模型
-bst.save_model('model.txt')
-json_model = bst.dump_model()
-
-# 加载模型
-bst = lgb.Booster(model_file = 'model.txt')
-```
-
-## 交叉验证
-
-```python
-num_round = 10
-lgb.cv(param, train_data, num_round, nfold = 5)
-```
-
-## 提前停止
-
-```python
-bst = lgb.train(param,
-                train_data,
-                num_round,
-                valid_sets = valid_sets,
-                ealy_stopping_rounds = 10)
-```
-
-## 预测
-
-- 用已经训练好的或加载的保存的模型对数据集进行预测
-- 如果在训练过程中启用了提前停止, 可以用 `bst.best_iteration` 从最佳迭代中获得预测结果
-
-```python
-testing = np.random.rand(7, 10)
-y_pred = bst.predict(testing, num_iteration = bst.best_iteration)
-```
-
-# LightGBM API
-
-## Data Structure API
-
-- `Dataset(data, label, reference, weight, ...)`
-- `Booster(params, train_set, model_file, ...)`
 
 ## Training API
 
@@ -714,39 +519,3 @@ plot_tree(booster, ax, tree_index, ...)
 create_tree_digraph(booster, tree_index, ...)
 ```
 
-# LightGBM 示例
-
-## 示例 1: 常用操作总结
-
-**Note:** 
-
-- 人工调参
-- 提高速度
-   - Use bagging by setting bagging_fraction and bagging_freq
-   - Use feature sub-sampling by setting feature_fraction
-   - Use small max_bin
-   - Use save_binary to speed up data loading in future learning
-   - Use parallel learning, refer to Parallel Learning Guide
-- 提高准确率
-   - Use large max_bin (may be slower)
-   - Use small learning_rate with large num_iterations
-   - Use large num_leaves (may cause over-fitting)
-   - Use bigger training data
-   - Try dart
-- 处理过拟合
-   - Use small max_bin
-   - Use small num_leaves
-   - Use min_data_in_leaf and min_sum_hessian_in_leaf
-   - Use bagging by set bagging_fraction and bagging_freq
-   - Use feature sub-sampling by set feature_fraction
-   - Use bigger training data
-   - Try lambda_l1, lambda_l2 and min_gain_to_split for regularization
-   - Try max_depth to avoid growing deep tree
-   - Try extra_trees
-   - Try increasing path_smooth
-
-## 示例 2
-
-```python
-
-```

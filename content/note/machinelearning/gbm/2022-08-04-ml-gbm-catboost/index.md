@@ -1,7 +1,7 @@
 ---
 title: CatBoost
 author: 王哲峰
-date: '2022-08-09'
+date: '2022-08-04'
 slug: ml-gbm-catboost
 categories:
   - machinelearning
@@ -11,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -59,18 +32,31 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [CatBoost 模型特点](#catboost-模型特点)
+- [CatBoost 资源](#catboost-资源)
+- [CatBoost 简介](#catboost-简介)
 - [CatBoost 模型理论](#catboost-模型理论)
-- [CatBoost 使用](#catboost-使用)
-  - [下载依赖库](#下载依赖库)
-  - [下载 CatBoost 库](#下载-catboost-库)
-  - [快速开始](#快速开始)
-  - [Parameter Config](#parameter-config)
-  - [数据可视化](#数据可视化)
+  - [TODO](#todo)
+- [CatBoost 参数](#catboost-参数)
 - [CatBoost API](#catboost-api)
+  - [CatBoost 安装](#catboost-安装)
+    - [安装依赖库](#安装依赖库)
+    - [安装 CatBoost 库](#安装-catboost-库)
+  - [核心数据结构](#核心数据结构)
+  - [Learning API](#learning-api)
+    - [CatBoostClassifier](#catboostclassifier)
+    - [CatBoostRegressor](#catboostregressor)
+    - [CatBoost](#catboost)
+  - [数据可视化 API](#数据可视化-api)
 </p></details><p></p>
 
-# CatBoost 模型特点
+# CatBoost 资源
+
+- [原始算法论文]()
+- [GitHub]()
+- [Doc]()
+- [Python 示例]()
+
+# CatBoost 简介
 
 CatBoost is a fast, scalabel, high performance open-scource gradient
 boosting on decision trees library;
@@ -90,114 +76,9 @@ boosting on decision trees library;
 
 # CatBoost 模型理论
 
-# CatBoost 使用
+## TODO
 
-## 下载依赖库
-
-```bash
-pip install numpy six
-```
-
-## 下载 CatBoost 库
-
-```bash
-# install catboost
-$ pip install catboost
-```
-
-## 快速开始
-
-- CatBoostClassifier
-
-```python
-import numpy as np
-from catboost import CatBoostClassifier, Pool
-
-# initialize data
-train_data = np.random.randit(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 2, size = (100))
-test_data = catboost_pool = Pool(train_data, train_labels)
-
-# build model
-model = CatBoostClassifier(iterations = 2,
-                            depth = 2,
-                            learning_rate = 1,
-                            loss_function = "Logloss",
-                            verbose = True)
-
-# train model
-model.fit(train_data, train_labels)
-
-# prediction using model
-y_pred = model.predict(test_data)
-y_pred_proba = model.predict_proba(test_data)
-print("class = ", y_pred)
-print("proba = ", y_pred_proba)
-```
-
-- CatBoostRegressor
-
-```python
-import numpy as np
-from catboost import CatBoostRegressor, Pool
-
-# initialize data
-train_data = np.random.randint(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 100, size = (100))
-test_data = np.random.randint(0, 100, size = (50, 10))
-
-# initialize Pool
-train_pool = Pool(train_data, train_label, cat_features = [0, 2, 5])
-test_pool = Pool(test_data, cat_features = [0, 2, 5])
-
-# build model
-model = CatBoostRegressor(iterations = 2, 
-                            depth = 2,
-                            learning_rate = 1, 
-                            loss_function = "RMSE")
-
-# train model
-model.fit(train_pool)
-
-# prediction
-y_pred = model.predict(test_pool)
-print(y_pred)
-```
-
-- CatBoost
-
-```python
-import numpy as np
-from catboost import CatBoost, Pool
-
-# read the dataset
-train_data = np.random.randint(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 2, size = (100))
-test_data = np.random.randint(0, 100, size = (50, 10))
-
-# init pool
-train_pool = Pool(train_data, train_labels)
-test_pool = Pool(test_data)
-
-# build model
-param = {
-    "iterations": 5
-}
-model = CatBoost(param)
-
-# train model
-model.fit(train_pool)
-
-# prediction
-y_pred_class = model.predict(test_pool, prediction_type = "Class")
-y_pred_proba = model.predict(test_pool, prediction_type = "Probability")
-y_pred_raw_vals = model.predict(test_pool, prediction_type = "RawFormulaVal")
-print("Class", y_pred_class)
-print("Proba", y_pred_proba)
-print("Raw", y_pred_raw_valss)
-```
-
-## Parameter Config
+# CatBoost 参数
 
 - Objectives and metrics
     - Regression
@@ -252,19 +133,130 @@ print("Raw", y_pred_raw_valss)
         - WKappa
     - Ranking
 
-## 数据可视化
+# CatBoost API
 
-下载 `ipywidgets` 可视化库: 
+## CatBoost 安装
+
+### 安装依赖库
 
 ```bash
-# install visualization tools
+$ pip install numpy six
+```
+
+### 安装 CatBoost 库
+
+```bash
+$ pip install catboost
+```
+
+## 核心数据结构
+
+## Learning API
+
+### CatBoostClassifier
+
+```python
+import numpy as np
+from catboost import CatBoostClassifier, Pool
+
+# initialize data
+train_data = np.random.randit(0, 100, size = (100, 10))
+train_labels = np.random.randint(0, 2, size = (100))
+test_data = catboost_pool = Pool(train_data, train_labels)
+
+# build model
+model = CatBoostClassifier(
+    iterations = 2,
+    depth = 2,
+    learning_rate = 1,
+    loss_function = "Logloss",
+    verbose = True
+)
+
+# train model
+model.fit(train_data, train_labels)
+
+# prediction using model
+y_pred = model.predict(test_data)
+y_pred_proba = model.predict_proba(test_data)
+print("class = ", y_pred)
+print("proba = ", y_pred_proba)
+```
+
+### CatBoostRegressor
+
+```python
+import numpy as np
+from catboost import CatBoostRegressor, Pool
+
+# initialize data
+train_data = np.random.randint(0, 100, size = (100, 10))
+train_labels = np.random.randint(0, 100, size = (100))
+test_data = np.random.randint(0, 100, size = (50, 10))
+
+# initialize Pool
+train_pool = Pool(train_data, train_label, cat_features = [0, 2, 5])
+test_pool = Pool(test_data, cat_features = [0, 2, 5])
+
+# build model
+model = CatBoostRegressor(
+    iterations = 2, 
+    depth = 2,
+    learning_rate = 1, 
+    loss_function = "RMSE"
+)
+
+# train model
+model.fit(train_pool)
+
+# prediction
+y_pred = model.predict(test_pool)
+print(y_pred)
+```
+
+### CatBoost
+
+```python
+import numpy as np
+from catboost import CatBoost, Pool
+
+# read the dataset
+train_data = np.random.randint(0, 100, size = (100, 10))
+train_labels = np.random.randint(0, 2, size = (100))
+test_data = np.random.randint(0, 100, size = (50, 10))
+
+# init pool
+train_pool = Pool(train_data, train_labels)
+test_pool = Pool(test_data)
+
+# build model
+param = {
+    "iterations": 5
+}
+model = CatBoost(param)
+
+# train model
+model.fit(train_pool)
+
+# prediction
+y_pred_class = model.predict(test_pool, prediction_type = "Class")
+y_pred_proba = model.predict(test_pool, prediction_type = "Probability")
+y_pred_raw_vals = model.predict(test_pool, prediction_type = "RawFormulaVal")
+print("Class", y_pred_class)
+print("Proba", y_pred_proba)
+print("Raw", y_pred_raw_valss)
+```
+
+## 数据可视化 API
+
+安装 `ipywidgets` 可视化库:
+
+```bash
 $ pip install ipywidgets
 $ jypyter nbextension enable --py widgetsnbextersion
 ```
 
 CatBoost 数据可视化介绍: 
 
-- [Data Visualization](https://catboost.ai/docs/features/visualization.html)
-
-# CatBoost API
+* [Data Visualization](https://catboost.ai/docs/features/visualization.html)
 

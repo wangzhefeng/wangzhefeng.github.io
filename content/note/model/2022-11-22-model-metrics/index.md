@@ -1,0 +1,22 @@
+---
+title: 模型评价指标
+author: 王哲峰
+date: '2022-11-22'
+slug: model-metrics
+categories:
+  - machinelearning
+tags:
+  - tool
+---
+
+
+
+# 分类
+
+* 准确率(precision)
+* 召回率(recall)
+* F 值(F-Measure)
+
+## 参考
+
+* https://blog.csdn.net/huacha__/article/details/80329707?spm=1001.2014.3001.5502
