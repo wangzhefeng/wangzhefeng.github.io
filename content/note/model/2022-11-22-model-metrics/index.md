@@ -20,3 +20,34 @@ tags:
 ## 参考
 
 * https://blog.csdn.net/huacha__/article/details/80329707?spm=1001.2014.3001.5502
+
+
+
+
+
+# 聚类
+
+
+## Rank Index
+
+
+
+
+
+## Mutual Information based scores
+
+## Homogeneity, completeness and V-measure
+
+## Fowlkes-Mallows scores
+
+## Silhouette Coefficient
+
+## Calinski-Harabasz Index
+
+## Davies-BouIdin Index
+
+## Contingency Matrix
+
+## Pair Confusion Matrix
+
+

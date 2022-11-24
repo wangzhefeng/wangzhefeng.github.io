@@ -34,6 +34,9 @@ details[open] summary {
 - [AGNES 层次聚类](#agnes-层次聚类)
   - [算法介绍](#算法介绍)
   - [算法实现](#算法实现)
+- [Ward](#ward)
+  - [算法介绍](#算法介绍-1)
+  - [算法实现](#算法实现-1)
 </p></details><p></p>
 
 # AGNES 层次聚类
@@ -157,4 +160,15 @@ ggplot(iris, aes(Petal.Length, Petal.Width, color = iris$Species)) +
     geom_point(col = clusterCut) + 
     scale_color_manual(values = c('black', 'red', 'green'))
 ```
+
+
+# Ward
+
+## 算法介绍
+
+
+
+## 算法实现
+
+
 

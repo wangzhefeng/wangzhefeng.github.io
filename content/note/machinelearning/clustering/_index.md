@@ -38,5 +38,32 @@ list_pages: true
     - [AGNES(Agglomerative Nesting)]()
 * "自顶向下" 的分拆策略
 
+# 常见聚类算法
+
+| 方法 | 参数 | 可扩展性 | 用例 | 几何 |
+|---------------------|----|----|----|----|
+| K-Means                  | | | | |
+| Affinity propagation      | | | | |
+| Mean-shift               | | | | |
+| Spectral clustering      | | | | |
+| Ward hierarchical        | | | | |
+| Agglomerative clustering | | | | |
+| DBSCAN                   | | | | |
+| OPTICS                   | | | | |
+| Gaussian                 | | | | |
+| BIRCH                    | | | | |
+| Bisecting K-Means        | | | | |
+
+
+# 聚类算法库
+
+* sklearn
+    - sklearn.cluster
+    - sklearn.feature_extraction
+    - sklearn.metrics.pairwise
+
+
+
+
 # 文档
 
