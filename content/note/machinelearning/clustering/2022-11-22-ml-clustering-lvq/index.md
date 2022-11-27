@@ -9,6 +9,32 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [算法介绍](#算法介绍)
+- [算法实现](#算法实现)
+</p></details><p></p>
+
 # 算法介绍
 
 LVQ(Learning vector Quantization) 假设数据样本带有类别标记, 

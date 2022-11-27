@@ -1,5 +1,5 @@
 ---
-title: K-Means 聚类
+title: 基于质心的聚类
 author: 王哲峰
 date: '2022-11-22'
 slug: ml-clustering-kmeans
@@ -37,19 +37,16 @@ details[open] summary {
   - [算法数学模型](#算法数学模型)
   - [算法伪代码](#算法伪代码)
   - [算法实现](#算法实现)
-    - [r 实现](#r-实现)
-    - [python实现](#python实现)
 - [K-Means++](#k-means-1)
-- [距离计算优化 elkan K-Means](#距离计算优化-elkan-k-means)
+- [elkan K-Means](#elkan-k-means)
 - [Mini Batch K-Means](#mini-batch-k-means)
+  - [算法介绍](#算法介绍)
 - [PAM 聚类](#pam-聚类)
   - [算法原理](#算法原理-1)
   - [算法优劣性](#算法优劣性-1)
   - [算法数学模型](#算法数学模型-1)
   - [算法伪代码](#算法伪代码-1)
   - [算法实现](#算法实现-1)
-    - [r 实现](#r-实现-1)
-    - [Python 实现](#python-实现)
 </p></details><p></p>
 
 # K-Means
@@ -65,18 +62,18 @@ details[open] summary {
 
 优点: 
 
-* 原理比较简单, 实现容易, 收敛速度快；
-* 聚类效果比较好；
-* 算法的可解释性较强；
-* 主要的参数仅有一个 `$k$`；
+* 原理比较简单, 实现容易, 收敛速度快
+* 聚类效果比较好
+* 算法的可解释性较强
+* 主要的参数仅有一个聚类簇个数 `$k$`
 
 缺点: 
 
-* K-means只适用于连续型数据集；
-* `$k$`值不容易选取；
-* 如果各隐含类别的数据不平衡, 比如各隐含类别的数据量严重失衡, 或者各隐含类别的方差不同, 则聚类效果不佳；
-* 采用迭代方法, 得到的结果只是局部最优；
-* K-means对数据异常点(极端值)比较敏感；
+* K-Means 只适用于连续型数据集
+* 聚类簇个数 `$k$` 值不容易选取
+* 如果各隐含类别的数据不平衡, 比如各隐含类别的数据量严重失衡, 或者各隐含类别的方差不同, 则聚类效果不佳
+* 采用迭代方法, 得到的结果只是局部最优
+* K-Means 对数据异常点(极端值)比较敏感
 
 ## 算法数学模型
 
@@ -105,62 +102,36 @@ K-Means 算法采用了贪心策略, 通过迭代优化来近似求解 `$E$` 的
 > **过程:**
 > 
 > 1. 从样本集中随机取出 `$k$` 个样本作为初始均值向量: `$\{\mu_{1}, \mu_{2}, \ldots,\mu_{k}\}$`
-> 2. **repeat**
-> 3. 令 `$C_{i}=\emptyset (1 \leqslant i \leqslant k)$`
 > 
-> 4. **for** `$j=1, 2, \ldots, n$` **do**
-> 5. 计算样本 `$x_{j}$` 与各均值向量 `$\mu_{i} (1 \leqslant i \leqslant k)$` 的距离: `$d_{ji}=\|x_{j}-\mu_{i}\|_{2}$`；
-> 6. 根据距离最近的均值向量确定 `$x_{j}$` 的簇标记 `$\lambda_{j}=arg min_{i \in \{1, 2, \ldots, k\}}d_{ji}$`；
-> 7. 将样本 `$x_{j}$` 划入相应的簇: `$C_{\lambda_{j}}=C_{\lambda_{j}} \cup \{x_{j}\}$`; 
-> 8. **end for**
+> **repeat**
+> 
+> 2. 令 `$C_{i}=\emptyset (1 \leqslant i \leqslant k)$`
+> 
+> 3. **for** `$j=1, 2, \ldots, n$` **do**
+> 
+>    * 计算样本 `$x_{j}$` 与各均值向量 `$\mu_{i} (1 \leqslant i \leqslant k)$` 的距离: `$d_{ji}=\|x_{j}-\mu_{i}\|_{2}$`；
+>    * 根据距离最近的均值向量确定 `$x_{j}$` 的簇标记 `$\lambda_{j}=arg min_{i \in \{1, 2, \ldots, k\}}d_{ji}$`；
+>    * 将样本 `$x_{j}$` 划入相应的簇: `$C_{\lambda_{j}}=C_{\lambda_{j}} \cup \{x_{j}\}$`; 
+> 
+>    **end for**
 > 
 > 9. **for** `$i=1, 2, \ldots, k$` **do**
-> 10. 计算新均值向量: `$\mu_{i}^{'}=\frac{1}{|C_{i}|}\sum_{x \in C_{i}}x$`;
-> 11. **if** `$\mu_{i}^{'} \neq \mu_{i}$` **then**
-> 12. 将当前均值向量 `$\mu_{i}$` 更新为 `$\mu_{i}^{'}$`
-> 13. **else**
-> 14. 保持当前均值向量不变
-> 15. **end if**
-> 16. **end for**
+>    * 计算新均值向量: `$\mu_{i}^{'}=\frac{1}{|C_{i}|}\sum_{x \in C_{i}}x$`;
+>    * **if** `$\mu_{i}^{'} \neq \mu_{i}$` **then**
+>       - 将当前均值向量 `$\mu_{i}$` 更新为 `$\mu_{i}^{'}$`
+>    * **else**
+>       - 保持当前均值向量不变
+>    * **end if**
+> 
+>    **end for**
 >
-> 17. **until** 当前均值向量均未更新
+>  **until** 当前均值向量均未更新
 > 
 > **输出:**
 > 
-> 簇划分 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$`,
+> * 簇划分 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$`,
 
 ## 算法实现
-
-### r 实现
-
-data
-
-```r
-# data
-set.seed(0)
-df = iris[, -5]
-```
-
-kmens:
-
-```r
-# clustering
-cl = kmeans(df, 3)
-cl
-```
-
-flexclust::kcca:
-
-```r
-if(!require(flexclust)) install.packages("flexclust")
-clk = flexclust::kcca(df, k = 3)
-clk
-clk@centers
-summary(clk)
-```
-
-### python实现
-
 
 
 # K-Means++
@@ -172,7 +143,7 @@ summary(clk)
 4. 重复2-3直到选择出 `$k$` 个聚类中心；
 5. 利用这 `$k$` 个质心去初始化质心, 然后运行标准的K-Means算法；
 
-# 距离计算优化 elkan K-Means
+# elkan K-Means
 
 在传统的 K-Means 算法中, 在每轮迭代时, 要计算所有的样本点到所有的质心的距离, 
 这样会比较的耗时. 那么, 对于距离的计算有没有能够简化的地方呢？
@@ -193,20 +164,23 @@ elkan K-Means利用了两边之和大于等于第三边,以及两边之差小于
 
 # Mini Batch K-Means
 
-在统的K-Means算法中, 要计算所有的样本点到所有的质心的距离. 
-如果样本量非常大, 比如达到10万以上, 特征有100以上, 
-此时用传统的K-Means算法非常的耗时, 就算加上elkan K-Means优化也依旧. 
-在大数据时代, 这样的场景越来越多. 此时Mini Batch K-Means应运而生. 
-顾名思义, Mini Batch, 也就是用样本集中的一部分的样本来做传统的K-Means, 
-这样可以避免样本量太大时的计算难题, 算法收敛速度大大加快. 
-当然此时的代价就是我们的聚类的精确度也会有一些降低. 
-一般来说这个降低的幅度在可以接受的范围之内. 
+## 算法介绍
 
-在Mini Batch K-Means中, 我们会选择一个合适的批样本大小batch size, 
-我们仅仅用batch size个样本来做K-Means聚类. 那么这batch size个样本怎么来的？
-一般是通过无放回的随机采样得到的. 为了增加算法的准确性, 
-我们一般会多跑几次Mini Batch K-Means算法, 
-用得到不同的随机采样集来得到聚类簇, 选择其中最优的聚类簇. 
+在统的 K-Means 算法中, 要计算所有的样本点到所有的质心的距离. 如果样本量非常大, 比如达到 10 万以上, 特征有 100 以上, 
+此时用传统的 K-Means 算法非常的耗时, 就算加上 elkan K-Means 优化也依旧. 
+
+在大数据时代, 这样的场景越来越多. 此时 Mini Batch K-Means 应运而生. 顾名思义, Mini Batch, 
+也就是用样本集中的一部分的样本来做传统的 K-Means, 这样可以避免样本量太大时的计算难题, 算法收敛速度大大加快. 
+当然此时的代价就是我们的聚类的精确度也会有一些降低. 一般来说这个降低的幅度在可以接受的范围之内. 
+
+在 Mini Batch K-Means 中, 我们会选择一个合适的批样本大小 batch size, 
+我们仅仅用 batch size 个样本来做 K-Means 聚类. 那么这 batch size 个样本怎么来的？
+一般是通过无放回的随机采样得到的. 为了增加算法的准确性, 一般会多跑几次 Mini Batch K-Means 算法, 
+用得到不同的随机采样集来得到聚类簇, 选择其中最优的聚类簇 
+
+
+
+
 
 # PAM 聚类
 
@@ -229,10 +203,10 @@ PAM的工作原理:
 
 ## 算法优劣性
 
-* PAM对噪声和异常值更稳健, 消除了k-means算法对于孤立点的敏感性；
+* PAM对噪声和异常值更稳健, 消除了K-Means算法对于孤立点的敏感性；
 * PAM支持混合的数据类型, 不仅限于连续变量；
-* 比k-means的计算的复杂度要高. 
-* 与k-means一样, 必须设置k的值. 
+* 比K-Means的计算的复杂度要高. 
+* 与K-Means一样, 必须设置k的值. 
 * 对小的数据集非常有效, 对大数据集效率不高
 
 ## 算法数学模型
@@ -240,53 +214,4 @@ PAM的工作原理:
 ## 算法伪代码
 
 ## 算法实现
-
-### r 实现
-
-函数解释: 
-
-```r
-pam(
-    x,                                              # 数据框或矩阵, 允许有空值(NA)
-    k,                                              # 设置分组数量
-    diss = inherits(x, "dist"),                     # 为TRUE时, x为距离矩阵；为FALSE时, x是变量矩阵. 默认为FALSE
-    metric = "euclidean",                           # 设置距离算法, 默认为euclidean, 距离矩阵忽略此项
-    medoids = NULL,                                 # 指定初始的中心, 默认为不指定. 
-    stand = FALSE,                                  # 为TRUE时进行标准化, 距离矩阵忽略此项. 
-    cluster.only = FALSE,                           # 为TRUE时, 仅计算聚类结果, 默认为FALSE
-    do.swap = TRUE,                                 # 是否进行中心点交换, 默认为TRUE；对于超大的数据集, 可以不进行交换. 
-    keep.diss = !diss && !cluster.only && n < 100,  # 是否保存距离矩阵数据
-    keep.data = !diss && !cluster.only,             # 是否保存原始数据
-    pamonce = FALSE,                                # 一种加速算法, 接受值为TRUE,FALSE,0,1,2
-    trace.lev = 0                                   # 日志打印, 默认为0, 不打印
-)                                                   
-```
-
-聚类实现: 
-
-```r
-if(!require(cluster)) install.packages("cluster")
-
-kclus = pam(x = df, k = 2)
-kclus
-kclus$clusinfo
-
-plot(df, col = kclus$clustering, main = "K-medoids Cluster")
-points(kclus$medoids, col = 1:3, pch = 10, cex = 4)
-```
-
-输出结果: 
-
-* medoids, 中心点的数据值
-* id.med, 中心点的索引
-* clustering, 每个点的分组
-* objective, 目标函数的局部最小值
-* isolation, 孤立的聚类(用L或L*表示)
-* clusinfo, 每个组的基本信息
-* silinfo, 存储各观测所属的类、其邻居类以及轮宽(silhouette)值
-* diss, 不相似度
-* call, 执行函数和参数
-* data, 原始数据集
-
-### Python 实现
 

@@ -1,5 +1,5 @@
 ---
-title: 推荐算法业务
+title: 推荐系统
 author: 王哲峰
 date: '2022-09-27'
 slug: rs-introduction
