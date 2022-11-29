@@ -56,9 +56,6 @@ details[open] summary {
   - [周期性检测流程](#周期性检测流程)
     - [检测流程](#检测流程)
     - [实例分析](#实例分析)
-  - [周期性检测实践](#周期性检测实践)
-- [时间序列季节性检测](#时间序列季节性检测)
-  - [傅里叶变换](#傅里叶变换-1)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -389,19 +386,6 @@ plt.show()
 
 ## 傅里叶变换
 
-傅里叶变换是一种将 **时域**、 **空域** 数据转化为 **频域** 数据的方法, 
-任何波形(时域)都可以看做是不同振幅、不同相位(频域)正弦波的叠加. 
-比如下面最前方的图形就是它后面所有正弦波的总和.
-
-![img](images/FT.png)
-
-对于一条具备周期性的时间序列, 它本身就很接近正弦波, 所以它的组成里一定包含一个显著的正弦波, 
-周期就是该正弦波的周期, 而这个正弦波可以通过傅里叶变换找到, 它将时序数据展开成
-三角函数的线性组合, 得到每个展开项的系数, 就是傅里叶系数. 
-傅里叶系数越大, 表明它所对应的正弦波的周期就越有可能是这份数据的周期. 
-
-- [An Interactive Guide To The Fourier Transform](https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/)
-
 ## 自相关系数
 
 自相关系数(Autocorrelation Function) 度量的是同一件事不同时间的相关程度.
@@ -445,17 +429,7 @@ plt.show()
 
 ![img](images/cycle_detection_flow.png)
 
-## 周期性检测实践
-
-- 见 `src/timeseries/timeseries_cyclical_detection.py`
-
-
-# 时间序列季节性检测
-
-## 傅里叶变换
-
-- https://anomaly.io/detect-seasonality-using-fourier-transform-r/
-
 # 参考
 
 - [[1]时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
+

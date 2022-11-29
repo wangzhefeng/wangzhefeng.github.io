@@ -11,6 +11,10 @@ disable_highlight: true
 偶尔在这里写文章、写笔记，记录生活，记录学习。
 希望在这个过程中，无论窗外如何嘈杂，都要静下心来思考，充实自己的内心、头脑。
 
+哲学家培根曾经说过下面的话，邱东在此基础上加上了对统计的理解：
+
+> “历史使人明智，诗歌使人巧慧，数学使人精细，博物使人深沉，伦理使人庄重，逻辑与修辞使人善辩，统计使人豁达”
+
 <!-- ![横渠四句](images/hengqusijv.jpg) -->
 
 下面这句话是北宋大儒张载（张横渠）代表有历史责任感的文人提出的生命理想，
@@ -53,6 +57,8 @@ disable_highlight: true
 > * “倦怠总会袭来，你渴望新的感受。一条从未踏足的小径，一个突然到来的朋友，或是一个意外的句子。但旧与新从来是紧密的链条。唯内在笃定才不断激发内在探索，因为你始终知道，爱是一切的源头。新道路，总因它意外浮现，唯爱和生命不可辜负。” -- 《十三邀》
 -->
 
+
+
 <!-- 喜欢的一段视频：
 <div class="plyr__video-embed" id="player" width="100%">
   <iframe
@@ -87,7 +93,7 @@ disable_highlight: true
     - [x] 部署相关文件
 * :white_check_mark: 添加 favicon.ico -->
 
-###
+##
 
 [<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.png" width="7%" />](images/github.png) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
 <!-- [<img src="images/github.svg" width="6%" />](https://github.com) -->
