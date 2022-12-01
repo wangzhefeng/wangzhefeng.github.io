@@ -2,7 +2,7 @@
 title: 广义加性模型(GAM)
 author: 王哲峰
 date: '2022-09-23'
-slug: model-gam
+slug: ml-gam
 categories:
   - machinelearning
 tags:
