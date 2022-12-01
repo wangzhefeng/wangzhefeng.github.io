@@ -1,6 +1,6 @@
 ---
 title: PyTorch
-subtitle: PyTorch Home
+subtitle: 
 list_pages: true
 # order_by: title
 ---
