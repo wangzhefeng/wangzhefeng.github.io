@@ -12,5 +12,6 @@ list_pages: true
 * [当推荐系统遇见知识图谱](https://mp.weixin.qq.com/s/mjkJY9yH2rizJi-huxan1g)
 * [万字入门推荐系统](https://mp.weixin.qq.com/s/YbwQAPIEkihO7XzVvrlDCg)
 * [从零单排推荐系统文章汇总目录](https://zhuanlan.zhihu.com/p/407871839)
+* [旧文档](https://rpubs.com/Wangzf/Recommendation_algorithm)
 
 ## 文档

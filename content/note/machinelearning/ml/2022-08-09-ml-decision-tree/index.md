@@ -74,6 +74,7 @@ details[open] summary {
 - [决策树在 sklearn 中的实现简单用法](#决策树在-sklearn-中的实现简单用法)
   - [分类](#分类)
   - [回归](#回归)
+- [TODO](#todo)
 </p></details><p></p>
 
 # 决策树模型
@@ -385,3 +386,9 @@ clf = tree.DecisionTreeRegressor()
 clf = clf.fit(X, y)
 clf.preidct()
 ```
+
+
+# TODO
+
+* [https://rpubs.com/Wangzf/CART](https://rpubs.com/Wangzf/CART)
+* https://rpubs.com/Wangzf/Regression

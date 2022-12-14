@@ -33,9 +33,9 @@ details[open] summary {
 
 - [快速开始](#快速开始)
 - [一张统计图的结构](#一张统计图的结构)
-  - [API](#api)
+- [图形 API](#图形-api)
 - [Subplots layout](#subplots-layout)
-  - [API](#api-1)
+  - [API](#api)
   - [subplots](#subplots)
 - [基本图形](#基本图形)
   - [plot](#plot)
@@ -72,8 +72,6 @@ details[open] summary {
 - [Quick reminder](#quick-reminder)
 </p></details><p></p>
 
-<!-- <img src="images/quick_start.png" width="50%" /> -->
-
 # 快速开始
 
 ```python
@@ -99,13 +97,13 @@ def quick_start():
 quick_start()
 ```
 
-<img src="images/figure.png" width="100%" />
+<img src="images/quick_start.png" width="100%" />
 
 # 一张统计图的结构
 
-<img src="images/anatomy.png" width="70%" />
+<img src="images/anatomy.png" width="100%" />
 
-## API
+# 图形 API
 
 ```python
 import matplotlib.pyplot as plt
