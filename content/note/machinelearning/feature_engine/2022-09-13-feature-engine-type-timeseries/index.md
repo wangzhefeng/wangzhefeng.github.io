@@ -32,6 +32,7 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [时间序列预处理](#时间序列预处理)
+  - [时间序列示例数据](#时间序列示例数据)
   - [标准化和中心化](#标准化和中心化)
     - [标准化](#标准化)
     - [中心化](#中心化)
@@ -76,6 +77,51 @@ details[open] summary {
 如果要做统一的分析，需要我们进行初步的处理，将时间序列整合到统一的范畴下，进行分析。
 这里基本的方法有：标准化、归一化、定量特征二值化
 
+## 时间序列示例数据
+
+[澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
+
+```python
+import pandas as pd 
+from pandas import Grouper
+import matplotlib.pyplot as plt 
+
+series = pd.read_csv(
+    "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+    header = 0,
+    index_col = 0, 
+    parse_dates = True,
+    date_parser = lambda dates: pd.to_datetime(dates, format = '%Y-%m-%d'),
+    squeeze = True
+)
+print(series.head())
+```
+
+```
+Date
+1981-01-01    20.7
+1981-01-02    17.9
+1981-01-03    18.8
+1981-01-04    14.6
+1981-01-05    15.8
+Name: Temp, dtype: float64
+```
+
+```python
+series.plot()
+plt.show()
+```
+
+![img](images/line.png)
+
+```python
+series.hist()
+plt.show()
+```
+
+![img](images/hist.png)
+
+
 ## 标准化和中心化
 
 ### 标准化
@@ -85,6 +131,50 @@ details[open] summary {
 有如下公式：
 
 `$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{std(\{x_{t}\}_{t}^{T})}$$`
+
+```python
+from pandas import read_csv
+from sklearn.preprocessing import StandarScaler
+from math import sqrt
+
+# Data
+series = pd.read_csv(
+    "daily-minimum-temperatures-in-me.csv", 
+    header = 0,
+    index_col = 0
+)
+print(series.head())
+values = series.values
+values = values.reshape((len(values), 1))
+
+# Standardization
+scaler = StandardScaler()
+scaler = scaler.fit(values)
+print("Mean: %f, StandardDeviation: %f" % (scaler.mean_, sqrt(scaler.var_)))
+
+# 标准化
+normalized = scaler.transform(values)
+for i in range(5):
+    print(normalized[i])
+
+# 逆变换
+inversed = scaler.inverse_transform(normalized)
+for i in range(5):
+    print(inversed[i])
+```
+
+```python
+normalized.plot()
+```
+
+![img](images/line_standard.png)
+
+
+```python
+inversed.plot()
+```
+
+![img](images/line_inversed_standard.png)
 
 ### 中心化
 
@@ -98,6 +188,72 @@ details[open] summary {
 
 归一化是将样本的特征值转换到同一范围（量纲）下，把数据映射到 `$[0, 1]$` 或 `$[-1, 1]$` 区间内，
 它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的
+
+```python
+import pandas as pd 
+from sklearn.preprocessing import MinMaxScaler
+
+# Data
+series = pd.read_csv(
+    "daily-minimum-temperautures-in-me.csv", 
+    header = 0, 
+    index_col = 0
+)
+print(series.head())
+values = series.values
+values = values.reshape((len(values), 1))
+
+# Normalization
+scaler = MinMaxScaler(feature_range = (0, 1))
+scaler = scaler.fit(values)
+print("Min: %f, Max: %f" % (scaler.data_min_, scaler.data_max_))
+
+# 正规化
+normalized = scaler.transform(values)
+for i in range(5):
+    print(normalized[i])
+
+# 逆变换
+inversed = scaler.inverse_transform(normalized)
+for i in range(5):
+    print(inversed[i])
+```
+
+``` 
+            Temp
+Date            
+1981-01-02  17.9
+1981-01-03  18.8
+1981-01-04  14.6
+1981-01-05  15.8
+1981-01-06  15.8
+Min: 0.000000, Max: 26.300000
+
+[0.68060837]
+[0.7148289]
+[0.55513308]
+[0.60076046]
+[0.60076046]
+[17.9]
+[18.8]
+[14.6]
+[15.8]
+[15.8]
+```
+
+```python
+normalized.plot()
+```
+
+![img](images/line_normalized.png)
+
+
+```python
+inversed.plot()
+```
+
+![img](images/line_inversed_normalized.png)
+
 
 ### 归一化
 

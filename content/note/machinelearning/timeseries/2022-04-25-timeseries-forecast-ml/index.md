@@ -32,17 +32,14 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [时间序列回归](#时间序列回归)
-  - [常见线性回归模型](#常见线性回归模型)
-  - [常见的非线性回归模型](#常见的非线性回归模型)
-  - [单步预测](#单步预测)
-  - [多步预测](#多步预测)
-  - [多变量预测](#多变量预测)
-    - [树模型](#树模型)
-- [时间序列数据 vs 监督机器学习数据](#时间序列数据-vs-监督机器学习数据)
-  - [数据形式](#数据形式)
-  - [模型](#模型)
+    - [单步预测](#单步预测)
+    - [多步预测](#多步预测)
+    - [多变量预测](#多变量预测)
+    - [递归预测 Recursive Forecasting](#递归预测-recursive-forecasting)
+    - [直接预测 Direct Forecasting](#直接预测-direct-forecasting)
+    - [堆叠预测 Stacking Forecasting](#堆叠预测-stacking-forecasting)
+    - [修正预测 Rectified Forecasting](#修正预测-rectified-forecasting)
 - [时间序列数据特征工程](#时间序列数据特征工程)
-    - [数据](#数据)
   - [创建 Date Time 特征](#创建-date-time-特征)
     - [常见特征](#常见特征)
   - [创建 Lagging 特征](#创建-lagging-特征)
@@ -50,14 +47,8 @@ details[open] summary {
     - [滑动窗口统计量特征](#滑动窗口统计量特征)
     - [TODO](#todo)
   - [创建 Window 变量](#创建-window-变量)
-- [时间序列特征正规化和标准化](#时间序列特征正规化和标准化)
-  - [正规化 Normalize](#正规化-normalize)
-  - [标准化 Standardize](#标准化-standardize)
 - [参考文章](#参考文章)
-- [参考](#参考)
 </p></details><p></p>
-
-
 
 # 时间序列回归
 
@@ -65,49 +56,26 @@ details[open] summary {
 简单来说，时间序列的回归分析需要分析历史数据，找到历史数据演化中的模式和特征，
 其主要分为线性回归分析和非线性回归分析两种类型
 
-回归分析多采用机器学习方法，我们首先需要明确机器学习（或深度学习）模型构建与验证的主体思路：
+回归分析多采用机器学习方法，我们首先需要明确机器学习(或深度学习)模型构建与验证的主体思路：
 
 1. 分析数据构建数据特征，将数据转化为特征样本集合
-2. 明确样本与标签（Label），划分训练集与测试集
+2. 明确样本与标签，划分训练集与测试集
 3. 比较不同模型在相同的训练集中的效果，或是相同模型的不同参数在同一个训练集中拟合的效果
 4. 在验证样本集中验证模型的准确度，通过相关的结果评估公式选择表现最好同时没有过拟合的模型
 
-## 常见线性回归模型
-
-* 线性回归(Linear Regression)
-* 多项式回归(Polynomial Regression)
-* 逐步回归(Stepwise Regression)
-* 岭回归(Ridge Regression)
-* 套索回归(Lasso Regression)
-* 弹性回归(ElasticNet Regression)
-
-## 常见的非线性回归模型
-
-时序统计学模型（AR、ARMA、ARIMA）模型，建模的思路源于针对当前观测点的最近P个点和最近Q个点的误差值进行建模，结构如下：
-
-`$$Y_{t} = \sum_{j=1}^{P} \phi_{j}Y_{t-j} - \sum_{k=i}^{Q}\theta_{k}\epsilon_{t-k} + \epsilon_{t}$$`
-
-而在现实背景中，很多数据并不是严格按照线性关系刻画的。为了兼顾模型的可解释性，
-很多工作将非线性的数据进行各种变换(幂函数变换、倒数变换、指数变换、对数变换、Box-Cax等)将一个非线性问题转换成一个呈现线性关系的问题，
-再利用相应的模型进行解决
-
-* 逻辑回归(Logistic Regression)
-* 树回归
-* 神经网络模型
-
 近年来时间序列预测方法，多采用机器学习方式。机器学习的方法，主要是构建样本数据集，
 采用“时间特征”到“样本值”的方式，通过有监督学习，学习特征与标签之前的关联关系，
-从而实现时间序列预测。常用的场景有
+从而实现时间序列预测。常用的场景有以下几种
 
-## 单步预测
+### 单步预测
 
 在时间序列预测中的标准做法是使用滞后的观测值 `$x_{t-1}$` 作为输入变量来预测当前的时间的观测值 `$x_{t}$`
 
-## 多步预测
+### 多步预测
 
 使用过去的观测序列 `$\{\ldots, x_{t-2}, x_{t-1}\}$` 预测未来的观测序列 `$\{x_{t}, x_{t+1}, \ldots\}$`
 
-## 多变量预测
+### 多变量预测
 
 多元时间序列，即每个时间有多个观测值：
 
@@ -117,18 +85,34 @@ details[open] summary {
 例如，可能有两组时间序列观测值 `$\{x_{t-1}^{a}, x_{t-2}^{a}, \ldots\}$`，
 `$\{x_{t-1}^{b}, x_{t-2}^{b}, \ldots\}$`，希望分析这组多元时间序列来预测 `$x_{t}^{a}$` 
 
-基于以上场景，许多监督学习的方法可以应用在时间序列的预测中，比如 svm/xgboost/逻辑回归/回归树/...
+基于以上场景，许多监督学习的方法可以应用在时间序列的预测中，
+在运用机器学习模型时，可以把时间序列模型当成一个回归问题来解决，
+比如 svm/xgboost/逻辑回归/回归树/...
 
-在运用机器学习模型时, 我们可以把时间序列模型当成一个回归问题来解决, 
-常见的方法有树模型与神经网络模型两大类 
+### 递归预测 Recursive Forecasting
 
-### 树模型
 
-一般采用的是 xgboost 或者 lightgbm 的方法, 现在业界也被广泛应用, 这里就不多做介绍了. 
-树模型的一个好处就是, 相对于以上的方法, 能更方便地添加一些 category 类的特征比如: 
-是否季节末、是否公共价格、是否营业时间等. 
 
-在用树模型做时间序列预测时, 特征工程的核心要点在于如何从历史的数据中抽取特征, 
+### 直接预测 Direct Forecasting
+
+
+
+
+### 堆叠预测 Stacking Forecasting
+
+
+
+### 修正预测 Rectified Forecasting
+
+
+# 时间序列数据特征工程
+
+将时间序列数据转换为监督机器学习问题数据
+
+* 将单变量时间序列数据转换为机器学习问题数据
+* 将多变量时间序列数据转换为机器学习问题数据
+
+特征工程的核心要点在于如何从历史的数据中抽取特征, 
 这里介绍一些特征构建的经验: 
 
 * 离散类时间特征: 年月日时分数, 周几, 一年中的第几天, 第几周, 一天中的哪个时间段等
@@ -137,104 +121,12 @@ details[open] summary {
 * 其他时序模型的预测值作为特征: ARIMA、SARIMA、指数平滑等
 * 其他相关业务线数据的引入: 比如对于售后业务线, 引入售前业务线/预定业务线等数据, 帮忙进行售后业务线的预测
 
-
-# 时间序列数据 vs 监督机器学习数据
-
-将时间序列数据转换为监督机器学习问题数据
-
-* 将单变量时间序列数据转换为机器学习问题数据
-* 将多变量时间序列数据转换为机器学习问题数据
-
-## 数据形式
-
-时间序列是按照时间索引排列的一串数字, 可以理解为为有序值构成的一列数据或有序列表: 
-
-| timestamp           | value |
-|---------------------|-------|
-| 2019-10-01 00:00:00 | 0     |
-| 2019-10-01 01:00:00 | 1     |
-| 2019-10-01 02:00:00 | 2     |
-| 2019-10-01 03:00:00 | 3     |
-| 2019-10-01 04:00:00 | 4     |
-
-监督机器学习问题由自变量 `$X$` 和 因变量 `$Y$`
-构成, 通常使用自变量 `$X$` 来预测因变量 `$Y$`:
-
-
-| `$X_1$` | `$X_2$` | `$\cdots$` | `$X_p$` | `$Y$` |
-|-------|-------|----------|-------|-----|
-|a1     |b1     |`$\cdots$`  | c1    | y1  |
-|a2     |b2     |`$\cdots$`  | c2    | y2  |
-|a3     |b3     |`$\cdots$`  | c3    | y3  |
-|a4     |b4     |`$\cdots$`  | c4    | y4  |
-|a5     |b5     |`$\cdots$`  | c5    | y5  |
-
-
-## 模型
-
-`$$\sum_{i=0}^{19}a_{i,j}A_{t-i}+\sum_{i=0}^{19}b_{i,j}B_{t-i}+ \cdots+\sum_{i=0}^{19}z_{i,j}Z_{t-i} = A_{t+j}+\epsilon, j = 1, 2, 3, 4, 5, 6$$`
-
-| `$A_1$`         | `$A_2$`         | `$\cdots$`  | `$A_{20}$`       | `$B_1$`         | `$B_1$`         | `$\cdots$`  | `$B_{20}$`       | `$\cdots$`  | `$Z_{1}$`       | `$Z_{2}$`       | `$\cdots$`  | `$Z_{20}$`       | `$A_{21}$`       |
-|---------------|---------------|----------|----------------|---------------|---------------|----------|----------------|----------|---------------|---------------|----------|----------------|----------------|
-| `$a_{(0, 1)}$`  | `$a_{(1, 1)}$`  | `$\cdots$`  | `$a_{(19, 1)}$`  | `$b_{(0, 1)}$`  | `$b_{(1, 1)}$`  | `$\cdots$`  | `$b_{(19, 1)}$`  | `$\cdots$`  | `$z_{(0, 1)}$`  | `$z_{(1, 1)}$`  | `$\cdots$`  | `$z_{(19, 1)}$`  | `$a_{(20, 1)}$`  |
-| `$a_{(0, 2)}$`  | `$a_{(1, 2)}$`  | `$\cdots$`  | `$a_{(19, 2)}$`  | `$b_{(0, 2)}$`  | `$b_{(1, 2)}$`  | `$\cdots$`  | `$b_{(19, 2)}$`  | `$\cdots$`  | `$z_{(0, 2)}$`  | `$z_{(1, 2)}$`  | `$\cdots$`  | `$z_{(19, 2)}$`  | `$a_{(20, 2)}$`  |
-| `$a_{(0, 3)}$`  | `$a_{(1, 3)}$`  | `$\cdots$`  | `$a_{(19, 3)}$`  | `$b_{(0, 3)}$`  | `$b_{(1, 3)}$`  | `$\cdots$`  | `$b_{(19, 3)}$`  | `$\cdots$`  | `$z_{(0, 3)}$`  | `$z_{(1, 3)}$`  | `$\cdots$`  | `$z_{(19, 3)}$`  | `$a_{(20, 3)}$`  |
-| `$a_{(0, 4)}$`  | `$a_{(1, 4)}$`  | `$\cdots$`  | `$a_{(19, 4)}$`  | `$b_{(0, 4)}$`  | `$b_{(1, 4)}$`  | `$\cdots$`  | `$b_{(19, 4)}$`  | `$\cdots$`  | `$z_{(0, 4)}$`  | `$z_{(1, 4)}$`  | `$\cdots$`  | `$z_{(19, 4)}$`  | `$a_{(20, 4)}$`  |
-| `$a_{(0, 5)}$`  | `$a_{(1, 5)}$`  | `$\cdots$`  | `$a_{(19, 5)}$`  | `$b_{(0, 5)}$`  | `$b_{(1, 5)}$`  | `$\cdots$`  | `$b_{(19, 5)}$`  | `$\cdots$`  | `$z_{(0, 5)}$`  | `$z_{(1, 5)}$`  | `$\cdots$`  | `$z_{(19, 5)}$`  | `$a_{(20, 5)}$`  |
-| `$a_{(0, 6)}$`  | `$a_{(1, 6)}$`  | `$\cdots$`  | `$a_{(19, 6)}$`  | `$b_{(0, 6)}$`  | `$b_{(1, 6)}$`  | `$\cdots$`  | `$b_{(19, 6)}$`  | `$\cdots$`  | `$z_{(0, 6)}$`  | `$z_{(1, 6)}$`  | `$\cdots$`  | `$z_{(19, 6)}$`  | `$a_{(20, 6)}$`  |
-
-
-# 时间序列数据特征工程
-
 三种特征:
 
 * Date Time Features
 * Lag Features
 * Window Features
 
-### 数据
-
-[澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
-
-```python
-import pandas as pd 
-from pandas import Grouper
-import matplotlib.pyplot as plt 
-
-series = pd.read_csv(
-    "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-    header = 0,
-    index_col = 0, 
-    parse_dates = True,
-    date_parser = lambda dates: pd.to_datetime(dates, format = '%Y-%m-%d'),
-    squeeze = True
-)
-print(series.head())
-```
-
-```
-Date
-1981-01-01    20.7
-1981-01-02    17.9
-1981-01-03    18.8
-1981-01-04    14.6
-1981-01-05    15.8
-Name: Temp, dtype: float64
-```
-
-```python
-series.plot()
-plt.show()
-```
-
-![img](images/line.png)
-
-```python
-series.hist()
-plt.show()
-```
-
-![img](images/hist.png)
 
 
 ## 创建 Date Time 特征
@@ -443,131 +335,14 @@ print(df.head())
 4  14.6  16.580  18.8  15.8
 ```
 
-# 时间序列特征正规化和标准化
-
-## 正规化 Normalize
-
-```python
-import pandas as pd 
-from sklearn.preprocessing import MinMaxScaler
-
-# Data
-series = pd.read_csv(
-    "daily-minimum-temperautures-in-me.csv", 
-    header = 0, 
-    index_col = 0
-)
-print(series.head())
-values = series.values
-values = values.reshape((len(values), 1))
-
-# Normalization
-scaler = MinMaxScaler(feature_range = (0, 1))
-scaler = scaler.fit(values)
-print("Min: %f, Max: %f" % (scaler.data_min_, scaler.data_max_))
-
-# 正规化
-normalized = scaler.transform(values)
-for i in range(5):
-    print(normalized[i])
-
-# 逆变换
-inversed = scaler.inverse_transform(normalized)
-for i in range(5):
-    print(inversed[i])
-```
-
-``` 
-            Temp
-Date            
-1981-01-02  17.9
-1981-01-03  18.8
-1981-01-04  14.6
-1981-01-05  15.8
-1981-01-06  15.8
-Min: 0.000000, Max: 26.300000
-
-[0.68060837]
-[0.7148289]
-[0.55513308]
-[0.60076046]
-[0.60076046]
-[17.9]
-[18.8]
-[14.6]
-[15.8]
-[15.8]
-```
-
-```python
-normalized.plot()
-```
-
-![img](images/line_normalized.png)
-
-
-```python
-inversed.plot()
-```
-
-![img](images/line_inversed_normalized.png)
-
-## 标准化 Standardize
-
-```python
-from pandas import read_csv
-from sklearn.preprocessing import StandarScaler
-from math import sqrt
-
-# Data
-series = pd.read_csv(
-    "daily-minimum-temperatures-in-me.csv", 
-    header = 0,
-    index_col = 0
-)
-print(series.head())
-values = series.values
-values = values.reshape((len(values), 1))
-
-# Standardization
-scaler = StandardScaler()
-scaler = scaler.fit(values)
-print("Mean: %f, StandardDeviation: %f" % (scaler.mean_, sqrt(scaler.var_)))
-
-# 标准化
-normalized = scaler.transform(values)
-for i in range(5):
-    print(normalized[i])
-
-# 逆变换
-inversed = scaler.inverse_transform(normalized)
-for i in range(5):
-    print(inversed[i])
-```
-
-```python
-normalized.plot()
-```
-
-![img](images/line_standard.png)
-
-
-```python
-inversed.plot()
-```
-
-![img](images/line_inversed_standard.png)
-
 # 参考文章
 
-- [blog1](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/)
-- [blog2](https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/)
-- [Machine Learning Strategies for Time Series Forecasting](https://link.springer.com/chapter/10.1007%2F978-3-642-36318-4_3)
-- [slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
-- [Machine Learning for Sequential Data: A Review](http://web.engr.oregonstate.edu/~tgd/publications/mlsd-ssspr.pdf)
-- [blog3](https://cloud.tencent.com/developer/article/1042809)
-- [resample](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
+* [Time Series Forecasting as Supervised Learning](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/)
+* [How to Convert a Time Series to a Supervised Learning Problem in Python](https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/)
+* [Machine Learning Strategies for Time Series Forecasting](https://link.springer.com/chapter/10.1007%2F978-3-642-36318-4_3)
+* [slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
+* [Machine Learning for Sequential Data: A Review](http://web.engr.oregonstate.edu/~tgd/publications/mlsd-ssspr.pdf)
+* [如何用Python将时间序列转换为监督学习问题](https://cloud.tencent.com/developer/article/1042809)
+* [How To Resample and Interpolate Your Time Series Data With Python](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
+* [时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
 
-# 参考
-
-* [[1]时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
