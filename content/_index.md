@@ -6,10 +6,10 @@ disable_highlight: true
 
 ##
 
-2017 年我从上海大学数学系毕业。开始了在上海工作的日子。
-工作之余在家听音乐、看书、睡觉。时不时看看 Dota2。
+2017 年我从上海大学数学系毕业，开始了在上海工作的日子。
+工作之余在家听音乐、看书、睡觉，时不时看看 Dota2。
 偶尔在这里写文章、写笔记，记录生活，记录学习。
-希望在这个过程中，无论窗外如何嘈杂，都要静下心来思考，充实自己的内心、头脑。
+无论窗外如何嘈杂，都要静下心来思考，充实自己的内心、头脑。
 
 关于统计，邱东在哲学家培根曾经说过话的基础上加上了对统计的理解：
 
@@ -27,6 +27,21 @@ disable_highlight: true
 > “看尽人世间形形色色的不幸之后，我们不能因为眼前的荣华富贵而狂妄自大，或者赞美稍纵即逝的幸福快乐。
   世事难料，未来变幻莫测。只有承蒙上苍垂怜、能够幸福到老的人，我们才能称之为幸福快乐。”
 
+关于程序：
+
+> 程序界的第一条规矩：只要代码能跑起来，就绝对不要再改了
+
+<div class="plyr__video-embed" id="player" width="100%">
+  <iframe
+    src="bugs.mp4"
+    allowfullscreen
+    allowtransparency
+    allow="autoplay"
+    width="49%"
+    height="100%"
+  ></iframe>
+</div>
+
 <!-- 喜欢的一段视频：
 <div class="plyr__video-embed" id="player" width="100%">
   <iframe
@@ -40,7 +55,9 @@ disable_highlight: true
 </div>
 -->
 
-### TODO
+
+
+<!-- ### TODO
 
 * :white_check_mark: 评论在一些页面不启用
 * :white_check_mark: 集成 Disqus 和 Utterances 到评论区

@@ -32,11 +32,16 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [循环神经网络 RNN](#循环神经网络-rnn)
+  - [Seq2Seq](#seq2seq)
+  - [WaveNet](#wavenet)
   - [LSTM](#lstm)
   - [GRU](#gru)
   - [LSTNet](#lstnet)
     - [网络结构](#网络结构)
     - [网络参数](#网络参数)
+  - [DeepAR](#deepar)
+  - [N-Beats](#n-beats)
+  - [TFT](#tft)
 - [卷积神经网络 CNN](#卷积神经网络-cnn)
 - [格拉姆角场 GAF](#格拉姆角场-gaf)
 - [短时傅里叶变换 STFT](#短时傅里叶变换-stft)
@@ -48,12 +53,15 @@ details[open] summary {
 
 深度学习方法近年来逐渐替代机器学习方法，成为人工智能与数据分析的主流，
 对于时间序列的分析，有许多方法可以进行处理。
-常见的利用神经网络技术来做时间序列预测的方法有 CNN、RNN、LSTM、GRU、seq2seq 等
+常见的利用神经网络技术来做时间序列预测的方法有 CNN、RNN、LSTM、GRU、Seq2Seq 等
 
 相对于传统的树模型需要人工构建相关模型特征, 神经网络模型通常需要喂入大量的数据来进行训练, 
 因此如果同类时序的数据量够多(有够多彼此间相关性较强的时序), 
 那么训练一个通用型的端对端的神经网络预测有时也有不错的效果, 比如使用 LSTM 一方面可以较容易地整合外部变量, 
 另一方面 LSTM 有能较好地自动提取时序特征的能力
+
+深度学习的思路是尽量只使用原始的序列和其它相关输入信息，基本不做特征工程，
+希望通过各类模型结构自动学习到时序的隐含表达，进而做端到端的预测输出
 
 # 循环神经网络 RNN
 
@@ -61,6 +69,19 @@ details[open] summary {
 天生的循环自回归的结构是对时间序列的很好的表示。所采用的方式也是监督学习，
 不过不需要人为的构建时序特征，可以通过深度学习网络拟合时序曲线，
 捕捉时间先后顺序关系，长期依赖，进行特征学习与预测
+
+## Seq2Seq
+
+![img](images/seq2seq.jpeg)
+
+基本是借鉴了 NLP 里的经典架构，使用 RNN/GRU/LSTM 作为基本单元，
+encoder 中做训练窗口中的信息提取，然后在 decoder 中做预测 horizon 的多步输出
+
+## WaveNet
+
+NN 系列模型不好并行，所以突然发现谷歌提出的这个空洞因果卷积感觉很高级，性能理论上也比 RNN 之类的好很多，它的结构大致长这样
+
+![img](images/wavenet.jpeg)
 
 ## LSTM
 
@@ -92,7 +113,26 @@ Long-and Short-term Time-series Network(LSTNet) 专门设计用于时间序列�
 
 ### 网络参数
 
+## DeepAR
 
+亚马逊提出的一个网络架构，也是基于 Seq2Seq，不过 DeepAR 的输出是一个概率分布，
+这也是它与传统 RNN 系列最大的一个区别
+
+![img](images/deepar.webp)
+
+
+## N-Beats
+
+出自 Element AI，Bengio 是其中的 Co-Founder。第一次见到它是来自 M5 比赛亚军的分享，不过他也只是在 top-level 的预测中使用了一下 N-Beats 模型
+
+![img](images/n-beats.webp)
+
+N-Beats 专注于做单变量的时序预测，且可以具有一定的 seasonality，trend 的可解释性，跟 Prophet 很相似。从论文的实验来看，作者使用了非常重的 ensemble，每个序列搞了 180 个模型的 bagging。这感觉有点过于“杀鸡用牛刀”了……我们实测下来也没有取得很好的效果，而且看起来还不好加额外的特征变量，使用场景很受限
+
+## TFT
+
+可以与树模型匹敌的深度学习模型了！这就是 Google AI 提出的 Temporal Fusion Transformers。
+也是本文提到的第一个带 transformer 结构的模型
 
 
 
