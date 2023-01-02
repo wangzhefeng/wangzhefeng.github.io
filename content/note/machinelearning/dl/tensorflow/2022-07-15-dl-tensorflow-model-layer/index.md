@@ -583,7 +583,7 @@ model.summary()
 `tf.keras.initializers.glorot_normal()`
 
 - Glorot 正态分布初始化器, 也称为 Xavier 正态分布初始化器
-- 它从以 0 为中心, 标准差为 `$stddev = \sqrt{{2}{fanin + fanout}}$` 的截断正态分布中抽取样本, 
+- 它从以 0 为中心, 标准差为 `$stddev = \sqrt{\frac{2}{fanin + fanout}}$` 的截断正态分布中抽取样本, 
   其中 `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
 
 
