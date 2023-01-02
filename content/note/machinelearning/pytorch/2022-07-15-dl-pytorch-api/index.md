@@ -1,5 +1,5 @@
 ---
-title: PyTorch 三阶 API
+title: PyTorch API
 author: 王哲峰
 date: '2022-07-16'
 slug: dl-pytorch-api
@@ -32,19 +32,13 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [低阶 API](#低阶-api)
-  - [线性回归示例](#线性回归示例)
-  - [DNN 二分类示例](#dnn-二分类示例)
 - [中阶 API](#中阶-api)
-  - [线性回归示例](#线性回归示例-1)
-  - [DNN 二分类示例](#dnn-二分类示例-1)
 - [高阶 API](#高阶-api)
-  - [线性回归示例](#线性回归示例-2)
-  - [DNN 二分类示例](#dnn-二分类示例-2)
-- [torch.nn.functional 和 torch.nn.Module](#torchnnfunctional-和-torchnnmodule)
-  - [torch.nn.functional](#torchnnfunctional)
-  - [torch.nn.Module](#torchnnmodule)
-    - [使用 nn.Module 管理参数](#使用-nnmodule-管理参数)
-    - [使用 nn.Module 管理子模块](#使用-nnmodule-管理子模块)
+- [functional 和 Module](#functional-和-module)
+  - [functional](#functional)
+  - [Module](#module)
+    - [使用 Module 管理参数](#使用-module-管理参数)
+    - [使用 Module 管理子模块](#使用-module-管理子模块)
 </p></details><p></p>
 
 # 低阶 API
@@ -52,165 +46,8 @@ details[open] summary {
 PyTorch 低阶 API 主要包括:
 
 * 张量操作
-* 计算图
+* 动态计算图
 * 自动微分
-
-## 线性回归示例
-
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-import torch
-from torch import nn
-from torchkeras.utils.utils_log import printbar
-
-# ------------------------------
-# data
-# ------------------------------
-# 样本数量
-num_sample = 400
-# 生成测试用数据集
-X = 10 * torch.rand([n, 2]) - 5.0  # torch.rand 是均匀分布
-w0 = torch.tensor(
-    [[2.0], 
-     [-3.0]]
-)
-b0 = torch.tensor(
-    [[10.0]]
-)
-Y = X@w0 + b0 + torch.normal(0.0, 2.0, size = [num_sample, 1])
-
-# ------------------------------
-# 构建数据管道迭代器
-# ------------------------------
-def data_iter(features, labels, batch_size):
-    num_examples = len(features)
-    indices = list(range(num_examples))
-    np.random.shuffle(indices)
-    for i in range(0, num_examples, batch_size):
-        indexs = torch.LongTensor(indices[i:min(i + batch_size, num_examples)])
-        yield features.index_select(0, indexs), labels.index_select(0, indexs)
-
-# ------------------------------
-# 定义模型
-# ------------------------------
-class LinearRegression:
-    
-    def __init__(self):
-        self.w = torch.randn_like(w0, requires_grad = True)
-        self.b = torch.zeros_like(b0, requires_grad = True)
-    
-    def forward(self, x):
-        return x@self.w + self.b
-    
-    def loss_fn(self, y_pred, y_true):
-        return torch.mean((y_pred - y_true) ** 2 / 2)
-
-model = LinearRegression()
-
-# ------------------------------
-# 训练模型
-# ------------------------------
-def train_step(model, features, labels, lr):
-    # 正向传播
-    preds = model.forward(features)
-    loss = model.loss_fn(preds, labels)
-
-    # 反向
-    loss.backward()
-
-    # 使用 torch.no_grad() 避免梯度记录
-    # 也可以通过操作 model.w.data 实现避免梯度记录
-    with torch.no_grad():
-        # 梯度下降算法更新参数
-        model.w -= lr * model.w.grad
-        model.b -= lr * model.b.grad
-        # 梯度清零
-        model.w.grad_zero_()
-        model.b.grad_zero_()
-     
-    return loss
-
-
-def train_model(X, Y, model, batch_size, epochs, lr):
-    for epoch in range(1, epochs + 1):
-        for features, labels in data_iter(
-            features = X, 
-            labels = Y, 
-            batch_size = batch_size):
-            loss = train_step(
-                model = model, 
-                features = features, 
-                labels = labels, 
-                lr = lr
-            )
-        
-        if epoch % 20 == 0:
-            printbar()
-            print("epoch = ", epoch, "loss = ", loss.item())
-            print("model.w = ", model.w.data)
-            print("model.b = ", model.b.data)
-
-batch_size = 10
-epochs = 200
-lr = 0.001
-train_model(X, Y, model, batch_size, epochs, lr)
-
-# ------------------------------
-# 结果可视化
-# ------------------------------
-def plot_linearreg_metrics(X, Y, preds, feature_idx, subplot_idx, xlabel, ylabel):
-    plt.figure(figsize = (8, 8))
-    ax = plt.subplot(subplot_idx)
-    ax.scatter(
-        X[:, feature_idx].numpy(), 
-        Y[:, 0].numpy(), 
-        c = "b", 
-        label = "samples"
-    )
-    ax.plot(
-        X[:, feature_idx].numpy(), 
-        preds, 
-        c = "-r", 
-        linewidth = 5.0, 
-        label = "model"
-    )
-    ax.legend()
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel, rotation = 0)
-
-plot_linearreg_metrics(
-    X = X, 
-    Y = Y, 
-    preds = (model.w[0].data * X[:, 0] + model.b[0].data).numpy(), 
-    feature_idx = 0,
-    subplot_idx = 121, 
-    xlabel = "x1", 
-    ylabel = "y"
-)
-plot_linearreg_metrics(
-    X = X, 
-    Y = Y, 
-    preds = (model.w[1].data * X[:, 1] + model.b[0].data).numpy(), 
-    feature_idx = 1,
-    subplot_idx = 122, 
-    xlabel = "x2", 
-    ylabel = "y"
-)
-```
-
-## DNN 二分类示例
-
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
-```
-
 
 # 中阶 API
 
@@ -221,31 +58,19 @@ PyTorch 中阶 API 主要包括
 * 优化器
 * 数据管道
 
-## 线性回归示例
-
-
-
-## DNN 二分类示例
-
-
 # 高阶 API
 
 PyTorch 没有官方的高阶 API，一般需要用户自己实现训练循环、验证循环、预测循环
 
-
-## 线性回归示例
-## DNN 二分类示例
-
-
-
-
-
-# torch.nn.functional 和 torch.nn.Module
+# functional 和 Module
 
 PyTorch 和神经网络相关的功能组件大多都封装在 `torch.nn` 模块下，
 这些功能组件的绝大部分既有函数形式实现，也有类形式实现
 
-## torch.nn.functional
+* torch.nn.functional
+* torch.nn.Module
+
+## functional
 
 `torch.nn.functional` 有各种功能组件的函数实现:
 
@@ -269,6 +94,8 @@ import torch.nn.functional as F
     - `F.mse_loss`
     - `F.cross_entropy`
 
+示例：
+
 ```python
 import torch
 import torch.nn.functional as F
@@ -282,7 +109,7 @@ tensor(0.)
 tensor(0.)
 ```
 
-## torch.nn.Module
+## Module
 
 为了便于对参数进行管理，一般通过继承 `torch.nn.Module` 转换称为类的实现形式，
 并直接封装在 `torch.nn` 模块下
@@ -310,7 +137,7 @@ from torch import nn
 实际上，`torch.nn.Module` 除了可以管理其引用的各种参数，
 还可以管理其引用的子模块，功能十分强大
 
-### 使用 nn.Module 管理参数
+### 使用 Module 管理参数
 
 在 PyTorch 中，模型的参数是需要被优化器训练的，
 因此，通常要设置参数为 `requires_grad = True` 的张量。
@@ -409,7 +236,7 @@ class Linear(nn.Module):
 ```
 
 
-### 使用 nn.Module 管理子模块
+### 使用 Module 管理子模块
 
 一般情况下，很少直接使用 `nn.Parameter` 来定义参数构建模型，而是通过一些拼装一些常用的模型层来构造模型。
 这些模型层也是继承自 `nn.Module` 的对象，本身也包括参数，属于要定义的模块的子模块

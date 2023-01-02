@@ -31,17 +31,6 @@ disable_highlight: true
 
 > 程序界的第一条规矩：只要代码能跑起来，就绝对不要再改了
 
-<div class="plyr__video-embed" id="player" width="100%">
-  <iframe
-    src="bugs.mp4"
-    allowfullscreen
-    allowtransparency
-    allow="autoplay"
-    width="49%"
-    height="100%"
-  ></iframe>
-</div>
-
 <!-- 喜欢的一段视频：
 <div class="plyr__video-embed" id="player" width="100%">
   <iframe

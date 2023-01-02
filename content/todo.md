@@ -29,7 +29,6 @@ details[open] summary {
   - [Timeseries](#timeseries)
   - [Deeplearning](#deeplearning)
   - [Tools](#tools)
-  - [Linux](#linux)
   - [Audio](#audio)
   - [Image Detection](#image-detection)
 - [Schedule](#schedule)
@@ -41,28 +40,31 @@ details[open] summary {
 
 * [ ] AutoTS 源码、文档阅读 
 * [ ] Darts 库源码、文档阅读
+* [ ] Kats 库
 * [ ] PyOD 库
 
 ### Deeplearning
 
+* [ ] PyTorch
+    - [ ] Env 熟悉和完善 
+    - [ ] Docker 安装(软件)
+    - [ ] PyTorch Pipeline 完善
+
 ### Tools
 
-- [ ] feedly 查看 https://feedly.com/i/welcome
+* [ ] feedly 查看 https://feedly.com/i/welcome
 * [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
 
-### Linux
-
-- [ ] ssh_config Linux manual page 查看 [文档](https://man7.org/linux/man-pages/man5/ssh_config.5.html)
 
 
 ### Audio
 
-- [ ] Audio-librosa
-- [ ] Audio-scipy
+* [ ] Audio-librosa
+* [ ] Audio-scipy
 
 ### Image Detection
 
-- [ ] [使用 CV2 和 Keras OCR从图像中删除文本](https://mp.weixin.qq.com/s/I1_2xGMGxBkUK7gMyrE9gQ) 
+* [ ] [使用 CV2 和 Keras OCR 从图像中删除文本](https://mp.weixin.qq.com/s/I1_2xGMGxBkUK7gMyrE9gQ) 
     - [ ] [Keras OCR](https://keras-ocr.readthedocs.io/en/latest/examples/index.html)
     - [ ] [OpenCV](https://opencv24-python-tutorials.readthedocs.io/en/latest/index.html)
 

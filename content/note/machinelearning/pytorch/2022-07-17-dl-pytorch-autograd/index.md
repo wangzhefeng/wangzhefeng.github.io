@@ -177,7 +177,7 @@ z = torch.sum(y * gradient)
 
 print(f"x:\n{x}")
 print(f"y:\n{y}")
-z.backward(gradient = gradient)
+z.backward()
 x_grad = x.grad
 print(f"x_grad:\n{x_grad}")
 ```
@@ -304,30 +304,31 @@ y= tensor(0.) ; x= tensor(1.0000)
 
 `torch.autograd` 包提供了对所有 Tensor 的自动微分操作:
 
-- `torch.Tensor(requires_grad = True)`
+* `torch.Tensor(requires_grad = True)`
     - 跟踪 `torch.Tensor` 上所有的操作
-- `requires_grad` 属性
-    - `torch.Tensor` 是否被跟踪
-- `torch.autograd.backward()` 方法
+    - `requires_grad` 属性
+        - `torch.Tensor` 是否被跟踪
+    - `.requres_grad_()` 方法
+        - 能够改变一个已经存在的 Tensor 的 `.requires_grad` 属性
+    - `.grad_fn` 属性
+* `torch.autograd.backward()` 方法
     - 自动计算所有的梯度
-- `grad` 属性
-    - `torch.Tensor` 上的梯度
-- `torch.autograd.grad()` 方法
+    - `grad` 属性
+        - `torch.Tensor` 上的梯度
+* `torch.autograd.grad()` 方法
     - 自动计算所有的梯度
-- `.detach()`
+* `.detach()`
     - 停止跟踪 `torch.Tensor` 上的跟踪历史、未来的跟踪
-- `with torch.no_grad(): pass`
-- `.grad_fn`
-- `.zero_grad()`
+* `with torch.no_grad(): pass`
+* `.zero_grad()`
 
 ```python
 import torch
 
-# --------------------
 # 创建 Tensor 时设置 requires_grad 跟踪前向计算
-# --------------------
 x = torch.ones(2, 2, requires_grad = True)
 print("x:", x)
+print(f"x.requires_grad: {x.requires_grad}")
 
 y = x + 2
 print("y:", y)
@@ -340,12 +341,15 @@ print("z.grad_fn", z.grad_fn)
 out = z.mean()
 print("out:", out)
 print("out.grad_fn:", out.grad_fn)
+
 out.backward()
 print("x.grad:", x.grad)
+```
 
-# --------------------
+* `requires_grad_()`
+
+```python
 # .requires_grad_() 能够改变一个已经存在的 Tensor 的 `requires_grad`
-# --------------------
 a = torch.randn(2, 2)
 a = ((a * 3) / (a - 1))
 print("a.requires_grad", a.requires_grad)
@@ -353,10 +357,12 @@ a.requires_grad_(True)
 print("a.requires_grad:", a.requires_grad)
 b = (a * a).sum()
 print("b.grad_fn", b.grad_fn)
+```
 
 
+* `with torch.no_grad: pass`
 
-# 梯度
+```python
 x = torch.randn(3, requires_grad = True)
 y = x * 2
 while y.data.norm() < 1000:
@@ -371,8 +377,12 @@ print((x ** 2).requires_grad)
 
 with torch.no_grad():
       print((x ** 2).requires_grad)
+```
 
-# .detach()
+
+* `.detach()`
+
+```python
 print(x.requires_grad)
 y = x.detach()
 print(y.requires_grad)

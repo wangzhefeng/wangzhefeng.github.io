@@ -30,7 +30,7 @@ h2 {
 }
 </style>
 
-> 纪念2022年1月8日那个寒冷的早晨，纪念我最在乎的那个人，内心对他充满愧疚
+> 纪念 2022 年 1 月 10 日那个寒冷的早晨，纪念我最在乎的那个人，内心对他充满愧疚
 
 ![Father painting by Maggi Hambling](images/father.jpeg)
 
