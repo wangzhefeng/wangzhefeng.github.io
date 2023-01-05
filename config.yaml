@@ -83,7 +83,7 @@ params:
     tag: ""
   
   utteranc: 
-    enable: true
+    enable: false
     repo: wangzhefeng/blog_comment
     issueTerm: pathname
     theme: github-light

@@ -194,35 +194,33 @@ loss = (y1 - y2) ** 2
 loss.backward()
 ```
 
-`$a=\frac{1}{2}$`
-
 `loss.backward()` 语句调用后，依次发生以下计算过程:
 
 1. `loss` 自己的 `grad` 梯度赋值为 1，即对自身的梯度 为 1
-
-`$loss.grad = \frac{dloss}{dloss}(x = 3) = 1$`
-
+    - `$loss.grad = \frac{dloss}{dloss}(x = 3) = 1$`
 2. `loss` 根据其自身梯度以及关联的 `backward()` 方法，
    计算出其对应的自变量即 `y1` 和 `y2` 的梯度，
    将该值赋值到 `y1.grad` 和 `y2.grad`
-    - `y1.grad` = dloss_dy1(x = 3) = 2 * (y1 - y2) * 1 = 2 * (4 - 6) * 1 = -4
-    - `y2.grad` = dloss_dy2(x = 3) = 2 * (y1 - y2) * (-1)= 2 * (4 - 6) * (-1) = 4
+    - `$y1.grad = \frac{dloss}{dy1}(x = 3) = 2 \cdot (y1 - y2) \cdot 1 = 2 \cdot (4 - 6) \cdot 1 = -4$`
+    - `$y2.grad = \frac{dloss}{dy2}(x = 3) = 2 \cdot (y1 - y2) \cdot (-1)= 2 \cdot (4 - 6) \cdot (-1) = 4$`
 3. `y1` 和 `y2` 根据其自身梯度以及关联的 `backward()` 方法，
    分别计算出其对应的自变量 `x` 的梯度，`x.grad` 将其收到多个梯度值累加
-    - `x.grad` = dloss_dx = dloss_loss * (dloss_dy1 * dy1_dx + dloss_dy2 * dy2_dx) = 1 * (-4 * 1 + 4 * 2) = 4
+    - `$x.grad = \frac{dloss}{dx} = \frac{dloss}{dloss} \cdot (\frac{dloss}{dy1} \cdot \frac{dy1}{dx} + \frac{dloss}{dy2} \cdot \frac{dy2}{dx}) = 1 \cdot (-4 \cdot 1 + 4 \cdot 2) = 4$`
 
-因为求导链式法则衍生的梯度累加规则，张量的 grad 梯度不会自动清零，在需要的时候需要手动置零
+因为求导链式法则衍生的梯度累加规则，张量的 `grad` 梯度不会自动清零，在需要的时候需要手动置零
 
 # PyTorch 计算图叶节点和非叶节点
 
 ```python
 import torch
 
+# 正向传播
 x = torch.tensor(3.0, requires_grad = True)
 y1 = x + 1
 y2 = 2 * x
 loss = (y1 - y2) ** 2
 
+# 反向传播
 loss.backward()
 
 print(f"loss.grad: {loss.grad}")
@@ -298,8 +296,6 @@ import torch
 from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 from tensorboard import notebook
-# %load_ext tensorboard
-# %tensorboard --logdir ./data/tensorboard
 
 class Net(nn.Module):
     
@@ -314,13 +310,17 @@ class Net(nn.Module):
 
 net = Net()
 
-# TODO
+# tensorboard 模型产看
 writer = SummaryWriter("./tensorboard")
 writer.add_graph(net, input_to_model = torch.rand(10, 2))
 writer.close()
 
+# 启动 tensorboard
 notebook.list()
-# 在 tensorboard 中查看模型
+# %load_ext tensorboard
+# %tensorboard --logdir ./data/tensorboard
+
+# 启动 tensorboard
 notebook.start("--logdir ./data/tensorboard")
-notebook.list()
 ```
+

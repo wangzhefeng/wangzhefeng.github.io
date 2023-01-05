@@ -32,9 +32,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [PyTorch 模型层简介](#pytorch-模型层简介)
+- [模型层简介](#模型层简介)
 - [基础层](#基础层)
-  - [PyTorch 模型层 API](#pytorch-模型层-api)
+  - [模型层 API](#模型层-api)
   - [归一化层](#归一化层)
     - [结构化数据的 BatchNorm1d](#结构化数据的-batchnorm1d)
     - [图片数据的 BatchNorm2d](#图片数据的-batchnorm2d)
@@ -42,9 +42,8 @@ details[open] summary {
     - [自适应学习 SwitchableNorm](#自适应学习-switchablenorm)
     - [对 BatchNorm 需要注意的几点](#对-batchnorm-需要注意的几点)
   - [PyTorch 示例](#pytorch-示例)
-  - [参考](#参考)
 - [卷积网络相关层](#卷积网络相关层)
-  - [PyTorch 模型层 API](#pytorch-模型层-api-1)
+  - [模型层 API](#模型层-api-1)
   - [卷积层](#卷积层)
     - [普通卷积](#普通卷积)
     - [空洞卷积](#空洞卷积)
@@ -54,7 +53,7 @@ details[open] summary {
   - [上采样层](#上采样层)
   - [PyTorch 示例](#pytorch-示例-1)
 - [循环网络相关层](#循环网络相关层)
-  - [PyTorch 模型层 API](#pytorch-模型层-api-2)
+  - [模型层 API](#模型层-api-2)
   - [RNN](#rnn)
   - [LSTM](#lstm)
     - [LSTM 结构解析](#lstm-结构解析)
@@ -64,22 +63,28 @@ details[open] summary {
     - [GRU 结构解析](#gru-结构解析)
     - [GRU 数学表示](#gru-数学表示)
     - [GRU 解释](#gru-解释)
-  - [参考](#参考-1)
+  - [参考](#参考)
   - [PyTorch 示例](#pytorch-示例-2)
 - [Transformer 相关层](#transformer-相关层)
-  - [PyTorch 模型层 API](#pytorch-模型层-api-3)
+  - [模型层 API](#模型层-api-3)
   - [Transformer 结构解析](#transformer-结构解析)
   - [Transformer 数学表示](#transformer-数学表示)
   - [Transformer 要点问题](#transformer-要点问题)
   - [PyTorch 示例](#pytorch-示例-3)
-  - [参考](#参考-2)
+  - [参考](#参考-1)
 - [自定义模型层](#自定义模型层)
   - [PyTorch 的 torch.nn.Linear 层源码](#pytorch-的-torchnnlinear-层源码)
+- [functional 和 Module](#functional-和-module)
+  - [functional](#functional)
+  - [Module](#module)
+    - [使用 Module 管理参数](#使用-module-管理参数)
+    - [使用 Module 管理子模块](#使用-module-管理子模块)
+  - [参考](#参考-2)
 </p></details><p></p>
 
-# PyTorch 模型层简介
+# 模型层简介
 
-`torch.nn` 中内置了非常丰富的各种模型层，
+深度学习模型一般由各种模型层组合而称。`torch.nn` 中内置了非常丰富的各种模型层，
 它们都属于 `torch.nn.Module` 的子类，具备参数管理功能
 
 如果这些内置的模型层不能满足需求，也可以通过继承 `torch.nn.Module` 基类构建自定义的模型层。
@@ -88,7 +93,7 @@ details[open] summary {
 
 # 基础层
 
-## PyTorch 模型层 API
+## 模型层 API
 
 * `nn.Linear`: 全连接层
     - 参数个数 = 输入层特征数 × 输出层特征数(weight) ＋ 输出层特征数(bias)
@@ -97,14 +102,6 @@ details[open] summary {
     - 一般用于将输入中的单词映射为稠密向量，嵌入层的参数需要学习
 * `nn.Flatten`: 压平层
     - 用于将多维张量样本压成一维张量样本
-* BatchNormalization
-    - `nn.BatchNorm1d`: 一维批标准化层
-        - 通过线性变换将输入批次缩放平移到稳定的均值和标准差。
-          可以增强模型对输入不同分布的适应性，加快模型训练速度，有轻微正则化效果
-        - 一般在激活函数之前使用。可以用 `afine` 参数设置该层是否含有可以训练的参数
-    - `nn.BatchNorm2d`: 二维批标准化层
-        - 常用于 CV 领域
-    - `nn.BatchNorm3d`: 三维批标准化层
 * Normalization
     - `nn.GroupNorm`: 组归一化
         - 一种替代批归一化的方法，将通道分成若干组进行归一，不受 batch 大小限制
@@ -112,25 +109,34 @@ details[open] summary {
         - 常用于 NLP 领域，不受序列长度不一致影响
     - `nn.InstanceNorm2d`: 样本归一化
         - 一般在图像风格迁移任务中效果较好
+    - BatchNormalization
+        - `nn.BatchNorm1d`: 一维批标准化层
+            - 通过线性变换将输入批次缩放平移到稳定的均值和标准差。
+              可以增强模型对输入不同分布的适应性，加快模型训练速度，有轻微正则化效果
+            - 一般在激活函数之前使用。可以用 `affine` 参数设置该层是否含有可以训练的参数
+        - `nn.BatchNorm2d`: 二维批标准化层
+            - 常用于 CV 领域
+        - `nn.BatchNorm3d`: 三维批标准化层
 * Dropout
     - `nn.Dropout`: 一维随机丢弃层
         - 一种正则化手段
     - `nn.Dropout2d`: 二维随机丢弃层
     - `nn.Dropout3d`: 三维随机丢弃层
+* Padding
+    - `nn.ConstantPad2d`: 二维常数填充层
+        - 对二维张量样本填充常数扩展长度
+    - `nn.ReplicationPad1d`: 一维复制填充层
+        - 对一维张量样本通过复制边缘值填充扩展长度
+    - `nn.ZeroPad2d`: 二维零值填充层
+        - 对二维张量样本在边缘填充0值
 * `nn.Threshold`: 限幅层
     - 当输入大于或小于阈值范围时，截断之
-* `nn.ConstantPad2d`: 二维常数填充层
-    - 对二维张量样本填充常数扩展长度
-* `nn.ReplicationPad1d`: 一维复制填充层
-    - 对一维张量样本通过复制边缘值填充扩展长度
-* `nn.ZeroPad2d`: 二维零值填充层
-    - 对二维张量样本在边缘填充0值
 
 ## 归一化层
 
 重点说说各种归一化层:
 
-`$$y = \frac{x - \mathrm{E}[x]}{ \sqrt{\mathrm{Var}[x] + \epsilon}} * \gamma + \beta$$`
+`$$y = \frac{x - \mathrm{E}[x]}{ \sqrt{\mathrm{Var}[x] + \epsilon}} \cdot \gamma + \beta$$`
 
 ### 结构化数据的 BatchNorm1d
 
@@ -189,8 +195,10 @@ import torch
 from torch import nn
 
 batch_size, channel, height, width = 32, 16, 128, 128
-tensor = torch.arange(0, 32 * 16 * 128 * 128).view(32, 16, 128, 128).float()
-bn = nn.BatchNorm2d(num_features = chanel, affine = False)
+tensor = torch.arange(0, 32 * 16 * 128 * 128) \
+    .view(32, 16, 128, 128) \
+    .float()
+bn = nn.BatchNorm2d(num_features = channel, affine = False)
 bn_out = bn(tensor)
 
 channel_mean = torch.mean(bn_out[:, 0, :, :])
@@ -204,8 +212,13 @@ import torch
 from torch import nn
 
 batch_size, sequence, features = 32, 100, 2048
-tensor = torch.arange(0, 32 * 100 * 2048).view(32, 100, 2048).float()
-ln = nn.LayerNorm(normalized_shape = [features], elementwise_affine = False)
+tensor = torch.arange(0, 32 * 100 * 2048) \
+    .view(32, 100, 2048) \
+    .float()
+ln = nn.LayerNorm(
+    normalized_shape = [features], 
+    elementwise_affine = False
+)
 ln_out = ln(tensor)
 
 token_mean = torch.mean(ln_out[0, 0, :])
@@ -214,20 +227,15 @@ print(f"token mean: {token_mean.item()}")
 print(f"token std: {token_std.item()}")
 ```
 
-
-## 参考
-
-- [参考论文](https://arxiv.org/pdf/1806.10779.pdf)
-
 # 卷积网络相关层
 
-## PyTorch 模型层 API
+## 模型层 API
 
 * 卷积层
     - `nn.Conv1d`: 普通一维卷积，常用于文本
         - 参数个数 = 输入通道数 × 卷积核尺寸(如3) × 卷积核个数 + 卷积核尺寸(如3)
     - `nn.Conv2d`: 普通二维卷积，常用于图像
-        - 参数个数 = 输入通道数 × 卷积核尺寸(如3乘3) × 卷积核个数 + 卷积核尺寸(如3乘3) 
+        - 参数个数 = 输入通道数 × 卷积核尺寸(如 3x3) × 卷积核个数 + 卷积核尺寸(如 3x3) 
         - 通过调整 `dilation` 参数大于 1，可以变成空洞卷积，增加感受野
         - 通过调整 `groups` 参数不为 1，可以变成分组卷积。
           分组卷积中每个卷积核仅对其对应的一个分组进行操作。
@@ -236,7 +244,7 @@ print(f"token std: {token_std.item()}")
         - 利用分组卷积和 `$1 \times 1$` 卷积的组合操作，
           可以构造相当于 TensorFlow 中的二维深度可分离卷积层 `tf.keras.layers.SeparableConv2D`
     - `nn.Conv3d`: 普通三维卷积，常用于视频
-        - 参数个数 = 输入通道数 × 卷积核尺寸(如3乘3乘3) × 卷积核个数 + 卷积核尺寸(如3乘3乘3)
+        - 参数个数 = 输入通道数 × 卷积核尺寸(如 3x3x3) × 卷积核个数 + 卷积核尺寸(如 3x3x3)
 * 池化层
     - `nn.MaxPool1d`: 一维最大池化
     - `nn.MaxPool2d`: 二维最大池化
@@ -255,7 +263,9 @@ print(f"token std: {token_std.item()}")
     - `nn.ConvTranspose2d`: 二维卷积转置层，俗称反卷积层
         - 并非卷积的逆操作，但在卷积核相同的情况下，当其输入尺寸是卷积操作输出尺寸的情况下，
           卷积转置的输出尺寸恰好是卷积操作的输入尺寸。在语义分割中可用于上采样
-    - `nn.Upsample`: 上采样层，操作效果和池化相反。可以通过mode参数控制上采样策略为"nearest"最邻近策略或"linear"线性插值策略。
+    - `nn.Upsample`: 上采样层，操作效果和池化相反。可以通过 `mode` 参数控制上采样策略为：
+        - `"nearest"`：最邻近策略
+        - `"linear"`：线性插值策略
     - `nn.Unfold`: 滑动窗口提取层
         - 其参数和卷积操作 `nn.Conv2d` 相同
         - 实际上，卷积操作可以等价于 `nn.Unfold` 和 `nn.Linear` 以及 `nn.Fold` 的一个组合。
@@ -288,7 +298,7 @@ print(f"token std: {token_std.item()}")
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nhe0y7x1g20az0al0vu.gif)
 
-- [参考文章: https://developer.orbbec.com.cn/v/blog_detail/892](https://developer.orbbec.com.cn/v/blog_detail/892)
+* [Dilated Convolution(空洞卷积、膨胀卷积)详解](https://developer.orbbec.com.cn/v/blog_detail/892)
 
 ### 分组卷积
 
@@ -300,7 +310,7 @@ print(f"token std: {token_std.item()}")
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5npy1zyalj20ie0erwf8.jpg)
 
-- [参考文章: https://zhuanlan.zhihu.com/p/65377955](https://zhuanlan.zhihu.com/p/65377955)
+* [理解分组卷积和深度可分离卷积如何降低参数量](https://zhuanlan.zhihu.com/p/65377955)
 
 ### 深度可分离卷积
 
@@ -323,7 +333,7 @@ print(f"token std: {token_std.item()}")
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5ns98iiamj20v70u075e.jpg)
 
-- [参考文章: https://zhuanlan.zhihu.com/p/115070523](https://zhuanlan.zhihu.com/p/115070523)
+* [转置卷积(Transpose Convolution)](https://zhuanlan.zhihu.com/p/115070523)
 
 ## 上采样层
 
@@ -332,7 +342,6 @@ print(f"token std: {token_std.item()}")
 还可以使用最邻近插值的方式进行上采样，但使用较少
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nsi5pt4eg20na0co74k.gif)
-
 
 ## PyTorch 示例
 
@@ -435,7 +444,7 @@ print(bilinear(inputs))
 
 # 循环网络相关层
 
-## PyTorch 模型层 API
+## 模型层 API
 
 * `nn.RNN`: 简单循环网络层(支持多层)
     - 容易存在梯度消失，不能够适用长期依赖问题。一般较少使用
@@ -519,7 +528,7 @@ h_{t}=\left(1-z_{t}\right) \odot \tilde{h}_{t} + z_{t} \odot h_{t-1} \tag{4}
 
 ## 参考
 
-- [参考文章: https://zhuanlan.zhihu.com/p/184937263](https://zhuanlan.zhihu.com/p/184937263)
+- [LSTM与GRU的原理](https://zhuanlan.zhihu.com/p/184937263)
 
 ## PyTorch 示例
 
@@ -563,7 +572,7 @@ summary(lstm,input_data=inputs);
 
 # Transformer 相关层
 
-## PyTorch 模型层 API
+## 模型层 API
 
 * `nn.Transformer`: Transformer 网络结构
     - Transformer 网络结构是替代循环网络的一种结构，解决了循环网络难以并行，
@@ -795,3 +804,392 @@ class Linear(nn.Module):
                  out_features={self.out_features}, \
                  bias={self.bias is not None}"
 ```
+
+# functional 和 Module
+
+PyTorch 和神经网络相关的功能组件大多都封装在 `torch.nn` 模块下，
+这些功能组件的绝大部分既有函数形式实现，也有类形式实现
+
+* torch.nn.functional
+* torch.nn.Module
+
+## functional
+
+`torch.nn.functional` 有各种功能组件的函数实现:
+
+```python
+import torch.nn.functional as F
+```
+
+* 激活函数
+    - `F.relu`
+    - `F.sigmoid`
+    - `F.tanh`
+    - `F.softmax`
+* 模型层
+    - `F.linear`
+    - `F.conv2d`
+    - `F.max_pool2d`
+    - `F.dropout2d`
+    - `F.embedding`
+* 损失函数
+    - `F.binary_cross_entropy`
+    - `F.mse_loss`
+    - `F.cross_entropy`
+
+示例：
+
+```python
+import torch
+import torch.nn.functional as F
+
+torch.relu(torch.tensor(-1.0))
+F.relu(torch.tensor(-1.0))
+```
+
+```
+tensor(0.)
+tensor(0.)
+```
+
+## Module
+
+为了便于对参数进行管理，一般通过继承 `torch.nn.Module` 转换称为类的实现形式，
+并直接封装在 `torch.nn` 模块下
+
+```python
+from torch import nn
+```
+
+* 激活函数
+    - `nn.ReLU`
+    - `nn.Sigmoid`
+    - `nn.Tanh`
+    - `nn.Softmax`
+* 模型层
+    - `nn.Linear`
+    - `nn.Conv2d`
+    - `nn.MaxPool2d`
+    - `nn.Dropout2d`
+    - `nn.Embedding`
+* 损失函数
+    - `nn.BCELoss`
+    - `nn.MSELoss`
+    - `nn.CrossEntropyLoss`
+
+实际上，`torch.nn.Module` 除了可以管理其引用的各种参数，
+还可以管理其引用的子模块，功能十分强大
+
+### 使用 Module 管理参数
+
+在 PyTorch 中，模型的参数是需要被优化器训练的，
+因此，通常要设置参数为 `requires_grad = True` 的张量。
+同时，在一个模型中，往往有许多的参数，要手动管理这些参数并不是一件容易的事情
+
+PyTorch 一般将参数用 `nn.Parameter` 来表示，
+并且用 `nn.Module` 来管理其结构下的所有参数
+
+* 载入 Python 依赖
+
+```python
+import torch
+from torch import nn
+import torch.nn.functional as F
+```
+
+* 设置参数为 `requires_grad = True` 的张量
+
+```python
+torch.randn(2, 2, requires_grad = True)
+```
+
+* `nn.Parameter()` 具有 `require_grad = True` 属性
+
+```python
+w = nn.Parameter(torch.randn(2, 2))
+print(w)
+print(w.requires_grad)
+```
+
+* `nn.ParameterList()` 可以将多个 `nn.Parameter()` 组成一个列表
+
+```python
+params_list = nn.ParameterList([
+    nn.Parameter(torch.rand(8, i))
+    for i in range(1, 3)
+])
+print(params_list)
+print(params_list[0].requires_grad)
+```
+
+* `nn.ParameterDict()` 可以将多个 `nn.Parameter()` 组成一个字典
+
+```python
+params_dict = nn.ParameterDict({
+    "a": nn.Parameter(torch.rand(2, 2)),
+    "b": nn.Parameter(torch.zeros(2)),
+})
+print(params_dict)
+print(params_dict["a"].requires_grad)
+```
+
+* 用 `nn.Module()` 将 `nn.Parameter`、`nn.ParameterList()`、`nn.ParameterDict()` 管理起来
+
+```python
+module = nn.Module()
+module.w = nn.Parameter(
+    torch.randn(2, 2)
+)
+module.params_list = nn.ParameterList([
+    nn.Parameter(torch.rand(8, i))
+    for i in range(1, 3)
+])
+module.param_dict = nn.ParameterDict({
+    "a": nn.Parameter(torch.rand(2, 2)),
+    "b": nn.Parameter(torch.zeros(2)),
+})
+
+num_param = 0
+for param in module.named_parameters():
+    print(param, "\n")
+    num_param = num_param + 1
+print(f"Number of Parameters = {num_param}")
+```
+
+* 实践当中，一般通过继承 `nn.Module` 来构建模块类，并将所有含有需要学习的部分放在构造函数中
+
+```python
+class Linear(nn.Module):
+    __constants__ = ["in_features", "out_features"]
+
+    def __init__(self, in_features, out_features, bias = True):
+        super(Linear, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.weight = nn.Parameter(
+            torch.Tensor(out_features, in_features)
+        )
+        if bias:
+            self.bias = nn.Parameter(torch.Tensor(out_features))
+        else:
+            self.register_parameter("bias", None)
+        
+    def forward(self, input):
+        return F.linear(input, self.weight, self.bias)
+```
+
+
+### 使用 Module 管理子模块
+
+一般情况下，很少直接使用 `nn.Parameter` 来定义参数构建模型，而是通过一些拼装一些常用的模型层来构造模型。
+这些模型层也是继承自 `nn.Module` 的对象，本身也包括参数，属于要定义的模块的子模块
+
+`nn.Module` 提供了一些方法可以管理这些子模块:
+
+* `children()`: 返回生成器，包括模块下的所有子模块
+* `named_children()`: 返回一个生成器，包括模块下的所有子模块，以及它们的名字
+* `modules()`: 返回一个生成器，包括模块下的所有各个层级的模块，包括模块本身
+* `named_modules()`: 返回一个生成器，包括模块下的所有各个层级的模块以及它们的名字，包括模块本身
+
+其中:
+
+* `children()` 和 `named_children()` 方法较多使用
+* `modules()` 和 `named_modules()` 方法较少使用，其功能可以通过多个 `named_children()` 的嵌套使用实现
+
+```python
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+
+        self.embedding = nn.Embedding(
+            num_embedding = 10000, 
+            embedding_dim = 3, 
+            padding_idx = 1
+        )
+
+        self.conv = nn.Sequential()
+        self.conv.add_module(
+            "conv_1", 
+            nn.Conv1d(in_channels = 3, out_channels = 16, kernel_size = 5),
+        )
+        self.conv.add_module(
+            "pool_1",
+            nn.MaxPool1d(kernel_size = 2),
+        )
+        self.conv.add_module(
+            "relu",
+            nn.ReLU(),
+        )
+        self.conv.add_module(
+            "conv_2",
+            nn.Conv1d(in_channels = 16, out_channels = 128, kernel_size = 2),
+        )
+        self.conv.add_module(
+            "pool_2",
+            nn.MaxPool1d(kernel_size = 2),
+        )
+        self.conv.add_module(
+            "relu_2",
+            nn.ReLU(),
+        )
+
+        self.dense = nn.Sequential()
+        self.dense.add_module("flatten", nn.Flatten())
+        self.dense.add_module("linear", nn.Linear(6144, 1))
+    
+    def forward(self, x):
+        x = self.embedding(x).transpose(1, 2)
+        x = self.conv(x)
+        y = self.dense(x)
+        return y
+
+net = Net()
+```
+
+```python
+i = 0
+for child in net.children():
+    i += 1
+    print(child, "\n")
+print("child number", i)
+```
+
+```
+Embedding(10000, 3, padding_idx=1) 
+
+Sequential(
+  (conv_1): Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+  (pool_1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_1): ReLU()
+  (conv_2): Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+  (pool_2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_2): ReLU()
+) 
+
+Sequential(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear): Linear(in_features=6144, out_features=1, bias=True)
+) 
+
+child number 3
+```
+
+```python
+i = 0
+for name, child in net.named_children():
+    i += 1
+    print(name, ":", child, "\n")
+print("child number", i)
+```
+
+```
+embedding : Embedding(10000, 3, padding_idx=1) 
+
+conv : Sequential(
+  (conv_1): Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+  (pool_1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_1): ReLU()
+  (conv_2): Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+  (pool_2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_2): ReLU()
+) 
+
+dense : Sequential(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear): Linear(in_features=6144, out_features=1, bias=True)
+) 
+
+child number 3
+```
+
+```python
+i = 0
+for module in net.modules():
+    i += 1
+    print(module)
+print("module number:", i)
+```
+
+```
+Net(
+  (embedding): Embedding(10000, 3, padding_idx=1)
+  (conv): Sequential(
+    (conv_1): Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+    (pool_1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (relu_1): ReLU()
+    (conv_2): Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+    (pool_2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (relu_2): ReLU()
+  )
+  (dense): Sequential(
+    (flatten): Flatten(start_dim=1, end_dim=-1)
+    (linear): Linear(in_features=6144, out_features=1, bias=True)
+  )
+)
+Embedding(10000, 3, padding_idx=1)
+Sequential(
+  (conv_1): Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+  (pool_1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_1): ReLU()
+  (conv_2): Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+  (pool_2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_2): ReLU()
+)
+Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+ReLU()
+Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+ReLU()
+Sequential(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear): Linear(in_features=6144, out_features=1, bias=True)
+)
+Flatten(start_dim=1, end_dim=-1)
+Linear(in_features=6144, out_features=1, bias=True)
+module number: 12
+```
+
+* 通过 `named_children` 方法找到 `embedding` 层，并将其参数设置为不可训练，相当于冻结 embedding 层
+
+```python
+children_dict = {
+    name: module for name, module in net.named_children()
+}
+print(children_dict)
+
+embedding = children_dict["embedding"]
+embedding.requires_grad_(False)
+```
+
+```
+{'embedding': Embedding(10000, 3, padding_idx=1), 'conv': Sequential(
+  (conv_1): Conv1d(3, 16, kernel_size=(5,), stride=(1,))
+  (pool_1): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_1): ReLU()
+  (conv_2): Conv1d(16, 128, kernel_size=(2,), stride=(1,))
+  (pool_2): MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (relu_2): ReLU()
+), 'dense': Sequential(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear): Linear(in_features=6144, out_features=1, bias=True)
+)}
+Embedding(10000, 3, padding_idx=1)
+```
+
+```python
+# 第一层的参数已经不可以被训练
+for param in embedding.parameters():
+    print(param.requires_grad)
+    print(param.numel())
+```
+
+```
+False
+30000
+```
+
+## 参考
+
+* [Differentiable Learning-To-Normalize Via Switchable Normalization](https://arxiv.org/pdf/1806.10779.pdf)

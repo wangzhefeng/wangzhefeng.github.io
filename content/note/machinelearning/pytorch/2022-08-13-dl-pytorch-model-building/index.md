@@ -32,9 +32,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [PyTorch 模型的创建](#pytorch-模型的创建)
+- [模型创建简介](#模型创建简介)
 - [使用 nn.Sequential 按层顺序构建模型](#使用-nnsequential-按层顺序构建模型)
-  - [用 add_module 方法](#用-add_module-方法)
+  - [用 add\_module 方法](#用-add_module-方法)
   - [使用变长参数](#使用变长参数)
   - [使用 OrderedDict](#使用-ordereddict)
 - [继承 nn.Module 基类构建自定义模型](#继承-nnmodule-基类构建自定义模型)
@@ -48,7 +48,7 @@ details[open] summary {
   - [nn.ModuleDict](#nnmoduledict)
 </p></details><p></p>
 
-# PyTorch 模型的创建
+# 模型创建简介
 
 使用 PyTorch 通常有三种方式构建模型:
 
@@ -71,9 +71,17 @@ from torch import nn
 from torchkeras import summary
 
 net = nn.Sequential()
-net.add_module("conv1", nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3))
+net.add_module("conv1", nn.Conv2d(
+    in_channels = 3, 
+    out_channels = 32, 
+    kernel_size = 3)
+)
 net.add_module("pool1", nn.MaxPool2d(kernel_size = 2,stride = 2))
-net.add_module("conv2", nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5))
+net.add_module("conv2", nn.Conv2d(
+    in_channels = 32, 
+    out_channels = 64, 
+    kernel_size = 5)
+)
 net.add_module("pool2", nn.MaxPool2d(kernel_size = 2, stride = 2))
 net.add_module("dropout", nn.Dropout2d(p = 0.1))
 net.add_module("adaptive_pool", nn.AdaptiveMaxPool2d((1, 1)))
@@ -317,7 +325,7 @@ from torch import nn
 
 class Net(nn.Module):
     def __init__(self):
-        super(Net, self.__init__()
+        super(Net, self).__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3),
             nn.MaxPool2d(kernel_size = 2, stride = 2),
@@ -376,7 +384,6 @@ class Net(nn.Module):
 net = Net()
 print(net)
 ```
-
 
 ## nn.ModuleDict
 

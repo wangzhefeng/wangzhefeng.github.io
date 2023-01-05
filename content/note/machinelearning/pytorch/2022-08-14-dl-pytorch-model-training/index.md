@@ -34,11 +34,11 @@ details[open] summary {
 
 - [权重初始化](#权重初始化)
 - [损失函数](#损失函数)
-  - [PyTorch 内置损失函数](#pytorch-内置损失函数)
+  - [内置损失函数](#内置损失函数)
     - [常用内置损失函数 API](#常用内置损失函数-api)
     - [常用内置损失函数解释](#常用内置损失函数解释)
   - [创建自定义损失函数](#创建自定义损失函数)
-    - [自定义损失函数 FocalLoss](#自定义损失函数-focalloss)
+    - [FocalLoss](#focalloss)
     - [SCELoss](#sceloss)
   - [自定义 L1 和 L2 正则化项](#自定义-l1-和-l2-正则化项)
     - [数据准备](#数据准备)
@@ -83,19 +83,8 @@ details[open] summary {
 
 PyTorch 中的损失函数一般在模型训练的时候指定。PyTorch 中内置的损失函数的参数和 TensorFlow 不同:
 
-* PyTorch: `y_pred` 在前，`y_true` 在后
-* TensorFlow: `y_true` 在前，`y_pred` 在后
-
-PyTorch 内置损失函数的使用:
-
-* 对于回归模型，通常使用的内置损失函数是均方损失函数 `torch.nn.MSELoss`
-* 对于二分类模型，通常使用的是二元交叉熵损失函数 `torch.nn.BCELoss`(输入已经是 `torch.nn.Sigmoid` 激活函数之后的结果)，
-  或者 `torch.nn.BCEWithLogitsLoss`(输入尚未经过 `torch.nn.Sigmoid` 激活函数)
-* 对于多分类模型
-    - 一般推荐使用交叉熵损失函数 `torch.nn.CrossEntropyLoss`(`y_true` 需要是一维的，
-      是类别编码，`y_pred` 未经过 `torch.nn.Softmax` 激活)
-    - 如果多分类的 `y_pred` 经过了 `torch.nn.LogSoftmax` 激活，可以使用 `torch.nn.NLLLoss` 损失函数(The Negative Log Likelihood Loss)，
-      这种方法和直接使用 `torch.nn.CrossEntropyLoss` 等价
+* PyTorch：`y_pred` 在前，`y_true` 在后
+* TensorFlow：`y_true` 在前，`y_pred` 在后
 
 如果有需要，也可以自定义损失函数，自定义损失函数需要接收两个张量 `y_pred`、`y_true` 作为输入参数，
 并输出一个标量作为损失函数
@@ -103,7 +92,7 @@ PyTorch 内置损失函数的使用:
 PyTorch 中的正则化项一般通过自定义的方式和损失函数一起添加作为目标函数。
 如果仅仅使用 L2 正则化，也可以利用优化器的 `weight_decay` 参数来实现相同的效果
 
-## PyTorch 内置损失函数
+## 内置损失函数
 
 PyTorch 内置损失函数一般有类的实现和函数的实现两种形式。
 例如：`torch.nn.BCE` 和 `torch.nn.functional.binary_cross_entropy` 都是二元交叉熵损失函数，
@@ -118,51 +107,113 @@ PyTorch 内置损失函数一般有类的实现和函数的实现两种形式。
 
 * `torch.nn.MSELoss`
     - 均方误差损失，也叫做 L2 损失
-    - 用于回归
 * `torch.nn.L1Loss`
     - L1 损失，也叫做绝对误差损失
-    - 用于回归
 * `torch.nn.SmoothL1Loss`
     - 平滑 L1 损失，当输入在 `$[-1, 1]$` 之间时，平滑为 L2 损失，
-    - 用于回归
 
 二分类:
 
 * `torch.nn.BCELoss`
     - 二元交叉熵损失，输入已经过 `torch.nn.Sigmoid` 激活，
       对于不平衡数据集可以用 `weights` 参数调整类别权重
-    - 用于二分类
 * `torch.nn.BCEWithLogitsLoss`
     - 二元交叉熵损失，输入未经过 `torch.nn.Sigmoid` 激活
-    - 用于二分类
 
 多分类:
 
 * `torch.nn.CrossEntropyLoss`
-    - 交叉熵，要求 `label` 为稀疏编码，输入未经过 `torch.nn.Softmax` 激活，
-      对于不平衡数据集可以用 `weight` 参数调整类别权重
-    - 用于多分类
+    - 交叉熵损失函数
+        - `y_true` 需要是一维的，是类别编码
+        - `y_pred` 未经过 `torch.nn.Softmax` 激活
+        - 对于不平衡数据集可以用 `weight` 参数调整类别权重
 * `torch.nn.NLLLoss`
-    - 负对数似然损失，要求 `label` 为稀疏编码，输入经过 `torch.nn.LogSoftmax` 激活
-    - 用于多分类
+    - 负对数似然损失(The Negative Log Likelihood Loss)
+    - 如果 `y_pred` 经过了 `torch.nn.LogSoftmax` 激活，
+      这种方法和直接使用 `torch.nn.CrossEntropyLoss` 等价
 * `torch.nn.KLDivLoss`
-    - KL 散度，也叫相对熵，等于交叉熵减去信息熵，要求输入经过 `torch.nn.LogSoftmax` 激活
-    - 用于多分类(标签为概率值)
+    - KL 散度，也叫相对熵，等于交叉熵减去信息熵
+    - 要求输入经过 `torch.nn.LogSoftmax` 激活
+    - 标签为概率值
 * `torch.nn.CosineSimilarity`
     - 余弦相似度
-    - 用于多分类
 * `torch.nn.AdaptiveLogSoftmaxWithLoss`
     - 一种非常适合多类别且类别分布很不均衡的损失函数，会自适应地将多个小类别合成一个 cluster
-    - 用于多分类
 
 ### 常用内置损失函数解释
 
+1.二分类的交叉熵的计算公式是什么？为什么是这样一种形式
 
+`$$BinaryCrossEntropyLoss(Y,\hat{Y}) = - \frac{1}{N}\sum_{i=0}^{N-1} (y_i log \hat{y_i} + (1-y_i) log(1-\hat{y_i}))$$`
 
+该公式由极大似然原理推导得来。由于 `$\hat{y_i}$` 表示的是样本标签为 1 的概率，
+`$1-\hat{y_i}$` 表示的是样本标签为 0 的概率，
+那么训练集中的全部样本取得对应标签的概率即似然函数可以写成如下形式
 
+`$$L(Y,\hat{Y}) = \prod_{i=0}^{N-1} \hat{y_i}^{y_i} (1-\hat{y_i})^{(1-y_i)}$$`
 
+注意当 `$y_i = 1$` 为时，连乘中的项为 `$\hat{y_i}$`，
+当 `$y_i = 0$` 为时，连乘中的项为 `$(1-\hat{y_i})$` 转换成对数似然函数，得到 
 
+`$$lnL(Y,\hat{Y}) = \sum_{i=0}^{N-1} y_i ln{\hat{y_i}} + (1-y_i)ln{(1-\hat{y_i})}$$`
 
+对数似然函数求极大值，等价于对对数似然函数的负数求极小值，
+考虑样本数量维度归一化，于是得到了二元交叉熵损失函数的形式。
+
+2.多元交叉熵的计算公式是什么？和二元交叉熵有什么联系?
+
+`$$CrossEntropyLoss(Y,\hat{Y}) = - \frac{1}{N}\sum_{i=0}^{N-1} \sum_{k=0}^{K-1} I(y_i==k) log \hat{y_{i,k}} \\
+\text{where} I(x) \text{ is the Indicator function} \\
+I(True)= 1 \text{ and } I(False) = 0$$`
+
+多元交叉熵是二元交叉熵的自然拓展，其中 `$y_i$` 取 `$0~K-1$` 其中的一个类别编码序号，
+`$\hat{y_i}$` 是一个长度为 K 的概率向量。多元交叉熵的类别数 K 取 2 时即可得到二元交叉熵对应的公式
+
+3.sklearn，catboost 等库中常常看到 logloss 对数损失函数，这个损失函数如何计算，和交叉熵有什么关系？
+
+`$$LogLoss(Y,\hat{Y}) = - \frac{1}{N}\sum_{i=0}^{N-1}  log(\hat{y_{i}}[y_i])$$`
+
+公式中的方括号和Python中的索引的用法一致，表示取 `$\hat{y_{i}}$` 的第 `$y_i$` 个元素
+
+容易证明，对数损失函数与交叉熵函数完全等价，是交叉熵的另外一种视角: 
+即每个样本对其标签对应类别的预测概率值求对数，求平均再取负数即可
+
+4.PyTorch 中的 `nn.NLLLoss` 和 `nn.CrossEntropyLoss` 有什么区别和联系？
+
+NLLoss 全称是 Negative Log Likelihood Loss，即负对数似然损失。其计算公式如下
+
+`$$NLLoss(Y,\hat{Z}) = - \frac{1}{N}\sum_{i=0}^{N-1}  {z_{i}}[y_i]$$`
+
+公式中的方括号和 Python 中的索引的用法一致，表示取 `$\hat{z_{i}}$` 的第 `$y_i$` 个元素
+
+注意的是这里的 `$\hat{Z}$` 实际上不是概率值，而是概率值取了对数，
+所以，和 LogLoss 一对比，很容易发现，`LogSoftmax` + `NLLLoss` 等价于 `Softmax` + `LogLoss`,
+等价于 `Softmax` + `CrossEntropyLoss`。为了数值精度考虑，
+PyTorch 中的 `nn.CrossEntropyLoss` 要求输入未经过 Softmax 激活，
+所以有 `nn.LogSoftmax` + `nn.NLLLoss` 等价于 `nn.CrossEntropyLoss`
+
+5.KL散度的计算公式是什么？有什么现实含义？和交叉熵有什么关系？
+
+KL 散度也叫相对熵，可以衡量两个概率分布之间的差异
+
+KL 散度的计算公式是交叉熵减去信息熵。注意 KL 散度是不对称的, 
+即 `$KL(P,Q)\neq KL(Q,P)$`, 所以不能够叫做 KL 距离
+
+两个随机变量 P 和 Q 之间的KL散度定义如下：
+
+`$$KL(P,Q) = \sum_{k=0}^{K-1}p_k ln(\frac{p_k}{q_k}) = \sum_{k=0}^{K-1} p_k (ln{p_k} - ln{q_k})$$`
+
+对二分类情况下，有：
+
+`$$KL(Y,\hat{Y}) = - \frac{1}{N}\sum_{i=0}^{N-1} (y_i log \hat{y_i} + (1-y_i) log(1-\hat{y_i}))  + \frac{1}{N}\sum_{i=0}^{N-1} (y_i log y_i + (1-y_i) log(1- y_i))$$`
+
+在 `$y_i$` 取 0 或 1 的情况下，信息熵部分为 0，所以 KL 散度就等于交叉熵，
+但是在一些情况下，例如使用标签平滑处理技术后，`$y_i$` 的取值不是 0 或 1，
+这时候，KL 散度相当于在交叉熵的基础上减去了一个常数，
+KL 散度作为损失函数去优化模型的效果和交叉熵是完全一样的，
+但是在这种情况下当模型完美拟合标签的情况下 KL 散度的最小值可取到 0，
+而此时交叉熵能够取到的最小值是信息熵不为 0，
+所以这种情况下使用KL散度更符合我们对 Loss 的一般认识
 
 ## 创建自定义损失函数
 
@@ -172,7 +223,7 @@ PyTorch 内置损失函数一般有类的实现和函数的实现两种形式。
 也可以对 `torch.nn.Module` 进行子类化，重写 `forward` 方法实现损失的计算逻辑，
 从而得到损失函数的类的实现
 
-### 自定义损失函数 FocalLoss
+### FocalLoss
 
 Focal Loss 是一种对 `binary_crossentropy` 的改进损失函数的形式。
 它在样本不均衡和存在较多易分类的样本时相比 `binary_crossentropy` 具有明显的优势
@@ -187,8 +238,7 @@ focal\_loss(y, p) =
 \end{cases}
 \end{split}$$`
 
-
-Focal Loss 有两个可调参数，从而让那模型更加聚焦在正样本和困难样本上，
+Focal Loss 只有两个可调参数，从而让模型更加聚焦在正样本和困难样本上，
 这就是为什么这个损失函数叫做 Focal Loss:
 
 * `alpha` 参数
@@ -257,7 +307,7 @@ SCELoss(Symmetric Cross Entropy Loss) 也是一种对交叉熵损失的改进损
 
 SCELoss 的数学形式:
 
-`$$sce\_loss(y, p) = ace\_loss(y, p) + \beta rce\_loss(y, p)$$`
+`$$sce\_loss(y, p) = \alpha \text{ } ce\_loss(y, p) + \beta \text{ } rce\_loss(y, p)$$`
 
 其中：
 
@@ -302,7 +352,7 @@ class SCELoss(nn.Module):
 
 ## 自定义 L1 和 L2 正则化项
 
-通常认为 L1 正则化可以产生稀疏权值矩阵，即产生一个稀疏模型，可以用于特征选择，
+通常认为 L1 正则化可以产生稀疏权值矩阵，即产生一个稀疏模型，可以用于特征选择。
 而 L2 正则化可以防止过拟合。一定程度上，L1 也可以防止过拟合
 
 ### 数据准备
@@ -523,7 +573,9 @@ print(f"torch.__version__ = {torch.__version__}")
 
 ```python
 # 数据转换
-transform = transforms.Compose([transforms.ToTensor()])
+transform = transforms.Compose([
+    transforms.ToTensor()
+])
 
 # 数据
 ds_train = torchvision.datasets.MNIST(
@@ -562,14 +614,14 @@ print(len(ds_val))
 import matplotlib
 import matplotlib.pyplot as plt
 
-%matplolib inline
-%config InlineBackend.figure_format = "svg"
+# %matplolib inline
+# %config InlineBackend.figure_format = "svg"
 
 plt.figure(figsize = (8, 8))
 for i in range(9):
     # data
     img, label = ds_train[i]
-    img = torch.squeez(img)
+    img = torch.squeeze(img)
     # plot
     ax = plt.subplot(3, 3, i + 1)
     ax.imshow(img.numpy())
@@ -590,15 +642,16 @@ import os
 import sys
 import time
 
-import numpy as np
-import pandas as pd
 import datetime
 from tqdm import tqdm
 from copy import deepcopy
+import numpy as np
+import pandas as pd
 
 import torch
 from torch import nn
 from torchmetrics import Accuracy
+
 # 注：
 #   多分类使用 torchmetrics 中的评估指标
 #   二分类使用 torchkeras.metrics 中的评估指标
@@ -630,12 +683,13 @@ print(net)
 ### 损失函数、优化器、评价指标
 
 ```python
+# 损失函数
 loss_fn = nn.CrossEntropyLoss()
-
+# 优化器
 optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
-
+# 评价指标
 metrics_dict = {
-    "acc": Accuracy()
+    "acc": Accuracy(),
 }
 ```
 
@@ -770,11 +824,11 @@ import os
 import sys
 import time
 
-import numpy as np
-import pandas as pd
 import datetime
 from tqdm import tqdm
 from copy import deepcopy
+import numpy as np
+import pandas as pd
 
 import torch
 from torch import nn

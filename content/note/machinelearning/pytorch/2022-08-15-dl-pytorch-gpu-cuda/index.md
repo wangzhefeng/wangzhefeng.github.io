@@ -32,23 +32,10 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [PyTorch 数据并行](#pytorch-数据并行)
-  - [让模型跑在 GPU 上](#让模型跑在-gpu-上)
-  - [让模型跑在多个 GPU 上](#让模型跑在多个-gpu-上)
-- [GPU 训练模型示例](#gpu-训练模型示例)
-  - [设备](#设备)
-  - [定义模型](#定义模型)
-  - [移动模型到 CUDA](#移动模型到-cuda)
-  - [训练模型](#训练模型)
-  - [移动数据到 CUDA](#移动数据到-cuda)
-- [多 GPU 训练模型示例](#多-gpu-训练模型示例)
-  - [设备](#设备-1)
-  - [定义模型](#定义模型-1)
-  - [包装模型为并行风格、移动模型到 CUDA](#包装模型为并行风格移动模型到-cuda)
-  - [训练模型](#训练模型-1)
-  - [移动数据到 CUDA](#移动数据到-cuda-1)
+- [PyTorch GPU 模型训练方式](#pytorch-gpu-模型训练方式)
+  - [GPU 训练模型](#gpu-训练模型)
+  - [多 GPU 训练模型](#多-gpu-训练模型)
 - [GPU 相关操作](#gpu-相关操作)
-  - [查看 GPU 信息](#查看-gpu-信息)
   - [查看 GPU 设备是否可用](#查看-gpu-设备是否可用)
   - [查看 GPU 设备数量](#查看-gpu-设备数量)
   - [将张量在 GPU 和 CPU 之间移动](#将张量在-gpu-和-cpu-之间移动)
@@ -62,26 +49,10 @@ details[open] summary {
   - [使用 GPU](#使用-gpu)
 - [线性回归示例](#线性回归示例)
   - [使用 CPU](#使用-cpu-1)
-    - [数据](#数据)
-    - [定义模型](#定义模型-2)
-    - [训练模型](#训练模型-2)
   - [使用 GPU](#使用-gpu-1)
-    - [设备](#设备-2)
-    - [数据](#数据-1)
-    - [数据移动到 GPU 上](#数据移动到-gpu-上)
-    - [定义模型](#定义模型-3)
-    - [模型移动到 GPU 上](#模型移动到-gpu-上)
-    - [训练模型](#训练模型-3)
 - [图片分类示例](#图片分类示例)
   - [使用 CPU 训练](#使用-cpu-训练)
-    - [模型](#模型)
-    - [损失函数、优化器、评价指标](#损失函数优化器评价指标)
-    - [模型训练](#模型训练)
   - [使用 GPU 训练](#使用-gpu-训练)
-    - [模型](#模型-1)
-    - [损失函数、优化器、评价指标](#损失函数优化器评价指标-1)
-    - [移动模型到 GPU 上](#移动模型到-gpu-上)
-    - [模型训练](#模型训练-1)
 - [训练循环中使用 GPU](#训练循环中使用-gpu)
   - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
   - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
@@ -97,95 +68,14 @@ details[open] summary {
     - [Jiterator](#jiterator)
 </p></details><p></p>
 
-# PyTorch 数据并行
 
-## 让模型跑在 GPU 上
+深度学习模型训练过程的耗时主要来自于两个部分，一部分来自数据准备，另一部分来自参数迭代。
+当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。
+当参数迭代过程成为训练时间的主要瓶颈时，通常的方法是应用 GPU 来进行加速
 
-```python
-import torch
+# PyTorch GPU 模型训练方式
 
-# 让模型在 GPU 上运行
-device = torch.device("cuda:0")
-model.to(device)
-
-# 将 tensor 复制到 GPU 上
-my_tensor = torch.ones(2, 2, dtype = torch.double)
-mytensor = my_tensor.to(device)
-```
-
-## 让模型跑在多个 GPU 上
-
-> * PyTorch 默认使用单个 GPU 执行运算
-
-```python
-model = nn.DataParallel(model)
-```
-
-```python
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-
-# Parameters
-input_size = 5
-output_size = 2
-
-batch_size = 30
-data_size = 100
-
-# Device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-
-# data 
-class RandomDataset(Dataset):
-
-    def __init__(self, size, length):
-        self.len = length
-        self.data = torch.randn(length, size)
-
-    def __len__(self):
-        return self.len
-    
-    def __getitem__(self, index):
-        return self.data[index]
-
-rand_loader = DataLoader(
-    dataset = RandomDataset(input_size, data_size), 
-    batch_size = batch_size, 
-    shuffle = True
-)
-
-# model
-class Model(nn.Module):
-
-    def __init__(self, input_size, output_size):
-        super(Model, self)__init__()
-        self.fc = nn.Linear(input_size, output_size)
-
-    def forward(self, input):
-        output = self.fc(input)
-        print("\tIn Model: input size", input.size(),
-                "output size", output.size())
-
-        return output
-
-model = Model(input_size, output_size)
-if torch.cuda.device_count() > 1:
-    print("Let's use", torch.cuda.device_count(), "GPUs!")
-    model = nn.DataParallel(model)
-
-model.to(device)
-
-
-for data in rand_loader:
-    input = data.to(device)
-    output = model(input)
-    print("Outside: input size", input.size(),
-        "output_size", output.size())
-```
-
-# GPU 训练模型示例
+## GPU 训练模型
 
 PyTorch 中使用 GPU 加速模型非常简单，只要将模型和数据移动到 GPU 上，核心代码只有几行
 
@@ -194,7 +84,7 @@ import torch
 print(f"torch.__version__ = {torch.__version__}")
 ```
 
-## 设备
+设备：
 
 ```python
 device = torch.device(
@@ -204,7 +94,7 @@ device = torch.device(
 print(f"Using {device} device")
 ```
 
-## 定义模型
+定义模型：
 
 ```python
 class Net(torch.nn.Module):
@@ -219,19 +109,19 @@ class Net(torch.nn.Module):
 model = Net()
 ```
 
-## 移动模型到 CUDA
+移动模型到 CUDA：
 
 ```python
 model.to(device)
 ```
 
-## 训练模型
+训练模型：
 
 ```python
 model.fit()
 ```
 
-## 移动数据到 CUDA
+移动数据到 CUDA：
 
 ```python
 features = features.to(device)
@@ -239,7 +129,9 @@ labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
 ```
 
-# 多 GPU 训练模型示例 
+## 多 GPU 训练模型
+
+> * PyTorch 默认使用单个 GPU 执行运算
 
 如果要使用多个 GPU 训练模型，只需要将模型设置为数据并行风格模型。
 模型移动到 GPU 上之后，会在每一个 GPU 上拷贝一个副本，
@@ -250,7 +142,7 @@ import torch
 print(f"torch.__version__ = {torch.__version__}")
 ```
 
-## 设备
+设备：
 
 ```python
 device = torch.device(
@@ -260,7 +152,7 @@ device = torch.device(
 print(f"Using {device} device")
 ```
 
-## 定义模型
+定义模型：
 
 ```python
 class Net(torch.nn.Module):
@@ -275,21 +167,22 @@ class Net(torch.nn.Module):
 model = Net()
 ```
 
-## 包装模型为并行风格、移动模型到 CUDA
+包装模型为并行风格、移动模型到 CUDA：
 
 ```python
 if torch.cuda.device_count() > 1:
-    model = tf.nn.DataParallel(model)
+    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    model = torch.nn.DataParallel(model)
     model.to(device)
 ```
 
-## 训练模型
+训练模型：
 
 ```python
 model.fit()
 ```
 
-## 移动数据到 CUDA
+移动数据到 CUDA：
 
 ```python
 features = features.to(device)
@@ -299,16 +192,11 @@ labels = labels.to(device)
 
 # GPU 相关操作
 
-## 查看 GPU 信息
-
-```python
-import torch
-from torch import nn
-```
-
 ## 查看 GPU 设备是否可用
 
 ```python
+import torch
+
 if_cuda = torch.cuda.is_available()
 print(f"if_cuda = {if_cuda}")
 ```
@@ -316,6 +204,8 @@ print(f"if_cuda = {if_cuda}")
 ## 查看 GPU 设备数量
 
 ```python
+import torch
+
 gup_count = torch.cuda.device_count()
 print(f"gpu_count = {gpu_count}")
 ```
@@ -346,7 +236,7 @@ if torch.cuda.is_available():
 
 ```
 device(type='gpu')
-False
+True
 ```
 
 ### tensor on cpu
@@ -473,7 +363,7 @@ import torch
 from torch import nn
 ```
 
-### 数据
+数据：
 
 ```python
 n = 1000000  # 样本数量
@@ -483,7 +373,7 @@ b0 = torch.tensor([10.0])
 Y = X@w0.t() + b0 + torch.normal(0.0, 2.0, size = [n, 1])
 ```
 
-### 定义模型
+定义模型：
 
 ```python
 class LinearRegression(nn.Module):
@@ -499,7 +389,7 @@ class LinearRegression(nn.Module):
 linear = LinearRegression()
 ```
 
-### 训练模型
+训练模型：
 
 ```python
 optimizer = torch.optim.Adam(linear.parameters(), lr = 0.1)
@@ -532,7 +422,7 @@ import torch
 from torch import nn
 ```
 
-### 设备
+设备：
 
 ```python
 device = torch.device(
@@ -542,7 +432,7 @@ device = torch.device(
 print(f"Using {device} device")
 ```
 
-### 数据
+数据：
 
 ```python
 n = 1000000  # 样本数量
@@ -552,7 +442,7 @@ b0 = torch.tensor([10.0])
 Y = X@w0.t() + b0 + torch.normal(0.0, 2.0, size = [n, 1])
 ```
 
-### 数据移动到 GPU 上
+数据移动到 GPU 上：
 
 ```python
 if torch.cuda.is_available():
@@ -562,7 +452,7 @@ if torch.cuda.is_available():
     print(f"Y.device: {Y.device}")
 ```
 
-### 定义模型
+定义模型：
 
 ```python
 class LinearRegression(nn.Module):
@@ -578,14 +468,14 @@ class LinearRegression(nn.Module):
 linear = LinearRegression()
 ```
 
-### 模型移动到 GPU 上
+模型移动到 GPU 上：
 
 ```python
 linear.to(device)
 print(f"if on cuda: {next(linear.parameters()).is_cuda}")
 ```
 
-### 训练模型
+训练模型：
 
 ```python
 optimizer = torch.optim.Adam(linear.parameters(), lr = 0.1)
@@ -693,14 +583,14 @@ def printlog(info):
     print(str(info) + "\n")
 ```
 
-### 模型
+模型：
 
 ```python
 net = create_net()
 print(net)
 ```
 
-### 损失函数、优化器、评价指标
+损失函数、优化器、评价指标：
 
 ```python
 loss_fn = nn.CrossEntropyLoss()
@@ -712,7 +602,7 @@ metrics_dict = {
 }
 ```
 
-### 模型训练
+模型训练：
 
 ```python
 # epochs 相关设置
@@ -860,14 +750,14 @@ def printlog(info):
     print(str(info) + "\n")
 ```
 
-### 模型
+模型：
 
 ```python
 net = create_net()
 print(net)
 ```
 
-### 损失函数、优化器、评价指标
+损失函数、优化器、评价指标：
 
 ```python
 loss_fn = nn.CrossEntropyLoss()
@@ -879,7 +769,7 @@ metrics_dict = {
 }
 ```
 
-### 移动模型到 GPU 上
+移动模型到 GPU 上：
 
 ```python
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -891,7 +781,7 @@ for name, fn in metrics_dict.items():
     fn.to(device)
 ```
 
-### 模型训练
+模型训练：
 
 ```python
 # 训练循环相关设置
