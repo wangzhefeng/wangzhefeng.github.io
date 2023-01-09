@@ -55,7 +55,6 @@ KKT(Karush-Kuhn-Tucker) 条件是在满足一些有规则的条件下，
 KKT 条件将 Lagrange 乘数法(Lagrange Multipliers) 所处理涉及的约束优化问题推广至不等式。
 在实际应用上，KKT 条件(方程组)一般不存在代数解，许多优化算法可供数值计算选用
 
-
 # KKT 条件
 
 对于具有等式和不等式约束的一般优化问题:
@@ -240,5 +239,6 @@ h_{k}(\textbf{x}) = 0, k = 1, 2, \ldots, l  \\
 
 # 参考
 
-- https://zhuanlan.zhihu.com/p/26514613
-- https://zhuanlan.zhihu.com/p/38163970
+* https://zhuanlan.zhihu.com/p/26514613
+* https://zhuanlan.zhihu.com/p/38163970
+
