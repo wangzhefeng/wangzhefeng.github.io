@@ -16,8 +16,6 @@ list_pages: true
 * [季节性地调整时间序列](https://anomaly.io/seasonally-adjustement-in-r/index.html)
 * [检测相关时间序列中的异常](https://anomaly.io/detect-anomalies-in-correlated-time-series/index.html)
 * [用移动中位数分解检测异常](https://anomaly.io/anomaly-detection-moving-median-decomposition/index.html)
-* [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
-* [9个时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
 
 # 文档
 

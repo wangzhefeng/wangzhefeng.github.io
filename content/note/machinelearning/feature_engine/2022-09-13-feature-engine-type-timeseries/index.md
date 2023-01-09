@@ -68,6 +68,20 @@ details[open] summary {
     - [元特征抽取](#元特征抽取)
     - [预测](#预测)
 - [时间序列特征构造基本准则](#时间序列特征构造基本准则)
+  - [动态特征](#动态特征)
+    - [lag 特征](#lag-特征)
+    - [日期时间衍生特征](#日期时间衍生特征)
+  - [静态特征](#静态特征)
+    - [类别特征](#类别特征)
+  - [其他衍生特征](#其他衍生特征)
+    - [滑窗类时间聚合特征](#滑窗类时间聚合特征)
+  - [创建 Date Time 特征](#创建-date-time-特征)
+    - [常见特征](#常见特征)
+  - [创建 Lagging 特征](#创建-lagging-特征)
+    - [滑动窗口特征](#滑动窗口特征)
+    - [滑动窗口统计量特征](#滑动窗口统计量特征)
+    - [TODO](#todo)
+  - [创建 Window 变量](#创建-window-变量)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -669,6 +683,264 @@ residual = np.mean(np.abs(y - preds))
 * 离散化对 xgboost 效果的提升也很显著
 * 对标签做个平滑效果可能会显著提升
 * 多做数据分析, 多清洗数据
+
+
+![img](images/feature_engineeing.webp)
+
+## 动态特征
+
+Lag 特征、日期时间衍生特征这类属于动态特征。随着时间变化会发生改变。这其中又可以分成两类：
+
+* 一类是在预测时无法提前获取到的信息，例如预测值本身，跟预测值相关的不可知信息，如未来的客流量，点击量等。
+对于这类信息，只能严格在历史窗口范围内做各种特征构建的处理，一般以 lag 为主
+* 另一类则是可以提前获取到的信息，例如我们有明确的定价计划，
+  可以预知在 T+1 时计划售卖的商品价格是多少。
+  对于这类特征，则可以直接像静态特征那样直接加入对应时间点的信息进去
+
+### lag 特征
+
+为了便于理解，可以假设预测的 horizon 长度仅为 1 天，而历史的特征 window 长度为 7 天，
+那么可以构建的最基础的特征即为过去 7 天的每天的历史值，来预测第 8 天的值。
+这个历史 7 天的值，在机器学习类方法中，一般被称为 lag 特征
+
+### 日期时间衍生特征
+
+对于时间本身，可以做各类日期衍生特征：
+
+* 离散类时间特征: 年月日时分数, 周几, 一年中的第几天, 第几周, 一天中的哪个时间段等
+* 判断类时间特征: 是否调休, 是否周末, 是否公共假期等
+
+## 静态特征
+
+即随着时间的变化，不会发生变化的信息。除了最细粒度的唯一键，还可以加入其它形式的静态特征。
+例如商品属于的大类，中类，小类，门店的地理位置特性，股票所属的行业等等。除了类别型，
+静态特征也可能是数值型，例如商品的重量，规格，一般是保持不变的
+
+### 类别特征
+
+另外一类最常见的基础特征，就是区分不同序列的类别特征，
+例如不同的门店，商品，或者不同的股票代码等。
+通过加入这个类别特征，就可以把不同的时间序列数据放在一张大表中统一训练了。
+模型理论上来说可以自动学习到这些类别之间的相似性，提升泛化能力
+
+## 其他衍生特征
+
+以上提到的基本属于直接输入的信息，基于这些信息，我们还可以进一步做各种复杂的衍生特征。
+例如在 lag 的基础上，我们可以做各种窗口内的统计特征，比如过去 n 个时间点的平均值，最大值，最小值，标准差等。
+进一步，还可以跟之前的各种维度信息结合起来来计算，比如某类商品的历史均值，某类门店的历史均值等。
+也可以根据自己的理解，做更复杂计算的衍生，例如过去 7 天中，销量连续上涨的天数，
+过去 7 天中最大销量与最低销量之差等等
+
+### 滑窗类时间聚合特征
+
+过去 X 天平均值, 过去 X 天方差, 过去 X 天最大值, 过去 X 小时四分位数, 过去 X 天偏态系数等
+
+
+## 创建 Date Time 特征
+
+### 常见特征
+
+* 一年中的月分
+* 一个月中的日期
+* 一天过去了几分钟
+* 一天的时间
+* 营业时间与否
+* 周末与否
+* 一年中的季节
+* 一年中的业务季度
+* 夏时制与否
+* 公共假期与否
+* 是否是闰年
+
+```python
+df = pd.DataFrame()
+df["Date"] = [series.index[i] for i in range(len(series))]
+df["month"] = [series.index[i].month for i in range(len(series))]
+df["day"] = [series.index[i].day for i in range(len(series))]
+df["temperature"] = [series[i] for i in range(len(series))]
+print(df.head())
+```
+
+```
+        Date  month  day  temperature
+0 1981-01-01      1    1         20.7
+1 1981-01-02      1    2         17.9
+2 1981-01-03      1    3         18.8
+3 1981-01-04      1    4         14.6
+4 1981-01-05      1    5         15.8
+```
+
+## 创建 Lagging 特征
+
+* pushed forward
+* pulled back
+
+```python
+import pandas as pd 
+
+def series_to_supervised(data, n_lag = 1, n_fut = 1, selLag = None, selFut = None, dropnan = True):
+      """
+      Converts a time series to a supervised learning data set by adding time-shifted prior and future period
+      data as input or output (i.e., target result) columns for each period
+      :param data:  a series of periodic attributes as a list or NumPy array
+      :param n_lag: number of PRIOR periods to lag as input (X); generates: Xa(t-1), Xa(t-2); min= 0 --> nothing lagged
+      :param n_fut: number of FUTURE periods to add as target output (y); generates Yout(t+1); min= 0 --> no future periods
+      :param selLag:  only copy these specific PRIOR period attributes; default= None; EX: ['Xa', 'Xb' ]
+      :param selFut:  only copy these specific FUTURE period attributes; default= None; EX: ['rslt', 'xx']
+      :param dropnan: True= drop rows with NaN values; default= True
+      :return: a Pandas DataFrame of time series data organized for supervised learning
+      
+      NOTES:
+      (1) The current period's data is always included in the output.
+      (2) A suffix is added to the original column names to indicate a relative time reference: e.g., (t) is the current
+         period; (t-2) is from two periods in the past; (t+1) is from the next period
+      (3) This is an extension of Jason Brownlee's series_to_supervised() function, customized for MFI use
+      """
+      n_vars = 1 if type(data) is list else data.shape[1]
+      df = pd.DataFrame(data)
+      origNames = df.columns
+      cols, names = list(), list()
+      # include all current period attributes
+      cols.append(df.shift(0))
+      names += [("%s" % origNames[j]) for j in range(n_vars)]
+      # lag any past period attributes (t-n_lag, ..., t-1)
+      n_lag = max(0, n_lag) # force valid number of lag periods
+      # input sequence (t-n, ..., t-1)
+      for i in range(n_lag, 0, -1):
+         suffix = "(t-%d)" % i
+         if (None == selLag):
+            cols.append(df.shift(i))
+            names += [("%s%s" % (origNames[j], suffix)) for j in range(n_vars)]
+         else:
+            for var in (selLag):
+                  cols.append(df[var].shift(i))
+                  names += [("%s%s" % (var, suffix))]
+      # include future period attributes (t+1, ..., t+n_fut)
+      n_fut = max(n_fut, 0)
+      # forecast sequence (t, t+1, ..., t+n)
+      for i in range(0, n_fut + 1):
+         suffix = "(t+%d)" % i
+         if (None == selFut):
+            cols.append(df.shift(-i))
+            names += [("%s%s" % (origNames[j], suffix)) for j in range(n_vars)]
+         else:
+            for var in (selFut):
+                  cols.append(df[var].shift(-i))
+                  names += [("%s%s" % (var, suffix))]
+      # put it all together
+      agg = pd.concat(cols, axis = 1)
+      agg.columns = names
+      # drop rows with NaN values
+      if dropnan:
+         agg.dropna(inplace = True)
+
+      return agg
+```
+
+### 滑动窗口特征
+
+```python
+temps = pd.DataFrame(series.values)
+df = pd.concat([
+    temps.shift(3), 
+    temps.shift(2), 
+    temps.shift(1), 
+    temps
+], axis = 1)
+df.columns = ["t-3", "t-2", "t-1", "t+1"]
+df.dropna(inplace = True)
+
+print(df.head())
+```
+
+``` 
+    t-3   t-2   t-1   t+1
+3  17.9  18.8  14.6  15.8
+4  18.8  14.6  15.8  15.8
+5  14.6  15.8  15.8  15.8
+6  15.8  15.8  15.8  17.4
+7  15.8  15.8  17.4  21.8
+```
+
+### 滑动窗口统计量特征
+
+```python
+temps = pd.DataFrame(series.values)
+
+shifted = temps.shift(1)
+window = shifted.rolling(window = 2)
+means = window.mean()
+
+df = pd.concat([mean, temps], axis = 1)
+df.columns = ["mean(t-2,t-1)", "t+1"]
+
+print(df.head())
+```
+
+```
+   mean(t-2,t-1)   t+1
+0            NaN  17.9
+1            NaN  18.8
+2          18.35  14.6
+3          16.70  15.8
+4          15.20  15.8
+```
+
+### TODO
+
+```python
+temps = pd.DataFrame(series.values)
+
+width = 3
+shifted = temps.shift(width - 1)
+window = shifted.rolling(windon = width)
+
+df = pd.concat([
+    window.min(), 
+    window.mean(), 
+    window.max(), 
+    temps
+], axis = 1)
+df.columns = ["min", "mean", "max", "t+1"]
+
+print(df.head())
+```
+
+```
+    min  mean   max   t+1
+0   NaN   NaN   NaN  17.9
+1   NaN   NaN   NaN  18.8
+2   NaN   NaN   NaN  14.6
+3   NaN   NaN   NaN  15.8
+4  14.6  17.1  18.8  15.8
+```
+
+## 创建 Window 变量
+
+```python
+temps = pd.DataFrame(series.values)
+
+window = temps.expanding()
+
+df = pd.concat([
+    window.min(), 
+    window.mean(), 
+    window.max(), 
+    temps.shift(-1)
+], axis = 1)
+df.columns = ["min", "mean", "max", "t+1"]
+
+print(df.head())
+```
+
+``` 
+    min    mean   max   t+1
+0  17.9  17.900  17.9  18.8
+1  17.9  18.350  18.8  14.6
+2  14.6  17.100  18.8  15.8
+3  14.6  16.775  18.8  15.8
+4  14.6  16.580  18.8  15.8
+```
 
 
 # 参考
