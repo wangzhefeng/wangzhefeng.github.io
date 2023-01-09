@@ -596,19 +596,19 @@ class Squares:
 示例: 
 
 ```python
-class Pair:
+# class Pair:
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
 
-    def __repr__(self):
-        return "Pair({0.x!r}, {0.y!r})".format(self) 
-        # "Pair({%r}, {%r})".format(self.x, self.y)
+#     def __repr__(self):
+#         return "Pair({0.x!r}, {0.y!r})".format(self) 
+#         # "Pair({%r}, {%r})".format(self.x, self.y)
     
-    def __str__(self):
-        return "({0.x!s}, {0.y!s})".format(self)
-        # "Pair({%s}, {%s})".format(self.x, self.y)
+#     def __str__(self):
+#         return "({0.x!s}, {0.y!s})".format(self)
+#         # "Pair({%s}, {%s})".format(self.x, self.y)
 
 >>> p = Pair(3, 4)
 >>> p
