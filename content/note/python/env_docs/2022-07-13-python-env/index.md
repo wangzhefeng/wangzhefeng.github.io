@@ -73,13 +73,7 @@ details[open] summary {
     - [Chocolatey 安装](#chocolatey-安装)
 - [创建 Python 虚拟环境](#创建-python-虚拟环境)
   - [virtualenv](#virtualenv)
-  - [virtualenvwrapper](#virtualenvwrapper)
-    - [Install packages](#install-packages)
-    - [Configuration](#configuration)
-    - [Create Virtual Env](#create-virtual-env)
-  - [pipx](#pipx)
-    - [安装 pipx](#安装-pipx)
-  - [pipenv](#pipenv)
+  - [conda](#conda)
   - [pyenv](#pyenv)
     - [安装 pyenv](#安装-pyenv)
     - [安装、卸载 Python](#安装卸载-python)
@@ -87,9 +81,6 @@ details[open] summary {
     - [构建 Python 虚拟环境](#构建-python-虚拟环境)
     - [使用多个 Python 环境](#使用多个-python-环境)
     - [探索 pyenv 命令](#探索-pyenv-命令)
-  - [conda](#conda)
-  - [virtualenv-burrito](#virtualenv-burrito)
-  - [autoenv](#autoenv)
 - [Python 项目管理](#python-项目管理)
   - [requirements.txt](#requirementstxt)
   - [README.md](#readmemd)
@@ -374,128 +365,14 @@ C:\> virtualenv --system-site-packages -p python3 ./venv
 (venv) C:\> deactivate
 ```
 
-## virtualenvwrapper
-
-
-### Install packages
+## conda
 
 ```bash
-# pipx install virtualenv
-# $ pipx install virtualenv
-
-# $ pip3 install virtualenv
-# $ sudo pip3 install virtualenv
-$ sudo apt-get install virtualenv
-
-# $ sudo pip3 install virtualenvwrapper
-$ sudo apt-get install virtualenvwrapper
+$ conda create -n venv pip python3.7
+$ source activate venv
+(venv) $ pip install --ignore-installed --upgrade packageURL
+(venv) $ source deactivate
 ```
-
-### Configuration 
-
-Location of Environments and Project Directories
-
-```bash
-export WORKON_HOME=~/Envs
-mkdir -p $WORKON_HOME
-# source /Users/zfwang/opt/anaconda3/bin/virtualenvwrapper.sh
-```
-
-`~/.zshrc` 配置: 
-
-```bash
-# ~/.zshrc
-export WORKON_HOME=~/Envs
-export PATH=$PATH:$WORKON_HOME
-source /Users/zfwang/opt/anaconda3/bin/virtualenvwrapper.sh
-
-# macOS
-export WORKON_HOME=~/.virtualenv
-export PATH=$PATH:$WORKON_HOME
-export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
-# export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
-source /usr/local/bin/virtualenvwrapper.sh
-```
-
-### Create Virtual Env
-
-1. 快速开始
-
-```bash
-# List the virtual env
-$ workon
-```
-
-```bash
-# make a virtual env
-$ mkvirtualenv env1
-$ mkvirtualenv --system-site-packages env1
-
-# install packages
-(env1)$ pip3 install django
-
-# see the new package installed
-(env1)$ lssitepackages
-
-# see all virtual envs
-(env1)$ ls $WORKON_HOME
-```
-
-```bash
-# switch between environments
-(env1)$ mkvirtualenv env2
-(env2)$ ls $WORKON_HOME
-```
-
-```bash
-(env2)$ workon env1
-(env1)$ echo $VIRTUAL_ENV
-
-# `psotmkvirtualenv`
-(env1)$ echo 'cd $VIRTUAL_ENV' >> $WORKON_HOME/postactivate
-
-(env1)$ workon env2
-(env2)$ echo 'pip3 install numpy' >> $WORKON_HOME/postactivate
-(env2)$ mkvirtualenv env3
-```
-
-2. Command Reference
-   - Managing Env
-      - `mkvirtualenv`
-      - `mktmpenv`
-      - `lsvirtualenv`
-      - `showvirtualenv`
-      - `rmvirtualenv`
-      - `cpvirtualenv`
-      - `allvirtualenv`
-   - Controlling Active Env
-      - `workon`
-      - `deactivate`
-   - Navigating to an Env
-      - `cdvirtualenv`
-      - `cdsitepackages`
-      - `lssitepackages`
-   - Path Management
-      - `add2virtualenv`
-      - `toggleglobalsitepackages`
-   - Project Directory Management
-      - `mkproject`
-      - `setvirtualenvproject`
-      - `cdproject`
-   - Managing Installed Packages
-      - `wipeenv`
-   - Others
-      - `virtualenvwrapper`
-
-## pipx
-
-### 安装 pipx
-
-## pipenv
-
-- [Pipenv](https://docs.pipenv.org/)
 
 ## pyenv
 
@@ -508,7 +385,8 @@ $ mkvirtualenv --system-site-packages env1
 5. 自动激活不同的 Python 版本和虚拟环境
 
 
-- 这里只介绍 Linux 和 macOS 的使用, 对于 Windows 用户参考 https://github.com/pyenv-win/pyenv-win
+* 这里只介绍 Linux 和 macOS 的使用, 对于 Windows 用户参考 https://github.com/pyenv-win/pyenv-win
+* [好家伙，妥妥的 Python Master](https://mp.weixin.qq.com/s/M7dmRl3fSujNKRETEXlhSg)
 
 ### 安装 pyenv
 
@@ -628,7 +506,7 @@ $ pyenv uninstall 3.7.10
 - pyenv 如何准确地解析使用的 Python 版本
 
 ![img](images/pyenv-pyramid.png)
-   
+
 ```bash
 # 查看当前已经下载的、使用的 Python 版本
 $ pyenv versions
@@ -774,27 +652,6 @@ $ pyenv local 3.6
 # 设置特定于 shell 的 Python 版本
 $ pyenv shell 3.8-dev
 ```
-
-## conda
-
-```bash
-$ conda create -n venv pip python3.7
-$ source activate venv
-(venv) $ pip install --ignore-installed --upgrade packageURL
-(venv) $ source deactivate
-```
-
-## virtualenv-burrito
-
-
-## autoenv
-
-
-
-
-
-
-
 
 # Python 项目管理
 
