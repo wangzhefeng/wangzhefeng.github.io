@@ -126,6 +126,8 @@ details[open] summary {
   - [下一步](#下一步)
 </p></details><p></p>
 
+* [22 张图，我发现了 git 秘密](https://mp.weixin.qq.com/s/xrjru4jfzfIyl_p-84e1gA)
+
 # Git Install
 
 ## Ubuntu

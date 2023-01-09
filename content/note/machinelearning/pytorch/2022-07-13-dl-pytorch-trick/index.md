@@ -1,7 +1,7 @@
 ---
 title: PyTorch 技巧
 author: 王哲峰
-date: '2022-12-29'
+date: '2022-07-13'
 slug: dl-pytorch-trick
 categories:
   - pytorch

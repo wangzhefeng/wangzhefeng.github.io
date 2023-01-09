@@ -52,6 +52,9 @@ details[open] summary {
     - [转置卷积](#转置卷积)
   - [上采样层](#上采样层)
   - [PyTorch 示例](#pytorch-示例-1)
+    - [卷积输出尺寸关系演示](#卷积输出尺寸关系演示)
+    - [卷积层参数数量演示](#卷积层参数数量演示)
+    - [上采样层](#上采样层-1)
 - [循环网络相关层](#循环网络相关层)
   - [模型层 API](#模型层-api-2)
   - [RNN](#rnn)
@@ -276,15 +279,36 @@ print(f"token std: {token_std.item()}")
 
 ## 卷积层
 
+卷积层的输出尺寸计算：
+
+* 卷积输出尺寸计算
+
+`$$o = (i + 2p -k) / s + 1$$`
+
+* 空洞卷积
+
+`$$k=d(k-1)+1$$`
+
+其中：
+
+* `$o$` 是输出尺寸
+* `$i$` 是输入尺寸
+* `$p$` 是 padding 大小
+* `$k$` 是卷积核尺寸
+* `$s$` 是 stride 步长
+* `$d$` 是空洞卷积 dilation 膨胀系数
+
 ### 普通卷积
 
 普通卷积的操作分为 3 个维度:
 
-* 在空间维度(Height 和 Width 维度)，是共享卷积核权重滑窗相乘求和
+* 在空间维度(Height 和 Width 维度)，是共享卷积核权重，滑窗相乘求和
     - 融合空间信息
 * 在输入通道维度，是每一个通道使用不同的卷积核参数，并对输入通道维度求和
     - 融合通道信息
 * 在输出通道维度，操作方式是并行堆叠(多种)，有多少个卷积核就有多少个输出通道
+
+> 普通卷积层的参数数量 = 输入通道数 × 卷积核尺寸(如 3x3) × 输出通道数(即卷积核个数) + 输出通道数(考虑偏置时）
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nhe0lsutg20az0aln03.gif)
 
@@ -314,10 +338,12 @@ print(f"token std: {token_std.item()}")
 
 ### 深度可分离卷积
 
+深度可分离卷积的思想是将融合空间信息和融合通道信息的操作在卷积中分成独立的两步完成。
 深度可分离卷积的思想是先用 `$g=m$`(输入通道数)的分组卷积逐通道作用融合空间信息，
 再用 `$n$`(输出通道数)个 `$1 \times 1$`卷积融合通道信息。
 其参数量为 `$(m \times k \times k)+ n \times m$`, 
-相比普通卷积的参数量 `$m \times n \times k \times k$` 显著减小
+相比普通卷积的参数量 `$m \times n \times k \times k$` 显著减小。
+同时，由于深度可分离卷积融合空间信息与融合通道信息相互分离，往往还能比普通卷积取得更好的效果
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5npbiuvzvj20uq0e7dge.jpg)
 
@@ -339,11 +365,13 @@ print(f"token std: {token_std.item()}")
 
 除了使用转置卷积进行上采样外，在图像分割领域更多的时候一般是使用双线性插值的方式进行上采样，
 该方法没有需要学习的参数，通常效果也更好，除了双线性插值之外，
-还可以使用最邻近插值的方式进行上采样，但使用较少
+还可以使用最邻近插值的方式进行上采样，但使用较少。此外，还有一种上采样方法是反池化。使用也不多
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nsi5pt4eg20na0co74k.gif)
 
 ## PyTorch 示例
+
+### 卷积输出尺寸关系演示
 
 ```python
 import torch 
@@ -354,13 +382,13 @@ import torch.nn.functional as F
 # 对空洞卷积 k' = d(k-1) + 1
 # o是输出尺寸，i 是输入尺寸，p是 padding大小， k 是卷积核尺寸， s是stride步长, d是dilation空洞参数
 
-inputs = torch.arange(0,25).view(1,1,5,5).float() # i= 5
-filters = torch.tensor([[[[1.0,1],[1,1]]]]) # k = 2
+inputs = torch.arange(0,25).view(1, 1, 5, 5).float()  # i= 5
+filters = torch.tensor([[[[1.0, 1], [1, 1]]]])  # k = 2
 
 outputs = F.conv2d(inputs, filters) # o = (5+2*0-2)//1+1 = 4
-outputs_s2 = F.conv2d(inputs, filters, stride=2)  #o = (5+2*0-2)//2+1 = 2
-outputs_p1 = F.conv2d(inputs, filters, padding=1) #o = (5+2*1-2)//1+1 = 6
-outputs_d2 = F.conv2d(inputs,filters, dilation=2) #o = (5+2*0-(2(2-1)+1))//1+1 = 3
+outputs_s2 = F.conv2d(inputs, filters, stride = 2)  #o = (5+2*0-2)//2+1 = 2
+outputs_p1 = F.conv2d(inputs, filters, padding = 1) #o = (5+2*1-2)//1+1 = 6
+outputs_d2 = F.conv2d(inputs, filters, dilation = 2) #o = (5+2*0-(2(2-1)+1))//1+1 = 3
 
 print("--inputs--")
 print(inputs)
@@ -368,78 +396,162 @@ print("--filters--")
 print(filters)
 
 print("--outputs--")
-print(outputs,"\n")
+print(outputs, "\n")
 
 print("--outputs(stride=2)--")
-print(outputs_s2,"\n")
+print(outputs_s2, "\n")
 
 print("--outputs(padding=1)--")
-print(outputs_p1,"\n")
+print(outputs_p1, "\n")
 
 print("--outputs(dilation=2)--")
-print(outputs_d2,"\n")
+print(outputs_d2, "\n")
 ```
 
-```python
-import torch 
-from torch import nn 
+```
+--inputs--
+tensor([[[[ 0.,  1.,  2.,  3.,  4.],
+          [ 5.,  6.,  7.,  8.,  9.],
+          [10., 11., 12., 13., 14.],
+          [15., 16., 17., 18., 19.],
+          [20., 21., 22., 23., 24.]]]])
+--filters--
+tensor([[[[1., 1.],
+          [1., 1.]]]])
+--outputs--
+tensor([[[[12., 16., 20., 24.],
+          [32., 36., 40., 44.],
+          [52., 56., 60., 64.],
+          [72., 76., 80., 84.]]]]) 
 
-features = torch.randn(8,64,128,128)
-print("features.shape:",features.shape)
+--outputs(stride=2)--
+tensor([[[[12., 20.],
+          [52., 60.]]]]) 
+
+--outputs(padding=1)--
+tensor([[[[ 0.,  1.,  3.,  5.,  7.,  4.],
+          [ 5., 12., 16., 20., 24., 13.],
+          [15., 32., 36., 40., 44., 23.],
+          [25., 52., 56., 60., 64., 33.],
+          [35., 72., 76., 80., 84., 43.],
+          [20., 41., 43., 45., 47., 24.]]]]) 
+
+--outputs(dilation=2)--
+tensor([[[[24., 28., 32.],
+          [44., 48., 52.],
+          [64., 68., 72.]]]]) 
+```
+
+
+### 卷积层参数数量演示
+
+```python
+import torch
+from torch import nn
+
+features = torch.randn(8, 64, 128, 128)
+print("features.shape:", features.shape)
 print("\n")
 
-#普通卷积
+# 普通卷积
 print("--conv--")
-conv = nn.Conv2d(in_channels=64,out_channels=32,kernel_size=3)
+conv = nn.Conv2d(in_channels = 64, out_channels = 32, kernel_size = 3)
 conv_out = conv(features)
-print("conv_out.shape:",conv_out.shape) 
-print("conv.weight.shape:",conv.weight.shape)
+print("conv_out.shape:", conv_out.shape) 
+print("conv.weight.shape:", conv.weight.shape)
 print("\n")
 
 #分组卷积
 print("--group conv--")
-conv_group = nn.Conv2d(in_channels=64,out_channels=32,kernel_size=3,groups=8)
+conv_group = nn.Conv2d(in_channels = 64, out_channels = 32, kernel_size = 3, groups = 8)
 group_out = conv_group(features)
-print("group_out.shape:",group_out.shape) 
-print("conv_group.weight.shape:",conv_group.weight.shape)
+print("group_out.shape:", group_out.shape) 
+print("conv_group.weight.shape:", conv_group.weight.shape)
 print("\n")
 
 #深度可分离卷积
 print("--separable conv--")
-depth_conv = nn.Conv2d(in_channels=64,out_channels=64,kernel_size=3,groups=64)
-oneone_conv = nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1)
+depth_conv = nn.Conv2d(in_channels = 64, out_channels = 64, kernel_size = 3, groups = 64)
+oneone_conv = nn.Conv2d(in_channels = 64, out_channels = 32, kernel_size = 1)
 separable_conv = nn.Sequential(depth_conv,oneone_conv)
 separable_out = separable_conv(features)
-print("separable_out.shape:",separable_out.shape) 
-print("depth_conv.weight.shape:",depth_conv.weight.shape)
-print("oneone_conv.weight.shape:",oneone_conv.weight.shape)
+print("separable_out.shape:", separable_out.shape) 
+print("depth_conv.weight.shape:", depth_conv.weight.shape)
+print("oneone_conv.weight.shape:", oneone_conv.weight.shape)
 print("\n")
 
 #转置卷积
 print("--conv transpose--")
-conv_t = nn.ConvTranspose2d(in_channels=32,out_channels=64,kernel_size=3)
+conv_t = nn.ConvTranspose2d(in_channels = 32, out_channels = 64, kernel_size = 3)
 features_like = conv_t(conv_out)
-print("features_like.shape:",features_like.shape)
-print("conv_t.weight.shape:",conv_t.weight.shape)
+print("features_like.shape:", features_like.shape)
+print("conv_t.weight.shape:", conv_t.weight.shape)
 ```
+
+```
+features.shape: torch.Size([8, 64, 128, 128])
+
+
+--conv--
+conv_out.shape: torch.Size([8, 32, 126, 126])
+conv.weight.shape: torch.Size([32, 64, 3, 3])
+
+
+--group conv--
+group_out.shape: torch.Size([8, 32, 126, 126])
+conv_group.weight.shape: torch.Size([32, 8, 3, 3])
+
+
+--separable conv--
+separable_out.shape: torch.Size([8, 32, 126, 126])
+depth_conv.weight.shape: torch.Size([64, 1, 3, 3])
+oneone_conv.weight.shape: torch.Size([32, 64, 1, 1])
+
+
+--conv transpose--
+features_like.shape: torch.Size([8, 64, 128, 128])
+conv_t.weight.shape: torch.Size([32, 64, 3, 3])
+```
+
+### 上采样层
 
 ```python
 import torch 
 from torch import nn 
 
-inputs = torch.arange(1, 5, dtype=torch.float32).view(1, 1, 2, 2)
+inputs = torch.arange(1, 5, dtype = torch.float32).view(1, 1, 2, 2)
 print("inputs:")
 print(inputs)
 print("\n")
 
-nearest = nn.Upsample(scale_factor=2, mode='nearest')
-bilinear = nn.Upsample(scale_factor=2,mode="bilinear",align_corners=True)
+nearest = nn.Upsample(scale_factor = 2, mode = 'nearest')
+bilinear = nn.Upsample(scale_factor = 2, mode = "bilinear", align_corners = True)
 
 print("nearest(inputs): ")
 print(nearest(inputs))
 print("\n")
 print("bilinear(inputs): ")
 print(bilinear(inputs)) 
+```
+
+```
+inputs:
+tensor([[[[1., 2.],
+          [3., 4.]]]])
+
+
+nearest(inputs)：
+tensor([[[[1., 1., 2., 2.],
+          [1., 1., 2., 2.],
+          [3., 3., 4., 4.],
+          [3., 3., 4., 4.]]]])
+
+
+bilinear(inputs)：
+tensor([[[[1.0000, 1.3333, 1.6667, 2.0000],
+          [1.6667, 2.0000, 2.3333, 2.6667],
+          [2.3333, 2.6667, 3.0000, 3.3333],
+          [3.0000, 3.3333, 3.6667, 4.0000]]]])
 ```
 
 # 循环网络相关层

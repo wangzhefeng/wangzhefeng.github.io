@@ -2,7 +2,7 @@
 title: PyTorch 自动微分机制
 author: 王哲峰
 date: '2022-07-17'
-slug: dl-pytorch-autograd
+slug: dl-pytorch-api-autograd
 categories:
   - deeplearning
   - pytorch

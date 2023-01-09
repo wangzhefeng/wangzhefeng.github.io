@@ -2,7 +2,7 @@
 title: PyTorch GPU 训练模型和 CUDA
 author: 王哲峰
 date: '2022-08-15'
-slug: dl-pytorch-gup-cuda
+slug: dl-pytorch-model-gup
 categories:
   - deeplearning
   - pytorch

@@ -28,6 +28,7 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [TensorFlow 和 PyTorch](#tensorflow-和-pytorch)
+- [TODO](#todo)
 - [文档](#文档)
 </p></details><p></p>
 
@@ -50,6 +51,12 @@ details[open] summary {
 3. TensorFlow 和 PyTorch 实际上整体风格已经非常相似了，学会了其中一个，
    学习另外一个将比较容易。两种框架都掌握的话，能够参考的开源模型案例更多，
    并且可以方便地在两种框架之间切换
+
+# TODO
+
+* https://github.com/pytorch/serve
+* [PyTorch Forecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html#)
+
 
 # 文档
 
