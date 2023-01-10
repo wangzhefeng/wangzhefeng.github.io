@@ -32,8 +32,6 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [时间序列回归](#时间序列回归)
-- [时间序列交叉验证](#时间序列交叉验证)
-  - [参考文章](#参考文章)
 - [时间序列预测方式](#时间序列预测方式)
   - [单步预测](#单步预测)
   - [多步预测](#多步预测)
@@ -42,6 +40,8 @@ details[open] summary {
   - [直接预测 Direct Forecasting](#直接预测-direct-forecasting)
   - [堆叠预测 Stacking Forecasting](#堆叠预测-stacking-forecasting)
   - [修正预测 Rectified Forecasting](#修正预测-rectified-forecasting)
+- [时间序列交叉验证](#时间序列交叉验证)
+  - [参考文章](#参考文章)
 - [时间序列模型选择](#时间序列模型选择)
   - [模型](#模型)
   - [local 模型和 global 模型](#local-模型和-global-模型)
@@ -74,19 +74,6 @@ details[open] summary {
 近年来时间序列预测方法，多采用机器学习方式。机器学习的方法，主要是构建样本数据集，
 采用“时间特征”到“样本值”的方式，通过有监督学习，学习特征与标签之前的关联关系，
 从而实现时间序列预测。常用的场景有以下几种
-
-# 时间序列交叉验证
-
-在时序问题上，需要特别注意不能做随机 split，而需要在时间维度上做前后的 split，
-以保证与实际预测应用时的情况一致
-
-
-
-## 参考文章
-
-* [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
-* [9个时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
-
 
 # 时间序列预测方式
 
@@ -140,6 +127,17 @@ details[open] summary {
 ## 堆叠预测 Stacking Forecasting
 
 ## 修正预测 Rectified Forecasting
+
+
+# 时间序列交叉验证
+
+在时序问题上，需要特别注意不能做随机 split，而需要在时间维度上做前后的 split，
+以保证与实际预测应用时的情况一致
+
+## 参考文章
+
+* [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
+* [9个时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
 
 # 时间序列模型选择
 
