@@ -49,39 +49,25 @@ menu:
     # - name: "订阅"
       # url: "/index.xml"
       # weight: 5
-  # js:
-  #   - name: "Home"
-  #     url: "/javascript/"
-  #     weight: 1
-  #   - name: "Note"
-  #     url: "/javascript/note/"
-  #     weight: 2
-  #   - name: "Demo"
-  #     url: "/javascript/demo/"
-  #     weight: 3
-
 
 params:
   description: ""
   footer: "&copy; [wangzf](https://wangzhefeng.com) 2022 | [<img src='https://simpleicons.org/icons/github.svg' width='3%'>](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
-  # costomJS: TODO
   githubContentURL: "https://github.com/wangzhefeng"
   twitterImage: "/images/logo.jpg"
-
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
   highlightjsLang: ["r", "yaml", "tex", "python", "bash", "shell", "cpp"]
   highlightjsTheme: "github" # "atom-one-dark"
   highlightjsVersion: "9.12.0"
-  
   # logo TODO
   logo:
     img: "images/logo.jpg"
     url: "/"
     alt: "logo"
     tag: ""
-  
+  # comment
   utteranc: 
     enable: false
     repo: wangzhefeng/blog_comment

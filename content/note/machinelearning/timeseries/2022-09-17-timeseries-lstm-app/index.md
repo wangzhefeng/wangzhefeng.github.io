@@ -2,7 +2,7 @@
 title: LSTM 时间序列预测
 author: 王哲峰
 date: '2022-09-17'
-slug: timeseriesl-lstm-app
+slug: timeseries-lstm-app
 categories:
   - deeplearning
 tags:

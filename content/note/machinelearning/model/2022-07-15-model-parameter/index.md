@@ -2,7 +2,7 @@
 title: 参数初始化和超参数的调优
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-model-parameter
+slug: model-parameter
 categories:
   - deeplearning
 tags:
@@ -35,6 +35,7 @@ details[open] summary {
   - [Xavier初始值](#xavier初始值)
   - [He初始值](#he初始值)
 - [超参数的调优](#超参数的调优)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -95,4 +96,8 @@ Kaiming He 等人推荐了一种初始值, 俗称 “He 初始值”
     - 训练数据用于参数(权重和偏置)的学习
     - 验证数据用于超参数的性能评估
     - 测试数据确认泛化能力, 要在最后使用(比较理想的是只用一次)
+
+# 参考
+
+* https://mp.weixin.qq.com/s/Wx1WMvQQQUV46ckGbE3Eag
 

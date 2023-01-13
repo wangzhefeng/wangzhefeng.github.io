@@ -2,7 +2,7 @@
 title: 反向传播算法
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-model-backforward
+slug: model-backforward
 categories:
   - deeplearning
 tags:

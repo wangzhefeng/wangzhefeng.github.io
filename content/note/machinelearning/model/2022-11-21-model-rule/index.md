@@ -1,12 +1,12 @@
 ---
-title: ML Rule
+title: 模型规则
 author: 王哲峰
 date: '2022-11-21'
-slug: ml-rule
+slug: model-rule
 categories:
-  - machinelearning
+  - model
 tags:
-  - article
+  - machinelearning
 ---
 
 <style>
