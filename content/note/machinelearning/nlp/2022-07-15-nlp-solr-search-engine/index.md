@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-04-05'
 slug: nlp-solr-search-engine
 categories:
-  - NLP
+  - nlp
 tags:
   - tool
 ---
