@@ -302,7 +302,6 @@ plt.show()
 
 ![img](images/new_clean.png)
 
-
 ### 自定义傅里叶变换函数
 
 ```python
@@ -322,8 +321,6 @@ x = np.random.random(1024)
 np.allclose(dft(x), fft(x))
 ```
 
-
-
 ### 周期性检测
 
 对于一条具备周期性的时间序列, 它本身就很接近正弦波, 所以它的组成里一定包含一个显著的正弦波, 
@@ -337,18 +334,7 @@ np.allclose(dft(x), fft(x))
 
 ### TODO
 
-* 
 * [An Interactive Guide To The Fourier Transform](https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/)
-
-
-
-
-
-
-
-
-
-
 
 # 小波分析
 
@@ -362,12 +348,7 @@ np.allclose(dft(x), fft(x))
 >
 > 小波变换分成两个大类：离散小波变换 (DWT)  和连续小波变换 (CWT)。两者的主要区别在于，连续变换在所有可能的缩放和平移上操作，而离散变换采用所有缩放和平移值的特定子集。
 
-
 ## 小波分析的应用
-
-
-
-
 
 # 参考资料
 

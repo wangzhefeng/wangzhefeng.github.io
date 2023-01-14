@@ -2,7 +2,7 @@
 title: YOLO:Real-Time Object Detection
 author: 王哲峰
 date: '2022-07-13'
-slug: dl-cv-yolo
+slug: yolo
 categories:
   - deeplearning
 tags:

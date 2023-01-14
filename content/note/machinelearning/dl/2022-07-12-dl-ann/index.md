@@ -1,5 +1,5 @@
 ---
-title: ANN 前馈神经网路
+title: ANN
 author: 王哲峰
 date: '2022-07-12'
 slug: dl-ann

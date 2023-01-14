@@ -1,5 +1,5 @@
 ---
-title: 图像处理
+title: Scipy Matplotlib Skimage 图像处理
 author: 王哲峰
 date: '2022-08-14'
 slug: cv-numpy-scipy-matplotlib
@@ -52,5 +52,3 @@ plt.show()
 # 特征提取
 
 
-
-# 

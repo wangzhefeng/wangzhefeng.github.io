@@ -1,8 +1,8 @@
 ---
-title: CNN-图像分类--从 LeNet5 到 ResNet
+title: 图像分类
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-cnn-classification
+slug: image-classification
 categories:
   - deeplearning
 tags:
@@ -48,7 +48,8 @@ details[open] summary {
 
 ## LeNet5 的提出
 
-在神经网络的和深度学习领域, Yann LeCun 在 1998 年在 IEEE 上发表了 (Gradient-based learning applied to document recognition, 1998), 文中首次提出了 **卷积-池化-全连接** 的神经网络结构, 
+在神经网络的和深度学习领域, Yann LeCun 在 1998 年在 IEEE 上发表了 (Gradient-based learning applied to document recognition, 1998), 
+文中首次提出了 **卷积-池化-全连接** 的神经网络结构, 
 由 LeCun 提出的七层网络命名为 LeNet-5, 因而也为他赢得了 CNN 之父的美誉.
 
 ## LeNet-5 的网络结构
@@ -59,8 +60,7 @@ LeNet-5 共有5层(输入输出层不计入层数, 池化层与卷积层算1层)
 每层都有一定的训练参数, 其中三个卷积层的训练参数较多, 
 每层都有多个滤波器(特征图), 每个滤波器都对上一层的输出提取不同的像素特征:
 
-`$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积(全连接) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
-
+> 输入 -> (卷积-池化) -> (卷积-池化) -> 卷积(全连接) -> 全连接 -> 全连接 -> 输出
 
 作为标准的卷积网络结构, LeNet-5 对后世的影响深远, 以至于在 16 年后, 
 谷歌提出 Inception 网络时也将其命名为 GoogLeNet, 
@@ -82,10 +82,11 @@ AlexNet (ImageNet Classification with Deep Convolutional Neural Networks, 2012),
 
 AlexNet 共有 8 层(输入输出层不计入层数, 池化层与卷积层算1层):
 
-`$$输入 \rightarrow (卷积-池化) \rightarrow (卷积-池化) \rightarrow 卷积 \rightarrow 卷积 \rightarrow (卷积-池化) \rightarrow 全连接 \rightarrow 全连接 \rightarrow 全连接 \rightarrow 输出$$`
+> 输入 -> (卷积-池化) -> (卷积-池化) -> 卷积 -> 卷积 -> (卷积-池化) -> 全连接 -> 全连接 -> 全连接 -> 输出
 
-AlexNet 继承了 LeNet-5 的思想, 将卷积神经网络发展到很宽很深的网络中, 相较 LeNet-5 的 6 万个参数, 
-AlexNet 包含了 6 亿 3 千万条连接, 6 千万个参数和 65 万个神经元.
+AlexNet 继承了 LeNet-5 的思想, 将卷积神经网络发展到很宽很深的网络中, 
+相较 LeNet-5 的 6 万个参数, AlexNet 包含了 6 亿 3 千万条连接, 
+6 千万个参数和 65 万个神经元.
 
 
 # ZFNet
@@ -174,3 +175,4 @@ GoogLeNet  (Going Deeper with Convolutions, 2014) 在借鉴此前 1x1 卷积思�
 由很多个残差块组成的残差网络如下图右图所示:
 
 ResNet 在 2015 年 ILSVRC 大赛上 top5 单模型的错误率达到了 3.57%, 在其他数据集上也有着惊人的表现。
+

@@ -2,7 +2,7 @@
 title: OpenCV 人脸检测
 author: 王哲峰
 date: '2022-08-31'
-slug: cv-opencv-flask-face-detection
+slug: opencv-face-detection
 categories:
   - computer vision
 tags:
@@ -182,4 +182,5 @@ $ flask app
 
 # 参考
 
-- https://github.com/DharmarajPi/Opencv-face-detection-deployment-using-flask-API
+* [Opencv-face-detection-deployment-using-flask-API](https://github.com/DharmarajPi/Opencv-face-detection-deployment-using-flask-API)
+
