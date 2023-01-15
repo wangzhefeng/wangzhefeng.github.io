@@ -299,7 +299,7 @@ bicycle: 99%
 
 运行结果如下:
 
-![detected_dog.img]()
+![detected_dog]()
 
 Darknet 检测器打印出了图像中检测到的目标，检测的置信度、花费的时间。
 默认情况下，检测器的输出会将检测后的图像文件保存为 `predictions.png`，
