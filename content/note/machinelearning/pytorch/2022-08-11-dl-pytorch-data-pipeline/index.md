@@ -356,14 +356,17 @@ print(f"len(ds_val) = {len(ds_val)}")
 print(f"len(ds_train+ds_val) = {len(ds_data)}")
 print((type(ds_data)))
 ```
+
 ### 根据图片目录创建图片数据集
 
 ```python
 import numpy as np
+from PIL import Image
+
 import torch
 from torch.utils.data import DataLoader
+
 from torchvision import transforms, datasets
-from PIL import Image
 
 # 图片
 img = Image.open("./data/cat.jpeg")
@@ -420,6 +423,21 @@ for features, labels in dl_train:
 * `__len__`
 * `__getitem__`
 
+文件所在目录结构如下
+
+```
+- img_dir
+    - tshirt1.jpg
+    - tshirt2.jpg
+    ...
+    - ankleboot999.jpg
+    - labels.csv
+        tshirt1.jpg, 0
+        tshirt2.jpg, 0
+        ...
+        ankleboot999.jpg, 9
+```
+
 加载相关库
 
 ```python
@@ -432,18 +450,6 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision.io import read_image
 import torchtext.iop import *
-```
-
-文件所在目录结构如下
-
-```
-- img_dir
-    - 
-    - labels.csv
-        tshirt1.jpg, 0
-        tshirt2.jpg, 0
-        ...
-        ankleboot999.jpg, 9
 ```
 
 创建 Dataset 类
@@ -477,17 +483,13 @@ class CustomImageDataset(Dataset):
             self.img_dir, 
             self.img_labels.iloc[idx, 0]
         )
-    
         # image tensor
         image = read_image(img_path)
-    
         # image label
         label = self.img_labels.iloc[idx, 1]
-    
         # image transform
         if self.transform:
             image = self.transform(image)
-    
         # image label transform
         if self.target_transform:
             label = self.target_transform(label)
@@ -511,8 +513,16 @@ test_data = CustomImageDataset(
     target_transform = ToTensor(),   
 )
 
-train_dataloader = DataLoader(training_data, batch_size = 64, shuffle = True)
-test_dataloader = DataLoader(test_data, batch_size = 64, shuffle = True)
+train_dataloader = DataLoader(
+    training_data, 
+    batch_size = 64, 
+    shuffle = True
+)
+test_dataloader = DataLoader(
+    test_data, 
+    batch_size = 64, 
+    shuffle = True
+)
 
 # Display image and label.
 train_features, train_labels = next(iter(train_dataloader))
@@ -530,6 +540,7 @@ print(f"Label: {label}")
 ```python
 from pathlib import Path
 from PIL import Image
+
 import torch
 from torch.utils.data import Dataset, DataLoader
 
@@ -579,8 +590,6 @@ for features, labels in dl_train:
     print(features.shape)
     print(labels.shape)
     break
-
-
 ```
 
 ## 使用 DataLoader 加载数据集
@@ -797,12 +806,26 @@ test_data = datasets.FashionMNIST(
 
 ## torchvision transforms
 
-所有的 TorchVision datasets 都有两个接受包含转换逻辑的可调用对象的参数:
+> torchvision.transforms
+
+所有的 torchvision datasets 都有两个接受包含转换逻辑的可调用对象的参数:
 
 * transform
     - 修改特征
 * target_transform
     - 修改标签
+
+大部分 transform 同时接受 PIL 图像和 tensor 图像，但是也有一些 tansform 只接受 PIL 图像，或只接受 tensor 图像
+
+* PIL
+* tensor
+
+transform 接受 tensor 图像或批量 tensor 图像
+
+* tensor 图像的 shape 格式是 `(C, H, W)`
+* 批量 tensor 图像的 shape 格式是 `(B, C, H, W)`
+
+
 
 `torchvision.transform` 模块提供了多个常用转换
 
@@ -811,18 +834,48 @@ test_data = datasets.FashionMNIST(
     - 将图像的像素强度值(pixel intensity values)缩放在 `[0, 1]` 范围内
 * Lambda 换换
     - 可以应用任何用户自定义的 lambda 函数
+    - `scatter_`: 在标签给定的索引上设置 `value`
 
 ### 常用转换
 
 * Scriptable transforms
+    - `torch.nn.Sequential`
+    - `torch.jit.script`
 * Compositions of transforms
+    - `Compose`: 将多个 transform 串联起来
 * Transforms on PIL Image and `torch.*Tensor`
+    - 
 * Transforms on PIL Image only
+    - `RandomChoice`
+    - `RandomOrder`
 * Transforms on `torch.*Tensor` only
+    - `LinearTransformation`
+    - `Normalize`
+    - `RandomErasing`
+    - `ConvertImageDtype`
 * Conversion transforms
+    - `ToPILImage`: tensor/ndarray -> PIL Image
+    - `ToTensor`: PIL Image/numpy.ndarray -> tensor
+    - `PILToTensor`: PIL Image -> tensor
 * Generic transforms
+    - `Lambda`
 * Automatic Augmentation transforms
+    - `AutoAugmentPolicy`
+    - `AutoAgument`
+    - `RandAugment`
+    - `TrivialAugmentWide`
+    - `AugMix`
 * Functional transforms
+    - 函数式转换提供了对转换管道的细粒度控制。与上述转换相反，
+      函数式转换不包含用于其参数的随机数生成器。
+      这意味着必须指定/生成所有参数，但函数转换将提供跨调用的可重现结果
+    - `torchvision.transform.functional`
+
+
+
+
+
+
 
 ## torchtext transforms
 

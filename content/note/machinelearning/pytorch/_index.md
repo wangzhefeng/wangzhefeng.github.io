@@ -5,33 +5,6 @@ list_pages: true
 # order_by: title
 ---
 
-<style>
-details {
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    padding: .5em .5em 0;
-}
-summary {
-    font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-}
-details[open] {
-    padding: .5em;
-}
-details[open] summary {
-    border-bottom: 1px solid #aaa;
-    margin-bottom: .5em;
-}
-</style>
-
-<details><summary>目录</summary><p>
-
-- [TensorFlow 和 PyTorch](#tensorflow-和-pytorch)
-- [TODO](#todo)
-- [文档](#文档)
-</p></details><p></p>
-
 # TensorFlow 和 PyTorch
 
 关于选择 TensorFlow 还是 PyTorch，听说来的经验是：
@@ -52,11 +25,12 @@ details[open] summary {
    学习另外一个将比较容易。两种框架都掌握的话，能够参考的开源模型案例更多，
    并且可以方便地在两种框架之间切换
 
-# TODO
+# 文章
 
+* https://github.com/lyhue1991/torchkeras
+* https://www.pytorchlightning.ai/
 * https://github.com/pytorch/serve
 * [PyTorch Forecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html#)
-
 
 # 文档
 

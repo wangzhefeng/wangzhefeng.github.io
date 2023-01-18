@@ -1,5 +1,5 @@
 ---
-title: PyTorch GPU 训练模型和 CUDA
+title: PyTorch 训练模型 GPU
 author: 王哲峰
 date: '2022-08-15'
 slug: dl-pytorch-model-gup

@@ -1,5 +1,5 @@
 ---
-title: PyTorch 张量
+title: PyTorch 张量创建及操作
 author: 王哲峰
 date: '2022-07-16'
 slug: dl-pytorch-api-tensor
@@ -64,16 +64,17 @@ details[open] summary {
     - [transpose 和 permute](#transpose-和-permute)
     - [t](#t)
 - [tensor 数学运算](#tensor-数学运算)
-  - [数学运算 API](#数学运算-api)
-    - [相加](#相加)
-    - [torch tensor To numpy array](#torch-tensor-to-numpy-array)
+  - [torch 和 numpy 相互转换](#torch-和-numpy-相互转换)
     - [numpy array To torch tensor](#numpy-array-to-torch-tensor)
+    - [torch tensor To numpy array](#torch-tensor-to-numpy-array)
+    - [In-place 操作](#in-place-操作)
   - [标量运算](#标量运算)
   - [向量运算](#向量运算)
     - [统计值](#统计值)
     - [CUM 扫描](#cum-扫描)
     - [排序](#排序)
   - [矩阵运算](#矩阵运算)
+    - [矩阵加法](#矩阵加法)
     - [矩阵乘法](#矩阵乘法)
     - [矩阵转置](#矩阵转置)
     - [矩阵逆](#矩阵逆)
@@ -86,7 +87,10 @@ details[open] summary {
     - [规则](#规则)
     - [einsum 基础范例](#einsum-基础范例)
     - [einsum 高级范例](#einsum-高级范例)
-  - [广播机制](#广播机制)
+- [torch 随机采样](#torch-随机采样)
+  - [设置随机数种子](#设置随机数种子)
+  - [生成随机数 tensor](#生成随机数-tensor)
+- [torch 广播机制](#torch-广播机制)
 - [cuda tensor](#cuda-tensor)
 - [参考](#参考)
 </p></details><p></p>
@@ -866,42 +870,19 @@ tensor 数学运算主要有:
     - `torch.einsum()` 
 * 广播机制
 
-tensor 数学运算 API:
+## torch 和 numpy 相互转换
 
-* 相加
-    - `+`
-    - `torch.add(x1, x2 out)`
-    - `.add()`
-    - `.add_()`
-* numpy.array to torch.tensor
-    - `torch.from_numpy()`
-* torch.tensor to numpy.array
-    - `.numpy()`
-
-## 数学运算 API
-
-### 相加
+### numpy array To torch tensor
 
 ```python
-import torch
+import numpy as np
 
-x = torch.zeros(5, 3, dtype = torch.long)
-y = torch.rand(5, 3)
+a = np.ones(5)
+b = torch.from_numpy(a)
+np.add(a, 1, out = a)
 
-# method 1
-print(x + y)
-
-# method 2
-print(torch.add(x, y))
-
-# method 3
-result = torch.empty(5, 3)
-torch.add(x, y, out = result)
-print(result)
-
-# method 4
-y.add_(x)
-print(y)
+print(a)
+print(b)
 ```
 
 ### torch tensor To numpy array
@@ -919,18 +900,15 @@ print(a)
 print(b)
 ```
 
-### numpy array To torch tensor
+### In-place 操作
 
-```python
-import numpy as np
+带有 `_` 后缀的操作叫做 in-place 操作，也就是就地计算的，
+比如下面的操作会直接改变 `$x$`：
 
-a = np.ones(5)
-b = torch.from_numpy(a)
-np.add(a, 1, out = a)
-
-print(a)
-print(b)
-```
+* x.add_(y)
+* x.copy_(y)
+* x.t_()
+* ...
 
 ## 标量运算
 
@@ -1040,6 +1018,7 @@ torch.sort(a, dim = 1)
 
 矩阵运算包括：
 
+* 矩阵加法
 * 矩阵乘法
 * 矩阵逆
 * 矩阵求迹
@@ -1048,7 +1027,43 @@ torch.sort(a, dim = 1)
 * 矩阵求特征值
 * 矩阵分解
 
+### 矩阵加法
+
+```python
+import torch
+
+x = torch.zeros(5, 3, dtype = torch.long)
+y = torch.rand(5, 3)
+
+# method 1
+print(x + y)
+
+# method 2
+print(torch.add(x, y))
+
+# method 3
+result = torch.empty(5, 3)
+torch.add(x, y, out = result)
+print(result)
+
+# method 4
+y.add_(x)
+print(y)
+```
+
 ### 矩阵乘法
+
+* 逐元素相乘
+
+```python
+a = torch.tensor([[1, 2], [3, 4]])
+b = torch.tensor([[2, 0], [0, 2]])
+
+a.mul(b)
+a * b
+```
+
+* 点积
 
 ```python
 a = torch.tensor([[1, 2], [3, 4]])
@@ -1059,7 +1074,7 @@ torch.matmul(a, b)
 torch.mm(a, b)
 ```
 
-高维张量的矩阵乘法在后面的维度上进行
+* 高维张量的矩阵乘法在后面的维度上进行
 
 ```python
 a = torch.randn(5, 5, 6)
@@ -1334,7 +1349,35 @@ A = torch.softmax(torch.einsum("in,ijn->ij", Q, K) / d_k, -1)
 print(f"A.shape:{A.shape}")
 ```
 
-## 广播机制
+# torch 随机采样
+
+## 设置随机数种子
+
+* torch.seed()
+    - 设置生成随机数的种子为非确定性随机数
+* torch.manual_seed()
+    - 设置生成随机数的种子
+* torch.initial_seed()
+    - 返回用于生成随机数的初始种子
+
+## 生成随机数 tensor
+
+* bernoulli
+    - 从伯努利分布中提取二进制随机数(0 或 1)
+* 正态分布
+    - normal: 正态分布
+    - randn: 标准正态分布
+    - randn_like: 标准整天分布
+    - multinomial: 多元正态分布
+* 均匀分布
+    - rand: `$[0, 1)$` 区间的均匀分布
+    - rand_like: `$[0, 1)$` 区间的均匀分布
+    - randint: 从给定区间的均匀分布中取整数
+    - randint_like: 从给定区间的均匀分布中取整数
+* pisson
+    - 泊松分布
+
+# torch 广播机制
 
 PyTorch 的广播规则和 Numpy 是一样的:
 
