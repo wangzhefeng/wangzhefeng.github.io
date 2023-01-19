@@ -41,9 +41,16 @@ details[open] summary {
   - [数据转换与增强简介](#数据转换与增强简介)
   - [常用转换](#常用转换)
 - [特征提取](#特征提取)
-- [模型和预训练权重](#模型和预训练权重)
+- [预训练模型和权重](#预训练模型和权重)
   - [模型类型](#模型类型)
+  - [预训练权重的一般信息](#预训练权重的一般信息)
+  - [初始化预训练模型](#初始化预训练模型)
+  - [使用预训练模型](#使用预训练模型)
+  - [模型注册机制](#模型注册机制)
+  - [从 Hub 中使用模型](#从-hub-中使用模型)
 - [工具](#工具)
+  - [APIs](#apis)
+  - [TODO](#todo)
 - [操作](#操作)
 - [任务](#任务)
   - [classification](#classification)
@@ -51,6 +58,7 @@ details[open] summary {
   - [segmentation](#segmentation)
   - [similarity learning](#similarity-learning)
   - [video classification](#video-classification)
+- [其他 APIs](#其他-apis)
 </p></details><p></p>
 
 # 数据集
@@ -227,25 +235,182 @@ transform 接受 tensor 图像或批量 tensor 图像
 
 
 
-# 模型和预训练权重
+# 预训练模型和权重
 
 > torchvision.models
 
 ## 模型类型
 
 * image classification
+    - AlexNet
+    - ConvNeXt
+    - DenseNet
+    - EfficientNet
+    - EfficientNetV2
+    - GoogLeNet
+    - Inception V3
+    - MaxVit
+    - MNASNet
+    - MobileNet V2
+    - MobileNet V3
+    - RegNet
+    - ResNet
+    - ResNeXt
+    - ShuffleNet V2
+    - SqueezeNet
+    - SwinTransformer
+    - VGG
+    - VisionTransformer
+    - Wide ResNet
+    - Quantized models
+        - Quantized GoogLeNet
+        - Quantized InceptionV3
+        - Quantized MobileNet V2
+        - Quantized MobileNet V3
+        - Quantized ResNet
+        - Quantized ResNeXt
+        - Quantized ShuffleNet V2
 * pixelwise semantic setmentation
-* object detection
+    - DeepLabV3
+    - FCN
+    - LRASPP
 * instance segmentation
+    - Mask R-CNN
+* object detection
+    - Faster R-CNN
+    - FCOS
+    - RetinaNet
+    - SSD
+    - SSDlite
 * person keypoint detection
+    - Keypoint R-CNN
 * video classification
+    - Video MViT
+    - Video ResNet
+    - Video S3D
 * optical flow
+    - RAFT
 
+## 预训练权重的一般信息
+
+* `torch.hub`
+    - 缓存目录可以通过 `TORCH_HOME` 环境变量设置
+        - `torch.hub.load_state_dict_from_url()`
+
+## 初始化预训练模型
+
+* Multi-weight support API
+
+```python
+from torchvision.models import resnet50, ResNet50_Weights
+
+# Old weights with accuracy 76.130%
+resnet50(weights = ResNet50_Weights.IMAGENET1K_V1)
+resnet50(weights = "IMAGENET_V1")  # new API
+
+# New weights with accuracy 80.858%
+resnet50(weights = ResNet50_Weights.IMAGENET1K_V2)
+resnet50(weights = "IMAGENET1K_V2")  # net API
+
+# Best available weights(currently alias for IMAGENET1K_V2)
+resnet50(weights = ResNet50_Weights.DEFAULT)
+
+# No Weights - random initialization
+resnet50(weights = None)
+resnet50()  # new API
+```
+
+## 使用预训练模型
+
+在使用预训练模型前，必须对图像数据进行预处理，处理方式因模型而异，比如：
+
+* resize resolution
+* resize interpolation
+* inference transforms
+* rescale values
+* ...
+
+每个模型的推断转换信息都在其权重文档中提供：
+
+```python
+# 初始化权重转换
+weights = ResNet50_Weights.DEFAULT
+preprocess = weights.transforms()
+
+# Apply it to the input image
+img_transformed = preprocess(img)
+```
+
+一些模型使用具有不同训练和评估行为的模块，例如批量归一化
+
+```python
+# Initialize model
+weights = ResNet50_Weights.DEFAULT
+model = resnet50(weights = weights)
+
+# Set model to eval mode
+model.eval()
+```
+
+## 模型注册机制
+
+* get_model()
+* get_model_weights()
+* get_weights()
+* list_models()
+
+## 从 Hub 中使用模型
+
+PyTorch Hub
+
+```python
+import torch
+
+# Option 1: passing weights param as string
+model = torch.hub.load(
+    "pytorch/vision", 
+    "resnet50", 
+    weights = "IMAGENET1K_V2"
+)
+
+# Option 2: passing weights param as enum
+weights = torch.hub.load(
+    "pytorch/vision", 
+    "get_weight",
+    weights = "ResNet50_Weights.IMAGENET1K_V2"
+)
+model = torch.hub.load(
+    "pytorch/vision", 
+    "resnet50", 
+    weights = weights
+)
+print(weight for weight in weights)
+```
 
 # 工具
 
+## APIs
+
+* draw_bounding_boxes
+* draw_segmentation_masks
+* draw_keypoint
+* flow_to_image
+* make_grid
+* save_image
+
+## TODO
+
+* https://pytorch.org/vision/stable/auto_examples/plot_visualization_utils.html#sphx-glr-auto-examples-plot-visualization-utils-py
 
 # 操作
+
+> torchvision.ops
+
+* operators
+* losses
+* layers
+
+
 
 # 任务
 
@@ -258,9 +423,15 @@ transform 接受 tensor 图像或批量 tensor 图像
 ## segmentation
 
 
-
-
 ## similarity learning
 
 ## video classification
+
+
+# 其他 APIs
+
+* torchvision.get_image_backend()
+* torchvision.set_image_backend()
+* torchvision.get_video_backend()
+* torchvision_set_video_backend()
 

@@ -41,6 +41,7 @@ details[open] summary {
   - [多个自变量求导](#多个自变量求导)
 - [使用自动微分和优化器求最小值](#使用自动微分和优化器求最小值)
 - [autograd 包功能](#autograd-包功能)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -388,4 +389,8 @@ y = x.detach()
 print(y.requires_grad)
 print(x.eq(y).all())
 ```
+
+# 参考
+
+* https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#further-readings
 

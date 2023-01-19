@@ -47,9 +47,12 @@ details[open] summary {
   - [三维张量](#三维张量)
   - [四维张量](#四维张量)
 - [tensor 尺寸](#tensor-尺寸)
+- [tensor 设备](#tensor-设备)
 - [tensor 创建](#tensor-创建)
   - [直接创建](#直接创建)
   - [tensor 和 numpy array](#tensor-和-numpy-array)
+    - [numpy array To torch tensor](#numpy-array-to-torch-tensor)
+    - [torch tensor To numpy array](#torch-tensor-to-numpy-array)
 - [tensor 结构操作](#tensor-结构操作)
   - [拼接和分割](#拼接和分割)
     - [cat](#cat)
@@ -64,10 +67,7 @@ details[open] summary {
     - [transpose 和 permute](#transpose-和-permute)
     - [t](#t)
 - [tensor 数学运算](#tensor-数学运算)
-  - [torch 和 numpy 相互转换](#torch-和-numpy-相互转换)
-    - [numpy array To torch tensor](#numpy-array-to-torch-tensor)
-    - [torch tensor To numpy array](#torch-tensor-to-numpy-array)
-    - [In-place 操作](#in-place-操作)
+  - [In-place 操作](#in-place-操作)
   - [标量运算](#标量运算)
   - [向量运算](#向量运算)
     - [统计值](#统计值)
@@ -91,7 +91,6 @@ details[open] summary {
   - [设置随机数种子](#设置随机数种子)
   - [生成随机数 tensor](#生成随机数-tensor)
 - [torch 广播机制](#torch-广播机制)
-- [cuda tensor](#cuda-tensor)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -113,7 +112,7 @@ tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
 但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
 variable 是 `torch.autograd` 中的数据类型
 
-variable(`torch.autograd.variable`) 有 5 个属性, 
+variable(`torch.autograd.variable`)(已经没用了) 有 5 个属性, 
 这些属性都是为了 tensor 的自动求导而设置的:
 
 * `data`
@@ -129,7 +128,9 @@ tensor(`torch.tensor`) 有 8 个属性:
         - 被包装的 tensor
     - `dtype`
         - tensor 的数据类型
-    - `shape`
+    - `dim()`
+        - 维度
+    - `shape`、`size()`
         - tensor 的形状
     - `device`
         - tensor 所在的设备, gpu/cup, tensor 放在 gpu 上才能使用加速
@@ -306,6 +307,21 @@ print(matrix.size())  # torch.Size([2, 2])
 print(matrix.shape)  # torch.Size([2, 2])
 ```
 
+# tensor 设备
+
+* CUDA 可用
+* 使用 `torch.device` 对象将 tensors 移出或放入 GPU
+
+```python
+x = torch.tensor([1])
+if torch.cuda.is_available():
+    device = torch.device("cuda")  # a cuda device object
+    y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
+    x = x.to(device)  # or just use strings `.to("cuda")`
+    z = x + y
+    z.to("cpu", torch.double)  # `.to` can also change dtype together!
+```
+
 # tensor 创建
 
 * 直接创建
@@ -408,6 +424,34 @@ tensor = torch.rand(2,2)
 t = tensor.tolist()
 print(t)
 print(type(t))
+```
+
+### numpy array To torch tensor
+
+```python
+import numpy as np
+
+a = np.ones(5)
+b = torch.from_numpy(a)
+np.add(a, 1, out = a)
+
+print(a)
+print(b)
+```
+
+### torch tensor To numpy array
+
+```python
+import torch
+
+a = torch.ones(5)
+b = a.numpy()
+print(a)
+print(b)
+
+a.add_(1)
+print(a)
+print(b)
 ```
 
 # tensor 结构操作
@@ -870,37 +914,7 @@ tensor 数学运算主要有:
     - `torch.einsum()` 
 * 广播机制
 
-## torch 和 numpy 相互转换
-
-### numpy array To torch tensor
-
-```python
-import numpy as np
-
-a = np.ones(5)
-b = torch.from_numpy(a)
-np.add(a, 1, out = a)
-
-print(a)
-print(b)
-```
-
-### torch tensor To numpy array
-
-```python
-import torch
-
-a = torch.ones(5)
-b = a.numpy()
-print(a)
-print(b)
-
-a.add_(1)
-print(a)
-print(b)
-```
-
-### In-place 操作
+## In-place 操作
 
 带有 `_` 后缀的操作叫做 in-place 操作，也就是就地计算的，
 比如下面的操作会直接改变 `$x$`：
@@ -1367,7 +1381,7 @@ print(f"A.shape:{A.shape}")
 * 正态分布
     - normal: 正态分布
     - randn: 标准正态分布
-    - randn_like: 标准整天分布
+    - randn_like: 标准正态分布
     - multinomial: 多元正态分布
 * 均匀分布
     - rand: `$[0, 1)$` 区间的均匀分布
@@ -1403,21 +1417,6 @@ a_broad, b_broad = torch.broadcast_tensors(a, b)
 print(a_broad)
 print(b_broad)
 a_broad + b_broad
-```
-
-# cuda tensor
-
-* CUDA 可用
-* 使用 `torch.device` 对象将 tensors 移出或放入 GPU
-
-```python
-x = torch.tensor([1])
-if torch.cuda.is_available():
-    device = torch.device("cuda")  # a cuda device object
-    y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
-    x = x.to(device)  # or just use strings `.to("cuda")`
-    z = x + y
-    z.to("cpu", torch.double)  # `.to` can also change dtype together!
 ```
 
 # 参考
