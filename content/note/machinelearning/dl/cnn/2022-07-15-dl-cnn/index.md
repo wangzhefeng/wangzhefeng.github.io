@@ -66,10 +66,16 @@ details[open] summary {
     - [CNN 完整结构](#cnn-完整结构)
   - [卷积层](#卷积层-1)
   - [池化层](#池化层-1)
-  - [全连接层](#全连接层-1)
   - [激活函数](#激活函数)
-  - [Dropout](#dropout)
+  - [全连接层](#全连接层-1)
+    - [原理](#原理)
+    - [示例](#示例)
+    - [对模型的影响](#对模型的影响)
   - [图像在 CNN 网络中的变化](#图像在-cnn-网络中的变化)
+    - [数据](#数据)
+    - [模型](#模型)
+    - [一个卷积层](#一个卷积层)
+    - [一个池化层](#一个池化层)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -706,7 +712,6 @@ RGB 格式就是通过对红(R)、绿(G)、蓝(B)三个颜色通道的变化，
 * average pooling
     - 通过 pooling 滤波器选取特征图(特征值矩阵)中的平均值
 
-
 池化层还有一些性质，比如它可以一定程度提高空间不变性，
 比如说平移不变性、尺度不变性、形变不变性。为什么会有空间不变性呢？
 因为上一层卷积本身就是对图像一个区域一个区域去卷积，因此对于 CNN 来说，
@@ -726,24 +731,228 @@ Pooling 层说到底还是一个特征选择，信息过滤的过程，也就是
 * average pooling 能减小第一种误差，更多的保留图像的背景信息
 * max pooling 能减小第二种误差，更多的保留纹理信息
 
-## 全连接层
-
 ## 激活函数
 
-## Dropout
+各种激活函数层出不穷，各有优点，比如下面这些：
 
+![img](images/active_func.jpg)
+
+每个激活函数都要考虑输入、输出以及数据变化，所以谨慎选择：
+
+* Sigmoid 只会输出正数，以及靠近 0 的输出变化率最大
+* tanh 和 sigmoid 不同的是，tanh 输出可以是负数
+* ReLU 是输入只能大于 0，如果输入含有负数，ReLU 就不适合；
+  如果输入是图片格式，ReLU 就挺常用的
+
+激活函数对于提高模型鲁棒性、增加非线性表达能力、缓解梯度消失问题，
+将特征图映射到新的特征空间从而更有利于训练、加速模型收敛等问题都有很好的帮助
+
+## 全连接层
+
+> 全连接层(Fully Connected Layer)
+
+### 原理
+
+
+全连接层之前的作用是提取特征，全连接层的作用是分类。
+全连接层中的每一层是由许多神经元组成的的平铺结构
+
+![img](images/cnn.jpg)
+
+![img](images/cnn_to_full.png)
+
+很简单,可以理解为在中间做了一个卷积
+
+![img](images/cnn2full.jpg)
+
+从上图我们可以看出，用一个 3x3x5 的 filter 去卷积激活函数的输出，
+得到的结果就是一个 fully connected layer 的一个神经元的输出，
+这个输出就是一个值。因为有 4096 个神经元，
+实际就是用一个 3x3x5x4096 的卷积层去卷积激活函数的输出
+
+这一步卷积一个非常重要的作用，就是把分布式特征 representation 映射到样本标记空间。
+即它把特征 representation 整合到一起，输出为一个值，
+这样做的一个好处就是大大减少特征位置对分类带来的影响
+
+![img](images/final.jpg)
+
+还有，发现有些全连接层有两层 1x4096 fully connected layer 平铺结构(有些网络结构有一层的，
+或者二层以上的)，但是大部分是两层以上，根据泰勒公式，就是用多项式函数去拟合光滑函数。
+这里的全连接层中一层的一个神经元就可以看成一个多项式，
+用许多神经元去拟合数据分布，但是只用一层 fully connected layer 有时候没法解决非线性问题，
+而如果有两层或以上 fully connected layer 就可以很好地解决非线性问题了
+
+全连接层参数特多(可占整个网络参数 80% 左右)，
+近期一些性能优异的网络模型如 ResNet 和 GoogLeNet 等均用全局平均池化(global average pooling，GAP)取代全连接层来融合学到的深度特征。
+需要指出的是，用 GAP 替代全连接层的网络通常有较好的预测性能
+
+### 示例
+
+![img](images/cat.jpg)
+
+从上图可以看出，猫在不同的位置，输出的特征值相同，但是位置不同。
+对于电脑来说，特征值相同，但是特征值位置不同，那分类结果也可能不一样。
+而这时全连接层 filter 的作用就相当于
+
+猫在哪我不管，我只要猫，于是我让 filter 去把这个猫找到。
+实际就是把 feature map 整合成一个值，这个值大，有猫；
+这个值小，那就可能没猫，和这个猫在哪关系不大了有没有，
+鲁棒性有大大增强了有没有。因为空间结构特性被忽略了，
+所以全连接层不适合用于在方位上找 Pattern 的任务，比如 segmentation
+
+### 对模型的影响
+
+全连接层对模型影响的参数有三个：
+
+1. 全连接层的总层数(长度)
+2. 单个全连接层的神经元数(宽度)
+3. 激活函数
+
+如果全连接层宽度不变，增加长度：
+
+* 优点：神经元个数增加，模型复杂度提升；
+  全连接层数加深，模型非线性表达能力提高。
+  理论上都可以提高模型的学习能力
+
+如果全连接层长度不变，增加宽度：
+
+* 优点：神经元个数增加，模型复杂度提升。理论上可以提高模型的学习能力
+
+难度长度和宽度都是越多越好？肯定不是
+
+* 缺点：
+    - 学习能力太好容易造成过拟合
+    - 运算时间增加，效率变低
+
+那么怎么判断模型学习能力如何？
+
+看 Training Curve 以及 Validation Curve，在其他条件理想的情况下，
+如果 Training Accuracy 高，Validation Accuracy 低，也就是过拟合了，
+可以尝试去减少层数或者参数。如果 Training Accuracy 低，说明模型学的不好，
+可以尝试增加参数或者层数。至于是增加长度和宽度，这个又要根据实际情况来考虑了。
+很多时候设计一个网络模型，不光考虑准确率，
+也常常得在 Accuracy/Efficiency 里寻找一个好的平衡点
 
 ## 图像在 CNN 网络中的变化
 
 > CNN 前向传播 forward propagation
 
+图像数据经过卷积层发生了什么变化，经过采样层发生了什么变化，
+经过激活层发生了什么变化，相当于实现了前向传播
+
+```python
+import numpy as np
+import cv2
+
+from keras import backend as K
+from keras.layers import Conv2D, MaxPooling2D, Activation, Flatten
+from keras.layers import BatchNormalization, Dropout, UpSampling2D
+from keras.layers import Input, add
+from keras.models import Model, Sequential, load_model
+```
+
+### 数据
+
+```python
+girl = cv2.imread("girl.jpg")
+print(girl.shape)
+# ------------------------------
+# 数据增维
+# ------------------------------
+# 由于 keras 只能按批处理数据，因此需要把单个数据提高一个维度
+girl_batch = np.expand_dims(girl, axis = 0)  # (575, 607, 3) -> (1, 575, 607, 3)
+print(girl_batch.shape)
+```
+
+![img](images/girl.jpg)
+
+### 模型
+
+```python
+# model
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation("relu"))
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_3"))
+model.add(Activation("relu"))
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_4"))
+model.add(Activation("relu"))
+model.add(Flatten())  # 把上层输出平铺
+model.add(Dense(8, activation = "relu", name = "dens_1"))  # 加入全连接层，分为 8 类
+model.save_weights("girl.h5")
+```
+
+因为 `Conv2d` 这个函数对于权值是随机初始化的，
+每运行一次程序权值就变了，权值变了就没有比较意义了，
+而我们不用 pretrained model，所以我们要保存第一次初始化的权值
+
+### 一个卷积层
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))
+model.load_weights("girl.h5", by_name = True)
+```
+
+`by_name` 表示只给和保存模型相同卷积层名字的卷积层导入权值，
+这里就是把上一步 `conv_1` 的权值导入这一步 `conv_1`，当然结构得相同
+
+查看卷积层的输出-特征图：
+
+```python
+conv_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_girl, axis = 0)
+
+# 把图像的像素值大小 rescale 到 0-255 之间
+girl_img = girl_img - np.min(girl_img) / (np.max(girl_img) - np.min(girl_img))
+
+cv2.imwrite("conv1_output.jpg", girl_img)
+```
+
+![img](images/conv.png)
+
+可以看到图像的一些纹理，边缘，或者颜色信息被一定程度上提取出来了，shape 也发生了变化
+
+### 一个池化层
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+```
+
+查看卷积层的输出-特征图：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+# TODO
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+# 把图像的像素值大小 rescale 到 0-255 之间
+girl_img = girl_img - np.min(girl_img) / (np.max(girl_img) - np.min(girl_img))
+# 图像保存
+cv2.imwrite("conv1_output.jpg", girl_img)
+```
+
+![img](images/conv_pooling.png)
+
+从上图可以明显的看到特征更加明显，并且 shape 减为三分之一了
+
+
 
 # 参考
 
 * [CNN卷积方法一览](https://mp.weixin.qq.com/s/9RvkFMOxmUTdZGDqjZfELw)
+* [如何理解卷积神经网络的结构](https://zhuanlan.zhihu.com/p/31249821)
 * [什么是卷积](https://zhuanlan.zhihu.com/p/30994790)
 * [图像卷积与滤波的一些知识点](https://blog.csdn.net/zouxy09/article/details/49080029)
-* [如何理解卷积神经网络的结构](https://zhuanlan.zhihu.com/p/31249821)
+* [卷积层是如何提取特征的](https://zhuanlan.zhihu.com/p/31657315)
 * [什么是采样层](https://zhuanlan.zhihu.com/p/32299939)
-
+* [什么是激活函数](https://zhuanlan.zhihu.com/p/32824193)
+* [什么是全连接层](https://zhuanlan.zhihu.com/p/33841176)
+* [图片在卷积神经网络中是怎么变化的](https://zhuanlan.zhihu.com/p/34222451)
 

@@ -54,61 +54,37 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [图像处理基本操作](#图像处理基本操作)
 - [Pillow 概览](#pillow-概览)
 - [Pillow 安装](#pillow-安装)
 - [Pillow 核心](#pillow-核心)
-  - [`Image` class](#image-class)
-  - [图像读、写、转换](#图像读写转换)
+  - [Image class](#image-class)
+  - [图像读写](#图像读写)
+    - [将图像转换为 JPEG 格式](#将图像转换为-jpeg-格式)
+    - [创建 JPEG 缩略图 thumbnails](#创建-jpeg-缩略图-thumbnails)
+    - [识别图像文件](#识别图像文件)
   - [图像剪切、粘贴、拼接](#图像剪切粘贴拼接)
+    - [从图像中复制子矩形](#从图像中复制子矩形)
+    - [从图像中复制子矩形并将子矩形粘贴回去](#从图像中复制子矩形并将子矩形粘贴回去)
+    - [图像滚动](#图像滚动)
+    - [RGB 波段拆分、合并](#rgb-波段拆分合并)
   - [图像几何变换](#图像几何变换)
+    - [简单的几何变换-改变图像像素大小](#简单的几何变换-改变图像像素大小)
+    - [简单的几何变换-图像逆时针旋转一定的角度](#简单的几何变换-图像逆时针旋转一定的角度)
+    - [图像转置](#图像转置)
   - [图像颜色转换](#图像颜色转换)
   - [图像增强](#图像增强)
   - [图像序列](#图像序列)
   - [PostScript 打印](#postscript-打印)
   - [图像读取](#图像读取)
   - [控制图像编码](#控制图像编码)
+  - [ImageDraw 绘图方法](#imagedraw-绘图方法)
 - [Pillow API](#pillow-api)
 </p></details><p></p>
-
-# 图像处理基本操作
-
-- 图像读取
-- 图像显示
-- 图像保存
-- pad 边缘填充
-- resize 
-- Crop 裁剪
-    - center crop
-    - five crop(top_left, top_right, bottom_left, bottom_right, center)
-    - random crop
-    - random resized crop
-- gray scale
-- color jitter 改变图片亮度、明暗、色调
-    - brightness
-    - saturation
-    - ...
-- Blur 模糊化
-    - Gaussian
-- Perspective 透视 
-- Rotation 旋转
-- Affine 仿射
-- Invert 反转
-- Posterize 调色（改变每个通道的颜色值）
-- Solarize 曝光
-- Adjust Sharpness 调节锐度
-- Adjust Contrast 对比度
-- Equalize 均衡
-- Augment 增强
-- Trivial Augment Wide
-- Flip 翻转
-    - Horizontal Flip
-    - Vertical Flip
 
 # Pillow 概览
 
 PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
-    
+ 
 - Image Archives, 图像存档和批处理
     - 图像读取(read image)
     - 图像打印(print image)
@@ -118,7 +94,7 @@ PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
     - TK PhotoImage
     - TK BitmapImage
     - Windows DIB interface[PythonWin, Windows-based tookits]
-    - show[debugging]
+    - `show` 方法用来 debugging
 - Image Processing, 图像处理
     - 图像点操作(point operations)
     - 图像卷积核滤波(filtering with a set of build in convolution kernel)
@@ -130,22 +106,6 @@ PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
 
 # Pillow 安装
 
-- macOS 安装:
-
-```bash
-$ python3 -m pip install --upgrade pip
-$ python3 -m pip install --upgrade Pillow
-```
-
-- Windows 安装:
-
-```bash
-$ python3 -m pip install --upgrade pip
-$ python3 -m pip install --upgrade Pillow
-```
-
-- Linux 安装:
-
 ```bash
 $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --upgrade Pillow
@@ -153,16 +113,19 @@ $ python3 -m pip install --upgrade Pillow
 
 # Pillow 核心
 
-## `Image` class
+## Image class
 
 API:
 
-- `from PIL import Image`
-- `Image.open`
-- `Image.format`
-- `Image.size`
-- `Image.mode`
-- `Image.show`
+```python
+from PIL import Image
+```
+
+* `Image.open`
+* `Image.format`
+* `Image.size`
+* `Image.mode`
+* `Image.show`
 
 示例:
 
@@ -170,19 +133,18 @@ API:
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 try:
     with Image.open(os.path.join(image_path, image_name + ".png")) as im:
         # 图像格式
         print(im.format)
-
         # 图像尺寸
         print(im.size)
-
+        w, h = im.size
+        print(f"image size: {(w, h)}")
         # 图像模式
         print(im.mode)
-
         # 图像打印
         im.show()
 except IOError as e:
@@ -191,13 +153,11 @@ except IOError as e:
 
 ![images](images/lena.png)
 
-.. note:: 
+> * `.format`: 图像格式
+> * `.size`: 图像尺寸 (width_pixels, height_pixels)
+> * `.mode`: 图像中条带的数量和名称、像素类型、像素深度
 
-- `.format`: 图像格式
-- `.size`: 图像尺寸(width_pixels, height_pixels)
-- `.mode`: 图像中条带的数量和名称、像素类型、像素深度
-
-## 图像读、写、转换
+## 图像读写
 
 API:
 
@@ -207,7 +167,7 @@ API:
 
 示例:
 
-- 将图像转换为 JPEG 格式:
+### 将图像转换为 JPEG 格式
 
 ```python
 import os, sys
@@ -228,7 +188,7 @@ for infile in sys.argv[1:]:
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 try:
     with Image.open(os.path.join(image_path, image_name + ".png")) as im:
@@ -239,7 +199,7 @@ except IOError as e:
 
 ![images](images/lena.jpg)
     
-- 创建 JPEG 缩略图(thumbnails)
+### 创建 JPEG 缩略图 thumbnails
 
 ```python
 import os, sys
@@ -262,7 +222,7 @@ for inflie in sys.argv[1:]:
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 size = (128, 128)
 
@@ -276,10 +236,9 @@ except IOError as e:
 
 ![images](images/lena.JPEG)
 
-- 识别图像文件
+### 识别图像文件
 
 ```python
-
 import sys
 from PIL import Image
 
@@ -295,7 +254,7 @@ for infile in sys.argv[1:]:
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -309,50 +268,43 @@ except IOError as e:
 
 API:
 
-- `Image.crop`: 从图像中复制子矩形
-- `Image.past`
-- `Image.merge`
-- `Image.split`
-- `Image.transpose(Image.ROTATE_180)`
+* `Image.crop`: 从图像中复制子矩形
+* `Image.past`
+* `Image.merge`
+* `Image.split`
+* `Image.transpose(Image.ROTATE_180)`
 
-示例:
-
-    - 从图像中复制子矩形
+### 从图像中复制子矩形
 
 ```python
-
-    import os
-    from PIL import Image
-
-    image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
-    image_name = "lena"
-
-    try:
-        box = (100, 100, 200, 200)
-        with Image.open(os.path.join(image_path, image_name + ".png")) as im:
-            region = im.crop(box)
-            region.show()
-            region.save(os.path.join(image_path, image_name + "_region" + ".png"))
-    except IOError as e:
-        print(f"Can't open {image_name}")
-```
-
-![images](images/lena_region.png)
-        
-.. note:: 
-
-  - PIL 中图像左上角坐标为 `(0, 0)`
-  - `box(left, upper, right, lowe)`
-
-
-- 从图像中复制子矩形、将子矩形粘贴回去
-
-```python
-
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
+image_name = "lena"
+
+try:
+    box = (100, 100, 200, 200)
+    with Image.open(os.path.join(image_path, image_name + ".png")) as im:
+        region = im.crop(box)
+        region.show()
+        region.save(os.path.join(image_path, image_name + "_region" + ".png"))
+except IOError as e:
+    print(f"Can't open {image_name}")
+```
+
+![images](images/lena_region.png)
+
+> * PIL 中图像左上角坐标为 `(0, 0)`
+> * `box(left, upper, right, lowe)`
+
+### 从图像中复制子矩形并将子矩形粘贴回去
+
+```python
+import os
+from PIL import Image
+
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -368,14 +320,13 @@ except IOError as e:
 
 ![images](images/lena_region_paste.png)
 
-
-- 图像滚动(image roll)
+### 图像滚动
 
 ```python
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 def roll(image, delta):
@@ -401,13 +352,13 @@ except OSError:
 
 ![images](images/lena_roll.png)
 
-- RGB波段拆分、合并
+### RGB 波段拆分、合并
 
 ```python
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -426,10 +377,8 @@ except OSError:
 ![images](images/lena_merge_grb.png)
 ![images](images/lena_merge_gbr.png)
 
-.. note:: 
-
-    - 对于单波段图像(single-band)，`Image.split` 返回图像本身
-    - 为了对单个颜色波段进行处理，需要首先将图像转换为 RGB
+> * 对于单波段图像(single-band)，`Image.split` 返回图像本身
+> * 为了对单个颜色波段进行处理，需要首先将图像转换为 RGB
 
 ## 图像几何变换
 
@@ -440,16 +389,13 @@ API:
 - `Image.transpose`
 - `Image.transform`
 
-示例:
-
-- 简单的几何变换-改变图像像素大小
+### 简单的几何变换-改变图像像素大小
 
 ```python
-
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -462,13 +408,13 @@ except OSError:
 
 ![images](images/lena_resize.png)
 
-- 简单的几何变换-图像逆时针旋转一定的角度
+### 简单的几何变换-图像逆时针旋转一定的角度
 
 ```python
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -481,13 +427,13 @@ except OSError:
 
 ![images](images/lena_rotate.png)
 
-- 图像转置
+### 图像转置
 
 ```python
 import os
 from PIL import Image
 
-image_path = "/Users/zfwang/project/machinelearning/deeplearning/deeplearning/src/pillow_src/images"
+image_path = "images"
 image_name = "lena"
 
 try:
@@ -513,10 +459,8 @@ except OSError:
 ![images](images/lena_rotate_4.png)
 ![images](images/lena_rotate_5.png)
 
-.. note:: 
-
-    - `trasnpose(ROTATE)` 与 `Image.Image.rotate` 效果相同
-    - `transform()` 能进行更多形式的图像转换
+> * `trasnpose(ROTATE)` 与 `Image.Image.rotate` 效果相同
+> * `transform()` 能进行更多形式的图像转换
 
 ## 图像颜色转换
 
@@ -532,7 +476,51 @@ except OSError:
 
 ## 控制图像编码
 
+## ImageDraw 绘图方法
 
+PIL 的 `ImageDraw` 提供了一系列绘图方法，让我们可以直接绘图。
+比如要生成字母验证码图片
+
+```python
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+import random
+
+# 随机字母:
+def rndChar():
+    return chr(random.randint(65, 90))
+
+# 随机颜色1:
+def rndColor():
+    return (random.randint(64, 255), random.randint(64, 255), random.randint(64, 255))
+
+# 随机颜色2:
+def rndColor2():
+    return (random.randint(32, 127), random.randint(32, 127), random.randint(32, 127))
+
+# 240 x 60:
+width = 60 * 4
+height = 60
+image = Image.new('RGB', (width, height), (255, 255, 255))
+# 创建Font对象:
+font = ImageFont.truetype('Arial.ttf', 36)
+# 创建Draw对象:
+draw = ImageDraw.Draw(image)
+# 填充每个像素:
+for x in range(width):
+    for y in range(height):
+        draw.point((x, y), fill=rndColor())
+# 输出文字:
+for t in range(4):
+    draw.text((60 * t + 10, 10), rndChar(), font=font, fill=rndColor2())
+# 模糊:
+image = image.filter(ImageFilter.BLUR)
+image.save('code.jpg', 'jpeg')
+```
+
+用随机颜色填充背景，再画上文字，最后对图像进行模糊，得到验证码图片如下
+
+![img](images/verfiycode.jpeg)
 
 # Pillow API
 
@@ -569,4 +557,3 @@ except OSError:
     - PIL
 - Plugin reference
 - Internal Reference Docs
-
