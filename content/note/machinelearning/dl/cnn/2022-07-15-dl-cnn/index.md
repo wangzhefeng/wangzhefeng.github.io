@@ -76,6 +76,15 @@ details[open] summary {
     - [模型](#模型)
     - [一个卷积层](#一个卷积层)
     - [一个池化层](#一个池化层)
+    - [激活函数](#激活函数-1)
+    - [新卷积层](#新卷积层)
+    - [新采样层](#新采样层)
+    - [新激活函数](#新激活函数)
+    - [将激活函数 relu 修改为 sigmoid](#将激活函数-relu-修改为-sigmoid)
+    - [将激活函数 relu 修改为 tanh](#将激活函数-relu-修改为-tanh)
+    - [新增两个卷积层和激活函数](#新增两个卷积层和激活函数)
+    - [全连接层](#全连接层-2)
+    - [不同 kernel size 对比](#不同-kernel-size-对比)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -844,57 +853,100 @@ Pooling 层说到底还是一个特征选择，信息过滤的过程，也就是
 import numpy as np
 import cv2
 
-from keras import backend as K
-from keras.layers import Conv2D, MaxPooling2D, Activation, Flatten
-from keras.layers import BatchNormalization, Dropout, UpSampling2D
-from keras.layers import Input, add
-from keras.models import Model, Sequential, load_model
+import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Activation, Flatten
+from tensorflow.keras.layers import BatchNormalization, Dropout, UpSampling2D
+from tensorflow.keras.layers import Input, add
+from tensorflow.keras.models import Model, Sequential, load_model
+
+print(f"tensorflow version: {tf.__version__}")
 ```
 
 ### 数据
 
+数据读取及查看：
+
 ```python
 girl = cv2.imread("girl.jpg")
-print(girl.shape)
-# ------------------------------
-# 数据增维
-# ------------------------------
-# 由于 keras 只能按批处理数据，因此需要把单个数据提高一个维度
-girl_batch = np.expand_dims(girl, axis = 0)  # (575, 607, 3) -> (1, 575, 607, 3)
-print(girl_batch.shape)
+print(f"girl shape: {girl.shape}")
+
+while True:
+    cv2.imshow("image", girl)
+    if cv2.waitKey(1) & 0xFF == 27:
+        break
+cv2.destoryAllWindows()
 ```
 
 ![img](images/girl.jpg)
 
+数据增维：
+
+```python
+# 由于 keras 只能按批处理数据，因此需要把单个数据提高一个维度
+# (575, 607, 3) -> (1, 575, 607, 3)
+girl_batch = np.expand_dims(girl, axis = 0)
+print(f"girl_batch shape: {girl_batch.shape}")
+```
+
+图像数据可视化函数：
+
+```python
+def visualize(img, filter_, kernel_width, kernel_height, name):
+    # 数据降维
+    img = np.squeeze(img, axis = 0)
+    # import pdb
+    # pdb.set_trace()
+    max_img = np.max(img)
+    min_img = np.min(img)
+    img = img - min_img
+    img = img / (max_img - min_img)
+    img = img * 255
+    # img = img.reshape(img.shape[:2])
+    cv2.imwrite(
+        f"{name}_filter{str(filter_)}_\
+        {str(kernel_width)}x{kernel_height}.jpg", 
+        img
+    )
+```
+
 ### 模型
 
 ```python
-# model
+kernel_width = 3
+kernel_height = 3
+filter_ = 3
+
 model = Sequential()
-model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(Conv2D(filter_, kernel_width, kernel_height, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
 model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
 model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
-model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+
+model.add(Conv2D(filter_, kernel_width, kernel_height, input_shape = girl.shape, name = "conv_2"))
 model.add(MaxPooling2D(pool_size = (2, 2)))
 model.add(Activation("relu"))
-model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_3"))
+
+model.add(Conv2D(filter_, kernel_width, kernel_height, input_shape = girl.shape, name = "conv_3"))
 model.add(Activation("relu"))
-model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_4"))
+
+model.add(Conv2D(filter_, kernel_width, kernel_height, input_shape = girl.shape, name = "conv_4"))
 model.add(Activation("relu"))
+
 model.add(Flatten())  # 把上层输出平铺
 model.add(Dense(8, activation = "relu", name = "dens_1"))  # 加入全连接层，分为 8 类
+
+# 因为 `Conv2d` 这个函数对于权值是随机初始化的，
+# 每运行一次程序权值就变了，权值变了就没有比较意义了，
+# 而我们不用 pretrained model，所以我们要保存第一次初始化的权值
 model.save_weights("girl.h5")
 ```
-
-因为 `Conv2d` 这个函数对于权值是随机初始化的，
-每运行一次程序权值就变了，权值变了就没有比较意义了，
-而我们不用 pretrained model，所以我们要保存第一次初始化的权值
 
 ### 一个卷积层
 
 ```python
 model = Sequential()
 model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))
+
 model.load_weights("girl.h5", by_name = True)
 ```
 
@@ -904,13 +956,16 @@ model.load_weights("girl.h5", by_name = True)
 查看卷积层的输出-特征图：
 
 ```python
+# 前向传播
 conv_girl = model.predict(girl_batch)
 girl_img = np.squeeze(conv_girl, axis = 0)
-
-# 把图像的像素值大小 rescale 到 0-255 之间
-girl_img = girl_img - np.min(girl_img) / (np.max(girl_img) - np.min(girl_img))
-
-cv2.imwrite("conv1_output.jpg", girl_img)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_girl"
+)
 ```
 
 ![img](images/conv.png)
@@ -923,6 +978,8 @@ cv2.imwrite("conv1_output.jpg", girl_img)
 model = Sequential()
 model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))
 model.add(MaxPooling2D(pool_size = (2, 2)))
+
+model.load_weights("girl.h5", by_name = True)
 ```
 
 查看卷积层的输出-特征图：
@@ -930,19 +987,344 @@ model.add(MaxPooling2D(pool_size = (2, 2)))
 ```python
 # 前向传播
 conv_pooling_girl = model.predict(girl_batch)
-# TODO
 girl_img = np.squeeze(conv_pooling_girl, axis = 0)
-# 把图像的像素值大小 rescale 到 0-255 之间
-girl_img = girl_img - np.min(girl_img) / (np.max(girl_img) - np.min(girl_img))
-# 图像保存
-cv2.imwrite("conv1_output.jpg", girl_img)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_girl"
+)
 ```
 
 ![img](images/conv_pooling.png)
 
 从上图可以明显的看到特征更加明显，并且 shape 减为三分之一了
 
+### 激活函数
 
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = 'conv_1'))
+model.add(MaxPooling2D(pool_size = (3, 3)))
+model.add(Activation('relu'))  # 只保留大于 0 的值
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_relu_girl"
+)
+```
+
+可以看到只有一些边缘的特征被保留下来了
+
+### 新卷积层
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_relu_conv_girl"
+)
+```
+
+纹理的信息更明显了
+
+### 新采样层
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_relu_conv_pooling_girl"
+)
+```
+
+### 新激活函数
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation("relu"))
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_relu_conv_pooling_relu_girl"
+)
+```
+
+### 将激活函数 relu 修改为 sigmoid
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = 'conv_1'))
+model.add(MaxPooling2D(pool_size = (3, 3)))
+model.add(Activation('sigmoid'))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = 'conv_2'))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation('sigmoid'))
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_sigmoid_conv_pooling_sigmoid_girl"
+)
+```
+
+### 将激活函数 relu 修改为 tanh
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = 'conv_1'))
+model.add(MaxPooling2D(pool_size = (3, 3)))
+model.add(Activation('tanh'))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = 'conv_2'))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation('tanh'))
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_tanh_conv_pooling_tanh_girl"
+)
+```
+
+### 新增两个卷积层和激活函数
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation("relu"))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_3"))
+model.add(Activation("relu"))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_4"))
+model.add(Activation("relu"))
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_tanh_conv_pooling_tanh_conv2_conv2_girl"
+)
+```
+
+### 全连接层
+
+```python
+model = Sequential()
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_1"))  # 卷积层，filter 数量为 3，卷积核 size 为 (3,3)
+model.add(MaxPooling2D(pool_size = (3, 3)))  # pooling 层，size 为 (3, 3)
+model.add(Activation("relu"))  # 激活函数, 只保留大于 0 的值
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_2"))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Activation("relu"))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_3"))
+model.add(Activation("relu"))
+
+model.add(Conv2D(3, 3, 3, input_shape = girl.shape, name = "conv_4"))
+model.add(Activation("relu"))
+
+model.add(Flatten())  # 把上层输出平铺
+model.add(Dense(8, activation = "relu", name = "dens_1"))  # 加入全连接层，分为 8 类
+
+model.load_weights("girl.h5", by_name = True)
+```
+
+查看结果：
+
+```python
+# 前向传播
+conv_pooling_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_pooling_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_pooling_tanh_conv_pooling_tanh_conv2_conv2_girl"
+)
+```
+
+### 不同 kernel size 对比
+
+```python
+model = Sequential()
+model.add(Conv2D(
+    3, 3, 3, 
+    kernel_initializer = keras.initializers.Constant(value = 0.12), input_shpae = girl.shape, 
+    name = "conv_333"
+))
+```
+
+查看卷积层的输出-特征图：
+
+```python
+# 前向传播
+conv_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 3, 
+    kernel_height = 3, 
+    name = "conv_333"
+)
+```
+
+```python
+model = Sequential()
+model.add(Conv2D(
+    3, 2, 2, 
+    kernel_initializer = keras.initializers.Constant(value = 0.12), input_shpae = girl.shape, 
+    name = "conv_322"
+))
+```
+
+查看卷积层的输出-特征图：
+
+```python
+# 前向传播
+conv_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 2, 
+    kernel_height = 2, 
+    name = "conv_322"
+)
+```
+
+```python
+model = Sequential()
+model.add(Conv2D(
+    3, 24, 24, 
+    kernel_initializer = keras.initializers.Constant(value = 0.12), input_shpae = girl.shape, 
+    name = "conv_32424"
+))
+```
+
+查看卷积层的输出-特征图：
+
+```python
+# 前向传播
+conv_girl = model.predict(girl_batch)
+girl_img = np.squeeze(conv_girl, axis = 0)
+visualize(
+    girl_img, 
+    filter_ = 3, 
+    kernel_width = 24, 
+    kernel_height = 24, 
+    name = "conv_32424"
+)
+```
 
 # 参考
 
