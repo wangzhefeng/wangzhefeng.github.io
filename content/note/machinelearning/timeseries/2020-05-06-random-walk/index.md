@@ -9,28 +9,7 @@ tags:
   - tool
 ---
 
-
-
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -60,9 +39,6 @@ details[open] summary {
 - [Python 示例](#python-示例)
 </p></details><p></p>
 
-
-
-
 # 随机漫步简介
 
 - [百度百科](https://baike.baidu.com/item/%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0/1674146?fromtitle=%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5&fromid=15578433&fr=aladdin)
@@ -71,6 +47,7 @@ details[open] summary {
 
 ```python
 import random
+
 """
 随机漫步生成是无规则的，是系统自行选择的结果.
 根据设定的规则自定生成，上下左右的方位，每次所经过的方向路径.
