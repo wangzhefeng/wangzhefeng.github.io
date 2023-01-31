@@ -60,9 +60,6 @@ details[open] summary {
 但是事实上，一般最好的分析性人才恰恰是那些能理解公司战略性政策和想法，
 并且懂得如何和业务部门沟通的人。而最好的战略性人才也恰恰是那些具备足够数据分析能力的人
 
-* [算法工程师应具备的落地能力](https://mp.weixin.qq.com/s/n2UUpRwvpoMElhu1n574dg)
-
-
 # 使用金字塔原则沟通
 
 ## 金字塔原则
@@ -207,5 +204,5 @@ details[open] summary {
 # 参考
 
 * [麦肯锡：优秀数据科学家的5个特征！](https://mp.weixin.qq.com/s/xrzNAUAVkM_1BIsXk0MI3g)
-
+* [算法工程师应具备的落地能力](https://mp.weixin.qq.com/s/n2UUpRwvpoMElhu1n574dg)
 
