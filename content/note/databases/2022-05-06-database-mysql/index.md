@@ -1065,4 +1065,5 @@ $ service mysqld restart
 * [Mysql 忘记root密码的完美解决方法](https://www.jb51.net/article/100925.htm)
 * [关于mysql数据库在输入密码后，滴的一声直接退出界面的解决办法](https://www.2cto.com/database/201412/361751.html)
 * [Ubuntu 16.04安装MySQL及问题解决](https://www.linuxidc.com/Linux/2017-05/143861.htm)
+* [数据库八股文背诵版](https://zhuanlan.zhihu.com/p/366840427)
 
