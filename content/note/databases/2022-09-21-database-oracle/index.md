@@ -33,46 +33,46 @@ details[open] summary {
 
 - [表空间](#表空间)
   - [表空间分类](#表空间分类)
-    - [查看用户表空间](#查看用户表空间)
-    - [设置用户的默认或临时表空间](#设置用户的默认或临时表空间)
-    - [创建表空间](#创建表空间)
-    - [查看表空间中的数据文件的路径](#查看表空间中的数据文件的路径)
+  - [查看用户表空间](#查看用户表空间)
+  - [设置用户的默认或临时表空间](#设置用户的默认或临时表空间)
+  - [创建表空间](#创建表空间)
+  - [查看表空间中的数据文件的路径](#查看表空间中的数据文件的路径)
 - [数据类型](#数据类型)
-  - [字符型数据(固定长度)](#字符型数据固定长度)
-  - [字符型数据(可变长度)](#字符型数据可变长度)
+  - [字符型](#字符型)
   - [数值型](#数值型)
   - [日期型](#日期型)
   - [其他类型](#其他类型)
-  - [数据类型转换](#数据类型转换)
-- [查看表结构](#查看表结构)
-- [增](#增)
-- [删](#删)
-- [查](#查)
-- [改](#改)
+  - [类型转换](#类型转换)
 - [约束](#约束)
   - [非空约束](#非空约束)
   - [主键约束](#主键约束)
   - [外键约束](#外键约束)
   - [唯一约束](#唯一约束)
   - [检查约束](#检查约束)
-- [条件判断语句](#条件判断语句)
-  - [IF](#if)
-    - [处理 NULL 值的函数](#处理-null-值的函数)
-    - [IF...](#if-1)
-    - [IF...ELSE](#ifelse)
+- [数据库操作](#数据库操作)
+  - [查看数据库](#查看数据库)
+  - [查看表结构](#查看表结构)
+  - [增](#增)
+  - [删](#删)
+  - [查](#查)
+  - [改](#改)
+  - [条件判断语句](#条件判断语句)
+    - [IF...](#if)
+      - [IF...ELSE](#ifelse)
     - [IF...ELSIF...ELSE](#ifelsifelse)
     - [嵌套IF](#嵌套if)
-  - [CASE](#case)
-- [NULL 函数](#null-函数)
-- [字符串函数](#字符串函数)
-- [查询语句](#查询语句)
-- [临时表](#临时表)
-- [时间处理函数](#时间处理函数)
-  - [获取两个日期之间的具体时间间隔 extract 函数是最好的选择](#获取两个日期之间的具体时间间隔-extract-函数是最好的选择)
-  - [时间转换函数 TO_DATE()](#时间转换函数-to_date)
-  - [字符串转换函数 TO_CHAR()](#字符串转换函数-to_char)
-  - [排序函数 RNAK(), DENSE_RNAK()](#排序函数-rnak-dense_rnak)
-  - [截取函数 TRUNC() 函数](#截取函数-trunc-函数)
+    - [CASE](#case)
+  - [NULL 函数](#null-函数)
+    - [NVL 和 NVL2](#nvl-和-nvl2)
+    - [COALESCE](#coalesce)
+  - [字符串函数](#字符串函数)
+  - [临时表](#临时表)
+  - [时间处理函数](#时间处理函数)
+    - [获取两个日期之间的具体时间间隔 extract 函数是最好的选择](#获取两个日期之间的具体时间间隔-extract-函数是最好的选择)
+    - [时间转换函数 TO\_DATE()](#时间转换函数-to_date)
+    - [字符串转换函数 TO\_CHAR()](#字符串转换函数-to_char)
+    - [排序函数 RNAK(), DENSE\_RNAK()](#排序函数-rnak-dense_rnak)
+    - [截取函数 TRUNC() 函数](#截取函数-trunc-函数)
 </p></details><p></p>
 
 # 表空间
@@ -83,9 +83,10 @@ details[open] summary {
 * 临时表空间
 * UNDO表空间
 
-### 查看用户表空间 
+## 查看用户表空间 
 
 ```sql
+-- 
 DESC DBA_TABLESPACES;
 SELECT TABLESPACE_NAME FROM DBA_TABLESPACES;
 
@@ -94,178 +95,103 @@ SELECT TABLESPACE_NAME FROM USER_TABLESPACES;
 
 DESC DBA_USERS;
 DESC USER_USER;
-SELECT DEFAULT_TABLESPACE, TEMPORARY_TABLESPACE FROM DBA_USERS WHERE USERNAME = 'SYSTEM';
-SELECT DEFAULT_TABLESPACE, TEMPORARY_TABLESPACE FROM DBA_USERS WHERE USERNAME = 'SCOTT';
-SELECT DEFAULT_TABLESPACE, TEMPORARY_TBALESPACE FROM USER_USERS WHERE USERNAME = 'SYSTEM';
-SELECT DEFAULT_TABLESPACE, TEMPORARY_TBALESPACE FROM USER_USERS WHERE USERNAME = 'SCOTT';
+
+SELECT DEFAULT_TABLESPACE, TEMPORARY_TABLESPACE 
+FROM DBA_USERS 
+WHERE USERNAME = 'SYSTEM';
+
+SELECT DEFAULT_TABLESPACE, TEMPORARY_TABLESPACE 
+FROM DBA_USERS 
+WHERE USERNAME = 'SCOTT';
+
+SELECT DEFAULT_TABLESPACE, TEMPORARY_TBALESPACE 
+FROM USER_USERS 
+WHERE USERNAME = 'SYSTEM';
+
+SELECT DEFAULT_TABLESPACE, TEMPORARY_TBALESPACE 
+FROM USER_USERS 
+WHERE USERNAME = 'SCOTT';
 ```
 
-### 设置用户的默认或临时表空间
+## 设置用户的默认或临时表空间
 
 ```sql
-ALTER USER username DEFAULT TABLESPACE tablespcae_name;
-ALTER USER username TEMPORARY TABLESPACE tablespace_name;
+ALTER USER username 
+DEFAULT TABLESPACE tablespcae_name;
+
+ALTER USER username 
+TEMPORARY TABLESPACE tablespace_name;
 ```
 
-### 创建表空间
+## 创建表空间
 
 ```sql
-CREATE TABLESPACE tablespace_name DATAFILE 'filename.dbf' SIZE 10M;
-CREATE TEMPORARY TABLESPACE tablespcae_name TEMPFILE 'filename.dbf' SIZE 10M;
+CREATE TABLESPACE tablespace_name 
+DATAFILE 'filename.dbf' 
+SIZE 10M;
+
+CREATE TEMPORARY TABLESPACE tablespcae_name 
+TEMPFILE 'filename.dbf' 
+SIZE 10M;
 ```
 
-### 查看表空间中的数据文件的路径
+## 查看表空间中的数据文件的路径
 
 ```sql
 DESC DBA_DATA_FILES;
-SELECT FILE_NAME FROM DBA_DATA_FILES WHERE TABLESPACE_NAME = tablespace_name;
+SELECT FILE_NAME 
+FROM DBA_DATA_FILES 
+WHERE TABLESPACE_NAME = tablespace_name;
+
 DESC DBA_TEMP_FILES;
-SELECT FIEL_NAME FROM DBD_TEMP_FILES WHERE TABLESPACE_NAME = tablespace_name;
+SELECT FIEL_NAME 
+FROM DBD_TEMP_FILES 
+WHERE TABLESPACE_NAME = tablespace_name;
 ```
 
 # 数据类型
 
-* char
-* varchar2
-* number
-* integer
-* binary_float
-* binary_double
-* float
-* long
+## 字符型
 
-## 字符型数据(固定长度)
+字符型数据(固定长度)：
 
-CHAR(2000)
-NCHAR(1000)
+* `CHAR(2000)`
+* `NCHAR(1000)`
 
-## 字符型数据(可变长度)
+字符型数据(可变长度)：
 
-VARCHAR2(4000)
-NVARCHAR2(2000)
+* `VARCHAR2(4000)`
+* `NVARCHAR2(2000)`
 
 ## 数值型
 
-NUMBER(p, s)
-FLOAT(n)
+常用：
+
+* `NUMBER(p, s)`
+* `INTEGER`
+* `FLOAT(n)`
+
+不常用：
+
+* `BINARY_FLOAT`
+* `BINARY_DOUBLE`
+* `LONG`
 
 ## 日期型
 
-DATA
-TIMESTAMP
+* `DATA`
+* `TIMESTAMP`
 
 ## 其他类型
 
-BLOB
-CLOB
+* `BLOB`
+* `CLOB`
 
-## 数据类型转换
+## 类型转换
 
-* to_char()
-* to_number()
-* floor()
-
-
-
-# 查看表结构
-
-```sql
-DESC USER_INFO;
-```
-
-# 增
-
-```sql
--- 创建表
-CREATE TABLE user_info (
-       ID NUMBER(6,0),
-       USERNAME VARCHAR2(20),
-       USERWD VARCHAR(20),
-       EMAIL VARCHAR2(30),
-       REGDATE DATE DEFAULT SYSDATE,
-       PRIMARY KEY (ID)
-);
--- 插入数据
-INSERT INTO table_name [(column1, column2, column3)] 
-VALUES (value1, value2, value3);
--- 创建表时复制表
-CREATE TABLE table_name 
-AS 
-SELECT * FROM table_name1;
--- 插入数据时复制表
-INSERT INTO table_name [(column1, 
-                         column2, 
-                         column3)] 
-SELECT [(column1, 
-         column2, 
-         column3)]
-FROM table_name1;
-```
-
-# 删
-
-```sql
-TRUNCATE TABLE table_name;      -- 清空表中的数据(效率较高)
-DELETE FROM table_name;         -- 清空表中的数据
-DELETE FROM table_name WHERE;   -- 删除表中的数据(按条件)
-DROP TABLE table_name;          -- 删除表
-```
-
-# 查
-
-```sql
-SELECT [DESTINCT] column_name AS COLUMN_NAME_NEW | * | CASE...WHEN... | DECODE()
-FROM table_name TABLE_NAMA_NEW
-INNER JOIN table_name1 ON condition
-LEFT JOIN table_name2 ON condition
-RIGHT JOIN table_name3 ON condition 
-FULL JOIN table_name4 ON condition
-WHERE condition1                      --LIKE "%_"|BETWEEN...AND...|IN|NOT IN| NOT|AND|OR|
-GROUP BY column1, column2
-HAVING condition2
-ORDER BY [DESC] column1, column2;
-
-
-CASE column_name
-  WHEN ''
-    THEN
-  WHEN ''
-    THEN
-  ELSE
-END;
-
-CASE 
-  WHEN expression1
-    THEN
-  WHEN expression2
-    THEN
-  ELSE
-END;
-
-DECODE(colum_name, value1, '', value2, '', value3, '', ..., default_value);
-```
-
-# 改
-
-```sql
--- 修改表
--- 增加字段
-ALTER TABLE table_name ADD column_name [DEFAULT] data_type;
--- 修改字段
-ALTER TABLE table_name MODIFY colum_name [DEFAULT] data_type;
--- 删除字段
-ALTER TABLE table_name DROP COLUMN column_name;
--- 重命名字段
-ALTER TABLE table_name RENAME COLUMN column_name TO new_column_name;
--- 修改表名
-RENAME table_name TO new_table_name;
--- 修改表中的数据
-UPDATE table_name
-SET column1 = value1,
-    column2 = value2,
-    column3 = value3
-WHERE condition;
-```
+* `to_char()`
+* `to_number()`
+* `floor()`
 
 # 约束
 
@@ -439,20 +365,147 @@ ALTER TABLE table_name ENABLE CONSTRAINT constraint_name;
 ALTER TABLE table_name DROP CONSTRAINT constraint_name;
 ```
 
-# 条件判断语句
+# 数据库操作
 
-## IF
+## 查看数据库
 
-### 处理 NULL 值的函数
+* TODO
 
-* IS NULL
-* IS NOT NULL
-* NVL()
-* NVL2()
-* COALESCE()
+## 查看表结构
+
+```sql
+DESC USER_INFO;
+```
+
+## 增
+
+```sql
+-- 创建表
+CREATE TABLE user_info (
+    ID NUMBER(6, 0),
+    USERNAME VARCHAR2(20),
+    USERWD VARCHAR(20),
+    EMAIL VARCHAR2(30),
+    REGDATE DATE DEFAULT SYSDATE,
+    PRIMARY KEY (ID)
+);
+
+-- 创建表时复制表
+CREATE TABLE table_name 
+AS 
+SELECT * FROM table_name1;
+
+-- 插入数据
+INSERT INTO table_name [(column1, column2, column3)]
+VALUES (value1, value2, value3);
+
+-- 插入数据时复制表
+INSERT INTO table_name [(column1, column2, column3)]
+SELECT [(column1, column2, column3)]
+FROM table_name1;
+```
+
+## 删
+
+```sql
+TRUNCATE TABLE table_name;      -- 清空表中的数据(效率较高)
+DELETE FROM table_name;         -- 清空表中的数据
+DELETE FROM table_name WHERE condition;   -- 删除表中的数据(按条件)
+DROP TABLE table_name;          -- 删除表
+```
+
+## 查
+
+查询语法：
+
+```sql
+SELECT 
+    -- 一般：[DESTINCT] column_name AS COLUMN_NAME_NEW 
+    -- 全部字段： * 
+    -- 判断： CASE...WHEN... 
+    -- DECODE()
+FROM table_name TABLE_NAMA_NEW
+INNER JOIN table_name1 ON condition
+LEFT JOIN table_name2 ON condition
+RIGHT JOIN table_name3 ON condition 
+FULL JOIN table_name4 ON condition
+WHERE condition1
+-- 模糊匹配：LIKE "%_" 
+-- 区间： BETWEEN...AND... 
+-- 区间： IN 
+-- 区间： NOT IN 
+-- 逻辑判断： NOT | AND | OR |
+GROUP BY column1, column2
+HAVING condition2
+ORDER BY [DESC] column1, column2;
+```
+
+* `CASE ... WHEN ...`
+
+```sql
+CASE column_name
+  WHEN ''
+    THEN ...
+  WHEN ''
+    THEN ...
+  ELSE ...
+END;
+
+CASE 
+  WHEN expression1
+    THEN ...
+  WHEN expression2
+    THEN ...
+  ELSE ...
+END;
+```
+
+* `DECODE()`
+
+```sql
+DECODE(
+    colum_name, 
+    value1, '', 
+    value2, '', 
+    value3, '', 
+    ..., 
+    default_value
+);
+```
+
+## 改
+
+```sql
+-- 增加字段
+ALTER TABLE table_name 
+ADD column_name [DEFAULT] data_type;
+
+-- 修改字段
+ALTER TABLE table_name 
+MODIFY colum_name [DEFAULT] data_type;
+
+-- 删除字段
+ALTER TABLE table_name 
+DROP COLUMN column_name;
+
+-- 重命名字段
+ALTER TABLE table_name 
+RENAME COLUMN column_name TO new_column_name;
+
+-- 修改表名
+RENAME table_name TO new_table_name;
+
+-- 修改表中的数据
+UPDATE table_name
+SET column1 = value1,
+    column2 = value2,
+    column3 = value3
+WHERE condition;
+```
+
+## 条件判断语句
 
 ### IF...
-
 
 ```sql
 IF condition THEN 
@@ -460,7 +513,7 @@ IF condition THEN
 END IF;
 ```
 
-### IF...ELSE
+#### IF...ELSE
 
 ```sql
 IF condition THEN 
@@ -502,7 +555,7 @@ IF condition1 THEN
 END IF;
 ```
 
-## CASE
+### CASE
 
 ```sql
 CASE expression
@@ -526,22 +579,19 @@ WHEN condition3 THEN
 END CASE;
 ```
 
+## NULL 函数
 
+* `IS NULL`
+* `IS NOT NULL`
+* `NVL()`
+* `NVL2()`
+* `COALESCE()`
 
+### NVL 和 NVL2
 
-
-
-# NULL 函数
-
-```
-nvl()     -- PL/SQL
-nvl2()
-isnull()  -- TL/SQL
-```
-
-nvl() nvl2() 处理算术表达式运算中栏位空值问题
-
-如果查询的栏位参与 +、-、/、* 算术运算, 只要参与运算的栏位有一个为空值, 则会导致整个运算结果为空值
+`NVL()`，`NVL2()` 处理算术表达式运算中栏位空值问题。
+如果查询的栏位参与 `+`、`-`、`*`、`/` 算术运算, 
+只要参与运算的栏位有一个为空值, 则会导致整个运算结果为空值
 
 * `nvl(expr1, expr2)`
     - 如果 expr1 不为空, 则返回 expr1, 否则返回 expr2
@@ -550,19 +600,24 @@ nvl() nvl2() 处理算术表达式运算中栏位空值问题
     - 如果 expr1 不为空, 则返回 expr2, 否则返回 expr3
     - expr1 可以是任意数据类型，但是 expr2 与 expr3 需是相同的数据类型
 
-# 字符串函数
+### COALESCE
 
-* trim()
-* substr()
-* regexp_substr()
-* translate()
-* trunc()
+* TODO
 
-# 查询语句
+## 字符串函数
+
+* `trim()`
+* `substr()`
+* `regexp_substr()`
+* `translate()`
+* `trunc()`
 
 ```sql
 -- example 1
-to_char(listagg(trim(field_name), ";") within group (order by field_name)) as field_name
+to_char(
+    listagg(trim(field_name), ";") 
+    within group (order by field_name)
+) as field_name
 
 
 -- example 2
@@ -573,8 +628,7 @@ FROM
 CONNECT BY LEVEL <= FLOOR(TO_DATE('20190315', 'YYYYMMDD') + 1);
 ```
 
-
-# 临时表
+## 临时表
 
 ```sql
 with 
@@ -584,13 +638,12 @@ temp3 as (),
 ...
 ```
 
-
-# 时间处理函数
+## 时间处理函数
 
 * 时间截取函数 `EXTRACT()`
 * `extract()` 函数从 oracle 9i 中引入, 用于从一个 date 或者 interval 类型中截取到特定的部分
 * 只可以从一个 date 类型中截取 year,month,day(date 日期的格式为 `yyyy-mm-dd`)
-* 只可以从一个 timestamp with time zone 的数据类型中截取 `TIMEZONE_HOUR和TIMEZONE_MINUTE`
+* 只可以从一个 timestamp with time zone 的数据类型中截取 `TIMEZONE_HOUR 和 TIMEZONE_MINUTE`
     - EXTRACT(YEAR FROM date'')
     - EXTRACT(MONTH FROM date'')
     - EXTRACT(DAY FROM date'')
@@ -607,6 +660,7 @@ temp3 as (),
 select extract(year from date'2011-05-17') year from dual;   
 select extract(month from date'2011-05-17') month from dual;   
 select extract(day from date'2011-05-17') day from dual;   
+
 -- example 2
 select extract(year from systimestamp) year,  
        extract(month from systimestamp) month,  
@@ -621,34 +675,37 @@ select extract(year from systimestamp) year,
 from dual;
 ```
 
-## 获取两个日期之间的具体时间间隔 extract 函数是最好的选择
+### 获取两个日期之间的具体时间间隔 extract 函数是最好的选择
 
 ```sql
 -- example
-select extract(day from dt2-dt1) day,
-     extract(hour from dt2-dt1) hour,
-       extract(minute from dt2-dt1) minute,  
-      ,extract(second from dt2-dt1) second  
-from (select to_timestamp('2011-02-04 15:07:00','yyyy-mm-dd hh24:mi:ss') dt1,   
-             to_timestamp('2011-05-17 19:08:46','yyyy-mm-dd hh24:mi:ss') dt2   
-      from dual);
+select 
+    extract(day from dt2-dt1) day,
+    extract(hour from dt2-dt1) hour,
+    extract(minute from dt2-dt1) minute,  
+    extract(second from dt2-dt1) second  
+from (
+    select 
+        to_timestamp('2011-02-04 15:07:00','yyyy-mm-dd hh24:mi:ss') dt1,   
+        to_timestamp('2011-05-17 19:08:46','yyyy-mm-dd hh24:mi:ss') dt2   
+    from dual
+);
 ```
 
-## 时间转换函数 TO_DATE()
+### 时间转换函数 TO_DATE()
 
 * TO_DATE(date, 'format')
 
-## 字符串转换函数 TO_CHAR()
+### 字符串转换函数 TO_CHAR()
 
 * TO_CHAR(string)
 
-
-## 排序函数 RNAK(), DENSE_RNAK()
+### 排序函数 RNAK(), DENSE_RNAK()
 
 * RANK() OVER(PARTITION BY field1 ORDER BY field2 ASC|DESC)
 * DENSE_RANK() OVER(PARTITION BY field1 ORDER BY fiels2 ASC|DESC)
 
-## 截取函数 TRUNC() 函数
+### 截取函数 TRUNC() 函数
 
 ```sql
 /**************日期********************/

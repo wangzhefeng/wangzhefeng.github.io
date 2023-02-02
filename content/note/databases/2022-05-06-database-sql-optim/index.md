@@ -46,6 +46,7 @@ details[open] summary {
 - [表变量使用](#表变量使用)
 - [存储过程](#存储过程)
 - [事务隔离级别](#事务隔离级别)
+- [参考](#参考)
 </p></details><p></p>
 
 # 内容
@@ -201,3 +202,7 @@ MySQL 默认隔离级别是 `Repeatable read`(可重复读)，有可能因为间
 互联网公司一般的隔离级别是 `read commited`(读已提交)，
 
 选用什么隔离级别主要看应用场景，因为隔离级别越低，事务并发性能越高
+
+# 参考
+
+* [SQL Server 百万级数据提高查询速度的方法](https://www.cnblogs.com/tohen/p/6241783.html?spm=a2c6h.12873639.article-detail.6.51f25a81nkC1ww)

@@ -44,9 +44,10 @@ details[open] summary {
   - [Hbase 架构](#hbase-架构)
     - [HRegionServer](#hregionserver)
     - [HMaster](#hmaster)
-- [RowKey 的设计](#rowkey-的设计)
-  - [根据一个 RowKey 查询](#根据一个-rowkey-查询)
-  - [根据 RowKey 范围查询](#根据-rowkey-范围查询)
+  - [RowKey 的设计](#rowkey-的设计)
+    - [根据一个 RowKey 查询](#根据一个-rowkey-查询)
+    - [根据 RowKey 范围查询](#根据-rowkey-范围查询)
+- [HBase 使用](#hbase-使用)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -228,11 +229,10 @@ HBase 在写数据的时候是先写到内存的，为了防止机器宕机，�
 HMaster 会处理元数据的变更和监控 RegionServer 的状态
 
 HMaster 会处理 HRegion 的分配或转移。如果 HRegion 的数据量太大的话，
-HMaster 会对拆分后的 HRegion 重新分配 HRegionServer。如果发现失效的 HRegion，
+Master 会对拆分后的 HRegion 重新分配 HRegionServer。如果发现失效的 HRegion，
 也会将失效的 HRegion 分配到正常的 HRegionServer 中
 
-
-# RowKey 的设计
+## RowKey 的设计
 
 要保证 RowKey 是唯一的，毕竟它是行键，有了它才可以唯一标识一条数据。
 在 HBase 里提供了三种查询方式：
@@ -241,7 +241,7 @@ HMaster 会对拆分后的 HRegion 重新分配 HRegionServer。如果发现失�
 2. 根据一个 RowKey 进行查询
 3. 根据 RowKey 过滤的范围查询
 
-##  根据一个 RowKey 查询
+###  根据一个 RowKey 查询
 
 首先要知道的是 RowKey 是会按字典序排序的，HBase 表会用 RowKey 来横向切分表。
 无论是读和写都是用 RowKey 去定位到 HRegion，然后找到 HRegionServer。
@@ -266,7 +266,7 @@ HRegion 上有两个很重要的属性：start-key 和 end-key。在定位 HRegi
 > 
 > 最后: 生成 RowKey 时, 尽量进行加盐或者哈希的处理, 这样很大程度上可以缓解数据热点问题
 
-## 根据 RowKey 范围查询
+### 根据 RowKey 范围查询
 
 上面的情况是针对通过 RowKey 单个查询的业务的，如果是根据 RowKey 范围查询的，那没必要上面那样做
 
@@ -279,8 +279,12 @@ HBase 将 RowKey 设计为字典序排序，如果不做限制，那很可能类
 拉取的时候只要访问一个 HRegionServer 就可以得到全部我想要的数据了，
 那查询的速度就快很多
 
+# HBase 使用
+
+
+
+
 
 # 参考
 
 * [我终于看懂了HBase](https://zhuanlan.zhihu.com/p/145551967)
-

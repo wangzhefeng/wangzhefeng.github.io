@@ -1,5 +1,5 @@
 ---
-title: Hive 和 HiveQL(HQL)
+title: Hive
 author: 王哲峰
 date: '2022-09-12'
 slug: database-hive
@@ -35,33 +35,47 @@ details[open] summary {
 - [Hive 简介](#hive-简介)
 - [HiveQL](#hiveql)
   - [数据类型](#数据类型)
-    - [文件格式](#文件格式)
-  - [创建数据库](#创建数据库)
+  - [文件格式](#文件格式)
+  - [数据库](#数据库)
     - [查询现有数据库](#查询现有数据库)
     - [创建新的数据库](#创建新的数据库)
     - [输出数据库的信息](#输出数据库的信息)
     - [切换用户当前工作数据库](#切换用户当前工作数据库)
     - [修改数据库](#修改数据库)
     - [删除数据库](#删除数据库)
-  - [创建表(创建, 修改, 删除, 查询)](#创建表创建-修改-删除-查询)
-    - [创建表(管理表[内部表])](#创建表管理表内部表)
-    - [创建表(外部表)](#创建表外部表)
-    - [复制另一张表的模式, 数据不会复制](#复制另一张表的模式-数据不会复制)
+  - [表](#表)
+    - [创建管理表](#创建管理表)
+    - [创建分区管理表](#创建分区管理表)
+    - [创建外部表](#创建外部表)
+    - [复制表模式](#复制表模式)
     - [列举表的属性信息](#列举表的属性信息)
     - [列举数据库中的所有表](#列举数据库中的所有表)
     - [查看表的详细表结构信息](#查看表的详细表结构信息)
     - [删除表](#删除表)
-    - [修改表(只修改元数据信息)](#修改表只修改元数据信息)
+    - [修改表](#修改表)
     - [向管理表中装载数据](#向管理表中装载数据)
-  - [创建函数](#创建函数)
-  - [创建视图](#创建视图)
-  - [创建索引](#创建索引)
+  - [函数](#函数)
+  - [视图](#视图)
+    - [创建视图](#创建视图)
+    - [复制视图](#复制视图)
+    - [删除视图](#删除视图)
+    - [查看视图](#查看视图)
+    - [显示视图的元数据信息](#显示视图的元数据信息)
+    - [视图是只读的](#视图是只读的)
+  - [索引](#索引)
+    - [建立索引](#建立索引)
+    - [Bitmap 索引](#bitmap-索引)
+    - [重建索引](#重建索引)
+    - [显示索引](#显示索引)
+    - [删除索引](#删除索引)
+    - [查看查询语句是否用到了索引](#查看查询语句是否用到了索引)
+    - [定制化索引](#定制化索引)
 - [参考资料](#参考资料)
 </p></details><p></p>
 
 # Hive 简介
 
-Hive 不支持
+Hive 不支持：
 
 * 行级插入, 更新, 删除
 * 事务
@@ -70,21 +84,27 @@ Hive 不支持
 
 ## 数据类型
 
-* TINYINT
-* SMALLINT
-* INT
-* BIGINT
-* BOOLEAN
-* FLOAT
-* DOUBLE
-* STRING
-* TIMESTAMP
-* BINARY
-* STRUCT
-* MAP
-* ARRAY
+* 整数
+    - TINYINT
+    - SMALLINT
+    - INT
+    - BIGINT
+* 布尔型
+    - BOOLEAN
+* 浮点型
+    - FLOAT
+    - DOUBLE
+* 字符型
+    - STRING
+* 日期时间
+    - TIMESTAMP
+* 其他
+    - BINARY
+    - STRUCT
+    - MAP
+    - ARRAY
 
-### 文件格式
+## 文件格式
 
 * csv
 * tsv
@@ -96,9 +116,12 @@ Hive 不支持
     -- /003
 ```
 
-## 创建数据库
+## 数据库
 
-创建, 修改, 删除
+* 查询
+* 创建
+* 修改
+* 删除
 
 ### 查询现有数据库
 
@@ -145,7 +168,6 @@ set hiv.cli.print.current.db = true;
 ```sql
 ALTER DATABASE financials 
 SET DBPROPERTIES ('edited-by' = 'wangzhefeng');
-
 ```
 
 ### 删除数据库
@@ -156,24 +178,50 @@ DROP DATABASE IF EXISTS financials RESTRICT;
 DROP DATABASE IF EXISTS financials CASCADE;
 ```
 
-## 创建表(创建, 修改, 删除, 查询)
+## 表
 
-### 创建表(管理表[内部表])
+* 创建
+* 删除
+* 查询
+* 修改
+
+### 创建管理表
+
+* 管理表也叫内部表
 
 ```sql
 CREATE TABLE IF NOT EXISTS mydb.employees (
-    name 			STRING 															COMMENT 'Employees name',
-    salary 			FLOAT 															COMMENT 'Employee salary',
-    subordinates 	ARRAY<STRING> 													COMMENT 'Names of subordinates',
-    deductions 		MAP<STRING, FLOAT> 												COMMENT 'Keys are deductions names, values are percentages',
-    address 		STRUCT<street: STRING, city: STRING, state: STRING, zip: INT> 	COMMENT 'Home address'
+    name STRING COMMENT 'Employees name',
+    salary FLOAT COMMENT 'Employee salary',
+    subordinates ARRAY<STRING> COMMENT 'Names of subordinates',
+    deductions MAP<STRING, FLOAT> COMMENT 'Keys are deductions names, values are percentages',
+    address STRUCT<street:STRING, city:STRING, state:STRING, zip:INT> COMMENT 'Home address'
 )
-COMMENT 'Description of the table'
-TBLPROPERTIES ('creator' = 'wangzhefeng', 'create-at' = "2018-08-11 17:56:00", ...)
+COMMENT 'Description of the table'  -- 表注释
+TBLPROPERTIES (  -- 表属性
+    'creator' = 'wangzhefeng', 
+    'create-at' = "2018-08-11 17:56:00", 
+    ...)
 LOCATION '/usr/hive/warehouse/mydb.db/employees';
 ```
 
-### 创建表(外部表)
+### 创建分区管理表
+
+```sql
+CREATE TABLE IF NOT EXISTS employees (
+    name STRING,
+    salary FLOAT,
+    subordinates ARRAY<STRING>,
+    deductions MAP<STRING, FLOAT>,
+    address STRUCT<street:STRING, city:STRING, state:STRING, zip:INT>
+)
+PATRITION BY (country STRING, state STRING);
+
+-- set hive.mapred.mode = strict;
+-- set hive.mapred.mode = nonstrict;
+```
+
+### 创建外部表
 
 ```sql
 CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
@@ -190,23 +238,11 @@ CREATE EXTERNAL TABLE IF NOT EXISTS stocks (
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY ','
 LOCATION '/data/stocks';
-
-
--- 创建分区管理表
-CREATE TABLE employees (
-    name STRING,
-    salary FLOAT,
-    subordinates ARRAY<STRING>,
-    deductions MAP<STRING, FLOAT>,
-    address STRUCT<street: STRING, city: STRING, state:STRING, zip: INT>
-)
-PATRITION BY (country STRING, state STRING);
-
--- set hive.mapred.mode = strict;
--- set hive.mapred.mode = nonstrict;
 ```
 
-### 复制另一张表的模式, 数据不会复制
+### 复制表模式
+
+复制另一张表的模式, 数据不会复制
 
 ```sql
 -- 管理表
@@ -232,6 +268,7 @@ SHOW PARTITIONS employees PARTITION (country = 'US', state = 'AK');
 
 ```sql
 USE mydb;
+
 SHOW TABLES;
 SHOW TABLES IN mydb;
 SHOW TABLES 'empl.*';
@@ -247,20 +284,27 @@ DESCRIBE mydb.employees.salary;
 
 ### 删除表
 
+* 管理表: 元数据信息和表内数据都会删除
+* 外部表: 删除元数据信息
+
 ```sql
--- 管理表: 元数据信息和表内数据都会删除
--- 外部表: 删除元数据信息
 DROP TABLE [IF EXISTS] employees;
 ```
 
-### 修改表(只修改元数据信息)
+### 修改表
 
-```sql
--- 表重命名
+* 只修改元数据信息
+
+表重命名
+
+```sql 
 ALTER TABLE table1 
 RENAME TO table2;
+```
 
--- 增加, 修改, 删除分区表
+增加, 修改, 删除分区表
+
+```sql
 ALTER TABLE table_name
 ADD [IF NOT EXISTS] 
 PARTITION ()
@@ -274,34 +318,48 @@ SET LOCATION '';
 ALTER TABLE table_name
 DROP [IF EXISTS]
 PARTITION ();
+```
 
+修改列
 
--- 修改列
+```sql
 ALTER TABLE table_name
 CHANGE COLUMN hms hours_minutes_seconds INT 
 COMMENT ""
 AFTER severity; -- FIRST
+```
 
--- 增加列
+增加列
+
+```sql
 ALTER TABLE table_name
 ADD COLUMNS (
     app_name STRING COMMENT '',
     session_id INT COMMENT '',
 );
+```
 
--- 删除、替换列
+删除、替换列
+
+```sql
 ALTER TABLE table_name 
 REPLACE COLUMNS (
     hours_minutes_seconds INT COMMENT '',
     severity STRING COMMENT '',
     message STRING COMMENT ''
 )
+```
 
--- 修改表属性
+修改表属性
+
+```sql
 ALTER TABLE table_name
 SET TBLPROPERTIES ('notes' = '');
+```
 
--- 修改存储属性
+修改存储属性
+
+```sql
 ALTER TABLE table_name
 PARTITION ()
 SET FILEFORMAT SEQUENCEFILE;
@@ -320,15 +378,21 @@ WITH SERDEPROPERTIES (
 LOAD DATA LOCAL INPATH '${env:HOME}/california-employees'
 OVERWRITE INTO TABLE employees
 PARTITION (country = 'US', state = 'CA');
+```
 
--- overwrite
+* overwrite
+
+```sql
 INSERT OVERWRITE TABLE employees
 PARTITION (country = 'US', state = 'OR')
 SELECT *
 FROM staged_employees se
 WHERE se.cnty = 'US' AND se.st = 'OR';
+```
 
--- append
+* append
+
+```sql
 INSERT [INTO] TABLE employees
 PARTITION (country = 'US', state = 'OR')
 SELECT *
@@ -336,68 +400,90 @@ FROM staged_employees se
 WHERE se.cnty = 'US' AND se.st = 'OR';
 ```
 
-## 创建函数
+## 函数
+
+函数类型: 
+
+* 内置函数
+* 用户自定义函数(加载)
+
+列举当前会话中所加载的所有函数名称
 
 ```sql
--- 函数类型: 
-    -- 内置函数
-    -- 用户自定义函数(加载)
-
--- 加载
-
--- 列举当前会话中所加载的所有函数名称
 SHOW FUNCTIONS;
+```
 
--- 查看函数文档
+查看函数文档
+
+```sql
 DESCRIBE FUNCTION concat;
 DESCRIBE FUNCTION EXTENDED concat;
+```
 
+调用函数
 
--- 调用函数
+```sql
 SELECT concat(column1, column2) AS x 
 FROM table_name;
 ```
 
-## 创建视图
+## 视图
+
+### 创建视图
 
 ```sql
--- 创建视图
 CREATE VIEW [IF NOT EXISTS] shorter_join(field1, field2, field3, ...) AS
 SELECT *
 FROM people 
-JOIN cart 
-    ON (cart.people_id = people.id)
+JOIN cart ON (cart.people_id = people.id)
 WHERE firstname = 'john';
 
 CREATE VIEW [IF NOT EXISTS] shipments(time, part)
 COMMENT 'Time and parts for shipments.'
-TBLPROPERTIES ('creator' = 'me')
-AS SELECT *
-   FROM people 
-   JOIN cart 
-       ON (cart.people_id = people.id)
-   WHERE firstname = 'john';
-
--- 复制视图
-CREATE VIEW shipments2
-LIKE shipments;
-
--- 删除视图
-DROP VIEW [IF EXISTS] shipments;
-
--- 查看视图
-SHOW TABLES;
-
--- 显示视图的元数据信息
-DESCRIBE shipments;
-DESCRIBE EXTENDED shipments;
-
--- 视图不能进行insert, load
--- 视图是只读的,只允许修改元数据信息
-ALTER VIEW shipments SET TBLPROPERTIES ('create' = 'me', 'create_at' = '2018-11-10');
+TBLPROPERTIES ('creator' = 'me') AS 
+SELECT *
+FROM people 
+JOIN cart ON (cart.people_id = people.id)
+WHERE firstname = 'john';
 ```
 
-## 创建索引
+### 复制视图
+
+```sql
+CREATE VIEW shipments2
+LIKE shipments;
+```
+
+### 删除视图
+
+```sql
+DROP VIEW [IF EXISTS] shipments;
+```
+
+### 查看视图
+
+```sql
+SHOW TABLES;
+```
+
+### 显示视图的元数据信息
+
+```sql
+DESCRIBE shipments;
+DESCRIBE EXTENDED shipments;
+```
+
+### 视图是只读的
+
+* 视图不能进行 `insert`, `load`
+* 视图是只读的，只允许修改元数据信息
+
+```sql
+ALTER VIEW shipments 
+SET TBLPROPERTIES ('create' = 'me', 'create_at' = '2018-11-10');
+```
+
+## 索引
 
 ```sql
 -- 建表employees
@@ -406,11 +492,14 @@ CREATE TABLE employees (
     salary FLOAT,
     subordinates ARRAY<STRING>,
     deductions MAP<STRING, FLOAT>,
-    address STRUCT<street:STRING, city:STRING, state:STRING, zip: INT>
+    address STRUCT<street: STRING, city: STRING, state: STRING, zip: INT>
 )
 PARTITION BY (country STRING, state STRING);
+```
 
--- 为表employees建立索引
+### 建立索引
+
+```sql
 CREATE INDEX employees_index 
 ON TABLE employees (country)
 AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
@@ -419,8 +508,11 @@ IDXPROPERTIES ('creator' = 'wangzhefeng', 'create_at' = '2018-11-09')
 IN TABLE employees_index_table
 PARTITIONED BY (country, name)
 COMMENT 'Employees indexed by country and name';
+```
 
--- Bitmap索引
+### Bitmap 索引
+
+```sql
 CREATE INDEX employees_index 
 ON TABLE employees (country)
 AS 'BITMAP'
@@ -429,28 +521,42 @@ IDXPROPERTIES ('creator' = 'wangzhefeng', 'create_at' = '2018-11-09')
 IN TABLE employees_index_table
 PARTITIONED BY (country, name)
 COMMENT 'Employees indexed by country and name';
+```
 
--- 重建索引
+### 重建索引
+
+```sql
 ALTER INDEX employees_index
 ON TABLE employees
 PARTITION (country = 'US')
 REBUILD;
+```
 
--- 显示索引
+### 显示索引
+
+```sql
 SHOW [FORMATTED] INDEX ON employees;
 SHOW [FORMATTED] INDEXES ON employees;
-
--- 删除索引
-DROP INDEX [IF EXISTS] employees_index ON TABLE employees;
-
--- 查看查询语句是否用到了索引
-EXPLAIN ...;
-
--- 定制化索引
--- https://cwiki.apache.org/confluence/display/Hive/IndexDe#CREATE_INDEX
 ```
+
+### 删除索引
+
+```sql
+DROP INDEX [IF EXISTS] employees_index 
+ON TABLE employees;
+```
+
+### 查看查询语句是否用到了索引
+
+```sql
+EXPLAIN ...;
+```
+
+### 定制化索引
+
+* https://cwiki.apache.org/confluence/display/Hive/IndexDe#CREATE_INDEX
 
 # 参考资料
 
-- [Hive Cheet Sheet](http://hortonworks.com/wp-content/uploads/2016/05/Hortonworks.CheatSheet.SQLtoHive.pdf)
+* [Hive Cheet Sheet](http://hortonworks.com/wp-content/uploads/2016/05/Hortonworks.CheatSheet.SQLtoHive.pdf)
 

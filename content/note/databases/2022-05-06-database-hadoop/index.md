@@ -10,25 +10,6 @@ tags:
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -80,8 +61,6 @@ details[open] summary {
 - [读/写](#读写)
 </p></details><p></p>
 
-
-
 # 环境配置
 
 - Java:Java 1.6及以上版本;
@@ -97,16 +76,12 @@ details[open] summary {
 - Google 率先提出了 MapReduce 用来应对数据处理需求的系统, 
    Doug Cutting 领导开发了一个开源版本的 MapReduce, 称为 Hadoop.
 - Hadoop是一个开源框架,可编写和运行分布式应用处理大规模数据;
-
-   - 方便: Hadoop运行在由一般商用机器构成的大型集群上,或者如Amazon弹性计算云(EC2)等云服务器之上;
-   - 健壮: Hadoop致力于在一般商用硬件上运行,其架构假设硬件会频繁地出现失效.它可以从容地处理大多数此类故障;
+    - 方便: Hadoop运行在由一般商用机器构成的大型集群上,或者如Amazon弹性计算云(EC2)等云服务器之上;
+    - 健壮: Hadoop致力于在一般商用硬件上运行,其架构假设硬件会频繁地出现失效.它可以从容地处理大多数此类故障;
    - 可扩展: Hadoop通过增加集群节点,可以线性地扩展以处理更大的数据集;
    - 简单: Hadoop允许用户快速编写出高效的并行代码;
-
 - Hadoop集群
-
    - Hadoop集群是在同一地点用网络互联的一组通用机器.数据存储和处理都发生在这个机器"云"中.不同的用户可以从独立的客户端提交计算作业到Hadoop,这些客户端可以是远离Hadoop集群的个人台式机;
-
 - 通常在一个 Hadoop 集群中的机器都是相对同构的 x86 Linux 服务器.
    而且它们几乎位于同一个数据中心,并且通常在同一组机架里;
 - Hadoop 强调把代码向数据迁移,而不是相反的过程;

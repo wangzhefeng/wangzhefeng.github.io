@@ -10,13 +10,3 @@ tags:
 ---
 
 
-```bash
-$ redis-cli
-$ redis-cli -a wangzhefeng
-```
-
-
-```redis
-set 'key' 'value'
-get 'key'
-```
