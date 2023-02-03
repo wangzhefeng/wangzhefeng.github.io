@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2020-09-13'
 slug: fraud-detection
 categories:
-  - machinelearning
+  - data analysis
 tags:
-  - ml
+  - model
 ---
 
 # 反欺诈模型

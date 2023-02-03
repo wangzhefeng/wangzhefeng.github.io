@@ -6,7 +6,7 @@ slug: root-cause-analysis
 categories:
   - data analysis
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

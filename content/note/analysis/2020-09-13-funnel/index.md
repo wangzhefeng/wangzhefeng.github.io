@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2020-09-13'
 slug: funnel
 categories:
-  - 知识点
+  - data analysis
 tags:
-  - tool
+  - model
 ---
 
 <style>

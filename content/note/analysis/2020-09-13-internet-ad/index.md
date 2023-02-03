@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2020-09-13'
 slug: internet-ad
 categories:
-  - machinelearning
+  - data analysis
 tags:
-  - article
+  - model
 ---
 
 <style>

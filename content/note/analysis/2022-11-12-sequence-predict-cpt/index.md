@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-11-12'
 slug: sequence-predict-cpt
 categories:
-  - model
+  - data analysis
 tags:
   - model
 ---
