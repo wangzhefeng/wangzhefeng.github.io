@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-10-22'
 slug: flink-env
 categories:
-  - flink
+  - database
 tags:
   - tool
 ---

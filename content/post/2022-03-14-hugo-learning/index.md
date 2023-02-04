@@ -2,11 +2,11 @@
 title: Hugo 边用边学
 author: 王哲峰
 date: '2022-03-14'
+slug: hugo-learning
 categories:
-  - Hugo
+  - blog
 tags:
   - tool
-slug: hugo-learning
 ---
 
 <style>

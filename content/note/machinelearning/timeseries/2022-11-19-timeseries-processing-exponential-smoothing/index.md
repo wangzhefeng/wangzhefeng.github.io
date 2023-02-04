@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-11-19'
 slug: timeseries-processing-exponential-smoothing
 categories:
-  - timeserie
+  - timeseries
 tags:
   - tool
 ---

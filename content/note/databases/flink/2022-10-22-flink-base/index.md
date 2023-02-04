@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-10-22'
 slug: flink-base
 categories:
-  - flink
+  - database
 tags:
   - tool
 ---
@@ -49,7 +49,7 @@ details[open] summary {
     - [分层 API](#分层-api)
       - [ProcessFunction](#processfunction)
       - [DataStream API](#datastream-api)
-      - [SQL & Table API](#sql--table-api)
+      - [SQL \& Table API](#sql--table-api)
     - [库](#库)
   - [运维](#运维)
 - [Flink 应用场景](#flink-应用场景)
