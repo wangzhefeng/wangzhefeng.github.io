@@ -1,5 +1,5 @@
 ---
-title: EM算法(Expectation Maximization algorithm)
+title: EM 算法
 author: 王哲峰
 date: '2022-09-13'
 slug: ml-em-algorithm
@@ -9,13 +9,15 @@ tags:
   - ml
 ---
 
-## EM算法
+# EM 算法介绍
 
-## EM算法收敛性
+EM 算法，Expectation Maximization algorithm
+
+## EM 算法收敛性
 
 ## 高斯混合模型
 
 * https://mp.weixin.qq.com/s/9qRGoDS9npqyLwAfKRu-zQ
 
+## EM 算法的推广
 
-## EM算法的推广
