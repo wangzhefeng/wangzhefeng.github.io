@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-09-01'
 slug: js-promise-async
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---

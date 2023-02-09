@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-12-02'
 slug: js-error
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---

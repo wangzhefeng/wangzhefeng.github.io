@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-05-01'
 slug: js-iterator-generator
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---

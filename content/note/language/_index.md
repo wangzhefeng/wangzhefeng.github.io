@@ -1,6 +1,6 @@
 ---
-title: 编程
-subtitle: 编程语言
+title: 编程语言
+subtitle: Programming language
 list_pages: true
 # order_by: title
 ---

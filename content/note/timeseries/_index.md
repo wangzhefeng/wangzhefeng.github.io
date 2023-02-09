@@ -16,6 +16,7 @@ list_pages: true
 * [季节性地调整时间序列](https://anomaly.io/seasonally-adjustement-in-r/index.html)
 * [检测相关时间序列中的异常](https://anomaly.io/detect-anomalies-in-correlated-time-series/index.html)
 * [用移动中位数分解检测异常](https://anomaly.io/anomaly-detection-moving-median-decomposition/index.html)
+* [为什么时序预测很难？](https://mp.weixin.qq.com/s/K0VVbZBcFJB5ctKWeMHUgQ)
 
 # 文档
 

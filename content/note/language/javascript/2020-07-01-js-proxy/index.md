@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-07-01'
 slug: js-proxy
 categories:
-  - 前端
+  - javascript
 tags:
   - tool
 ---

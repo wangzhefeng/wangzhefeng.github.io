@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2021-03-14'
 slug: plyr
 categories:
-  - 前端
+  - javascript
 tags:
   - note
 ---
