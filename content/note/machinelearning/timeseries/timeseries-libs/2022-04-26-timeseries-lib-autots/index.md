@@ -6,7 +6,7 @@ slug: timeseries-lib-autots
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: ml-gbm-xgboost
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

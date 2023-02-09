@@ -6,7 +6,7 @@ slug: ml-random-forest
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

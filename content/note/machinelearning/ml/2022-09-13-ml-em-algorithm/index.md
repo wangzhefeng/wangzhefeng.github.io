@@ -6,7 +6,7 @@ slug: ml-em-algorithm
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
 ---
 
 # EM 算法介绍

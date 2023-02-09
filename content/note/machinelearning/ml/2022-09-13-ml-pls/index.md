@@ -6,5 +6,5 @@ slug: ml-pls
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
 ---

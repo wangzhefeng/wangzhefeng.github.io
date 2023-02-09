@@ -6,7 +6,7 @@ slug: timeseries-lib-darts
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

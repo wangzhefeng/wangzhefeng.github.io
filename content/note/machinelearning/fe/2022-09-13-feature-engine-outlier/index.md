@@ -6,7 +6,7 @@ slug: feature-engine-outlier
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

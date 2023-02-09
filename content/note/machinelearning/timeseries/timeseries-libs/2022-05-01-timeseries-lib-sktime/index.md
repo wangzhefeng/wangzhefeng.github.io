@@ -6,7 +6,7 @@ slug: timeseries-lib-sktime
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 > A unified framework for machine learning with time series.

@@ -6,7 +6,7 @@ slug: timeseries-lib-prophet
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

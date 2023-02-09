@@ -6,7 +6,7 @@ slug: ml-decision-tree
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

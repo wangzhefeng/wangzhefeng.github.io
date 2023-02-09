@@ -7,7 +7,7 @@ categories:
   - machinelearning
 tags:
   - model
-  - ml
+  - machinelearning
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: feature-engine-type-timeseries
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

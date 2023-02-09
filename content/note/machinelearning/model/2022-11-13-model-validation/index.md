@@ -6,7 +6,7 @@ slug: model-validation
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
 ---
 
 

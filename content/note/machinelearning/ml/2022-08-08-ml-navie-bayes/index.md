@@ -6,7 +6,7 @@ slug: ml-navie-bayes
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

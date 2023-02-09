@@ -6,7 +6,7 @@ slug: dl-unsupervised-learning
 categories:
   - deeplearning
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

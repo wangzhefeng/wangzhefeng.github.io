@@ -6,7 +6,7 @@ slug: timeseries-process
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

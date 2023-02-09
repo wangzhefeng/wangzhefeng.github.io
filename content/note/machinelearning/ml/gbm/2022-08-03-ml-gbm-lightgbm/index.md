@@ -6,7 +6,7 @@ slug: ml-gbm-lightgbm
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

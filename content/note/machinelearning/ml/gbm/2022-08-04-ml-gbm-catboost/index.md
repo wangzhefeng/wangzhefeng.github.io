@@ -6,7 +6,7 @@ slug: ml-gbm-catboost
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

@@ -6,7 +6,7 @@ slug: feature-engine-type-numeric
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

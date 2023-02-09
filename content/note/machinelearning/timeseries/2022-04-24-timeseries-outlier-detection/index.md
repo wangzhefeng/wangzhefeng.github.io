@@ -6,7 +6,7 @@ slug: timeseries-outlier-detection
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

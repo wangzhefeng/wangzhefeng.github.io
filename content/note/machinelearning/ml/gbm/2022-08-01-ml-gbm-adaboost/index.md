@@ -6,7 +6,7 @@ slug: ml-gbm-adaboost
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

@@ -6,7 +6,7 @@ slug: feature-engine-type-audio
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: timeseries-decomposition
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

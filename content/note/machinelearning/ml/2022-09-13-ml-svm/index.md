@@ -6,7 +6,7 @@ slug: ml-svm
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

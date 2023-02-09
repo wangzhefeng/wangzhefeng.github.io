@@ -31,17 +31,19 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [分类](#分类)
+- [二分类](#二分类)
   - [precision \& recall \& F1](#precision--recall--f1)
     - [举例](#举例)
     - [使用方法](#使用方法)
-  - [混淆矩阵-ROC 和 AUC](#混淆矩阵-roc-和-auc)
+  - [混淆矩阵 以及 ROC 和 AUC](#混淆矩阵-以及-roc-和-auc)
+- [多分类](#多分类)
 - [回归](#回归)
-  - [普通回归](#普通回归)
-  - [时间序列预测](#时间序列预测)
-    - [MAPE](#mape)
-    - [WMAPE](#wmape)
-    - [SMAPE](#smape)
+  - [RMSE](#rmse)
+  - [MSE](#mse)
+- [时间序列预测](#时间序列预测)
+  - [MAPE](#mape)
+  - [WMAPE](#wmape)
+  - [SMAPE](#smape)
 - [排序](#排序)
 - [聚类](#聚类)
   - [Rank Index](#rank-index)
@@ -56,7 +58,7 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
-# 分类
+# 二分类
 
 * 精度
 * 准确率(precision)
@@ -123,15 +125,27 @@ F1 值则综合这两者指标的评估指标，用于综合反映整体领域�
 
 ### 使用方法
 
-## 混淆矩阵-ROC 和 AUC
+## 混淆矩阵 以及 ROC 和 AUC
+
+
+# 多分类
+
+
 
 
 # 回归
 
-## 普通回归
+## RMSE
+
+> Root Mean Square Error
 
 
-## 时间序列预测
+## MSE
+
+> Mean Square Error
+
+
+# 时间序列预测
 
 在指标方面，作为一个回归问题，可以使用 MAE，MSE 等方式来计算。
 但这类 metric 受到具体预测数值区间范围不同，
@@ -150,16 +164,16 @@ F1 值则综合这两者指标的评估指标，用于综合反映整体领域�
 可能还会考察整体的预测偏差（总量偏大或偏小），
 进而使用一些非对称 loss 来进行具体的优化
 
-### MAPE
+## MAPE
 
 
-### WMAPE
+## WMAPE
 
 `$$WMAPE = \frac{\sum_{t=1}^{n}|A_{t} - F_{t}|}{\sum_{t=1}^{n}|A_{t}|}$$`
 
 
 
-### SMAPE
+## SMAPE
 
 
 
@@ -198,3 +212,4 @@ F1 值则综合这两者指标的评估指标，用于综合反映整体领域�
 # 参考
 
 * [准确率(Precision)、召回率(Recall)、F值(F-Measure)的简要说明](https://blog.csdn.net/huacha__/article/details/80329707?spm=1001.2014.3001.5502)
+

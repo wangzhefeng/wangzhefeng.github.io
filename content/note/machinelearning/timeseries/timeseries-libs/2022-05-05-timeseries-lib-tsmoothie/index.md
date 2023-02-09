@@ -6,7 +6,7 @@ slug: timeseries-lib-tsmoothie
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

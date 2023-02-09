@@ -6,7 +6,7 @@ slug: feature-engine-selection
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

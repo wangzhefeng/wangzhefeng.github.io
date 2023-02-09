@@ -6,5 +6,5 @@ slug: feature-engine-type-video
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---

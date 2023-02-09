@@ -6,7 +6,7 @@ slug: ml-logistic-regression
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - model
 ---
 

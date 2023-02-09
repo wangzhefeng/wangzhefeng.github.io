@@ -6,7 +6,7 @@ slug: timeseries-forecast_ml
 categories:
   - timeseries
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

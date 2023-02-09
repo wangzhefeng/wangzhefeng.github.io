@@ -6,7 +6,7 @@ slug: feature-engine-build
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 <style>

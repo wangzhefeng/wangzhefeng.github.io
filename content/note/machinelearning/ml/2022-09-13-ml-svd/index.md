@@ -6,7 +6,7 @@ slug: ml-svd
 categories:
   - machinelearning
 tags:
-  - ml
+  - machinelearning
   - tool
 ---
 

@@ -6,7 +6,7 @@ slug: feature-engine-type-text
 categories:
   - feature engine
 tags:
-  - ml
+  - machinelearning
 ---
 
 
