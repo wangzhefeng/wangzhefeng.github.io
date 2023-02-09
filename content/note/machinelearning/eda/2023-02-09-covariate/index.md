@@ -37,8 +37,18 @@ details[open] summary {
       - [pandas 绘图](#pandas-绘图)
       - [boxplot 绘图](#boxplot-绘图)
     - [数值特征](#数值特征)
+      - [person 相关系数](#person-相关系数)
+      - [scatter 绘图](#scatter-绘图)
+      - [regplot 绘图](#regplot-绘图)
+    - [时间特征](#时间特征)
+      - [plot 绘图](#plot-绘图)
+      - [statsmodels 分解](#statsmodels-分解)
   - [标签为二元变量](#标签为二元变量)
+    - [类别特征](#类别特征-1)
+    - [数值特征](#数值特征-1)
   - [标签为多元变量](#标签为多元变量)
+    - [类别特征](#类别特征-2)
+    - [数值特征](#数值特征-2)
 - [特征和特征关系分析](#特征和特征关系分析)
 - [参考](#参考)
 </p></details><p></p>
@@ -103,16 +113,156 @@ sns.boxplot(x = var, y = label, data = df)
 
 ### 数值特征
 
+关于数值变量与数值标签的关系，一般会观察下面的结果：
 
+* 数值特征与数值标签的 pearson 相关系数；如果该数值的绝对值越大，
+  往往说明该特征能为模型带来非常大的帮助
+* 观察数值特征与数值标签的时候，一般采用散点图即可，也可以使用 regplot 绘制出拟合的曲线
+
+#### person 相关系数
+
+```python
+df[["LotArea", label]].corr("pearson")
+```
+
+#### scatter 绘图
+
+```python
+import matplotlib.pyplot  as plt
+%matplotlib inline
+
+plt.figure(figsize = [10, 6])
+plt.scatter(x = "LotArea", y = label, data = df)
+plt.xlabel("LotArea")
+plt.ylabel(label)
+```
+
+#### regplot 绘图
+
+```python
+import matplotlib.pyplot  as plt
+import seaborn as sns
+%matplotlib inline
+
+plt.figure(figsize = [10, 6])
+sns.regplot(x = df["LotArea"], y = df[label])
+```
+
+### 时间特征
+
+关于时间与数值标签，主要希望随着时间变化，数据是否表现除了某些特殊的模式(周期性等)，
+以及是否出现了明显的异常现象等等。时间变量与数值变量的可视化直接使用 plot 函数即可
+
+#### plot 绘图
+
+```python
+plt.figure(figsize = [10,6])
+
+# 用 index 模拟时间
+plt.plot(
+    df.index, df[label].values, 
+    color = 'black', 
+    linestyle = '--', 
+    linewidth = '1', 
+    label = label
+)
+plt.xlabel('Time', fontsize = 14)   
+plt.ylabel(label, fontsize = 16)    
+```
+
+#### statsmodels 分解
+
+```python
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+decomposition = seasonal_decompose(ts, freq, two_sided = False)
+trend = decomposition.trend
+seasonal = decomposition.seasonal
+residual = decomposition.resid
+decomposition.plot()
+plt.show()
+```
 
 ## 标签为二元变量
 
+> 二分类
+
+### 类别特征
+
+关于类别变量与二元标签的关系可以直接通过 barplot 函数进行可视化，
+如果不同类之间的分布差不大，那说明该类别变量大概率是意义不大的
+
+```python
+df = pd.read_csv('./data/titanic_train.csv') 
+
+var = 'Pclass'
+label = 'Survived'
+df.groupby(var)[label].mean()
+
+plt.figure(figsize = [10, 6])
+sns.barplot(x = bar, y = label, data = df)
+```
+
+### 数值特征
+
+数值变量与二元标签的关系一般可以通过下面的两种方式分析：
+
+* 对数值变量进行分桶，然后基于类别变量与二元标签的关系进行分析
+* 使用 boxplot 函数，观测在不同标签下，数值特征的分布差异
+
+```python
+plt.figure(figsize = [10, 6])
+sns.boxplot(df[label], df['Fare'])
+```
+
 ## 标签为多元变量
 
+> 多分类
 
+在观测标签为多分类的问题时，因为标签是多个类别的，可以通过两种策略对其进行观察：
 
+* 将多分类转化为多个二分类然后进行观测，这么做最大的问题是需要分析量大大增加了，会使得问题变得更加繁琐
+* 采用和数值变量与二元标签的策略对模型进行观测
+
+```python
+multi_label = 'y_generated'
+df['y_generated'] = np.random.randint(low = 0.5, high = 3.5, size = df.shape[0])
+```
+
+### 类别特征
+
+直接使用 countplot，将 hue 的位置设置为标签的名称即可
+
+```python
+plt.figure(figsize = [10,6])
+sns.countplot(x = 'Pclass', hue = multi_label, data = df)
+plt.ylabel('Number of Occurrences', fontsize = 12)
+plt.xlabel(multi_label, fontsize = 12)
+plt.show()
+```
+
+### 数值特征
+
+直接使用 boxplot 即可，观测在每个类处数值变量的分布情况。
+如果所有类处的数值变量分布都类似，那可能该数值变量带来的影响会相对较小，反之影响较大
+
+```python
+plt.figure(figsize = [10,6])
+sns.boxplot(x = multi_label, y = 'Age', data = df)
+plt.ylabel('Age distribution', fontsize = 12)
+plt.xlabel(multi_label, fontsize = 12)
+plt.show()
+```
 
 # 特征和特征关系分析
+
+
+
+
+
+
+
+
 
 # 参考
 
