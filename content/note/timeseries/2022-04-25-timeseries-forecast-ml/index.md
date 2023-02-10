@@ -138,6 +138,7 @@ details[open] summary {
 
 * [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
 * [9个时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
+* [样本组织](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247492305&idx=1&sn=c4c9783ee3ab85a8f7a813e803f15177&chksm=c32afb5ef45d7248d539aca50cff13a840ff53bb2400166ea146256675b08b93419be3f8fadc&scene=21#wechat_redirect)
 
 # 时间序列模型选择
 
