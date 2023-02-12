@@ -260,4 +260,5 @@ PCA 是线性算法，不能表示本质上是非线性的数据。由很多 PCA
 * [特征工程--图像特征上篇](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494894&idx=2&sn=d268c10eea333da6ff48007140b14d16&chksm=c32af561f45d7c7729a4b92744b0d87f312539cf5a65c03d7fa9fe597145ce9eae7e45f8216a&scene=21#wechat_redirect)
 * [特征工程--图像特征中篇](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247495021&idx=1&sn=21af676dc9bd1de7b203971b35f4b524&chksm=c32af4e2f45d7df4bf28d97121fb06662f112c873e80109d6072eb361f2f6f7866866fbb7bc2&scene=21#wechat_redirect)
 * [特征工程--图像特征下篇](https://mp.weixin.qq.com/s/SARm2GlHZHYKAFFRr9buXw)
+* [图像数据的特征工程](https://mp.weixin.qq.com/s/TRSrPT501FinjsbcmC1d6A)
 
