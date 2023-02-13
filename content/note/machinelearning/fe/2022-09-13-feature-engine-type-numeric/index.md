@@ -48,6 +48,13 @@ details[open] summary {
     - [Yeo-Johnson 转换](#yeo-johnson-转换)
     - [Box-Cox 转换](#box-cox-转换)
 - [样本正规化(Normalization)](#样本正规化normalization)
+- [树模型特征工程](#树模型特征工程)
+  - [树模型数据吸收方式](#树模型数据吸收方式)
+  - [树模型特征工程](#树模型特征工程-1)
+    - [高基数类别数据](#高基数类别数据)
+    - [交叉信息挖掘](#交叉信息挖掘)
+    - [局部上下文信息特征](#局部上下文信息特征)
+- [参考](#参考)
 </p></details><p></p>
 
 异常值 偏态分布
@@ -349,4 +356,190 @@ from sklearn.preprocessing import Normalizer
 norm = Normalizer()
 df_norm = norm.fit_transform(df)
 ```
+
+# 树模型特征工程
+
+特征工程和模型是一个完整的整体，特征工程的目的是为了辅助模型进行更好的学习，
+因为目前还没有一个模型可以直接对所有类型的数据进行充分的学习，
+所以对于模型学习不佳的地方或者难以学好的地方，我们需要通过特征工程的方式对数据进行转化，
+然后再将转化后的数据输入模型使模型可以得到更好的学习，从而拿到更好的效果
+
+先分析梯度提升树对于数据的吸收方式，探讨梯度提升树模型学习不好的地方，
+之后我们再阐述各类特征如何通过特征工程的方式转化为树模型更易吸收的形式，
+从而拿到更好的效果
+
+## 树模型数据吸收方式
+
+树模型每次分裂的时候都会贪心地寻找一个最佳的分割点，依据寻找到的最佳分割点将数据一分为二。
+然后再从所有的特征中继续贪心地寻找下一个分割点，继续以最佳分割点位中心，
+按照大于小于该值的情况进行分割，依此类推
+
+也就是说，梯度提升树模型可以近似认为是一种贪心的二叉树模型
+
+## 树模型特征工程
+
+从梯度提升树模型对于数据的吸收方式中，我们发现梯度提升树对于下面几种情况是做得不够好
+
+### 高基数类别数据
+
+什么是高基数类别特征呢？一个类别特征中不同的值的个数较大的时候，
+我们认为该类别特征是高基数的特征
+
+一般可以通过下面的方式来计算基数：
+
+```python
+df["feature"].nunique()
+# or
+len(set(df["feature"].unique()))
+```
+
+当类别特征的基数较大，树模型很难在较短的几次分裂过程中将数据完美的分割开，
+我们知道树模型是基于贪心的策略，只要其中有一次分割的位置不好，
+那么对于后续的分割就会产生一些不良的影响，
+这也是为什么很多梯度提升树模型在碰到高基数的类别特征的时候效果效果不佳的原因
+
+举个极端的例子，我们现在有 500 个不同的数，如果是奇数，对应的标签就是1，
+如果是偶数，对应的标签就是0，目前做下面两个实验：
+
+* 直接训练，验证；
+* 采用常用的特征工程技巧，Mean-target 编码，再验证
+
+```python
+import lightgbm as lgb
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split,KFold
+
+
+# data
+df = pd.DataFrame()
+feature = np.array(np.random.randint(1, 500, size = [10000]))
+label = feature % 2
+df['f'] = feature
+df['y'] = label
+X_train, X_test, y_train, y_test = train_test_split(
+    df['f'].values, 
+    df['y'].values, 
+    test_size = 0.33
+)
+
+# 交叉验证
+kf = KFold(n_splits = 5)
+# Mean-Target encode
+tr_target_encode = np.zeros(X_train.shape[0])
+te_target_encode = np.zeros(X_test.shape[0])
+for tr_ind, val_ind in kf.split(X_train, y_train):
+    df_tmp = pd.DataFrame({
+        'f': X_train, 
+        'y': y_train
+    })
+    dic = df_tmp.groupby('f')['y'].mean().to_dict() 
+    tr_target_encode[val_ind] = [dic[v] for v in X_train[val_ind]]
+    te_target_encode = [te_target_encode[i] + dic[v] / 5.0 for i, v in enumerate(X_test)]
+ 
+tr_target_encode = np.array(tr_target_encode)
+te_target_encode = np.array(te_target_encode)
+
+# 模型训练
+model = lgb.LGBMClassifier(
+    n_estimators = 1000, 
+    learning_rate = 0.05
+)
+model.fit(
+    X_train.reshape(-1,1),
+    y_train, 
+    eval_set = (X_test.reshape(-1,1), y_test), 
+    eval_metric ='auc',
+    early_stopping_rounds = 50, 
+    verbose = 200
+)
+
+# 模型验证
+model = lgb.LGBMClassifier(
+    n_estimators = 1000, 
+    learning_rate = 0.05
+)
+model.fit(
+    np.concatenate([
+        X_train.reshape(-1, 1), 
+        tr_target_encode.reshape(-1, 1)
+    ], axis = 1),
+    y_train, 
+    eval_set = (
+        np.concatenate([
+            X_test.reshape(-1, 1), 
+            te_target_encode.reshape(-1, 1)
+        ], axis = 1), 
+        y_test
+    ), 
+    eval_metric = 'auc', 
+    early_stopping_rounds = 50, 
+    verbose = 200
+)
+```
+
+从上面的实验中，我们发现对于相对高基数的特征，直接放入模型是很难找到最优的分割，
+最终往往导致模型陷入次优的状态。而通过简单的特征工程，我们不仅可以得到更好的效果，
+而且往往还能加速模型的收敛
+
+### 交叉信息挖掘
+
+此处我们所谓的交叉信息就是特征之间的交叉关系，举例来说，用户 ID 是单个特征，商店 ID 也是单个特征，
+那么用户和商品的组合就是二阶组合特征。因为梯度提升树模型，每次都只会对单个特征进行分割，
+进而再对下一个特征进行分割，所以如果两个特征的交叉存在极强的信息，那么梯度提升树模型是很难挖掘出此类信息的
+
+举个例子：我们有一些交易数据，如果平均每个用户的交易额度是大于某个 550，就是好用户；反之就是一般用户
+
+```python
+df = pd.DataFrame()
+uids = ['u1'] * 4 + ['u2'] * 3 + ['u3'] * 4
+price = [400, 2000, 650, 150, 1000, 500, 300, 500, 200, 300, 1000]
+isGood = [0] * 7 + [1] * 4
+
+df['UID']   = uids
+df['Price'] = price
+df['isGood'] = isGood
+df['MeanPrice'] = df.groupby('UID')['Price'].transform('mean').values
+```
+
+![img](images/tree_data.png)
+
+如果我们只用用户 UID 进行分割，我们发现三次也可以全部分对，但是数据集合中，
+我们的用户很多，这么做又会出现和高基数类别数据类似的问题。如果我们使用 Price 进行分割，
+我们发现没法直接分割开，从而会出现下面这种的分割情况：
+
+![img](images/tree1.png)
+
+而如果我们基于用户ID和用户消费的价格求均值，再进行分割，我们就可以很快地将二者完美的分割开：
+
+![img](images/tree2.png)
+
+也就是说，我们直接基于用户的ID对用户的消费价格求均值得到的特征完美的帮助了我们的模型。
+这是一个简单的例子，还有非常多的情况树模型都没法挖掘，这些我们会在后续特征工程部分进行详细地展开
+
+### 局部上下文信息特征
+
+同样的原因，因为梯度提升树模型每次都是贪心的按照大于，小于等于某个值进行分割，
+而如果该特征上下之间存在某些关系，同时这些关系影响非常大的话，梯度提升树模型也是极难捕捉到的。
+例如在某个波动曲线中，如果下一时刻与上一时刻的差值大于某个阈值，
+这个时候表示出了故障，而其它时候则正常，这种情况梯度提升树模型可能完全不知道该如何去区分
+
+![img](images/tree_data.png)
+
+如果我们按照原始的 feature 去进行划分，模型可能会将大于 800 的值预测位 1，如下图所示：
+
+![img](images/tree3.png)
+
+对于剩下的 `200` 那个却极难划分。而如果我们进行上下文的特征抽取，
+即用下一阶段的值减去上一阶段的值并取绝对值，那么我们就可以得到下面所示的结果，
+模型很快就可以得到充分的学习并拿到很好的效果：
+
+![img](images/tree4.png)
+
+# 参考
+
+* [为什么要做特征工程](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494087&idx=1&sn=21787939263293e1471df7da29de4c0a&chksm=c32af048f45d795e55c08d882228ea5b733797568e15e54d8c00649adfa84a9c8b2843077d91&scene=21#wechat_redirect)
 
