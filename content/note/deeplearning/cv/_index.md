@@ -22,5 +22,9 @@ list_pages: true
         - 语义分割
         - 实例分割
 
-# 文档
+## 文章
+
+* [计算机视觉学习路线（入门篇）](https://mp.weixin.qq.com/s/CSo8TzC7WjVkPJ2XCI2aCg)
+
+## 文档
 
