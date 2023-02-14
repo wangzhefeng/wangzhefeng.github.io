@@ -1,5 +1,5 @@
 ---
-title: 反欺诈模型 Fraud Detection
+title: 反欺诈
 author: 王哲峰
 date: '2020-09-13'
 slug: fraud-detection
@@ -8,6 +8,8 @@ categories:
 tags:
   - model
 ---
+
+> Fraud Detection
 
 # 反欺诈模型
 

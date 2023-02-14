@@ -1,5 +1,5 @@
 ---
-title: 埋点 Data Buried Point
+title: 埋点
 author: 王哲峰
 date: '2020-09-22'
 slug: data-buried-point
@@ -47,6 +47,8 @@ details[open] summary {
 - [关于埋点的数据的注意事项](#关于埋点的数据的注意事项)
 - [参考文献](#参考文献)
 </p></details><p></p>
+
+> Data Buried Point
 
 # 流量统计的基础-埋点
 
