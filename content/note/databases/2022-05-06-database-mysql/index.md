@@ -36,6 +36,27 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [MySQL 介绍](#mysql-介绍)
+  - [DBS](#dbs)
+  - [MySQL](#mysql)
+  - [MySQL 存储引擎](#mysql-存储引擎)
+    - [查看 MySQL 可用存储引擎](#查看-mysql-可用存储引擎)
+    - [存储引擎比较及选择](#存储引擎比较及选择)
+    - [修改存储引擎](#修改存储引擎)
+- [MySQL 环境](#mysql-环境)
+  - [安装过程省略](#安装过程省略)
+  - [Windows](#windows)
+    - [服务启停和状态查看](#服务启停和状态查看)
+    - [初始化设置](#初始化设置)
+    - [启动和关闭 MySQL CLI](#启动和关闭-mysql-cli)
+  - [MacOS 和 Linux](#macos-和-linux)
+    - [环境变量配置](#环境变量配置)
+    - [服务启停和状态查看](#服务启停和状态查看-1)
+    - [初始化设置](#初始化设置-1)
+    - [启动和关闭 MySQL CLI](#启动和关闭-mysql-cli-1)
+    - [配置](#配置)
+- [MySQL 数据类型](#mysql-数据类型)
+- [MySQL 运算符](#mysql-运算符)
 - [MySQL 约束](#mysql-约束)
   - [主键约束](#主键约束)
     - [主键介绍](#主键介绍)
@@ -47,6 +68,7 @@ details[open] summary {
     - [外键规则](#外键规则)
     - [创建外键](#创建外键)
     - [删除外键](#删除外键)
+  - [唯一约束](#唯一约束)
 - [MySQL 索引](#mysql-索引)
   - [索引介绍](#索引介绍)
     - [索引](#索引)
@@ -87,21 +109,400 @@ details[open] summary {
   - [开窗函数](#开窗函数)
     - [分组排序](#分组排序)
     - [row\_number 实现](#row_number-实现)
-- [MySQL 安装](#mysql-安装)
-  - [安装过程省略](#安装过程省略)
-  - [环境变量配置](#环境变量配置)
-  - [服务启停和状态查看](#服务启停和状态查看)
-  - [启动 MySQL](#启动-mysql)
-  - [初始化设置](#初始化设置)
-  - [配置](#配置)
 - [MySQL 忘记 root 密码的完美解决方法](#mysql-忘记-root-密码的完美解决方法)
   - [更改 my.cnf 配置文件](#更改-mycnf-配置文件)
   - [更改 root 用户名](#更改-root-用户名)
 - [参考](#参考)
 </p></details><p></p>
 
+# MySQL 介绍
+
+## DBS
+
+数据库系统(DataBase System)简称 DBS，DBS 是个大的概念，包括：
+
+* 数据库(DataBase)简称 DB
+    - DB 是专门存数据的集合。DB 是长期存储在计算机内的有组织、可共享的大量的数据集合。
+      它可以供各种用户共享，具有最小冗余度和较高的数据独立性
+* 数据库管理系统(DataBase Management System)简称 DBMS
+    - DBMS 是由 DBA 对 DB 的查询、更新、删除、修改操作。DBMS 是用来操纵和管理 DB 的软件，用于建立、使用和维护 DB。
+      它对 DB 进行统一的管理和控制，以保证 DB 的安全性和完整性，用户可以通过 DBMS 访问 DB 中的数据 
+* 应用系统
+* 数据库管理员(DataBase Administrator)简称 DBA
+    - DBA 也可以通过 DBMS 进行 DB 的维护工作，它可使多个应用程序和用户拥有不同的方法在同时或不同时刻去建立、
+      修改和询问 DB(也就是说 DBMS 可以将控制权发挥到极致(也就是所说的安全性)) 
+
+DBS 中的“系统”是指能够提供一系列数据库相关服务组件的有机结合体。
+它应该包括：DB、DBMS(以及开发工具)、应用系统、DBA 和用户构成。
+所以联系就是 DBS 包括 DBMS 和 DB
+
+目前占据中低端市场大半江山的 Oracle 就是数据库管理系统，
+也称之为关系型数据库管理系统(Relational DataBase Management System)简称 RDBMS。
+这里需要注意的是，虽然有时候把 Oracle、MySQL 等称之为数据库，但确切讲，
+它们应该是数据库管理系统，即 DBMS
+
+## MySQL
+
 MySQL 是一个关系型数据库管理系统, 也是最流行的关系型数据库管理系统之一, 在 WEB 应用方面, 
 MySQL 是最好的 RDBMS(Relational Database Management System, 关系数据库管理系统) 应用软件
+
+MySQL 是一个开放源码的数据库管理系统(DBMS)。数据库管理系统有三个主要组成部分：
+
+* 数据库(DB)：存储数据的地方
+* 数据库管理系统(DBMS)：用于管理数据库的软件
+* 数据库应用程序(DBAS)：为了提高数据库系统的处理能力所使用的管理数据库的软件补充
+
+MySQL 链接数据库的方式：
+
+* 操作系统
+    - CMD 链接
+    - ODBC API：给所有的数据库提供一个共同的接口
+* Java API(JDBC)：Java 应用程序连接数据库的接口
+* Python API：Python 下载接口连接
+* ...
+
+MySQL 版本：
+
+* 社区版：完全免费，官方不提供技术支持
+* 企业版：付费使用，支持 ACID，官方提供电话技术支持
+
+MySQL 客户端：
+
+* Navicat for MySQL
+* MySQL workbench
+
+## MySQL 存储引擎
+
+MySQL 的核心是存储引擎，不同的存储引擎提供不同的存储机制，索引技巧，锁定水平，等功能。
+在 MySQL 中，不需要在整个服务器中使用同一存储引擎，正对具体的要求，可以对每个表使用不同的存储引擎
+
+### 查看 MySQL 可用存储引擎
+
+```bash
+mysql> show engines;
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+| Engine             | Support | Comment                                                        | Transactions | XA   | Savepoints |
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+| ARCHIVE            | YES     | Archive storage engine                                         | NO           | NO   | NO         |
+| BLACKHOLE          | YES     | /dev/null storage engine (anything you write to it disappears) | NO           | NO   | NO         |
+| MRG_MYISAM         | YES     | Collection of identical MyISAM tables                          | NO           | NO   | NO         |
+| FEDERATED          | NO      | Federated MySQL storage engine                                 | NULL         | NULL | NULL       |
+| MyISAM             | YES     | MyISAM storage engine                                          | NO           | NO   | NO         |
+| PERFORMANCE_SCHEMA | YES     | Performance Schema                                             | NO           | NO   | NO         |
+| InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys     | YES          | YES  | YES        |
+| MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables      | NO           | NO   | NO         |
+| CSV                | YES     | CSV storage engine                                             | NO           | NO   | NO         |
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+9 rows in set (0.00 sec)
+```
+
+### 存储引擎比较及选择
+
+比较：
+
+| 功能       | MyISAM | MEMORY | InnoDB | ARCHIVE |
+|-----------|--------|--------|--------|----------|
+| 存储限制    | 256TB  | RAM    | 64TB   | None    |
+| 支持事务    | :negative_squared_cross_mark: | :negative_squared_cross_mark: | :white_check_mark: | :negative_squared_cross_mark: |
+| 支持全文索引 | :white_check_mark: | :negative_squared_cross_mark: | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| 支持数索引   | :white_check_mark:| :white_check_mark: | :white_check_mark: | :negative_squared_cross_mark: |
+| 支持哈希索引 | :negative_squared_cross_mark: | :white_check_mark: | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| 支持数据缓存 | :negative_squared_cross_mark: | N/A | :white_check_mark: | :negative_squared_cross_mark: |
+| 支持外键    | :negative_squared_cross_mark: | :negative_squared_cross_mark: | :white_check_mark: | :negative_squared_cross_mark: |
+
+选择：
+ 
+| 存储引擎 | 选择时机 |
+|---------|----|
+| MyISAM  | 当数据表主要用来插入和查询数据 |
+| MEMORY  | 当临时表存放数据，数据量不大，并且不需要较高的数据安全性(MySQL 中使用了该引擎作为临时表，存储查询中间信息)|
+| InnoDB  | 当需要提交、回滚和崩溃恢复能力的事务安全能力，并且需要实现并发控制 |
+| ARCHIVE | 当只有 INSERT 和 SELECT 操作时，支持高并发插入，但不是事务安全的，适合存储归档数据，如日志信息 |
+
+存储引擎的选择不是完全随意的，父表与子表之间必须有相同的存储引擎；
+并且只有 innodb 支持外键；只有两张表都是 innodb 引擎才能建立外键
+
+
+
+
+### 修改存储引擎
+
+修改用户的存储引擎：
+
+* 修改 `\etc\my-default.cnf` 中的配置
+
+修改数据库的存储引擎：
+
+
+
+修改表的存储引擎：
+
+```bash
+mysql> alter table table_name engine=myisam;
+```
+
+# MySQL 环境
+
+## 安装过程省略
+
+* Windows
+* Linux
+* MacOS
+
+## Windows
+
+### 服务启停和状态查看
+
+```bash
+# 开启 MySQL 服务
+$ service mysqld start
+
+# 关闭 MySQL 服务
+$ service mysqld stop
+$ mysqladmin -uroot -p123456 shutdown
+
+# 检查端口是否运行
+$ lsof -i:3306
+```
+
+### 初始化设置
+
+```bash
+# 方法 1
+$ mysqladmin -u root -p123456 password 'abc123'
+
+# 方法 2
+mysql> set password for root@localhost = '123456';
+mysql> exit;
+```
+
+### 启动和关闭 MySQL CLI
+
+启动：
+
+```bash
+# 单实例登录
+$ mysql -uroot -p123456
+
+# 多实例登录
+$ mysql -uroot -p123456 -S /data/3306/mysql.sock
+```
+
+关闭：
+
+```
+Ctrl + D
+
+# or 
+mysql> exit;
+```
+
+## MacOS 和 Linux
+
+### 环境变量配置
+
+在终端切换到根目录, 编辑 `~/.zshrc` 或者 `~/.bash_profile`
+
+```bash
+$ cd ~
+$ vim ~/.zshrc
+```
+
+在 `~/.zhsrc` 文件中添加配置项
+
+```bash
+export PATH=$PATH:/usr/local/mysql/bin
+export PATH=$PATH:/usr/local/mysql/support-files
+```
+
+保存并启用配置项
+
+```bash
+:wq
+$ source ~/.zshrc
+$ echo $PATH
+```
+
+### 服务启停和状态查看
+
+```bash
+# 开启 MySQL 服务
+$ sudo mysql.server start
+
+# 停止 MySQL 服务
+$ sudo mysql.server stop
+
+# 重启 MySQL 服务
+$ sudo mysql.server restart
+
+# 查看 MySQL 服务状态
+$ sudo mysql.server status
+```
+
+### 初始化设置
+
+设置初始化密码，进入数据库 MySQL 数据库之后执行下面的语句，设置当前 root 用户的密码为 `123456`
+
+```bash
+# 方法 1
+$ mysqladmin -u root -p123456 password 'abc123'
+
+# 方法 2
+mysql> set password for root@localhost = '123456';
+mysql> exit;
+```
+
+### 启动和关闭 MySQL CLI
+
+启动：
+
+```bash
+$ sudo mysql.server start
+$ mysql -uroot -p123456
+```
+
+```bash
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.17 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+```
+
+关闭：
+
+```
+Ctrl + D
+
+# or 
+mysql> exit;
+```
+
+查看 MySQL 版本：
+
+```bash
+mysql> select version();
+```
+
+```
++-----------+
+| version() |
++-----------+
+| 8.0.17    |
++-----------+
+1 row in set (0.00 sec)
+```
+
+查看 MySQL 当前用户：
+
+```bash
+mysql> select user();
+```
+
+```
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+```
+
+### 配置
+
+MySQL 配置文件在 `/usr/local/mysql/support-files` 目录下
+
+```bash
+$ cd /etc
+
+$ sudo touch my-default.cnf
+$ sudo chmod -R 777 /etc/my-default.cnf
+$ vim /Users/zfwang/Desktop/my-default.cnf
+```
+
+```
+[mysqld]
+default-storage-engine=INNODB
+character-set-server=utf8
+port = 3306
+
+[client]
+default-character-set=utf8
+```
+
+验证配置：
+
+```bash
+$ mysql -u root -p123456
+$ mysql> show variables like '%char%';
+```
+
+```
++--------------------------+-----------------------------------------------------------+
+| Variable_name            | Value                                                     |
++--------------------------+-----------------------------------------------------------+
+| character_set_client     | utf8mb4                                                   |
+| character_set_connection | utf8mb4                                                   |
+| character_set_database   | utf8mb4                                                   |
+| character_set_filesystem  | binary                                                    |
+| character_set_results    | utf8mb4                                                   |
+| character_set_server     | utf8mb4                                                   |
+| character_set_system     | utf8                                                      |
+| character_sets_dir       | /usr/local/mysql-8.0.17-macos10.14-x86_64/share/charsets/ |
++--------------------------+-----------------------------------------------------------+
+8 rows in set (0.01 sec)
+```
+
+# MySQL 数据类型
+
+* 整数
+    - int： 4 字节
+    - float：  4 字节
+    - double： 8 字节
+* 字符串
+    - char
+    - varchar
+    - binary
+    - blob
+    - text
+    - set
+* 日期时间
+    - year：1 字节
+    - time： (hh:mi:ss) 3 字节
+    - date： (yyyy-mm-dd) 3字节
+    - datetime：(yyyy-mm-dd hh24:mi:ss) 8 字节
+    - timestamp：(yyyy-mm-dd hh24:mi:ss) 4 字节
+* 二进制
+    - bit
+    - binary
+    - blob
+    - longblob
+
+# MySQL 运算符
+
+* 算数运算符：+、-、*、/、%
+* 比较运算符：
+    - `=`
+    - `!=`
+    - `is null`
+    - `is not null`
+    - `in`
+    - LikeRegexp 正则表达式匹配
+* 逻辑运算符
+    - `not`
+    - `and`、`&&`
+    - `or`、`||`
+    - `xor`
+
+
 
 # MySQL 约束
 
@@ -206,6 +607,28 @@ REFERENCES <主表名> (<列名>);
 ```sql
 ALTER TABLE <表名> 
 DROP FOREIGN KEY <外键约束名>;
+```
+
+## 唯一约束
+
+可以通过为表主键添加 `auto_increment` 关键字来实现字段自增；
+默认的初始值是 1，每新增一条记录，字段值加1；一个表只有一个auto_increment约束
+
+可以设置自增长序列的初始值为100：
+
+```bash
+mysql> create table db_test5(
+           id int(11) primary key auto_increment,
+           name varchar(24),
+           deptID int(11), 
+           salary float
+       ) auto_increment=100;
+```
+
+可以设置自增长序列的步长为 40：
+
+```bash
+$ set auto_increment=40
 ```
 
 # MySQL 索引
@@ -447,10 +870,6 @@ DROP INDEX `PRIMARY` ON leads;
 
 SHOW INDEXES FROM leads;
 ```
-
-
-
-
 
 # MySQL 数据库
 
@@ -909,104 +1328,6 @@ FROM payments
 ORDER BY customerNumber;
 ```
 
-# MySQL 安装
-
-## 安装过程省略
-
-* Windows
-* Linux
-* Mac
-
-## 环境变量配置
-
-在终端切换到根目录, 编辑 `~/.zshrc` 或者 `~/.bash_profile`
-
-```bash
-$ cd ~
-$ vim ~/.zshrc
-```
-
-在 `~/.zhsrc` 文件中添加配置项
-
-```bash
-export PATH=$PATH:/usr/local/mysql/bin
-export PATH=$PATH:/usr/local/mysql/support-files
-```
-
-保存并启用配置项
-
-```bash
-:wq
-$ source ~/.zshrc
-$ echo $PATH
-```
-
-## 服务启停和状态查看
-
-```bash
-# 停止 MySQL 服务
-$ sudo mysql.server stop
-# 重启 MySQL 服务
-$ sudo mysql.server restart
-# 查看 MySQL 服务状态
-$ sudo mysql.server status
-```
-
-## 启动 MySQL
-
-```bash
-$ sudo mysql.server start
-$ mysql -u root -p
-```
-
-```bash
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 8
-Server version: 8.0.17 MySQL Community Server - GPL
-
-Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql>
-```
-
-## 初始化设置
-
-设置初始化密码, 进入数据库 MySql 数据库之后执行下面的语句, 
-设置当前 root 用户的密码为 `123456`
-
-```bash
-mysql> set password = password("123456");
-mysql> exit
-```
-
-## 配置
-
-```bash
-$ cd /usr/local/mysql/support-files
-$ cp my-default.cnf /Users/zfwang/Desktop
-$ vim /Users/zfwang/Desktop/my-default.cnf
-
-[mysqld]
-default-storage-engine=INNODB
-character-set-server=utf8
-port = 3306
-
-[client]
-default-character-set=utf8
-
-mv /Users/zfwang/Desktop/my-default.cnf /etc
-```
-
-```bash
-$ mysql -u root -p
-$ mysql> show variables like '%char%';
-```
 
 # MySQL 忘记 root 密码的完美解决方法
 
@@ -1066,4 +1387,5 @@ $ service mysqld restart
 * [关于mysql数据库在输入密码后，滴的一声直接退出界面的解决办法](https://www.2cto.com/database/201412/361751.html)
 * [Ubuntu 16.04安装MySQL及问题解决](https://www.linuxidc.com/Linux/2017-05/143861.htm)
 * [数据库八股文背诵版](https://zhuanlan.zhihu.com/p/366840427)
+* [主流数据库](https://zhuanlan.zhihu.com/p/70361894)
 
