@@ -25,6 +25,7 @@ list_pages: true
 ## 文章
 
 * [计算机视觉学习路线（入门篇）](https://mp.weixin.qq.com/s/CSo8TzC7WjVkPJ2XCI2aCg)
+* [图像识别系统](https://mp.weixin.qq.com/s/QS-yeyTjK_xqleIPsIL3tg)
 
 ## 文档
 

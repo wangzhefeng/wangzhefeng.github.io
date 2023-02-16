@@ -9,38 +9,63 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
-# 1.fastText 简介
+- [fastText 简介](#fasttext-简介)
+  - [快速开始](#快速开始)
+    - [fastText 是什么](#fasttext-是什么)
+    - [fastText 环境依赖](#fasttext-环境依赖)
+    - [fastText 工具库构建](#fasttext-工具库构建)
+- [使用 fastText 进行文本分类](#使用-fasttext-进行文本分类)
+  - [准备文本数据](#准备文本数据)
+  - [构建分类器](#构建分类器)
+- [使用 fastText 进行词表示](#使用-fasttext-进行词表示)
+</p></details><p></p>
 
-- 官网:https://fasttext.cc/
+# fastText 简介
 
-## 1.1 快速开始
+- 官网: https://fasttext.cc/
 
-### 1.1.1 fastText 是什么
+## 快速开始
 
+### fastText 是什么
 
 fastText is a library for efficient learning of **word representations** and **sentence classification**.
 
-### 1.1.2 fastText 环境依赖
+### fastText 环境依赖
 
 - 计算机系统
-
     - macOS
     - Linux
-
 - C++11 编译器
-
     - (gcc-4.6.3 or newer) or (clang-3.3 or newer)
     - make
-
 - Python 依赖
-
     - >=python 2.6
     - numpy
     - scipy
 
-### 1.1.3 fastText 工具库构建
+### fastText 工具库构建
 
 1. 构建 fastText 为一个命令行工具(CLT)
 
@@ -94,7 +119,7 @@ $ pip install
 >>> help(fasttext.FastText)
 ```
 
-# 2.使用 fastText 进行文本分类
+# 使用 fastText 进行文本分类
 
 文本分类可以应用在许多方面:
 
@@ -102,55 +127,57 @@ $ pip install
 - sentiment analysis
 - smart replies
 
-## 2.1 准备文本数据
+## 准备文本数据
 
-- 数据来源: https://cooking.stackexchange.com/
-- 数据描述: 
-    - building a classifier to automatically recognize the topic of a stackexchange question about cooking
-- 数据下载
+数据来源：
+
+* https://cooking.stackexchange.com/
+
+数据描述：
+
+* building a classifier to automatically recognize the topic of a stackexchange question about cooking
+
+数据下载：
 
 ```bash
-
 $ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz
 $ tar xvzf cooking.stackexchange.tar.gz
 $ head cooking.stackexchange.txt
 $ wc cooking.stackexchange.txt
 ```
 
-- 数据格式预览
+数据格式预览：
 
-============================================================================== ==============================================================================
-Label                                                                           document
-============================================================================== ==============================================================================
-__label__sauce __label__cheese                                                 How much does potato starch affect a cheese sauce recipe?
-__label__food-safety __label__acidity                                          Dangerous pathogens capable of growing in acidic environments
-__label__cast-iron __label__stove                                              How do I cover up the white spots on my cast iron stove?
-__label__restaurant                                                            Michelin Three Star Restaurant; but if the chef is not there
-__label__knife-skills __label__dicing                                          Without knife skills, how can I quickly and accurately dice vegetables?
-__label__storage-method __label__equipment __label__bread                      What's the purpose of a bread box?
-__label__baking __label__food-safety __label__substitutions __label__peanuts   how to seperate peanut oil from roasted peanuts at home?
-__label__chocolate                                                             American equivalent for British chocolate terms
-__label__baking __label__oven __label__convection                              Fan bake vs bake
-__label__sauce __label__storage-lifetime __label__acidity __label__mayonnaise  Regulation and balancing of readymade packed mayonnaise and other sauces
-============================================================================== ==============================================================================
+| Label                                                                         |   document | 
+|-------------------------------------------------------------------------------|---------------------------------------------------------------|
+| __label__sauce __label__cheese                                                |  How much does potato starch affect a cheese sauce recipe? | 
+| __label__food-safety __label__acidity                                         |  Dangerous pathogens capable of growing in acidic environments | 
+| __label__cast-iron __label__stove                                             |  How do I cover up the white spots on my cast iron stove? | 
+| __label__restaurant                                                           |  Michelin Three Star Restaurant; but if the chef is not there | 
+| __label__knife-skills __label__dicing                                         |  Without knife skills, how can I quickly and accurately dice vegetables? | 
+| __label__storage-method __label__equipment __label__bread                     |  What's the purpose of a bread box? | 
+| __label__baking __label__food-safety __label__substitutions __label__peanuts  |  how to seperate peanut oil from roasted peanuts at home? | 
+| __label__chocolate                                                            |  American equivalent for British chocolate terms | 
+| __label__baking __label__oven __label__convection                             |  Fan bake vs bake | 
+| __label__sauce __label__storage-lifetime __label__acidity __label__mayonnaise |  Regulation and balancing of readymade packed mayonnaise and other sauces | 
 
-- 数据集分割
+数据集分割：
 
-    - Training dataset
+* Training dataset
 
 ```bash
 $ head -n 12404 cooking.stackexchange.txt > cooking.train
 $ wc cooking.train
 ```
 
-    - validation dataset
+* validation dataset
 
 ```bash
-    $ tail -n 3000 cooking.stackexchange.txt > cooking.valid
-    $ wc cooking.valid
+$ tail -n 3000 cooking.stackexchange.txt > cooking.valid
+$ wc cooking.valid
 ```
 
-## 2.2 构建分类器
+## 构建分类器
 
 - 基本模型
 
@@ -222,7 +249,6 @@ model = fasttext.train_supervised(input = "cooking.train", lr = 1.0, epoch = 25)
 model.test("cooking.valid")
 ```
 
-
 - (4)word n-grams
 
 ```python
@@ -275,5 +301,5 @@ model.predict(
 model.test("cooking.valid", k = -1)
 ```
 
-# 3.使用 fastText 进行词表示
+# 使用 fastText 进行词表示
 

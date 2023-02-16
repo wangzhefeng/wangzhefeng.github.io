@@ -9,11 +9,50 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
-# 1.Gensim 简介
+- [Gensim 简介](#gensim-简介)
+  - [Gensim 简介](#gensim-简介-1)
+  - [Demo](#demo)
+- [Gensim 安装](#gensim-安装)
+  - [Gensim 安装](#gensim-安装-1)
+  - [Gensim 依赖](#gensim-依赖)
+- [Gensim 使用](#gensim-使用)
+  - [Gensim 中常用核心概念](#gensim-中常用核心概念)
+    - [Document](#document)
+    - [Corpus](#corpus)
+    - [Vector](#vector)
+    - [Model](#model)
+  - [语料(Corpora)和词空间(Vector Spaces)](#语料corpora和词空间vector-spaces)
+  - [主题(Topics)和转换(Transformations)](#主题topics和转换transformations)
+  - [相似性查询(Similarity Queries)](#相似性查询similarity-queries)
+  - [常用教程](#常用教程)
+- [Gensim 常用 API](#gensim-常用-api)
+</p></details><p></p>
 
-## 1.1 Gensim 简介
+# Gensim 简介
+
+## Gensim 简介
 
 - Gensim is a Free python library
 - Gensim is a topic modelling for humans
@@ -28,8 +67,7 @@ tags:
     - open source
     - ready-to-use models and corpora
 
-## 1.2 Demo
-
+## Demo
 
 ```python
 from gensim import corpora, models, similarities, downloader
@@ -47,10 +85,9 @@ index = similarities.MatrixSimilarity(lsi[another_corpus])
 sims = index[query]
 ```
 
-# 2.Gensim 安装
+# Gensim 安装
 
-## 2.1 Gensim 安装
-
+## Gensim 安装
 
 ```bash
 $ pip install --upgrade gensim
@@ -58,21 +95,19 @@ $ pip install --upgrade gensim
 $ conda install -c conda-forge gensim
 ```
 
-## 2.2 Gensim 依赖
+## Gensim 依赖
 
 - Python 3.6, 3.7, 3.8
 - Numpy
 - smart_open: 用于打开远程存储库中的文件或压缩文件
 
-# 3.Gensim 使用
-
+# Gensim 使用
 
 ```python
 import  pprint
 ```
 
-## 3.1 Gensim 中常用核心概念
-
+## Gensim 中常用核心概念
 
 ``gensim`` 的核心概念:
 
@@ -81,25 +116,20 @@ import  pprint
 - Vector
 - Model
 
-### 3.1.1 Document
-
+### Document
 
 ```python
 document = "Human machine interface for lab abc computer applications"
 ```
 
-### 3.1.2 Corpus
-
+### Corpus
 
 一个 ``Corpus`` 是一系列 ``Document`` 对象的集合，Corpora 在 Gensim 中提供了两个角色:
 
-- 1.``Model`` 训练的输入. 在训练期间，模型会使用该训练语料库来查找常见的主题和主题，从而初始化其内部模型参数
-
-  - Gensim 专注于无监督模型，因此不需要人工干预，例如昂贵的注释或手工标记文档.
-
-- 2.整理好的 ``Document``. 训练后，可以使用主题模型从新文档(训练语料库中未显示的文档)中提取主题
-
-  - 可以为此类语料库索引 **相似性查询**，通过语义相似性查询，聚类等
+1. ``Model`` 训练的输入. 在训练期间，模型会使用该训练语料库来查找常见的主题和主题，从而初始化其内部模型参数
+    - Gensim 专注于无监督模型，因此不需要人工干预，例如昂贵的注释或手工标记文档.
+2. 整理好的 ``Document``. 训练后，可以使用主题模型从新文档(训练语料库中未显示的文档)中提取主题
+    - 可以为此类语料库索引 **相似性查询**，通过语义相似性查询，聚类等
 
 ```python
 from gensim import corpora, models, similarities, downloader
@@ -139,18 +169,14 @@ dictionary = corpora.Dictionary(processed_corpus)
 print(dictionary)
 ```
 
-### 3.1.3 Vector
+### Vector
 
 为了推断语料库中的潜在结构，需要可以表示文档的数学处理方式:
 
 - 方法 1: 将文档表示为 **特征向量**
-
     - 密集向量
-
 - 方法 2: 词袋模型
-
     - 稀疏向量/词袋向量
-
 
 ```python
 pprint.pprint(dictionary.token2id)
@@ -158,18 +184,17 @@ pprint.pprint(dictionary.token2id)
 
 使用 `doc2bow` 为文档创建单词袋表示法:
 
-
 ```python
 new_doc = "Human computer interaction"
 new_vec = dictionary.doc2bow(new_doc.lower().split())
 print(new_vec)
 ```
 
-### 3.1.4 Model
+### Model
 
 常用模型:
 
-    - tf-idf
+- tf-idf
 
 ```python
 from gensim import models
@@ -182,29 +207,13 @@ words = "system minors".lower().split()
 print(tfidf[dictionary.doc2bow(words)])
 ```
 
+## 语料(Corpora)和词空间(Vector Spaces)
 
-## 3.2 语料(Corpora)和词空间(Vector Spaces)
+## 主题(Topics)和转换(Transformations)
 
+## 相似性查询(Similarity Queries)
 
+## 常用教程
 
-
-
-## 3.3 主题(Topics)和转换(Transformations)
-
-
-
-
-## 3.4 相似性查询(Similarity Queries)
-
-
-
-
-## 3.5 常用教程
-
-
-
-
-
-# 4.Gensim 常用 API
-
+# Gensim 常用 API
 

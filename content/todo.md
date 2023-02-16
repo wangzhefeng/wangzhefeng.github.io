@@ -26,6 +26,7 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [TODO](#todo)
+  - [NAS](#nas)
   - [Timeseries](#timeseries)
   - [Deeplearning](#deeplearning)
   - [Tools](#tools)
@@ -35,6 +36,10 @@ details[open] summary {
 </p></details><p></p>
 
 ## TODO
+
+### NAS
+
+* [搭建私有云](https://mp.weixin.qq.com/s/E9rrjGtV5RJwxvtICgrOxQ)
 
 ### Timeseries
 
@@ -54,8 +59,6 @@ details[open] summary {
 
 * [ ] feedly 查看 https://feedly.com/i/welcome
 * [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
-
-
 
 ### Audio
 

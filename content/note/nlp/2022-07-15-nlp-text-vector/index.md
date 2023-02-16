@@ -36,8 +36,24 @@ details[open] summary {
 - [为词向量模型建立词汇表](#为词向量模型建立词汇表)
 - [离散表示](#离散表示)
   - [One-Hot Representation](#one-hot-representation)
+    - [One-Hot 算法简介](#one-hot-算法简介)
+    - [One-hot 的优、缺点](#one-hot-的优缺点)
+    - [One-Hot 算法示例](#one-hot-算法示例)
+    - [One-Hot 算法 Python 实现](#one-hot-算法-python-实现)
   - [词袋模型(Bag of Word)](#词袋模型bag-of-word)
+    - [词袋模型算法](#词袋模型算法)
+    - [词袋模型示例](#词袋模型示例)
+    - [词袋模型优缺点](#词袋模型优缺点)
+    - [词袋模型 Python 实现](#词袋模型-python-实现)
+  - [Bi-gram、N-gram](#bi-gramn-gram)
+    - [Bi-gram、N-gram 算法简介](#bi-gramn-gram-算法简介)
+    - [Bi-gram、N-gram 算法示例](#bi-gramn-gram-算法示例)
+    - [Bi-gram、N-gram 算法 Python 实现](#bi-gramn-gram-算法-python-实现)
   - [TF-IDF](#tf-idf)
+    - [TF-IDF 算法简介](#tf-idf-算法简介)
+    - [TF-IDF 算法优缺点](#tf-idf-算法优缺点)
+    - [TF-IDF 算法 Python 实现](#tf-idf-算法-python-实现)
+  - [共现矩阵(Co-currence Matrix)](#共现矩阵co-currence-matrix)
   - [Count Vector](#count-vector)
 - [分布式表示](#分布式表示)
   - [Word Embedding 简介](#word-embedding-简介)
@@ -134,8 +150,8 @@ NLP 相关任务中最常见的第一步是创建一个 **词表库** 并把每�
 
 ## One-Hot Representation
 
-- One-Hoe 算法简介
-- 
+### One-Hot 算法简介
+
 熟悉机器学习中分类变量的处理方法的同学对此一定很熟悉, 无序的分类变量是不能直接硬编码为数字放入模型中的, 
 因为模型会自动认为其数值之间存在可比性, 通常对于分类变量我们需要进行 one-hot 编码。
 那么如何应用 one-hot 编码进行词汇表征呢？假设我们有一个包括 10000 个单词的词汇表, 
@@ -153,14 +169,17 @@ NLP 相关任务中最常见的第一步是创建一个 **词表库** 并把每�
 模型仍然不会猜出目标词是 juice。因为基于 one-hot的表征方法使得算法并不知道 apple 和 orange 之间的相似性, 
 这主要是因为任意两个向量之间的内积都为零, 很难区分两个单词之间的差别和联系。
 
-- One-hot 的优、缺点
+### One-hot 的优、缺点
 
 - 优点:简单快捷
-- 缺点:数据稀疏、耗时耗空间、不能很好地展示词与词之间的相似关系, 且还未考虑到词出现的频率, 因而无法区别词的重要性
+- 缺点:数据稀疏、耗时耗空间、不能很好地展示词与词之间的相似关系, 
+  且还未考虑到词出现的频率, 因而无法区别词的重要性
+    - One-hot 的第一个问题是: One-hot 的基本假设是词之间的语义和语法关系是相互独立的, 
+      仅仅从两个向量是无法看出两个词汇之间的关系的, 这种独立性不适合词汇语义的运算; 
+    - One-hot 的第二个问题是:维度爆炸问题, 随着词典规模的增大, 句子构成的词袋模型的维度变得越来越大, 
+      矩阵也变得超稀疏, 这种维度的爆增, 会大大耗费计算资源
 
-    - One-hot 的第一个问题是:One-hot 的基本假设是词之间的语义和语法关系是相互独立的, 仅仅从两个向量是无法看出两个词汇之间的关系的, 这种独立性不适合词汇语义的运算; 
-    - One-hot 的第二个问题是:维度爆炸问题, 随着词典规模的增大, 句子构成的词袋模型的维度变得越来越大, 矩阵也变得超稀疏, 这种维度的爆增, 会大大耗费计算资源。
-- One-Hot 算法示例
+### One-Hot 算法示例
 
 1. 文本语料
 
@@ -218,7 +237,7 @@ Mary:     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 too:      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
-- One-Hot 算法 Python 实现
+### One-Hot 算法 Python 实现
 
 ```python
 import os
@@ -270,128 +289,123 @@ from sklearn import DictVectorizer
 
 ## 词袋模型(Bag of Word)
 
+### 词袋模型算法
 
-- 词袋模型算法
+- 对于句子、篇章, 常用的离散表示方法是词袋模型, 词袋模型以 One-Hot 为基础, 忽略词表中词的顺序和语法关系, 
+  通过记录词表中的每一个词在该文本中出现的频次来表示该词在文本中的重要程度, 解决了 One-Hot 未能考虑词频的问题
+- 词袋(Bag Of Word) 模型是最早的以词语为基本单元的文本向量化方法。词袋模型, 也称为计数向量表示(Count Vectors).
+  文档的向量表示可以直接使用单词的向量进行求和得到
 
-   - 对于句子、篇章, 常用的离散表示方法是词袋模型, 词袋模型以 One-Hot 为基础, 忽略词表中词的顺序和语法关系, 
-     通过记录词表中的每一个词在该文本中出现的频次来表示该词在文本中的重要程度, 解决了 One-Hot 未能考虑词频的问题
-   - 词袋(Bag Of Word) 模型是最早的以词语为基本单元的文本向量化方法。词袋模型, 也称为计数向量表示(Count Vectors).
-     文档的向量表示可以直接使用单词的向量进行求和得到
+### 词袋模型示例
 
-- 词袋模型示例
+文本语料
 
-   1. 文本语料
+```python
+John likes to watch movies, Mary likes too.
+John also likes to watch football games.
+```
 
-      ```python
-        
-         John likes to watch movies, Mary likes too.
-         John also likes to watch football games.
-        ```
-    
-   2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
+基于上述两个文档中出现的单词, 构建如下词典(dictionary)
 
-      ```python
+```python
+{
+    "John": 1, 
+    "likes": 2,
+    "to": 3,
+    "watch": 4,
+    "movies": 5,
+    "also": 6,
+    "football": 7,
+    "games": 8,
+    "Mary": 9,
+    "too": 10,
+}
+```
 
-         {
-            "John": 1, 
-            "likes": 2,
-            "to": 3,
-            "watch": 4,
-            "movies": 5,
-            "also": 6,
-            "football": 7,
-            "games": 8,
-            "Mary": 9,
-            "too": 10,
-         }
-        ```
-   3. 上面词典中包含 10 个单词, 每个单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
+上面词典中包含 10 个单词, 每个单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
 
-      ```python
+```python
+John likes to watch movies, Mary likes too.  ->  [1, 2, 1, 1, 1, 0, 0, 0, 1, 1]
+John also likes to watch football games.     ->  [1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
+```
 
-         John likes to watch movies, Mary likes too.  ->  [1, 2, 1, 1, 1, 0, 0, 0, 1, 1]
-         John also likes to watch football games.     ->  [1, 1, 1, 1, 0, 1, 1, 1, 0, 0]
+| 文本        | John | likes | to |  watch  | movies  | also  | football  | games  | Mary | too | 
+| ---------------------------------------------| -----|-------|---|------|-------|-----|---------|------|-----|----|
+| John likes to watch movies, Mary likes too.  | [1,    | 2,     | 1,  | 1,    | 1,     | 0,    |0,       | 0,     |1,    | 1] | 
+| John also likes to watch football games.     | [1,   |  1,    |  1, |  1,   |  0,    |  1,   | 1,      |  1,    | 0,   |  0] |
 
-      ============================================= ====== ====== === ====== ======= ===== ========= ====== ===== ====
-       文本                                          John   likes  to  watch  movies  also  football  games  Mary  too
-      ============================================= ====== ====== === ====== ======= ===== ========= ====== ===== ====
-       John likes to watch movies, Mary likes too.  [1,    2,     1,  1,     1,      0,    0,        0,     1,    1]
-       John also likes to watch football games.     [1,    1,     1,  1,     0,      1,    1,        1,     0,    0]
-      ============================================= ====== ====== === ====== ======= ===== ========= ====== ===== ====
 
-      - 横向来看, 把每条文本表示成了一个向量
-      - 纵向来看, 不同文档中单词的个数又可以构成某个单词的词向量, 如: "John" 纵向表示成 `[1, 1]`
+- 横向来看, 把每条文本表示成了一个向量
+- 纵向来看, 不同文档中单词的个数又可以构成某个单词的词向量, 如: "John" 纵向表示成 `[1, 1]`
 
-   4. 词袋模型优缺点
+### 词袋模型优缺点
 
-      - 优点:
+- 优点:
+    - 方法简单, 当语料充足时, 处理简单的问题如文本分类, 其效果比较好
+- 缺点:
+    - 数据稀疏、维度大
+    - 无法保留词序信息
+    - 存在语义鸿沟的问题
 
-         - 方法简单, 当语料充足时, 处理简单的问题如文本分类, 其效果比较好
+### 词袋模型 Python 实现
 
-      - 缺点:
+```python
+from sklearn import CountVectorizer
 
-         - 数据稀疏、维度大
-         - 无法保留词序信息
-         - 存在语义鸿沟的问题
+count_vect = CountVectorizer(analyzer = "word")
 
-- 词袋模型 Python 实现
+# 假定已经读进来 DataFrame, "text"列为文本列
+count_vect.fit(trainDF["text"])
 
-   ```python
-
-      from sklearn import CountVectorizer
-      
-      count_vect = CountVectorizer(analyzer = "word")
-      
-      # 假定已经读进来 DataFrame, "text"列为文本列
-      count_vect.fit(trainDF["text"])
-
-      # 每行为一条文本, 此句代码基于所有语料库生成单词的词典
-      xtrain_count = count_vect.transform(train_x)
-    ```
+# 每行为一条文本, 此句代码基于所有语料库生成单词的词典
+xtrain_count = count_vect.transform(train_x)
+```
 
 ## Bi-gram、N-gram
 
-- Bi-gram、N-gram 算法简介
-    - 与词袋模型原理类似, Bi-gram 将相邻两个词编上索引, N-gram 将相邻 N 个词编上索引
-- Bi-gram、N-gram 算法示例
+### Bi-gram、N-gram 算法简介
 
-   1. 文本语料
+与词袋模型原理类似, Bi-gram 将相邻两个词编上索引, N-gram 将相邻 N 个词编上索引
 
-    ```python
-    John likes to watch movies, Mary likes too.
-    John also likes to watch football games.
-    ```
+### Bi-gram、N-gram 算法示例
 
-   2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
+1. 文本语料
 
-    ```python
-    {
-        "John likes": 1,
-        "likes to": 2,
-        "to watch": 3,
-        "watch movies": 4,
-        "Mary likes": 5,
-        "likes too": 6,
-        "John also": 7,
-        "also likes": 8,
-        "watch football": 9,
-        "football games": 10,
-    }
-    ```
+```python
+John likes to watch movies, Mary likes too.
+John also likes to watch football games.
+```
 
-   3. 上面词典中包含 10 组单词, 每组单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
+2. 基于上述两个文档中出现的单词, 构建如下词典(dictionary)
 
-    ```python
-    John likes to watch movies. Mary likes too.  -> [1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
-    John also likes to watch football games.     -> [0, 1, 1, 0, 0, 0, 1, 1, 1, 1]
-    ```
+```python
+{
+    "John likes": 1,
+    "likes to": 2,
+    "to watch": 3,
+    "watch movies": 4,
+    "Mary likes": 5,
+    "likes too": 6,
+    "John also": 7,
+    "also likes": 8,
+    "watch football": 9,
+    "football games": 10,
+}
+```
 
-   4. Bi-gram、N-gram 优点
-      - 考虑了词的顺序
-   5. Bi-gram、N-gram 缺点
-      - 词向量急剧膨胀
+3. 上面词典中包含 10 组单词, 每组单词有唯一的索引, 那么每个文本可以使用一个 10 维的向量来表示:
 
-- Bi-gram、N-gram 算法 Python 实现
+```python
+John likes to watch movies. Mary likes too.  -> [1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
+John also likes to watch football games.     -> [0, 1, 1, 0, 0, 0, 1, 1, 1, 1]
+```
+
+4. Bi-gram、N-gram 优点
+  - 考虑了词的顺序
+5. Bi-gram、N-gram 缺点
+  - 词向量急剧膨胀
+
+### Bi-gram、N-gram 算法 Python 实现
 
 ```python
 from . import .
@@ -399,65 +413,61 @@ from . import .
 
 ## TF-IDF
 
-- TF-IDF 算法简介
+### TF-IDF 算法简介
 
-   - TF-IDF(词频-逆文档频率法, Term Frequency-Inverse Document Frequency) 作为一种加权方法, 
-     TF-IDF 在词袋模型的基础上对次出现的频次赋予 TF-IDF 权值, 对词袋模型进行修正, 进而表示该词在文档集合中的重要程度
+TF-IDF(词频-逆文档频率法, Term Frequency-Inverse Document Frequency) 作为一种加权方法, 
+TF-IDF 在词袋模型的基础上对次出现的频次赋予 TF-IDF 权值, 对词袋模型进行修正, 进而表示该词在文档集合中的重要程度
       
-      - 统计各词在文档中的 TF-IDF 值(词袋模型 + IDF 值)
-      - 词袋模型、Bi-gram、N-gram 都是基于计数得到的, 而 TF-IDF 则是基于频率统计得到的
-      - 在利用 TF-IDF 进行特征提取时, 若词 α 在某篇文档中出现频率较高且在其他文档中出现频率较低时, 
-        则认为α可以代表该文档的特征, 具有较好的分类能力, 那么α作为特征被提取出来
+- 统计各词在文档中的 TF-IDF 值(词袋模型 + IDF 值)
+- 词袋模型、Bi-gram、N-gram 都是基于计数得到的, 而 TF-IDF 则是基于频率统计得到的
+- 在利用 TF-IDF 进行特征提取时, 若词 α 在某篇文档中出现频率较高且在其他文档中出现频率较低时, 
+  则认为α可以代表该文档的特征, 具有较好的分类能力, 那么α作为特征被提取出来
+ 
+TF-IDF 的分数代表了词语在当前文档和整个语料库中的相对重要性。TF-IDF 分数由两部分组成
+
+TF(Term Frequency): 词语频率
+
+`$$TF(t) = \frac{词语在当前文档出现的次数}{当前文档中词语的总数}$$`
+
+- TF 判断的是该字/词语是否是当前文档的重要词语, 但是如果只用词语出现频率来判断其是否重要可能会出现一个问题, 
+  就是有些通用词可能也会出现很多次, 如:a、the、at、in 等, 当然一般我们会对文本进行预处理时去掉这些所谓的停用词(stopwords), 
+  但是仍然会有很多通用词无法避免地出现在很多文档中, 而其实它们不是那么重要
+
+
+IDF(Inverse Document Frequency):逆文档频率
+
+`$$IDF(t) = log_{e} \Big(\frac{文档总数}{出现该词语的文档总数} \Big)$$`
    
-   - TF-IDF 的分数代表了词语在当前文档和整个语料库中的相对重要性。TF-IDF 分数由两部分组成
+- IDF 用于判断是否在很多文档中都出现了词词语, 即很多文档或所有文档中都出现的就是通用词。
+  出现该词语的文档越多, IDF 越小, 其作用是抑制通用词的重要性
 
-      - TF(Term Frequency):词语频率
+将上述求出的 TF 和 IDF 相乘得到的分数 TF-IDF, 就是词语在当前文档和整个语料库中的相对重要性。
+TF-IDF 与一个词在当前文档中出现次数成正比, 与该词在整个语料库中的出现次数成反比
 
-            `$$TF(t) = \frac{词语在当前文档出现的次数}{当前文档中词语的总数}$$`
-         
-         - TF 判断的是该字/词语是否是当前文档的重要词语, 但是如果只用词语出现频率来判断其是否重要可能会出现一个问题, 
-           就是有些通用词可能也会出现很多次, 如:a、the、at、in 等, 当然一般我们会对文本进行预处理时去掉这些所谓的停用词(stopwords), 
-           但是仍然会有很多通用词无法避免地出现在很多文档中, 而其实它们不是那么重要
+### TF-IDF 算法优缺点
 
-      - IDF(Inverse Document Frequency):逆文档频率
+- 优点:
+    - 简单快速, 结果比较符合实际情况
+- 缺点:
+    - 单纯以"词频"衡量一个词的重要性, 不够全面, 有时重要的词可能出现次数并不多
+    - 无法体现词的位置信息, 出现位置靠前的词与出现位置靠后的词, 都被视为重要性相同, 这是不正确的
 
-            `$$IDF(t) = log_{e} \Big(\frac{文档总数}{出现该词语的文档总数} \Big)$$`
+### TF-IDF 算法 Python 实现
 
-         - IDF 用于判断是否在很多文档中都出现了词词语, 即很多文档或所有文档中都出现的就是通用词。
-           出现该词语的文档越多, IDF 越小, 其作用是抑制通用词的重要性
+```python
+from sklearn import TfidfVectorizer
+from sklearn import HashingVectorizer
 
-      - 将上述求出的 TF 和 IDF 相乘得到的分数 TF-IDF, 就是词语在当前文档和整个语料库中的相对重要性
-      - TF-IDF 与一个词在当前文档中出现次数成正比, 与该词在整个语料库中的出现次数成反比
+# word level tf-idf
+tfidf_vect = TfidfVectorizer(analyzer = "word", token_pattern = r"\w{1,}", max_features = 5000)
+tfidf_vect.fit(trianDF["text"])
+xtrain_tfidf = tfidf_vect.transform(train_x)
 
-- TF-IDF 算法优缺点
-
-   - 优点:
-      
-      - 简单快速, 结果比较符合实际情况
-   
-   - 缺点:
-      
-      - 单纯以"词频"衡量一个词的重要性, 不够全面, 有时重要的词可能出现次数并不多
-      - 无法体现词的位置信息, 出现位置靠前的词与出现位置靠后的词, 都被视为重要性相同, 这是不正确的
-
-- TF-IDF 算法 Python 实现
-
-   ```python
-
-      from sklearn import TfidfVectorizer
-      from sklearn import HashingVectorizer
-
-      # word level tf-idf
-      tfidf_vect = TfidfVectorizer(analyzer = "word", token_pattern = r"\w{1,}", max_features = 5000)
-      tfidf_vect.fit(trianDF["text"])
-      xtrain_tfidf = tfidf_vect.transform(train_x)
-
-      # n-gram level tf-idf
-      tfidf_vect_ngram = TfidfVectorizer(analyzer = "word", token_pattern = r"\w{1,}", ngram_ragne(2, 3), max_features = 5000)
-      tfidf_vect_ngram.fit(trainDF["text"])
-      xtrain_tfidf = tfidf_vect.transform(train_x)
-    ```
-
+# n-gram level tf-idf
+tfidf_vect_ngram = TfidfVectorizer(analyzer = "word", token_pattern = r"\w{1,}", ngram_ragne(2, 3), max_features = 5000)
+tfidf_vect_ngram.fit(trainDF["text"])
+xtrain_tfidf = tfidf_vect.transform(train_x)
+```
 
 ## 共现矩阵(Co-currence Matrix)
 
@@ -845,14 +855,14 @@ GloVe 词向量模型基本步骤如下:
     - 其中, 加权函数 `$f` 可以帮助我们避免只学习到一个常见词的词向量模型,  `$f` 函数的选择原则在于既不给常见词(this/of/and)以过分的权重, 
     也不回给一些不常见词(durion)太小的权重, 参考形式如下:
 
-        `$$\begin{split}
-        f(X_{ij})= \left \{
-        \begin{array}{rcl}
-        (\frac{X_{ij}}{x_{max}})^{\alpha}, & & {如果 X_{ij} < x_{max}} \\
-        1,                                 & & {否则}                  \\
-        \end{array}
-        \right.
-        \end{split}$$`
+    `$$\begin{split}
+    f(X_{ij})= \left \{
+    \begin{array}{rcl}
+    (\frac{X_{ij}}{x_{max}})^{\alpha}, & & {如果 X_{ij} < x_{max}} \\
+    1,                                 & & {否则}                  \\
+    \end{array}
+    \right.
+    \end{split}$$`
 
 - 4.计算余弦相似度
 

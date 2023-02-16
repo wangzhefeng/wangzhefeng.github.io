@@ -9,6 +9,35 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [Bag of Words](#bag-of-words)
+- [Sparsity](#sparsity)
+- [Common Vectorizer usage](#common-vectorizer-usage)
+- [TF-IDF term weighting](#tf-idf-term-weighting)
+- [Decoding text files](#decoding-text-files)
+</p></details><p></p>
+
 - feature_extraction.text.CountVectorizer
 - feature_extraction.text.HasingVectorizer
 - feature_extraction.text.TfidfTransformer
