@@ -9,6 +9,36 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [什么是 NLP?](#什么是-nlp)
+  - [NLP 的概念](#nlp-的概念)
+  - [NLP 的研究任务](#nlp-的研究任务)
+- [NLP 相关知识的构成](#nlp-相关知识的构成)
+- [NLP 的三个层面](#nlp-的三个层面)
+- [NLP 常用语料库](#nlp-常用语料库)
+</p></details><p></p>
+
 自然语言处理是人工智能和语言学领域的分支学科。此领域探讨如何处理及运用自然语言。
 自然语言处理包括多方面和步骤, 基本有认知、理解、生成等部分
 
