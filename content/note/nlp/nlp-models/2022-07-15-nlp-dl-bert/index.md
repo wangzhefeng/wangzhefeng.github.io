@@ -31,6 +31,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [BERT 介绍](#bert-介绍)
   - [BERT 简介](#bert-简介)
   - [BERT](#bert)
@@ -46,6 +47,15 @@ details[open] summary {
     - [调用 BERT 进行应用](#调用-bert-进行应用)
 - [参考](#参考)
 </p></details><p></p>
+
+# TODO
+
+* [万字长文带你纵览 BERT 家族](https://mp.weixin.qq.com/s/ejWRhjYDFSNkAVMyMzwpOQ)
+* [Bert系列之模型参数计算](https://mp.weixin.qq.com/s/D7T0Pdqr01viicJfAWdIMQ)
+- [BERT代码从零解读](https://mp.weixin.qq.com/s/vUcryYyedxlbe0WhAOZhIA)
+- https://mp.weixin.qq.com/s/HHVMYv66nJ_vHZgit81gdQ
+* [BERT meet Knowledge Graph：预训练模型与知识图谱相结合的研究进展](https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652088025&idx=4&sn=909d52eada0f70bf4826bb218d3291ad&chksm=f120d228c6575b3e1e4c28dfbba41cac4e3db300efe546e05977b7b90742d00f4afe963c0ae6&mpshare=1&scene=1&srcid=12010etKB71ivFrNo8lrZknY&sharer_sharetime=1606810826557&sharer_shareid=d02c7b7d24f901d5f03e661b5ee5c1e5&version=3.0.36.6180&platform=mac#rd)
+* [技术详解：BERT的分词预处理、输入Embedding、中间编码与输出向量解析](https://mp.weixin.qq.com/s/LglV7qE5vP9hmDL2azvnfg)
 
 # BERT 介绍
 
@@ -140,6 +150,5 @@ print(vec)
 
 # 参考
 
-- https://mp.weixin.qq.com/s/vUcryYyedxlbe0WhAOZhIA
-- https://mp.weixin.qq.com/s/HHVMYv66nJ_vHZgit81gdQ
+
 

@@ -31,6 +31,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [图像数据不足时的处理方法](#图像数据不足时的处理方法)
   - [基于模型的方法](#基于模型的方法)
   - [基于数据的方法](#基于数据的方法)
@@ -70,6 +71,10 @@ details[open] summary {
   - [改变图像亮度、清晰度、对比度、锐度](#改变图像亮度清晰度对比度锐度)
 - [参考](#参考)
 </p></details><p></p>
+
+# TODO
+
+* [AugMix：我比MixUp要强！](https://mp.weixin.qq.com/s/M6UU8xAFPgxolSS-oPE3dw)
 
 # 图像数据不足时的处理方法
 

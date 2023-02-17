@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-12-02'
 slug: dl-rnn-text-generation
 categories:
-  - deeplearning
+  - nlp
 tags:
   - model
 ---

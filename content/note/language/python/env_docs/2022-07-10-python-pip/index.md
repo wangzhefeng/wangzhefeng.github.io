@@ -35,6 +35,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [pip 介绍](#pip-介绍)
 - [pip 安装](#pip-安装)
   - [Install with get-pip.py](#install-with-get-pippy)
@@ -56,6 +57,9 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
+# TODO
+
+* [关于 pip 的 15 个使用小技巧](https://mp.weixin.qq.com/s/2pxwZ15rA9wv9urPiOCuDg)
 
 # pip 介绍
 

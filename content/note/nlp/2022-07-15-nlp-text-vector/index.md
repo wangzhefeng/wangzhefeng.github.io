@@ -31,6 +31,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [概述](#概述)
   - [词汇表征](#词汇表征)
 - [为词向量模型建立词汇表](#为词向量模型建立词汇表)
@@ -87,6 +88,13 @@ details[open] summary {
         - [fasttext 的 Python 实现](#fasttext-的-python-实现)
 - [参考文献](#参考文献)
 </p></details><p></p>
+
+
+# TODO
+
+* [词向量最强面经](https://mp.weixin.qq.com/s/llMhdDosePtzqujtlqCy1w)
+* [白话文讲解Word2Vec](https://mp.weixin.qq.com/s/JtqepPGCFUiHIrgZnrcJ4g)
+* [秒懂词向量Word2vec的本质](https://zhuanlan.zhihu.com/p/26306795)
 
 # 概述
 

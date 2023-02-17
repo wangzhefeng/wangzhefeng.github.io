@@ -32,6 +32,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [GNN 解决什么问题](#gnn-解决什么问题)
 - [图](#图)
   - [图介绍](#图介绍)
@@ -46,6 +47,10 @@ details[open] summary {
   - [图表示实现](#图表示实现)
 - [参考](#参考)
 </p></details><p></p>
+
+# TODO
+
+* [终于有人总结了图神经网络](https://mp.weixin.qq.com/s/HDXfbP7jZp3qONKFcmrTbA)
 
 # GNN 解决什么问题
 

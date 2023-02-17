@@ -31,16 +31,22 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [GAN](#gan)
 - [DCGAN](#dcgan)
 - [InfoGAN](#infogan)
 - [WGAN](#wgan)
-- [WGAN_GP](#wgan_gp)
+- [WGAN\_GP](#wgan_gp)
 - [GAN 生成式对抗网络介绍](#gan-生成式对抗网络介绍)
   - [GAN 的核心思想和基本原理](#gan-的核心思想和基本原理)
   - [DCGAN 深度卷积对抗网络](#dcgan-深度卷积对抗网络)
   - [Keras 搭建一个 DCGAN](#keras-搭建一个-dcgan)
 </p></details><p></p>
+
+# TODO
+
+* [GANs的优化函数与完整损失函数计算](https://mp.weixin.qq.com/s/MZdNBamuqBN_i0-V_GwZqw)
+
 
 # GAN
 

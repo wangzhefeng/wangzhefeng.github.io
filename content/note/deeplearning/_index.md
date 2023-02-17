@@ -29,4 +29,8 @@ list_pages: true
 * DIN
 * DIEN
 
+## 文章
+
+* [Horovod分布式计算原理与代码实现](https://mp.weixin.qq.com/s/wNeCGMSRF0jg7yNJ_s6dWw)
+
 ## 文档

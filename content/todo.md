@@ -31,7 +31,6 @@ details[open] summary {
   - [Deeplearning](#deeplearning)
   - [Tools](#tools)
   - [Audio](#audio)
-  - [Image Detection](#image-detection)
 - [Schedule](#schedule)
 </p></details><p></p>
 
@@ -43,33 +42,20 @@ details[open] summary {
 
 ### Timeseries
 
-* [ ] AutoTS 源码、文档阅读 
-* [ ] Darts 库源码、文档阅读
-* [ ] Kats 库
-* [ ] PyOD 库
 
 ### Deeplearning
 
-* [ ] PyTorch
-    - [ ] Env 熟悉和完善 
-    - [ ] Docker 安装(软件)
-    - [ ] PyTorch Pipeline 完善
 
 ### Tools
 
-* [ ] feedly 查看 https://feedly.com/i/welcome
 * [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
+* [分布式统计计算方法简介](https://mp.weixin.qq.com/s/OOpjBBLVqg77Ao9s6KZ5vg)
 
 ### Audio
 
 * [ ] Audio-librosa
 * [ ] Audio-scipy
 
-### Image Detection
-
-* [ ] [使用 CV2 和 Keras OCR 从图像中删除文本](https://mp.weixin.qq.com/s/I1_2xGMGxBkUK7gMyrE9gQ) 
-    - [ ] [Keras OCR](https://keras-ocr.readthedocs.io/en/latest/examples/index.html)
-    - [ ] [OpenCV](https://opencv24-python-tutorials.readthedocs.io/en/latest/index.html)
 
 ## Schedule
 

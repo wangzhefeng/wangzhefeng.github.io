@@ -31,8 +31,14 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [AutoEncoder 自编码器](#autoencoder-自编码器)
 </p></details><p></p>
+
+# TODO
+
+* [深入理解生成模型VAE](https://mp.weixin.qq.com/s/exaBFn4cjedwDVbGKC-UUw)
+
 
 # AutoEncoder 自编码器
 

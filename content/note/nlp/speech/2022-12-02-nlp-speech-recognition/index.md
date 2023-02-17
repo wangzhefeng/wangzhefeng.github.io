@@ -4,10 +4,14 @@ author: 王哲峰
 date: '2022-12-02'
 slug: dl-rnn-speech-recognition
 categories:
-  - deeplearning
+  - nlp
 tags:
   - model
 ---
+
+# TODO
+
+* [语音识别](https://mp.weixin.qq.com/s?__biz=MzA5MjEyMTYwMg==&mid=2650243458&idx=1&sn=ca710d875a71f8e1287a00103efb9d61&chksm=8872deefbf0557f91878516d9cd765849a2594fa7f4baeffd2181d4f70fbae7fc94586b8f22d&scene=21#wechat_redirect)
 
 # 语音数据的表示方式
 

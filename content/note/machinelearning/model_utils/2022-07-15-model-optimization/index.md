@@ -31,6 +31,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [神经网络模型学习算法优化](#神经网络模型学习算法优化)
   - [经验风险最小化](#经验风险最小化)
   - [代理损失函数和提前终止](#代理损失函数和提前终止)
@@ -88,6 +89,11 @@ details[open] summary {
     - [Nadam 的优缺点](#nadam-的优缺点)
 - [参考资料](#参考资料)
 </p></details><p></p>
+
+# TODO
+
+* [从梯度下降到 Adam！一文看懂各种神经网络优化算法](https://mp.weixin.qq.com/s/5ceSksIGl4Z2_vv3rdlG1w)
+
 
 # 神经网络模型学习算法优化
 

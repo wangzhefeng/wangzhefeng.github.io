@@ -41,6 +41,7 @@ details[open] summary {
 # TODO
 
 * [文本分类算法综述](https://mp.weixin.qq.com/s/nwYDRoMKYZ0xal9bRXCfHw)
+* [一文总结文本分类必备经典模型](https://mp.weixin.qq.com/s/f5SkoWD4BY_HDWfPi5R5ng)
 
 # 文本分类任务简介
 
