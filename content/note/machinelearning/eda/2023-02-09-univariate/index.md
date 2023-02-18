@@ -45,7 +45,8 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
-针对单变量观测分析，可以将数据按照类型拆分成数值型、类别型、时间类型、字符串(`object` 型)、图像
+针对单变量观测分析，可以将数据按照类型拆分成数值型、类别型、
+时间类型、字符串(`object` 型)、图像
 
 # 数值变量
 
@@ -54,25 +55,15 @@ details[open] summary {
 1. 是否存在异常值
 2. 数据的整体分布情况
 
-```python
-import seaborn as sns
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-plt.figure(figsize = (10, 6))
-%matplotlib inline
-
-df = pd.read_csv("")
-df.head()
-```
-
 ## 基于数值观察
 
-可以直接通过 pandas 的 `describe` 函数去观测数值数据的分位数，
+可以直接通过 Pandas 的 `describe()` 函数去观测数值数据的分位数，
 基于分位数判断这些数据是否符合预期
 
 ```python
+import pandas as pd
+
+df = pd.read_csv("data.csv")
 df[""].describe(percentiles = np.array(list(range(10))) * 0.1)
 ```
 
