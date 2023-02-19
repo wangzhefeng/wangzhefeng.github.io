@@ -27,12 +27,19 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [文章](#文章)
 - [特征工程](#特征工程)
 - [结构化数据](#结构化数据)
 - [非结构化数据](#非结构化数据)
 - [原本相关](#原本相关)
 - [文档](#文档)
 </p></details><p></p>
+
+## 文章
+
+* [全网写特征工程最通透的](https://mp.weixin.qq.com/s/SVjZvbeJUaBag-NiELGDVw)
+
+数据建模就是从数据中学习到洞见(insights)的过程，这个过程其实是很曲折的，要经过数据的表达、模型的学习两部。其中：数据的表达就是原始数据经过 clean 和 transformer 得到 feaaures 的过程，即为特征工程
 
 ## 特征工程
 
@@ -102,6 +109,9 @@ details[open] summary {
     - 过采样和欠采样结合
 * **样本组织**
     - 
+
+
+
 
 ## 文档
 

@@ -182,7 +182,9 @@ plt.show()
 import scattertext as st
 
 df = st.SampleCorpora.ConventionData2012.get_data().assign(
-    parse = lambda df: df.text.apply(st.whitespace_nlp_with_sentences)
+    parse = lambda df: df.text.apply(
+        st.whitespace_nlp_with_sentences
+    )
 )
 
 corpus = st.CorpusFromParsedDocuments(
@@ -209,9 +211,10 @@ open('./demo_compact.html', 'w').write(html)
 
 图像数据和文本数据都属于特殊的数据，暂时将其放在单变量一起介绍。
 图像的数据可以直接进行可视化，有些朋友会加入不同的算子或者预处理之类的，
-然后再进行可视化看效果。而关于图像的可视化方式有非常多，
-可以基于 PIL，基于 matplotlb.image，cv2，scipy，skimage 等等，
-下面是一个基于 PIL 的图像可视化案例
+然后再进行可视化看效果
+
+关于图像的可视化方式有非常多，可以基于 `PIL`、基于 `matplotlib.image`、
+`cv2`、`scipy`、`skimage` 等等，下面是一个基于 `PIL` 的图像可视化案例
 
 ```python
 from PIL import Image

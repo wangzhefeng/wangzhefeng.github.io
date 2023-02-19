@@ -31,53 +31,58 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [评价指标常见问题](#评价指标常见问题)
+  - [在机器学习的背景下解释精度和召回率之间的区别](#在机器学习的背景下解释精度和召回率之间的区别)
+  - [绍以下模型评估中精度和召回率之间的权衡](#绍以下模型评估中精度和召回率之间的权衡)
+  - [介绍一下用 F1 score 吗](#介绍一下用-f1-score-吗)
+  - [如何为给定的问题选择合适的评估指标](#如何为给定的问题选择合适的评估指标)
+  - [解释在模型评估中使用 ROC 曲线的原因](#解释在模型评估中使用-roc-曲线的原因)
+  - [如何确定二元分类模型的最佳阈值](#如何确定二元分类模型的最佳阈值)
+  - [如何评估聚类模型的性能](#如何评估聚类模型的性能)
+  - [多类分类问题的背景下各种指标之间的区别](#多类分类问题的背景下各种指标之间的区别)
+  - [如何评估推荐系统的性能](#如何评估推荐系统的性能)
+  - [在评估模型性能时如何处理不平衡的数据集](#在评估模型性能时如何处理不平衡的数据集)
+  - [在样本数据不均匀的情况下使用 ROC 更好还是 PRC 更好](#在样本数据不均匀的情况下使用-roc-更好还是-prc-更好)
 - [二分类](#二分类)
   - [混淆矩阵](#混淆矩阵)
-  - [错误率和准确率](#错误率和准确率)
-    - [错误率](#错误率)
-    - [准确率](#准确率)
-    - [损失函数](#损失函数)
+    - [confusion\_matrix](#confusion_matrix)
+  - [错误率](#错误率)
+    - [error rate](#error-rate)
+  - [准确率](#准确率)
+    - [accuracy\_score](#accuracy_score)
   - [查准率和查全率以及 F1](#查准率和查全率以及-f1)
     - [查准率](#查准率)
     - [查全率](#查全率)
     - [F1](#f1)
     - [举例](#举例)
-    - [损失函数](#损失函数-1)
+    - [Python API](#python-api)
+  - [Precision Recall Rate](#precision-recall-rate)
   - [Log Loss](#log-loss)
-    - [定义](#定义)
-    - [损失函数](#损失函数-2)
+    - [log\_loss](#log_loss)
   - [混淆矩阵 以及 ROC 和 AUC](#混淆矩阵-以及-roc-和-auc)
     - [ROC](#roc)
     - [AUC](#auc)
-    - [损失函数](#损失函数-3)
   - [Normalized Gini Coefficient](#normalized-gini-coefficient)
-    - [定义](#定义-1)
-    - [损失函数](#损失函数-4)
-    - [实现](#实现)
 - [多分类](#多分类)
   - [Categorization Accuracy](#categorization-accuracy)
-    - [准确率](#准确率-1)
-    - [损失函数](#损失函数-5)
   - [Multi Class Log Loss](#multi-class-log-loss)
-    - [Log Loss](#log-loss-1)
-    - [损失函数](#损失函数-6)
   - [MAP-Mean Average Precision](#map-mean-average-precision)
-    - [MAP](#map)
-    - [损失函数](#损失函数-7)
   - [Mean F1](#mean-f1)
-    - [Mean F1](#mean-f1-1)
-    - [损失函数](#损失函数-8)
   - [Average Jaccard Index](#average-jaccard-index)
-    - [Jaccard Index](#jaccard-index)
-    - [损失函数](#损失函数-9)
 - [回归](#回归)
-  - [RMSE](#rmse)
+  - [MBE](#mbe)
   - [MSE](#mse)
-    - [定义](#定义-2)
-    - [损失函数](#损失函数-10)
+  - [RMSE](#rmse)
+  - [RSE](#rse)
+  - [NRMSE](#nrmse)
+  - [RRMSE](#rrmse)
   - [MAE](#mae)
+  - [RAE](#rae)
   - [RMSLE](#rmsle)
   - [MAPE](#mape)
+  - [Huber Loss](#huber-loss)
+  - [Log Cosh Loss](#log-cosh-loss)
+  - [Quantile Loss](#quantile-loss)
 - [时间序列预测](#时间序列预测)
   - [MAPE](#mape-1)
   - [WMAPE](#wmape)
@@ -93,12 +98,167 @@ details[open] summary {
   - [Davies-BouIdin Index](#davies-bouidin-index)
   - [Contingency Matrix](#contingency-matrix)
   - [Pair Confusion Matrix](#pair-confusion-matrix)
+- [推荐系统](#推荐系统)
 - [参考](#参考)
 </p></details><p></p>
 
 在机器学习或者深度学习领域，我们在为待解决的问题生成预测模型后，
 需要对这个模型对未知数据的泛化性能进行评估，
 性能度量方法就是评估模型泛化能力的评价标准
+
+
+# 评价指标常见问题
+
+## 在机器学习的背景下解释精度和召回率之间的区别
+
+在机器学习模型中，精度和召回率是两个常用的评估指标。
+精度是衡量模型在所有正预测中做出的真正正预测的数量，
+表示模型避免假阳性预测的能力，其数学表达式为：
+
+`$$Precision = \frac{TP}{TP+FP}$$`
+
+召回率是衡量模型在数据集中所有实际正实例中做出的真正预测的数量。
+召回率表示模型正确识别所有正实例的能力，其数学表达式为：
+
+`$$Recall = \frac{TP}{TP+FN}$$`
+
+精确性和召回率都是重要的评估指标，但两者之间的权衡取决于要解决的具体问题的要求。
+例如：
+* 在医学诊断中，召回率可能更重要，因为它对识别一种疾病的所有病例至关重要，
+  即使这会导致更高的假阳性率
+* 在欺诈检测中，精确度可能更重要，因为避免虚假指控至关重要，即使这会导致更高的假阴性率
+
+## 绍以下模型评估中精度和召回率之间的权衡
+
+模型评估中精度和召回率之间的权衡是指正确识别正面实例(召回率)和正确识别仅正面实例(召回率)之间的权衡。
+精度高意味着假阳性的数量低，而召回率高意味着假阴性的数量低。对于给定的模型，
+通常不可能同时最大化精度和召回率。为了进行这种权衡，需要考虑问题的特定目标和需求，
+并选择与它们相一致的评估度量
+
+## 介绍一下用 F1 score 吗
+
+F1 score 是机器学习中常用的评估指标，用于平衡精度和召回率。
+精确度衡量的是模型所做的所有正面预测中正观察的比例，
+而召回率衡量的是所有实际正观察中正预测的比例。
+F1 score 是精度和召回率的调和平均值，通常用作总结二元分类器性能的单一指标
+
+`$$F1 = \frac{2 * (Precision * Recall)}{Precision + Recall}$$`
+
+在模型必须在精度和召回率之间做出权衡的情况下，F1 score 比单独使用精度或召回率提供了更细致的性能评估。
+例如，在假阳性预测比假阴性预测成本更高的情况下，优化精度可能更重要，而在假阴性预测成本更高的情况下，
+可能会优先考虑召回。F1 score 可用于评估模型在这些场景下的性能，
+并就如何调整其阈值或其他参数来优化性能给出相应的数据支持
+
+## 如何为给定的问题选择合适的评估指标
+
+为给定的问题选择适当的评估是模型开发过程的一个关键方面。
+在选择指标时，考虑问题的性质和分析的目标是很重要的。需要考虑的一些常见因素包括：
+
+* 问题类型：是二元分类问题、多类分类问题、回归问题还是其他问题
+* 业务目标：分析的最终目标是什么，需要什么样的性能？例如，如果目标是最小化假阴性，召回率将是一个比精度更重要的指标
+* 数据集特征：类是平衡的还是不平衡的？数据集是大还是小？
+* 数据质量：数据的质量如何，数据集中存在多少噪声？
+
+基于这些因素，可以选择一个评估指标，如 Accuracy、F1-score、AUC-ROC、Precision-Recall、均方误差等。
+但是一般都会使用多个评估指标来获得对模型性能的完整理解
+
+## 解释在模型评估中使用 ROC 曲线的原因
+
+ROC 曲线是二元分类模型性能的图形表示，该模型绘制真阳性率(TPR)与假阳性率(FPR)。
+它有助于评估模型的敏感性(真阳性)和特异性(真阴性)之间的权衡，
+并广泛用于评估基于二元分类结果(如是或否、通过或失败等)进行预测的模型
+
+![img](images/roc.png)
+
+ROC 曲线通过比较模型的预测结果和实际结果来衡量模型的性能。
+一个好的模型在 ROC 曲线下有很大的面积，这意味着它能够准确地区分正类和负类。
+ROC AUC(Area Under the Curve，曲线下面积) 用于比较不同模型的性能，
+特别是在类别不平衡时评估模型性能的好方法
+
+## 如何确定二元分类模型的最佳阈值
+
+二元分类模型的最佳阈值是通过找到在精度和召回率之间平衡的阈值来确定的。
+这可以通过使用评估指标来实现，例如 F1 score，它平衡了准确性和召回率，
+或者使用 ROC 曲线，它绘制了各种阈值的真阳性率和假阳性率
+
+最佳阈值通常选择 ROC 曲线上最接近左上角的点，因为这样可以最大化真阳性率，
+同时最小化假阳性率
+
+在实践中，最佳阈值还可能取决于问题的具体目标以及与假阳性和假阴性相关的成本
+
+## 如何评估聚类模型的性能
+
+聚类模型的性能可以使用许多指标进行评估。一些常见的指标包括：
+
+* Silhouette 分数：它衡量观察到自己的簇与其他簇相比的相似性。
+  分数范围从 -1 到 1，值越接近 1 表示聚类结构越强
+* Calinski-Harabasz 指数：它衡量的是簇间方差与簇内方差的比值。较高的值表示更好的聚类解决方案
+* Davies-Bouldin 指数：它衡量每个簇与其最相似的簇之间的平均相似性。较小的值表示更好的聚类解决方案
+* Adjusted Rand 指数：它测量真实类标签和预测聚类标签之间的相似性，并根据概率进行调整。
+  较高的值表示更好的聚类解决方案
+* 混淆矩阵：它可以通过将预测的聚类与真实的类进行比较来评估聚类模型的准确性
+
+## 多类分类问题的背景下各种指标之间的区别
+
+![img](images/multiclass.png)
+
+## 如何评估推荐系统的性能
+
+评估推荐系统的性能包括衡量系统向用户推荐相关项目的有效性和效率。一些常用的用于评估推荐系统性能的指标包括:
+
+* Precision：与用户相关的推荐项目的比例
+* Recall：系统推荐相关项目的比例
+* F1-Score：精密度和召回率的调和平均值
+* Mean Average Precision (MAP)：一个推荐系统的整体用户的平均精度的度量
+* Normalized Discounted Cumulative Gain (NDCG)：衡量推荐项目的等级加权相关性
+* Root Mean Square Error (RMSE)：对一组项目的预测评分和实际评分之间的差异进行测量
+
+## 在评估模型性能时如何处理不平衡的数据集
+
+为了在模型评估中处理不平衡的数据集，可以使用以下几种技术:
+
+* 重新采样数据集：对少数类进行过采样或对多数类进行过采样，以平衡类分布
+* 使用不同的评估指标：诸如精度、召回率、F1-score 和 ROC 曲线下面积(AUC-ROC)等指标对类别不平衡很敏感，
+  可以更好地理解模型在不平衡数据集上的性能
+* 使用代价敏感学习：为不同类型的错误分类分配成本，例如为假阴性分配比假阳性更高的成本，
+  以使模型对少数类别更敏感
+* 使用集成方法：通过组合多个模型的结果，可以使用 bagging、
+  boosting 和 stacking 等技术来提高模型在不平衡数据集上的性能
+* 混合方法：上述技术的组合可用于处理模型评估中的不平衡数据集
+
+## 在样本数据不均匀的情况下使用 ROC 更好还是 PRC 更好
+
+> 虽然 ROC 适用于评估分类器的整体性能，但是对于类别不均衡的数据，ROC 曲线往往会过于“乐观”，因此还是 PR 曲线更好
+
+我们知道，ROC 表示了 TPR(True Positive Rate)和 FPR(False Positive Rate)之间的关系。
+TPR 是在正样本的基础上计算的，FPR 是在负样本的基础上计算的，因此即使正负样本的比例不均衡，
+计算结果并不会改变。我们只需要注意保证样本的绝对数量不能太低，让 TPR 和 FPR 统计意义上有意义
+
+与之相对的，精度召回曲线的情况恰恰相反，尽管召回率只在正样本基础上计算，
+精度准确率需要同时测量正和负样本，因此精确度的测量取决于数据中的正负之比
+
+ROC 曲线由于兼顾正例与负例，所以适用于评估分类器的整体性能，相比而言 PR 曲线完全聚焦于正例
+
+一种常见的认为 ROC 适用不均衡数据集的错误观点是，反正 TPR 和 FPR 的计算方式都是比值，因此数据是否均衡并不重要
+
+* 首先运用极限思想，在二分类问题中假设 A 类数据占据了 99.99%，那么分类器只需要预测所有数据为 A 类即可。这显然不合理
+* 其次对于多分类问题，ROC 也会因为“负类”的概念出现问题。即使你的数据在各个类别里是均匀分布的，
+  对于 negative class，也就是所有的不是你目标的类别，也必定会被过度代表，
+  而 Precision Recall 曲线可以很好地解决这个问题
+
+那么 ROC 曲线适合被应用在什么地方呢？
+
+ROC 曲线主要不是为了显示出阈值是多少，而是关于模型在使用某个阈值时特征空间中数据的分离程度。
+对于一个鲁棒的分类器，TPR 提升的速度应该远远地高于 FPR 提升的速度(凹函数)。
+因此可以根据具体的应用，在曲线上找到最优的点，得到相对应的 precision 和 recall 等指标，
+去调整模型的阈值，从而得到一个符合具体应用的模型
+
+因此数据中如果存在不同的类别分布，且想要比较分类器的性能且剔除类别分布改变的影响，
+则 ROC 曲线比较适合；反之，如果想测试相同类别分布下对分类器的性能的影响，则 PR 曲线比较适合
+
+最后我们得到一个有点反直觉的结论：
+
+* ROC 曲线选用的两个指标不依赖数据中具体的类别分布，因此不适合被应用于数据分布极度不均的任务中
 
 # 二分类
 
@@ -112,11 +272,16 @@ details[open] summary {
 
 ![img](images/confusion_matrix.png)
 
-## 错误率和准确率
+### confusion_matrix
 
-错误率和精度是分类任务中最常用的两种性能度量，适用于二分类和多分类
+* sklearn.confusion_matrix
 
-### 错误率
+```python
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+```
+
+## 错误率
 
 > * Error Rate：错误率
 > * 错误率是分类错误的样本数占样本总数的比例
@@ -127,6 +292,8 @@ details[open] summary {
 
 `$$ErrorRate(\hat{y}_{i}, y_{i})=\frac{1}{N}\sum_{i=1}^{N}I(\hat{y}_{i} \neq y_{i})$$`
 
+`$$ErrorRate = \frac{FP+FN}{TP+FP+FN+TN}$$`
+
 其中：
 
 * `$I(\cdot)$` 为示性函数
@@ -134,7 +301,13 @@ details[open] summary {
 * `$y_{i} \in \{0, 1\}$` 表示样本 `$i$` 对应的真实标签
 * `$\hat{y}_{i}\in \{0, 1\}$` 表示样本 `$i$` 对应的预测结果
 
-### 准确率
+### error rate 
+
+```python
+
+```
+
+## 准确率
 
 > * Accuracy：准确率
 > * 精度则为分类正确的样本数占样本总数的比例
@@ -145,14 +318,14 @@ details[open] summary {
 
 `$$Accuracy(\hat{y}_{i}, y_{i}) = \frac{1}{N}\sum_{i=1}^{N}I(\hat{y}_{i} = y_{i})$$`
 
+`$$Accuracy = \frac{TP+TN}{TP+FP+FN+TN}$$`
+
 其中：
 
 * `$I(\cdot)$` 为示性函数
 * `$N$` 为测试样本个数
 * `$y_{i} \in \{0, 1\}$` 表示样本 `$i$` 对应的真实标签
 * `$\hat{y}_{i}\in \{0, 1\}$` 表示样本 `$i$` 对应的预测结果
-
-### 损失函数
 
 针对准确率问题，目前常采用的损失函数为 Binary Log Loss/Binary Cross Entropy，其数学形式如下：
 
@@ -161,6 +334,12 @@ details[open] summary {
 其中：
 
 * `$p_{i}$` 为模型对第 `$i$` 个样本的预测概率
+
+### accuracy_score
+
+```python
+from sklearn.metric import accuracy_score
+```
 
 ## 查准率和查全率以及 F1
 
@@ -179,6 +358,8 @@ details[open] summary {
 即 TP、FP、TN、FN，显然有 TP + FP + TN + FN = 样例总数
 
 ### 查准率
+
+> 查准率，Precision
 
 根据混淆矩阵，查准率 Precision 的定义为：
 
@@ -258,16 +439,29 @@ details[open] summary {
 召回率(Recall)就是从关注领域(关心的类别样本)中，召回目标类别(被判定为关心的类别中关心的类别)的比例；
 F1 值则综合这两者指标的评估指标，用于综合反映整体领域的指标
 
-### 损失函数
-
 和准确率指标优化类似，此处使用 Binary Cross Entropy 进行优化即可，
 不同之处在于，在得到最终的预测概率之后，需要通过一些策略寻找最优阈值
 
 还有的时候会对损失函数进行加权优化；例如标签为 1 的样本的权重就设置大一些等
 
+### Python API
+
+```python
+from sklearn.metrics import roc_auc_score
+```
+
+## Precision Recall Rate
+
+* TODO
+
 ## Log Loss
 
-### 定义
+Log Loss 也称为逻辑回归损失或交叉熵损失。它基本上定义在概率估计上，
+并测量分类模型的性能，其中输入是介于 0 和 1 之间的概率值
+
+通过精确区分，可以更清楚地理解它。准确度是我们模型中预测的计数（预测值=实际值），
+而对数损失是预测的不确定性量，基于它与实际标签的差异。借助对数损失值，
+可以更准确地了解模型的性能
 
 `$$LogLoss = -\frac{1}{N}\sum_{i=1}^{N}\Big(y_{i}log p_{i} + (1 - y_{i})log(1 - p_{i})\Big)$$`
 
@@ -275,9 +469,13 @@ F1 值则综合这两者指标的评估指标，用于综合反映整体领域�
 
 * `$p_{i}$` 为模型对第 `$i$` 个样本的预测概率
 
-### 损失函数
-
 因为 Logloss 是可以直接进行优化的函数，一般我们会直接基于 LogLoss 函数进行优化
+
+### log_loss
+
+```python
+from sklearn.metrics import log_loss
+```
 
 ## 混淆矩阵 以及 ROC 和 AUC
 
@@ -364,21 +562,13 @@ AUC 的数值都不会大于 1。又由于 ROC 曲线一般都处于 `$y=x$` 这
 所以 AUC 的取值范围在 0.5 和 1 之间。AUC 越接近 1.0，检测方法真实性越高。
 等于 0.5 时，一般就无太多应用价值了
 
-### 损失函数
+
 
 最为常见的还是基于 LogLoss 函数的优化
 
 ## Normalized Gini Coefficient
 
-### 定义
-
 `$$Gini = 2 \times AUC - 1$$`
-
-### 损失函数
-
-LogLoss
-
-### 实现
 
 ```python
 from sklearn.metrics import roc_auc_score
@@ -410,7 +600,7 @@ gini_normalized(actual = y, pred = p)
 
 ## Categorization Accuracy
 
-### 准确率
+> Categorization Accuracy，分类准确率
 
 定义：
 
@@ -422,7 +612,7 @@ gini_normalized(actual = y, pred = p)
 * `$y_{i}$` 为第 `$i$` 个样本的类别标签
 * `$p_{i}$` 为预测的第 `$i$` 个样本的类别
 
-### 损失函数
+
 
 `$$Loss = -\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{K} y_{i,k}log(p_{i,k})$$`
 
@@ -434,8 +624,6 @@ gini_normalized(actual = y, pred = p)
 
 ## Multi Class Log Loss
 
-### Log Loss
-
 定义：
 
 `$$logloss = -\frac{1}{N}\sum_{i=1}^{N}\sum_{i=1}^{N}\sum_{i=1}^{M}y_{i,j}log(p_{i,j})$$`
@@ -444,8 +632,6 @@ gini_normalized(actual = y, pred = p)
 
 * `$N$` 为测试样本的个数
 * `$M$` 为类标签的个数
-
-### 损失函数
 
 针对准确率问题，目前常采用的损失函数为 Multiclass Log Loss，其数学形式如下：
 
@@ -458,8 +644,6 @@ gini_normalized(actual = y, pred = p)
 
 ## MAP-Mean Average Precision
 
-### MAP
-
 定义：
 
 `$$MAP = \frac{1}{|U|}\sum_{u=1}^{|U|}\frac{1}{min(A, m)}\sum_{k=1}^{min(n, A)}P(k)$$`
@@ -471,13 +655,9 @@ gini_normalized(actual = y, pred = p)
 * `$n$` 是预测物品的数量
 * `$M$` 是给定用户购买物品的数量，如果 `$M=0$`，则精度定义为 0
 
-### 损失函数
-
 使用 Sigmoid Cross Entropy，注意与其它常用的多分类损失函数的区别
 
 ## Mean F1
-
-### Mean F1
 
 定义：
 
@@ -488,14 +668,10 @@ gini_normalized(actual = y, pred = p)
 * `$p = \frac{tp}{tp+fp}$`
 * `$r = \frac{tp}{tp+fn}$`
 
-### 损失函数
+
 
 Mean Square Loss
-
-
 ## Average Jaccard Index
-
-### Jaccard Index
 
 两个区域 A 和 B 的 Jaccard Index 可以表示为：
 
@@ -507,50 +683,400 @@ Mean Square Loss
 * `$FP$` 表示 False Positive 的面积
 * `$FN$` 表示 False Negative 的面积
 
-### 损失函数
-
 Sigmoid
 
 # 回归
 
-## RMSE
+## MBE
 
-> Root Mean Square Error
+> Mean Bias Error，MBE，平均偏差误差
 
-RMSE 可以直接优化的函数，一般默认选用平方损失函数进行优化即可，很多工具包里面也称之为 L2 损失
+
+
+MBE 是测量过程高估或低估参数值的趋势。偏差只有一个方向，可以是正的，也可以是负的。
+正偏差意味着数据的误差被高估，负偏差意味着误差被低估。MBE 是预测值与实际值之差的平均值。
+该评估指标量化了总体偏差并捕获了预测中的平均偏差。它几乎与 MAE 相似，
+唯一的区别是这里没有取绝对值。这个评估指标应该小心处理，因为正负误差可以相互抵消
+
+优点：
+
+* 想检查模型的方向（即是否存在正偏差或负偏差）并纠正模型偏差，MBE 是一个很好的衡量标准
+
+缺点：
+
+* 就幅度而言，这不是一个好的衡量标准，因为误差往往会相互补偿
+* 它的可靠性不高，因为有时高个体错误会产生低 MBE
+* 作为一种评估指标，它在一个方向上可能始终是错误的
+
+
+
+```python
+def mean_bias_error(true, pred):
+    bias_error = true - pred
+    mbe_loss = np.mean(np.sum(bias_erro) / ture.size)
+
+    return mbe_loss
+```
 
 ## MSE
 
-> Mean Square Error
+> Mean Square Error，MSE，均方误差或 L2 损失
 
-### 定义
 
-`$$E(f; D) = \frac{1}{N}\sum_{i=1}^{N}\Big(f(x_{i}) - y_{i}\Big)$$`
 
-`$$MSE(y_{i}, \hat{y}_{i}) = \frac{1}{N}\sum_{i=1}^{N}\Big(\hat{y}_{i} - y_{i}\Big)$$`
+均方误差也称为 L2 损失，MSE 通过将预测值和实际值之间的差平方并在整个数据集中对其进行平均来计算误差。
+MSE 也称为二次损失，因为惩罚与误差不成正比，而是与误差的平方成正比。平方误差为异常值赋予更高的权重，
+从而为小误差产生平滑的梯度
 
-### 损失函数
+MSE 永远不会是负数，因为误差是平方的。误差值范围从零到无穷大。
+MSE 随着误差的增加呈指数增长。一个好的模型的 MSE 值接近于零
+
+`$$E(f; D) = \frac{1}{n}\sum_{i=1}^{n}\Big(f(x_{i}) - y_{i}\Big)^{2}$$`
+
+`$$MSE = \frac{1}{n}\sum_{i=1}^{n}\Big(\hat{y}_{i} - y_{i}\Big)^{2}$$`
+
+优点：
+
+* MSE 会得到一个只有一个全局最小值的梯度下降
+* 对于小的误差，它可以有效地收敛到最小值。没有局部最小值
+* MSE 通过对模型进行平方来惩罚具有巨大错误的模型
+
+缺点：
+
+* 对异常值的敏感性通过对它们进行平方来放大高误差
+* MSE 会受到异常值的影响，会寻找在整体水平上表现足够好的模型
+
+
 
 回归问题的性能度量方法与其常用的损失函数一样，都是均方误差。
-MSE 是可以直接优化的函数，所以直接默认选用平方损失函数进行优化即可，很多工具包里面也称之为 L2 损失
+MSE 是可以直接优化的函数，所以直接默认选用平方损失函数进行优化即可，
+很多工具包里面也称之为 L2 损失
+
+
+
+```python
+def mean_squared_error(true, pred):
+    squared_error = np.square(true - pred)
+    sum_squared_error = np.sum(squared_error)
+    mse_loss = sum_squared_error / true.size
+
+    return mse_error
+```
+
+## RMSE
+
+> Root Mean Square Error，RMSE，均方根误差
+
+
+
+RMSE 是通过取 MSE 的平方根来计算的。RMSE 也称为均方根偏差。
+它测量误差的平均幅度，并关注与实际值的偏差。RMSE 值为零表示模型具有完美拟合。
+RMSE 越低，模型及其预测就越好
+
+`$$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}\Big(\hat{y}_{i} - y_{i}\Big)^{2}}$$`
+
+优点：
+
+* 易于理解
+* 计算方便
+
+缺点：
+
+* 建议去除异常值才能使其正常运行
+* 会受到数据样本大小的影响
+
+
+
+```python
+def root_mean_squared_error(true, pred):
+    squared_error = np.square(true - pred)
+    sum_squared_error = np.sum(squared_error)
+    rmse_loss = np.sqrt(sum_squared_error / true.size)
+
+    return rmse_loss
+```
+
+## RSE
+
+> Relative Squared Error，RSE，相对平方误差
+
+
+
+RSE 需要使用均方误差并将其除以实际数据与数据平均值之间的差异的平方
+
+`$$RSE = \frac{\sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^{2}}{\sum_{i=1}^{n}(y_{i} - \bar{y})^{2}}$$`
+
+其中：
+
+* `$\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_{i}$`
+
+优点：
+
+* 对预测的平均值和规模不敏感
+
+
+
+```python
+def relative_squared_error(true, pred):
+    true_mean = np.mean(true)
+    squared_error_sum = np.sum(np.square(true - pred))
+    squared_error_den = np.sum(np.square(true - true_mean))
+    rse_loss = squared_error_num / squared_error_den
+
+    return rse_loss
+```
+
+## NRMSE
+
+> Normalized Root Mean Squared Error，NRMSE，归一化 RMSE
+
+
+
+归一化 RMSE 通常通过除以一个标量值来计算，它可以有不同的方式。
+有时选择四分位数范围可能是最好的选择，因为其他方法容易出现异常值。
+当您想要比较不同因变量的模型或修改因变量时，NRMSE 是一个很好的度量。
+它克服了尺度依赖性，简化了不同尺度模型甚至数据集之间的比较
+
+* RMSE / maximum value in the series
+* RMSE / mean
+* RMSE / difference between the maximum and the minimum values (if mean is zero)
+* RMSE / standard deviation
+* RMSE / interquartile range
+
+```python
+def normalized_root_mean_squared_error(true, pred):
+    squared_error = np.square((true - pred))
+    sum_squared_error = np.sum(squared_error)
+    rmse = np.sqrt(sum_squared_error / true.size)
+    nrmse_loss = rmse/np.std(pred)
+
+    return nrmse_loss
+```
+
+## RRMSE
+
+> Relative Root Mean Squared Error，RRMSE，相对 RMSE
+
+
+
+RRMSE 是 RMSE 的无量纲形式，是由均方根值归一化的均方根误差，其中每个残差都根据实际值进行缩放
+
+`$$RRMSE = \sqrt{\frac{\frac{1}{n}\sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^{2}}{\sum_{i=1}^{n}(\hat{y}_{i})^{2}}}$$`
+
+* Excellent when RRMSE < 10%
+* Good when RRMSE is between 10% and 20%
+* Fair when RRMSE is between 20% and 30%
+* Poor when RRMSE > 30%
+
+
+
+```python
+def relative_root_mean_squared_error(true, pred):
+    num = np.sum(np.square(true - pred))
+    den = np.sum(np.square(pred))
+    squared_error = num/den
+    rrmse_loss = np.sqrt(squared_error)
+
+    return rrmse_loss
+```
 
 ## MAE
 
 > Mean Absolute Error
 
-MAE 在诸多工具包中也已经有对应的优化函数，直接使用即可，有些包中也会称之为 L1 损失函数
+
+
+MAE(Mean Absolute Error，平均绝对误差) 也称为 L1 损失函数。
+它是通过取预测值和实际值之间的绝对差值并在整个数据集中取平均值来计算的。
+从数学上讲，它是绝对误差的算术平均值。MAE 仅测量误差的大小，不关心它们的方向。
+MAE 越低，模型的准确性就越高
+
+`$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_{i} - \hat{y}_{i}|$$`
+
+优点：
+
+* 由于采用了绝对值，因此所有误差都以相同的比例加权
+* 如果训练数据有异常值，MAE 不会惩罚由异常值引起的高错误
+* 它提供了模型执行情况的平均度量
+
+缺点：
+
+* 有时来自异常值的大错误最终被视为与低错误相同
+* 在零处不可微分。许多优化算法倾向于使用微分来找到评估指标中参数的最佳值。在 MAE 中计算梯度可能具有挑战性。
+
+
+
+```python
+def mean_absolute_error(true, pred):
+    abs_error = np.abs(true - pred)
+    sum_abs_error = np.sum(abs_error)
+    mae_loss = sum_abs_error / true_.size
+    
+    return mae_loss
+```
+
+## RAE
+
+> Relative Absolute Error，RAE，相对绝对误差
+
+
+
+RAE 是通过将总绝对误差除以实际值与平均值之间的绝对差来计算的。
+RAE 以比率表示，范围值在 `$[0, 1]$`。一个好的模型将具有接近于零的值，
+其中零是最佳值
+
+`$$RAE = \frac{\sum_{i=1}^{n}|y_{i} - \hat{y}_{i}|}{\sum_{i=1}^{n}|y_{i} - \bar{y}|}$$`
+
+其中：
+
+* `$\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_{i}$`
+
+优点：
+
+* RAE 可用于比较以不同单位测量误差的模型
+* RAE 是可靠的，因为它可以防止异常值
+
+
+
+```python
+def relative_absolute_error(true, pred):
+    true_mean = np.mean(true)
+    squared_error_num = np.sum(np.abs(true - pred))
+    squared_error_den = np.sum(np.abs(true - true_mean))
+    rae_loss = squared_error_num / squared_error_den
+
+    return rae_loss
+```
+
+
+
+```python
+def relative_absolute_error(true, pred):
+    true_mean = np.mean(ture)
+    squared_error_num = np.sum(np.abs(true - pred))
+    squared_error_den = np.sum(np.abs(true - true_mean))
+    rae_loss = squared_error_num / squared_error_den
+    
+    return rae_loss
+```
 
 ## RMSLE
 
-> Root Mean Squared Logarithmic Error
+> Root Mean Squared Logarithmic Error，RMSLE，均方根对数误差
 
-先对数据做 log1p 转化，然后使用 L2 损失函数直接求解即可
+
+
+均方根对数误差是通过将 log 应用于实际值和预测值然后取它们的差异来计算的。
+RMSLE 对于小误差和大误差被均匀处理的异常值是稳健的。如果预测值小于实际值，
+则对模型进行更多的惩罚，而如果预测值大于实际值，则对模型进行较少的惩罚
+
+`$$RMSLE = \sqrt{(log(y_{i} + 1) - log(\hat{y}_{i} + 1))^{2}}$$`
+
+优点：
+
+* 不依赖于比例，并且适用于各种比例。
+* 它不受大异常值的影响。
+* 它只考虑实际值和预测值之间的相对误差
+
+
+
+```python
+def root_mean_squared_log_error(true, pred):
+    square_error = np.square((np.log(true + 1) - np.log(pred + 1)))
+    mean_square_log_error = np.mean(square_error)
+    rmsle_loss = np.sqrt(mean_square_log_error)
+    return rmsle_loss
+```
 
 ## MAPE
 
-> Mean Absolute Percentage Error
+> Mean Absolute Percentage Error，MAPE，平均绝对百分比误差
 
-如果采用神经网络对此类问题进行优化，可以直接自己定义 MAPE 的 Loss
+MAPE 是通过将实际值与预测值之间的差值除以实际值来计算的。
+MAPE 随着误差的增加而线性增加。MAPE 越小，模型性能越小
+
+`$$MAPE = \frac{1}{n}\sum_{i=1}^{n}\frac{|y_{i}-\hat{y}_{i}|}{y_{i}} \times 100 \%$$`
+
+优点：
+
+* MAPE 与变量的规模无关，因为它的误差估计是以百分比为单位的
+* 所有错误都在一个共同的尺度上标准化，很容易理解
+* MAPE 避免了正值和负值相互抵消的问题
+
+缺点：
+
+* 分母值为零时，面临着“除以零”的问题
+* MAPE 对数值较小的误差比对数值大的误差错误的惩罚更多
+* 因为使用除法运算，对于相同的误差，实际值的变化将导致损失的差异
+
+
+
+```python
+def mean_absolute_percentage_error(true, pred):
+    abs_error = (np.abs(true - pred)) / true
+    sum_abs_error = np.sum(abs_error)
+    mape_loss = (sum_abs_error / true.size) * 100
+
+    return mape_loss
+```
+
+## Huber Loss
+
+Huber损失是线性和二次评分方法的组合。它有一个超参数 delta，可以根据数据进行调整。
+对于高于 `$\delta$` 的值，损失将是线性的（L1 损失），对于低于 `$\delta$` 的值，损失将是二次的（L2 损失）。
+它平衡并结合了 MAE（平均绝对误差）和 MSE（均方误差）的良好特性
+
+`$$L_{\delta} = \begin{cases}
+\frac{1}{2}(y - f(x))^{2}，|y-f(x)| \leq \delta \\
+\delta|y - f(x)| - \frac{1}{2}\delta^{2}，otherwise\end{cases}$$`
+
+优点：
+
+* 它在零处是可微的
+* 由于 `$\delta$` 以上的线性度，异常值得到了正确处理
+* 可以调整超参数delta以最大限度地提高模型准确性
+
+缺点：
+
+* 为了最大限度地提高模型精度，需要优化delta，这是一个迭代过程
+* 它只能微分一次
+
+```python
+def huber_loss(true, pred, delta):
+    huber_mse = 0.5 * np.square(true - pred)
+    huber_mae = delta * (np.abs(true - pred) - 0.5 * (np.square(delta)))
+
+    return np.where(np.abs(true - pred) <= delta, huber_mse, huber_mae)
+```
+
+## Log Cosh Loss
+
+Log cosh 计算误差的双曲余弦的对数。这个函数比二次损失更平滑。
+它像 MSE 一样工作，但不受大预测误差的影响
+
+`$$LogCosh = \sum_{i=1}^{n}log(cosh(\hat{y}_{i} - y_{i}))$$`
+
+优点：
+
+* 同时处处可二次微分
+* 比 Huber需要更少的计算
+
+缺点：
+
+* 适应性较差，因为它遵循固定的比例
+* 与 Huber loss 相比，推导更复杂，需要深入研究
+
+```python
+def huber_loss(true, pred, delta):
+    diff = np.cosh(pred - delta)
+    diff = np.log(diff)
+    return diff.mean()
+```
+
+## Quantile Loss
+
+分位数回归损失函数用于预测分位数。分位数是确定组中有多少值低于或高于某个限制的值。
+它跨预测变量（自变量）的值估计响应变量（因变量）的条件中位数或分位数
 
 # 时间序列预测
 
@@ -607,6 +1133,12 @@ MAE 在诸多工具包中也已经有对应的优化函数，直接使用即可�
 
 ## Pair Confusion Matrix
 
+
+# 推荐系统
+
+
+
+
 # 参考
 
 * [准确率(Precision)、召回率(Recall)、F值(F-Measure)的简要说明](https://blog.csdn.net/huacha__/article/details/80329707?spm=1001.2014.3001.5502)
@@ -625,4 +1157,5 @@ MAE 在诸多工具包中也已经有对应的优化函数，直接使用即可�
 * [Model Fit Metrics](https://www.kaggle.com/residentmario/model-fit-metrics)
 * [精确率、召回率、F1 值、ROC、AUC 各自的优缺点是什么](https://www.zhihu.com/question/30643044/answer/224360465)
 * [ROC曲线](https://blog.csdn.net/VictoriaW/article/details/77863395)
+* [12种回归评价指标](https://mp.weixin.qq.com/s/q-lktuRnzyqe6t0XlVJKkQ)
 
