@@ -654,4 +654,7 @@ print(t, p_value)
 * [详解 AB 测试](https://mp.weixin.qq.com/s?__biz=Mzg3MjIwNzk4Mg==&mid=2247484514&idx=1&sn=25b39850ff110468225826b767d6becb&chksm=cef38763f9840e7515309208aea7fbb48604073e63bfa575acc799c4cb023f126ef5b25e60ca&cur_album_id=1850129385429794822&scene=189#wechat_redirect)
 * [如何做一个 AB test](https://zhuanlan.zhihu.com/p/75762862)
 * [抽样分布-AB test 的理论基础](https://mp.weixin.qq.com/s/Y7iuiG145-aaF1HLBTQmkw)
+* [阿里妈妈数据科学系列](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3MDYxODE2Ng==&action=getalbum&album_id=1945243070300536834&scene=173&from_msgid=2247484640&from_itemidx=1&count=3&nolastread=1#wechat_redirect)
+* [流量为王：ABTest流量分层分桶机制](https://mp.weixin.qq.com/s/Z8ESl6mVXcyNaLuaaGBWoA)
+* [A/B-test显著性检验](https://blog.csdn.net/buracag_mc/article/details/74905483)
 

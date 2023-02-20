@@ -35,6 +35,7 @@ details[open] summary {
 
 ## 文章
 
+* [机器学习入门清单及路线](https://mp.weixin.qq.com/s/KeD9kPG8PowlKrz69zSHNQ)
 * [机器学习初学者易踩的5个坑](https://mp.weixin.qq.com/s/6r4FX7DEIUHE8pnYkftXSA)
 
 ## 机器学习系统的种类

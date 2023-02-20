@@ -51,6 +51,7 @@ details[open] summary {
   - [向量化计算](#向量化计算)
   - [assign 和 numpy select](#assign-和-numpy-select)
   - [timeseries](#timeseries)
+- [参考](#参考)
 </p></details><p></p>
 
 # 自动探索性数据分析
@@ -410,4 +411,9 @@ df_droped.asfreq("MS")
 ```python
 df_droped.groupby(pd.Grouper(freq = "MS")).first()
 ```
+
+
+# 参考
+
+* [Python 自动探索性数据分析神库](https://mp.weixin.qq.com/s/F9Ixe9_d4XDxK-MJOMaVqQ)
 

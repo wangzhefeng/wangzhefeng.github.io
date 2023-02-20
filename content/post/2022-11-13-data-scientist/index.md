@@ -205,4 +205,5 @@ details[open] summary {
 
 * [麦肯锡：优秀数据科学家的5个特征！](https://mp.weixin.qq.com/s/xrzNAUAVkM_1BIsXk0MI3g)
 * [算法工程师应具备的落地能力](https://mp.weixin.qq.com/s/n2UUpRwvpoMElhu1n574dg)
+* [成为算法工程师的路上，掌握什么思维会让自我提升突飞猛进？](https://mp.weixin.qq.com/s/n2g83C4fl8gSDROjAmutpQ)
 

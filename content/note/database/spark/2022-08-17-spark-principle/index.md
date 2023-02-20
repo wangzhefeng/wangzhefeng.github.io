@@ -88,11 +88,14 @@ details[open] summary {
   - [SparkR](#sparkr)
   - [Spark 生态系统和工具包](#spark-生态系统和工具包)
 - [WordCount 示例](#wordcount-示例)
+- [参考](#参考)
 </p></details><p></p>
 
 # Spark 优势特点
 
 > 作为大数据计算框架 MapReduce 的继任者，Spark 具有以下优势特性
+
+![img](images/spark1.png)
 
 * 高效性：运行速度快
     - 使用 DAG 执行引擎以支持循环数据流与内存计算
@@ -130,12 +133,16 @@ MapReduce 和 Spark 对比：
 
 ## 通用性
 
+![img](images/spark2.png)
+
 Spark 提供了统一的解决方案。Spark 可以用于批处理、交互式查询(Spark SQL)、
 实时流式计算(Spark Streaming)、机器学习(Spark MLlib)和图计算(GraphX)。
 这些不同类型的处理都可以在同一个应用中无缝使用，这对于企业应用来说，
 就可以使用一个平台来进行不同的工程实现，减少了人力开发和平台部署成本
 
 ## 兼容性
+
+![img](images/spark3.png)
 
 Spark 能够跟很多开源工程兼容使用，如 Spark 可以使用 Hadoop 的 YARN 和 Apache Mesos 作为它的资源管理和调度器，
 并且 Spark 可以读取多种数据源，如 HDFS、HBase、MySQL 等
@@ -272,7 +279,6 @@ RDD 代表一个不可变、可分区、元素可并行计算的集合
 * 读取文件中的数据生成 RDD
 * 通过将内存中的对象并行化得到 RDD
 
-
 ## RDD 操作
 
 创建 RDD 后，可以使用各种操作对 RDD 进行编程。
@@ -323,8 +329,6 @@ DAG Scheduler 会把 DAG 划分成相互依赖的多个 Stage，划分 Stage 的
 然后将这些 Task 以 TaskSet 的形式提交给 Task Scheduler 运行
 
 ![img](images/stage切割原理.png)
-
-
 
 # Apache Spark
 
@@ -1105,3 +1109,9 @@ rdd_count.collect()
  ('spark', 4),
  ('sql', 1)]
 ```
+
+
+# 参考
+
+* [Spark的基本原理](https://mp.weixin.qq.com/s/dontNjAGFyskhHz7tbdWeg)
+

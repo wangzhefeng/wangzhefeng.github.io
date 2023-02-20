@@ -4,32 +4,12 @@ author: 王哲峰
 date: '2022-03-11'
 slug: statistical-philosophy
 categories:
-  - 内心的疑问
+  - 数学、统计学
 tags:
   - note
 ---
 
-
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -52,22 +32,19 @@ details[open] summary {
 }
 </style>
 
-
-
 <details><summary>目录</summary><p>
 
-- [TODO](#todo)
-- [阅读材料](#阅读材料)
+- [参考](#参考)
 </p></details><p></p>
 
-# TODO
 
 
 
 
-# 阅读材料
+# 参考
 
-- 统计之美
-- 统计使人豁达
-- 谢邦昌
-- [Philosophy of Statistics](https://plato.stanford.edu/entries/statistics/)
+* [统计之美]()
+* [统计使人豁达]()
+* [谢邦昌]()
+* [Philosophy of Statistics](https://plato.stanford.edu/entries/statistics/)
+* [因果推断——现代统计的思想飞跃](https://mp.weixin.qq.com/s/QxL0DWR-NF35NHZ6FkxHZA)
