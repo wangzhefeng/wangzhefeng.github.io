@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-11-21'
 slug: model-rule
 categories:
-  - model
+  - machinelearning
 tags:
   - machinelearning
 ---
@@ -202,3 +202,4 @@ details[open] summary {
 4. 对于权重绝对值高或低的特征, 可以进行更细化的工作, 也可以进行特征组合
 5. 进行 Bad-Case 分析, 针对错误的例子确定是否还有地方可以修改挖掘
 6. 进行模型融合
+

@@ -6,7 +6,7 @@ slug: model-metrics
 categories:
   - machinelearning
 tags:
-  - tool
+  - machinelearning
 ---
 
 <style>

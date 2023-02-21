@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2022-10-30'
 slug: similarity-distances
 categories:
-  - algorithms
+  - machinelearning
 tags:
-  - model
+  - machinelearning
 ---
 
 <style>

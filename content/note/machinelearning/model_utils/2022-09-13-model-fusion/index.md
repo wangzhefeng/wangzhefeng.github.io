@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2022-09-13'
 slug: model-fusion
 categories:
-  - model
+  - machinelearning
 tags:
-  - note
+  - machinelearning
 ---
 
 <style>

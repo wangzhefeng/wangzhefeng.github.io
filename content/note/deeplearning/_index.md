@@ -5,6 +5,10 @@ list_pages: true
 # order_by: title
 ---
 
+## 文章
+
+* [Horovod分布式计算原理与代码实现](https://mp.weixin.qq.com/s/wNeCGMSRF0jg7yNJ_s6dWw)
+
 ## 业务方向
 
 根据业务和技术方向的差异性，目前工业界的算法工程师主要可以分成：
@@ -29,8 +33,5 @@ list_pages: true
 * DIN
 * DIEN
 
-## 文章
-
-* [Horovod分布式计算原理与代码实现](https://mp.weixin.qq.com/s/wNeCGMSRF0jg7yNJ_s6dWw)
-
 ## 文档
+

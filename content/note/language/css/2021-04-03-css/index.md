@@ -9,6 +9,36 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [CSS 内容](#css-内容)
+  - [CSS 介绍](#css-介绍)
+  - [CSS 关键概念](#css-关键概念)
+  - [CSS 样式化表格](#css-样式化表格)
+- [CSS 样式](#css-样式)
+- [相关教程、文章](#相关教程文章)
+</p></details><p></p>
+
 # CSS 内容
 
 - CSS 介绍

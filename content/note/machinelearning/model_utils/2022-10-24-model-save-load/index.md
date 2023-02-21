@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2022-10-24'
 slug: model-save-load
 categories:
-  - model
+  - machinelearning
 tags:
-  - note
+  - machinelearning
 ---
 
 <style>
@@ -29,26 +29,17 @@ details[open] summary {
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
+- [模型持久化介绍](#模型持久化介绍)
+- [Pickle](#pickle)
+- [PMML](#pmml)
 - [参考](#参考)
 </p></details><p></p>
 
+# 模型持久化介绍
+
 ```python
-# -*- coding: utf-8 -*-
-
-
-# *********************************************
-# * Author      : zhefeng wang
-# * Email       : wangzhefengr@163.com
-# * Date        : 2021.11.03
-# * Version     : 1.0.0
-# * Description : 模型部署方法
-# * Link        : https://zhuanlan.zhihu.com/p/92691256
-# **********************************************
-
-
 # python libraries
 import os
 import sys
@@ -59,14 +50,6 @@ from sklearn.externals import joblib
 from sklearn2pmml import sklearn2pmml, PMMLPipeline
 from sklearn_pandas import DataFrameMapper
 from pypmml import Model
-
-
-# global variable
-GLOBAL_VARIABLE = None
-
-
-def func():
-    pass
 
 
 # TODO
@@ -88,8 +71,11 @@ class ModelDeploy:
         模型载入
         """
         pass
+```
 
+# Pickle
 
+```python
 class ModelDeployPkl(ModelDeploy):
     """
     模型离线部署类
@@ -129,7 +115,18 @@ class ModelDeployPkl(ModelDeploy):
         self.model = joblib.load(self.save_file_path)
 
 
+# 测试代码 main 函数
+def main():
+    save_file_path = None
+    model_deploy_pkl = ModelDeployPkl(save_file_path)
 
+if __name__ == "__main__":
+    main()
+```
+
+# PMML
+
+```python
 class ModelDeployPmml(ModelDeploy):
     """
     模型在线部署类
@@ -177,17 +174,14 @@ class ModelDeployPmml(ModelDeploy):
 # 测试代码 main 函数
 def main():
     save_file_path = None
-    model_deploy_pkl = ModelDeployPkl(save_file_path)
     model_deploy_pmml = ModelDeployPmml(save_file_path)
 
 if __name__ == "__main__":
     main()
 ```
 
-
-
 # 参考
 
 - https://scikit-learn.org/stable/model_persistence.html
-
+* https://zhuanlan.zhihu.com/p/92691256
 
