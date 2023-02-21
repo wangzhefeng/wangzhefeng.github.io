@@ -44,12 +44,12 @@ details[open] summary {
     - [存储引擎比较及选择](#存储引擎比较及选择)
     - [修改存储引擎](#修改存储引擎)
 - [MySQL 环境](#mysql-环境)
-  - [安装过程省略](#安装过程省略)
   - [Windows](#windows)
     - [服务启停和状态查看](#服务启停和状态查看)
     - [初始化设置](#初始化设置)
     - [启动和关闭 MySQL CLI](#启动和关闭-mysql-cli)
-  - [MacOS 和 Linux](#macos-和-linux)
+  - [Linux](#linux)
+  - [MacOS](#macos)
     - [环境变量配置](#环境变量配置)
     - [服务启停和状态查看](#服务启停和状态查看-1)
     - [初始化设置](#初始化设置-1)
@@ -243,12 +243,6 @@ mysql> alter table table_name engine=myisam;
 
 # MySQL 环境
 
-## 安装过程省略
-
-* Windows
-* Linux
-* MacOS
-
 ## Windows
 
 ### 服务启停和状态查看
@@ -297,7 +291,89 @@ Ctrl + D
 mysql> exit;
 ```
 
-## MacOS 和 Linux
+## Linux
+
+1. 查看是否安装 MySQL
+
+```bash
+$ sudo dpkg -l | grep mysql
+```
+
+2. 安装 MySQL
+
+```bash
+$ sudo apt install mysql-server
+```
+
+如果安装时报错，无法获得锁，运行以下命令，强制解锁：
+
+```bash
+$ sudo rm /var/cache/apt/archives/lock
+$ sudo rm /var/lib/dpkg/lock
+```
+
+3. 验证是否安装成功
+
+```bash
+$ netstat -tap | grep mysql
+$ dpkg -l | grep mysql
+```
+
+4. 检查 MySQL 启动状态
+
+```bash
+$ systemctl status mysql
+```
+
+5. 查看登录密码
+
+```bash
+$ sudo cat /etc/mysql/debian.cnf
+```
+
+6. 登录 MySQL CLI
+
+```bash
+$ mysql -uroot -p
+```
+
+7. 修改密码
+
+```bash
+mysql> use mysql;
+mysql> update mysql.user set authentication_string=password('your_new_pasword') where user='root' and Host ='localhost';
+mysql> update user set plugin="mysql_native_password";
+mysql> flush privileges;
+```
+
+8. 重启数据库
+
+```bash
+$ sudo service mysql restart
+```
+
+9. 设置允许远程连接
+
+```bash
+$ sudo vi /etc/mysql/mysql.conf.d/mysql.cnf
+```
+
+注释掉 `bind-address = 127.0.0.1`
+
+10. 保存退出，然后登录 MySQL 服务，执行如下命令，
+    其中 `connect_pasword` 建议与你本地的登录密码保持一致
+
+```bash
+mysql> grant all on *.* to root@'%' identified by 'connect_pasword' with grant option;
+# 刷新权限
+mysql> flush privileges;
+```
+
+11. 重启 mysql，远程客户端连接测试
+
+注意：一定要重启，否则客户端连接可能会报错：2003 - Can’t connect to MySQL server on ‘192.168.186.131’ (10038)
+
+## MacOS
 
 ### 环境变量配置
 
