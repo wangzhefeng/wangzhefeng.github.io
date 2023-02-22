@@ -5,7 +5,7 @@ list_pages: true
 # order_by: title
 ---
 
-# 文章
+## 文章
 
 * [ACF 和 PACF](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484365&idx=1&sn=d4e22bd52ae58c78eb5424f3f4f139f3&chksm=c173fdc4f60474d287e3111f7cadef9fa9211aa3565f1852c6bbd8276f32f226922a3386ee24&scene=178&cur_album_id=2111235593522200577#rd)
 * [PACF](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484417&idx=1&sn=efd49713967931a93568f1a8557672cd&chksm=c173fa08f604731e96ff7ddfc07f622befb1351fdda49b602715dca91c0eddcfd4b2e83655db&cur_album_id=2111235593522200577&scene=189#wechat_redirect)
@@ -17,6 +17,8 @@ list_pages: true
 * [检测相关时间序列中的异常](https://anomaly.io/detect-anomalies-in-correlated-time-series/index.html)
 * [用移动中位数分解检测异常](https://anomaly.io/anomaly-detection-moving-median-decomposition/index.html)
 * [为什么时序预测很难？](https://mp.weixin.qq.com/s/K0VVbZBcFJB5ctKWeMHUgQ)
+* [计算时间序列周期的三种方法](https://mp.weixin.qq.com/s/GbhsnrZvMQdOY1k-EclBPw)
+* [可用于时间序列预测的14种损失函数](https://mp.weixin.qq.com/s/eeKsAYvRaZvc3dsyin_pRQ)
 
-# 文档
+## 文档
 
