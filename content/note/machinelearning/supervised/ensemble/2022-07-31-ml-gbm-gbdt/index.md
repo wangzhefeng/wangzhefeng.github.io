@@ -1,12 +1,11 @@
 ---
-title: GBM
+title: GBDT
 author: 王哲峰
-date: '2022-07-30'
-slug: ml-gbm
+date: '2022-07-31'
+slug: ml-gbm-gbdt
 categories:
   - machinelearning
 tags:
-  - machinelearning
   - model
 ---
 
@@ -44,7 +43,6 @@ details[open] summary {
   - [参数类型](#参数类型)
   - [调参策略](#调参策略)
 </p></details><p></p>
-
 
 # GBM 模型原理
 
