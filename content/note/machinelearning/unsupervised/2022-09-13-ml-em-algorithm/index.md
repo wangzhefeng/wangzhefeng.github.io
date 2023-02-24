@@ -21,3 +21,5 @@ EM 算法，Expectation Maximization algorithm
 
 ## EM 算法的推广
 
+# 参考
+

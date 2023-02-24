@@ -6,7 +6,7 @@ slug: ml-pca
 categories:
   - machinelearning
 tags:
-  - tool
+  - model
 ---
 
 <style>
