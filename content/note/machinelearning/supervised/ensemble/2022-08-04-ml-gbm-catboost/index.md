@@ -32,7 +32,6 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [CatBoost 资源(TODO)](#catboost-资源todo)
 - [CatBoost 简介](#catboost-简介)
 - [CatBoost 模型理论](#catboost-模型理论)
   - [预测漂移](#预测漂移)
@@ -62,13 +61,6 @@ details[open] summary {
   - [数据可视化 API](#数据可视化-api)
 - [参考](#参考)
 </p></details><p></p>
-
-# CatBoost 资源(TODO)
-
-- [原始算法论文]()
-- [GitHub]()
-- [Doc]()
-- [Python 示例]()
 
 # CatBoost 简介
 
@@ -108,6 +100,10 @@ CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此
 * CatBoost 可以自动化寻找类别特征的组合，利用特征之间的关系，极大地丰富特征的维度
 * CatBoost 采用 Ordered Boosting 的方法对抗训练集中的噪声点，避免梯度估计的偏差，
   更好地解决了预测偏移的问题；尤其是在小数据集上，CatBoost 的效果更加稳定
+
+CatBoost 对比 LightGBM：
+
+![img](images/cat_light.png)
 
 # CatBoost 模型理论
 
@@ -332,7 +328,7 @@ Ordered TS 的计算样例图：
 
 如上图所示，如果对打乱顺序后 `ID` 为 `6` 的样本进行 TS 编码，
 会先将样本 `4`、`3`、`7`、`2` 作为历史样本，然后使用它们去计算样本 `6` 的 TS 编码，
-由于只有样本 `4` 和样本 `6` 为同类特征，二样本 `6` 不参与自身的 TS 计算，
+由于只有样本 `4` 和样本 `6` 为同类特征， 而样本 `6` 不参与自身的 TS 计算，
 所以最后样本 `6` 的 TS 为 `$\frac{1+\alpha p}{1+\alpha}$`。
 注意：上图展示的是训练集的 TS 编码过程，而测试集 TS 编码是用全测试集进行计算的
 
@@ -341,8 +337,8 @@ Ordered TS 的计算样例图：
 假设有无限的训练数据，可以轻松构建一个算法。每步提升中，独立采样一个新数据 `$D_{t}$`，
 然后对新采样的数据集应用现有模型，便可获得无偏残差 (Unshifted Residuals)。
 但现实中，带标注的数据是有限的。如果我们用 I 颗树学习一个模型，
-为了使残差 `$r{I-1}(x^{(k), y^{(k)}})$` 不偏移，需要训练模型 `$F^{I-1}$` 时不用样本 `$x^{(k)}$`。
-因为我们需要计算所有样本各自的无偏残差，所以训练模型 `$F^{I-1}$` 不用任何样本才行。
+为了使残差 `$r^{I-1}(x^{(k)}, y^{(k)})$` 不偏移，需要训练模型 `$F^{I-1}$` 时不用样本 `$x^{(k)}$`。
+因为需要计算所有样本各自的无偏残差，所以训练模型 `$F^{I-1}$` 不用任何样本才行。
 第一样看上去，不可能吧，怎么可能模型训练不使用样本？但是，可以搞一堆模型，
 然后每个模型用不同的样本去训练。听起来有点迷糊，我们先看一张图
 
@@ -350,26 +346,51 @@ Ordered TS 的计算样例图：
 
 上图展示了传统提升和排序提升中残差计算的对比：
 
-* 传统残差计算法：第t轮的输入残差可通过上一轮  的模型预测值与样本真实值做差得到。而因为残差计算中的模型  是用全部数据集训练的，所以容易预测偏移。
-* 排序提升残差计算法：CatBoost基于排序提升原则去计算残差，例如样本4的残差计算是用前3个样本训练得到的模型预测值与样本真实值做差，这样的话，样本4的残差计算没有让样本4自身参与进去，这样可以避免了预测偏移，因为得到的是无偏残差。
-
+* 传统残差计算法：第 `$t$` 轮的输入残差可通过上一轮 `$t-1$` 的模型预测值与样本真实值做差得到。
+  而因为残差计算中的模型 `$M^{t-1}$` 是用全部数据集训练的，所以容易预测偏移
+* 排序提升残差计算法：CatBoost 基于排序提升原则去计算残差，
+  例如样本 4 的残差计算是用前 3 个样本训练得到的模型预测值与样本真实值做差，
+  这样的话，样本 4 的残差计算没有让样本4自身参与进去，这样可以避免了预测偏移，
+  因为得到的是无偏残差
 
 看起来排序提升残差计算法更好，但它需要留意以下几点：
 
-1. 计算残差需要  个不同模型。所以Catboost中，作者在CatBoost的梯度提升算法中做了些修改，详见后续伪代码部分。
-2. TS计算与残差计算所用样本顺序是一样的，即  ，才能保证预测不偏移。
-3. 同理Ordered TS，单用一个顺序  会增加最终模型的方差，所以每次提升都采用不同的  ，以避免模型欠拟合。
+1. 计算残差需要 `$n$` 个不同模型。所以 Catboost 中，
+   作者在 CatBoost 的梯度提升算法中做了些修改，详见后续伪代码部分
+2. TS 计算与残差计算所用样本顺序是一样的，即 `$\sigma_{cat} = \sigma_{boost}$`，
+   才能保证预测不偏移
+3. 同理 Ordered TS，单用一个顺序 `$\sigma$` 会增加最终模型的方差，
+   所以每次提升都采用不同的  ，以避免模型欠拟合。
 
-Catboost有两种提升模式：Ordered和Plain，后者是标准GBDT算法搭配Ordered TS，前者是Ordered TS + Ordered Boosting。前面讲了Ordered Boosting下的残差计算方式，现在我们正式来看下CatBoost是怎么建树的。CatBoost是用对称树 (Oblivious Decision Tree)作为弱学习器，对称意味着树同一层都使用相同分裂标准。对称树是平衡的，不易过拟合，且能显著加速测试执行时间。具体伪代码如下所示：
+Catboost 有两种提升模式：Ordered 和 Plain，后者是标准 GBDT 算法搭配 Ordered TS，
+前者是 Ordered TS + Ordered Boosting。前面讲了 Ordered Boosting 下的残差计算方式，
+现在我们正式来看下 CatBoost 是怎么建树的。CatBoost 是用对称树(Oblivious Decision Tree)作为弱学习器，
+对称意味着树同一层都使用相同分裂标准。对称树是平衡的，不易过拟合，且能显著加速测试执行时间。具体伪代码如下所示：
 
 ![img](images/ob_algo.png)
 
-首先，CatBoost对训练集生成  个独立随机排列序列。序列  用于评估树分裂情况，以帮助定义树结构。  用于为给定树选择叶子节点值  。在Orderd Boosting模式中，我们维持一个模型  ，它是学习序列  里前  个样本的模型，然后对第  个样本预测。在算法迭代  轮下，我们从  中随机选一个序列  ，并基于此构建一棵树  。首先，对于类别型数据，TS编码在序列  下完成。然后，该序列继续影响树的学习。即，基于  ，我们计算对应得梯度  。之后，当构建树时，我们使用余弦相似度  估计梯度  ，其中，对每个样本  ，我们取梯度  (该梯度只基于序列  的历史样本计算)。在每轮评估候选分裂点时，第  个样本的叶子节点值  是与样本  同属相同叶子节点  的历史样本  的梯度值  求均值所得。注意：  是依赖于序列  ，因为  会影响样本  的Ordered TS值。当树结构   (即分类特征顺序)确定了，我们会用它提升所有模型  。作者强调：所有模型  都是共用一个相同树结构  ，但是根据  和  设置不同叶子节点值应用在不同  的。具体过程如图6所示。
+首先，CatBoost 对训练集生成 `$s+1$` 个独立随机排列序列。
+序列 `$\sigma_{1}, \ldots, \sigma_{s}$` 用于评估树分裂情况，
+以帮助定义树结构。`$\sigma_{0}$` 用于为给定树选择叶子节点值 `$b_{j}$`。
+在 Orderd Boosting 模式中，我们维持一个模型 `$M_{r,j}$`，
+它是学习序列 `$\sigma_{r}$` 里前 `$j$` 个样本的模型，
+然后对第 `$i$` 个样本预测。在算法迭代 `$$` 轮下，
+我们从 `$\{\sigma_{1}, \ldots, \sigma_{s}\}$` 中随机选一个序列 `$\sigma_{r}$`，
+并基于此构建一棵树 `$T_{t}$`。
 
+* 首先，对于类别型数据，TS 编码在序列 `$\sigma_{r}$` 下完成
+* 然后，该序列继续影响树的学习。即基于 `$M_{r, j(i)}$`，
+  我们计算对应得梯度 `$grad_{r}j(i) = \frac{\partial L(y_{i}, s)}{\partial s}|_{s = M_{r}j(i)}$`。
+* 之后，当构建树时，我们使用余弦相似度 `$cos(\cdot, \cdot)$` 估计梯度 `$G$`
 
+其中，对每个样本 `$i$`，我们取梯度 `$grad_{r,\sigma(i)-1}(i)$` (该梯度只基于序列 `$\sigma_{r}$` 的历史样本计算)。
+在每轮评估候选分裂点时，第 `$i$` 个样本的叶子节点值 `$\bigtriangleup(i)$` 是与样本 `$i$` 同属相同叶子节点 `$leaf_{r}(i)$` 的历史样本 `$p$` 的梯度值 `$grad_{r, \sigma(i) - 1}$` 求均值所得。注意：`$leaf_{r}(i)$` 是依赖于序列 `$\sigma_{r}$`，
+因为 `$\sigma_{r}$` 会影响样本 `$i$` 的 Ordered TS 值。当树结构 `$T_{t}$` (即分类特征顺序)确定了，
+我们会用它提升所有模型 `$M'_{r, j}$`。作者强调：所有模型 `$M$` 都是共用一个相同树结构 `$T_{t}$`，
+但是根据 `$r'$` 和 `$j$` 设置不同叶子节点值应用在不同 `$M'_{r,j}$` 的。具体过程如图6所示。
 
-
-Plain Boosting模式跟标准GBDT流程类似，但如果出现类别特征，他会对应  个序列，维持  个模型  
+Plain Boosting 模式跟标准 GBDT 流程类似，但如果出现类别特征，
+他会对应 `$\sigma_{1}, \ldots, \sigma_{s}$` 个序列，维持 `$s$` 个模型 `$M_{r}$`  
 
 ## 特征组合
 
@@ -578,5 +599,9 @@ CatBoost 数据可视化介绍:
 # 参考
 
 * [类别变量杀手CatBoost](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494038&idx=2&sn=936c63d7f3eb8ad9dccc04e65395655d&chksm=c32af019f45d790fade45a8ce74c8d6ca8f35a60ab8e82c594c9ab2ab923eefa99d096697e2f&scene=21#wechat_redirect)
-* [CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
+* [务实基础】CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
 * [CatBoost/tutorials](https://github.com/catboost/tutorials)
+* [Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., & Gulin, A. (2018). CatBoost: unbiased boosting with categorical features. In Advances in neural information processing systems (pp. 6638-6648).]()
+* https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features
+* [CatBoost官方文档](https://catboost.ai/docs)
+

@@ -32,7 +32,6 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [LightGBM 资源](#lightgbm-资源)
 - [LightGBM 简介](#lightgbm-简介)
   - [LightGBM 特点](#lightgbm-特点)
   - [LightGBM vs XGBoost](#lightgbm-vs-xgboost)
@@ -59,16 +58,8 @@ details[open] summary {
   - [Scikit-learn API](#scikit-learn-api)
   - [Callbacks](#callbacks)
   - [Plotting](#plotting)
+- [参考](#参考)
 </p></details><p></p>
-
-# LightGBM 资源
-
-- [原始算法论文](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf>)
-- [GitHub-Python-Package](https://github.com/Microsoft/LightGBM/tree/master/python-package>)
-- [GitHub-R-Package](https://github.com/Microsoft/LightGBM/tree/master/R-package>)
-- [GitHub-Microsoft](https://github.com/Microsoft/LightGBM>)
-- [Doc](https://lightgbm.readthedocs.io/en/latest/>)
-- [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
 
 # LightGBM 简介
 
@@ -84,6 +75,8 @@ It is designed to be distributed and efficient with the following advantages:
 - Capable of handling large-scale data.
 
 ## LightGBM vs XGBoost
+
+![img](images/light_xgb.png)
 
 LightGBM 可以看成是 XGBoost 的升级加强版本:
 
@@ -115,6 +108,8 @@ LightGBM 在 XGBoost 上主要有三方面的优化:
 > LightGBM 性能优化原理
 
 ## LightGBM 优化策略
+
+![img](images/lgb1.png)
 
 由于 XGBoost 采用的基模型是二叉树，因此生产每片叶子需要分裂一次。
 而每次分裂，都要遍历素有特征上所有候选分裂点位，
@@ -488,7 +483,6 @@ lgbr.predict(X,
             **kwargs)
 ```
 
-
 ## Callbacks
 
 - `early_stopping(stopping_round, ...)`
@@ -519,3 +513,11 @@ plot_tree(booster, ax, tree_index, ...)
 create_tree_digraph(booster, tree_index, ...)
 ```
 
+# 参考
+
+* [原始算法论文](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf>)
+* [GitHub-Python-Package](https://github.com/Microsoft/LightGBM/tree/master/python-package>)
+* [GitHub-R-Package](https://github.com/Microsoft/LightGBM/tree/master/R-package>)
+* [GitHub-Microsoft](https://github.com/Microsoft/LightGBM>)
+* [Doc](https://lightgbm.readthedocs.io/en/latest/>)
+* [Python 示例](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide>)
