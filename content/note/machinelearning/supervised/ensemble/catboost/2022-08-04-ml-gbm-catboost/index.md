@@ -33,32 +33,23 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [CatBoost 简介](#catboost-简介)
-- [CatBoost 模型理论](#catboost-模型理论)
-  - [预测漂移](#预测漂移)
-    - [类别特征编码中的预测偏移](#类别特征编码中的预测偏移)
-    - [梯度提升方法中的预测偏移](#梯度提升方法中的预测偏移)
-    - [CatBoost 优化原理](#catboost-优化原理)
-  - [类别特征处理策略](#类别特征处理策略)
-    - [低基数类别特征](#低基数类别特征)
-    - [高基数类别特征](#高基数类别特征)
-    - [目标变量编码](#目标变量编码)
-      - [均值编码](#均值编码)
-      - [平滑均值编码](#平滑均值编码)
-      - [其他均值编码](#其他均值编码)
-  - [Ordered TS](#ordered-ts)
-  - [Ordered Boosting](#ordered-boosting)
-  - [特征组合](#特征组合)
-- [CatBoost 参数](#catboost-参数)
-- [CatBoost API](#catboost-api)
-  - [CatBoost 安装](#catboost-安装)
-    - [安装依赖库](#安装依赖库)
-    - [安装 CatBoost 库](#安装-catboost-库)
-  - [核心数据结构](#核心数据结构)
-  - [Learning API](#learning-api)
-    - [CatBoostClassifier](#catboostclassifier)
-    - [CatBoostRegressor](#catboostregressor)
-    - [CatBoost](#catboost)
-  - [数据可视化 API](#数据可视化-api)
+  - [CatBoost 特点](#catboost-特点)
+  - [CatBoost vs LightGBM](#catboost-vs-lightgbm)
+- [CatBoost 优化策略](#catboost-优化策略)
+- [预测漂移](#预测漂移)
+  - [类别特征编码中的预测偏移](#类别特征编码中的预测偏移)
+  - [梯度提升方法中的预测偏移](#梯度提升方法中的预测偏移)
+  - [CatBoost 优化原理](#catboost-优化原理)
+- [类别特征处理策略](#类别特征处理策略)
+  - [低基数类别特征](#低基数类别特征)
+  - [高基数类别特征](#高基数类别特征)
+  - [目标变量编码](#目标变量编码)
+    - [均值编码](#均值编码)
+    - [平滑均值编码](#平滑均值编码)
+    - [其他均值编码](#其他均值编码)
+- [Ordered TS](#ordered-ts)
+- [Ordered Boosting](#ordered-boosting)
+- [特征组合](#特征组合)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -66,7 +57,16 @@ details[open] summary {
 
 > CatBoost，Categorical Boosting
 
-下面是 CatBoost 官方文档的介绍：
+CatBoost 由俄罗斯公司 Yandex 设计，并于 2017 年在 Github 上开源。在 2017 年刚刚开源的时候，
+CatBoost 的效果并不理想，而且因为 CatBoost 在 CPU 上训练很慢，并不是很受大家的欢迎。
+但随着 CatBoost 开始支持 GPU 训练，模型训练速度得到了大大提升，
+后来大家发现其经常在类别特征较多的竞赛中可以取得非常不错的效果而越加受欢迎。
+CatBoost 的名称由 Category 和 Boosting 组成，从名称我们也可以看出，
+CatBoost 在类别特征方面的处理进行了升级处理。当然除此之外，
+CatBoost 还解决了梯度偏差（Gradient Bias）以及预测偏移（Prediction shift）的问题，
+进一步提升了模型的效果和泛化能力
+
+## CatBoost 特点
 
 > CatBoost is a fast, scalabel, high performance open-scource gradient
 > boosting on decision trees library;
@@ -84,14 +84,9 @@ details[open] summary {
 > 5. Fast prediction
 >    - Apply your trained model quickly and efficiently even to latency-critical task using CatBoost's models applier;
 
-CatBoost 由俄罗斯公司 Yandex 设计，并于 2017 年在 Github 上开源。在 2017 年刚刚开源的时候，
-CatBoost 的效果并不理想，而且因为 CatBoost 在 CPU 上训练很慢，并不是很受大家的欢迎。
-但随着 CatBoost 开始支持 GPU 训练，模型训练速度得到了大大提升，
-后来大家发现其经常在类别特征较多的竞赛中可以取得非常不错的效果而越加受欢迎。
-CatBoost 的名称由 Category 和 Boosting 组成，从名称我们也可以看出，
-CatBoost 在类别特征方面的处理进行了升级处理。当然除此之外，
-CatBoost 还解决了梯度偏差（Gradient Bias）以及预测偏移（Prediction shift）的问题，
-进一步提升了模型的效果和泛化能力
+## CatBoost vs LightGBM
+
+![img](images/cat_light.png)
 
 CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此处我们将其归纳为下面几点：
 
@@ -101,15 +96,11 @@ CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此
 * CatBoost 采用 Ordered Boosting 的方法对抗训练集中的噪声点，避免梯度估计的偏差，
   更好地解决了预测偏移的问题；尤其是在小数据集上，CatBoost 的效果更加稳定
 
-CatBoost 对比 LightGBM：
-
-![img](images/cat_light.png)
-
-# CatBoost 模型理论
+# CatBoost 优化策略
 
 ![img](images/optim.png)
 
-## 预测漂移
+# 预测漂移
 
 > 预测偏移，Prediction Shift
 
@@ -121,7 +112,7 @@ CatBoost 对比 LightGBM：
 
 预测偏移发生在两个地方：类别特征编码、梯度提升方法
 
-### 类别特征编码中的预测偏移
+## 类别特征编码中的预测偏移
 
 对于类别特征的编码，不同的模型采用了不同的方案：
 
@@ -161,7 +152,7 @@ CatBoost 对比 LightGBM：
 * `$\alpha$` 为控制先验参与编码的权重
 * `$D^{(k)} \subset D_{\{x^{(k)}\}}$`
 
-### 梯度提升方法中的预测偏移
+## 梯度提升方法中的预测偏移
 
 已经知道 TS 因目标泄露带来预测偏移。那接下来看下 GBDT 类模型中，它们梯度提升方法里的预测偏移是在哪发生的
 
@@ -182,17 +173,17 @@ GBDT 当前轮的弱学习器是拟合上一轮的负梯度值，因此 `$h^{t}$
 如果训练集和测试集分布不一致，那么用训练集得到的梯度值分布就跟测试集的梯度值分布不一致，
 那么便会有预测偏移，最终影响了模型的通用性
 
-### CatBoost 优化原理
+## CatBoost 优化原理
 
 CatBoost 针对类别特征 TS 编码时发生的预测偏移采用了 Ordered TS 方法，
 针对梯度提升方法中的偏移采用 Ordered Boosting 方法
 
-## 类别特征处理策略
+# 类别特征处理策略
 
 类别特征是非常难以处理的一类特征，对其处理的好坏对模型的效果影响巨大。
 那么 CatBoost 是如何处理此类数据呢？
 
-### 低基数类别特征
+## 低基数类别特征
 
 > 低基数特征，low-cardinality features
 
@@ -201,7 +192,7 @@ CatBoost 针对类别特征 TS 编码时发生的预测偏移采用了 Ordered T
 当然也可以对其进行 One-Hot 编码转化为数值型的特征，即先将低基数的类别特征进行 One-Hot 预处理，
 然后对其进行训练，而 CatBoost 就是采用此类策略
 
-### 高基数类别特征
+## 高基数类别特征
 
 > 高基数特征：high-cardinality features
 
@@ -219,11 +210,11 @@ CatBoost 采用的策略也是类似的，它采用了目标变量统计（Targe
 有的时候，还可以通过对编码之后的特征进行阈值设置，例如：基于对数损失、基尼系数或者均方差等，
 得到对训练集而言将类别一分为二的划分当中相对较优的那个
 
-### 目标变量编码
+## 目标变量编码
 
 > 目标变量编码，Target Statistics，或 Target Encoding
 
-#### 均值编码
+### 均值编码
 
 在处理类别特征的时候，最简单的就是直接用类别对应的目标变量的均值来替换原来的类别值。
 下面详细进行说明：
@@ -252,7 +243,7 @@ TS 是基于类别的目标变量 `$y$` 的期望来进行估算：`$\hat{x}^{(k
 * 当类别特征的基数较小的时候，统计的均值噪音信息较大
 * 每个类别含有更多的信息，直接取均值的话会丢失非常多的信息
 
-#### 平滑均值编码
+### 平滑均值编码
 
 均值编码估算方式在低基类别上有噪声，因此常常会加先验概率 `$p$` 进行平滑
 
@@ -287,7 +278,7 @@ TS 是基于类别的目标变量 `$y$` 的期望来进行估算：`$\hat{x}^{(k
 > 其中是第个训练样本。不同之处在于，对于训练集，我们是按照下面的形式进行计算的 `$\mathbbE}(\bar{x}^{i} y_{k}) = \frac{y_k + \alpha p{1+\alpha$`；
 > 对于测试集 `$\mathbb{E}(\bar{x}^i | y) = p$`
 
-#### 其他均值编码
+### 其他均值编码
 
 为了避免目标变量的泄漏，防止条件转移，可以通过下面的方式进行计算：
 
@@ -302,7 +293,7 @@ TS 是基于类别的目标变量 `$y$` 的期望来进行估算：`$\hat{x}^{(k
 * Ordered TS
     - 这是一个更加高效的策略。它依赖于排序的准则，每个样本的TS值仅依赖于观察到的历史。为了使这个想法适应标准的离线设置，我们引入了一个人工“时间”，也就是对训练样本进行随机扰动，对于每个样本，我们使用所有的"history"计算TS,即:
 
-## Ordered TS
+# Ordered TS
 
 之前在背景里有讲 Greedy TS 的编码思路，但其实还有其它 TS 编码方式。
 这里，根据论文整理了下 Greedy TS、Holdout TS 和 Leave-one-out TS 的编码思路对比图如下：
@@ -332,7 +323,7 @@ Ordered TS 的计算样例图：
 所以最后样本 `6` 的 TS 为 `$\frac{1+\alpha p}{1+\alpha}$`。
 注意：上图展示的是训练集的 TS 编码过程，而测试集 TS 编码是用全测试集进行计算的
 
-## Ordered Boosting
+# Ordered Boosting
 
 假设有无限的训练数据，可以轻松构建一个算法。每步提升中，独立采样一个新数据 `$D_{t}$`，
 然后对新采样的数据集应用现有模型，便可获得无偏残差 (Unshifted Residuals)。
@@ -392,7 +383,7 @@ Catboost 有两种提升模式：Ordered 和 Plain，后者是标准 GBDT 算法
 Plain Boosting 模式跟标准 GBDT 流程类似，但如果出现类别特征，
 他会对应 `$\sigma_{1}, \ldots, \sigma_{s}$` 个序列，维持 `$s$` 个模型 `$M_{r}$`  
 
-## 特征组合
+# 特征组合
 
 在数据建模中，组合特征是至关重要的，好的组合特征可以为模型带来巨大的提升。
 例如在商品点击预估问题中，单独的用户信息和商品信息并不能很好地反映用户和商品之间的交叉关系，
@@ -412,189 +403,6 @@ CatBoost 捕捉高阶依赖的类别特征组合成额外的类别特征，例�
 * CatBoost 在每次分割时会进行贪心的特征组合
     - 例如，在选择第一个节点时，会先考虑单个节点，在生成第二个节点时，考虑那个单节点和其它类别特征的组合，
       然后选择其中最好的，即贪心地进行类别特征的交叉组合
-
-
-# CatBoost 参数
-
-- Objectives and metrics
-    - Regression
-        - MAE
-        - MAPE
-        - Poisson
-        - Quantile
-        - RMSE
-        - LogLinQuantile
-        - Lq
-        - Huber
-        - Expectile
-        - FairLoss
-        - NumErrors
-        - SMAPE
-        - R2
-        - MSLE
-        - MedianAbsoluteError
-    - Classification
-        - Logloss
-        - CrossEntropy
-        - Precision
-        - Recall
-        - F1
-        - BalancedAccuracy
-        - BalancedErrorRate
-        - MCC
-        - Accuracy
-        - CtrFactor
-        - AUC
-        - NormalizedGini
-        - BriefScore
-        - HingeLoss
-        - HammingLoss
-        - ZeroOneLoss
-        - Kapp
-        - WKappa
-        - LogLikelihoodOfPrediction
-    - Multiclassification
-        - MultiClass
-        - MultiClassOneVsAll
-        - Precision
-        - Recall
-        - F1
-        - TotalF1
-        - MCC
-        - Accuracy
-        - HingeLoss
-        - HammingLoss
-        - ZeroOneLoss
-        - Kappa
-        - WKappa
-    - Ranking
-
-# CatBoost API
-
-## CatBoost 安装
-
-### 安装依赖库
-
-```bash
-$ pip install numpy six
-```
-
-### 安装 CatBoost 库
-
-```bash
-$ pip install catboost
-```
-
-## 核心数据结构
-
-## Learning API
-
-### CatBoostClassifier
-
-```python
-import numpy as np
-from catboost import CatBoostClassifier, Pool
-
-# initialize data
-train_data = np.random.randit(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 2, size = (100))
-test_data = catboost_pool = Pool(train_data, train_labels)
-
-# build model
-model = CatBoostClassifier(
-    iterations = 2,
-    depth = 2,
-    learning_rate = 1,
-    loss_function = "Logloss",
-    verbose = True
-)
-
-# train model
-model.fit(train_data, train_labels)
-
-# prediction using model
-y_pred = model.predict(test_data)
-y_pred_proba = model.predict_proba(test_data)
-print("class = ", y_pred)
-print("proba = ", y_pred_proba)
-```
-
-### CatBoostRegressor
-
-```python
-import numpy as np
-from catboost import CatBoostRegressor, Pool
-
-# initialize data
-train_data = np.random.randint(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 100, size = (100))
-test_data = np.random.randint(0, 100, size = (50, 10))
-
-# initialize Pool
-train_pool = Pool(train_data, train_label, cat_features = [0, 2, 5])
-test_pool = Pool(test_data, cat_features = [0, 2, 5])
-
-# build model
-model = CatBoostRegressor(
-    iterations = 2, 
-    depth = 2,
-    learning_rate = 1, 
-    loss_function = "RMSE"
-)
-
-# train model
-model.fit(train_pool)
-
-# prediction
-y_pred = model.predict(test_pool)
-print(y_pred)
-```
-
-### CatBoost
-
-```python
-import numpy as np
-from catboost import CatBoost, Pool
-
-# read the dataset
-train_data = np.random.randint(0, 100, size = (100, 10))
-train_labels = np.random.randint(0, 2, size = (100))
-test_data = np.random.randint(0, 100, size = (50, 10))
-
-# init pool
-train_pool = Pool(train_data, train_labels)
-test_pool = Pool(test_data)
-
-# build model
-param = {
-    "iterations": 5
-}
-model = CatBoost(param)
-
-# train model
-model.fit(train_pool)
-
-# prediction
-y_pred_class = model.predict(test_pool, prediction_type = "Class")
-y_pred_proba = model.predict(test_pool, prediction_type = "Probability")
-y_pred_raw_vals = model.predict(test_pool, prediction_type = "RawFormulaVal")
-print("Class", y_pred_class)
-print("Proba", y_pred_proba)
-print("Raw", y_pred_raw_valss)
-```
-
-## 数据可视化 API
-
-安装 `ipywidgets` 可视化库:
-
-```bash
-$ pip install ipywidgets
-$ jypyter nbextension enable --py widgetsnbextersion
-```
-
-CatBoost 数据可视化介绍: 
-
-* [Data Visualization](https://catboost.ai/docs/features/visualization.html)
 
 # 参考
 

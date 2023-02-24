@@ -32,11 +32,11 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [XGBoost 资源](#xgboost-资源)
 - [XGBoost 简介](#xgboost-简介)
   - [XGBoost 特点](#xgboost-特点)
+  - [XGBoost vs GBDT](#xgboost-vs-gbdt)
   - [XGBoost 优势](#xgboost-优势)
-  - [XGBoost 缺点](#xgboost-缺点)
+  - [XGBoost  优缺点](#xgboost--优缺点)
 - [XGBoost 模型理论](#xgboost-模型理论)
   - [模型目标函数](#模型目标函数)
   - [模型目标](#模型目标)
@@ -48,29 +48,16 @@ details[open] summary {
     - [贪心算法(Exact Greedy Algorithm for split finding)](#贪心算法exact-greedy-algorithm-for-split-finding)
     - [近似算法(Approximate Algorithm for split finding)](#近似算法approximate-algorithm-for-split-finding)
   - [自定义损失函数](#自定义损失函数)
-- [XGBoost 参数](#xgboost-参数)
-  - [通用参数](#通用参数)
-  - [Tree Booster 参数](#tree-booster-参数)
-  - [Linear Booster 参数](#linear-booster-参数)
-  - [学习任务参数](#学习任务参数)
-  - [参数调节](#参数调节)
-- [XGBoost API](#xgboost-api)
-  - [核心数据结构](#核心数据结构)
-  - [Learning API](#learning-api)
-  - [Scikit-Learn API](#scikit-learn-api)
-  - [数据可视化 API](#数据可视化-api)
+- [XGBoost 工程优化](#xgboost-工程优化)
+  - [列块并行学习](#列块并行学习)
+  - [缓存访问](#缓存访问)
+  - [块式核外计算](#块式核外计算)
+- [参考](#参考)
 </p></details><p></p>
 
-# XGBoost 资源
-
-- [原始算法论文]()
-- [GitHub-Python-Package]()
-- [GitHub-R-Package]()
-- [GitHub-Microsoft]()
-- [Doc]()
-- [Python 示例]()
-
 # XGBoost 简介
+
+> XGBoost，eXtreme Gradient Boosting
 
 ## XGBoost 特点
 
@@ -93,6 +80,18 @@ details[open] summary {
   XGBoost 则对损失函数进行了二阶泰勒展开, 同时用到一阶和二阶导数. 
 * 且 XGBoost 支持自定义损失函数, 只要函数可一阶和二阶求导
 
+## XGBoost vs GBDT
+
+GBDT 基于负梯度（"残差"）优化偏差的训练方式容易使模型过拟合，
+虽然 GBDT 在学习率、树数量、子采样比例和决策树结构参数上有做正则化去避免过拟合，
+但是有没有其他更好的正则化手段呢？
+
+另外，GBDT 的串行训练方式造成的计算开销大，能从其它地方优化，从而加快模型训练吗？
+答案是有，2016 年陈天奇发表了 XGBoost，他在 GBDT 的基础上，优化了算法原理和工程实现，
+但本质上它跟 GBDT 一样都是加性模型
+
+![img](images/xgb_gbdt.png)
+
 ## XGBoost 优势
 
 - 正则化的 GBM (Regularization)
@@ -109,29 +108,45 @@ details[open] summary {
 - 并行和分布式计算
 - 设计高效核外计算, 进行 cache-aware 数据块处理
 
-## XGBoost 缺点
+## XGBoost  优缺点
 
-> XGBoost 的缺点也是LightGBM 的出发点
+> XGBoost 的缺点也是 LightGBM 的出发点
 
-每轮迭代时, 都需要遍历整个训练数据集多次:
+优点：
 
-* 如果把整个训练数据装进内存则会限制训练数据的大小
-* 如果不装进内存, 反复地读写训练数据又会消耗非常大的时间
+* 预测精度比 GBDT 高，因为采用二阶泰勒展开
+* 更有效避免过拟合，因为正则化手段更丰富了
+    - 例如：在损失函数上加入正则化项（抑制叶子节点数量和叶子节点权重）、缩减、列采样等
+* 针对缺失值和稀疏值有较好的处理手段，自动分配分裂方向
+* 灵活性强，不仅支持 CART 树作为弱学习器，还支持其他线性分类器如逻辑回归
+* 工程落地性好，支持特征粒度上的并行。因为使用了一系列工程优化方法，
+  例如块存储，还有使用近似算法减少计算量
 
-预排序方法(pre-sorted): 
+缺点：
 
-* 首先, 空间消耗大. 这样的算法需要保存数据的特征值, 
-  还保存了特征排序的结果(例如排序后的索引, 为了后续快速地计算分割点), 
-  这里需要消耗训练数据两倍的内存 
-* 其次时间上也有较大的开销, 在遍历每一个分割点的时候, 都需要进行分裂增益的计算, 消耗的代价大
-
-对 cache 优化不友好:
-
-* 在预排序后, 特征对梯度的访问是一种随机访问, 并且不同的特征访问的顺序不一样, 
-  无法对 cache 进行优化. 同时, 在每一层长树的时候, 需要随机访问一个行索引到叶子索引的数组, 
-  并且不同特征访问的顺序也不一样, 也会造成较大的 cache miss
+* XGBoost 还是跟 GBDT 一样，处理不好类别型数据
+    - 一旦类别型特征出现，XGBoost 把类别型特征当作数值型特征处理，用 Label Encoding 会增加模型学习难度，
+      但陈天奇在项目问答模块回答道：“当类别数量小 (比如10-100) 时，可以考虑 One-hot Encoding。”，
+      而如果类别数过大，个人觉得 One-hot 编码的风险会很大，因为带来了很大稀疏性，这会导致两种结果：
+        - (1) 增加内存和时间开销
+        - (2) 稀疏特征的分裂下的子树泛化性差，易拟合
+* 存在内存开销，需要存储梯度统计值和索引指针
+* 每轮迭代时, 都需要遍历整个训练数据集多次:
+    - 如果把整个训练数据装进内存则会限制训练数据的大小
+    - 如果不装进内存, 反复地读写训练数据又会消耗非常大的时间
+* 预排序方法(pre-sorted)
+    - 首先, 空间消耗大. 这样的算法需要保存数据的特征值, 
+      还保存了特征排序的结果(例如排序后的索引, 为了后续快速地计算分割点), 
+      这里需要消耗训练数据两倍的内存 
+    - 其次时间上也有较大的开销, 在遍历每一个分割点的时候, 都需要进行分裂增益的计算, 消耗的代价大
+* 对 cache 优化不友好:
+    - 在预排序后, 特征对梯度的访问是一种随机访问, 并且不同的特征访问的顺序不一样, 
+      无法对 cache 进行优化. 同时, 在每一层长树的时候, 需要随机访问一个行索引到叶子索引的数组, 
+      并且不同特征访问的顺序也不一样, 也会造成较大的 cache miss
 
 # XGBoost 模型理论
+
+![img](images/flow.png)
 
 ## 模型目标函数
 
@@ -393,372 +408,54 @@ XGBoost 使用贪心算法:
 
 * TODO
 
-# XGBoost 参数
 
-## 通用参数
+# XGBoost 工程优化
 
-> 控制整个模型的通用性能
+前面花了大量篇幅讲解了作者在"原理优化"上的工作，我们现在来看下“工程优化”，
+个人觉得这是论文的亮点之一，毕竟陈天奇的研究方向是大规模机器学习，
+而且这也是 XGBoost 在工业界受欢迎的原因，就因为工程优化做的好。
+作者在"工程优化"上主要有三点：列块并行学习、缓存访问和块式核外计算
 
-* `booster`：基本学习器类型，默认 `gbtree`
-    - `gbtree`：基于树的模型
-    - `gblinear`：线性模型
-    - `dart`：TODO
-* `nthread`：用于运行的并行线程数，默认为最大可用线程数
-* `verbosity`：打印消息的详细程度
-    - `0`：静默
-    - `1`：警告
-    - `2`：信息
-    - `3`：调试
+## 列块并行学习
 
-## Tree Booster 参数
+在上面近似算法中，我们知道要提前对特征进行值排序，才能进行扫描找最佳分裂点。
+但排序是很耗时的，比如像Local局部分裂策略，我们如果每次分裂完又重新排序，这就耗时了。
+所以为了减少时间开销，我们在 XGBoostx 训练前就先对特征进行值排序，
+然后将排序好的特征值和对应样本的位置指针保存至块中 (Block)。
+块中的数据是以稀疏矩阵 (即 Compressed Sparse Columns, CSC) 格式保存的，
+使得后续扫描都能重复使用。由于一个块里放一列，所以这对并行化和列采样都有帮助
 
-> 控制每步迭代中每个基学习器(树模型)
+![img](images/list_block.png)
 
-需要调参：
+## 缓存访问
 
-* `eta`(`learning_rate`)
-    - 学习率，在更新中收缩每步迭代中基本学习期的权重，使模型更加稳健，防止过度拟合
-    - 默认 0.3
-    - 范围：`$[0, 1]$`
-    - 典型值一般设置为：`$[0.01, 0.2]$` 或 `$[0.05, 0.3]$`
-* `n_estimators`
-    - 树模型基学习器的数量
-* `max_depth`
-    - 一棵树的最大深度。增加此值将使模型更复杂，并且更可能过度拟合
-    - 默认 6
-    - 范围：`$[0，\infty)$`
-    - 典型值一般设置为：`$[3, 10]$`
-* `min_child_weight`
-    - 子节点中所有样本的权重和的最小值，如果新分裂的节点的样本权重和小于 `min_child_weight` 则停止分裂，
-      可以用来减少过拟合，但是也不能太高，太高会导致欠拟合
-    - 默认 1
-    - 范围：`$[0，\infty)$`
-    - 典型值一般设置为：1
-* `gamma`(`min_split_loss`)
-    - 树模型节点当分裂结果使得损失函数减少时，才会进行分裂。
-      分裂节点时，损失函数减小值只有大于等于 gamma 时节点才分裂。
-      gamma 值越大，算法越保守，越不容易过拟合，但性能就不一定能保证，需要平衡
-    - 默认 0
-    - 范围：`$[0，\infty)$`
-    - 典型值一般设置为：`$[0.1, 0.2]$`
-* `subsample`
-    - 构建每棵树对样本的采样率
-    - 默认 1
-    - 范围：`$(0, 1]$`
-    - 典型值一般设置为：`$[0.5, 0.9]$`
-* `colsample_bytree`
-    - 列采样率，也就是特征采样率
-    - 默认 1
-    - 范围：`$(0，1]$`
-    - 典型值一般设置为：`$[0.5, 0.9]$`
-* `scale_pos_weight`
-    - 控制正负权重的平衡，在类别高度不平衡的情况下，将参数设置大于 0，可以加快收敛。
-      Kaggle 竞赛一般设置 `sum(negativ instances) / sum(positive instances)`
-* `lambda`(reg_lambda)：
-    - 叶节点权重得分的 L2 正则参数。L2 正则化权重项，增加此值将使模型更加保守
-    - 默认 1
-* `alpha`(reg_alpha)：
-    - 叶节点权重得分的l1正则参数。权重的 L1 正则化项，增加此值将使模型更加保守。适用于高维数据中, 能使得算法加速
-    - 默认 0
+在我们扫描排序好的特征值时，我们需要基于对应位置指针找到一阶和二阶导数，
+但这不是连续内存空间访问，所以可能会造成CPU缓存丢失，从而使分裂点寻找的过程变慢了。
+对此，XGBoost 提出缓存预加载算法 (Cache-aware Prefetching Algorithm)，
+为每个线程分配一个内部缓存区，将导数数据放在里面，然后以小批次的方式进行累加操作，
+这样将不连续的读写尽可能变得连续。这种方法，对于贪心算法来说，提速2倍。
+但对于近似算法，要注意平衡块大小，因为块太小会导致低效并行化，块太大会导致缓存丢失。
+实验显示，每个块 `$2^{16}$` 个样本可以达到较好的平衡
 
-一般不需要调参：
+## 块式核外计算
 
-* `max_leaf_nodes`
-    - 树中叶节点的最大数量
-* `max_delta_step`：
-    - 允许每个叶子输出的最大增量步长。如果将该值设置为 0，则表示没有约束。如果将其设置为正值，
-      则可以帮助使更新步骤更加保守。通常不需要此参数，但是当类极度不平衡时，
-      它可能有助于逻辑回归。将其设置为 `$[1, 10]$` 的值可能有助于控制更新
-    - 默认 0
-    - 范围：`$[0，\infty)$`
-* `sampling_method`
-    - 用于对训练样本进行采样的方法
-    - 默认 `uniform`
-    - `uniform`：每个训练实例的选择概率均等。通常将 subsample>=0.5 设置为良好的效果
-    - `gradient_based`：每个训练实例的选择概率与规则化的梯度绝对值成正比，
-      具体来说就是，subsample 可以设置为低至 0.1，而不会损失模型精度
-* `tree_method`
-    - XGBoost 中使用的树构建算法 
-    - 默认 `auto`
-    - auto：使用启发式选择最快的方法
-    - exact：对于小型数据集，精确的贪婪算法，枚举所有拆分的候选点
-    - approx：对于较大的数据集，使用分位数和梯度直方图的近似贪婪算法
-    - hist：更快的直方图优化的近似贪婪算法(LightGBM 也是使用直方图算法)
-    - gpu_hist：GPU hist 算法的实现
-- `num_parallel_tree`
-    - 每次迭代期间构造的并行树的数量。此选项用于支持增强型随机森林
-    - 默认 1
-- `monotone_constraints`
-    - 可变单调性的约束，在某些情况下，如果有非常强烈的先验信念认为真实的关系具有一定的质量，
-      则可以使用约束条件来提高模型的预测性能
-    - 例如 `params_constrained['monotone_constraints'] = "(1,-1)"`，
-      `(1,-1)` 表示对第一个预测变量施加增加的约束，对第二个预测变量施加减小的约束
+一般来说，我们是把数据主要加载至CPU内存中，把待加载数据放在硬盘中，等 CPU 运算完再读取硬盘数据，
+可 CPU 和硬盘的 IO 不同，前者更快，后者更慢。为了在这块提速，
+作者提出两个核外 (out-of-core) 计算技巧：
 
-## Linear Booster 参数
+* 块压缩 (Block Compression)：采用列压缩，然后用一个独立线程对待加载入CPU的数据进行解压。这样减少了读取压力。
+* 块分区 (Block Sharding)：将数据分区至多个硬盘中，另外给每个硬盘都分配个线程预加载，这增加了磁盘读取的吞吐
 
-- `lambda`(reg_lambda)：
-    - L2 正则化权重项。增加此值将使模型更加保守。归一化为训练示例数
-    - 默认 0
-- `alpha`(reg_alpha)：
-    - 权重的 L1 正则化项。增加此值将使模型更加保守。归一化为训练示例数
-    - 默认 0
-- `updater`：默认 `shotgun`
-    - `shotgun`：基于 shotgun 算法的平行坐标下降算法。使用 "hogwild" 并行性，因此每次运行都产生不确定的解决方案
-    - `coord_descent`：普通坐标下降算法。同样是多线程的，但仍会产生确定性的解决方案
-- `feature_selector`：特征选择和排序方法，默认 `cyclic`
-    - `cyclic`：通过每次循环一个特征来实现的
-    - `shuffle`：类似于 `cyclic`，但是在每次更新之前都有随机的特征变换
-    - `random`：一个随机(有放回)特征选择器
-    - `greedy`：选择梯度最大的特征(贪婪选择)
-    - `thrifty`：近似贪婪特征选择(近似于 `greedy`)
-- `top_k`：要选择的最重要特征数(在 `greedy` 和 `thrifty` 内)
+# 参考
 
-## 学习任务参数
-
-> 控制模型优化的表现
-
-* `objective`：默认 `reg:squarederror`，表示最小平方误差
-    - 回归
-        - `reg:squarederror`：最小平方误差
-        - `reg:squaredlogerror`：对数平方损失
-        - `reg:logistic`：逻辑回归
-        - `reg:pseudohubererror`：使用伪 Huber 损失进行回归，这是绝对损失的两倍可微选择
-        - `reg:tweedie`：使用对数链接进行 Tweedie 回归
-    - 二分类
-        - `binary:logistic`：二元分类的逻辑回归，输出分类概率
-        - `binary:logitraw`：用于二进制分类的逻辑回归，逻辑转换之前的输出得分
-        - `binary:hinge`：二进制分类的铰链损失。这使预测为0或1，而不是产生概率。(SVM就是铰链损失函数)
-    - 生存分析
-        - `survival:cox`：针对正确的生存时间数据进行 Cox 回归(负值被视为正确的生存时间)
-        - `survival:aft`：用于检查生存时间数据的加速故障时间模型
-        - `aft_loss_distribution`：survival:aft 和 aft-nloglik 度量标准使用的概率密度函数
-    - 多分类
-        - `multi:softmax`：使用 softmax 目标函数进行多类分类，需要设置 `num_class`(类数)，返回分类标签
-        - `multi:softprob`：与 softmax 相同，但输出向量，可以进一步重整为矩阵。
-          结果包含属于每个类别的每个数据点的预测概率
-    - 排序
-        - `rank:pairwise`：使用 LambdaMART 进行成对排名，从而使成对损失最小化
-        - `rank:ndcg`：使用 LambdaMART 进行列表式排名，使标准化折让累积收益(NDCG)最大化
-        - `rank:map`：使用 LambdaMART 进行列表平均排名，使平均平均精度(MAP)最大化
-        - `reg:gamma`：使用对数链接进行伽马回归。输出是伽马分布的平均值
-    - `count:poisson`：计数数据的泊松回归，泊松分布的输出平均值
-    - 自定义损失函数和评价指标
-* `eval_metric`：验证数据的评估指标，将根据目标分配默认指标(回归均方根，分类误差，排名的平均平均精度)，
-  用户可以添加多个评估指标
-    - 回归
-        - `rmse`，均方根误差
-        - `rmsle`：均方根对数误差
-        - `mae`：平均绝对误差
-        - `mphe`：平均伪 Huber 错误
-    - 二分类
-        - `logloss`：负对数似然
-        - `error`：二(进制)分类错误率
-    - 多分类
-        - `merror`：多类分类错误率
-        - `mlogloss`：多类 `logloss`
-    - `auc`：曲线下面积
-    - `aucpr`：PR 曲线下的面积
-    - `ndcg`：归一化累计折扣
-    - `map`：平均精度
-* `seed`：随机数种子，默认 0
-
-## 参数调节
-
-参数调优的一般策略:
-
-1. 首先, 选择一个相对较大的 `eta`/`learning_rate`, 比如: 0.1(一般范围在: `$[0.05, 0.3]$`)
-    - 根据这个选定的 `learning_rate`，对树的数量 `n_estimators` 进行 CV 调优，
-      选择一个最优的 `n_estimators`
-2. 依次调节树参数 
-    - `max_depth`
-        - `$[3, 10]$`
-    - `min_child_weight`
-        - 类别不平衡数据选择一个较小值
-    - `gamma`
-        - `$[0.1, 0.2]$`
-    - `subsample`
-        - `$[0.5, 0.9]$`
-    - `colsample_bytree`
-        - `$[0.5, 0.9]$`
-    - `scale_pos_weight`
-        - 类别不平衡数据选择一个较小值
-3. 调节正则化参数
-    - `lambda`: L2
-    - `alpha`: L1
-4. 减小 `learning_rate`, 增加决策树数量 `n_estimators`，并且优化其他参数
-5. 调节对模型结果影响最大的参数
-   - `max_depth`
-   - `min_child_weight`
-
-# XGBoost API
-
-## 核心数据结构
-
-```python
-xgb.DMatrix(
-    data,
-    label = None,
-    missing = None,
-    weight = None,
-    silent = False,
-    feature_name = None,
-    feature_type = None,
-    nthread = None
-)
-```
-
-```python
-xgb.Booster(
-    params = None, 
-    cache = (),
-    model_file = None
-)
-```
-
-## Learning API
-
-```python
-xgb.train(
-    params, 
-    dtrain,
-    num_boost_round = 10,
-    evals = (),
-    obj = None,
-    feval = None,
-    maximize = False,
-    early_stopping_rounds = None,
-    evals_result = None,
-    verbose_eval = True,
-    xgb_model = None,
-    callbacks = None,
-    learning_rate = None
-)
-```
-
-```python
-xgb.cv(
-    params, 
-    dtrain,
-    num_boost_round = 10,
-    # ---------
-    # cv params
-    nfold = 3,
-    stratified = False,
-    folds = None,
-    metrics = (),
-    # ---------
-    obj = None,
-    feval = None,
-    maximize = False,
-    early_stopping_rounds = None,
-    fpreproc = None,
-    as_pandas = True,
-    verbose_eval = None,
-    show_stdv = True,
-    seed = 0,
-    callbacks = None,
-    shuffle = True
-)
-```
-
-## Scikit-Learn API
-
-```python
-xgb.XGBRegressor(
-    max_depth = 3,
-    learning_rate = 0.1, 
-    n_estimators = 100,
-    verbosity = 1,
-    silent = None,
-    objective = "reg:squarederror",
-    booster = "gbtree",
-    n_jobs = 1,
-    nthread = None,
-    gamma = 0,
-    min_child_weight = 1,
-    max_delta_step = 0,
-    subsample = 1,
-    colsample_bytree = 1,
-    colsample_bylevel = 1,
-    colsample_bynode = 1,
-    reg_alpha = 0,
-    reg_lambda = 1,
-    scale_pos_weight = 1,
-    base_score = 0.5,
-    random_state = 0,
-    seed = None,
-    missing = None,
-    importance_type = "gain",
-    **kwargs
-)
-
-xgbr.fit(
-    X, y,
-    sample_weight = None,
-    eval_set = None,
-    eval_metric = None, 
-    early_stopping_rounds = None,
-    verbose = True,
-    xgb_model = None,
-    sample_weight_eval_set = None,
-    callbacks = None
-)
-```
-
-```python
-xgb.XGBClassifier(
-    max_depth = 3,
-    learning_rate = 0.1,
-    n_estimators = 100,
-    verbosity = 1,
-    silent = None,
-    objective = "binary:logistic",
-    booster = "gbtree",
-    n_jobs = 1,
-    nthread = None,
-    gamma = 0,
-    min_child_weight = 1,
-    max_delta_step = 0,
-    subsample = 1,
-    colsample_bytree = 1,
-    colsample_bylevel = 1,
-    colsample_bynode = 1,
-    reg_alpha = 0,
-    reg_lambda = 1,
-    scale_pos_weight = 1,
-    base_score = 0.5,
-    random_state = 0,
-    seed = None, 
-    missing = None,
-    **kwargs
-)
-xgbc.fit(
-    X, 
-    y,
-    sample_weight = None,
-    eval_set = None,
-    eval_metric = None,
-    early_stopping_rounds = None,
-    verbose = True,
-    xgb_model = None,
-    sample_weight_eval_set = None,
-    callbacks = None
-)
-```
-
-## 数据可视化 API
-
-```python
-xgb.plot_importance(
-    booster,
-    ax = None,
-    height = 0.2, 
-    xlim = None,
-    ylim = None,
-    title = "Feature importance",
-    xlabel = "F score",
-    ylabel = "Features",
-    importance_type = "weight"
-)
-```
+* [Xgboost: A scalable tree boosting system]()
+* [GitHub-Python-Package]()
+* [GitHub-R-Package]()
+* [GitHub-Microsoft]()
+* [Doc](https://xgboost.readthedocs.io/en/latest/get_started.html)
+* [Python 示例]()
+* [《深入理解XGBoost》- Microstrong]()
+* [陈天奇在项目问答模块](https://github.com/dmlc/xgboost/issues/21)
+* [comment:re sklearn -- integer encoding vs 1-hot (py)](https://github.com/szilard/benchm-ml/issues/1)
+* [务实基础-XGBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485425&idx=1&sn=36b23b224ceb8e5595730042fc7797a8&chksm=fa04199acd73908c0498b323b7edb8b3ce52b17964edc2462cb842ff6fefe3fdc0b5cadd91ba&cur_album_id=1577157748566310916&scene=189#wechat_redirect)
 

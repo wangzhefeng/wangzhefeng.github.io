@@ -31,6 +31,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [GBDT 简介](#gbdt-简介)
+  - [GBDT 介绍](#gbdt-介绍)
+  - [GBDT vs RandomForest](#gbdt-vs-randomforest)
 - [GBM 模型原理](#gbm-模型原理)
   - [函数估计问题](#函数估计问题)
   - [梯度提升模型 GBM](#梯度提升模型-gbm)
@@ -39,10 +42,29 @@ details[open] summary {
     - [L2Boost](#l2boost)
     - [LogitBoost](#logitboost)
     - [QBC](#qbc)
-- [GBM 模型调参](#gbm-模型调参)
-  - [参数类型](#参数类型)
-  - [调参策略](#调参策略)
+- [参考](#参考)
 </p></details><p></p>
+
+# GBDT 简介
+
+## GBDT 介绍
+
+集成学习 Boosting 一族将多个弱学习器(或称基学习器)提升为强学习器，
+像 AdaBoost, GBDT 等都属于“加性模型”(Additive Model)，即基学习器的线性组合。
+1997年 Freund 和 Schapire 提出的 AdaBoost，它是先从初始训练集训练出一个基学习器，
+然后基于基学习器的在这一轮的表现，在下一轮训练中给预测错的训练样本更大权重值，
+以达到逐步减少在训练集的预测错误率。这种训练机制像不像做一套卷子，有些重难点题做不出来，
+那下次又给你做同样的卷子，但不同的是：之前你做错的重难点题占有很大的分值比重，
+这样你会将更多重心放在了这些难题上，从而提高你的学习表现。那除了这种方式，
+还有没有其他方法攻克考题上的重难点？有，就是死磕到底，找到这题错在哪？
+基于此错误继续去做这道题，直到做对为止。这跟 GBDT 的工作机制就很像了，
+它是先产生一个弱学习器(CART 回归树模型)，训练后得到输入样本的残差，然后再产生一个弱学习器，
+基于上一轮残差进行训练。不断迭代，最后加权结合所有弱学习器得到强学习器。
+GBDT 的一个应用示意图如下（某样本预测值 = 它在不同弱学习器所在叶子节点输出值的累加值）
+
+## GBDT vs RandomForest
+
+![img](images/gbdt_vsrf.png)
 
 # GBM 模型原理
 
@@ -239,69 +261,12 @@ g_m (\mathbf{x}) &= \Bigg[\frac{\partial E_{y, \mathbf{x}}[L(y, f(\mathbf{x}))]}
     - 其中: `$K(\cdot)$` 是一个标准正态分布的累积分布函数, `$h$` 是一个给定的大于零的常数.
 * 基学习器:
 
-# GBM 模型调参
+# 参考
 
-## 参数类型
-
-* 决策树参数
-    - `min_samples_split`
-        - 要分裂的树节点需要的最小样本数量, 若低于某个阈值, 则在此节点不分裂
-        - 用于控制过拟合, 过高会阻止模型学习, 并导致欠拟合
-        - 需要使用CV进行调参
-    - `min_samples_leaf`
-        - 叶子节点中所需的最小样本数, 若低于某个阈值, 则此节点的父节点将不分裂, 此节点的父节点作为叶子结点
-        - 用于控制过拟合, 同 `min_samples_split` 
-        - 一般选择一个较小的值用来解决不平衡类型样本问题
-    - `min_weight_fraction_leaf`
-        - 类似于 `min_sample_leaf` 
-        - 一般不进行设置, 上面的两个参数设置就可以了
-    - `max_depth`
-        - 一棵树的最大深度
-        - 用于控制过拟合, 过大会导致模型比较复杂, 容易出现过拟合
-        - 需要使用 CV 进行调参
-    - `max_leaf_nodes`
-        - 一棵树的最大叶子节点数量
-        - 一般不进行设置, 设置 `max_depth` 就可以了
-    - `max_features`
-        - 在树的某个节点进行分裂时的考虑的最大的特征个数
-        - 一般进行随机选择, 较高的值越容易出现过拟合, 但也取决于具体的情况
-        - 一般取特征个数的平方根(跟随机森林的选择一样)
-* Boosting参数
-    - `learning_rate`
-        - 学习率
-    - `n_estimators`
-        - 树的个数
-    - `subsample`
-        - 构建每棵数时选择的样本数
-* 其他参数
-    - `loss`: 损失函数
-    - `init`
-    - `random_state`
-    - `verbose`
-    - `warm_start`
-    - `presort`
-
-## 调参策略
-
-* 一般参数调节策略: 
-    - 选择一个相对来说较高的 learning rate, 先选择默认值 0.1(0.05-0.2)
-    - 选择一个对于这个 learning rate 最优的树的数量(合适的数量为: 40-70)
-        - 若选出的树的数量较小, 可以减小 learning rate 重新跑 GridSearchCV
-        - 若选出的树的数量较大, 可以增大初始 learning rate 重新跑 GridSearchCV
-    - 调节基于树的参数
-    - 降低 learning rate, 增加学习器的个数得到更稳健的模型
-* 对于 learning rate 的调节, 对其他树参数设置一些默认的值
-    - `min_samples_split = 500`
-        - 0.5-1% of total samples
-        - 不平衡数据选择一个较小值
-    - `min_samples_leaf = 50`
-        - 凭感觉选择, 考虑不平衡数据, 选择一个较小值
-    - `max_depth = 8`
-        - 基于数据的行数和列数选择, 5-8
-    - `mat_features = 'sqrt'`
-    - `subsample = 0.8`
-* 调节树参数
-    - 调节 `max_depth` , `min_samples_split`
-    - 调节 `min_samples_leaf`
-    - 调节 `max_features`
+* [Friedman, J. H. (2001). Greedy function approximation: a gradient boosting machine. Annals of statistics, 1189-1232.]()
+* [《机器学习》- 周志华著]()
+* [《The Elements of Statistical Learning》- Trevor Hastie, Robert Tibshirani, and Jerome Friedman著]()
+* [《GBDT的原理、公式推导和应用》 - 刘启林的机器学习笔记]()
+* [《梯度提升树(GBDT)原理小结》- 刘建平Pinard]()
+* [sklearn.ensemble.GradientBoostingRegressor]()
 
