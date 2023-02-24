@@ -1,6 +1,6 @@
 ---
 title: GPU
-subtitle: GPU 相关内容
+subtitle: GPU 相关
 list_pages: true
-# order_by: title
+order_by: title
 ---

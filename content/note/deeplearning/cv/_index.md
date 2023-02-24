@@ -2,7 +2,7 @@
 title: 计算机视觉
 subtitle: Computer Vision
 list_pages: true
-# order_by: title
+order_by: title
 ---
 
 ## 计算机视觉的三大应用任务
