@@ -39,12 +39,13 @@ details[open] summary {
     - [感知机模型学习](#感知机模型学习)
     - [Logistic 回归](#logistic-回归)
   - [支持向量机(形式)](#支持向量机形式)
-- [函数间隔(Function Margin)与几何间隔(Geometric Margin)](#函数间隔function-margin与几何间隔geometric-margin)
-  - [函数间隔(Function Margin)](#函数间隔function-margin)
-  - [几何间隔(Geometric Margin)](#几何间隔geometric-margin)
+- [函数间隔与几何间隔](#函数间隔与几何间隔)
+  - [函数间隔](#函数间隔)
+  - [几何间隔](#几何间隔)
+- [参考](#参考)
 </p></details><p></p>
 
-- 适用于高维数据；
+- 适用于高维数据
 - 不同的核函数
 
 # 什么是支持向量机？
@@ -65,27 +66,27 @@ details[open] summary {
 
 给定一个数据集
 
-:math:`$T = \{(x_1,y_1),(x_2, y_2),...,(x_n, y_n)\}$$`
+`$$T = \{(x_1,y_1),(x_2, y_2),...,(x_n, y_n)\}$$`
 
 其中: 
 
-- :math:`x_i\in R^{n}$$`
-- :math:`y_i \in \{0, 1\}$`
-- :math:`i=1,2, ..., n$`
+- `$x_i\in R^{n}$`
+- `$y_i \in \{0, 1\}$`
+- `$i=1,2, ..., n$`
 
-如果存在某个超平面\ :math:`S`:
+如果存在某个超平面 `$S`:
 
-:math:`$\omega^{T}x+b=0$$`
+`$$\omega^{T}x+b=0$$`
 
-能够将数据集的正实例(:math:`y=1$`)和负实例(:math:`y=0$`)完全正确地分到超平面的两侧, 
-即对所有的 :math:`y_i=1$` 的实例 :math:`i$`, 有 :math:`\omega^{T}x+b>0$`；
-对所有的 :math:`y_i=0$` 的实例 :math:`i$`, 有 :math:`\omega^{T}x+b<0$`, 
-则称数据集 :math:`T$` 为线性可分数据集, 否则称为线性不可分. 
+能够将数据集的正实例(`$y=1$`)和负实例(`$y=0$`)完全正确地分到超平面的两侧, 
+即对所有的 `$y_i=1$` 的实例 `$i$`, 有 `$\omega^{T}x+b>0$`；
+对所有的 `$y_i=0$` 的实例 `$i$`, 有 `$\omega^{T}x+b<0$`, 
+则称数据集 `$T$` 为线性可分数据集, 否则称为线性不可分. 
 
-一个二分类线性分类器就是要在 :math:`R^n$` 特征空间中找到一个超平面 :math:`S$`, 
+一个二分类线性分类器就是要在 `$R^n$` 特征空间中找到一个超平面 `$S$`, 
 其方程可以表示为: 
 
-:math:`$\omega^{T}x+b = 0$$`
+`$$\omega^{T}x+b = 0$$`
 
 这个超平面将特征空间划分为两个部分, 位于两部分的点分别被分为两类. 
 
@@ -94,23 +95,22 @@ details[open] summary {
 ### 感知机模型
 
 感知机就是一个二分类线性分类器, 
-其目的是从特征学习出一个分类模型 :math:`f(\cdot)$`: :math:`y=f(z), y \in \{0, 1\}$`
+其目的是从特征学习出一个分类模型 `$f(\cdot)$`: `$y=f(z), y \in \{0, 1\}$`
 
 感知机模型是将特征变量的线性组合作为自变量: 
 
-:math:`$z=\omega^{T}x + b$$`
+`$$z=\omega^{T}x + b$$`
 
-由于自变量 :math:`x$` 取值的范围是
-:math:`[-\infty, +\infty]$`, 因此, 需要使用 `阶跃函数(Step函数)` 将自变量
-:math:`z=\omega^{T}x + b$` 映射到范围 :math:`\{0, 1\}$` 上. 
+由于自变量 `$x$` 取值的范围是
+`$[-\infty, +\infty]$`, 因此, 需要使用 `阶跃函数(Step函数)` 将自变量
+`$z=\omega^{T}x + b$` 映射到范围 `$\{0, 1\}$` 上. 
 
-这里 :math:`f(z)$` 是一个阶跃函數(step function): 
+这里 `$f(z)$` 是一个阶跃函數(step function): 
 
-`$$f(z) = 
-\\left{ 
-\\begin{array}{ll} 1 & & z \\geq 0 \\ 0 & & z < 0
-\\end{array}
-\\right.$$`
+`$$f(z) = \begin{cases}
+1 & & z \geq 0 \\
+0 & & z < 0
+\end{cases}$$`
 
 > 感知机模型的目标就是从数据中学习得到 `$\omega, b$`, 
 使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
@@ -158,8 +158,8 @@ Logistic Regression 模型是将特征变量的线性组合作为自变量:
 
 `$$z=\omega^{T}x + b$$`
 
-由于自变量 `$x$` 取值的范围是 `$\[-\infty, +\infty\]$`, 因此, 
-需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$\[0, 1\]$` 上, 
+由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`, 因此, 
+需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$[0, 1]$` 上, 
 映射后的值被认为是 `$y=1$` 的概率. 假设: 
 
 `$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
@@ -170,9 +170,10 @@ Logistic Regression 模型是将特征变量的线性组合作为自变量:
 
 因此 Logistic Regression 模型的形式为: 
 
-`$$\\left{ \\begin{array}{ll} P(y=1|x, \\omega) = h\ *{\omega,b}(x) =
-\\sigma(\omega^{T}x+b)\\ P(y=0|x, \\omega) = 1 - h*\ {\omega,b}(x) =1-
-\\sigma(\omega^{T}x+b) \\end{array} \\right.$$`
+`$$\begin{cases}
+P(y=1|x, \omega) = h *\{\omega, b\}(x) =\sigma(\omega^{T}x+b) \\ 
+P(y=0|x, \omega) = 1 - h* \{\omega, b\}(x) =1-\sigma(\omega^{T}x+b) 
+\end{cases}$$`
 
 当要判别一个新来的数据点 `$x_{test}$` 属于哪个类别时, 
 只需要求解 `$h_{\omega, b}(x_{test}) = \sigma(\omega^{T}x_{test} + b)$`: 
@@ -183,9 +184,9 @@ Logistic Regression 模型是将特征变量的线性组合作为自变量:
 0    &      & h_{\omega,b}(x_{test}) < 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b < 0\\
 \end{array} \right.$$`
 
-Logistic Regression 的目标就是从数据中学习得到 :math:`\omega, b$`, 
-使得正例 :math:`y=1$` 的特征 :math:`\omega^{T}x+b$` 远大于 :math:`0$`, 
-负例 :math:`y=0$` 的特征 :math:`\omega^{T}x + b$` 远小于 :math:`0$`. 
+Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
+使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
+负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 
 
 ## 支持向量机(形式)
 
@@ -193,42 +194,53 @@ Logistic Regression 的目标就是从数据中学习得到 :math:`\omega, b$`,
 
 假设: 
 
-:math:`$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
+`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
 
-这里, 只需考虑 :math:`\omega^{T}x + b$` 的正负问题, 
-而不关心 :math:`\sigma(\cdot)$` 的形式. 
-因此将 :math:`\sigma(\cdot)$` 进行简化, 将其简单地映射到 `$\[-1, 1\]$` 上: 
+这里, 只需考虑 `$\omega^{T}x + b$` 的正负问题, 
+而不关心 `$\sigma(\cdot)$` 的形式. 
+因此将 `$\sigma(\cdot)$` 进行简化, 将其简单地映射到 `$[-1, 1]$` 上: 
 
-:math:`$\sigma(z)=\left\{
+`$$\sigma(z)=\left\{
 \begin{array}{rcl}
 1     &      & z \geq 0\\
 -1    &      & z < 0\\
 \end{array} \right. $$`
 
-# 函数间隔(Function Margin)与几何间隔(Geometric Margin)
+# 函数间隔与几何间隔
 
-- 一般而言, 一个数据点距离超平面(\ :math:`\omega^{T}x+b =0$`)的远近可以表示为分类预测的确信或准确程度. 
-- 在超平面\ :math:`\omega^{T}x+b$` 确定的情况下, 
-  :math:`|\omega^{T}x+b|$` 能够相对表示点 :math:`x$` 距离超平面的远近；
-  而 :math:`\omega^{T}x+b$` 的符号与类别标记 :math:`y$` 的符号是否一致表示分类是否正确, 
-  可以用指标量 :math:`y\cdot (\omega^{T}x+b)$` 的正负性来判定或表示分类的正确性和确信度；
+> 函数间隔，Function Margin
+> 几何间隔，Geometric Margin
 
-## 函数间隔(Function Margin)
+- 一般而言, 一个数据点距离超平面( `$\omega^{T}x+b =0$`)的远近可以表示为分类预测的确信或准确程度. 
+- 在超平面 `$\omega^{T}x+b$` 确定的情况下, 
+  `$|\omega^{T}x+b|$` 能够相对表示点 `$x$` 距离超平面的远近；
+  而 `$\omega^{T}x+b$` 的符号与类别标记 `$y$` 的符号是否一致表示分类是否正确, 
+  可以用指标量 `$y\cdot (\omega^{T}x+b)$` 的正负性来判定或表示分类的正确性和确信度；
+
+## 函数间隔
+
+> Function Margin
 
 函数间隔: 
 
-:math:`\hat{\gamma}=y\cdot (\omega^{T}x+b)=yf(x)$$`
+`$$\hat{\gamma}=y\cdot (\omega^{T}x+b)=yf(x)$$`
 
-超平面 :math:`\omega^{T}x+b$` 关于训练数据\ :math:`T$` 的函数间隔为超平面 :math:`\omega^{T}x+b$` 
-关于 :math:`T$` 中所有样本点 :math:`(x_i, y_i)$` 的函数间隔的最小值: 
+超平面 `$\omega^{T}x+b$` 关于训练数据 `$T$` 的函数间隔为超平面 `$\omega^{T}x+b$` 
+关于 `$T$` 中所有样本点 `$(x_i, y_i)$` 的函数间隔的最小值: 
 
-:math:`\hat{\gamma}=\min\hat{\gamma}_{i}, i = 1, 2,..., n$$`
+`$$\hat{\gamma}=\min\hat{\gamma}_{i}, i = 1, 2,..., n$$`
 
 - 上面定义的函数间隔虽然可以表示分类预测的正确性和确信度, 但在选择分类超平面时, 只有函数间隔是不够的；
-- 如果成比例的改变\ :math:`\omega$` 和\ :math:`b$`, 
-  比如将他们改变为\ :math:`2\omega$` 和\ :math:`2b$`, 
-  虽然此时超平面没有改变, 但是函数间隔的值\ :math:`yf(x)$` 却变成了原来的4倍. 
-- 解决问题: 可以对法向量\ :math:`\omega$` 加一些约束条件, 使其表面上看起来规范化；
+- 如果成比例的改变 `$\omega$` 和 `$b$`, 
+  比如将他们改变为 `$2\omega$` 和 `$2b$`, 
+  虽然此时超平面没有改变, 但是函数间隔的值 `$yf(x)$` 却变成了原来的4倍. 
+- 解决问题: 可以对法向量 `$\omega$` 加一些约束条件, 使其表面上看起来规范化；
 
-## 几何间隔(Geometric Margin)
+## 几何间隔
+
+> Geometric Margin
+
+
+
+# 参考
 

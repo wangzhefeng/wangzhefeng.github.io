@@ -412,4 +412,5 @@ PV-tree 不需要对所有特征进行通信，所以通信损失低。基于投
 * [Microstrong：《深入理解 LightGBM》]()
 * [A communication-efficient parallel algorithm for decision tree]()
 * [微软亚洲研究院：《如何玩转 LightGBM》- 腾讯视频]()
+* [狂野上分的 LightGBM](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494009&idx=1&sn=cd18b6138c85f466fa2c031dd29b2e48&chksm=c32af0f6f45d79e09b840b366d5e7b34a84b6a4619de2f9f3a1cacc2751bcc0567237851f01a&scene=21#wechat_redirect)
 

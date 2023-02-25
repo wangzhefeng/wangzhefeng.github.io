@@ -27,7 +27,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [TODO](#TODO)
+- [集成学习](#集成学习)
+  - [Boosting](#boosting)
+- [文档](#文档)
 </p></details><p></p>
 
 ## 集成学习

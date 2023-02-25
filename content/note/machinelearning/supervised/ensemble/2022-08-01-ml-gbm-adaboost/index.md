@@ -35,6 +35,7 @@ details[open] summary {
 - [AdaBoost 模型理论](#adaboost-模型理论)
   - [Adaboost 迭代算法](#adaboost-迭代算法)
   - [AdaBoost 具体算法](#adaboost-具体算法)
+- [参考](#参考)
 </p></details><p></p>
 
 # AdaBoost 模型理论
@@ -61,7 +62,8 @@ AdaBoost, 是英文 "Adaptive Boosting"(自适应增强)的缩写,
   因此在序列中每个分类器将被迫重点关注这些很难被之前分类器正确分类的训练数据观测值.
 - 最后, 再将这些弱分类器的分类结果进行加权组合, 得到最终的强分类器.
 
-当然, AdaBoost 算法同样可以用来解决响应变量为连续的回归问题. 许多学者都研究了AdaBoost 产生能够准确分类的分类器的原因,
+当然, AdaBoost 算法同样可以用来解决响应变量为连续的回归问题. 
+许多学者都研究了AdaBoost 产生能够准确分类的分类器的原因,
 他们在数据实验中发现, 当使用基于决策树的分类器作为"基本学习器"(base learner) 
 
 `$$G_{m}(\mathbf{x}), m=1, 2, \ldots, M$$` 
@@ -105,3 +107,7 @@ Breiman 就直接将使用树模型作为基分类器的 AdaBoost 算法称为�
    最终得到的强分类器为:
 
 `$$G(\mathbf{x}) = sign\Bigg(\sum^{M}_{m=1}\alpha^{[m]}G^{[m]}(\mathbf{x})\Bigg)$$`
+
+
+# 参考
+
