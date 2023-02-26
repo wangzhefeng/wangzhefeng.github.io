@@ -6,7 +6,6 @@ slug: ml-random-forest
 categories:
   - machinelearning
 tags:
-  - machinelearning
   - model
 ---
 
@@ -75,7 +74,6 @@ details[open] summary {
   - [Random Forest 性质讨论](#random-forest-性质讨论)
   - [Random Forest 性能评价指标](#random-forest-性能评价指标)
   - [随机森林参数设置](#随机森林参数设置)
-- [TODO](#todo)
 </p></details><p></p>
 
 随机森林是一种有监督学习算法, 是以决策树为及学习器的集成学习算法. 
@@ -326,9 +324,4 @@ from sklearn.ensemble import RandomForestClassifier
   随机森林内决策树的强度和相关度和随机选择属性的个数相关, 
   如果随机选择属性的个数足够小, 树的相关性趋向于减弱, 
   另一方面, 决策树模型的分类强度随着随机选择属性的个数的增加而提高. 
-
-
-# TODO
-
-* [https://rpubs.com/Wangzf/randomforest](https://rpubs.com/Wangzf/randomforest)
 
