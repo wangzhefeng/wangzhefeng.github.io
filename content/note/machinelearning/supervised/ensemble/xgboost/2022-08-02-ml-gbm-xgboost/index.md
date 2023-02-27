@@ -553,7 +553,7 @@ L^{(t)} &= \sum_{i=1}^{n}\Bigg[g_{i}f_{t}(x_{i}) + \frac{1}{2}h_{i}f_{t}^{2}(x_{
 这是因为原论文在阐述稀疏感知分裂方案 (Sparsity-aware Split Finding) 上，
 提到的 “Missing Value” 并不完全等同于严格意义上的缺失值 (即 `np.nan`)，
 而是指稀疏矩阵中的 0 值和 `np.nan` 值。
-陈天奇在 XGBoost 开源项目问答区下“What are the ways of treatng missing values in XGboost?” 有如下的回答：
+陈天奇在 XGBoost 开源项目问答区下“What are the ways of treatng missing values in XGBoost?” 有如下的回答：
 
 > tqchen: xgboost naturally accepts sparse feature format, 
 > you can directly feed data in as sparse matrix, 

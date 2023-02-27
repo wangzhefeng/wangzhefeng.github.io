@@ -346,14 +346,14 @@ Ordered TS 的计算样例图：
 
 看起来排序提升残差计算法更好，但它需要留意以下几点：
 
-1. 计算残差需要 `$n$` 个不同模型。所以 Catboost 中，
+1. 计算残差需要 `$n$` 个不同模型。所以 CatBoost 中，
    作者在 CatBoost 的梯度提升算法中做了些修改，详见后续伪代码部分
 2. TS 计算与残差计算所用样本顺序是一样的，即 `$\sigma_{cat} = \sigma_{boost}$`，
    才能保证预测不偏移
 3. 同理 Ordered TS，单用一个顺序 `$\sigma$` 会增加最终模型的方差，
    所以每次提升都采用不同的  ，以避免模型欠拟合。
 
-Catboost 有两种提升模式：Ordered 和 Plain，后者是标准 GBDT 算法搭配 Ordered TS，
+CatBoost 有两种提升模式：Ordered 和 Plain，后者是标准 GBDT 算法搭配 Ordered TS，
 前者是 Ordered TS + Ordered Boosting。前面讲了 Ordered Boosting 下的残差计算方式，
 现在我们正式来看下 CatBoost 是怎么建树的。CatBoost 是用对称树(Oblivious Decision Tree)作为弱学习器，
 对称意味着树同一层都使用相同分裂标准。对称树是平衡的，不易过拟合，且能显著加速测试执行时间。具体伪代码如下所示：

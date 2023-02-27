@@ -59,22 +59,69 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [模型推导-从线性模型出发](#模型推导-从线性模型出发)
-- [角度2 模型推导-TODO](#角度2-模型推导-todo)
-- [Loss Function 推导](#loss-function-推导)
-- [Loss Function 优化方法](#loss-function-优化方法)
+- [Logistic Regression 模型介绍](#logistic-regression-模型介绍)
+  - [模型原理](#模型原理)
+  - [模型原理](#模型原理-1)
+  - [模型原理](#模型原理-2)
+    - [损失函数推导](#损失函数推导)
+    - [损失函数优化方法](#损失函数优化方法)
 - [Logistic Regression 实现](#logistic-regression-实现)
   - [模型类型](#模型类型)
   - [模型形式](#模型形式)
   - [模型学习算法](#模型学习算法)
-  - [Scikit API](#scikit-api)
-    - [LogisticRegression](#logisticregression)
-    - [SGDClassifier](#sgdclassifier)
-    - [LogisticRegressionCV](#logisticregressioncv)
-- [TODO](#todo)
+- [Logistic Regression API](#logistic-regression-api)
+  - [LogisticRegression](#logisticregression)
+  - [SGDClassifier](#sgdclassifier)
+  - [LogisticRegressionCV](#logisticregressioncv)
+- [参考](#参考)
 </p></details><p></p>
 
-# 模型推导-从线性模型出发
+# Logistic Regression 模型介绍
+
+## 模型原理
+
+Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
+
+`$$y = f(z), y \in \{0, 1\}$$`
+
+Logistic Regression 模型是将特征变量的线性组合作为自变量: 
+
+`$$z=\omega^{T}x + b$$`
+
+由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`，
+因此需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$[0, 1]$` 上。
+映射后的值被认为是 `$y=1$` 的概率。假设: 
+
+`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
+
+其中：
+
+* `$\sigma(z)$` 是 Sigmoid 函数 
+
+`$$\sigma(z)=\frac{1}{1+e^{-z}}$$`
+
+因此 Logistic Regression 模型的形式为： 
+
+`$$\begin{cases}
+P(y=1|x, \omega) = h_{\omega, b}(x) =\sigma(\omega^{T}x+b) \\ 
+P(y=0|x, \omega) = 1 - h_{\omega, b}(x) =1-\sigma(\omega^{T}x+b) 
+\end{cases}$$`
+
+当要判别一个新来的数据点 `$x_{test}$` 属于哪个类别时, 
+只需要求解 `$h_{\omega, b}(x_{test}) = \sigma(\omega^{T}x_{test} + b)$`: 
+
+`$$ y_{test}=\left\{
+\begin{array}{rcl}
+1    &      & h_{\omega,b}(x_{test}) \geq 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b \geq 0\\
+0    &      & h_{\omega,b}(x_{test}) < 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b < 0\\
+\end{array} \right.$$`
+
+Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
+使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
+负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 
+
+
+## 模型原理
 
 **线性模型:**
 
@@ -126,9 +173,9 @@ details[open] summary {
 
 `$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
 
-# 角度2 模型推导-TODO
+## 模型原理
 
-# Loss Function 推导
+### 损失函数推导
 
 **Logistic Regression 模型:**
 
@@ -165,7 +212,7 @@ details[open] summary {
 
 `$$L(\omega) = - \sum_{i=1}^{N} [y_{i} \log \hat{y}_{i} + (1-y_{i}) \log(1- \hat{y}_{i})]$$`
 
-# Loss Function 优化方法
+### 损失函数优化方法
 
 - 梯度下降法
 - 拟牛顿法
@@ -207,15 +254,15 @@ Logistic Regression with L2 正则化
 - SGDClassifier with log loss
    - 适用于大数据集, 高维数据集
 
-## Scikit API
+# Logistic Regression API
 
 ```python
-   from sklearn.linear_model import LogisticRegression
-   from sklearn.linear_model import LogisticRegressionCV
-   from sklearn.linear_model import SGDClassifier 
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegressionCV
+from sklearn.linear_model import SGDClassifier 
 ```
 
-### LogisticRegression
+## LogisticRegression
 
 ```python
 lr = LogisticRegression(penalty = "l2", 
@@ -260,7 +307,7 @@ lr.n_iter_
    - `solver in ["newton-cg", "sag", "lbfgs"], penalty = "l2"`
    - `solver = "liblinear", penalty in ["l2", "l1"]`
 
-### SGDClassifier
+## SGDClassifier
 
 ```python
 # 使用SGD算法训练的线性分类器: SVM, Logistic Regression
@@ -288,7 +335,7 @@ sgdc_lr = SGDClassifier(loss = 'log',
                         n_iter = None)
 ```
 
-### LogisticRegressionCV
+## LogisticRegressionCV
 
 ```python
 import numpy as np
@@ -308,44 +355,5 @@ for i, C in enmerate((1, 0.1, 0.01)):
     clf_l1_LR = LogisticRegression(C = C, penalty = "l1", )
 ```
 
-# TODO
+# 参考
 
-Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
-
-`$$y = f(z), y \in \{0, 1\}$$`
-
-Logistic Regression 模型是将特征变量的线性组合作为自变量: 
-
-`$$z=\omega^{T}x + b$$`
-
-由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`，
-因此需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$[0, 1]$` 上。
-映射后的值被认为是 `$y=1$` 的概率。假设: 
-
-`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
-
-其中：
-
-* `$\sigma(z)$` 是 Sigmoid 函数 
-
-`$$\sigma(z)=\frac{1}{1+e^{-z}}$$`
-
-因此 Logistic Regression 模型的形式为： 
-
-`$$\begin{cases}
-P(y=1|x, \omega) = h_{\omega, b}(x) =\sigma(\omega^{T}x+b) \\ 
-P(y=0|x, \omega) = 1 - h_{\omega, b}(x) =1-\sigma(\omega^{T}x+b) 
-\end{cases}$$`
-
-当要判别一个新来的数据点 `$x_{test}$` 属于哪个类别时, 
-只需要求解 `$h_{\omega, b}(x_{test}) = \sigma(\omega^{T}x_{test} + b)$`: 
-
-`$$ y_{test}=\left\{
-\begin{array}{rcl}
-1    &      & h_{\omega,b}(x_{test}) \geq 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b \geq 0\\
-0    &      & h_{\omega,b}(x_{test}) < 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b < 0\\
-\end{array} \right.$$`
-
-Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
-使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
-负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 

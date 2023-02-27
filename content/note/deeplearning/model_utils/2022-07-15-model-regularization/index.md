@@ -166,7 +166,7 @@ details[open] summary {
     - 如果是平方损失 (square loss), 就是线性回归 (linear)
     - 如果是对数损失 (log loss), 就是对数几率回归 (log odd)
     - 如果是合页损失 (hinge loss), 就是支持向量机 (svm)
-    - 如果是指数损失 (exp loss), 就是 Adaboost
+    - 如果是指数损失 (exp loss), 就是 AdaBoost
 
 #### 正则化项
 

@@ -1,5 +1,5 @@
 ---
-title: 广义加性模型(GAM)
+title: 广义加性模型
 author: 王哲峰
 date: '2022-09-23'
 slug: ml-gam
