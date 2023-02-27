@@ -75,7 +75,7 @@ details[open] summary {
 
 若 `$p_{model}(y|x) = N(y;f(x;\theta), I)$`:
 
-`$$J(\theta)=\frac{1}{2}E_{x,y \sim \hat{p}_{data}} ||y-f(x;\theta)||^{2} + const$$`
+`$$J(\theta)=\frac{1}{2}E_{x,y \sim \hat{p}_{data}} \parallel y-f(x;\theta)\parallel^{2} + const$$`
 `$$E=\frac{1}{2} \sum_{k}(y_k-t_k)^2$$`
 
 其中:
