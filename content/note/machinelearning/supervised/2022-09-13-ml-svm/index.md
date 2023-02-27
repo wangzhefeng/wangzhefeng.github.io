@@ -45,16 +45,11 @@ details[open] summary {
   - [SMO 算法](#smo-算法)
   - [软间隔](#软间隔)
   - [核函数](#核函数)
-- [函数间隔与几何间隔](#函数间隔与几何间隔)
-  - [函数间隔](#函数间隔)
-  - [几何间隔](#几何间隔)
-- [线性分类器](#线性分类器)
+- [其他内容](#其他内容)
   - [线性可分性](#线性可分性)
-  - [感知机](#感知机)
-    - [感知机模型](#感知机模型)
-    - [感知机模型学习](#感知机模型学习)
-  - [Logistic 回归](#logistic-回归)
-  - [支持向量机](#支持向量机)
+  - [函数间隔与几何间隔](#函数间隔与几何间隔)
+    - [函数间隔](#函数间隔)
+    - [几何间隔](#几何间隔)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -242,43 +237,163 @@ h_{j}(x) = 0, j = 1, 2, \ldots, l
 
 `$$\sum_{i=1}^{m}\alpha_{i}y_{i} = 0$$`
 
+将 `$\mathbf{w}$` 代入拉格朗日函数 `$L(\mathbf{w}, b, \alpha) = \frac{1}{2}||\mathbf{w}||^{2} + \sum_{i=1}^{m}\alpha_{i}(1-y_{i}(\mathbf{w}^{T}\mathbf{x}_{i} + b))$`，同时利用上式，可以得到：
 
+`$$\begin{align}
+L(\mathbf{w}, b, \alpha) 
+&= \frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j} + \sum_{i=1}^{m}\alpha_{i} - \sum_{i=1}^{m}\alpha_{i}y_{i}\Big((\sum_{j=1}^{m}\alpha_{j}y_{j}\mathbf{x}_{j})\cdot \mathbf{x}_{i} + b\Big) \\
+&= \frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j} + \sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j} - b\sum_{i=1}^{m}\alpha_{i}y_{i} + \sum_{i=1}^{m}\alpha_{i}\\
+&= \frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j} + \sum_{i=1}^{m}\alpha_{i}
+\end{align}$$`
+
+然后再来求此时关于 `$\alpha$` 的极大值，即 `$max_{\alpha, \alpha \geq 0}min_{\omega, b}L(\mathbf{w}, b, \alpha)$`，故有：
+
+`$$\underset{\alpha}{max}-\frac{1}{2}\sum_{i}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j} + \sum_{i=1}^{m}\alpha_{i}$$`
+
+`$$s.t. \quad \sum_{}^{}\alpha_{i}y_{i}=0，\\ \alpha \geq 0, i=1,2,\ldots,m$$`
+
+此式为关于 `$\alpha$` 的极大值求解，当求出解 `$\alpha$` 之后，求出 `$\mathbf{w}$`、`$b$`，有：
+
+`$$\begin{align}
+f(\mathbf{x}) &= \mathbf{w}^{T}\mathbf{x} + b \\
+&=\sum_{i=1}^{m}\alpha_{i}y_{i}\mathbf{x}_{i}^{T}\mathbf{x} + b
+\end{align}$$`
+
+此处开始思考求解拉格朗日乘子 `$\alpha$`，有约束条件，实际为 KKT 条件：
+
+`$$\begin{cases}
+\alpha_{i} \geq 0 \\
+1-y_{i}f(\mathbf{x}_{i}) \leq 0 \\
+\alpha_{i}(1-y_{i}f(\mathbf{x}_{i})) = 0
+\end{cases}$$`
+
+此时，对于任意样本 `$(\mathbf{x}_{i}, y_{i})$`​，
+总有​ `$\alpha_{i}=0$` 或 `$y_{i}f(\mathbf{x}_{i})=1$`。若​ `$\alpha_{i} = 0$`，
+则该样本将不会在 `$f(\mathbf{x}) = \sum_{i=1}^{m}\alpha_{i}y_{i}\mathbf{x}_{i}^{T}\mathbf{x} + b$` 中出现，
+也就不会对 `$f(x)$` ​有任何影响；若 `$\alpha_{i} \geq 0$`​，则必有 `$y_{i}f(\mathbf{x}_{i}) = 1$`​，
+所对应的样本点位于最大间隔边界上，是一个支持向量。这显示出支持向量的一个重要性质：
+训练完成后，大部分的训练样本都不需保留，最终模型仅与支持向量有关
 
 ## SMO 算法
 
-那上面的 ​
- 是如何求解得到的呢？这里我们采用Platt在1998年专门针对SVM的对偶问题求解设计的算法SMO(Sequential Minimal Optimization)。它的主要思想是每次挑选出两个变量 
- ​和​ 
- ，固定其他的 
- ​参数，由此问题就变成了类似于二次方程求最大值的问题 。其大致为重复一下步骤：
+那上面的 ​`$\alpha$` 是如何求解得到的呢？
+这里我们采用 Platt 在 1998 年专门针对 SVM 的对偶问题求解设计的算法 SMO(Sequential Minimal Optimization)。
+它的主要思想是每次挑选出两个变量 `$\alpha_{i}$` ​和​ `$\alpha_{j}$`，固定其他的 `$\alpha$` ​参数，
+由此问题就变成了类似于二次方程求最大值的问题 。其大致为重复一下步骤：
 
-选出​ 
- 中“最不好”的两个参数 
-、
- 、​
-固定这两个参数以外的其他​ 
- ，求解​ 
- 来更新 
-、
- ​。
-选取的 
-、
- ​只要有一个不满足KKT条件，目标函数就会在迭代会减小。而KKT条件的违背程度越大，则更新变量后目标函数值减小的幅度越大。
+1. 选出​ `$\alpha_{i}, \alpha_{2}, \ldots, \alpha_{m}$` 中“最不好”的两个参数 
+`$\alpha_{i}$`、`$\alpha_{j}$`
+2. 固定这两个参数以外的其他​ `$\alpha$`，
+   求解​ `$\underset{\alpha}{max}\underset{\mathbf{w},b}{min}L(\mathbf{w}, b, \alpha)$` 来更新 
+`$\alpha_{i}$`、`$\alpha_{j}$`
 
-那我们应该如何选取这两个参数 
- ​和​ 
- 呢？
+选取的 `$\alpha_{i}$`、`$\alpha_{j}$` ​只要有一个不满足 KKT 条件，
+目标函数就会在迭代会减小。而 KKT 条件的违背程度越大，则更新变量后目标函数值减小的幅度越大
 
-先选出违反KKT条件最严重的样本，以其参数作为第一个参数
-采用启发式的思考方式，选择与第一个样本间隔最大的样本，其参数作为第二个参数。直观的解释是，与对两个相似的参数进行更新相比，两个参数有很大的差别，更新会使目标函数变化更大。
+那我们应该如何选取这两个参数 `$\alpha_{i}$` ​和​ `$\alpha_{j}$` 呢？
 
+1. 先选出违反 KKT 条件最严重的样本，以其参数作为第一个参数
+2. 采用启发式的思考方式，选择与第一个样本间隔最大的样本，其参数作为第二个参数。
+   直观的解释是，与对两个相似的参数进行更新相比，两个参数有很大的差别，
+   更新会使目标函数变化更大
 
 ## 软间隔
 
 以上的推导形式都是建立在样本数据线性可分的基础上，如果样本数据中线性不可分（你中有我，我中有你），
 应该如何处理呢？这里我们引入软间隔（Soft Margin），意味着，允许支持向量机在一定程度上出错
 
+![img](images/soft_margin.png)
 
+引入常量 `$C > 0$` 和 “`$0/1$` 损失函数” `$l_{0/1}(z)$`，其特性为当 `$z<0$` 时函数为 1，否则函数为 0：
+
+`$$l_{0/1}(z) = \begin{cases}
+1, z \leq 0 \\
+0, z \geq 0
+\end{cases}$$`
+
+允许样本在一定程度上出错，即有样本不满足约束：
+
+`$$y_{i}(\mathbf{w}^{T}\mathbf{x}_{i} + b) \geq 1$$`
+
+我们的目标是在最大化间隔的同时，尽可能减小不满足约束的样本数量，此时的优化目标写为：
+
+`$$\underset{\omega, b}{min}\frac{1}{2}||\mathbf{w}||^{2}+C\sum_{i=1}^{m}l_{0/1}\big(y_{i}(\mathbf{w}^{T}\mathbf{x}_{i} + b)-1\big)$$`
+
+* 当​ `$C$` 无穷大时，迫使所有样本均满足约束，使得上式后半部分为​
+* 当 `$C$` 取有限值时，允许一些样本不满足约束
+
+![img](images/param_c.png)
+
+但是上式的 `$l_{0/1}$` 损失函数非凸、非连续，数学性质不好，用其他一些函数来代替它：
+
+* Hinge 损失
+
+`$$l_{hinge}(z) = max(0, 1-z)$$`
+
+* 指数损失
+
+`$$l_{exp}(z) = e^{-z}$$`
+
+* 对数损失
+
+`$$l_{log}(z) = log(1+e^{-z})$$`
+
+以上四种损失函数图像如下所示：
+
+![img](images/loss.png)
+
+若采用 Hinge 损失，原优化目标变为：
+
+`$$\underset{\omega, b}{min}\frac{1}{2}||\mathbf{w}||^{2} + C\sum_{i=1}^{m}max(0, 1- y_{i}(\mathbf{w}^{T}\mathbf{x}_{i}) + b)$$`
+
+引入“松弛变量”(slack variables)，可将上式重写为：
+
+`$$\underset{\mathbf{w},b, \xi_{i}}{min}\frac{1}{2}||\mathbf{w}||^{w} + C\sum_{i=1}^{m}\xi_{i}$$`
+
+`$$s.t. \quad y_{i}(\mathbf{w}^{T}\mathbf{x}_{i} + b) \geq 1 -\xi_{i} \\ \xi_{i} \geq 0, i=1,2,\ldots,m$$`
+
+仔细思考松弛变量 `$xi$` 的作用，可以看到，原来的硬间隔要求：`$y_{i}(\mathbf{w}^{T}\mathbf{x}_{i}+b) \geq 1$`，
+所有的样本距离划分超平面距离都要大于 `$\frac{1}{||\mathbf{w}||}$`；而引入松弛变量 `$\xi$` 之后，
+我们允许那些样本距划分超平面 `$\frac{1-\xi}{||\mathbf{w}||}$` 的样本点(即离群点)存在，其中 `$\xi \geq 0$`。
+允许离群点存在即忽略它们，不因为个别离群点改变原有的可以将绝大多数样本分离的划分超平面。可以看出，当松弛变量​ 
+`$\xi$` 为 0 时即为硬间隔，不允许离群点存在；`$\xi$` 越大，离群点偏离分类群越远。当 `$\xi$` 为1时，
+离群点在划分超平面上，当 ​`$\xi$` 大于1时，离群点已经跑到另一个分类样本群去了，即被错误分类了
+
+再来思考惩罚因子​ `$C$` 的作用，它是随松弛变量 `$\xi$` 一起引入的，代表了有多重视离群点。​
+`$C$` 越大表示越重视，越不想丢掉离群点，`$C$` ​为无穷大时迫使后半式​ `$\sum_{i=1}^{m}\xi_{i}$` 为 0，
+而​ `$\xi_{i} \geq 0$` 所以有​ `$\xi_{i} = 0$`，即不允许有离群点。
+在实际应用中，`$C$` ​是需要事先设定且需要调参的数
+
+上面得到的软间隔优化目标也是个二次规划问题，我们同样转换为拉格朗日函数：
+
+`$$L(\mathbf{w}, b, \alpha, \xi, \mu) = \frac{1}{2}||\mathbf{w}||^{2} + \sum_{i=1}^{m}\alpha_{i}(1-\xi_{i} - y_{i}(\mathbf{w}^{T}\mathbf{x}_{i} + b)) - \sum_{i=1}^{m}\mu_{i}\xi_{i}$$`
+
+其中：`$\alpha_{i} \geq 0$`，`$\mu_{i} \geq 0$` 是拉格朗日乘子。同样地我们转换为对偶问题，将现在的：
+
+`$$\underset{\omega, b, \xi_{i}}{min}\underset{\alpha, \mu}{max}L(\mathbf{w}, b, \alpha, \xi, \mu)$$`
+
+转换为：
+
+`$$\underset{\alpha, \mu}{max}\underset{\omega, b, \xi_{i}}{min}L(\mathbf{w}, b, \alpha, \xi, \mu)$$`
+
+令 `$L(\mathbf{w}, b, \alpha, \xi, \mu)$` 对 `$\mathbf{w}$`，`$b$`，`$\xi_{i}$` 的偏导为 0，可得：
+
+`$$\mathbf{w} = \sum_{i=1}^{m}\alpha_{i}y_{i}\mathbf{x}_{i}$$`
+
+`$$0 = \sum_{i=1}^{m}\alpha_{i}y_{i}$$`
+
+`$$C = \alpha_{i} + \mu_{i}$$`
+
+将此结果代入 `$L(\mathbf{w}, b, \alpha, \xi, \mu)$`，就得到其最小值。然后其对偶问题转换为：
+
+`$$\underset{\alpha}{max}\sum_{i=1}^{m}\alpha_{i} - \frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\mathbf{x}_{i}^{T}\mathbf{x}_{j}$$`
+
+`$$s.t. \quad \sum_{i=1}^{m}\alpha_{i}y_{i} = 0$$`
+
+`$$0 \leq \alpha_{i} \leq C, i= 1,2, \ldots, m$$`
+
+对比硬间隔的对偶问题，软间隔的差别只在于对对偶变量的约束不同：
+前者是​ `$\alpha_{i} \geq 0$`，后者是​ `$0 \leq \alpha_{i} \leq C$`
 
 ## 核函数
 
@@ -301,44 +416,65 @@ h_{j}(x) = 0, j = 1, 2, \ldots, l
 1, \quad \quad \quad \quad N \leq d + 1
 \end{cases}$$`
 
+即样本空间维度大于样本个数时，一定线性可分（证明略）
 
+令 `$\phi$(\mathbf{x})` 表示将 `$\mathbf{x}$` 映射后的特征向量，于是在特征空间中的划分超平面为：
 
-# 函数间隔与几何间隔
+`$$f(\mathbf{x}) = \mathbf{w}^{T}\phi(\mathbf{x}) + b$$`
 
-> * 函数间隔，Function Margin
-> * 几何间隔，Geometric Margin
+现在的问题就转化为了如何找到合适的 `$\phi(\cdot)$` 将 `$\mathbf{x}$` 映射到高维空间，使得样本线性可分。
 
-一般而言, 一个数据点距离超平面(`$\omega^{T}x+b =0$`)的远近可以表示为分类预测的确信或准确程度
+与硬间隔 SVM 对偶问题求解相似，我们要优化的目标变为：
 
-在超平面 `$\omega^{T}x+b$` 确定的情况下，`$|\omega^{T}x+b|$` 能够相对表示点 `$x$` 距离超平面的远近；
-而 `$\omega^{T}x+b$` 的符号与类别标记 `$y$` 的符号是否一致表示分类是否正确，
-可以用指标量 `$y\cdot (\omega^{T}x+b)$` 的正负性来判定或表示分类的正确性和确信度
+`$$\underset{\omega, b}{min}\frac{1}{2}||\mathbf{w}||^{2}$$`
 
-## 函数间隔
+`$$s.t. \quad y_{i}(\mathbf{w}^{T}\phi(\mathbf{x}_{i}) + b) \geq 1, i=1, 2, \ldots, m$$`
 
-> Function Margin
+转化为对偶问题：
 
-函数间隔: 
+`$$\underset{\alpha}{max}\sum_{i=1}^{m}\alpha_{i} - \frac{1}{2}\sum_{i=1}^{m}\sum_{j=1}^{m}\alpha_{i}\alpha_{j}y_{i}y_{j}\phi(\mathbf{x}_{i}^{T})\phi(\mathbf{x}_{j})$$`
 
-`$$\hat{\gamma}=y\cdot (\omega^{T}x+b)=yf(x)$$`
+`$$s.t. \quad \sum_{i=1}^{m}\alpha_{i}y_{i} = 0$$`
 
-超平面 `$\omega^{T}x+b$` 关于训练数据 `$T$` 的函数间隔为超平面 `$\omega^{T}x+b$` 
-关于 `$T$` 中所有样本点 `$(x_i, y_i)$` 的函数间隔的最小值: 
+`$$\alpha_{j} \geq 0, i=1, 2, \ldots, m$$`
 
-`$$\hat{\gamma}=\min\hat{\gamma}_{i}, i = 1, 2,..., n$$`
+上式的计算中涉及到了 `$\phi(\mathbf{x}_{i})^{T}\phi(\mathbf{x}_{j})$`，
+这是样本 `$\mathbf{x}_{i}$` 和 `$\mathbf{x}_{j}$` 映射到特征空间之后的内积。
+由于特征空间维度可能很高甚至是无穷维，计算困难，于是换了一条路来解决这个问题，设想一个函数：
 
-上面定义的函数间隔虽然可以表示分类预测的正确性和确信度，但在选择分类超平面时，只有函数间隔是不够的。
-如果成比例的改变 `$\omega$` 和 `$b$`，比如将他们改变为 `$2\omega$` 和 `$2b$`，
-虽然此时超平面没有改变, 但是函数间隔的值 `$yf(x)$` 却变成了原来的 4 倍
+`$$\kappa(\mathbf{x}_{i}, \mathbf{x}_{j}) = \langle \phi(\mathbf{x}_{i}), \phi(\mathbf{x}_{j})\rangle = \phi(\mathbf{x}_{i})^{T}\phi(\mathbf{x}_{j})$$`
 
-解决防范: 可以对法向量 `$\omega$` 加一些约束条件，使其表面上看起来规范化
+其中：
 
-## 几何间隔
+* `$\langle \rangle$` 表示求两个向量的内积
 
-> Geometric Margin
+我们把 ​`$\kappa(\mathbf{x}_{i}, \mathbf{x}_{j})$` 称为核函数，它的作用显而易见，
+使我们不必直接去计算​ `$\langle \phi(\mathbf{x}_{i}), \phi(\mathbf{x}_{j})\rangle$`，
+甚至不需要知道 `$\phi(\cdot)$` ​长什么样，直接求出​ `$\phi(\mathbf{x}_{i})^{T}\phi(\mathbf{x}_{j})$` 的结果。
 
+将核函数代入后求解，得
 
-# 线性分类器
+`$$\begin{align}
+f(\mathbf{x}) 
+&= \mathbf{w}^{T}\phi(\mathbf{x}) + b \\
+&= \sum_{i=1}^{m}\alpha_{i}y_{i}\phi(\mathbf{x}_{i})^{T}\phi(\mathbf{x}) + b \\
+&= \sum_{i=1}^{m}\alpha_{i}y_{i}\kappa(\mathbf{x}, \mathbf{x}_{i}) + b
+\end{align}$$`
+
+上式表明，模型的最优解可以通过训练样本的核函数展开，这一展开式称为“支持向量展式”。
+
+国外的英文文献把Kernel（核函数）叫做Kernel Function或者是Kernel Trick，从Trick这种叫法可知核函数其实是一种运算技巧而已。
+
+可以证明，只要一个对称函数所对应的核矩阵半正定，它就能作为核函数使用。而对于一个半正定核矩阵，总能找到一个与之对应的 
+`$\phi(\cdot)$` ​。事实上，核函数的选取依然是一个未决问题，核函数选择的不合适，意味着将样本映射到了一个不合适的特征空间，可能会导致样本依然无法线性可分。
+
+下表列出了几种常用的核函数：
+
+![img](images/kernel_func.png)
+
+可以发现，线性核函数对应着样本空间本身，即不对样本做函数映射
+
+# 其他内容
 
 ## 线性可分性
 
@@ -367,124 +503,39 @@ h_{j}(x) = 0, j = 1, 2, \ldots, l
 
 这个超平面将特征空间划分为两个部分, 位于两部分的点分别被分为两类
 
-## 感知机
+## 函数间隔与几何间隔
 
-### 感知机模型
+> * 函数间隔，Function Margin
+> * 几何间隔，Geometric Margin
 
-感知机就是一个二分类线性分类器，其目的是从特征学习出一个分类模型 `$f(\cdot)$`：
+一般而言, 一个数据点距离超平面(`$\omega^{T}x+b =0$`)的远近可以表示为分类预测的确信或准确程度
 
-`$$y=f(z), y \in \{0, 1\}$$`
+在超平面 `$\omega^{T}x+b$` 确定的情况下，`$|\omega^{T}x+b|$` 能够相对表示点 `$x$` 距离超平面的远近；
+而 `$\omega^{T}x+b$` 的符号与类别标记 `$y$` 的符号是否一致表示分类是否正确，
+可以用指标量 `$y\cdot (\omega^{T}x+b)$` 的正负性来判定或表示分类的正确性和确信度
 
-感知机模型是将特征变量的线性组合作为自变量：
+### 函数间隔
 
-`$$z=\omega^{T}x + b$$`
+> Function Margin
 
-由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`，
-因此需要使用阶跃函数(Step 函数)将线性模型 `$z=\omega^{T}x + b$` 映射到集合 `$\{0, 1\}$` 上
+函数间隔: 
 
-阶跃函数(step function) `$f(\cdot)$` 如下：
+`$$\hat{\gamma}=y\cdot (\omega^{T}x+b)=yf(x)$$`
 
-`$$f(z) = \begin{cases}
-1 & & z \geq 0 \\
-0 & & z < 0
-\end{cases}$$`
+超平面 `$\omega^{T}x+b$` 关于训练数据 `$T$` 的函数间隔为超平面 `$\omega^{T}x+b$` 
+关于 `$T$` 中所有样本点 `$(x_i, y_i)$` 的函数间隔的最小值: 
 
-感知机模型的目标就是从数据中学习得到 `$\omega, b$`，
-使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`，
-负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`
+`$$\hat{\gamma}=\min\hat{\gamma}_{i}, i = 1, 2,..., n$$`
 
-### 感知机模型学习
+上面定义的函数间隔虽然可以表示分类预测的正确性和确信度，但在选择分类超平面时，只有函数间隔是不够的。
+如果成比例的改变 `$\omega$` 和 `$b$`，比如将他们改变为 `$2\omega$` 和 `$2b$`，
+虽然此时超平面没有改变, 但是函数间隔的值 `$yf(x)$` 却变成了原来的 4 倍
 
-感知机的学习就是寻找一个超平面能够将特征空间中的两个类别的数据分开，
-即确定感知机模型参数 `$\omega, b$`, 所以需要定义学习的损失函数并将损失函数最小化
+解决防范: 可以对法向量 `$\omega$` 加一些约束条件，使其表面上看起来规范化
 
-1. 定义学习损失函数
+### 几何间隔
 
-`$$L(\omega, b)=-\frac{1}{||\omega||}\sum_{x_i \in M}y_i(\omega^{T} x_i + b) \\
-=-\sum_{x_i \in M}y_i(\omega^{T} x_i + b)$$`
-
-其中: 
-
-* 集合 `$M$` 是超平面 `$S$` 的误分类点集合
-
-损失函数的意义是：误分类点到超平面的 `$S$` 的距离总和
-
-2. 感知机学习算法
-
-> 随机梯度下降算法(Stochastic gradient descent)
-
-最优化问题: 
-
-`$$\omega, b= argmin L(\omega, b)=-\sum_{x_i \in M}y_i(\omega^{T} x_i + b)$$`
-
-算法: 
-
-1. 选取初始值: `$\omega_0, b_0$`
-2. 在训练数据中选取数据点 `$(x_i, y_i)$`
-3. 如果 `$y_i(\omega\cdot x_i + b)<0$`
-    - `$\omega \gets \omega + \eta y_i x_i$`
-    - `$b \gets b + \eta y_i$`
-4. 重新选取数据点，直到训练集中没有误分类点
-
-## Logistic 回归
-
-Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
-
-`$$y = f(z), y \in \{0, 1\}$$`
-
-Logistic Regression 模型是将特征变量的线性组合作为自变量: 
-
-`$$z=\omega^{T}x + b$$`
-
-由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`，
-因此需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$[0, 1]$` 上。
-映射后的值被认为是 `$y=1$` 的概率。假设: 
-
-`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
-
-其中：
-
-* `$\sigma(z)$` 是 Sigmoid 函数 
-
-`$$\sigma(z)=\frac{1}{1+e^{-z}}$$`
-
-因此 Logistic Regression 模型的形式为： 
-
-`$$\begin{cases}
-P(y=1|x, \omega) = h_{\omega, b}(x) =\sigma(\omega^{T}x+b) \\ 
-P(y=0|x, \omega) = 1 - h_{\omega, b}(x) =1-\sigma(\omega^{T}x+b) 
-\end{cases}$$`
-
-当要判别一个新来的数据点 `$x_{test}$` 属于哪个类别时, 
-只需要求解 `$h_{\omega, b}(x_{test}) = \sigma(\omega^{T}x_{test} + b)$`: 
-
-`$$ y_{test}=\left\{
-\begin{array}{rcl}
-1    &      & h_{\omega,b}(x_{test}) \geq 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b \geq 0\\
-0    &      & h_{\omega,b}(x_{test}) < 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b < 0\\
-\end{array} \right.$$`
-
-Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
-使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
-负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 
-
-## 支持向量机
-
-在支持向量机中, 将符号进行变换: 
-
-假设: 
-
-`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
-
-这里，只需考虑 `$\omega^{T}x + b$` 的正负问题，而不关心 `$\sigma(\cdot)$` 的形式。
-因此将 `$\sigma(\cdot)$` 进行简化，将其简单地映射到 `$[-1, 1]$` 上：
-
-`$$\sigma(z)=\left\{
-\begin{array}{rcl}
-1     &      & z \geq 0\\
--1    &      & z < 0\\
-\end{array} \right. $$`
-
+> Geometric Margin
 
 # 参考
 

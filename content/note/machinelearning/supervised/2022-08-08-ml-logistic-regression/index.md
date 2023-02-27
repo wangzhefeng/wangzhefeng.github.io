@@ -71,6 +71,7 @@ details[open] summary {
     - [LogisticRegression](#logisticregression)
     - [SGDClassifier](#sgdclassifier)
     - [LogisticRegressionCV](#logisticregressioncv)
+- [TODO](#todo)
 </p></details><p></p>
 
 # 模型推导-从线性模型出发
@@ -306,3 +307,45 @@ y = (y > 4).astype(np.int)
 for i, C in enmerate((1, 0.1, 0.01)):
     clf_l1_LR = LogisticRegression(C = C, penalty = "l1", )
 ```
+
+# TODO
+
+Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
+
+`$$y = f(z), y \in \{0, 1\}$$`
+
+Logistic Regression 模型是将特征变量的线性组合作为自变量: 
+
+`$$z=\omega^{T}x + b$$`
+
+由于自变量 `$x$` 取值的范围是 `$[-\infty, +\infty]$`，
+因此需要使用 Logistic 函数(Sigmoid 函数)将自变量 `$z=\omega^{T}x + b$` 映射到范围 `$[0, 1]$` 上。
+映射后的值被认为是 `$y=1$` 的概率。假设: 
+
+`$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
+
+其中：
+
+* `$\sigma(z)$` 是 Sigmoid 函数 
+
+`$$\sigma(z)=\frac{1}{1+e^{-z}}$$`
+
+因此 Logistic Regression 模型的形式为： 
+
+`$$\begin{cases}
+P(y=1|x, \omega) = h_{\omega, b}(x) =\sigma(\omega^{T}x+b) \\ 
+P(y=0|x, \omega) = 1 - h_{\omega, b}(x) =1-\sigma(\omega^{T}x+b) 
+\end{cases}$$`
+
+当要判别一个新来的数据点 `$x_{test}$` 属于哪个类别时, 
+只需要求解 `$h_{\omega, b}(x_{test}) = \sigma(\omega^{T}x_{test} + b)$`: 
+
+`$$ y_{test}=\left\{
+\begin{array}{rcl}
+1    &      & h_{\omega,b}(x_{test}) \geq 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b \geq 0\\
+0    &      & h_{\omega,b}(x_{test}) < 0.5 & \Leftrightarrow & \omega^{T}x_{test}+b < 0\\
+\end{array} \right.$$`
+
+Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
+使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
+负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 

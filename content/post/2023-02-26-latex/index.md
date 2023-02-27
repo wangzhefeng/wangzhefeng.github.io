@@ -77,6 +77,7 @@ details[open] summary {
 - [AMS 二元运算符](#ams-二元运算符)
 - [AMS 其他符号](#ams-其他符号)
 - [数学字母](#数学字母)
+- [参考](#参考)
 </p></details><p></p>
 
 # 数学模式重音符
@@ -218,3 +219,9 @@ details[open] summary {
 # AMS 其他符号
 
 # 数学字母
+
+
+# 参考
+
+* [常用数学符号的 LaTeX 表示方法](http://mohu.org/info/symbols/symbols.htm)
+
