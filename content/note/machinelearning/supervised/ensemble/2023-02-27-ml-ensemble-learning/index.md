@@ -42,9 +42,15 @@ CatBoost 相较于 XGBoost 以及 LightGBM，在类别特征上进行了较大�
 还设计了贪心的特征组合策略。此外，通过 Ordered Boosting 的策略，CatBoost 缓解了预测漂移的问题，
 在诸多小数据集的表现上也展现了非常好的效果
 
-目前三个模型互相借鉴，也都在之前的基础上进行了不同程度的改进，但三个模型训练融合依旧是在传统数据建模竞赛中的一大利器
-
+目前三个模型互相借鉴，也都在之前的基础上进行了不同程度的改进，但三个模型训练融合依旧是在传统数据建模竞赛中的一大利器。
 此外，斯坦福大学算法团队提出了 NgBoost 模型
+
+## GBDT 类模型总结
+
+* [GBDT 类模型总结](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485914&idx=1&sn=d94efee9110e58605d8b075ec4a20aa7&chksm=fa0417b1cd739ea72a5eede9a7bf552748b1668caaadebb93bb937a7d0255499160312c339a7&scene=178&cur_album_id=1577157748566310916#rd)
+* [A Gentle Introduction to the Gradient Boosting Algorithm for Machine Learning](https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/)
 
 ## Bagging
 
+* Bagging
+* Random Forest

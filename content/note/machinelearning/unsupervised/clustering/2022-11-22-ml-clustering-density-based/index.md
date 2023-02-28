@@ -42,6 +42,7 @@ details[open] summary {
   - [算法优劣性](#算法优劣性)
     - [优点](#优点)
     - [缺点](#缺点)
+  - [算法示例](#算法示例)
 - [ADBSCAN](#adbscan)
   - [算法介绍](#算法介绍)
   - [算法实现](#算法实现)
@@ -53,7 +54,9 @@ details[open] summary {
   - [算法数学模型](#算法数学模型-1)
   - [算法伪代码](#算法伪代码-1)
   - [算法优劣性](#算法优劣性-1)
-- [算法实现](#算法实现-2)
+  - [算法实现](#算法实现-2)
+- [Mean Shift](#mean-shift)
+- [算法实现](#算法实现-3)
   - [R 实现聚类](#r-实现聚类)
   - [Python 实现聚类](#python-实现聚类)
     - [sklearn](#sklearn)
@@ -66,6 +69,14 @@ details[open] summary {
 ## 算法原理介绍
 
 ### 基本原理
+
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise)是一种基于密度的聚类算法，
+其可以有效地发现任意形状的簇，并能够处理噪声数据。DBSCAN算法的核心思想是：对于一个给定的数据点，
+如果它的密度达到一定的阈值，则它属于一个簇中；否则，它被视为噪声点
+
+DBSCAN算法的优点是能够自动识别簇的数目，并且对于任意形状的簇都有较好的效果。并且还能够有效地处理噪声数据，
+不需要预先指定簇的数目。缺点是对于密度差异较大的数据集，可能会导致聚类效果不佳，需要进行参数调整和优化。
+另外该算法对于高维数据集的效果也不如其他算法
 
 DBSCAN (Density-Based Spatial Clustering of Application with Noise)，具有噪声的基于密度的聚类方法。
 是一种基于密度的空间聚类算法。该算法将具有足够密度的区域划分为簇，并在具有噪声的空间数据库中发现任意形状的簇，
@@ -214,6 +225,58 @@ DBSCAN (Density-Based Spatial Clustering of Application with Noise)，具有噪�
 
 在处理高维数据时也会出现这种缺点, 因为难以估计距离阈值 `$\epsilon$`
 
+
+## 算法示例
+
+```python
+from sklearn.cluster import DBSCAN
+
+db = DBSCAN(eps=3, min_samples=10).fit(X)
+DBSCAN_labels = db.labels_
+
+# Number of clusters in labels, ignoring noise if present.
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise_ = list(labels).count(-1)
+
+print("Estimated number of clusters: %d" % n_clusters_)
+print("Estimated number of noise points: %d" % n_noise_)
+
+unique_labels = set(labels)
+core_samples_mask = np.zeros_like(labels, dtype=bool)
+core_samples_mask[db.core_sample_indices_] = True
+
+colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
+for k, col in zip(unique_labels, colors):
+    if k == -1:
+        # Black used for noise.
+        col = [0, 0, 0, 1]
+
+    class_member_mask = labels == k
+
+    xy = X[class_member_mask & core_samples_mask]
+    plt.plot(
+        xy[:, 0],
+        xy[:, 1],
+        "o",
+        markerfacecolor=tuple(col),
+        markeredgecolor="k",
+        markersize=14,
+)
+
+    xy = X[class_member_mask & ~core_samples_mask]
+    plt.plot(
+        xy[:, -1],
+        xy[:, 1],
+        "o",
+        markerfacecolor=tuple(col),
+        markeredgecolor="k",
+        markersize=6,
+)
+
+plt.title(f"Estimated number of clusters: {n_clusters_}")
+plt.show()
+```
+
 # ADBSCAN
 
 
@@ -235,6 +298,16 @@ DBSCAN (Density-Based Spatial Clustering of Application with Noise)，具有噪�
 
 # OPTICS
 
+OPTICS（Ordering Points To Identify the Clustering Structure）是一种基于密度的聚类算法，
+其能够自动确定簇的数量，同时也可以发现任意形状的簇，并能够处理噪声数据。
+OPTICS 算法的核心思想是：对于一个给定的数据点，通过计算它到其它点的距离，
+确定其在密度上的可达性，从而构建一个基于密度的距离图。然后，通过扫描该距离图，
+自动确定簇的数量，并对每个簇进行划分
+
+OPTICS算法的优点是能够自动确定簇的数量，并能够处理任意形状的簇，并能够有效地处理噪声数据。
+该算法还能够输出聚类层次结构，便于分析和可视化。缺点是计算复杂度较高，尤其是在处理大规模数据集时，
+需要消耗大量的计算资源和存储空间。另外就是该算法对于密度差异较大的数据集，可能会导致聚类效果不佳
+
 OPTICS(Ordering Points To Identify the Clustering Structure) 和 DBSCAN 聚类相同, 
 都是基于密度的聚类, 但是, OPTICS 的好处在于可以处理不同密度的类, 
 结果有点像基于连通性的聚类, 不过还是有些区别的. 上段伪代码
@@ -247,12 +320,100 @@ OPTICS(Ordering Points To Identify the Clustering Structure) 和 DBSCAN 聚类�
 
 ## 算法优劣性
 
+## 算法实现
+
+```python
+from sklearn.cluster import OPTICS
+import matplotlib.gridspec as gridspec
+
+#Build OPTICS model:
+clust = OPTICS(min_samples=3, min_cluster_size=100, metric='euclidean')
+
+# Run the fit
+clust.fit(X)
+
+space = np.arange(len(X))
+reachability = clust.reachability_[clust.ordering_]
+OPTICS_labels = clust.labels_[clust.ordering_]
+labels = clust.labels_[clust.ordering_]
+
+plt.figure(figsize=(10, 7))
+G = gridspec.GridSpec(2, 3)
+ax1 = plt.subplot(G[0, 0])
+ax2 = plt.subplot(G[1, 0])
 
 
+# Reachability plot
+colors = ["g.", "r.", "b.", "y.", "c."]
+for klass, color in zip(range(0, 5), colors):
+    Xk = space[labels == klass]
+    Rk = reachability[labels == klass]
+    ax1.plot(Xk, Rk, color, alpha=0.3)
+ax1.plot(space[labels == -1], reachability[labels == -1], "k.", alpha=0.3)
+ax1.set_ylabel("Reachability (epsilon distance)")
+ax1.set_title("Reachability Plot")
+
+# OPTICS
+colors = ["g.", "r.", "b.", "y.", "c."]
+for klass, color in zip(range(0, 5), colors):
+    Xk = X[clust.labels_ == klass]
+    ax2.plot(Xk[:, 0], Xk[:, 1], color, alpha=0.3)
+ax2.plot(X[clust.labels_ == -1, 0], X[clust.labels_ == -1, 1], "k+", alpha=0.1)
+ax2.set_title("Automatic Clustering\nOPTICS")
 
 
+plt.tight_layout()
+plt.show()
+```
 
 
+# Mean Shift
+
+Mean Shift Clustering 是一种基于密度的非参数聚类算法，其基本思想是通过寻找数据点密度最大的位置（称为"局部最大值"或"高峰"），
+来识别数据中的簇。算法的核心是通过对每个数据点进行局部密度估计，并将密度估计的结果用于计算数据点移动的方向和距离。
+算法的核心是通过对每个数据点进行局部密度估计，并将密度估计的结果用于计算数据点移动的方向和距离
+
+Mean Shift  Clustering 算法的优点是不需要指定簇的数目，且对于形状复杂的簇也有很好的效果。
+算法还能够有效地处理噪声数据。他的缺点也是计算复杂度较高，尤其是在处理大规模数据集时，
+需要消耗大量的计算资源和存储空间，该算法还对初始参数的选择比较敏感，需要进行参数调整和优化
+
+
+```python
+from itertools import cycle
+from sklearn.cluster import MeanShift, estimate_bandwidth
+
+# The following bandwidth can be automatically detected using
+bandwidth = estimate_bandwidth(X, quantile = 0.2, n_samples = 100)
+
+# model
+ms = MeanShift(bandwidth = bandwidth)
+ms.fit(X)
+MS_labels = ms.labels_
+cluster_centers = ms.cluster_centers_
+
+labels_unique = np.unique(labels)
+n_clusters_ = len(labels_unique)
+print("number of estimated clusters : %d" % n_clusters_)
+
+# result
+plt.figure(1)
+plt.clf()
+colors = cycle("bgrcmykbgrcmykbgrcmykbgrcmyk")
+for k, col in zip(range(n_clusters_), colors):
+    my_members = labels == k
+    cluster_center = cluster_centers[k]
+    plt.plot(X[my_members, 0], X[my_members, 1], col + ".")
+    plt.plot(
+        cluster_center[0],
+        cluster_center[1],
+        "o",
+        markerfacecolor = col,
+        markeredgecolor = "k",
+        markersize = 14,
+)
+plt.title("Estimated number of clusters: %d" % n_clusters_)
+plt.show()
+```
 
 
 

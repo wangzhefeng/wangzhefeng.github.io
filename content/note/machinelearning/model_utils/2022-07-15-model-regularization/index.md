@@ -108,6 +108,7 @@ details[open] summary {
 - [Batch Normalization](#batch-normalization-1)
   - [Batch Normalization原理](#batch-normalization原理)
   - [Batch Normalization优点](#batch-normalization优点)
+- [参考](#参考)
 </p></details><p></p>
 
 # 过拟合
@@ -578,4 +579,9 @@ Batch Normalization, 顾名思义, 以进行学习时的 mini-batch 为单位, �
 - 可以使学习快速进行(可以增大学习率)
 - 不那么依赖初始值(对初始值不敏感)
 - 抑制过拟合(降低Dropout等的必要性)
+
+
+# 参考
+
+* [防止模型过拟合的方法汇总](https://mp.weixin.qq.com/s/abqBdcuhM1yAIvr_QaMz1A)
 

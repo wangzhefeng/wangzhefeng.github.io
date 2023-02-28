@@ -99,4 +99,8 @@ details[open] summary {
 # 参考
 
 * [wiki-广义线性模型](https://zh.wikipedia.org/zh-cn/%E5%BB%A3%E7%BE%A9%E7%B7%9A%E6%80%A7%E6%A8%A1%E5%9E%8B)
+* https://zhangzhenhu.github.io/blog/glm/source/%E5%B9%BF%E4%B9%89%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/content.html
+* https://zhuanlan.zhihu.com/p/22876460
+* https://xg1990.com/blog/archives/304
+* https://andrewwang.rbind.io/courses/bayesian_statistics/notes/Ch9_h.pdf
 

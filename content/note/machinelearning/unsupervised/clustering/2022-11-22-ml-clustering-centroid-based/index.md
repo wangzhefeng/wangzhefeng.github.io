@@ -90,7 +90,7 @@ K-Means 算法针对聚类所得簇划分 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$`,
 直观上看, 平方误差在一定程度上刻画了簇内样本围绕均值向量的紧密程度, 
 `$E$` 值越小簇内样本相似度越高. 但最小化 `$E$` 不容易, 是一个 NP 难问题, 
 K-Means 算法采用了贪心策略, 通过迭代优化来近似求解 `$E$` 的最小值. 
-具体算法如下. 
+具体算法如下
 
 ## 算法伪代码
 
@@ -132,6 +132,29 @@ K-Means 算法采用了贪心策略, 通过迭代优化来近似求解 `$E$` 的
 > * 簇划分 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$`,
 
 ## 算法实现
+
+```python
+from sklearn.cluster import KMeans
+
+# model
+kmeans = KMeans(n_clusters = 5)
+km = kmeans.fit(X)
+km_labels = km.labels_
+
+# results
+print(kmeans.labels_)
+
+# visualise results
+plt.scatter(X[:, 0], X[:, 1], c = kmeans.labels_, s = 70, cmap = 'Paired')
+plt.scatter(
+    kmeans.cluster_centers_[:, 0], 
+    kmeans.cluster_centers_[:, 1], 
+    marker = '^', 
+    s = 100, 
+    linewidth = 2,
+    c = [0, 1, 2, 3, 4]
+)
+```
 
 
 # K-Means++

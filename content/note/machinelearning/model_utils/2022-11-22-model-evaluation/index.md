@@ -2,7 +2,7 @@
 title: 模型评价指标
 author: 王哲峰
 date: '2022-11-22'
-slug: model-metrics
+slug: model-evaluation
 categories:
   - machinelearning
 tags:
@@ -71,12 +71,12 @@ details[open] summary {
   - [Average Jaccard Index](#average-jaccard-index)
 - [回归](#回归)
   - [MBE](#mbe)
+  - [MAE](#mae)
   - [MSE](#mse)
   - [RMSE](#rmse)
   - [RSE](#rse)
   - [NRMSE](#nrmse)
   - [RRMSE](#rrmse)
-  - [MAE](#mae)
   - [RAE](#rae)
   - [RMSLE](#rmsle)
   - [MAPE](#mape)
@@ -87,18 +87,31 @@ details[open] summary {
   - [MAPE](#mape-1)
   - [WMAPE](#wmape)
   - [SMAPE](#smape)
-- [排序](#排序)
 - [聚类](#聚类)
-  - [Rank Index](#rank-index)
-  - [Mutual Information based scores](#mutual-information-based-scores)
-  - [Homogeneity, completeness and V-measure](#homogeneity-completeness-and-v-measure)
-  - [Fowlkes-Mallows scores](#fowlkes-mallows-scores)
-  - [Silhouette Coefficient](#silhouette-coefficient)
-  - [Calinski-Harabasz Index](#calinski-harabasz-index)
-  - [Davies-BouIdin Index](#davies-bouidin-index)
-  - [Contingency Matrix](#contingency-matrix)
-  - [Pair Confusion Matrix](#pair-confusion-matrix)
+  - [聚类指标简介](#聚类指标简介)
+    - [设置聚类性能度量的目的](#设置聚类性能度量的目的)
+    - [什么样的聚类结果比较好](#什么样的聚类结果比较好)
+    - [聚类性能度量指标](#聚类性能度量指标)
+  - [外部指标](#外部指标)
+    - [Rand Index](#rand-index)
+    - [Adjusted Rand Score](#adjusted-rand-score)
+    - [Jaccard Coefficient](#jaccard-coefficient)
+    - [Fowlkes-Mallows scores](#fowlkes-mallows-scores)
+  - [内部指标](#内部指标)
+    - [Davies-Bouldin Index](#davies-bouldin-index)
+    - [Dunn Index](#dunn-index)
+    - [Silhouette Coefficient](#silhouette-coefficient)
+    - [Calinski-Harabasz Index](#calinski-harabasz-index)
+  - [其他](#其他)
+    - [Homogeneity 和 Completeness](#homogeneity-和-completeness)
+    - [V-Measure](#v-measure)
+    - [Mutual Information based scores](#mutual-information-based-scores)
+    - [Normalized Mutual Information Score](#normalized-mutual-information-score)
+    - [Adjusted Mutual Information Score](#adjusted-mutual-information-score)
+    - [Contingency Matrix](#contingency-matrix)
+    - [Pair Confusion Matrix](#pair-confusion-matrix)
 - [推荐系统](#推荐系统)
+- [排序](#排序)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -668,9 +681,8 @@ gini_normalized(actual = y, pred = p)
 * `$p = \frac{tp}{tp+fp}$`
 * `$r = \frac{tp}{tp+fn}$`
 
-
-
 Mean Square Loss
+
 ## Average Jaccard Index
 
 两个区域 A 和 B 的 Jaccard Index 可以表示为：
@@ -691,12 +703,12 @@ Sigmoid
 
 > Mean Bias Error，MBE，平均偏差误差
 
-
-
 MBE 是测量过程高估或低估参数值的趋势。偏差只有一个方向，可以是正的，也可以是负的。
 正偏差意味着数据的误差被高估，负偏差意味着误差被低估。MBE 是预测值与实际值之差的平均值。
 该评估指标量化了总体偏差并捕获了预测中的平均偏差。它几乎与 MAE 相似，
 唯一的区别是这里没有取绝对值。这个评估指标应该小心处理，因为正负误差可以相互抵消
+
+`$$MBE = \frac{1}{n}\sum_{i=1}^{n}(y_{i} - \hat{y}_{i})$$`
 
 优点：
 
@@ -708,7 +720,7 @@ MBE 是测量过程高估或低估参数值的趋势。偏差只有一个方向�
 * 它的可靠性不高，因为有时高个体错误会产生低 MBE
 * 作为一种评估指标，它在一个方向上可能始终是错误的
 
-
+API：
 
 ```python
 def mean_bias_error(true, pred):
@@ -718,13 +730,45 @@ def mean_bias_error(true, pred):
     return mbe_loss
 ```
 
+## MAE
+
+> Mean Absolute Error
+
+MAE(Mean Absolute Error，平均绝对误差) 也称为 L1 损失函数。
+是最简单的损失函数之一，也是一种易于理解的评价指标。
+它是通过取预测值和实际值之间的绝对差值并在整个数据集中取平均值来计算的。
+从数学上讲，它是绝对误差的算术平均值。MAE 仅测量误差的大小，不关心它们的方向。
+MAE 越低，模型的准确性就越高
+
+`$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_{i} - \hat{y}_{i}|$$`
+
+优点：
+
+* 由于采用了绝对值，因此所有误差都以相同的比例加权
+* 如果训练数据有异常值，MAE 不会惩罚由异常值引起的高错误
+* 它提供了模型执行情况的平均度量
+
+缺点：
+
+* 有时来自异常值的大错误最终被视为与低错误相同
+* 在零处不可微分。许多优化算法倾向于使用微分来找到评估指标中参数的最佳值。在 MAE 中计算梯度可能具有挑战性。
+
+API：
+
+```python
+def mean_absolute_error(true, pred):
+    abs_error = np.abs(true - pred)
+    sum_abs_error = np.sum(abs_error)
+    mae_loss = sum_abs_error / true_.size
+    
+    return mae_loss
+```
+
 ## MSE
 
 > Mean Square Error，MSE，均方误差或 L2 损失
 
-
-
-均方误差也称为 L2 损失，MSE 通过将预测值和实际值之间的差平方并在整个数据集中对其进行平均来计算误差。
+MSE 也称为 L2 损失，MSE 通过将预测值和实际值之间的差平方并在整个数据集中对其进行平均来计算误差。
 MSE 也称为二次损失，因为惩罚与误差不成正比，而是与误差的平方成正比。平方误差为异常值赋予更高的权重，
 从而为小误差产生平滑的梯度
 
@@ -746,13 +790,11 @@ MSE 随着误差的增加呈指数增长。一个好的模型的 MSE 值接近�
 * 对异常值的敏感性通过对它们进行平方来放大高误差
 * MSE 会受到异常值的影响，会寻找在整体水平上表现足够好的模型
 
-
-
 回归问题的性能度量方法与其常用的损失函数一样，都是均方误差。
 MSE 是可以直接优化的函数，所以直接默认选用平方损失函数进行优化即可，
 很多工具包里面也称之为 L2 损失
 
-
+API：
 
 ```python
 def mean_squared_error(true, pred):
@@ -766,8 +808,6 @@ def mean_squared_error(true, pred):
 ## RMSE
 
 > Root Mean Square Error，RMSE，均方根误差
-
-
 
 RMSE 是通过取 MSE 的平方根来计算的。RMSE 也称为均方根偏差。
 它测量误差的平均幅度，并关注与实际值的偏差。RMSE 值为零表示模型具有完美拟合。
@@ -785,7 +825,7 @@ RMSE 越低，模型及其预测就越好
 * 建议去除异常值才能使其正常运行
 * 会受到数据样本大小的影响
 
-
+API：
 
 ```python
 def root_mean_squared_error(true, pred):
@@ -800,8 +840,6 @@ def root_mean_squared_error(true, pred):
 
 > Relative Squared Error，RSE，相对平方误差
 
-
-
 RSE 需要使用均方误差并将其除以实际数据与数据平均值之间的差异的平方
 
 `$$RSE = \frac{\sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^{2}}{\sum_{i=1}^{n}(y_{i} - \bar{y})^{2}}$$`
@@ -814,7 +852,7 @@ RSE 需要使用均方误差并将其除以实际数据与数据平均值之间�
 
 * 对预测的平均值和规模不敏感
 
-
+API：
 
 ```python
 def relative_squared_error(true, pred):
@@ -830,8 +868,6 @@ def relative_squared_error(true, pred):
 
 > Normalized Root Mean Squared Error，NRMSE，归一化 RMSE
 
-
-
 归一化 RMSE 通常通过除以一个标量值来计算，它可以有不同的方式。
 有时选择四分位数范围可能是最好的选择，因为其他方法容易出现异常值。
 当您想要比较不同因变量的模型或修改因变量时，NRMSE 是一个很好的度量。
@@ -842,6 +878,8 @@ def relative_squared_error(true, pred):
 * RMSE / difference between the maximum and the minimum values (if mean is zero)
 * RMSE / standard deviation
 * RMSE / interquartile range
+
+API：
 
 ```python
 def normalized_root_mean_squared_error(true, pred):
@@ -857,8 +895,6 @@ def normalized_root_mean_squared_error(true, pred):
 
 > Relative Root Mean Squared Error，RRMSE，相对 RMSE
 
-
-
 RRMSE 是 RMSE 的无量纲形式，是由均方根值归一化的均方根误差，其中每个残差都根据实际值进行缩放
 
 `$$RRMSE = \sqrt{\frac{\frac{1}{n}\sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^{2}}{\sum_{i=1}^{n}(\hat{y}_{i})^{2}}}$$`
@@ -868,7 +904,7 @@ RRMSE 是 RMSE 的无量纲形式，是由均方根值归一化的均方根误�
 * Fair when RRMSE is between 20% and 30%
 * Poor when RRMSE > 30%
 
-
+API：
 
 ```python
 def relative_root_mean_squared_error(true, pred):
@@ -880,46 +916,9 @@ def relative_root_mean_squared_error(true, pred):
     return rrmse_loss
 ```
 
-## MAE
-
-> Mean Absolute Error
-
-
-
-MAE(Mean Absolute Error，平均绝对误差) 也称为 L1 损失函数。
-它是通过取预测值和实际值之间的绝对差值并在整个数据集中取平均值来计算的。
-从数学上讲，它是绝对误差的算术平均值。MAE 仅测量误差的大小，不关心它们的方向。
-MAE 越低，模型的准确性就越高
-
-`$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_{i} - \hat{y}_{i}|$$`
-
-优点：
-
-* 由于采用了绝对值，因此所有误差都以相同的比例加权
-* 如果训练数据有异常值，MAE 不会惩罚由异常值引起的高错误
-* 它提供了模型执行情况的平均度量
-
-缺点：
-
-* 有时来自异常值的大错误最终被视为与低错误相同
-* 在零处不可微分。许多优化算法倾向于使用微分来找到评估指标中参数的最佳值。在 MAE 中计算梯度可能具有挑战性。
-
-
-
-```python
-def mean_absolute_error(true, pred):
-    abs_error = np.abs(true - pred)
-    sum_abs_error = np.sum(abs_error)
-    mae_loss = sum_abs_error / true_.size
-    
-    return mae_loss
-```
-
 ## RAE
 
 > Relative Absolute Error，RAE，相对绝对误差
-
-
 
 RAE 是通过将总绝对误差除以实际值与平均值之间的绝对差来计算的。
 RAE 以比率表示，范围值在 `$[0, 1]$`。一个好的模型将具有接近于零的值，
@@ -936,7 +935,7 @@ RAE 以比率表示，范围值在 `$[0, 1]$`。一个好的模型将具有接�
 * RAE 可用于比较以不同单位测量误差的模型
 * RAE 是可靠的，因为它可以防止异常值
 
-
+API：
 
 ```python
 def relative_absolute_error(true, pred):
@@ -964,8 +963,6 @@ def relative_absolute_error(true, pred):
 
 > Root Mean Squared Logarithmic Error，RMSLE，均方根对数误差
 
-
-
 均方根对数误差是通过将 log 应用于实际值和预测值然后取它们的差异来计算的。
 RMSLE 对于小误差和大误差被均匀处理的异常值是稳健的。如果预测值小于实际值，
 则对模型进行更多的惩罚，而如果预测值大于实际值，则对模型进行较少的惩罚
@@ -978,7 +975,7 @@ RMSLE 对于小误差和大误差被均匀处理的异常值是稳健的。如�
 * 它不受大异常值的影响。
 * 它只考虑实际值和预测值之间的相对误差
 
-
+API：
 
 ```python
 def root_mean_squared_log_error(true, pred):
@@ -1009,7 +1006,7 @@ MAPE 随着误差的增加而线性增加。MAPE 越小，模型性能越小
 * MAPE 对数值较小的误差比对数值大的误差错误的惩罚更多
 * 因为使用除法运算，对于相同的误差，实际值的变化将导致损失的差异
 
-
+API：
 
 ```python
 def mean_absolute_percentage_error(true, pred):
@@ -1040,6 +1037,8 @@ Huber损失是线性和二次评分方法的组合。它有一个超参数 delta
 
 * 为了最大限度地提高模型精度，需要优化delta，这是一个迭代过程
 * 它只能微分一次
+
+API：
 
 ```python
 def huber_loss(true, pred, delta):
@@ -1109,34 +1108,538 @@ def huber_loss(true, pred, delta):
 ## SMAPE
 
 
-
-
-# 排序
-
 # 聚类
 
-## Rank Index
+> 聚类性能度量亦称聚类"有效性指标"(validity index)
 
-## Mutual Information based scores
+## 聚类指标简介
 
-## Homogeneity, completeness and V-measure
+### 设置聚类性能度量的目的
 
-## Fowlkes-Mallows scores
+对聚类结果，通过某种性能度量来评估其好坏。若明确了最终将要使用的性能度量，
+则可直接将其作为聚类过程的优化目标，从而更好地得到符合要求的聚类结果
 
-## Silhouette Coefficient
+### 什么样的聚类结果比较好
 
-## Calinski-Harabasz Index
+* "簇内相似度"(intra-cluster similarity)高
+* "蔟间相似度"(inter-cluster similarity)低
 
-## Davies-BouIdin Index
+### 聚类性能度量指标
 
-## Contingency Matrix
+* "外部指标"(external index)：将聚类结果与某个"参考模型"(reference model)进行比较
+    - 度量指标的结果值均在 `$[0,1]$` 区间，值越大越好
+* "内部指标"(internal index)：直接考察聚类结果而不利用任何参考模型
 
-## Pair Confusion Matrix
+## 外部指标
 
+对数据集 `$D = \{x_1, x_2, \ldots, x_n\}$`, 
+假定通过聚类给出的簇划分为 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$`, 
+参考模型给出的簇划分为 `$C^{*}=\{C_{1}^{*}, C_{2}^{*}\, \ldots, C_{k}^{*}\}$`. 
+
+相应地, 令 `$\lambda$` 与 `$\lambda^{*}$` 分别表示与 `$C$` 和 `$C^{*}$` 对应的簇标记向量, 
+将样本两两配对考虑, 定义: 
+
+`$$a=|SS|, SS=\{(x_{i}, x_{j}) | \lambda_{i}=\lambda_{j}, \lambda_{i}^{*}=\lambda_{j}^{*}, i<j\}$$`
+`$$b=|SD|, SD=\{(x_{i}, x_{j}) | \lambda_{i}=\lambda_{j}, \lambda_{i}^{*} \neq \lambda_{j}^{*}, i<j\}$$`
+`$$c=|DS|, DS=\{(x_{i}, x_{j}) | \lambda_{i} \neq \lambda_{j}, \lambda_{i}^{*}=\lambda_{j}^{*}, i<j\}$$`
+`$$d=|DD|, DD=\{(x_{i}, x_{j}) | \lambda_{i} \neq \lambda_{j}, \lambda_{i}^{*} \neq \lambda_{j}^{*}, i<j\}$$`
+
+其中: 
+
+* 集合 `$SS$` 包含了在 `$C$` 中隶属于相同簇且在 `$C^{*}$` 中也隶属于相同簇的样本对；
+* 集合 `$SD$` 包含了在 `$C$` 中隶属于相同簇但在 `$C^{*}$` 中隶属于不同簇的样本对；
+* 集合 `$DS$` 包含了在 `$C$` 中隶属于不同簇但在 `$C^{*}$` 中隶属于相同簇的样本对；
+* 集合 `$DD$` 包含了在 `$C$` 中隶属于不同簇且在 `$C^{*}$` 中也隶属于不同簇的样本对；
+
+这样, 由于每个样本对 `$(x_{i}, x_{j})(i<j)$` 仅能出现在一个集合中, 因此有: 
+
+`$$a+b+c+d=n(n-1)/2$$`
+
+### Rand Index
+
+> Rand 指数(Rand Index 简称 RI)
+
+Rand Index 是一种衡量聚类算法性能的指标。它衡量的是聚类算法将数据点分配到聚类中的准确程度。
+Rand Index 的范围为 `$[0, 1]$`，如果 Rand Index 为 1 表示两个聚类完全仙童，接近 0 表示两个聚类有很大的不同。
+
+`$$RI = \frac{a + b}{nC_{2}}$$`
+
+`$$RI=\frac{2(a+d)}{n(n-1)}$$`
+
+其中：
+
+* `$a$`：在真实标签中处于同一簇中的样本对数，在预测聚类中处于同一簇中的样本对数
+* `$b$`：真实聚类和预测聚类中处于不同聚类的样本对的数目
+
+API：
+
+```python
+def rand_index_score(y_true, y_pred):
+ 
+     # Initialize variables
+     a, b = 0,0
+     
+     # Compute variables
+     for i in range(len(y_true)):
+         for j in range(i+1, len(y_true)):
+             if y_true[i] == y_true[j] and y_pred[i] == y_pred[j]:
+                 a += 1
+             elif y_true[i] != y_true[j] and y_pred[i] != y_pred[j]:
+                 b += 1
+     #combinations
+     combinations = comb(len(y_true),2)
+     
+     # Compute Rand Index
+     rand_index = (a + b) / combinations
+     print(a)
+     print(b)
+     
+     return rand_index
+ 
+ #Call the function and print result:
+ print(rand_index_score(df['cluster_id'], km_labels))
+```
+
+```python
+from sklearn import metrics
+
+metrics.rand_score(df["cluster_id"], model_labels)
+
+ # Build a dataframe:
+ data = {
+    'Model': ["KM", "AP", "AC", "MS", "BKM", "DBSCAN", "OPTICS", "BIRCH"],
+    'Rand_Index':[0.99, 0.93,1, 0.99, 0.94, 0.91, 0.95,1]
+}
+Rand_Index = pd.DataFrame(data)
+ 
+# Make the plot
+y_pos = np.arange(len(Rand_Index['Model']))
+ 
+plt.stem(Rand_Index['Rand_Index'])
+plt.xticks(y_pos, Rand_Index['Model'])
+plt.show()
+```
+
+### Adjusted Rand Score
+
+Adjusted Rand Score（调整兰德指数）是一种用于衡量聚类算法性能的指标，它是 Rand Index 的一种调整形式，
+可以用于评估将样本点分为多个簇的聚类算法。它考虑了机会的概率，取值范围为 `$[-1,1]$`，
+其中值越接近1表示聚类结果越准确，值越接近0表示聚类结果与随机结果相当，值越接近-1表示聚类结果与真实类别完全相反
+
+`$$Adj\_RI = \frac{(RI - Expected RI)}{max(RI) - Expected RI}$$`
+
+
+API：
+
+```python
+from sklearn import metrics
+
+metrics.adjusted_rand_score(df["cluster_id"], model_label)
+
+# 可视化
+data = {
+    'Model': ["KM", "AP", "AC", "MS", "BKM", "DBSCAN", "OPTICS", "BIRCH"],
+    'Adj_Rand_Score':[0.97, 0.81,0.98, 0.97, 0.82, 0.74, 0.48, 0.92]
+}
+Adj_Rand_Score = pd.DataFrame(data)
+
+# Make the plot
+y_pos = np.arange(len(Adj_Rand_Score['Model']))
+
+plt.bar(y_pos,Adj_Rand_Score['Adj_Rand_Score'])
+plt.xticks(y_pos, Adj_Rand_Score['Model'])
+plt.show()
+```
+
+### Jaccard Coefficient
+
+> Jaccard 系数(Jaccard Coefficient 简称 JC)
+
+`$$JC=\frac{a}{a+b+c}$$`
+
+### Fowlkes-Mallows scores
+
+> FM 指数(Fowlkes and Mallows Index 简称 JMI)
+
+Fowlkes-Mallows 分数是这个是最容易理解的，它主要基于数据的真实标签和聚类结果的交集、
+联合集以及簇内和簇间点对数的比值来计算。由以下公式得到
+
+
+`$$FMI=\sqrt{\frac{a}{a+b} \cdot \frac{a}{a+c}}$$`
+
+`$$FMI = \frac{TP}{\sqrt{(TP + FP)(TP + FN)}}$$`
+
+API：
+
+```python
+def fowlkes_mallows_score(labels_true, labels_pred):
+
+    n = len(labels_true)
+    tp, fp, tn, fn = 0, 0, 0, 0
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            if labels_true[i] == labels_true[j] and labels_pred[i] == labels_pred[j]:
+                tp += 1
+            elif labels_true[i] != labels_true[j] and labels_pred[i] == labels_pred[j]:
+                fp += 1
+            elif labels_true[i] == labels_true[j] and labels_pred[i] != labels_pred[j]:
+                fn += 1
+            else:
+                tn += 1
+
+    FM_score = tp / np.sqrt((tp + fp) * (tp + fn))
+
+    return FM_score
+
+FM_score = fowlkes_mallows_score(y_true, km_labels)
+print('Fowlkes Mallows Score is: ', FM_score)
+```
+
+```python
+from sklearn import metrics
+
+metrics.fowlkes_mallows_score(df["cluster_id"], model_labels)
+```
+
+
+## 内部指标
+
+根据聚类结果的簇划分 `$C=\{C_{1}, C_{2}, \ldots, C_{k}\}$` ,定义: 
+
+* 簇 `$C$` 内样本间的平均距离 
+
+`$$avg(C)=\frac{2}{|C|(|C|-1)}\sum_{1<i<j<|C|}dist(x_{i}, x_{j})$$`
+
+* 簇 `$C$` 内样本间的最远距离 
+
+`$$diam(C)=max_{1<i<j<|C|}dist(x_{i}, x_{j})$$`
+
+* 簇 `$C_{i}$` 与簇 `$C_{j}$` 最近样本间的距离 
+
+`$$d_{min}(C_{i}, C_{j})=min_{1<i<j<|C|}dist(x_{i}, x_{j}$$`
+
+* 簇 `$C_{i}$` 与簇 `$C_{j}$` 中心点间的距离 
+
+`$$d_{cen}(C_{i}, C_{j})=dist(\mu_{i}, \mu_{j})$$`
+
+其中: 
+
+* `$dist(,)$` 是两个样本之间的距离
+* `$\mu$` 是簇 `$C$` 的中心点 `$\mu=\frac{1}{|C|}\sum_{1<i<|C|}x_{i}$`
+
+### Davies-Bouldin Index
+
+> DB 指数(Davies-Bouldin Index 简称 DBI)
+
+DB 指数主要基于簇内的紧密程度和簇间的分离程度来计算。DB 指数的取值范围是 `$[0, +\infty]$`，
+值越小表示聚类结果越好
+
+`$$DB = \frac{1}{k}\sum_{i=1}^{k}\underset{i \neq j}{\max}R_{ij}$$`
+
+`$$R_{ij} = \frac{s_{i} + s_{j}}{d_{ij}}$$`
+
+> `$$DBI=\frac{1}{k}\sum^{k}_{i=1}\underset{j \neq i}{max}\bigg(\frac{avg(C_{i})+avg(C_{j})}{d_{cen(\mu_{i}, \mu_{j})]}}\bigg)$$`
+
+API：
+
+```python
+def euclidean_distance(x, y):
+    return np.sqrt(np.sum((x - y) ** 2))
+
+def davies_bouldin(X, labels):
+    n_clusters = len(np.bincount(labels))
+    cluster_k = [X[labels == k] for k in range(n_clusters)]
+    centroids = [np.mean(k, axis=0) for k in cluster_k]
+    
+    db_indices = []
+    for i, k_i in enumerate(cluster_k):
+        s_i = np.mean([np.linalg.norm(x - centroids[i]) for x in k_i])
+        R = []
+        for j, k_j in enumerate(cluster_k):
+            if j != i:
+                s_j = np.mean([np.linalg.norm(x - centroids[j]) for x in k_j])
+                dist = np.linalg.norm(centroids[i] - centroids[j])
+                R.append((s_i + s_j) / dist)
+        db_indices.append(np.max(R))
+    return np.mean(db_indices)
+
+DB_Index = davies_bouldin(X, km_labels)
+print(DB_Index)
+```
+
+```python
+from sklearn import metrics
+
+metrics.davies_bouldin_score(X, model_labels)
+```
+
+
+
+
+### Dunn Index
+
+> Dunn 指数(Dunn Index 简称 DI)
+
+`$$DI=\underset{1 \leqslant i \leqslant k}{min}\bigg\{\underset{j \neq i}{min}\bigg(\frac{d_{min}(C_{i}, C_{j})}{max_{1 eqslant l \leqslant k}diam(C_{l})}\bigg)\bigg\}$$`
+
+* DI 的值越大越好
+
+### Silhouette Coefficient
+
+轮廓分数使用同一聚类中的点之间的距离，以及下一个临近聚类中的点与所有其他点之间的距离来评估模型的表现。
+它主要基于样本点与其所属簇内和最近邻簇之间的距离、相似性和紧密度等因素来计算。数值越高，模型性能越好。
+一般公式为
+
+`$$s = \frac{b-a}{max(a, b)}$$`
+
+其中：
+
+* `$a$` 为样本与同类中所有其他点之间的平均距离
+* `$b$` 为样本与下一个最近聚类中所有其他点之间的平均距离
+
+API：
+
+```python
+n_samples = len(X)
+cluster_labels = np.unique(km_labels)
+
+n_clusters = len(cluster_labels)
+silhouette_vals = np.zeros(n_samples)
+
+
+for i in range(n_samples):
+    a_i = np.mean([np.linalg.norm(X[i] - X[j]) for j in range(n_samples) if km_labels[j] == km_labels[i] and j != i])
+    b_i = np.min([np.mean([np.linalg.norm(X[i] - X[j]) for j in range(n_samples) if km_labels[j] == k]) for k in cluster_labels if k != km_labels[i]])
+    silhouette_vals[i] = (b_i - a_i) / max(a_i, b_i)
+
+silhouette_score = np.mean(silhouette_vals)
+print(silhouette_score)
+```
+
+```python
+from sklearn import metrics
+
+metrics.silhouette_score(X, model_labels)
+```
+
+### Calinski-Harabasz Index
+
+Calinski-Harabasz Index（也称 Variance Ratio Criterion）是一种用于衡量聚类算法性能的指标，
+它主要基于簇内和簇间方差之间的比值来计算。Calinski-Harabasz Index 的取值范围为 `$[0, +\infty)$`，
+值越大表示聚类结果越好
+
+`$$s = \frac{tr(B_{k})}{tr(W_{k})} \times \frac{n_{E} - k}{k-1}$$`
+
+其中：`$tr(B)$` 和 `$tr(W)$` 分别表示簇间协方差矩阵和簇内协方差矩阵的迹
+
+Calinski-Harabasz Index 也可以用于确定聚类的最优簇数。通过计算不同簇数下的 Calinski-Harabasz Index，
+可以选择使得 Calinski-Harabasz Index 最大的簇数作为最终的聚类结果
+
+API：
+
+```python
+def calinski_harabasz_score(X, labels):
+    n_samples, _ = X.shape
+    n_labels = len(np.unique(labels))
+    if n_labels == 1:
+        return np.nan
+    mean = np.mean(X, axis=0)
+    extra_disp, intra_disp = 0., 0.
+    for k in range(n_labels):
+        cluster_k = X[labels == k]
+        mean_k = np.mean(cluster_k, axis=0)
+        extra_disp += cluster_k.shape[0] * np.sum((mean_k - mean) ** 2)
+        intra_disp += np.sum((cluster_k - mean_k) ** 2)
+    chs = (extra_disp / (n_labels - 1)) / (intra_disp / (n_samples - n_labels))
+    return chs
+
+CHS = calinski_harabasz_score(X, km_labels)
+print(CHS)
+```
+
+
+```python
+from sklearn import metrics
+
+metrics.calinski_harabasz_score(X, model_labels)
+```
+
+## 其他
+
+### Homogeneity 和 Completeness
+
+Homogeneity Score 和 Completeness Score 是两个用于评估聚类结果的指标，
+它们可以用于衡量聚类算法对数据的划分是否“同质”（即簇内只包含同一类别的样本点），
+以及是否“完整”（即同一类别的样本点是否被划分到同一个簇中）。
+该指标的取值范围也为 `$[0,1]$`，值越大表示聚类结果越好。需要注意的是，
+该指标对簇的数量较为敏感，因此在使用时需要结合实际问题进行调参
+
+同质性和完整性是给定公式的两个相关度量：
+
+`$$h = 1 - \frac{H(C|K)}{H(C)}$$`
+
+`$$c = 1 - \frac{H(K|C)}{K}$$`
+
+为了获得同质性和完整性，我们需要找到真实标签的熵(H)和预测标签的熵(H)，
+以及给定预测标签的真实标签的条件联合熵(CJH)，以及给定真实标签的预测标签的 CJH
+
+```python
+def entropy(arr):
+    #Find unique values and their counts:
+    unique, counts = np.unique(arr, return_counts=True)
+    #Get the probability for each cluster (unique value):
+    p = counts / len(arr)
+    #Apply entropy formula:
+    entropy = -np.sum(p * np.log2(p))
+    return entropy
+
+entropy_y_true = entropy(y_true)
+entropy_km_labels = entropy(km_labels)
+
+print('Entropy for y_true: ', entropy_y_true)
+print('Entropy for km_labels: ', entropy_km_labels)
+```
+
+计算联合熵：
+
+```python
+import numpy as np
+from collections import Counter
+import math
+
+def conditional_entropy(X, Y):
+    #Build a 2D-numpy array with true clusters and predicted clusters:
+    XY = np.column_stack((X, Y))
+
+    #Count the number of observations in X and Y with the same values:
+    xy_counts = Counter(map(tuple, XY))
+
+    #Get the joint probability:
+    joint_prob = np.array(list(xy_counts.values())) / len(XY)
+
+    #Get conditional probability:
+    y_counts = Counter(Y)
+    conditional_prob = np.zeros_like(joint_prob)
+    for i, (x, y) in enumerate(xy_counts.keys()):
+        conditional_prob[i] = xy_counts[(x, y)] / y_counts[y]
+
+    #Get conditional entropy:
+    conditional_entropy = -np.sum(joint_prob * np.log2(conditional_prob + 1e-10))
+
+    return conditional_entropy
+
+joint_entropy_y_true = conditional_entropy(y_true, km_labels)
+print('Joint entropy for y_true given km_labels is: ', joint_entropy_y_true)
+
+joint_entropy_km_labels = conditional_entropy(km_labels, y_true)
+print('Joint entropy for km_labels given y_true is: ', joint_entropy_km_labels)
+```
+
+现在可以计算同质性和完整性值：
+
+```python
+homogeneity = 1 - (joint_entropy_y_true / entropy_y_true)
+print('homogeneity: ', homogeneity)
+
+completeness = 1 - (joint_entropy_km_labels / entropy_km_labels)
+print('Completeness: ', completeness)
+```
+
+sklearn API：
+
+```python
+from sklearn import metrics
+
+metrics.homogeneity_score(df["cluster_id"], model_label)
+metrics.completeness_score(df["cluster_id"], model_label)
+```
+
+### V-Measure
+
+V-Measure 是一种综合考虑同质性和完整性的评估指标，可以用于衡量聚类算法对数据的划分质量。
+V-Measure 的取值范围为 `$[0,1]$`，值越大表示聚类结果越好
+
+`$$\upsilon = \frac{(1 + \beta) \times homogeneity \times completeness}{\beta \times homogeneity + completeness}$$`
+
+API：
+
+```python
+beta = 1
+v_measure = ((1 + beta) * homogeneity * completeness) / (beta * homogeneity+completeness)
+print('V-Measure is:', v_measure)
+```
+
+```python
+from sklearn import metrics
+
+metrics.v_measure_score(y_true, km_labels)
+```
+
+### Mutual Information based scores
+
+基于互信息的分数（Mutual Information-based Score）是一种用于衡量聚类算法性能的指标，
+它衡量的是聚类结果与真实标签之间的相似性。基于互信息的分数可以用于评估将样本点分为多个簇的聚类算法
+
+基于互信息的分数的取值范围为 `$[0,1]$`，其中值越接近1表示聚类结果越准确，值越接近 0 表示聚类结果与随机结果相当，
+值越小表示聚类结果与真实类别之间的差异越大。基于互信息的分数是一种相对指标，它的取值受到真实类别数量的影响。
+当真实类别数量很大时，基于互信息的分数可能会受到偏差
+
+`$$MI(U, V) = \sum_{i=1}^{|U|}\sum_{j=1}^{|V|}\frac{|U_{i} \cap V_{j}|}{N}log\frac{N|U_{i} \cap V_{j}|}{|U_{i}||V_{j}|}$$`
+
+API：
+
+```python
+from sklearn import metrics
+
+metrics.mutual_info_score(df["cluster_id"], model_label)
+```
+
+### Normalized Mutual Information Score
+
+Normalized Mutual Information Score（标准化互信息分数）是基于互信息的分数的一种标准化形式，
+可以用于评估将样本点分为多个簇的聚类算法。它知识将互信息分数进行了标准化，
+在 0(表示没有互信息)和 1(表示完全相关)之间进行缩放。为了标准化上一步中得到的结果，
+我们只需要做一点额外的工作：
+
+```python
+h_true = -np.sum(px * np.log(px))
+h_pred = -np.sum(py * np.log(py))
+
+nmi = mi / ((h_true + h_pred) / 2)
+```
+
+与基于互信息的分数相比，标准化互信息分数更加稳健，不受真实类别数量的影响。
+
+```python
+from sklearn import metrics
+
+metrics.normalized_mutual_info_score(df["cluster_id"], model_label)
+```
+
+### Adjusted Mutual Information Score
+
+Adjusted Mutual Information Score（调整互信息分数）是一种用于衡量聚类算法性能的指标，
+它是基于互信息的分数的一种调整形式，AMI不受标签数值的影响，即使标签重新排序，也会产生相同的分数。
+公式如下所示，其中 `$E$` 代表预期:
+
+`$$AMI(U, V) = \frac{MI(U, V) - E(MI(U, V))}{avg(H(U), H(V)) - E(MI(U, V))}$$`
+
+API：
+
+```python
+from sklearn import metrics
+
+metrics.adjusted_mutual_info_score(df["cluster_id"], model_label)
+```
+
+### Contingency Matrix
+
+### Pair Confusion Matrix
 
 # 推荐系统
 
-
+# 排序
 
 
 # 参考
@@ -1158,4 +1661,4 @@ def huber_loss(true, pred, delta):
 * [精确率、召回率、F1 值、ROC、AUC 各自的优缺点是什么](https://www.zhihu.com/question/30643044/answer/224360465)
 * [ROC曲线](https://blog.csdn.net/VictoriaW/article/details/77863395)
 * [12种回归评价指标](https://mp.weixin.qq.com/s/q-lktuRnzyqe6t0XlVJKkQ)
-
+* [10个聚类算法的评价指标](https://mp.weixin.qq.com/s/mGZx80fEQIl7D9ib1Nvx6A)

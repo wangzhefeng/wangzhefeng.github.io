@@ -93,7 +93,7 @@ LightGBM 在 XGBoost 上主要有三方面的优化：
 4. Leaf-wise 树生长策略优化
 5. 支持类别型特征
 
-![img](images/lgb1.png)
+![img](images/optim.png)
 
 > 由于 XGBoost 采用的基模型是二叉树，因此生产每片叶子需要分裂一次。
 > 而每次分裂，都要遍历素有特征上所有候选分裂点位，

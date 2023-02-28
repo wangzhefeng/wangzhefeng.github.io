@@ -1,5 +1,5 @@
 ---
-title: 模型规则
+title: 建模法则
 author: 王哲峰
 date: '2022-11-21'
 slug: model-rule
