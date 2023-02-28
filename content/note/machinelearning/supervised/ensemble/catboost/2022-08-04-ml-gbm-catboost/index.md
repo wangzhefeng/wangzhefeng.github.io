@@ -407,7 +407,7 @@ CatBoost 捕捉高阶依赖的类别特征组合成额外的类别特征，例�
 # 参考
 
 * [类别变量杀手CatBoost](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494038&idx=2&sn=936c63d7f3eb8ad9dccc04e65395655d&chksm=c32af019f45d790fade45a8ce74c8d6ca8f35a60ab8e82c594c9ab2ab923eefa99d096697e2f&scene=21#wechat_redirect)
-* [务实基础】CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
+* [务实基础-CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
 * [CatBoost/tutorials](https://github.com/catboost/tutorials)
 * [Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., & Gulin, A. (2018). CatBoost: unbiased boosting with categorical features. In Advances in neural information processing systems (pp. 6638-6648).]()
 * https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features

@@ -32,8 +32,9 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [GBDT 简介](#gbdt-简介)
-  - [GBDT 介绍](#gbdt-介绍)
+  - [GBDT 特点](#gbdt-特点)
   - [GBDT vs RandomForest](#gbdt-vs-randomforest)
+  - [GBDT 优缺点](#gbdt-优缺点)
 - [GBM 模型原理](#gbm-模型原理)
   - [函数估计问题](#函数估计问题)
   - [加性模型](#加性模型)
@@ -64,7 +65,7 @@ details[open] summary {
 
 # GBDT 简介
 
-## GBDT 介绍
+## GBDT 特点
 
 集成学习 Boosting 一族将多个弱学习器(或称基学习器)提升为强学习器，
 像 AdaBoost、GBDT 等都属于“加性模型”(Additive Model)，即基学习器的线性组合
@@ -87,6 +88,10 @@ GBDT 的一个应用示意图如下（某样本预测值 = 它在不同弱学习
 ## GBDT vs RandomForest
 
 ![img](images/gbdt_rf.png)
+
+## GBDT 优缺点
+
+* TODO
 
 # GBM 模型原理
 
