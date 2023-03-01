@@ -338,7 +338,7 @@ if torch.cuda.is_available():
     - `torch.linspace()`
 * 依概率分布创建
     - `torch.manual_seed()`
-    - `torch.normal()`: 标准正太分布
+    - `torch.normal()`: 标准正态
     - `torch.randn()`: 正态分布
     - `torch.rand()`: 均匀分布
     - `torch.randint()`

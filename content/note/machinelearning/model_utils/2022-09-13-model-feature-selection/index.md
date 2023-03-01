@@ -1,5 +1,5 @@
 ---
-title: 模型降维和特征选择
+title: 特征选择
 author: 王哲峰
 date: '2022-09-13'
 slug: model-feature-selection
