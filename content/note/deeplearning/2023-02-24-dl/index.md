@@ -33,3 +33,25 @@ tags:
 * DeepCross
 * DIN
 * DIEN
+
+# 深度学习领域
+
+## 深度理解深度学习的一些文章
+
+* 用信息论的知识去分析高维数据
+    - [Discovering Structure in High-Dimensional Data Through Correlation Explanation](https://arxiv.org/abs/1406.1222)
+* 用 group theory 去分析为什么深度模型会有效
+    - [Learning the Irreducible Representations of Commutative Lie Groups](https://arxiv.org/abs/1402.4437)
+* 分析 model compression 的问题
+    - [Do Deep Nets Really Need to be Deep?](https://arxiv.org/abs/1312.6184)
+* 分析每一层 layer 学出来的 representation
+    - [How transferable are features in deep neural networks?](https://arxiv.org/abs/1411.1792)
+* 用复杂理论来分析 dropout
+    - [Dropout Rademacher Complexity of Deep Neural Networks](https://arxiv.org/abs/1402.3811)
+* 分析什么情况下深度模型会失败
+    - [Intriguing properties of neural networks](https://arxiv.org/abs/1312.6199)
+
+# 参考
+
+* [机器学习领域，如何选择研究方向](https://www.zhihu.com/question/28689201)
+

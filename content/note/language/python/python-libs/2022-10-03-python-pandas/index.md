@@ -31,17 +31,11 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [自动探索性数据分析](#自动探索性数据分析)
-  - [D-Tale](#d-tale)
-  - [Pandas-Profiling](#pandas-profiling)
-  - [Sweetviz](#sweetviz)
-  - [AutoViz](#autoviz)
-  - [Dataprep](#dataprep)
-  - [Klib](#klib)
-  - [Dabl](#dabl)
-  - [Speedml](#speedml)
-  - [DataTile](#datatile)
-  - [edaviz](#edaviz)
+- [Pyjanitor](#pyjanitor)
+  - [coalesc](#coalesc)
+  - [concatenate\_columns 和 deconcatenate\_column](#concatenate_columns-和-deconcatenate_column)
+  - [take\_first](#take_first)
+  - [自定义 janitor](#自定义-janitor)
 - [最佳实践](#最佳实践)
   - [pipe](#pipe)
   - [assign](#assign)
@@ -54,169 +48,206 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
-# 自动探索性数据分析
 
-Dataprep 是我最常用的 EDA 包，AutoViz 和 D-Tale 也是不错的选择，
-如果你需要定制化分析可以使用 Klib，SpeedML 整合的东西比较多，
-单独使用它啊进行 EDA 分析不是特别的适用，其他的包可以根据个人喜好选择，
-其实都还是很好用的，最后 edaviz 就不要考虑了，因为已经不开源了
+# Pyjanitor
 
-## D-Tale
+`pyjanitor` 库的灵感来自于 R 语言的 `janitor` 包，英文单词即为清洁工之意，也就是通常用来进行数据处理或清洗数据。
+`pyjanitor` 脱胎于 Pandas 生态圈，其使用的核心也是围绕着链式展开，可以使得我们更加专注于每一步操作的动作或谓词（Verbs）
 
-D-Tale 使用 Flask 作为后端、React 作为前端并且可以与 ipython notebook 和终端无缝集成
+`pyjanitor` 的 API 文档并不复杂，大多数 API 都是围绕着通用的清洗任务而设计。这主要涉及为几部分：
 
-D-Tale 可以支持 Pandas 的 DataFrame、Series、MultiIndex、DatetimeIndex、RangeIndex
+* 操作列的方法（Modify columns）
+* 操作值的方法（Modify values）
+* 用于筛选的方法（Filtering）
+* 用于数据预处理的方法（Preprocessing），主要是机器学习特征处理的一些方法
+* 其他方法
 
-D-Tale 库用一行代码就可以生成一个报告，其中包含数据集、相关性、图表和热图的总体总结，
-并突出显示缺失的值等。D-Tale 还可以为报告中的每个图表进行分析
+需要注意的是，尽管 `pyjanitor` 库名称带有 py 二字，但是在导入时则是输入 `janitor`；
+就像 `Beautifulsoup4` 库在导入时写为 `bs4` 一样，以免无法导入而报错
 
+## coalesc
 
-```python
-import dtale
-import pandas as pd
+示例：比如我数据中有两个字段 a 和 b，但是两个字段或多或少都有缺失值。
+需要定义一个新的字段 c，它由两个字段构建而来。如果第一个字段中存在缺失值，
+则取第二个字段中的值，反之亦可；如果两者都为缺失，则保留缺失值
 
-dtale.show(pd.read_csv("titanic.csv"))
-```
-
-
-## Pandas-Profiling
-
-Pandas-Profiling 可以生成 Pandas DataFrame 的概要报告。
-panda-profiling 扩展了 pandas DataFrame `df.profile_report()`，
-并且在大型数据集上工作得非常好，它可以在几秒钟内创建报告
+示例数据：
 
 ```python
 import pandas as pd
-from pandas_profiling import ProfileReport
+import numpy as np
 
-profile = ProfileReport(pd.read_csv("titanic.csv"), explorative = True)
-profile.to_file("output.html")
+df = pd.DataFrame({
+    "a": [None, 2, None, None, 5, 6],
+    "b": [1, None, None, 4, None, 6],
+})
+df
 ```
 
-## Sweetviz
-
-Sweetviz 是一个开源的 Python 库，只需要两行 Python 代码就可以生成漂亮的可视化图，
-将 EDA(探索性数据分析)作为一个 HTML 应用程序启动。
-Sweetviz 包是围绕快速可视化目标值和比较数据集构建的
-
-Sweetviz 库生成的报告包含数据集、相关性、分类和数字特征关联等的总体总结
+pandas 加 apply 实现：
 
 ```python
 import pandas as pd
-import sweetviz as sv
 
-sweet_report = sv.analyze(pd.read_csv("titanic.csv"))
-sweet_report.show_html("sweet_report.html")
+def get_valid_value(col_x, col_y):
+    if not pd.isna(col_x) and pd.isna(col_y):
+        return col_x
+    elif pd.isna(col_x) and not pd.isna(col_y):
+        return col_y
+    elif not (pd.isna(col_x) or pd.isna(col_y)):
+        return col_x
+    else:
+        return np.nan
+
+df["c"] = df.apply(lambda x: get_valid_value(x["a"], x["b"]), axis = 1)
+df
 ```
 
-## AutoViz
-
-Autoviz 包可以用一行代码自动可视化任何大小的数据集，
-并自动生成 HTML、bokeh 等报告。用户可以与 AutoViz 包生成的 HTML 报告进行交互
+pyjanitor coalesc 实现：
 
 ```python
-import pandas as pd
-from autoviz.AutoViz_Class import AutoViz_Class
+import janitor
 
-autoviz = AutoViz_Class().AutoViz("train.csv")
-```
-
-## Dataprep
-
-Dataprep 是一个用于分析、准备和处理数据的开源 Python 包。
-DataPrep 构建在 Pandas 和 Dask DataFrame 之上，可以很容易地与其他 Python 库集成。
-DataPrep 的运行速度这 10 个包中最快的，他在几秒钟内就可以为 Pandas/Dask DataFrame 生成报告
-
-```python
-from dataprep.datasets import load_dataset
-from dataprep.eda import create_report
-
-df = load_dataset("titanic.csv")
-create_report(df).show_browser()
-```
-
-## Klib
-
-klib 是一个用于导入、清理、分析和预处理数据的 Python 库
-
-klibe 虽然提供了很多的分析函数，但是对于每一个分析需要我们手动的编写代码，
-所以只能说是半自动化的操作，但是如果我们需要更定制化的分析，他是非常方便的
-
-```python
-import klib
-import pandas as pd
-
-df = pd.read_csv("DATASET.csv")
-klib.missingval_plot(df)
-klib.corr_plot(df_cleaned, annot = False)
-klib.dist_plot(df_cleaned["Win_Prob"])
-klib.cat_plot(df, figsize=(50,15))
-```
-
-## Dabl
-
-Dabl 不太关注单个列的统计度量，而是更多地关注通过可视化提供快速概述，
-以及方便的机器学习预处理和模型搜索
-
-Dabl 中的 `Plot()` 函数可以通过绘制各种图来实现可视化，包括:
-
-* 目标分布图
-* 散点图
-* 线性判别分析
-
-```python
-import pandas as pd
-import dabl
-
-df = pd.read_csv("titanic.csv")
-dabl.plot(df, target_col="Survived")
-```
-
-
-## Speedml
-
-SpeedML 是用于快速启动机器学习管道的 Python 包。
-SpeedML 整合了一些常用的 ML 包，包括 Pandas，Numpy，Sklearn，Xgboost 和 Matplotlib，
-所以说其实 SpeedML 不仅仅包含自动化 EDA 的功能
-
-```python
-from speedml import Speedml
-
-sml = Speedml(
-    '../input/train.csv', 
-    '../input/test.csv',
-    target = 'Survived', 
-    uid = 'PassengerId'
+df.coalesc(
+    column_names = ["a", "b"],
+    new_column_name = "c",
+    delete_columns = False,
 )
-sml.train.head()
-
-sml.plot.correlate()
-sml.plot.distribute()
-sml.plot.ordinal('Parch')
-sml.plot.ordinal('SibSp')
-sml.plot.continuous('Age')
 ```
 
+## concatenate_columns 和 deconcatenate_column
 
-
-## DataTile
-
-DataTile（以前称为Pandas-Summary）是一个开源的 Python 软件包，负责管理，
-汇总和可视化数据。DataTile 基本上是 Pandas DataFrame `describe()` 函数的扩展
+* `concatenate_columns()` 将多个列根据某个分隔符合并成一个新列
+* `deconcatnate_column()` 将单个列拆分成多个列
 
 ```python
 import pandas as pd
-from datatile.summary.df import DataFrameSummary
+import janitor
 
-df = pd.read_csv("titanic.csv")
-dfs = DataFrameSummary(df)
-dfs.summary()
+df = pd.DataFrame({
+    "date_time": [
+        "2020-02-01 11:00:00",
+        "2020-02-03 12:10:11",
+        "2020-03-24 13:24:31"
+    ]
+})
+
+(
+    df
+        .deconcatenate_column(
+            column_name = "date_time",
+            new_column_names = ["date", "time"],
+            sep = " ",
+            preserve_position = False,
+        )
+        .deconcatenate_column(
+            column_name = "date",
+            new_column_names = ["year", "month", "day"],
+            sep = "-",
+            preserve_position = True,
+        )
+        .concatenate_columns(
+            column_names = ["year", "month", "day"],
+            new_column_name = "new_date",
+            sep = "-",
+        )
+)
 ```
 
-## edaviz
+## take_first
 
-edaviz 是一个可以在 Jupyter Notebook 和 Jupyter Lab 中进行数据探索和可视化的 python 库，
-他本来是非常好用的，但是后来被砖厂 (Databricks) 收购并且整合到 bamboolib 中
+有的时候，会 `groupby()` 某个字段并对一些数值列进行操作、倒序排列，
+最后每组取最大的数即倒序后的第一行。在 R 语言中可以很轻易直接这么实现：
+
+```r
+library(dplyr)
+
+df <- data.frame(
+    a = c("x", "x", "y", "y", "y"),
+    b = c(1, 3, 2, 5, 4)
+)
+
+df %>% 
+    group_by(a) %>%
+    arrange(desc(b)) %>%
+    slice(1) %>%
+    ungroup()
+```
+
+在没使用 pyjanitor 之前，我往往都是通过 Pandas 这么实现的：
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "a": ["x", "x", "y", "y", "y"],
+    "b": [1, 3, 2, 5, 4]
+})
+
+(
+    df
+        .groupby("a")
+        .apply(lambda grp: grp.sort_values(by = "b", ascending = False).head(1))
+        .reset_index(drop = True)
+)
+```
+
+这里利用了 groupby 之后的生成的 DataFrameGroupBy 对象再进行多余的降序取第一个的操作，
+最后将分组后产生的索引值删除。现在可以直接使用 pyjanitor 中的 take_first 方法直接一步到位：
+
+```python
+import pandas as pd
+import janitor
+
+df = pd.DataFrame({
+    "a": ["x", "x", "y", "y", "y"],
+    "b": [1, 3, 2, 5, 4]
+})
+
+df.take_first(subset = "a", by = "b", ascending = False)
+```
+
+## 自定义 janitor
+
+pyjanitor 中的方法仅仅只是一些通用的实现方法，不同的人在使用过程中可能也会有不同的需要。
+但好在我们也可以实现自己的 janitor 方法。pyjanitor 得益于 pandas-flavor 库的加持得以轻松实现链式方法
+
+pandas-flavor 提供了能让使用者简单且快速地编写出带有 Pandas 味儿的方法：
+
+* 第一步，只需要在你编写的函数、方法或类中添加对应的装饰器即可
+* 第二步，确保最后返回的是 DataFrame 或 Series 类的对象即可
+
+本质上来说，pandas-flavor 库中提供的装饰器就等价于重写或新增了 DataFrame 类的方法，
+在使用过程中如果方法有报错，那就需要还原加载 pandas 库之后再重新写入
+
+关于 pandas-flavor 装饰器的用法，详见项目的 Github（https://github.com/Zsailer/pandas_flavor）
+
+比如我们写一个简单清理数据字段或变量名称多余空格的方法：
+
+```python
+import pandas as pd
+import pandas_flavor as pf
+
+@pf.register_dataframe_method
+def strip_names(df):
+    import re
+
+    colnames = df.columns.tolist()
+    colnames = list(map(lambda col: '_'.join(re.findall(r"\w+", col)), colnames))
+    df.columns = colnames
+    return df
+```
+
+```python
+data = pd.DataFrame({
+    " a ": [1, 1],
+    "  b  zz  ": [2, 1],
+})
+data
+dta.strip_names()
+```
+
+
 
 
 # 最佳实践
@@ -416,4 +447,5 @@ df_droped.groupby(pd.Grouper(freq = "MS")).first()
 # 参考
 
 * [Python 自动探索性数据分析神库](https://mp.weixin.qq.com/s/F9Ixe9_d4XDxK-MJOMaVqQ)
+* [用 Pyjanitor 更好地进行数据清洗与处理](https://mp.weixin.qq.com/s/9AasPTO-7Caku3_5CMj5kQ)
 
