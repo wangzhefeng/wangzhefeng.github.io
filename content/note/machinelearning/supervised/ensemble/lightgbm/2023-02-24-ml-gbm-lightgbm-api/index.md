@@ -32,87 +32,33 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [LightGBM 参数](#lightgbm-参数)
-  - [Booster 参数](#booster-参数)
-  - [LightGBM 调参技巧](#lightgbm-调参技巧)
-- [LightGBM API](#lightgbm-api)
-  - [LightGBM 安装](#lightgbm-安装)
-  - [核心数据结构](#核心数据结构)
-    - [数据接口](#数据接口)
-    - [加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件](#加载-libsvmzero-based-文本文件lightgbm-二进制文件)
-    - [加载 Numpy 2 维数组](#加载-numpy-2-维数组)
-    - [加载 scipy.sparse.csr\_matrix 数组](#加载-scipysparsecsr_matrix-数组)
+- [LightGBM 安装](#lightgbm-安装)
+  - [pip 安装](#pip-安装)
+  - [从源码安装](#从源码安装)
+- [LightGBM 核心数据结构](#lightgbm-核心数据结构)
+  - [数据接口](#数据接口)
+    - [加载文本文件和二进制文件](#加载文本文件和二进制文件)
+    - [加载 numpy 2 维数组](#加载-numpy-2-维数组)
+    - [加载 pandas DataFrame](#加载-pandas-dataframe)
+    - [加载 H2O DataTable Frame](#加载-h2o-datatable-frame)
+    - [加载 scipy 稀疏矩阵](#加载-scipy-稀疏矩阵)
     - [保存数据为 LightGBM 二进制文件](#保存数据为-lightgbm-二进制文件)
     - [创建验证数据](#创建验证数据)
     - [在数据加载时标识特征名称和类别特征](#在数据加载时标识特征名称和类别特征)
     - [有效利用内存空间](#有效利用内存空间)
+- [LightGBM 模型 API](#lightgbm-模型-api)
   - [Training API](#training-api)
   - [Scikit-learn API](#scikit-learn-api)
   - [Callbacks](#callbacks)
   - [Plotting](#plotting)
+- [参考](#参考)
 </p></details><p></p>
 
+# LightGBM 安装
 
-# LightGBM 参数
+LightGBM 的安装非常简单，在 Linux 下很方便的就可以开启GPU训练。可以优先选用从 pip 安装，如果失败再从源码安装
 
-* 参数设置方式: 
-    - 命令行参数
-    - 参数配置文件
-    - Python 参数字典
-* 参数类型:
-    - 核心参数
-    - 学习控制参数
-    - IO 参数
-    - 目标参数
-    - 度量参数
-    - 网络参数
-    - GPU 参数
-    - 模型参数
-    - 其他参数
-
-## Booster 参数
-
-```python
-param = {
-   'num_levels': 31,
-   'num_trees': 100,
-   'objective': 'binary',
-   'metirc': ['auc', 'binary_logloss']
-}
-```
-
-## LightGBM 调参技巧
-
-![img](images/params.png)
-
-* 人工调参
-* 提高速度
-   - Use bagging by setting `bagging_fraction` and `bagging_freq`
-   - Use feature sub-sampling by setting `feature_fraction`
-   - Use small `max_bin`
-   - Use `save_binary` to speed up data loading in future learning
-   - Use parallel learning, refer to Parallel Learning Guide
-* 提高准确率
-    - Use large `max_bin` (may be slower)
-    - Use small learning_rate with large num_iterations
-    - Use large num_leaves (may cause over-fitting)
-    - Use bigger training data
-    - Try `dart`
-* 处理过拟合
-    - Use small `max_bin`
-    - Use small `num_leaves`
-    - Use `min_data_in_leaf` and `min_sum_hessian_in_leaf`
-    - Use bagging by set `bagging_fraction` and `bagging_freq`
-    - Use feature sub-sampling by set `feature_fraction`
-    - Use bigger training data
-    - Try `lambda_l1`, `lambda_l2` and `min_gain_to_split` for regularization
-    - Try `max_depth` to avoid growing deep tree
-    - Try `extra_trees`
-    - Try increasing `path_smooth`
-
-# LightGBM API
-
-## LightGBM 安装
+## pip 安装
 
 ```bash
 # 默认版本
@@ -125,23 +71,48 @@ $ pip install lightgbm --install-option=--mpi
 $ pip install lightgbm --install-option=--gpu
 ```
 
-## 核心数据结构
+## 从源码安装
 
-- `Dataset(data, label, reference, weight, ...)`
-- `Booster(params, train_set, model_file, ...)`
+```bash
+$ git clone --recursive https://github.com/microsoft/LighGBM
+$ cd LightGBM
+$ mkdir build
+$ cd build
+cmake ..
+```
 
-### 数据接口
+开启 MPI 通信机制，训练更快：
 
-* LibSVM(zero-based), TSV, CSV, TXT 文本文件
-* Numpy 2 维数组
-* pandas DataFrame
-* H2O DataTable’s Frame
-* SciPy sparse matrix
-* LightGBM 二进制文件
+```bash
+$ cmake -DUSE_MPI=ON ..
+```
+
+GPU 版本，训练更快：
+
+```bash
+$ cmake -DUSE_GPU=1 ..
+$ make -j4
+```
+
+# LightGBM 核心数据结构
+
+* `Dataset(data, label, reference, weight, ...)`
+* `Booster(params, train_set, model_file, ...)`
+
+## 数据接口
 
 > 数据保存在 `lightgbm.Dataset` 对象中
 
-### 加载 LibSVM(zero-based) 文本文件、LightGBM 二进制文件
+* LibSVM(zero-based)、TSV、CSV、TXT 文本文件
+* numpy 二维数组
+* pandas DataFrame
+* H2O DataTable’s Frame
+* scipy sparse matrix
+* LightGBM 二进制文件
+
+### 加载文本文件和二进制文件
+
+> LibSVM(zero-based) 文本文件、LightGBM 二进制文件
 
 ```python
 import lightgbm as lgb
@@ -159,7 +130,7 @@ train_svm_data = lgb.Dataset('train.svm')
 train_bin_data = lgb.Dataset('train.bin')
 ```
 
-### 加载 Numpy 2 维数组
+### 加载 numpy 2 维数组
 
 ```python
 import liggtgbm as lgb
@@ -169,7 +140,13 @@ label = np.random.randint(2, size = 500)
 train_array = lgb.Dataset(data, label = label)
 ```
 
-### 加载 scipy.sparse.csr_matrix 数组
+### 加载 pandas DataFrame
+
+### 加载 H2O DataTable Frame
+
+### 加载 scipy 稀疏矩阵
+
+> scipy.sparse.csr_matrix 数组
 
 ```python
 import lightgbm as lgb
@@ -241,72 +218,79 @@ If you are concerned about your memory consumption, you can save memory by:
 - 2.Explicitly set `raw_data=None` after the Dataset has been constructed
 - Call `gc`
 
+# LightGBM 模型 API
 
 ## Training API
 
-- `train(params, train_set, num_boost_round, ...)`
-- `cv(params, train_ste, num_boost_round, ...)`
+* `train(params, train_set, num_boost_round, ...)`
+* `cv(params, train_ste, num_boost_round, ...)`
 
 ## Scikit-learn API
 
-- `LGBMModel(boosting\ *type, num*\ leaves, ...)`
-- `LGBMClassifier(boosting\ *type, num*\ leaves, ...)`
-- `LGBMRegressor(boosting\ *type, num*\ leaves, ...)`
-- `LGBMRanker(boosting\ *type, num*\ leaves, ...)`
-
+* `LGBMModel(boosting\ *type, num*\ leaves, ...)`
+* `LGBMClassifier(boosting\ *type, num*\ leaves, ...)`
+* `LGBMRegressor(boosting\ *type, num*\ leaves, ...)`
+* `LGBMRanker(boosting\ *type, num*\ leaves, ...)`
 
 ```python
-lightgbm.LGBMClassifier(boosting_type = "gbdt", # gbdt, dart, goss, rf
-                       num_leaves = 31, 
-                       max_depth = -1, 
-                       learning_rate = 0.1,
-                       n_estimators = 100,
-                       subsample_for_bin = 200000,
-                       objective = None, 
-                       class_weight = None,
-                       min_split_gain = 0.0,
-                       min_child_weight = 0.001, 
-                       min_child_samples = 20,
-                       subsample = 1.0,
-                       subsample_freq = 0,
-                       colsample_bytree = 1.0,
-                       reg_alpha = 0.0,
-                       reg_lambda = 0.0,
-                       random_state = None,
-                       n_jobs = -1, 
-                       silent = True,
-                       importance_type = "split",
-                       **kwargs)
+lightgbm.LGBMClassifier(
+    boosting_type = "gbdt", # gbdt, dart, goss, rf
+    num_leaves = 31, 
+    max_depth = -1, 
+    learning_rate = 0.1,
+    n_estimators = 100,
+    subsample_for_bin = 200000,
+    objective = None, 
+    class_weight = None,
+    min_split_gain = 0.0,
+    min_child_weight = 0.001, 
+    min_child_samples = 20,
+    subsample = 1.0,
+    subsample_freq = 0,
+    colsample_bytree = 1.0,
+    reg_alpha = 0.0,
+    reg_lambda = 0.0,
+    random_state = None,
+    n_jobs = -1, 
+    silent = True,
+    importance_type = "split",
+    **kwargs
+)
 
 lgbc.fit(X, y,
-        sample, 
-        weight = None, 
-        init_score = None,
-        eval_set = None,
-        eval_names = None, 
-        eval_sample_weight = None,
-        eval_class_weight = None,
-        eval_init_score = None,
-        eval_metric = None,
-        early_stopping_rounds = None,
-        verbose = True,
-        feature_name = "auto",
-        categorical_feature = "auto",
-        callbacks = None)
+    sample, 
+    weight = None, 
+    init_score = None,
+    eval_set = None,
+    eval_names = None, 
+    eval_sample_weight = None,
+    eval_class_weight = None,
+    eval_init_score = None,
+    eval_metric = None,
+    early_stopping_rounds = None,
+    verbose = True,
+    feature_name = "auto",
+    categorical_feature = "auto",
+    callbacks = None
+)
 
-lgbc.predict(X, 
-            raw_score = False,
-            num_iteration = None,
-            pred_leaf = False,
-            pred_contrib = False,
-            **kwargs)
+lgbc.predict(
+    X, 
+    raw_score = False,
+    num_iteration = None,
+    pred_leaf = False,
+    pred_contrib = False,
+    **kwargs
+)
 
-lgbc.predict_proba(X, 
-                  raw_score = False,
-                  num_iteration = None,
-                  pred_leaf = False,
-                  pred_contrib = False,
-                  **kwargs)
+lgbc.predict_proba(
+    X, 
+    raw_score = False,
+    num_iteration = None,
+    pred_leaf = False,
+    pred_contrib = False,
+    **kwargs
+)
 ```
 
 ```python
@@ -382,3 +366,8 @@ plot_metric(booster, ax, tree, index, ...)
 plot_tree(booster, ax, tree_index, ...)
 create_tree_digraph(booster, tree_index, ...)
 ```
+
+
+
+# 参考
+

@@ -78,7 +78,42 @@ details[open] summary {
 
 ![img](images/dr_fs.png)
 
+在回归问题中，当输入(数据)变量的维度比较高时(比如：输入变量维度高于样本的个数)，
+如果我们继续使用像 LSE(最小二乘方法)等简单方法时就会产生很多问题
+
+在高维问题中产生的最重要的两个问题是：
+
+* 多重共线性 (Multicollinearity)
+    - 一些输入变量会高度相关
+    - 当输入变量维度高于样本的个数时，最小二乘估计将不是唯一的
+* 过拟合 (Overfitting)
+    - 模型在训练过程中将训练数据(少数样本)的一些特性学习到模型中而作为所有数据(总体)的共性，
+      以至于使得模型在训练数据外的其他数据样本上的效果很差
+
+当我们使用数据训练模型的时候，很重要的一点就是要在过拟合与欠拟合之间达到一个平衡。防止过拟合的一种方法就是对模型的复杂度进行约束。
+模型中用到的解释变量的个数是模型复杂度的一种体现。控制解释变量个数有很多方法，例如变量选择 (feature selection)，
+即用 filter 或 wrapper 方法提取解释变量的最佳子集。或是进行变量构造 (feature construction)，也称为将维技术，
+即将原始变量进行某种映射或转换，如主成分方法和因子分析。变量选择的方法是比较“硬”的方法，变量要么进入模型，要么不进入模型，
+只有 0-1 两种选择。但也有“软”的方法，也就是 Regularization 类方法
+
+解决高维问题的方法或措施：
+
+* 变量选择 (Variable selection)
+    - 最优子集选择 (Best subset selection)
+    - 逐步选择 (stepwise selection)
+* 正则化 (Regularization)
+    - Ridge
+    - LASSO
+    - SCAD
+    - elastic net
+* 降维 (Dimension reduction techniques)
+    - 主成分分析(回归) (Principal component regression)
+    - 因子分析 (Factor analysis)
+    - 偏最小二乘 (Partial least squares)
+
 # 特征选择简介
+
+
 
 ## 特征选择介绍
 
@@ -381,9 +416,46 @@ print('X_selected.shape:', X_selected.shape)
 
 实际使用中，推荐 RFECV 和 Null Importance，因为他们既考虑了特征权重也考虑了模型表现
 
+> 变量选择方法的原则：
+> 
+> * 一个好的模型拥有小的测试误差(test error)
+>     * 预测准确
+>     * 低残差
+> 
+> 变量选择中估计测试误差(test error)的准则：
+> 
+> * Mallow’s Cp
+>     - Cp adds a penalty as number of variables (flexibility) increases. Choose the lowest Cp
+>     
+> `$$Cp=\frac{1}{n}(RSS+2p\sigma^{2})$$`
+> 
+> * AIC
+>     - Similar to Cp, but can be generalized to non-linear models. Choose the lowest AIC.
+> 
+> `$$AIC=2n(p−loglik)$$`
+> 
+> 
+> * BIC
+>     - Proportional to AIC, but penalizes flexibility more heavily. Choose the lowest BIC.
+> 
+> `$$BIC = −2\cdot loglik + plog(n)$$`
+> 
+> 
+> * Adjusted R2
+>     - Adds penalty to R2 for unnecessary variables. 
+>       Popular, but not as statistically well-founded as Cp, AIC and BIC. 
+>       Choose the highest Adjusted R2
+> 
+> `$$R^{2}=1−\frac{\frac{RSS}{n−p−1}}{\frac{TSS}{n−1}}$$`
+
+
 ## 完全搜索
 
 遍历所有可能组合的特征子集，然后输入模型，选择最佳模型分数的特征子集。不推荐使用，计算开销过大
+
+* 最优子集选择 (best subset selection)
+    - Find the prediction error for every possible subset of variables. 
+      Use the subset with the lowest test error.
 
 ## 启发式搜索
 
@@ -394,6 +466,17 @@ print('X_selected.shape:', X_selected.shape)
 向前搜索是先从空集开始，每轮只加入一个特征，然后训练模型，若模型评估分数提高，
 则保留该轮加入的特征，否则丢弃。反之，向后特征是做减法，先从全特征集开始，
 每轮减去一个特征，若模型表现减低，则保留特征，否则弃之
+
+* 逐步选择(stepwise section)
+    - 向后逐步选择 (Backwards selection)
+        - Start with every variable in the model. 
+          Then delete the variable who’s omission improves the test error the most. 
+          Continue until you cannot improve the test error.
+    - 向前逐步选择 (Forward selection)
+        - Start with no variables in the model. 
+          Then add the variable that improves the test error the most. 
+          Continue until you cannot improve the test error.
+    - 向前向后逐步选择(Backwards Forward selection)
 
 ### 递归特征消除
 
