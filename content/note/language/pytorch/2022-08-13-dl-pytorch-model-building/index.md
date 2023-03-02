@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-13'
 slug: dl-pytorch-model-building
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-15'
 slug: dl-pytorch-model-gup
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

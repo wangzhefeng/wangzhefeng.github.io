@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-16'
 slug: dl-pytorch-model-save-load
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-09-10'
 slug: dl-tensorflow-estimator
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

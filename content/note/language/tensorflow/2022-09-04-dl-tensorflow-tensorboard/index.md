@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-09-04'
 slug: dl-tensorflow-tensorboard
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

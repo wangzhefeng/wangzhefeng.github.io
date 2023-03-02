@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-03'
 slug: dl-tensorflow-autograd
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool
@@ -38,7 +37,7 @@ details[open] summary {
   - [求二阶导数](#求二阶导数)
   - [在 AutoGraph 中使用梯度磁带求导](#在-autograph-中使用梯度磁带求导)
 - [利用梯度磁带和优化器求最小值](#利用梯度磁带和优化器求最小值)
-  - [使用 optimizer.apply_gradients](#使用-optimizerapply_gradients)
+  - [使用 optimizer.apply\_gradients](#使用-optimizerapply_gradients)
   - [使用 optimizer.minimize](#使用-optimizerminimize)
   - [在 AutoGraph 中完成最小值求解](#在-autograph-中完成最小值求解)
 </p></details><p></p>

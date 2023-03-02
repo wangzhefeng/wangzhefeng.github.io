@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-15'
 slug: dl-tensorflow-model-training
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool
@@ -44,7 +43,7 @@ details[open] summary {
   - [创建自定义损失函数](#创建自定义损失函数)
     - [类形式的损失函数](#类形式的损失函数)
     - [函数形式的损失函数](#函数形式的损失函数)
-  - [损失函数的使用—compile() & fit()](#损失函数的使用compile--fit)
+  - [损失函数的使用—compile() \& fit()](#损失函数的使用compile--fit)
     - [通过实例化一个损失类创建损失函数](#通过实例化一个损失类创建损失函数)
     - [直接使用损失函数](#直接使用损失函数)
   - [损失函数的使用—单独使用](#损失函数的使用单独使用)
@@ -58,7 +57,7 @@ details[open] summary {
   - [创建自定义评价指标](#创建自定义评价指标)
     - [类形式评价指标](#类形式评价指标)
     - [函数形式评价指标](#函数形式评价指标)
-  - [评价指标的使用—compile() & fit()](#评价指标的使用compile--fit)
+  - [评价指标的使用—compile() \& fit()](#评价指标的使用compile--fit)
   - [评价指标的使用—单独使用](#评价指标的使用单独使用)
 - [优化器](#优化器)
   - [TensorFlow 内置优化器](#tensorflow-内置优化器)
@@ -77,14 +76,14 @@ details[open] summary {
     - [自定义迭代训练](#自定义迭代训练)
     - [学习率衰减和调度](#学习率衰减和调度)
   - [TensorFlow 优化器使用示例](#tensorflow-优化器使用示例)
-    - [optimizer.apply_gradients](#optimizerapply_gradients)
+    - [optimizer.apply\_gradients](#optimizerapply_gradients)
     - [optimizer.minimize](#optimizerminimize)
     - [model.compile 和 model.fit](#modelcompile-和-modelfit)
   - [TensorFlow 优化器核心 API](#tensorflow-优化器核心-api)
-    - [apply_gradients](#apply_gradients)
-    - [weights_property](#weights_property)
-    - [get_weights](#get_weights)
-    - [set_weights](#set_weights)
+    - [apply\_gradients](#apply_gradients)
+    - [weights\_property](#weights_property)
+    - [get\_weights](#get_weights)
+    - [set\_weights](#set_weights)
   - [TensorFlow 优化器共有参数](#tensorflow-优化器共有参数)
 - [回调函数](#回调函数)
 - [模型训练](#模型训练)

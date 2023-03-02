@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-17'
 slug: dl-pytorch-tensorboard
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

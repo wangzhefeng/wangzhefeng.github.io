@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-12'
 slug: dl-pytorch-model-layer
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

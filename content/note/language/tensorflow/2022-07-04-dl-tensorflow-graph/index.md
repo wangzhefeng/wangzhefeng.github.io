@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-04'
 slug: dl-tensorflow-graph
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-14'
 slug: dl-pytorch-model-compile
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

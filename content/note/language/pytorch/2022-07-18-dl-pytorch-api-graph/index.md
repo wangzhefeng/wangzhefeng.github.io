@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-18'
 slug: dl-pytorch-api-graph
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

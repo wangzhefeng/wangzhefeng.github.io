@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-15'
 slug: dl-tensorflow-model-save-load
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

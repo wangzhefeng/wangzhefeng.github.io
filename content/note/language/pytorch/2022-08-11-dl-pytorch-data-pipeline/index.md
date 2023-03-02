@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-08-11'
 slug: dl-pytorch-data-pipeline
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

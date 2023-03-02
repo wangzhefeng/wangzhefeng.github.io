@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-15'
 slug: dl-tensorflow-utils
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool
@@ -33,18 +32,18 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [模型可视化](#模型可视化)
-  - [plot_model()](#plot_model)
-  - [model_to_dot()](#model_to_dot)
+  - [plot\_model()](#plot_model)
+  - [model\_to\_dot()](#model_to_dot)
 - [序列化工具(Serialization utilities)](#序列化工具serialization-utilities)
   - [CustomObjectScope class](#customobjectscope-class)
-  - [get_custom_objects()](#get_custom_objects)
-  - [register_keras_serializable()](#register_keras_serializable)
-  - [serialize_keras_object()](#serialize_keras_object)
-  - [daserialize_keras_object()](#daserialize_keras_object)
-- [Python & Numpy utilities](#python--numpy-utilities)
-  - [to_categorical()](#to_categorical)
+  - [get\_custom\_objects()](#get_custom_objects)
+  - [register\_keras\_serializable()](#register_keras_serializable)
+  - [serialize\_keras\_object()](#serialize_keras_object)
+  - [daserialize\_keras\_object()](#daserialize_keras_object)
+- [Python \& Numpy utilities](#python--numpy-utilities)
+  - [to\_categorical()](#to_categorical)
   - [normalize()](#normalize)
-  - [get_file()](#get_file)
+  - [get\_file()](#get_file)
   - [Progbar class](#progbar-class)
   - [Sequence class](#sequence-class)
 </p></details><p></p>

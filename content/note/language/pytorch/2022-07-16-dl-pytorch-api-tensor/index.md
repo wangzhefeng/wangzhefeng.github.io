@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-16'
 slug: dl-pytorch-api-tensor
 categories:
-  - deeplearning
   - pytorch
 tags:
   - tool

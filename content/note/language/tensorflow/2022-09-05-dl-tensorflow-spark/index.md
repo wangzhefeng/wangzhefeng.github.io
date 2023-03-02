@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-09-05'
 slug: dl-tensorflow-spark
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

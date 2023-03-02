@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-01'
 slug: dl-tensorflow-env
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

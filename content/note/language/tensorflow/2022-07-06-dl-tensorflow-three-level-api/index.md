@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-09-20'
 slug: dl-tensorflow-three-level-api
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool

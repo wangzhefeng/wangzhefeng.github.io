@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-05'
 slug: dl-tensorflow-dataset
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool
@@ -36,12 +35,12 @@ details[open] summary {
   - [TensorFlow Datasets 库](#tensorflow-datasets-库)
   - [TensorFlow Dataset API](#tensorflow-dataset-api)
     - [tf.data](#tfdata)
-    - [tensorflow_datasets](#tensorflow_datasets)
+    - [tensorflow\_datasets](#tensorflow_datasets)
     - [tf.keras.datasets](#tfkerasdatasets)
   - [TensorFlow Dataset 建立](#tensorflow-dataset-建立)
-    - [tf.data.Dataset.from_tensor_slices](#tfdatadatasetfrom_tensor_slices)
-    - [tf.data.Dataset.from_tensor_slices 和 tf.keras.datasets.mnist.load_data](#tfdatadatasetfrom_tensor_slices-和-tfkerasdatasetsmnistload_data)
-    - [tensorflow_datasets](#tensorflow_datasets-1)
+    - [tf.data.Dataset.from\_tensor\_slices](#tfdatadatasetfrom_tensor_slices)
+    - [tf.data.Dataset.from\_tensor\_slices 和 tf.keras.datasets.mnist.load\_data](#tfdatadatasetfrom_tensor_slices-和-tfkerasdatasetsmnistload_data)
+    - [tensorflow\_datasets](#tensorflow_datasets-1)
     - [TFRecord](#tfrecord)
 - [TensorFlow 内置 Dataset](#tensorflow-内置-dataset)
   - [查看可用的数据集](#查看可用的数据集)
@@ -86,7 +85,7 @@ details[open] summary {
 - [提升管道性能](#提升管道性能)
   - [prefetch](#prefetch)
   - [interleave](#interleave)
-  - [map num_parallel_calls](#map-num_parallel_calls)
+  - [map num\_parallel\_calls](#map-num_parallel_calls)
   - [cache](#cache)
   - [map batch](#map-batch)
 - [特征列](#特征列)

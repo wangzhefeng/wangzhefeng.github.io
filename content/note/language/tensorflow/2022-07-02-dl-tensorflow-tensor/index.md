@@ -4,7 +4,6 @@ author: 王哲峰
 date: '2022-07-02'
 slug: dl-tensorflow-tensor
 categories:
-  - deeplearning
   - tensorflow
 tags:
   - tool
@@ -56,7 +55,7 @@ details[open] summary {
   - [向量运算](#向量运算)
   - [矩阵运算](#矩阵运算)
   - [广播机制](#广播机制)
-    - [tf.broadcast_to 以显式的方式按照广播机制扩展张量的维度](#tfbroadcast_to-以显式的方式按照广播机制扩展张量的维度)
+    - [tf.broadcast\_to 以显式的方式按照广播机制扩展张量的维度](#tfbroadcast_to-以显式的方式按照广播机制扩展张量的维度)
     - [计算广播后计算结果的形状，静态形状，TensorShape 类型参数](#计算广播后计算结果的形状静态形状tensorshape-类型参数)
     - [计算广播后计算结果的形状，动态形状，Tensor 类型参数](#计算广播后计算结果的形状动态形状tensor-类型参数)
     - [广播效果](#广播效果)
