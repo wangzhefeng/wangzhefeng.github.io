@@ -2,7 +2,7 @@
 title: 时间序列平滑及预测
 author: 王哲峰
 date: '2022-11-19'
-slug: timeseries-processing-exponential-smoothing
+slug: timeseries-processing-smoothing
 categories:
   - timeseries
 tags:
