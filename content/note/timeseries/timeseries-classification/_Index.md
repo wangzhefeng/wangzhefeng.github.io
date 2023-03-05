@@ -1,6 +1,6 @@
 ---
-title: 时间序列分类
-subtitle: Time Series
+title: 分类
+subtitle: Classification
 list_pages: true
 order_by: title
 ---

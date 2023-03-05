@@ -8,3 +8,11 @@ categories:
 tags:
   - model
 ---
+
+
+
+
+# 参考
+
+* [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
+

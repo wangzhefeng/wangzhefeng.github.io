@@ -1,6 +1,6 @@
 ---
-title: 时间序列分析-深度学习
-subtitle: Time Series
+title: 深度学习
+subtitle: Deeplearning
 list_pages: true
 order_by: title
 ---

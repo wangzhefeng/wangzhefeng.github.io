@@ -1,5 +1,6 @@
 ---
-title: Lib tslearn 时间序列预测
+title: Lib tslearn 
+subtitle: 预测
 author: 王哲峰
 date: '2022-05-04'
 slug: timeseries-lib-tslearn
@@ -44,8 +45,8 @@ details[open] summary {
   - [Requirements](#requirements-3)
 - [tslearn 快速开始](#tslearn-快速开始)
   - [时间序列格式](#时间序列格式)
-    - [tslearn.utils.to_time_series](#tslearnutilsto_time_series)
-    - [tslearn.utils.to_time_series_dataset](#tslearnutilsto_time_series_dataset)
+    - [tslearn.utils.to\_time\_series](#tslearnutilsto_time_series)
+    - [tslearn.utils.to\_time\_series\_dataset](#tslearnutilsto_time_series_dataset)
   - [载入标准时间序列数据集](#载入标准时间序列数据集)
     - [tslearn datasets](#tslearn-datasets)
     - [text 格式数据](#text-格式数据)

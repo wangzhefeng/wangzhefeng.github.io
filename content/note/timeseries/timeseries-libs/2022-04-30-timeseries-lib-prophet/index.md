@@ -1,5 +1,6 @@
 ---
-title: Lib prophet 时间序列预测
+title: Lib prophet 
+subtitle: 预测
 author: 王哲峰
 date: '2022-04-30'
 slug: timeseries-lib-prophet
