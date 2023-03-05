@@ -40,8 +40,20 @@ details[open] summary {
     - [时间序列预测](#时间序列预测)
     - [时间序列异常检测](#时间序列异常检测)
     - [时间序列分类](#时间序列分类)
+    - [时间序列检索](#时间序列检索)
+    - [时间序列聚类](#时间序列聚类)
+    - [时间序列分割](#时间序列分割)
+    - [因果分析](#因果分析)
     - [生存分析](#生存分析)
     - [时间序列模式识别](#时间序列模式识别)
+  - [时间序列 Python 库](#时间序列-python-库)
+  - [时间序列模型](#时间序列模型)
+    - [预测](#预测)
+    - [分类](#分类)
+    - [异常检测](#异常检测)
+    - [表示](#表示)
+    - [数据增强](#数据增强)
+  - [时间序列数据集](#时间序列数据集)
 - [时间序列分析-baseline](#时间序列分析-baseline)
   - [baseline 特点](#baseline-特点)
   - [baseline 数据](#baseline-数据)
@@ -138,6 +150,19 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 
 学术界对时间序列的研究，主体分为时序表示、时序预测、模式识别、异常检测、关联分析等几大类
 
+时间序列分析具体包括的任务：
+
+* 检索 (Indexing, query by content): given a time series and some similarity measure, 
+  find the nearest matching time series.
+* 聚类 (Clustering): find groups (clusters) of similar time series.
+* 分类 (Classification): assign a time series to a predefined class.
+* 分割 (Segmentation, Summarization): create an accurate approximation of a time series by reducing 
+  its dimensionality while retaining its essential features.
+* 预测 (Forecasting, Prediction): given a time series dataset up to a given time tn, forecast the next values.
+* 异常检测 (Anomaly Detection): find abnormal data points or subsequences.
+* 因果分析 (Rules Discovery): find the rules that may govern associations between sets of time series or subsequences
+
+
 ### 时间序列预测
 
 时间序列预测 Time Series Forecasting:
@@ -222,6 +247,14 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 有时目标是在不牺牲性能的情况下尽早对时间序列进行分类，这代表了早期的时间序列分类任务。
 每次测量可能代价高昂，或者尽快采取行动可能很重要。这导致了权衡，因为更少的观察通常会导致更差的性能
 
+### 时间序列检索
+
+### 时间序列聚类
+
+### 时间序列分割
+
+### 因果分析
+
 ### 生存分析
 
 > 生存分析 Survival Analysis 用来预测感兴趣事件发生的时间
@@ -277,13 +310,70 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
   或同时序不同时间位置的关联点。常见的有周期分析，季节分析，波形联动分析，时间关联性等问题
 
 
+## 时间序列 Python 库
 
+![img](images/libs.png)
 
+* Kats，推荐指数：⭐⭐
+    - 主页：https://facebookresearch.github.io/Kats/
+    - Github：https://github.com/facebookresearch/Kats
+* darts，推荐指数：⭐⭐
+    - 介绍：a Python library for easy manipulation and forecasting of time series. 
+      It contains a variety of models, from classics such as ARIMA to deep neural networks.
+    - 主页：https://unit8co.github.io/darts/
+    - Github：https://github.com/unit8co/darts
+* GluonTS，推荐指数：⭐⭐⭐⭐
+    - 主页：https://ts.gluon.ai/index.html
+    - Github：https://github.com/awslabs/gluon-ts/
+* NeuralProphet，推荐指数：⭐⭐⭐⭐
+    - 主页：https://neuralprophet.com/
+    - Github：https://github.com/ourownstory/neural_prophet
+* arch
+    - 介绍：Autoregressive Conditional Heteroskedasticity (ARCH) and other tools for financial econometrics, written in Python.
+    - 主页：https://arch.readthedocs.io/en/latest/
+    - Github：https://github.com/bashtage/arch
+* AtsPy
+    - 介绍：Automated Time Series Models in Python
+    - Github：https://github.com/firmai/atspy
+* banpei
+    - 介绍：Anomaly detection library based on singular spectrum transformation
+    - Github：https://github.com/tsurubee/banpei
+* cesium
+    - 介绍：end-to-end machine learning platform for time-series, from calculation of features to model-building to predictions.
+    - 主页：https://cesium-ml.org/
+    - Github：https://github.com/cesium-ml/cesium
+* pyfbad
+    - Github：https://github.com/Teknasyon-Teknoloji/pyfbad
 
+更多的模型介绍可以查阅论文 [arxiv 2021]A systematic review of Python packages for time series analysis.
 
+## 时间序列模型
 
+### 预测
 
+![img](images/models.png)
 
+### 分类
+
+* LSTM FCN，LSTM Fully Convolutional Networks for Time Series Classification
+
+### 异常检测
+
+* [AAAI 2022] Towards a Rigorous Evaluation of Time-series Anomaly Detection
+
+### 表示
+
+* [AAAI 2022] TS2Vec: Towards Universal Representation of Time Series
+
+### 数据增强
+
+* [IJCAI 2021] Time Series Data Augmentation for Deep Learning: A Survey
+* [arxiv 2020] An empirical survey of data augmentation for time series classification with neural networks
+
+## 时间序列数据集
+
+* UCR Time Series Classification Archive
+* UEA & UCR Time Series Classification Repository 
 
 # 时间序列分析-baseline
 
@@ -398,7 +488,6 @@ plt.plot([None for i in train_y] + [x for x in predictions])
 plt.show()
 ```
 
-
 # 一些经验与思考
 
 1. 训练测试数据的划分
@@ -438,3 +527,5 @@ plt.show()
 * [R package forecast](https://cran.r-project.org/web/packages/forecast/)
 * [应该了解的 6 个时间序列预测任务](https://towardsdatascience.com/6-time-series-predictive-tasks-you-should-know-about-b899fb83b6bf)
 * [关于时间序列你应该知道的 12 件事](https://towardsdatascience.com/12-things-you-should-know-about-time-series-975a185f4eb2)
+* [时序资料汇总：模型和常见库对比](https://mp.weixin.qq.com/s/KYSFvlS9iLMX2zBiU5CGZg)
+
