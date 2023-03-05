@@ -34,24 +34,17 @@ details[open] summary {
 - [平稳时间序列分析介绍](#平稳时间序列分析介绍)
 - [AR 模型](#ar-模型)
   - [AR(`$p$`) 模型](#arp-模型)
-  - [AR(`$p$`) 模型结构](#arp-模型结构)
-  - [AR(`$p$`) 模型的统计性质](#arp-模型的统计性质)
   - [AR(`$p$`) 模型应用](#arp-模型应用)
-  - [参考资料](#参考资料)
 - [MA 模型](#ma-模型)
   - [MA(`$q$`) 模型](#maq-模型)
-  - [MA(`$q$`) 模型结构](#maq-模型结构)
-  - [MA(`$q$`) 模型的统计性质](#maq-模型的统计性质)
   - [MA(`$q$`) 模型应用](#maq-模型应用)
 - [ARMA 模型](#arma-模型)
   - [ARMA(`$p$`, `$q$`) 模型](#armap-q-模型)
-  - [ARMA(`$p$`, `$q$`) 模型结构](#armap-q-模型结构)
-  - [ARMA(`$p$`, `$q$`) 模型的统计性质](#armap-q-模型的统计性质)
   - [ARMA(`$p$`, `$q$`) 模型应用](#armap-q-模型应用)
 - [AM 和 AM 以及 ARMA 建模流程](#am-和-am-以及-arma-建模流程)
   - [计算 ACF 和 PACF](#计算-acf-和-pacf)
-    - [ACF 计算示例](#acf-计算示例)
-    - [ACF 和 PACF 计算实现](#acf-和-pacf-计算实现)
+    - [ACF 和 PACF 计算示例](#acf-和-pacf-计算示例)
+    - [ACF 和 PACF 可视化](#acf-和-pacf-可视化)
   - [模型识别](#模型识别)
   - [参数估计](#参数估计)
   - [模型检验](#模型检验)
@@ -72,7 +65,7 @@ ARMA(Auto Regression Moving Average) 模型的全称是 **自回归移动平均�
 
 ![img](images/flow.png)
 
-1. 求出该观察序列的 **样本自相关系数(ACF)** 和 **样本偏自相关系数(PACF)** 的值
+1. 求出该观察序列的样本自相关系数(ACF)和样本偏自相关系数(PACF)的值
 2. 根据样本自相关系数和偏自相关系数的性质，选择阶数适当的 ARMA(`$p$`, `$q$`) 模型进行拟合
 3. 估计模型中的位置参数的值
 4. 检验模型的有效性
@@ -86,11 +79,10 @@ ARMA(Auto Regression Moving Average) 模型的全称是 **自回归移动平均�
 
 ## AR(`$p$`) 模型
 
-AR(`$p$`)模型，称为 `$p$` 阶自回归模型。该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列
+AR(`$p$`) 模型，称为 `$p$` 阶自回归模型。该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+其数学表达式为：
 
-## AR(`$p$`) 模型结构
-
-`$$x_{t}=c + \phi_{1}y_{t-1} + \phi_{2}y_{t-2} + \cdots + \phi_{p}y_{t-p} + \varepsilon_{t}$$`
+`$$x_{t}=c + \phi_{1}x_{t-1} + \phi_{2}x_{t-2} + \cdots + \phi_{p}x_{t-p} + \varepsilon_{t}$$`
 
 AR(`$p$`) 有三个限制条件：
 
@@ -102,27 +94,16 @@ AR(`$p$`) 有三个限制条件：
 * 当期的随机干扰与过去的序列值无关
     - `$E(x_{s}\varepsilon_{t}) = 0, \forall s < t$`
 
-另外，`$c$` 是常数，表示时间序列没有进行 0 均值化
-
-* 当 `$c=0$` 时，为中心化的 AR(`$p$`) 模型
-* 当 `$c \neq 0$`时，为非中心化的 AR(`$p$`) 模型，可以通过以下变换，转化为中心化 AR(`$p$`) 序列
-
-`$$\mu = \frac{c}{1-\phi_{1} - \phi_{2} - \ldots - \phi_{p}}$$`
+另外，`$c$` 是常数，当 `$c=0$` 时，为中心化的 AR(`$p$`) 模型；当 `$c \neq 0$`时，为非中心化的 AR(`$p$`) 模型，
+可以通过以下变换，转化为中心化 AR(`$p$`) 序列
 
 `$$y_{t} = x_{t} - \mu$$`
+`$$\mu = \frac{c}{1-\phi_{1} - \phi_{2} - \ldots - \phi_{p}}$$`
 
 `$y_{t}$` 为 `$x_{t}$` 的中心化序列，相当于将非中心化序列平移了 `$\mu$`
 
-由于 AR 模型拟合的是平稳序列，所以拟合后的模型也应该为平稳的，因此在拟合完模型后，
+由于 AR(`$p$`) 模型拟合的是平稳序列，所以拟合后的模型也应该为平稳的，因此在拟合完模型后，
 为了保险，会将模型拟合后的结果再做平稳性检验，看拟合模型是否平稳
-
-## AR(`$p$`) 模型的统计性质
-
-- 均值
-- 方差
-- 自协方差函数
-- 自相关系数
-- 偏自相关系数
 
 ## AR(`$p$`) 模型应用
 
@@ -130,27 +111,25 @@ AR(`$p$`) 有三个限制条件：
 from statsmodels.tsa.ar_model import AR
 from random import random
 
+# data
 data = [x + random() for x in range(1, 100)]
 
+# model
 model = AR(data)
 model_fit = model.fit()
 
+# model predict
 y_hat = model_fit.predict(len(data), len(data))
 print(y_hat)
 ```
-
-## 参考资料
-
-* [Autoregressive models](https://otexts.com/fpp2/AR.html)
 
 # MA 模型
 
 ## MA(`$q$`) 模型
 
-MA(`$p$`) 模型称为 `$q$` 阶移动平均(Moving Average)模型。为残差误差(residual erros)的线性函数，
-与计算时间序列的移动平均不同，该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列
-
-## MA(`$q$`) 模型结构
+MA(`$p$`) 模型，称为 `$q$` 阶移动平均(Moving Average)模型。为残差误差(residual erros)的线性函数，
+与计算时间序列的移动平均不同，该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+其数学表达式为：
 
 `$$x_{t}=\mu + \varepsilon_{t} + \theta_{1}\varepsilon_{t-1} + \theta_{2}\varepsilon_{t-2} + \cdots + \theta_{q}\varepsilon_{t-q}$$`
 
@@ -162,8 +141,8 @@ MA(`$q$`) 有两个限制条件：
     - `$Var(\varepsilon_{t}) = \sigma_{\varepsilon}^{2}$`
     - `$E(\varepsilon_{t}\varepsilon_{s}) = 0, s \neq t$`
 
-`$\mu$` 是常数，当 `$\mu=0$` 时，为中心化的 MA(`$q$`) 模型。当 `$\mu \neq 0$` 时，为非中心化 MA(`$q$`) 模型，
-可以通过以下变换，转化为中心化 MA(`$q$`) 序列：
+另外，`$\mu$` 是常数，当 `$\mu=0$` 时，为中心化的 MA(`$q$`) 模型；当 `$\mu \neq 0$` 时，
+为非中心化 MA(`$q$`) 模型，可以通过以下变换，转化为中心化 MA(`$q$`) 序列：
 
 `$$y_{t} = x_{t} - \mu$$`
 
@@ -174,24 +153,20 @@ MA(`$q$`) 有两个限制条件：
 误差项是不可观察的，其中的 `$\varepsilon_{t}$` 是由 `$\varepsilon_{0}$` 递推过来的，
 而 `$\varepsilon_{0}$` 有专门的获取方法
 
-## MA(`$q$`) 模型的统计性质
-
-* 常数均值
-* 常数方差
-* 自协方差函数只与滞后阶数相关, 且 `$q$` 阶截尾
-* 自相关系数 `$q$` 阶截尾
-
 ## MA(`$q$`) 模型应用
 
 ```python
 from statsmodesl.tsa.arima_model import ARMA
 from random import random
 
+# data
 data = [x + random() for x in range(1, 100)]
 
+# model
 model = ARMA(data, order = (0, 1))
 model_fit = model.fit(disp = False)
 
+# model predict
 y_hat = model_fit.predict(len(data), len(data))
 print(y_hat)
 ```
@@ -200,11 +175,10 @@ print(y_hat)
 
 ## ARMA(`$p$`, `$q$`) 模型
 
-ARMA(`$p$`, `$q$`)模型，称为自回归移动平均(auto-regressive moving average)模型, 
+ARMA(`$p$`, `$q$`) 模型，称为自回归移动平均(Auto-Regressive Moving Average)模型，
 是时间序列和残差误差的线性函数，是 AR(`$p$`) 和 MA(`$q$`) 模型的组合，
-该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列
-
-## ARMA(`$p$`, `$q$`) 模型结构
+该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+其数学表达式为：
 
 `$$\left\{
 \begin{array}{**lr**}
@@ -220,19 +194,10 @@ ARMA 模型的另一种形式：
 `$$(1-\sum_{i=1}^{p}\phi_{i}B^{i})x_{t} = (1 - \sum_{i=1}^{q}\theta_{i}B^{i})\varepsilon_{t}$$`
 `$$\Phi(B)x_{t} = \Theta(B)\varepsilon_{t}$$`
 
-当 `$\phi_{0}$` 时，为中心化模型
-
-* 当 `$q = 0$` 时, ARMA(`$p$`, `$q$`) 模型就退化成了 AR(`$p$`) 模型.
-* 当 `$p = 0$` 时, ARMA(`$p$`, `$q$`) 模型就退化成了 MA(`$q$`) 模型.
-
-所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例, 它们统称为 ARMA 模型。
+当 `$\phi_{0} = 0$` 时，为中心化模型。当 `$q = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 AR(`$p$`) 模型；
+当 `$p = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 MA(`$q$`) 模型。
+所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例，它们统称为 ARMA 模型。
 而 ARMA(`$p$`, `$p$`) 模型的统计性质也正是 AR(`$p$`) 模型和 MA(`$p$`) 模型统计性质的有机结合
-
-## ARMA(`$p$`, `$q$`) 模型的统计性质
-
-* 均值
-* 自协方差函数
-* 自相关系数
 
 ## ARMA(`$p$`, `$q$`) 模型应用
 
@@ -240,11 +205,14 @@ ARMA 模型的另一种形式：
 from statsmodels.tsa.arima_model import ARMA
 from random import random
 
+# data
 data = [random.() for x in range(1, 100)]
 
+# model
 model = ARMA(data, order = (2, 1))
 model_fit = model.fit(disp = False)
 
+# model predict
 y_hat = model_fit.predict(len(data), len(data))
 print(y_hat)
 ```
@@ -262,11 +230,26 @@ print(y_hat)
 
 `$$\hat{p}_{k} = \frac{\sum_{t=1}^{n-k}(x_{t} - \bar{x})(x_{t+k} - \bar{x})}{\sum_{t=1}^{n}(x_{t} - \bar{x})^{2}}, \quad 0<k<n$$`
 
-### ACF 计算示例
+其中：
+
+* `$t$` 为当前时序数据的时间索引
+* `$k$` 为滞后期(lag)
+* `$n$` 为原始时间序列长度
+* `$\bar{x}$` 为原始时间序列的均值
+
+根据 ACF 求出滞后 `$k$` 自相关系数时，实际上得到并不是 `$x(t)$` 与 `$x(t-k)$` 之间单纯的相关关系。
+因为 `$x(t)$` 同时还会受到中间 `$k-1$` 个随机变量 `$x(t-1), x(t-2), \ldots, x(t-k+1)$` 的影响，
+而这 `$k-1$` 个随机变量又都和 `$x(t-k)$` 具有相关关系，
+所以自相关系数里面实际掺杂了其他变量对 `$x(t)$` 与 `$x(t-k)$` 的影响
+
+在剔除了中间 `$k-1$` 个随机变量 `$x(t-1), x(t-2), \ldots, x(t-k+1)$` 的干扰之后，
+`$x(t-k)$` 对 `$x(t)$` 影响的相关程度，叫偏自相关系数。不同滞后期得到的偏自相关系数，叫偏自相关图
+
+### ACF 和 PACF 计算示例
 
 原序列：
 
-`$$X = [2, 3, 4, 3, 8, 7]$$`
+`$$x = [2, 3, 4, 3, 8, 7]$$`
 
 滞后序列：
 
@@ -275,19 +258,21 @@ print(y_hat)
 
 均值:
 
-`$$\bar{X} = \sum_{i=1}^{6}X_{i} = 4.5$$`
+`$$\bar{x} = \sum_{i=1}^{6}x_{i} = 4.5$$`
 
 方差:
 
-`$$\sigma^{2}(X) = \sum_{i=1}^{6}(X_{i} - \bar{X})(X_{i} - \bar{X}) = 4.916$$`
+`$$\sigma^{2}(x) = \sum_{i=1}^{6}(x_{i} - \bar{x})(x_{i} - \bar{x}) = 4.916$$`
 
 `$A$` 与 `$B$` 的相关系数:
 
-`$$r(lag = 1) = \frac{1}{5}\sum_{i=1}^{5}(A_{i} - \bar{X})(B_{i} - \bar{X}) = 1.75$$`
+`$$r(lag = 1) = \frac{1}{5}\sum_{i=1}^{5}(A_{i} - \bar{x})(B_{i} - \bar{x}) = 1.75$$`
 
 自相关系数:
 
-`$$ACF(lag = 1) = \frac{r(lag = 1)}{\sigma^{2}(X)} = \frac{1.75}{4.91666667} = 0.3559322$$`
+`$$ACF(lag = 1) = \frac{r(lag = 1)}{\sigma^{2}(x)} = \frac{1.75}{4.91666667} = 0.3559322$$`
+
+Python API：
 
 ```python
 import statsmodels.api as sm
@@ -297,15 +282,7 @@ print(sm.tsa.stattools.acf(X, nlags = 1, adjusted = True))
 [1, 0.3559322]
 ```
 
-根据 ACF 求出滞后 `$k$` 自相关系数时，实际上得到并不是 `$X(t)$` 与 `$X(t-k)$` 之间单纯的相关关系。
-因为 `$X(t)$` 同时还会受到中间 `$k-1$` 个随机变量 `$X(t-1), X(t-2), \ldots, X(t-k+1)$` 的影响，
-而这 `$k-1$` 个随机变量又都和 `$X(t-k)$` 具有相关关系，
-所以自相关系数里面实际掺杂了其他变量对 `$X(t)$` 与 `$X(t-k)$` 的影响
-
-在剔除了中间 `$k-1$` 个随机变量 `$X(t-1), X(t-2), \ldots, X(t-k+1)$` 的干扰之后，
-`$X(t-k)$` 对 `$X(t)$` 影响的相关程度，叫偏自相关系数。不同滞后期得到的偏自相关系数，叫偏自相关图
-
-### ACF 和 PACF 计算实现
+### ACF 和 PACF 可视化
 
 ```python
 import numpy as np
@@ -313,7 +290,6 @@ import pandas as pd
 import akshare as ak
 from matplotlib import pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-
 np.random.seed(123)
 
 # -------------- 准备数据 --------------
@@ -332,7 +308,6 @@ gdp = df['国内生产总值-绝对值'][::-1].astype('float')
 
 # GDP DIFF
 gdp_diff = gdp.diff(4).dropna()
-
 # -------------- 绘制图形 --------------
 fig, ax = plt.subplots(4, 2)
 fig.subplots_adjust(hspace = 0.5)
@@ -372,7 +347,7 @@ plt.show()
 
 ## 模型识别
 
-基于 ACF 和 PACF 图，我们可以参考下图，进行模型定阶（即确定 `$p$` 和 `$q$` 的取值）。
+基于 ACF 和 PACF 图，可以参考下图，进行模型定阶（即确定 `$p$` 和 `$q$` 的取值）。
 其中，AR 看 PACF 定 `$p$`，MA 看 ACF 定 `$q$`。拖尾是指趋向于 0，截尾是指为 0，
 但实际上并不能出现完美的理论截尾，但可以利用 2 倍标准差范围辅助判断：
 
@@ -407,7 +382,8 @@ plt.show()
 
 `$$AIC=2 ln(模型的极大似然函数) + 2(模型中未知参数个数)$$`
 
-AIC越小，模型越优秀。但AIC有不足，就是AIC的拟合误差会受样本容量放大而被影响，样本容量越大，往往AIC选择的模型会含有更多的参数。为此，BIC加入对未知参数个数的惩罚权重： 
+AIC 越小，模型越优秀。但 AIC 有不足，就是 AIC 的拟合误差会受样本容量放大而被影响，样本容量越大，
+往往 AIC 选择的模型会含有更多的参数。为此，BIC 加入对未知参数个数的惩罚权重： 
 
 `$$AIC = 2ln(模型的极大似然函数) + ln(x) (模型中未知参数个数)$$`
 
