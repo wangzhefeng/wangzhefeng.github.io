@@ -3,7 +3,7 @@ title: TODS
 subtitle: 异常检测
 author: 王哲峰
 date: '2023-03-05'
-slug: timeseries-lib-tods
+slug: lib-tods
 categories:
   - timeseries
 tags:

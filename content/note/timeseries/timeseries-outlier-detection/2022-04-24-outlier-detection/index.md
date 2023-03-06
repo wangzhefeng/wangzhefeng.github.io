@@ -2,7 +2,7 @@
 title: 时间序列异常值检测
 author: 王哲峰
 date: '2022-04-24'
-slug: timeseries-outlier-detection
+slug: outlier-detection
 categories:
   - timeseries
 tags:

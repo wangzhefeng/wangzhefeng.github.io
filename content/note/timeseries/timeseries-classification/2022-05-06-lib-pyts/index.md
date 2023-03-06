@@ -66,11 +66,10 @@ $ pip install pyts
 
 # 参考
 
-* [[1](Time Series Classifification from Scratch with Deep Neural Networks: A Strong Baseline]()
-* [[2] DTW](https://blog.csdn.net/raym0ndkwan/article/details/45614813)
-* [[3] DTW & KNN](https://nbviewer.jupyter.org/github/markdregan/K-Nearest-Neighbors-with-Dynamic-Time-Warping/blob/master/K_Nearest_Neighbor_Dynamic_Time_Warping.ipynb)
-* [[4] BiGRU CNN](http://www.doc88.com/p-0334856528441.html)
-* [[5] LSTM Fully Convolutional Networks for Time Series Classification]()
-* [GitHub](https://github.com/johannfaouzi/pyts)
-* [Doc](https://pyts.readthedocs.io/en/latest/)
+* [Time Series Classifification from Scratch with Deep Neural Networks: A Strong Baseline]()
+* [DTW & KNN](https://nbviewer.jupyter.org/github/markdregan/K-Nearest-Neighbors-with-Dynamic-Time-Warping/blob/master/K_Nearest_Neighbor_Dynamic_Time_Warping.ipynb)
+* [BiGRU CNN](http://www.doc88.com/p-0334856528441.html)
+* [LSTM Fully Convolutional Networks for Time Series Classification]()
+* [PyTS GitHub](https://github.com/johannfaouzi/pyts)
+* [PyTS Doc](https://pyts.readthedocs.io/en/latest/)
 

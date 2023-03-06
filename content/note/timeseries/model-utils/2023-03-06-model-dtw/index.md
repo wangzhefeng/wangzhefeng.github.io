@@ -36,6 +36,7 @@ details[open] summary {
   - [fastdtw 库](#fastdtw-库)
     - [安装](#安装)
     - [使用](#使用)
+- [参考](#参考)
 </p></details><p></p>
 
 # 动态时间归整介绍
@@ -183,4 +184,8 @@ $ streamlit run synchronization.py
 动态时间规整可能是快速方便地同步时间序列数据的最有效的解决方案。
 虽然它不是完美无缺的，确实存在边界条件匹配性差等缺点，但它是我接触过的最全面的解决方案。
 并且它绝不限于线性数据，并且确实可以同步具有不同维度的非线性数据
+
+# 参考
+
+* [DTW](https://blog.csdn.net/raym0ndkwan/article/details/45614813)
 

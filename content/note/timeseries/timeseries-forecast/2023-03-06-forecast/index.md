@@ -2,7 +2,7 @@
 title: 时间序列预测
 author: 王哲峰
 date: '2023-03-06'
-slug: timeseries-forecast
+slug: forecast
 categories:
   - timeseries
 tags:
