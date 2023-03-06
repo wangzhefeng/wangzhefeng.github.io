@@ -3,7 +3,7 @@ title: Lib pyts
 subtitle: 时间序列分类
 author: 王哲峰
 date: '2022-05-06'
-slug: timeseries-lib-pyts
+slug: lib-pyts
 categories:
   - timeseries
 tags:

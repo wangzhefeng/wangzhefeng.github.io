@@ -2,7 +2,7 @@
 title: 时间序列分类
 author: 王哲峰
 date: '2023-03-05'
-slug: timeseries-classification
+slug: classification
 categories:
   - timeseries
 tags:
