@@ -2,7 +2,7 @@
 title: 时间序列预处理
 author: 王哲峰
 date: '2022-04-22'
-slug: timeseries-process
+slug: process
 categories:
   - timeseries
 tags:

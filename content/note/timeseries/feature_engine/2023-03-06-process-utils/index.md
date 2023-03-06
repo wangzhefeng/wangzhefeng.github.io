@@ -1,8 +1,8 @@
 ---
-title: timeseries-process-utils
+title: 时间序列处理技巧 
 author: 王哲峰
 date: '2023-03-06'
-slug: timeseries-process-utils
+slug: process-utils
 categories:
   - timeseries
 tags:

@@ -2,7 +2,7 @@
 title: 时间序列特征工程
 author: 王哲峰
 date: '2022-09-13'
-slug: feature-engine-type-timeseries
+slug: feature-engine
 categories:
   - feature engine
 tags:

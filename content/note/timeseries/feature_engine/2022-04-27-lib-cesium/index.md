@@ -3,7 +3,7 @@ title: Lib cesium
 subtitle: 特征工程
 author: 王哲峰
 date: '2022-04-27'
-slug: timeseries-lib-cesium
+slug: lib-cesium
 categories:
   - timeseries
 tags:

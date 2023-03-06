@@ -3,7 +3,7 @@ title: Lib tsfresh
 subtitle: 特征工程
 author: 王哲峰
 date: '2022-05-03'
-slug: timeseries-lib-tsfresh
+slug: lib-tsfresh
 categories:
   - timeseries
 tags:

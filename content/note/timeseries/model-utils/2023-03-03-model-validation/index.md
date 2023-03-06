@@ -1,5 +1,5 @@
 ---
-title: 时间序列交叉验证
+title: 交叉验证
 author: 王哲峰
 date: '2023-03-03'
 slug: timeseries-model-cv
@@ -31,8 +31,8 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [时间序列交叉验证介绍](#时间序列交叉验证介绍)
-- [时间序列交叉验证](#时间序列交叉验证)
+- [时间序列交叉介绍](#时间序列交叉介绍)
+- [时间序列分割](#时间序列分割)
   - [Time Series Split](#time-series-split)
     - [介绍](#介绍)
     - [优缺点](#优缺点)
@@ -44,6 +44,7 @@ details[open] summary {
     - [介绍](#介绍-2)
     - [应用](#应用-2)
 - [蒙特卡洛交叉验证](#蒙特卡洛交叉验证)
+  - [MonteCarloCV 介绍](#montecarlocv-介绍)
   - [MonteCarloCV 实现](#montecarlocv-实现)
   - [MonteCarloCV 使用](#montecarlocv-使用)
 - [Hold Out](#hold-out)
@@ -57,7 +58,7 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
-# 时间序列交叉验证介绍
+# 时间序列交叉介绍
 
 评估性能对预测模型的开发至关重要。交叉验证是一种流行的技术，但是在处理时间序列时，
 应该确保交叉验证处理了数据的时间依赖性质，要防止数据泄漏和获得可靠的性能估计。
@@ -67,17 +68,17 @@ details[open] summary {
 对于方法的采用建议如下：
 
 * 首选技术是蒙特卡洛交叉验证
-* 其次，时间序列交叉验证(及其变体)是一个很好的选择
+* 其次，时间序列分割(及其变体)是一个很好的选择
 * 如果时间序列数据较大，通常直接使用 Holdout，因为评估过程更快
 
-# 时间序列交叉验证
+# 时间序列分割
 
 ## Time Series Split
 
 ### 介绍
 
 对时间序列进行多次拆分是个好主意，这样做可以在时间序列数据的不同部分上测试模型。
-在时间序列交叉验证中，时间序列被分成 `$k+1$` 个连续的大小相等的数据块，前 `$k$` 个块为训练数据，
+在时间序列分割中，时间序列被分成 `$k+1$` 个连续的大小相等的数据块，前 `$k$` 个块为训练数据，
 第 `$k+1$` 个块为测试数据
 
 下面是该技术的可视化描述:
@@ -86,7 +87,7 @@ details[open] summary {
 
 ### 优缺点
 
-使用时间序列交叉验证的主要好处如下:
+使用时间序列分割的主要好处如下:
 
 * 保持了观察的顺序
     - 这个问题在有序数据集(如时间序列)中非常重要
@@ -101,7 +102,7 @@ details[open] summary {
 
 ### 应用
 
-时间序列交叉验证就是 scikit-learn 中 `TimeSeriesSplit` 实现
+时间序列分割就是 scikit-learn 中 `TimeSeriesSplit` 实现
 
 ```python
 import numpy as np
@@ -195,7 +196,7 @@ Fold 2:
 
 ### 介绍
 
-另一种应用时间序列交叉验证的方法是滑动窗口，即在迭代之后老的数据块被丢弃。
+另一种应用时间序列分割的方法是滑动窗口，即在迭代之后老的数据块被丢弃。
 这种方法可能在两种情况下有用：
 
 * 数据量巨大
@@ -213,7 +214,9 @@ Fold 2:
 
 # 蒙特卡洛交叉验证
 
-蒙特卡罗交叉验证(MonteCarloCV)是一种可以用于时间序列的方法。与时间序列交叉验证不同，
+## MonteCarloCV 介绍
+
+蒙特卡罗交叉验证(MonteCarloCV)是一种可以用于时间序列的方法。与时间序列分割(Time Series Split)不同，
 每个迭代中的验证原点是随机选择的，即在不同的随机起点来获取一个时间周期的数据
 
 下图是这种技术的直观图示：
@@ -245,17 +248,23 @@ from sklearn.utils.validation import indexable, _num_samples
  
 class MonteCarloCV(_BaseKFold):
  
-    def __init__(self, n_splits: int, train_size: float, test_size: float, gap: int = 0):
+    def __init__(self, 
+                 n_splits: int, 
+                 train_size: float, 
+                 test_size: float, 
+                 gap: int = 0):
         """
         Monte Carlo Cross-Validation
  
         Holdout applied in multiple testing periods
         Testing origin (time-step where testing begins) is randomly chosen according to a monte carlo simulation
  
-        :param n_splits: (int) Number of monte carlo repetitions in the procedure
-        :param train_size: (float) Train size, in terms of ratio of the total length of the series
-        :param test_size: (float) Test size, in terms of ratio of the total length of the series
-        :param gap: (int) Number of samples to exclude from the end of each train set before the test set.
+        Parameters
+        ----------
+        n_splits: (int) Number of monte carlo repetitions in the procedure
+        train_size: (float) Train size, in terms of ratio of the total length of the series
+        test_size: (float) Test size, in terms of ratio of the total length of the series
+        gap: (int) Number of samples to exclude from the end of each train set before the test set.
         """
         self.n_splits = n_splits
         self.n_samples = -1
@@ -263,12 +272,13 @@ class MonteCarloCV(_BaseKFold):
         self.train_size = train_size
         self.test_size = test_size
         self.train_n_samples = 0
-        self.test_n_samples = 0
- 
+        self.test_n_samples = 0 
         self.mc_origins = []
  
-    def split(self, X, y=None, groups=None) -> Generator:
-        """Generate indices to split data into training and test set.
+    def split(self, X, y = None, groups = None) -> Generator:
+        """
+        Generate indices to split data into training and test set.
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
@@ -278,6 +288,7 @@ class MonteCarloCV(_BaseKFold):
             Always ignored, exists for compatibility.
         groups : array-like of shape (n_samples,)
             Always ignored, exists for compatibility.
+        
         Yields
         ------
         train : ndarray
@@ -304,23 +315,21 @@ class MonteCarloCV(_BaseKFold):
             )
  
         indices = np.arange(self.n_samples)
- 
         selection_range = np.arange(self.train_n_samples + 1, self.n_samples - self.test_n_samples - 1)
  
-        self.mc_origins = \
-            np.random.choice(a=selection_range,
-                              size=self.n_splits,
-                              replace=True)
- 
+        self.mc_origins = np.random.choice(
+            a = selection_range,
+            size = self.n_splits,
+            replace = True
+        )
         for origin in self.mc_origins:
             if self.gap > 0:
                 train_end = origin - self.gap + 1
             else:
                 train_end = origin - self.gap
             train_start = origin - self.train_n_samples - 1
- 
             test_end = origin + self.test_n_samples
- 
+
             yield (
                 indices[train_start:train_end],
                 indices[origin:test_end],
@@ -332,10 +341,10 @@ class MonteCarloCV(_BaseKFold):
 
 MonteCarloCV 接受四个参数：
 
-* n_splitting：分折或迭代的次数。这个值趋向于 10
-* training_size：每次迭代时训练集的大小与时间序列大小的比值
-* test_size：类似于 training_size，但用于验证集
-* gap：分离训练集和验证集的观察数。与 TimeSeriesSplits 一样，此参数的值默认为0(无间隙)
+* `n_splitting`：分折或迭代的次数。这个值趋向于 10
+* `training_size`：每次迭代时训练集的大小与时间序列大小的比值
+* `test_size`：类似于 `training_size`，但用于验证集
+* `gap`：分离训练集和验证集的观察数。与 TimeSeriesSplits 一样，此参数的值默认为 0(无间隙)
 
 每次迭代的训练和验证大小取决于输入数据。发现一个 0.6/0.1 的分区工作得很好。
 也就是说，在每次迭代中，60% 的数据被用于训练，10% 的观察结果用于验证
@@ -396,15 +405,20 @@ Hold Out 是估计预测效果最简单的方法。工作原理是进行一次�
 
 可以使用 scikit-learn 中的 `train_test_split` 函数应用 Hold Out 验证
 
+```python
+from sklearn.model_selection import train_test_split
+
+tts = train_test_split()
+```
+
 # K-Fold 交叉验证
 
 ## K-Fold
 
-K-Fold 交叉验证是一种用于评估模型性能的流行技术。它的工作原理是变换观察结果，
-并将它们分配给 K 个相等大小的折。然后每折都被用作验证而剩下的其他数据进行训练
-这种方法的主要优点是所有的观测结果都在某个时刻被用于验证
-
-但是整个过程是在观测是独立的假设下进行的。这对时间序列来说是不成立的。
+K-Fold 交叉验证是一种用于评估模型性能的流行技术。它的工作原理是变换观测数据，
+并将它们分配给 K 个相等大小的折，然后每折都被用作验证而剩下的其他数据用作模型训练。
+这种方法的主要优点是所有的观测数据都在某个时刻被用于验证，
+但是整个过程是在观测是独立的假设下进行的，这对时间序列来说是不成立的，
 所以最好选择一种尊重观察的时间顺序的交叉验证方法
 
 但是在某些情况下，K-Fold 交叉验证对时间序列是有用的。
@@ -438,11 +452,11 @@ K-Fold 交叉验证是一种用于评估模型性能的流行技术。它的工�
 
 # 参考
 
-* [时间序列交叉验证](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
-* [9个时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
+* [时间序列分割](https://lonepatient.top/2018/06/10/time-series-nested-cross-validation.html)
+* [9个时间序列分割方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
 * [样本组织](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247492305&idx=1&sn=c4c9783ee3ab85a8f7a813e803f15177&chksm=c32afb5ef45d7248d539aca50cff13a840ff53bb2400166ea146256675b08b93419be3f8fadc&scene=21#wechat_redirect)
 * [时间序列的蒙特卡罗交叉验证](https://mp.weixin.qq.com/s/n4Ghl67_-r_NN29Jd5E5SA)
-* [时间序列交叉验证方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
+* [时间序列分割方法的介绍和对比](https://mp.weixin.qq.com/s/JpZV2E102FU94_aj-b-sOA)
 * Picard, Richard R., and R. Dennis Cook. “Cross-validation of regression models.” 
   Journal of the American Statistical Association 79.387 (1984): 575–583.
 * Vitor Cerqueira, Luis Torgo, and Igor Mozetič. “Evaluating time series  forecasting models: 
