@@ -33,13 +33,22 @@ details[open] summary {
 
 - [时间序列交叉验证介绍](#时间序列交叉验证介绍)
 - [时间序列交叉验证](#时间序列交叉验证)
-  - [时间序列交叉验证](#时间序列交叉验证-1)
-  - [带间隙的时间序列交叉验证](#带间隙的时间序列交叉验证)
-  - [滑动时间序列交叉验证](#滑动时间序列交叉验证)
+  - [Time Series Split](#time-series-split)
+    - [介绍](#介绍)
+    - [优缺点](#优缺点)
+    - [应用](#应用)
+  - [带间隙的 TimeSeriesSplit](#带间隙的-timeseriessplit)
+    - [介绍](#介绍-1)
+    - [应用](#应用-1)
+  - [滑动 TimeSeriesSplit](#滑动-timeseriessplit)
+    - [介绍](#介绍-2)
+    - [应用](#应用-2)
 - [蒙特卡洛交叉验证](#蒙特卡洛交叉验证)
   - [MonteCarloCV 实现](#montecarlocv-实现)
   - [MonteCarloCV 使用](#montecarlocv-使用)
 - [Hold Out](#hold-out)
+  - [Hold Out 介绍](#hold-out-介绍)
+  - [Hold Out 应用](#hold-out-应用)
 - [K-Fold 交叉验证](#k-fold-交叉验证)
   - [K-Fold](#k-fold)
   - [Blocked K-Fold](#blocked-k-fold)
@@ -50,54 +59,144 @@ details[open] summary {
 
 # 时间序列交叉验证介绍
 
-评估性能对预测模型的开发至关重要。交叉验证是一种流行的技术。但是在处理时间序列时，
-应该确保交叉验证处理了数据的时间依赖性质
-
-交叉验证应用于时间序列需要注意是要防止泄漏和获得可靠的性能估计。
-在时序问题上，需要特别注意不能做随机 split，而需要在时间维度上做前后的 split，
+评估性能对预测模型的开发至关重要。交叉验证是一种流行的技术，但是在处理时间序列时，
+应该确保交叉验证处理了数据的时间依赖性质，要防止数据泄漏和获得可靠的性能估计。
+在时序问题上，需要特别注意不能做随机分割，而需要在时间维度上做前后的分割，
 以保证与实际预测应用时的情况一致
 
-建议：
+对于方法的采用建议如下：
 
 * 首选技术是蒙特卡洛交叉验证
-* 时间序列交叉验证(及其变体)是一个很好的选择
-* 如果时间序列大小较大，通常直接 Holdout，因为评估过程更快
+* 其次，时间序列交叉验证(及其变体)是一个很好的选择
+* 如果时间序列数据较大，通常直接使用 Holdout，因为评估过程更快
 
 # 时间序列交叉验证
 
-## 时间序列交叉验证
+## Time Series Split
 
-进行多次拆分是个好主意。这样做可以在数据的不同部分上测试模型。
-一种方法是使用时间序列交叉验证，时间序列被分成 K 个连续的大小相等的数据块
+### 介绍
+
+对时间序列进行多次拆分是个好主意，这样做可以在时间序列数据的不同部分上测试模型。
+在时间序列交叉验证中，时间序列被分成 `$k+1$` 个连续的大小相等的数据块，前 `$k$` 个块为训练数据，
+第 `$k+1$` 个块为测试数据
 
 下面是该技术的可视化描述:
 
 ![img](images/timeseriessplit.png)
 
+### 优缺点
+
 使用时间序列交叉验证的主要好处如下:
 
-* 保持了观察的顺序。这个问题在有序数据集(如时间序列)中非常重要
-* 生成了很多拆分。几次拆分后可以获得更稳健的评估。如果数据集不大，这一点尤其重要
+* 保持了观察的顺序
+    - 这个问题在有序数据集(如时间序列)中非常重要
+* 生成了很多拆分，几次拆分后可以获得更稳健的评估
+    - 如果数据集不大，这一点尤其重要
 
-的主要缺点是跨折叠的训练样本量是不一致的：
+主要缺点是跨折叠的训练样本量是不一致的：
 
-* 假设将该方法应用于上图所示的 5 次分折。在第一次迭代中，所有可用观测值的 20% 用于训练。
-  但是，这个数字在上次迭代中是 80%。因此，初始迭代可能不能代表完整的时间序列。这个问题会影响性能估计。
+* 假设将该方法应用于上图所示的 5 次分折。在第一次迭代中，所有可用观测值的 20% 用于训练，
+  但是，这个数字在最后一次迭代中是 80%。因此，初始迭代可能不能代表完整的时间序列，这个问题会影响性能估计。
   可以使用蒙特卡洛交叉验证结局这个问题
+
+### 应用
 
 时间序列交叉验证就是 scikit-learn 中 `TimeSeriesSplit` 实现
 
-## 带间隙的时间序列交叉验证
+```python
+import numpy as np
+from sklearn.model_selection import TimeSeriesSplit
+
+
+X = np.array([
+    [1, 2],
+    [3, 4],
+    [1, 2],
+    [3, 4],
+    [1, 2],
+    [3, 4],
+])
+y = np.array([1, 2, 3, 4, 5, 6])
+
+tscv = TimeSeriesSplit(n_splits = 5, max_train_size = None, test_size = None, gap = 0)
+
+for i, (train_index, test_index) in enumerate(tscv.split(X)):
+    print(f"Fold {i}:")
+    print(f"  Train: index={train_index}")
+    print(f"  Test: index={test_index}")
+```
+
+```
+Fold 0:
+  Train: index=[0]
+  Test:  index=[1]
+Fold 1:
+  Train: index=[0 1]
+  Test:  index=[2]
+Fold 2:
+  Train: index=[0 1 2]
+  Test:  index=[3]
+Fold 3:
+  Train: index=[0 1 2 3]
+  Test:  index=[4]
+Fold 4:
+  Train: index=[0 1 2 3 4]
+  Test:  index=[5]
+```
+
+## 带间隙的 TimeSeriesSplit
+
+### 介绍
 
 可以在上述技术中增加训练和验证之间的间隙。这有助于增加两个样本之间的独立性
 
 ![img](images/timeseriessplit_gap.png)
 
+### 应用
+
 使用 `TimeSeriesSplit` 类中的 `gap` 参数引入这个间隙
 
-## 滑动时间序列交叉验证 
+```python
+import numpy as np
+from sklearn.model_selection import TimeSeriesSplit
 
-另一种应用时间序列交叉验证的方法是滑动窗口。在迭代之后老的数据块被丢弃。这种方法可能在两种情况下有用:
+
+X = np.array([
+    [1, 2],
+    [3, 4],
+    [1, 2],
+    [3, 4],
+    [1, 2],
+    [3, 4],
+])
+y = np.array([1, 2, 3, 4, 5, 6])
+
+tscv = TimeSeriesSplit(n_splits = 3, test_size = 2, gap = 2)
+
+for i, (train_index, test_index) in enumerate(tscv.split(X)):
+    print(f"Fold {i}:")
+    print(f"  Train: index={train_index}")
+    print(f"  Test: index={test_index}")
+```
+
+```
+Fold 0:
+  Train: index=[0 1 2 3]
+  Test:  index=[6 7]
+Fold 1:
+  Train: index=[0 1 2 3 4 5]
+  Test:  index=[8 9]
+Fold 2:
+  Train: index=[0 1 2 3 4 5 6 7]
+  Test:  index=[10 11]
+```
+
+## 滑动 TimeSeriesSplit 
+
+### 介绍
+
+另一种应用时间序列交叉验证的方法是滑动窗口，即在迭代之后老的数据块被丢弃。
+这种方法可能在两种情况下有用：
 
 * 数据量巨大
 * 旧的观察已经过时了
@@ -105,6 +204,12 @@ details[open] summary {
 这种变体也可以应用于训练样本和验证样本之间的间隙
 
 ![img](images/timeseriessplit_sliding.png)
+
+### 应用
+
+```python
+# TODO
+```
 
 # 蒙特卡洛交叉验证
 
@@ -279,10 +384,15 @@ gsearch.fit(X, y)
 
 > Hold Out 验证，样本外验证
 
-Hold Out 是估计预测效果最简单的方法。工作原理是进行一次分割，该序列的第一部分数据集用于训练模型，在保留的数据集中进行验证。
-一般情况下训练集的大小设置为总数据集的 `$70\%$`，如果时间序列数据集不大，使用单个分割可能会导致不可靠的估计
+## Hold Out 介绍
+
+Hold Out 是估计预测效果最简单的方法。工作原理是进行一次分割，该序列的第一部分数据集用于训练模型，
+在保留的数据集中进行验证。一般情况下训练集的大小设置为总数据集的 `$70\%$`，如果时间序列数据集不大，
+使用单个分割可能会导致不可靠的估计
 
 ![img](images/holdout.png)
+
+## Hold Out 应用
 
 可以使用 scikit-learn 中的 `train_test_split` 函数应用 Hold Out 验证
 
