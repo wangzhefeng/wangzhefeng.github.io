@@ -36,24 +36,24 @@ details[open] summary {
   - [时间序列的定义](#时间序列的定义)
     - [定义](#定义)
     - [类型](#类型)
-  - [时间序列的研究领域](#时间序列的研究领域)
-    - [时间序列预测](#时间序列预测)
-    - [时间序列异常检测](#时间序列异常检测)
-    - [时间序列分类](#时间序列分类)
-    - [时间序列检索](#时间序列检索)
-    - [时间序列聚类](#时间序列聚类)
-    - [时间序列分割](#时间序列分割)
-    - [因果分析](#因果分析)
-    - [生存分析](#生存分析)
-    - [时间序列模式识别](#时间序列模式识别)
-  - [时间序列 Python 库](#时间序列-python-库)
-  - [时间序列模型](#时间序列模型)
-    - [预测](#预测)
-    - [分类](#分类)
-    - [异常检测](#异常检测)
-    - [表示](#表示)
-    - [数据增强](#数据增强)
-  - [时间序列数据集](#时间序列数据集)
+- [时间序列的研究领域](#时间序列的研究领域)
+  - [时间序列预测](#时间序列预测)
+  - [时间序列异常检测](#时间序列异常检测)
+  - [时间序列分类](#时间序列分类)
+  - [时间序列检索](#时间序列检索)
+  - [时间序列聚类](#时间序列聚类)
+  - [时间序列分割](#时间序列分割)
+  - [因果分析](#因果分析)
+  - [生存分析](#生存分析)
+  - [时间序列模式识别](#时间序列模式识别)
+- [时间序列模型](#时间序列模型)
+  - [预测](#预测)
+  - [分类](#分类)
+  - [异常检测](#异常检测)
+  - [表示](#表示)
+  - [数据增强](#数据增强)
+- [时间序列数据集](#时间序列数据集)
+- [时间序列 Python 库](#时间序列-python-库)
 - [时间序列分析-baseline](#时间序列分析-baseline)
   - [baseline 特点](#baseline-特点)
   - [baseline 数据](#baseline-数据)
@@ -146,7 +146,7 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 
 ![img](images/timeseries_class.png)
 
-## 时间序列的研究领域
+# 时间序列的研究领域
 
 学术界对时间序列的研究，主体分为时序表示、时序预测、模式识别、异常检测、关联分析等几大类
 
@@ -162,8 +162,7 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 * 异常检测 (Anomaly Detection): find abnormal data points or subsequences.
 * 因果分析 (Rules Discovery): find the rules that may govern associations between sets of time series or subsequences
 
-
-### 时间序列预测
+## 时间序列预测
 
 时间序列预测 Time Series Forecasting:
 
@@ -174,10 +173,8 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 * 确定性预测
     - 提前预测许多值
 * 不确定性预测(概率预测)
-    - 预测特定值(点估计)有助于减少未来的不确定性。
-      但是，提供合理值的区间更利于做出最佳决策。
-      或者，在二元事件的情况下，事件发生的概率。
-      例如，“明天有 80% 的机会下雨”这句话比简单地说“明天会下雨”更有信息量
+    - 预测特定值(点估计)有助于减少未来的不确定性。但是，提供合理值的区间更利于做出最佳决策。
+      或者，在二元事件的情况下，事件发生的概率。例如，“明天有 80% 的机会下雨”这句话比简单地说“明天会下雨”更有信息量
 * 极值预测
     - 能源负载峰值对于高效管理电网非常重要
 
@@ -185,12 +182,10 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 
 > 类似于时间序列预测，但针对多个位置或轨迹
 
-* 可以使用支持 GPS 的传感器沿多个位置捕获时间序列。
-  例如，几个浮标站被放置在沿海岸测量海洋状况的不同固定位置。
+* 可以使用支持 GPS 的传感器沿多个位置捕获时间序列。例如，几个浮标站被放置在沿海岸测量海洋状况的不同固定位置。
   使用时空数据，目标是预测每个位置的未来值
-* 时空数据背后的主要挑战之一与其带来的额外依赖性有关。
-  给定位置的观测值不仅与该位置的先前观测值相关，而且与其邻居的观测值相关。
-  时空依赖性的适当建模对于获得准确可靠的预测至关重要
+* 时空数据背后的主要挑战之一与其带来的额外依赖性有关。给定位置的观测值不仅与该位置的先前观测值相关，
+  而且与其邻居的观测值相关。时空依赖性的适当建模对于获得准确可靠的预测至关重要
 * 有时传感器并不固定在某些位置，例如出租车车队中的 GPS 设备。
   有了这些数据，目标可以是使用历史轨迹来预测正在进行或即将到来的旅行的持续时间
 
@@ -209,7 +204,7 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
   就预测价格回报而言超过正阈值可用作买入信号；相反(预测价格回报低于负阈值)可以代表卖出触发器。
   如果未达到任何阈值，则交易者应保持当前的持有
 
-### 时间序列异常检测
+## 时间序列异常检测
 
 > 时间序列异常检测，Time Series Anomaly Detection，
   或 Activity Monitoring 用来及时检测需要采取行动的罕见但具有破坏性的事件
@@ -232,7 +227,7 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 这些实体可能会或可能不会经历感兴趣的事件。此外，在时间序列异常检测中，
 事件是任意定义的，并不特定于超过特定阈值，尽管可能是这种情况
 
-### 时间序列分类
+## 时间序列分类
 
 > 时间序列分类 Time Series Classification 用来将时间序列分类为预定义的类
 
@@ -247,15 +242,15 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 有时目标是在不牺牲性能的情况下尽早对时间序列进行分类，这代表了早期的时间序列分类任务。
 每次测量可能代价高昂，或者尽快采取行动可能很重要。这导致了权衡，因为更少的观察通常会导致更差的性能
 
-### 时间序列检索
+## 时间序列检索
 
-### 时间序列聚类
+## 时间序列聚类
 
-### 时间序列分割
+## 时间序列分割
 
-### 因果分析
+## 因果分析
 
-### 生存分析
+## 生存分析
 
 > 生存分析 Survival Analysis 用来预测感兴趣事件发生的时间
 
@@ -277,11 +272,10 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 生存分析问题的主要挑战是观察经常被审查——关于某些实体的信息仅部分可用。
 这可能是因为实体可能在事件发生之前停止被观察
 
-### 时间序列模式识别
+## 时间序列模式识别
 
 还有其他时间序列任务，其主要目标是知识发现。这些本质上不是预测性的，但仍然非常相关。
-它们提供有关时间序列的重要信息，并可用作预测任务的子任务。
-该类问题旨在对时间序列各种形式的信息进行处理和分析，
+它们提供有关时间序列的重要信息，并可用作预测任务的子任务。该类问题旨在对时间序列各种形式的信息进行处理和分析，
 以对事物或现象进行描述、辨认、分类和解释的过程
 
 时间序列聚类(Time Series Clustering):
@@ -309,8 +303,35 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 * 该类问题多出现在多维时间序列中，旨在发现不同时序之间的相似点或关联点，
   或同时序不同时间位置的关联点。常见的有周期分析，季节分析，波形联动分析，时间关联性等问题
 
+# 时间序列模型
 
-## 时间序列 Python 库
+## 预测
+
+![img](images/models.png)
+
+## 分类
+
+* LSTM FCN，LSTM Fully Convolutional Networks for Time Series Classification
+
+## 异常检测
+
+* [AAAI 2022] Towards a Rigorous Evaluation of Time-series Anomaly Detection
+
+## 表示
+
+* [AAAI 2022] TS2Vec: Towards Universal Representation of Time Series
+
+## 数据增强
+
+* [IJCAI 2021] Time Series Data Augmentation for Deep Learning: A Survey
+* [arxiv 2020] An empirical survey of data augmentation for time series classification with neural networks
+
+# 时间序列数据集
+
+* UCR Time Series Classification Archive
+* UEA & UCR Time Series Classification Repository 
+
+# 时间序列 Python 库
 
 ![img](images/libs.png)
 
@@ -346,34 +367,6 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
     - Github：https://github.com/Teknasyon-Teknoloji/pyfbad
 
 更多的模型介绍可以查阅论文 [arxiv 2021]A systematic review of Python packages for time series analysis.
-
-## 时间序列模型
-
-### 预测
-
-![img](images/models.png)
-
-### 分类
-
-* LSTM FCN，LSTM Fully Convolutional Networks for Time Series Classification
-
-### 异常检测
-
-* [AAAI 2022] Towards a Rigorous Evaluation of Time-series Anomaly Detection
-
-### 表示
-
-* [AAAI 2022] TS2Vec: Towards Universal Representation of Time Series
-
-### 数据增强
-
-* [IJCAI 2021] Time Series Data Augmentation for Deep Learning: A Survey
-* [arxiv 2020] An empirical survey of data augmentation for time series classification with neural networks
-
-## 时间序列数据集
-
-* UCR Time Series Classification Archive
-* UEA & UCR Time Series Classification Repository 
 
 # 时间序列分析-baseline
 

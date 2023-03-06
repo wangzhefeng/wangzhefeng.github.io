@@ -361,3 +361,4 @@ np.allclose(dft(x), fft(x))
 * http://users.rowan.edu/~polikar/WTpart1.html
 * http://users.rowan.edu/~polikar/WTpart2.html
 * http://users.rowan.edu/~polikar/WTpart3.html
+

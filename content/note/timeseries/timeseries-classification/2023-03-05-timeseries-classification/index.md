@@ -489,8 +489,9 @@ Fawaz 等人。在他们关于时间序列分类的深度学习的论文中对�
 
 # 参考
 
-* [8种时间序列分类方法总结](https://mp.weixin.qq.com/s/NdRQMjUBuNkyFSCAA7mo6g)
 * [时间序列分类总结](https://blog.csdn.net/qq_34919792/article/details/104262255)
+* [DTW动态时间规整](https://blog.csdn.net/raym0ndkwan/article/details/45614813)
+* [8种时间序列分类方法总结](https://mp.weixin.qq.com/s/NdRQMjUBuNkyFSCAA7mo6g)
 * [时间序列分类的实践指南](https://www.dataapplab.com/introduction-time-series-classification/)
 * [A Hands-On Introduction to Time Series Classification ](https://www.analyticsvidhya.com/blog/2019/01/introduction-time-series-classification/)
 * [Indoor User Movement Prediction from RSS data Data Set](https://archive.ics.uci.edu/ml/datasets/Indoor+User+Movement+Prediction+from+RSS+data)

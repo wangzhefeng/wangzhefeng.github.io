@@ -35,8 +35,11 @@ details[open] summary {
 - [时间序列预测方式](#时间序列预测方式)
   - [单步预测](#单步预测)
   - [多步预测](#多步预测)
+    - [递归预测](#递归预测)
+    - [多目标回归](#多目标回归)
+    - [递归多目标回归](#递归多目标回归)
   - [多变量预测](#多变量预测)
-  - [递归预测 Recursive Forecasting](#递归预测-recursive-forecasting)
+  - [递归预测](#递归预测-1)
   - [直接预测 Direct Forecasting](#直接预测-direct-forecasting)
   - [堆叠预测 Stacking Forecasting](#堆叠预测-stacking-forecasting)
   - [修正预测 Rectified Forecasting](#修正预测-rectified-forecasting)
@@ -104,6 +107,81 @@ details[open] summary {
 
 使用过去的观测序列 `$\{\ldots, x_{t-2}, x_{t-1}\}$` 预测未来的观测序列 `$\{x_{t}, x_{t+1}, \ldots\}$`
 
+大多数预测问题都被定义为单步预测，根据最近发生的事件预测系列的下一个值。
+时间序列多步预测需要预测未来多个值， 提前预测许多步骤具有重要的实际优势，
+多步预测减少了长期的不确定性。但模型试图预测更远的未来时，模型的误差也会逐渐增加
+
+### 递归预测
+
+> Recursive Forecasting
+
+多步预测最简单的方法是递归形式，训练单个模型进行单步预测，
+然后将模型与其先前的预测结果作为输入得到后续的输出
+
+```python
+from sklearn.linear_model import LinearRegression
+
+# using a linear regression for simplicity. any regression will do.
+recursive = LinearRegression()
+# training it to predict the next value of the series (t+1)
+recursive.fit(X_tr, Y_tr['t+1'])
+# setting up the prediction data structure
+predictions = pd.DataFrame(np.zeros(Y_ts.shape), columns=Y_ts.columns)
+
+# making predictions for t+1
+yh = recursive.predict(X_ts)
+predictions['t+1'] = yh
+
+# iterating the model with its own predictions for multi-step forecasting
+X_ts_aux = X_ts.copy()
+for i in range(2, Y_tr.shape[1] + 1):
+    X_ts_aux.iloc[:, :-1] = X_ts_aux.iloc[:, 1:].values
+    X_ts_aux['t-0'] = yh
+
+    yh = recursive.predict(X_ts_aux)
+
+    predictions[f't+{i}'] = yh
+```
+
+上述代码逻辑在sktime中也可以找到相应的实现：[sktime.RecursiveTimeSeriesRegressionForecaster](https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.compose.RecursiveTimeSeriesRegressionForecaster.html)
+
+递归方法只需要一个模型即可完成整个预测范围，且无需事先确定预测范围
+
+但此种方法用自己的预测作为输入，这导致误差逐渐累计，对长期预测的预测性能较差
+
+### 多目标回归
+
+多目标回归为每一个预测结果构建一个模型，如下是一个使用案例：
+
+```python
+from sklearn.multioutput import MultiOutputRegressor
+
+direct = MultiOutputRegressor(LinearRegression())
+direct.fit(X_tr, Y_tr)
+direct.predict(X_ts)
+```
+
+scikit-learn 的 MultiOutputRegressor 为每个目标变量复制了一个学习算法。
+在这种情况下，预测方法是 LinearRegression
+
+此种方法避免了递归方式中错误传播，但多目标预测需要更多的计算资源。
+此外多目标预测假设每个点是独立的，这是违背了时序数据的特点
+
+### 递归多目标回归
+
+递归多目标回归结合了多目标和递归的思想。为每个点建立一个模型。
+但是在每一步的输入数据都会随着前一个模型的预测而增加
+
+```python
+from sklearn.multioutput import RegressorChain
+
+dirrec = RegressorChain(LinearRegression())
+dirrec.fit(X_tr, Y_tr)
+dirrec.predict(X_ts)
+```
+
+这种方法在机器学习文献中被称为 chaining。scikit-learn 通过 RegressorChain 类为其提供了一个实现
+
 ## 多变量预测
 
 多元时间序列，即每个时间有多个观测值：
@@ -118,7 +196,7 @@ details[open] summary {
 在运用机器学习模型时，可以把时间序列模型当成一个回归问题来解决，
 比如 svm/xgboost/逻辑回归/回归树/...
 
-## 递归预测 Recursive Forecasting
+## 递归预测 
 
 ## 直接预测 Direct Forecasting
 

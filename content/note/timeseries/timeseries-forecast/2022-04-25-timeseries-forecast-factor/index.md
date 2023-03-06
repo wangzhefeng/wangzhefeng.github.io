@@ -1,5 +1,5 @@
 ---
-title: 时间序列预测-基本规则法
+title: 基本规则法
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-forecast-factor
