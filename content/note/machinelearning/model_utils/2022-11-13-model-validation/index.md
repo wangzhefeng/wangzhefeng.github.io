@@ -43,13 +43,18 @@ details[open] summary {
   - [TFDV](#tfdv)
     - [安装](#安装-2)
     - [使用](#使用-1)
+- [模型交叉验证](#模型交叉验证)
+  - [Hold Out](#hold-out)
+  - [K-Fold](#k-fold)
+    - [K-Fold](#k-fold-1)
+    - [分层 K-Fold](#分层-k-fold)
+    - [分层分组 K-Fold](#分层分组-k-fold)
 - [参考](#参考)
 </p></details><p></p>
 
 # 模型验证介绍
 
 机器学习模型项目不是一次性的,它是一个持续的过程。如果存在任何异常，则需要对生产中的模型进行持续监控
-
 
 # 模型验证工具
 
@@ -272,9 +277,22 @@ anomalies = tfdv.validate_statistics(
 tfdv.display_anomalies(anomalies)
 ```
 
+# 模型交叉验证
+
+## Hold Out
+
+## K-Fold
+
+### K-Fold
+
+### 分层 K-Fold
+
+### 分层分组 K-Fold
+
+
 
 # 参考
 
 * [机器学习模型验证，这 3 个 Python 包可轻松解决 95% 的需求](https://mp.weixin.qq.com/s?__biz=MzA3MTM5MDYyMA==&mid=2656763105&idx=1&sn=2c481069a1d2849b1f816075ba122df9&chksm=84801812b3f79104a6ec6f26db92dc452342ebcce6fcb6ff2928d966d9ea90d182baed1a2b52&scene=132#wechat_redirect)
-* [全面了解模型验证](https://ww2.mathworks.cn/campaigns/offers/all-about-model-validation.html)
+* [交叉验证常见的6个错误](https://mp.weixin.qq.com/s/OirhNWfpz-mRJpSb_CwIXA)
 
