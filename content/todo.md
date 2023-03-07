@@ -30,7 +30,7 @@ details[open] summary {
   - [Timeseries](#timeseries)
   - [Deeplearning](#deeplearning)
   - [Tools](#tools)
-  - [Audio](#audio)
+  - [Spark](#spark)
 - [Schedule](#schedule)
 </p></details><p></p>
 
@@ -51,10 +51,7 @@ details[open] summary {
 * [季节性地调整时间序列](https://anomaly.io/seasonally-adjustement-in-r/index.html)
 * [检测相关时间序列中的异常](https://anomaly.io/detect-anomalies-in-correlated-time-series/index.html)
 * [用移动中位数分解检测异常](https://anomaly.io/anomaly-detection-moving-median-decomposition/index.html)
-* [为什么时序预测很难？](https://mp.weixin.qq.com/s/K0VVbZBcFJB5ctKWeMHUgQ)
 * [计算时间序列周期的三种方法](https://mp.weixin.qq.com/s/GbhsnrZvMQdOY1k-EclBPw)
-* [可用于时间序列预测的14种损失函数](https://mp.weixin.qq.com/s/eeKsAYvRaZvc3dsyin_pRQ)
-
 
 ### Deeplearning
 
@@ -64,12 +61,14 @@ details[open] summary {
 
 * [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
 * [分布式统计计算方法简介](https://mp.weixin.qq.com/s/OOpjBBLVqg77Ao9s6KZ5vg)
-
-### Audio
-
-* [ ] Audio-librosa
-* [ ] Audio-scipy
 * [洗牌算法](https://mp.weixin.qq.com/s/gudVQFhoUi_d3jBNyamYvA)
+
+
+### Spark
+
+* [ Learning Apache Spark with Python](https://runawayhorse001.github.io/LearningApacheSpark/index.html)
+* [Apache Spark: core concepts, architecture and internals](https://datastrophic.io/core-concepts-architecture-and-internals-of-apache-spark/)
+* [Distributed Systems Architecture](https://0x0fff.com/category/spark/)
 
 ## Schedule
 

@@ -40,3 +40,6 @@ details[open] summary {
 
 
 # Tableau
+
+* [你会Tableau吗](https://mp.weixin.qq.com/s?__biz=Mzg3ODY2MDAyMQ==&mid=2247496904&idx=1&sn=f78a77bcb9569d6975e7fed6148b637c&chksm=cf12e412f8656d04282f8bd68c2b9734a093bbfdfcfe3625e69a618976f44703680c2c187f26&scene=21#wechat_redirect)
+* [Tableau中文入门手册](https://mp.weixin.qq.com/s?__biz=Mzg3ODY2MDAyMQ==&mid=2247496927&idx=1&sn=9325fc06f0a453c0de210d43fda92361&chksm=cf12e405f8656d13112064421727f3cfb08f56a51a6612b1e308a416774289d559186666d717&scene=21#wechat_redirect)

@@ -33,9 +33,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [使用情景](#使用情景)
-- [PySpark App 示例](#pyspark-app-示例)
-- [PySpark 原生功能](#pyspark-原生功能)
+- [PySpark Python 包管理介绍](#pyspark-python-包管理介绍)
+  - [PySpark App 示例](#pyspark-app-示例)
+  - [PySpark 原生功能](#pyspark-原生功能)
 - [Conda](#conda)
   - [Tools](#tools)
   - [创建、打包环境](#创建打包环境)
@@ -60,12 +60,12 @@ details[open] summary {
 - [TODO](#todo)
 </p></details><p></p>
 
-# 使用情景
+# PySpark Python 包管理介绍
 
-当需要在 YARN, Kubernetes, Mesos 集群管理器上运行 PySpark App 时，
+当需要在 YARN、Kubernetes、Mesos 集群管理器上运行 PySpark App 时，
 需要确定 Python 程序及其运行所需的依赖库已经安装在执行器(executor)上
 
-# PySpark App 示例
+## PySpark App 示例
 
 * 一个将要在集群上运行的应用程序
 
@@ -96,10 +96,9 @@ if __name__ == "__main__":
     main(SparkSession.builer.getOrCreate())
 ```
 
-# PySpark 原生功能
+## PySpark 原生功能
 
-PySpark 允许通过以下方式加载 Python 文件(`.py`)，压缩的 Python 包(`.zip`)，
-和 Egg 文件(`.egg`) 到执行器(executors)
+PySpark 允许通过以下方式加载 Python 文件(`.py`)、压缩的 Python 包(`.zip`)、Egg 文件(`.egg`) 到执行器(executors)
 
 * 在配置项中设置 `spark.submit.pyFiles`
 * 在 Spark 脚本中设置 `--py-files` 选项

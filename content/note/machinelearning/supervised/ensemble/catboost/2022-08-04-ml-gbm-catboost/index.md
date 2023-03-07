@@ -275,8 +275,9 @@ TS 是基于类别的目标变量 `$y$` 的期望来进行估算：`$\hat{x}^{(k
 > 在上面的例子中有：
 > 
 > `$$\mathbb{E}(\hat{x}^{(k)}|y = \upsilon) = \mathbb{E}(\hat{x}^{(k)}|y^{(k)} = \upsilon)$$`
-> 其中是第个训练样本。不同之处在于，对于训练集，我们是按照下面的形式进行计算的 `$\mathbbE}(\bar{x}^{i} y_{k}) = \frac{y_k + \alpha p{1+\alpha$`；
-> 对于测试集 `$\mathbb{E}(\bar{x}^i | y) = p$`
+> 其中是第个训练样本。不同之处在于，对于训练集，
+> 我们是按照下面的形式进行计算的 `$\mathbb{E}(\bar{x}^{i} | y_{k}) = \frac{y_{k} + \alpha p}{1+\alpha}$`；
+> 对于测试集 `$\mathbb{E}(\bar{x}^{i} | y) = p$`
 
 ### 其他均值编码
 
@@ -406,10 +407,8 @@ CatBoost 捕捉高阶依赖的类别特征组合成额外的类别特征，例�
 
 # 参考
 
-* [类别变量杀手CatBoost](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494038&idx=2&sn=936c63d7f3eb8ad9dccc04e65395655d&chksm=c32af019f45d790fade45a8ce74c8d6ca8f35a60ab8e82c594c9ab2ab923eefa99d096697e2f&scene=21#wechat_redirect)
+* [类别变量杀手 CatBoost](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494038&idx=2&sn=936c63d7f3eb8ad9dccc04e65395655d&chksm=c32af019f45d790fade45a8ce74c8d6ca8f35a60ab8e82c594c9ab2ab923eefa99d096697e2f&scene=21#wechat_redirect)
 * [务实基础-CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
-* [CatBoost/tutorials](https://github.com/catboost/tutorials)
-* [Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., & Gulin, A. (2018). CatBoost: unbiased boosting with categorical features. In Advances in neural information processing systems (pp. 6638-6648).]()
-* https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features
+* [CatBoost GitHub tutorials](https://github.com/catboost/tutorials)
 * [CatBoost官方文档](https://catboost.ai/docs)
-
+* [CatBoost: unbiased boosting with categorical]()

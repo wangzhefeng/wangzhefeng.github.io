@@ -159,3 +159,5 @@ K_{p} 小了到达的慢一些，不会有稳态误差。
 # 参考
 
 * [PID控制算法原理(抛弃公式，从本质上真正理解PID控制)](https://zhuanlan.zhihu.com/p/39573490)
+* [串讲：控制理论：PID控制（经典控制理论）](https://zhuanlan.zhihu.com/p/147800110)
+
