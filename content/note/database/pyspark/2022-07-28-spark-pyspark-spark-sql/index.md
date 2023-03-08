@@ -1,6 +1,6 @@
 ---
 title: PySpark Spark SQL
-subtitle: Apache Arrow in PySpark
+subtitle: TODO-Apache Arrow in PySpark
 author: 王哲峰
 date: '2022-07-28'
 slug: spark-pyspark-spark-sql
@@ -11,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -59,18 +32,19 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [Apache Arrow in PySpark](#apache-arrow-in-pyspark)
+- [PySpark 中的 Apache Arrow](#pyspark-中的-apache-arrow)
   - [Apache Arrow](#apache-arrow)
   - [PyArrow](#pyarrow)
-    - [推荐安装版本](#推荐安装版本)
-    - [安装方式](#安装方式)
+    - [pip](#pip)
+    - [其他](#其他)
 - [启用与 Pandas 之间的转换](#启用与-pandas-之间的转换)
-- [Pandas UDFs](#pandas-udfs)
+- [Pandas 自定义函数](#pandas-自定义函数)
   - [Series to Series](#series-to-series)
-- [Pandas Function APIs](#pandas-function-apis)
+- [Pandas 函数 APIs](#pandas-函数-apis)
+- [参考](#参考)
 </p></details><p></p>
 
-# Apache Arrow in PySpark
+# PySpark 中的 Apache Arrow
 
 Apache Arrow is an in-memory columnar data format that is used 
 in Spark to efficiently transfer data between JVM and Python processes
@@ -84,29 +58,35 @@ https://arrow.apache.org/docs/index.html
 
 ## PyArrow
 
-### 推荐安装版本
+推荐安装版本：
 
 * pyarrow==1.0.0
 * pandas>=1.0.5
 
-### 安装方式
+### pip
 
-* 如果 PySpark 是通过 pip 安装的，那么 PyArrow 可以通过如下命名作为 SQL 模块的依赖项自动安装
+如果 PySpark 是通过 pip 安装的，那么 PyArrow 可以通过如下命名作为 SQL 模块的依赖项自动安装
 
 ```bash
 $ pip install "pyspark[sql]"
 ```
 
-* [其他](https://arrow.apache.org/docs/python/install.html)
+### 其他
+
+* https://arrow.apache.org/docs/python/install.html
 
 # 启用与 Pandas 之间的转换
 
+* Spark DataFrame -> Pandas DataFrame
+    - `DataFrame.toPandas()`
+* Pandas DataFrame -> Spark DataFrame
+    - `SparkSession.createDataFrame()`
+
 在使用 `DataFrame.toPandas()` 将 Spark DataFrame 转换为 Pandas DataFrame，
 以及使用 `SparkSession.createDataFrame()` 从 Pandas DataFrame 创建 Spark DataFrame 时，
-Arrow 可以作为一个优化器。
+Arrow 可以作为一个优化器
 
-要在执行这两种转换操作时使用 Array，
-用户首先需要在 Spark 配置项中将 `spark.sql.execution.arrow.pyspark.enable` 设置为 `true`，
+要在执行这两种转换操作时使用 Array，用户首先需要在 Spark 中配置 `spark.sql.execution.arrow.pyspark.enable=true`，
 默认情况下这个配置项为 `false`
 
 此外，如果在 Spark 实际计算之前发生错误，
@@ -133,37 +113,54 @@ result_pdf = df.select("*").toPandas()
 print(f"Pandas DataFrame result statistics:\n{str(result_pdf.descrive())}\n")
 ```
 
-# Pandas UDFs
+# Pandas 自定义函数
 
 Pandas UDF 是用户定义的函数，由 Spark 执行并使用 Arrow 转换数据，使用 Pandas 处理数据，允许向量化操作。
 Pandas UDF 使用 `pandas_udf()` 作为装饰器或包装函数来定义，不需要额外的配置。
-Pandas UDF 通常表现为常规的 PySpark 函数 API。
+Pandas UDF 通常表现为常规的 PySpark 函数 API
 
-从由 Python 3.6 构建额 Spark 3.0 开始，可以使用 Python 类型提示。
+从由 Python 3.6 构建的 Spark 3.0 开始，可以使用 Python 类型提示。
 在所有情况下，当只有一个变量时类型提示应该使用 `pandas.Series`，
-当输出或输出列的类型为 `StructType` 时应该使用`pandas.DataFrame`  
+当输出或输出列的类型为 `StructType` 时应该使用 `pandas.DataFrame`  
 
 ```python
 import pandas as pd
 from pyspark.sql.functions import pandas_udf
 
 @pandas_udf("col1 string, col2 long")  # type: ignore[call-overload]
-def func(s1: pd.Series, s2: pd.Series, s3: pd.DataFrame) -> pd.DataFrame:
+def func(s1: pd.Series, 
+         s2: pd.Series, 
+         s3: pd.DataFrame) -> pd.DataFrame:
     s3["col2"] = s1 + s2.str.len()
     return s3
 
-df = spark.createDataFrame([
-    [1, "a string", ("a nested string",)]
-], schema = "long_col long, string_col string, struct_col struct<col1:string>")
+df = spark.createDataFrame(
+    [[1, "a string", ("a nested string",)]], 
+    schema = "long_col long, 
+              string_col string, 
+              struct_col struct<col1:string>"
+)
+```
 
+```python
 df.printSchema()
+```
+
+```
 # root
 # |-- long_column: long (nullable = true)
 # |-- string_column: string (nullable = true)
 # |-- struct_column: struct (nullable = true)
 # |    |-- col1: string (nullable = true)
+```
 
-df.select(func("long_col", "string_col", "struct_col")).printSchema()
+```python
+df.select(
+    func("long_col", "string_col", "struct_col")
+).printSchema()
+```
+
+```
 # |-- func(long_col, string_col, struct_col): struct (nullable = true)
 # |    |-- col1: string (nullable = true)
 # |    |-- col2: long (nullable = true)
@@ -174,5 +171,9 @@ df.select(func("long_col", "string_col", "struct_col")).printSchema()
 
 
 
-# Pandas Function APIs
+# Pandas 函数 APIs
+
+
+
+# 参考
 

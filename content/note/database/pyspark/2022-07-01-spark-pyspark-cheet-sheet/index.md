@@ -1,6 +1,5 @@
 ---
 title: PySpark Cheet Sheet
-subtitle: RDD Basic
 author: 王哲峰
 date: '2022-07-01'
 slug: spark-pyspark-cheet-sheet
@@ -11,118 +10,77 @@ tags:
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
     padding: .5em .5em 0;
 }
-
 summary {
     font-weight: bold;
     margin: -.5em -.5em 0;
     padding: .5em;
 }
-
 details[open] {
     padding: .5em;
 }
-
 details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [Spark](#spark)
-- [Initializing Spark](#initializing-spark)
-  - [SparkContext](#sparkcontext)
-  - [Inspect SparkContext](#inspect-sparkcontext)
-  - [Configuration](#configuration)
-  - [Using The Shell](#using-the-shell)
-- [Loading Data](#loading-data)
+- [Spark 初始化](#spark-初始化)
+  - [SparkContext 创建](#sparkcontext-创建)
+  - [SparkContext 配置](#sparkcontext-配置)
+  - [SparkContext 查看](#sparkcontext-查看)
+  - [Shell 初始化 Spark](#shell-初始化-spark)
+- [加载数据](#加载数据)
   - [Parallelized Collections](#parallelized-collections)
-  - [External Data](#external-data)
-- [Retrieving RDD Information](#retrieving-rdd-information)
-  - [Basic Information](#basic-information)
-  - [Summary](#summary)
-- [Applying Functions](#applying-functions)
-- [Selecting Data](#selecting-data)
-  - [Getting](#getting)
-  - [Sampling](#sampling)
-  - [Filtering](#filtering)
-- [Iterating](#iterating)
-- [Reshaping Data](#reshaping-data)
+  - [加载外部数据](#加载外部数据)
+- [检索 RDD 信息](#检索-rdd-信息)
+  - [基本信息](#基本信息)
+  - [统计信息](#统计信息)
+- [Applying 函数](#applying-函数)
+- [数据筛选](#数据筛选)
+  - [获取数据](#获取数据)
+  - [随机采样](#随机采样)
+  - [筛选数据](#筛选数据)
+- [迭代](#迭代)
+- [数据重塑](#数据重塑)
   - [Reducing](#reducing)
   - [Grouping by](#grouping-by)
   - [Aggregating](#aggregating)
-- [Mathematical Operations](#mathematical-operations)
-- [Sort](#sort)
+- [数学操作](#数学操作)
+- [排序](#排序)
 - [Repartitioning](#repartitioning)
-- [Saving](#saving)
+- [保存](#保存)
 - [Stopping SparkContext](#stopping-sparkcontext)
 - [Execution](#execution)
 </p></details><p></p>
-
-
 
 
 # Spark
 
 PySpark is the Spark Python API that exposes the Spark programming model to Python.
 
-# Initializing Spark
+# Spark 初始化
 
-## SparkContext
-
-```python
->>> from pyspark import SparkContext
->>> sc = SparkContext(master = "local[2]")
-```
-
-## Inspect SparkContext
-
+## SparkContext 创建
 
 ```python
->>> from pyspark import SparkContext
->>> sc.version                # Retrieve SparkContext version
->>> sc.pythonVer              # Retrieve Python version
->>> sc.master                 # Master URL to connect to
->>> str(sc.sparkHome)         # Path where Spark is installed on worker nodes
->>> str(sc.sparkUser())       # Retrieve name of the Spark User running SparkContext
->>> sc.appName                # Return application name
->>> sc.applicationId          # Retrieve application ID
->>> sc.defaultParallelism     # Return default level of parallelism
->>> sc.defaultMinPartitions   # Default minimum number of partitions for RDDs
+from pyspark import SparkContext
+
+sc = SparkContext(master = "local[2]")
 ```
 
-## Configuration
-
+## SparkContext 配置
 
 ```python
 from pyspark import SparkConf, SparkContext
+
 conf = (
    SparkConf()
       .setMaster("local")
@@ -132,35 +90,59 @@ conf = (
 sc = SparkContext(conf = conf)
 ```
 
-## Using The Shell
+## SparkContext 查看
+
+```python
+from pyspark import SparkContext
+
+sc = SparkContext(master = "local[2]")
+sc.version                # Retrieve SparkContext version
+sc.pythonVer              # Retrieve Python version
+sc.master                 # Master URL to connect to
+str(sc.sparkHome)         # Path where Spark is installed on worker nodes
+str(sc.sparkUser())       # Retrieve name of the Spark User running SparkContext
+sc.appName                # Return application name
+sc.applicationId          # Retrieve application ID
+sc.defaultParallelism     # Return default level of parallelism
+sc.defaultMinPartitions   # Default minimum number of partitions for RDDs
+```
+
+## Shell 初始化 Spark
 
 ```bash
 $ ./bin/sparkshell master local[2]
 $ ./bin/pyspark master local[4] pyfiles copy.py
 ```
 
-# Loading Data
+# 加载数据
 
 ## Parallelized Collections
 
-
 ```python
+from pyspark import SparkContext
+
+sc = SparkContext(master = "local[2]")
+
 rdd = sc.parallelize([("a", 7), ("a", 2), ("b", 2)])
 rdd2 = sc.parallelize([("a", 2), ("d", 1), ("b", 1)])
 rdd3 = sc.parallelize(range(100))
 rdd4 = sc.parallelize([("a", ["x", "y", "z"]), ("b", ["p", "r"])])
 ```
 
-## External Data
+## 加载外部数据
 
 ```python
+from pyspark import SparkContext
+
+sc = SparkContext(master = "local[2]")
+
 textFile = sc.textFile("/my/directory/*.txt")
 textFile2 = sc.wholeTextFiles("/my/directory/")
 ```
 
-# Retrieving RDD Information
+# 检索 RDD 信息
 
-## Basic Information
+## 基本信息
 
 ```python
 rdd.getNumPartitions()
@@ -172,8 +154,7 @@ rdd3.sum()
 sc.parallelize([]).isEmpty()
 ```
 
-## Summary
-
+## 统计信息
 
 ```python
 rdd3.max()
@@ -185,8 +166,7 @@ rdd3.histogram(3)
 rdd3.stats()
 ```
 
-# Applying Functions
-
+# Applying 函数
 
 ```python
 rdd.map(lambda x: x + (x[1], x[0])).collect()
@@ -195,9 +175,9 @@ rdd5.collect()
 rdd4.flatMapValues(lambda x: x).collect()
 ```
 
-# Selecting Data
+# 数据筛选
 
-## Getting
+## 获取数据
 
 ```python
 rdd.collect()
@@ -206,14 +186,13 @@ rdd.first()
 rdd.top(2)
 ```
 
-## Sampling
+## 随机采样
 
 ```python
 rdd3.sample(False, 0.15, 81).collect()
 ```
 
-## Filtering
-
+## 筛选数据
 
 ```python
 rdd.filter(lambda x: "a" in x).collect()
@@ -221,7 +200,7 @@ rdd5.distinct().collect()
 rdd.keys().collect()
 ```
 
-# Iterating
+# 迭代
 
 ```python
 def g(x):
@@ -230,7 +209,7 @@ def g(x):
 rdd.foreach(g)
 ```
 
-# Reshaping Data
+# 数据重塑
 
 ## Reducing
 
@@ -258,7 +237,7 @@ rdd.foldByKey(0, add).collect()
 rdd3.keyBy(lambda x: x + x).collect()
 ```
 
-# Mathematical Operations
+# 数学操作
 
 ```python
 rdd.subtract(rdd2)
@@ -266,7 +245,7 @@ rdd2.subtractByKey(rdd)
 rdd.cartesian(rdd2).collect()
 ```
 
-# Sort
+# 排序
 
 ```python
 rdd2.sortBy(lambda x: x[1]).collect()
@@ -280,7 +259,7 @@ rdd.repartition(4)
 rdd.coalesce()
 ```
 
-# Saving
+# 保存
 
 ```python
 rdd.saveAsTextFile("rdd.txt")

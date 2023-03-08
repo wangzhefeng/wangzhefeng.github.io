@@ -131,23 +131,91 @@ Streaming, MLlib (Machine Learning) and Spark Core.
 
 > Python Version: >=Python 3.7
 
+依赖：
+
+| 包      | 最小支持版本 | 说明                                                            |
+|---------|------------|----------------------------------------------------------------|
+| pandas  | 1.0.5      | Optional for Spark SQL                                         |
+| pyarrow | 1.0.0      | Optional for Spark SQL                                         |
+| py4j    | 0.10.9.5   | Required                                                       |
+| pandas  | 1.0.5      | Required for pandas API on Spark                               |
+| pyarrow | 1.0.0      | Required for pandas API on Spark                               |
+| numpy   | 1.15       | Required for pandas API on Spark and MLLib DataFrame-based API |
+| Java    | >=8        | `JAVA_HOME`。如果用的是 Java 11，需要设置 `-Dio.netty.tryReflectionSetAccessible=true` |
+
+
 ## Spark 官方发布
 
+* https://spark.apache.org/downloads.html
 
 ## pip
 
+安装 PySpark：
 
+```bash
+$ pip install pyspark
 
+# Spark SQL
+$ pip install pyspark[sql]
 
+# pandas API on Spark
+$ pip install pyspark[pandas_on_spark] plotly
+```
+
+指定 Hadoop 版本：
+
+```bash
+# Hadoop 2
+$ PYSPARK_HADOOP_VERSION=2 pip install pyspark
+
+# PySpark 镜像，Hadoop 2
+$ PYSPARK_RELEASE_MIRROR=http://mirror.apache-kr.org PYSPARK_HADOOP_VERSION=2 pip install
+
+# Hadoop2，跟踪下载和安装状态
+$ PYSPARK_HADOOP_VERSION=2 pip install pyspark -v
+```
+
+`PYSPARK_HADOOP_VERSION` 支持的值:
+
+* `without`: Spark pre-built with user-provided Apache Hadoop
+* `2`: Spark pre-built for Apache Hadoop 2.7
+* `3`: Spark pre-built for Apache Hadoop 3.3 and later (default)
 
 ## Conda
 
+创建 Conda 虚拟环境：
+
+```bash
+$ conda create -n pyspark_env
+$ conda activate pyspark_env
+```
+
+安装 PySpark：
+
+```bash
+$ conda install -c conda-forge pyspark
+```
+
 ## 手工安装
 
+1. 下载 Apache Spark `spark-3.x.x-bin-hadoop3.tgz`
+2. 解压 `spark-3.x.x-bin-hadoop3.tgz`
 
+```bash
+$ tar xzvf spark-3.x.x-bin-hadoop3.tgz
+```
+
+3. 设置环境变量
+
+```bash
+$ cd spark-3.x.x-bin-hadoop3
+$ export SPARK_HOME=`pwd`
+$ export PYTHONPATH=$(ZIPS=("$SPARK_HOME"/python/lib/*.zip); IFS=:; echo "${ZIPS[*]}"):$PYTHONPATH
+```
 
 ## 从源代码安装
 
+* https://spark.apache.org/docs/3.3.2/#downloading
 
 # 参考
 

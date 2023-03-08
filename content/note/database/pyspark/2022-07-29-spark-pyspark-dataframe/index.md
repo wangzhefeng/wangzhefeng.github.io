@@ -10,117 +10,96 @@ tags:
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
     padding: .5em .5em 0;
 }
-
 summary {
     font-weight: bold;
     margin: -.5em -.5em 0;
     padding: .5em;
 }
-
 details[open] {
     padding: .5em;
 }
-
 details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
 </style>
 
-
 <details><summary>目录</summary><p>
 
 - [必备知识](#必备知识)
-- [PySpark 初始化 SparkSession](#pyspark-初始化-sparksession)
+- [初始化 SparkSession](#初始化-sparksession)
   - [PySpark App](#pyspark-app)
-  - [PySpark shell](#pyspark-shell)
+  - [PySpark Shell](#pyspark-shell)
 - [DataFrame 创建](#dataframe-创建)
-  - [相关 API](#相关-api)
   - [List of List](#list-of-list)
   - [List of Tuple](#list-of-tuple)
   - [pandas DataFrame](#pandas-dataframe)
-  - [List of pyspark.sql.Row](#list-of-pysparksqlrow)
-  - [RDD of list of tuples](#rdd-of-list-of-tuples)
+  - [Row](#row)
+  - [RDD](#rdd)
   - [查看数据](#查看数据)
 - [DataFrame 查看](#dataframe-查看)
-  - [相关 API](#相关-api-1)
-  - [横向 Show](#横向-show)
-  - [纵向 Show](#纵向-show)
-  - [Eager Evaluation](#eager-evaluation)
-  - [Number of row to show](#number-of-row-to-show)
-  - [Schema 和 Column names](#schema-和-column-names)
+  - [横向查看](#横向查看)
+  - [纵向查看](#纵向查看)
+  - [即时产看](#即时产看)
+  - [设置查看的最大行数](#设置查看的最大行数)
+  - [Schema 和列名](#schema-和列名)
   - [Summary](#summary)
   - [收集分布式数据集到本地内存](#收集分布式数据集到本地内存)
   - [收集部分分布式数据集到本地内存](#收集部分分布式数据集到本地内存)
   - [转换为 pandas.DataFrame](#转换为-pandasdataframe)
 - [DataFrame 筛选](#dataframe-筛选)
-  - [相关 API](#相关-api-2)
   - [选择列](#选择列)
+    - [select](#select)
+    - [withColumn](#withcolumn)
   - [选择行](#选择行)
 - [DataFrame Apply](#dataframe-apply)
-  - [相关 API](#相关-api-3)
-  - [pandas UDFs 和 pandas Function APIs](#pandas-udfs-和-pandas-function-apis)
-  - [mapInPandas 和 Python natvie function](#mapinpandas-和-python-natvie-function)
+  - [pandas\_udf](#pandas_udf)
+  - [mapInPandas](#mapinpandas)
 - [DataFrame Grouping](#dataframe-grouping)
-  - [相关 API](#相关-api-4)
-  - [groupby function show()](#groupby-function-show)
-  - [applyInPandas 和 Python natvie function](#applyinpandas-和-python-natvie-function)
-  - [Co-grouping](#co-grouping)
-- [Getting data in/out](#getting-data-inout)
-  - [相关 API](#相关-api-5)
+  - [groupby](#groupby)
+  - [applyInPandas](#applyinpandas)
+  - [cogroup](#cogroup)
+- [数据读写](#数据读写)
   - [CSV](#csv)
   - [Parquet](#parquet)
   - [ORC](#orc)
-- [DataFrame with SQL](#dataframe-with-sql)
-  - [相关 API](#相关-api-6)
+- [DataFrame 和 Spark SQL](#dataframe-和-spark-sql)
   - [DataFrame 注册为一个表格并运行 SQL](#dataframe-注册为一个表格并运行-sql)
   - [UDF 可以开箱即用地在 SQL 中注册和调用](#udf-可以开箱即用地在-sql-中注册和调用)
   - [SQL 表达式混入作用 PySpark 列](#sql-表达式混入作用-pyspark-列)
+- [参考](#参考)
 </p></details><p></p>
 
 
 # 必备知识
 
-* RDD
-* transforms
-* actions
-* pandas
+* Spark
+    - RDD
+    - transforms
+    - actions
+* Python
+    - pyspark
+        - DataFrame
+    - pandas
+        - DataFrame
+* SQL
 
-# PySpark 初始化 SparkSession
+# 初始化 SparkSession
 
 ## PySpark App
 
 ```python
 from pyspark.sql import SparkSession
+
 spark = SparkSession.builder.getOrCreate()
 ```
 
-## PySpark shell
+## PySpark Shell
 
 ```python
 $ pyspark
@@ -128,6 +107,12 @@ $ pyspark
 
 ![images](images/pyspark_shell.jpg)
 
+其中包含的信息：
+
+* Python Version：3.7.10
+* Spark context Web UI：[http://192.168.1.8:4040](http://192.168.1.8:4040)
+* Spark context：`sc`(`master = local[*], app id = local-1659113580876`)
+* SparkSession：`spark`
 
 # DataFrame 创建
 
@@ -138,7 +123,7 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 ```
 
-## 相关 API
+相关 API：
 
 * `spark.createDataFrame(, schema)`
 * `Row()`
@@ -147,30 +132,32 @@ spark = SparkSession.builder.getOrCreate()
 ## List of List
 
 ```python
-df = spark.createDataFrame([
-    [1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)],
-    [2, 3., 'string2', date(2000, 2, 1), datetime(2000, 1, 2, 12, 0)],
-    [3, 4., 'string3', date(2000, 3, 1), datetime(2000, 1, 3, 12, 0)],
-], schema = "a long, b double, c string, d date, e timestamp")
+df = spark.createDataFrame(
+    [[1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)],
+     [2, 3., 'string2', date(2000, 2, 1), datetime(2000, 1, 2, 12, 0)],
+     [3, 4., 'string3', date(2000, 3, 1), datetime(2000, 1, 3, 12, 0)]], 
+    schema = "a long, b double, c string, d date, e timestamp"
+)
 df
 ```
 
 ## List of Tuple
 
 ```python
-df = spark.createDataFrame([
-    (1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)),
-    (2, 3., 'string2', date(2000, 2, 1), datetime(2000, 1, 2, 12, 0)),
-    (3, 4., 'string3', date(2000, 3, 1), datetime(2000, 1, 3, 12, 0))
-], schema = "a long, b double, c string, d date, e timestamp")
+df = spark.createDataFrame(
+    [(1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)),
+     (2, 3., 'string2', date(2000, 2, 1), datetime(2000, 1, 2, 12, 0)),
+     (3, 4., 'string3', date(2000, 3, 1), datetime(2000, 1, 3, 12, 0))], 
+     schema = "a long, b double, c string, d date, e timestamp"
+)
 df
 ```
 
 ## pandas DataFrame
 
 ```python
+# pandas DataFrame
 import pandas as pd
-
 pandas_df = pd.DataFrame({
     'a': [1, 2, 3],
     'b': [2., 3., 4.],
@@ -178,11 +165,15 @@ pandas_df = pd.DataFrame({
     'd': [date(2000, 1, 1), date(2000, 2, 1), date(2000, 3, 1)],
     'e': [datetime(2000, 1, 1, 12, 0), datetime(2000, 1, 2, 12, 0), datetime(2000, 1, 3, 12, 0)]
 })
+
+# pyspark DataFrame
 df = spark.createDataFrame(pandas_df)
 df
 ```
 
-## List of pyspark.sql.Row
+## Row
+
+> List of pyspark.sql.Row
 
 ```python
 from pyspark.sql import Row
@@ -195,7 +186,9 @@ df = spark.createDataFrame([
 df
 ```
 
-## RDD of list of tuples
+## RDD
+
+> RDD of list of tuples
 
 ```python
 rdd = spark.sparkContext.parallelize([
@@ -214,7 +207,6 @@ df = spark.createDataFrame(
 
 ```python
 df.show()
-df.printSchema()
 ```
 
 ```
@@ -225,7 +217,13 @@ df.printSchema()
 |  2|3.0|string2|2000-02-01|2000-01-02 12:00:00|
 |  3|4.0|string3|2000-03-01|2000-01-03 12:00:00|
 +---+---+-------+----------+-------------------+
+```
 
+```python
+df.printSchema()
+```
+
+```
 root
  |-- a: long (nullable = true)
  |-- b: double (nullable = true)
@@ -236,7 +234,7 @@ root
 
 # DataFrame 查看
 
-## 相关 API
+相关 API：
 
 * `DataFrame.show()`
 * `spark.conf.set()`
@@ -248,33 +246,33 @@ root
 * `DataFrame.tail()`
 * `DataFrame.toPandas()`
 
-## 横向 Show
+## 横向查看
 
 ```python
 df.show(1)
 ```
 
-## 纵向 Show
+## 纵向查看
 
 ```python
 df.show(1, vertical = True)
 ```
 
-## Eager Evaluation
+## 即时产看
 
 ```python
 spark.conf.set("spark.sql.repl.eagerEval.enable", True)
 df
 ```
 
-## Number of row to show
+## 设置查看的最大行数
 
 ```python
 spark.config.set("spark.sql.repl.eagerEval.maxNumRows", 10)
 df
 ```
 
-## Schema 和 Column names
+## Schema 和列名
 
 ```python
 df.printSchema()
@@ -314,7 +312,7 @@ df.toPandas()
 
 # DataFrame 筛选
 
-## 相关 API
+相关 API：
 
 * `DataFrame.column_name`
 * `pyspark.sql.Column`
@@ -326,7 +324,7 @@ df.toPandas()
 
 ## 选择列
 
-* PySpark DataFrame 是惰性计算的，所以选择一个列不会马上计算，而只会返回一个 `Column` 实例
+PySpark DataFrame 是惰性计算的，所以选择一个列不会马上计算，而只会返回一个 `Column` 实例：
 
 ```python
 df.a
@@ -336,7 +334,7 @@ df.a
 Column<b'a'>
 ```
 
-* 大部分列操作都会返回 `Column`
+大部分列操作都会返回 `Column`：
 
 ```python
 from pyspark.sql import Column
@@ -349,7 +347,7 @@ type(df.c) == type(upper(df.c)) == type(df.c.isNull())
 True
 ```
 
-* DataFrame.select()
+### select
 
 ```python
 df.select(df.c).show()
@@ -364,6 +362,8 @@ df.select(df.c).show()
 |string3|
 +-------+
 ```
+
+### withColumn
 
 * 分配一个新 `Column` 实例
 
@@ -395,16 +395,14 @@ df.filter(df.a == 1).show()
 +---+---+-------+----------+-------------------+
 ```
 
-
 # DataFrame Apply
 
-## 相关 API
+相关 API：
 
-* `pyspark.sql.functions.pandas_udf`
+* `pyspark.sql.functions.pandas_udf()`
 * `DataFrame.mapInPandas()`
 
-## pandas UDFs 和 pandas Function APIs
-
+## pandas_udf
 
 ```python
 import pandas as pd
@@ -431,7 +429,7 @@ df.select(pandas_plus_one(df.a)).show()
 +------------------+
 ```
 
-## mapInPandas 和 Python natvie function
+## mapInPandas
 
 ```python
 def pandas_filter_func(iterator):
@@ -443,15 +441,15 @@ df.mapInPandas(pandas_filter_func, schema = df.schema).show()
 
 # DataFrame Grouping
 
-* `split-apply-combine`
+> `split-apply-combine`
 
-## 相关 API
+相关 API：
 
 * `DataFrame.groupby().func().show()`
 * `DataFrame.groupby().applyInPandas().show()`
 * `DataFrame.groupby().cogroup(DataFrame.groupby()).applyInPandas().show()`
 
-## groupby function show()
+## groupby
 
 ```python
 df = spark.createDataFrame([
@@ -468,20 +466,25 @@ df.show()
 ```
 
 ```python
-df.groupby("color").avg().show()
+df \
+    .groupby("color") \
+    .avg() \
+    .show()
 ```
 
-## applyInPandas 和 Python natvie function
-
+## applyInPandas
 
 ```python
 def plus_mean(pandas_df):
     return pandas_df.assign(v1 = pandas_df.v1 - pandas_df.v1.mean())
 
-df.groupby("color").applyInPandas(plus_mean, schema = df.schema).show()
+df \
+    .groupby("color") \
+    .applyInPandas(plus_mean, schema = df.schema) \
+    .show()
 ```
 
-## Co-grouping
+## cogroup
 
 ```python
 df1 = spark.createDataFrame([
@@ -496,17 +499,23 @@ df2 = spark.createDataFrame([
     (20000101, 2, "y"),
 ], schema = ("time", "id", "v2"))
 
+
 def asof_join(l, r):
     return pd.merge_asof(l, r, on = "time", by = "id")
 
-df1.groupby("id").cogroup(df2.groupby("id")).applyInPandas(
-    asof_join, schema = "time int, id int, v1 double, v2 string"
-).show()
+
+df1 \
+    .groupby("id") \
+    .cogroup(df2.groupby("id")) \
+    .applyInPandas(
+        asof_join, 
+        schema = "time int, id int, v1 double, v2 string") \
+    .show()
 ```
 
-# Getting data in/out
+# 数据读写
 
-## 相关 API
+相关 API：
 
 * csv
     - `DataFrame.write.csv()`
@@ -518,18 +527,9 @@ df1.groupby("id").cogroup(df2.groupby("id")).applyInPandas(
     - `DataFrame.write.orc()`
     - `spark.read.orc()` 
 * JDBC
-    - ``
-    - ``
 * text
-    - ``
-    - ``
 * binaryFile
-    - ``
-    - ``
 * Avro
-    - ``
-    - ``
-
 
 ## CSV
 
@@ -552,11 +552,11 @@ df.write.orc("zoo.orc")
 spark.read.orc("zoo.orc").show()
 ```
 
-# DataFrame with SQL
+# DataFrame 和 Spark SQL
 
-* DataFrame 和 Spark SQL 共享相同的执行引擎，因此它们可以无缝互换使用
+DataFrame 和 Spark SQL 共享相同的执行引擎，因此它们可以无缝互换使用
 
-## 相关 API
+相关 API：
 
 * `DataFrame.createOrReplaceTempView()`
 * `spark.sql()`
@@ -631,4 +631,8 @@ df.select(expr("count(*)") > 0).show()
 |          true|
 +--------------+
 ```
+
+# 参考
+
+* [Quickstart: DataFrame](https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_df.html)
 

@@ -31,6 +31,15 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [时间序列分析介绍](#时间序列分析介绍)
+  - [时间序列模型](#时间序列模型)
+    - [预测](#预测)
+    - [分类](#分类)
+    - [异常检测](#异常检测)
+    - [表示](#表示)
+    - [数据增强](#数据增强)
+  - [时间序列数据集](#时间序列数据集)
+  - [时间序列 Python 库](#时间序列-python-库)
 - [时间序列介绍](#时间序列介绍)
   - [时间序列发展](#时间序列发展)
   - [时间序列的定义](#时间序列的定义)
@@ -46,14 +55,6 @@ details[open] summary {
   - [因果分析](#因果分析)
   - [生存分析](#生存分析)
   - [时间序列模式识别](#时间序列模式识别)
-- [时间序列模型](#时间序列模型)
-  - [预测](#预测)
-  - [分类](#分类)
-  - [异常检测](#异常检测)
-  - [表示](#表示)
-  - [数据增强](#数据增强)
-- [时间序列数据集](#时间序列数据集)
-- [时间序列 Python 库](#时间序列-python-库)
 - [时间序列分析-baseline](#时间序列分析-baseline)
   - [baseline 特点](#baseline-特点)
   - [baseline 数据](#baseline-数据)
@@ -68,6 +69,95 @@ details[open] summary {
 - [一些经验与思考](#一些经验与思考)
 - [参考资料](#参考资料)
 </p></details><p></p>
+
+
+# 时间序列分析介绍
+
+时间序列分析方法有两种：
+
+* 描述性时序分析：通过直观数据绘图比较，寻找序列中的规律。
+  由于数据存在随机性，想通过总结表面现象去预测未来走势是很难的
+* 统计性时序分析：研究重心再分析序列值内在的相关关系上，更注重统计分析
+
+描述性时序分析包含以下内容：
+
+* 时间序列数据包含的信息
+* 时间序列数据可视化
+
+统计性时序分析又分为两种：
+
+* 频域（Frequency Domain）分析方法：也称频谱分析或谱分析，
+  它假设任何一种无趋势的时间序列都可以分解成若干不同频率的周期波动，
+  可以借助傅里叶变换、正弦、余弦之和去逼近某个函数。但一般比较复杂，
+  属于纵向数据分析，分析结果抽象，不易于解释，对数学要求高
+* 时域（Time Domain）分析方法：它假设序列之间存在一定的相关关系，且具有统计规律，
+  可以通过拟合出适当的数学模型来描述规律，从而预测未来走势。属于横向数据分析
+
+
+## 时间序列模型
+
+### 预测
+
+![img](images/models.png)
+
+### 分类
+
+* LSTM FCN，LSTM Fully Convolutional Networks for Time Series Classification
+
+### 异常检测
+
+* [AAAI 2022] Towards a Rigorous Evaluation of Time-series Anomaly Detection
+
+### 表示
+
+* [AAAI 2022] TS2Vec: Towards Universal Representation of Time Series
+
+### 数据增强
+
+* [IJCAI 2021] Time Series Data Augmentation for Deep Learning: A Survey
+* [arxiv 2020] An empirical survey of data augmentation for time series classification with neural networks
+
+## 时间序列数据集
+
+* UCR Time Series Classification Archive
+* UEA & UCR Time Series Classification Repository 
+
+## 时间序列 Python 库
+
+![img](images/libs.png)
+
+* Kats，推荐指数：⭐⭐
+    - 主页：https://facebookresearch.github.io/Kats/
+    - Github：https://github.com/facebookresearch/Kats
+* darts，推荐指数：⭐⭐
+    - 介绍：a Python library for easy manipulation and forecasting of time series. 
+      It contains a variety of models, from classics such as ARIMA to deep neural networks.
+    - 主页：https://unit8co.github.io/darts/
+    - Github：https://github.com/unit8co/darts
+* GluonTS，推荐指数：⭐⭐⭐⭐
+    - 主页：https://ts.gluon.ai/index.html
+    - Github：https://github.com/awslabs/gluon-ts/
+* NeuralProphet，推荐指数：⭐⭐⭐⭐
+    - 主页：https://neuralprophet.com/
+    - Github：https://github.com/ourownstory/neural_prophet
+* arch
+    - 介绍：Autoregressive Conditional Heteroskedasticity (ARCH) and other tools for financial econometrics, written in Python.
+    - 主页：https://arch.readthedocs.io/en/latest/
+    - Github：https://github.com/bashtage/arch
+* AtsPy
+    - 介绍：Automated Time Series Models in Python
+    - Github：https://github.com/firmai/atspy
+* banpei
+    - 介绍：Anomaly detection library based on singular spectrum transformation
+    - Github：https://github.com/tsurubee/banpei
+* cesium
+    - 介绍：end-to-end machine learning platform for time-series, from calculation of features to model-building to predictions.
+    - 主页：https://cesium-ml.org/
+    - Github：https://github.com/cesium-ml/cesium
+* pyfbad
+    - Github：https://github.com/Teknasyon-Teknoloji/pyfbad
+
+更多的模型介绍可以查阅论文 [arxiv 2021]A systematic review of Python packages for time series analysis.
 
 # 时间序列介绍
 
@@ -302,71 +392,6 @@ Burg 在他从事的地震信号的分析与处理中提出最大熵谱，其把
 
 * 该类问题多出现在多维时间序列中，旨在发现不同时序之间的相似点或关联点，
   或同时序不同时间位置的关联点。常见的有周期分析，季节分析，波形联动分析，时间关联性等问题
-
-# 时间序列模型
-
-## 预测
-
-![img](images/models.png)
-
-## 分类
-
-* LSTM FCN，LSTM Fully Convolutional Networks for Time Series Classification
-
-## 异常检测
-
-* [AAAI 2022] Towards a Rigorous Evaluation of Time-series Anomaly Detection
-
-## 表示
-
-* [AAAI 2022] TS2Vec: Towards Universal Representation of Time Series
-
-## 数据增强
-
-* [IJCAI 2021] Time Series Data Augmentation for Deep Learning: A Survey
-* [arxiv 2020] An empirical survey of data augmentation for time series classification with neural networks
-
-# 时间序列数据集
-
-* UCR Time Series Classification Archive
-* UEA & UCR Time Series Classification Repository 
-
-# 时间序列 Python 库
-
-![img](images/libs.png)
-
-* Kats，推荐指数：⭐⭐
-    - 主页：https://facebookresearch.github.io/Kats/
-    - Github：https://github.com/facebookresearch/Kats
-* darts，推荐指数：⭐⭐
-    - 介绍：a Python library for easy manipulation and forecasting of time series. 
-      It contains a variety of models, from classics such as ARIMA to deep neural networks.
-    - 主页：https://unit8co.github.io/darts/
-    - Github：https://github.com/unit8co/darts
-* GluonTS，推荐指数：⭐⭐⭐⭐
-    - 主页：https://ts.gluon.ai/index.html
-    - Github：https://github.com/awslabs/gluon-ts/
-* NeuralProphet，推荐指数：⭐⭐⭐⭐
-    - 主页：https://neuralprophet.com/
-    - Github：https://github.com/ourownstory/neural_prophet
-* arch
-    - 介绍：Autoregressive Conditional Heteroskedasticity (ARCH) and other tools for financial econometrics, written in Python.
-    - 主页：https://arch.readthedocs.io/en/latest/
-    - Github：https://github.com/bashtage/arch
-* AtsPy
-    - 介绍：Automated Time Series Models in Python
-    - Github：https://github.com/firmai/atspy
-* banpei
-    - 介绍：Anomaly detection library based on singular spectrum transformation
-    - Github：https://github.com/tsurubee/banpei
-* cesium
-    - 介绍：end-to-end machine learning platform for time-series, from calculation of features to model-building to predictions.
-    - 主页：https://cesium-ml.org/
-    - Github：https://github.com/cesium-ml/cesium
-* pyfbad
-    - Github：https://github.com/Teknasyon-Teknoloji/pyfbad
-
-更多的模型介绍可以查阅论文 [arxiv 2021]A systematic review of Python packages for time series analysis.
 
 # 时间序列分析-baseline
 

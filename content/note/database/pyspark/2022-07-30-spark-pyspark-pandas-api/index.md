@@ -1,5 +1,6 @@
 ---
-title: PySpark Pandas API on Spark
+title: PySpark Pandas API
+subtitle: Pandas API on Spark
 author: 王哲峰
 date: '2022-07-30'
 slug: spark-pyspark-pandas-api
@@ -10,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -85,11 +59,11 @@ details[open] summary {
   - [head](#head)
   - [index](#index)
   - [columns](#columns)
-  - [to_numpy](#to_numpy)
+  - [to\_numpy](#to_numpy)
   - [describe](#describe)
   - [T](#t)
-  - [sort_index](#sort_index)
-  - [sort_values](#sort_values)
+  - [sort\_index](#sort_index)
+  - [sort\_values](#sort_values)
 - [缺失数据](#缺失数据)
   - [删除缺失值所在行](#删除缺失值所在行)
   - [填充缺失值](#填充缺失值)
@@ -99,8 +73,8 @@ details[open] summary {
   - [transform and apply a function](#transform-and-apply-a-function)
     - [APIs](#apis)
     - [transform 和 apply](#transform-和-apply)
-    - [pandas_on_spark.transform_batch](#pandas_on_sparktransform_batch)
-    - [pandas_on_spark.apply_batch](#pandas_on_sparkapply_batch)
+    - [pandas\_on\_spark.transform\_batch](#pandas_on_sparktransform_batch)
+    - [pandas\_on\_spark.apply\_batch](#pandas_on_sparkapply_batch)
 - [Grouping](#grouping)
 - [Plotting](#plotting)
   - [Pandas-on-Spark Series](#pandas-on-spark-series)
@@ -143,6 +117,7 @@ details[open] summary {
   - [尽可能直接使用 Pandas API on Spark](#尽可能直接使用-pandas-api-on-spark)
 - [支持的 pandas API](#支持的-pandas-api)
 - [在 Structured Streaming 上使用 Pandas API on Spark](#在-structured-streaming-上使用-pandas-api-on-spark)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -1735,4 +1710,9 @@ Pandas API on Spark 目前不支持 Structured Streaming，
 0 2020-02-21 09:49:38.574      5  1
 ...
 ```
+
+# 参考
+
+* [Quickstart: Pandas API on Spark](https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html)
+* [Pandas API on Spark](https://spark.apache.org/docs/latest/api/python/user_guide/pandas_on_spark/index.html)
 
