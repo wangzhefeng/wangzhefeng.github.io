@@ -37,10 +37,8 @@ details[open] summary {
 - [仅支持宽数据的低阶 API](#仅支持宽数据的低阶-api)
 - [快速和大数据](#快速和大数据)
   - [使用适当的模型列表，尤其是预定义的列表](#使用适当的模型列表尤其是预定义的列表)
+- [参考](#参考)
 </p></details><p></p>
-
-* [GitHub](https://github.com/winedarksea/AutoTS)
-* [Document](https://winedarksea.github.io/AutoTS/build/html/index.html)
 
 AutoTS is a time series package for Python designed for rapidly deploying high-accuracy forecasts at scale.
 
@@ -173,4 +171,9 @@ from autots.models.model_list import model_lists
     - "auto"
 
 
+
+# 参考
+
+* [GitHub](https://github.com/winedarksea/AutoTS)
+* [Document](https://winedarksea.github.io/AutoTS/build/html/index.html)
 

@@ -3,7 +3,7 @@ title: Lib tsfresh
 subtitle: 特征工程
 author: 王哲峰
 date: '2022-05-03'
-slug: lib-tsfresh
+slug: timeseries-lib-tsfresh
 categories:
   - timeseries
 tags:
@@ -198,7 +198,7 @@ pipeline.fit(X, y)
 
 # 参考
 
-* tsfresh Github：https://github.com/blue-yonder/tsfresh‍
-* tsfresh 文档：https://tsfresh.readthedocs.io
+* [tsfresh Github](https://github.com/blue-yonder/tsfresh‍)
+* [tsfresh 文档](https://tsfresh.readthedocs.io)
 * [tsfresh 使用小结](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247487150&idx=1&sn=d070e11282e3bd1f9656e6be656d16e0&chksm=fa0410c5cd7399d3b1acec6d379c659d1344cf52232206e86c6d5867ba54c77062ca3581e06a&scene=178&cur_album_id=1577157748566310916#rd)
 

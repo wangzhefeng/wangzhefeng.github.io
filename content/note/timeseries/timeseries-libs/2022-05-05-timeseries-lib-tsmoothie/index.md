@@ -3,7 +3,7 @@ title: Lib tsmoothie
 subtitle: 光滑和异常检测
 author: 王哲峰
 date: '2022-05-05'
-slug: lib-tsmoothie
+slug: timeseries-lib-tsmoothie
 categories:
   - timeseries
 tags:
@@ -49,6 +49,7 @@ details[open] summary {
 - [时间序列异常检测](#时间序列异常检测)
 - [极端事件的时间序列预处理](#极端事件的时间序列预处理)
 - [深度学习中的时间序列 Bootstrap](#深度学习中的时间序列-bootstrap)
+- [参考](#参考-2)
 </p></details><p></p>
 
 > A python library for time-series smoothing and outlier detection in a vectorized way.
@@ -319,4 +320,9 @@ Kalman Filter
 
 
 # 深度学习中的时间序列 Bootstrap
+
+
+# 参考
+
+* [GitHub](https://github.com/cerlymarco/tsmoothie)
 

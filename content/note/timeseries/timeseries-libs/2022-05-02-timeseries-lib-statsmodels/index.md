@@ -69,6 +69,7 @@ details[open] summary {
   - [分布](#分布)
   - [图性](#图性)
   - [Input-Output](#input-output)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -563,4 +564,10 @@ plt.show()
 ## Input-Output
 
 
+
+
+
+# 参考
+
+* [statsmodels tsa](https://www.statsmodels.org/stable/tsa.html)
 

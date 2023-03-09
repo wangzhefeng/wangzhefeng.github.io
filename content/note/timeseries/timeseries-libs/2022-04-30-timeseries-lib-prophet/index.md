@@ -1053,4 +1053,5 @@ fig = m.plot_components(forecast)
 * [Blog](https://zr9558.com/2018/11/30/timeseriespredictionfbprophet/)
 * [Facebook 时间序列预测算法 Prophet 的研究](https://zhuanlan.zhihu.com/p/52330017)
 * [时间序列原理篇之Facebook Prophet算法](https://zhuanlan.zhihu.com/p/463183142)
+* [GitHub](https://github.com/facebook/prophet)
 

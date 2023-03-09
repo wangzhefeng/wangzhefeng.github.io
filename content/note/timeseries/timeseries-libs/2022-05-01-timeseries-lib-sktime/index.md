@@ -12,10 +12,6 @@ tags:
 
 > A unified framework for machine learning with time series.
 
-* [Doc](https://www.sktime.org/en/stable/)
-* [GitHub](https://github.com/sktime/sktime)
-
-
 # 安装与加载
 
 ```bash
@@ -39,3 +35,9 @@ $ pip install sktime[all_extras]
 ## 时间序列标注
 
 time series annotation
+
+
+# 参考
+
+* [Doc](https://www.sktime.org/en/stable/)
+* [GitHub](https://github.com/sktime/sktime)

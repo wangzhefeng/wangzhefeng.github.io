@@ -32,16 +32,16 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [Options](#options)
-  - [getting 和 setting options](#getting-和-setting-options)
+- [配置项](#配置项)
+  - [可用配置项](#可用配置项)
+  - [getting 和 setting](#getting-和-setting)
     - [属性](#属性)
     - [方法](#方法)
   - [不同 DataFrame 上的数据操作](#不同-dataframe-上的数据操作)
-  - [默认 Index 类型](#默认-index-类型)
+  - [索引类型](#索引类型)
     - [sequence](#sequence)
-    - [distributed-sequence(default)](#distributed-sequencedefault)
+    - [distributed-sequence](#distributed-sequence)
     - [distributed](#distributed)
-  - [可用 options](#可用-options)
 - [数据对象](#数据对象)
   - [概念区分](#概念区分)
     - [Spark API](#spark-api)
@@ -121,23 +121,42 @@ details[open] summary {
 </p></details><p></p>
 
 
-# Options
+# 配置项
+
+> 此处的 API 均在 `pandas_on_spark` 命名空间有效
 
 属性:
 
-* `pyspark.pandas.options.display.max_rows`
-* `pyspark.pandas.options.display.max_columns`
+* `pyspark.pandas.options.`
+    - `display.max_rows`
+    - `display.max_columns`
 
 方法:
 
-* `pyspark.pandas.get_option("option_name")`
-* `pyspark.pandas.set_option("option_name", new_value)`
-* `pyspark.pandas.reset_option()`
-* `pyspark.pandas.option_context("option_name", option_value, "option_name", option_value, ...)`
+* `pyspark.pandas.`
+    - `get_option("option_name")`
+    - `set_option("option_name", new_value)`
+    - `reset_option()`
+    - `option_context("option_name", option_value, "option_name", option_value, ...)`
 
-API 均在 `pandas_on_spark` 命名空间有效
+## 可用配置项
 
-## getting 和 setting options
+| 配置型                      | 默认值    | 说明 |
+|----------------------------|----------|----|
+| `display.max_rows`           | `1000`     | 显示最大行数量 |
+| `compute.max_rows`           | `1000`     | 计算适用的最大行数 |
+| `compute.shorcut_limit`      | `1000`     | |
+| `compute.ops_on_diff_frames` | `False`    | 是否允许在不同的 DataFrame 或 Series 上的数据操作 |
+| `compute.default_index_type` | `'distributed-sequence'` | 配置索引类型 |
+| `compute.ordered_head`       | `False`    | |
+| `compute.eager_check`        | `True`     | |
+| `compute.is_in_limit`        | `80`       | |
+| `plotting.max_rows`          | `1000`     | |
+| `plotting.sample_ration`     | `None`     | |
+| `plotting.backend`           | `'plotly'` |  |
+
+
+## getting 和 setting
 
 ### 属性
 
@@ -153,7 +172,7 @@ API 均在 `pandas_on_spark` 命名空间有效
 
 ### 方法
 
-* get_option() & set_option()
+* `get_option()` 和 `set_option()`
 
 ```python
 >>> import pyspark.pandas as ps
@@ -165,7 +184,7 @@ API 均在 `pandas_on_spark` 命名空间有效
 10
 ```
 
-* reset_option()
+* `reset_option()`
 
 ```python
 >>> import pyspark.pandas as ps
@@ -181,7 +200,7 @@ API 均在 `pandas_on_spark` 命名空间有效
 1000
 ```
 
-* option_context()
+* `option_context()`
 
 ```python
 >>> import pyspark.pandas as ps
@@ -202,6 +221,8 @@ API 均在 `pandas_on_spark` 命名空间有效
 为了防止高资源消耗，Pandas API on Spark 默认不允许在不同 DataFrame 或 Series 上的操作。
 可以通过设置 `compute.ops_on_diff_frames` 为 `True` 启用操作
 
+DataFrame 和 DataFrame：
+
 ```python
 >>> import pyspark.pandas as ps
 >>> 
@@ -220,13 +241,15 @@ API 均在 `pandas_on_spark` 命名空间有效
 >>> ps.reset_option("compute.ops_on_diff_frames")
 ```
 
+DataFrame 和 Series：
+
 ```python
 >>> import pyspark.pandas as ps
 >>> 
 >>> ps.set_option("compute.ops_on_diff_frames", True)
 >>> psdf = ps.range(5)
->>> psser_a = ps.Series([1, 2, 3, 4])
->>> psdf["new_col"] = psser_a
+>>> psser = ps.Series([1, 2, 3, 4])
+>>> psdf["new_col"] = psser
 >>> psdf
    id  new_col
 0   0      1.0
@@ -237,9 +260,13 @@ API 均在 `pandas_on_spark` 命名空间有效
 >>> ps.reset_option("compute.ops_on_diff_frames")
 ```
 
-## 默认 Index 类型
+## 索引类型
 
-可以通过 `compute.default_index_type` 配置索引类型
+可以通过 `compute.default_index_type` 配置索引类型，常用的索引类型有：
+
+* sequence
+* distributed-sequence：默认配置
+* distributed
 
 ### sequence
 
@@ -250,7 +277,9 @@ API 均在 `pandas_on_spark` 命名空间有效
 >>> import pyspark.pandas as ps
 >>> 
 >>> ps.set_option("compute.default_index_index", "sequence")
+>>> 
 >>> psdf = ps.range(3)
+>>> 
 >>> ps.reset_option("compute.default_index_type")
 >>> psdf.index
 Int64Index([0, 1, 2], dtype='int64')
@@ -259,39 +288,53 @@ Int64Index([0, 1, 2], dtype='int64')
 等价于：
 
 ```python
->>> from pyspark.sql import functions as F, Window
->>> import pyspark.pandas as ps
->>>
->>> spark_df = ps.range(3).to_spark()
->>> sequential_index = F.row_number().over(
-...    Window.orderBy(F.monotonically_increasing().asc())
-... ) - 1
->>> spark_df.select(sequential_index).rdd.map(lambda r: r[0]).collect()
+from pyspark.sql import functions as F, Window
+import pyspark.pandas as ps
+
+# DataFrame
+spark_df = ps.range(3).to_spark()
+
+# Index
+sequential_index = F.row_number().over(
+    Window.orderBy(F.monotonically_increasing().asc())
+) - 1
+
+spark_df \
+    .select(sequential_index) \
+    .rdd \
+    .map(lambda r: r[0])  \
+    .collect() \
 ```
 
-### distributed-sequence(default)
+### distributed-sequence
 
 以分布式方式通过分组(group-by)和分组映射(group-map)方法实现一个递增的序列。
 它仍然在全局范围内生成顺序索引。如果默认索引必须是大型数据集中的序列，则必须使用该索引
 
 ```python
->>> import pyspark.pandas as ps
->>> 
->>> ps.set_option("compute.default_index_type", "distributed-sequence")
->>> psdf = ps.range(3)
->>> ps.reset_option("compute.default_index_type")
->>> psdf.index
->>> Int64Index([0, 1, 2], dtype='int64')
->>> Int64Index([0, 1, 2], dtype='int64')
+import pyspark.pandas as ps
+
+ps.set_option("compute.default_index_type", "distributed-sequence")
+psdf = ps.range(3)
+ps.reset_option("compute.default_index_type")
+
+psdf.index
+```
+
+```
+Int64Index([0, 1, 2], dtype='int64')
 ```
 
 等价于:
 
 ```python
->>> import pyspark.pandas as ps
->>>
->>> spark_df = ps.range(3).to_spark()
->>> spark_df.rdd.zipWithIndex().map(lambda p: p[1]).collect()
+import pyspark.pandas as ps
+
+spark_df = ps.range(3).to_spark()
+spark_df.rdd.zipWithIndex().map(lambda p: p[1]).collect()
+```
+
+```
 [1, 2, 3]
 ```
 
@@ -301,45 +344,37 @@ Int64Index([0, 1, 2], dtype='int64')
 这些值是不确定的。如果索引不必是一个递增的序列，则应使用该索引。在性能方面，与其他索引类型相比，该索引几乎没有任何损失
 
 ```python
->>> import pyspark.pandas as ps
->>> 
->>> ps.set_option("compute.default_index_type", "distribute")
->>> psdf = ps.range(3)
->>> ps.reset_option("compute.default_index_type")
->>> psdf.index
+import pyspark.pandas as ps
+
+ps.set_option("compute.default_index_type", "distribute")
+psdf = ps.range(3)
+ps.reset_option("compute.default_index_type")
+
+psdf.index
+```
+
+```
 Int64Index([25769803776, 60129542144, 94489280512], dtype='int64')
 ```
 
 等价于：
 
 ```python
->>> from pyspark.sql import functions as F
->>> import pyspark.pandas as ps
->>> 
->>> spark_df = ps.range(3).to_spark()
->>> spark_df.select(F.monotonically_increasing_id()) \
-...    .rdd.map(lambda r: r[0]).collect() 
+from pyspark.sql import functions as F
+import pyspark.pandas as ps
+
+spark_df = ps.range(3).to_spark()
+spark_df \
+    .select(F.monotonically_increasing_id()) \
+    .rdd.map(lambda r: r[0]) \
+    .collect() 
+```
+
+```
 [25769803776, 60129542144, 94489280512]
 ```
 
-## 可用 options
-
-| 配置型 | 默认值 | 说明 |
-|----|----|----|
-| display.max_rows | 1000 | |
-| compute.max_rows | 1000 | |
-| compute.shorcut_limit | 1000 | |
-| compute.ops_on_diff_frames | False | |
-| compute.default_index_type | 'distributed-sequence' | |
-| compute.ordered_head | False | |
-| compute.eager_check | True | |
-| compute.is_in_limit | 80 | |
-| plotting.max_rows | 1000 | |
-| plotting.sample_ration | None | |
-| plotting.backend | 'plotly' |  |
-
 # 数据对象
-
 
 ## 概念区分
 

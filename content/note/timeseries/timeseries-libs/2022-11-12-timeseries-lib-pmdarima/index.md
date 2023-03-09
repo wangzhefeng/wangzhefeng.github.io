@@ -50,6 +50,7 @@ details[open] summary {
     - [joblib](#joblib)
     - [对比 pickle 和 joblib 结果](#对比-pickle-和-joblib-结果)
   - [使用新的观测样本更新模型](#使用新的观测样本更新模型)
+- [参考](#参考)
 </p></details><p></p>
 
 # Install
@@ -329,3 +330,9 @@ arima.update(test)
 with open("arima.pkl", "wb") as pkl:
     pickle.dump(arima, pkl)
 ```
+
+# 参考
+
+* [Doc](http://alkaline-ml.com/pmdarima/index.html)
+* [Doc Examples](http://alkaline-ml.com/pmdarima/auto_examples/index.html)
+

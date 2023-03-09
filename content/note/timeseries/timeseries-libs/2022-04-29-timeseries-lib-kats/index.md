@@ -41,4 +41,8 @@ Kats 是 Facebook 布的一个专门为了时间序列服务的工具库。它�
 # 参考
 
 * [Facebook时序工具库Kats](https://zhuanlan.zhihu.com/p/394686861)
+* [GitHub](https://github.com/facebookresearch/Kats)
+* [GitHub tutorials](https://github.com/facebookresearch/Kats/blob/main/tutorials/kats_101_basics.ipynb)
+* [Doc](https://facebookresearch.github.io/Kats/)
+
 

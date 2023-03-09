@@ -78,8 +78,6 @@ details[open] summary {
 - [异常检测数据集](#异常检测数据集)
   - [SEQ](#seq)
   - [其他](#其他)
-- [异常检测工具](#异常检测工具)
-  - [PyOD](#pyod)
 - [结论和方向](#结论和方向)
 - [参考](#参考)
 </p></details><p></p>
@@ -942,16 +940,6 @@ n_error_outlier = y_pred[y_pred == -1].size
 ## 其他
 
 ![img](images/data.png)
-
-# 异常检测工具
-
-## PyOD
-
-* [GitHub](https://github.com/yzhao062/Pyod)
-* [Doc](https://pyod.readthedocs.io/en/latest/)
-* [知乎](https://www.zhihu.com/people/breaknever/posts?page=3)
-* [Resources](https://github.com/yzhao062/anomaly-detection-resources)
-* https://www.andrew.cmu.edu/user/yuezhao2/
 
 # 结论和方向
 

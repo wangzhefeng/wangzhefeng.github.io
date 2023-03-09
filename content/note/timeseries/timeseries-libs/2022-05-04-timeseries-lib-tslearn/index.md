@@ -57,6 +57,7 @@ details[open] summary {
   - [Regression](#regression)
 - [tslearn 和其他包](#tslearn-和其他包)
   - [cesium](#cesium)
+- [参考](#参考)
 </p></details><p></p>
 
 > `tslearn` is a Python package that provides 
@@ -243,3 +244,10 @@ len(to_cesium_dataset(
       [3]]]  
 ))
 ```
+
+
+# 参考
+
+* [Doc](https://tslearn.readthedocs.io/en/latest/)
+* [Gallery of examples](https://tslearn.readthedocs.io/en/latest/auto_examples/index.html)
+

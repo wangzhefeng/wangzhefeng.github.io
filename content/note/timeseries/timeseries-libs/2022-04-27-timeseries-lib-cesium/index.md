@@ -3,7 +3,7 @@ title: Lib cesium
 subtitle: 特征工程
 author: 王哲峰
 date: '2022-04-27'
-slug: lib-cesium
+slug: timeseries-lib-cesium
 categories:
   - timeseries
 tags:
@@ -41,6 +41,7 @@ details[open] summary {
     - [多通道时间序列特征工程](#多通道时间序列特征工程)
   - [模型构建](#模型构建)
   - [预测](#预测)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -237,3 +238,10 @@ print("Wavelet transform features: training accuracy={:.2%}, test accuracy={:.2%
           accuracy_score(preds_dwt[train], eeg["classes"][train]),
           accuracy_score(preds_dwt[test], eeg["classes"][test])))
 ```
+
+
+# 参考
+
+* [cesium Doc](https://cesium-ml.org/docs/index.html)
+* [cesium GitHub](https://github.com/cesium-ml/cesium)
+
