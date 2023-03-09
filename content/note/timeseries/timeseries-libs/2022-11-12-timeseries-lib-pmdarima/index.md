@@ -1,5 +1,5 @@
 ---
-title: Lib pmdarima
+title: pmdarima
 subtitle: R's auto.arima
 author: 王哲峰
 date: '2022-11-12'

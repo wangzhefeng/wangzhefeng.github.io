@@ -1,5 +1,5 @@
 ---
-title: Lib prophet 
+title: prophet 
 subtitle: 预测
 author: 王哲峰
 date: '2022-04-30'

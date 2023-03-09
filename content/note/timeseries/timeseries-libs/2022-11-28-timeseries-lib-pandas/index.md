@@ -1,5 +1,5 @@
 ---
-title: Lib Pandas
+title: Pandas
 subtitle: 数据预处理
 author: 王哲峰
 date: '2022-11-28'

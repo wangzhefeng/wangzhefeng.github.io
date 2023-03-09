@@ -1,5 +1,5 @@
 ---
-title: Lib Sktime 
+title: Sktime 
 subtitle: 机器学习
 author: 王哲峰
 date: '2022-05-01'

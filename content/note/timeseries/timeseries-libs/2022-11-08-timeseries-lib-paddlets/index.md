@@ -1,5 +1,5 @@
 ---
-title: Lib-Paddlets
+title: Paddlets
 author: 王哲峰
 date: '2022-11-08'
 slug: timeseries-lib-paddlets
@@ -10,4 +10,8 @@ tags:
 ---
 
 
-- https://github.com/PaddlePaddle/PaddleTS
+
+# 参考
+
+* [GitHub](https://github.com/PaddlePaddle/PaddleTS)
+

@@ -1,5 +1,5 @@
 ---
-title: Lib tsmoothie
+title: tsmoothie
 subtitle: 光滑和异常检测
 author: 王哲峰
 date: '2022-05-05'

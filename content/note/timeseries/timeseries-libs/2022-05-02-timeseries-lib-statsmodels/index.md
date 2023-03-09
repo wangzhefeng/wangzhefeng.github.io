@@ -1,5 +1,5 @@
 ---
-title: Lib Statsmodels
+title: Statsmodels
 author: 王哲峰
 date: '2022-05-02'
 slug: timeseries-lib-statsmodels

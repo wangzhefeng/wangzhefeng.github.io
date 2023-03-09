@@ -1,5 +1,5 @@
 ---
-title: Lib tslearn 
+title: tslearn 
 subtitle: 预测
 author: 王哲峰
 date: '2022-05-04'
