@@ -10,3 +10,5 @@ list_pages: true
 > 3. tsmoothie
 > 4. NeuralProphet
 > 5. GluonTS
+> 6. sktime
+
