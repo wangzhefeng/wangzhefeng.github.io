@@ -1,8 +1,8 @@
 ---
-title: 傅里叶变换与小波分析
+title: 傅里叶变换
 author: 王哲峰
 date: '2022-03-11'
-slug: wavelet-fourier-transform
+slug: fourier-transform
 categories:
   - 数学、统计学
 tags:
@@ -31,25 +31,21 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [傅里叶变换](#傅里叶变换)
-  - [傅里叶变换介绍](#傅里叶变换介绍)
-  - [快速傅里叶变换](#快速傅里叶变换)
-  - [傅里叶变换的应用](#傅里叶变换的应用)
-    - [数据去噪](#数据去噪)
-      - [将干净的数据与噪声混合](#将干净的数据与噪声混合)
-      - [从时域到频域的转换](#从时域到频域的转换)
-      - [去除噪声频率](#去除噪声频率)
-      - [从频域到时域的转换](#从频域到时域的转换)
+- [傅里叶变换简介](#傅里叶变换简介)
+- [傅里叶变换介绍](#傅里叶变换介绍)
+- [傅里叶变换的应用](#傅里叶变换的应用)
+  - [数据去噪](#数据去噪)
+    - [将干净的数据与噪声混合](#将干净的数据与噪声混合)
+    - [从时域到频域的转换](#从时域到频域的转换)
+    - [去除噪声频率](#去除噪声频率)
+    - [从频域到时域的转换](#从频域到时域的转换)
     - [自定义傅里叶变换函数](#自定义傅里叶变换函数)
-    - [周期性检测](#周期性检测)
-    - [季节性检测](#季节性检测)
-    - [TODO](#todo)
-- [小波分析](#小波分析)
-  - [小波分析的应用](#小波分析的应用)
+  - [周期性检测](#周期性检测)
+  - [季节性检测](#季节性检测)
 - [参考资料](#参考资料)
 </p></details><p></p>
 
-# 傅里叶变换
+# 傅里叶变换简介
 
 傅里叶变换的维基百科介绍：
 
@@ -71,26 +67,7 @@ details[open] summary {
 
 ![img](images/fft0.gif)
 
-四种傅里叶变换：
-
-![img](images/ft_type.png)
-
-两本介绍傅里叶变换的书：
-
-* Frequency Domain and Fourier Transforms. Paul W. Cuff’s textbook from Princeton.
-* Digital Signal Processing — by Steven W.Smith 的第 8 章 DSP
-
-其他：
-
-* [使用傅立叶变换清理时间序列数据噪声](https://cloud.tencent.com/developer/article/1891362)
-* [An Interactive Guide To The Fourier Transform](https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/)
-* [Fourier Transforms With scipy.fft: Python Signal Processing](https://realpython.com/python-scipy-fft/)
-* [Understanding the FFT Algorithm](http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/)
-* [Frequency Domain and Fourier Transforms](https://www.princeton.edu/~cuff/ele201/kulkarni_text/frequency.pdf)
-* [Denoising Data with FFT(Python)](https://www.youtube.com/watch?v=s2K1JfNR7Sc&ab_channel=SteveBrunton)
-* [The FFT Algorithm — Simple Step by Step](https://www.youtube.com/watch?v=htCj9exbGo0&ab_channel=SimonXu)
-
-## 傅里叶变换介绍
+# 傅里叶变换介绍
 
 傅里叶变换(Fourier Transform, FT)是一种将 **时域**、 **空域** 数据转化为 **频域** 数据的方法, 
 任何波形(时域)都可以看做是不同振幅、不同相位(频域)正弦波的叠加. 
@@ -104,28 +81,35 @@ details[open] summary {
 
 将时域数据变换为频域数据的公式如下：
 
-`$$X_{k} = \sum_{n=0}^{N-1} x_{n} \cdot e^{\frac{-i2 \pi k n}{N}}$$`
+`$$X_{k} = \sum_{n=0}^{N-1} x_{n} \cdot e^{\frac{-i 2 \pi k n}{N}}$$`
 
 其中：
 
-* `$x_{n}$`：原始时域信号数据，表示第 `$n$` 个位置(时间)的时域数据点，范围为 `$[0, N-1]$`
-    - `$N$`：数据点个数
+* `$x_{n}$`：原始时域信号数据，表示第 `$n$` 个位置(时间)的时域数据点，范围为 `$[0, N-1]$`，其中 `$N$` 为数据点个数
 * `$k$`：频率序号，范围与 `$n$` 相同，`$[0, N-1]$`，因为极端情况下每个数据点代表一个独立的正弦波
 
 将时域数据通过傅里叶变换转换为频域数据后就可以轻松地处理频域中的数据，
 例如：去除噪声波。之后，可以使用逆方程将频域数据转换回时域波：
 
-`$$x_{n} = \frac{1}{N}\sum_{n=0}{N-1} X_{k} \cdot e^{\frac{i2 \pi kn}{N}}$$`
+`$$x_{n} = \frac{1}{N}\sum_{n=0}^{N-1} X_{k} \cdot e^{\frac{i2 \pi kn}{N}}$$`
 
-## 快速傅里叶变换
+四种傅里叶变换：
 
-快速傅里叶变换(Fast Fourier Transform, FFT)
+![img](images/ft_type.png)
 
-## 傅里叶变换的应用
 
-### 数据去噪
+`$$X(f) = \int_{-\infty}^{\infty} x(t) \cdot e^{-2 j \pi ft} dt$$`
 
-#### 将干净的数据与噪声混合
+`$$x(t) = \int_{-\infty}^{\infty } X(f) \cdot e^{2 j \pi ft} df$$`
+
+
+
+
+# 傅里叶变换的应用
+
+## 数据去噪
+
+### 将干净的数据与噪声混合
 
 创建两个正弦波并将它们合并为一个正弦波，然后故意用随机噪声数据污染干净的数据波。
 将两个信号组合成第三个信号也称为卷积或信号卷积
@@ -224,7 +208,7 @@ plt.show()
 但是 傅立叶变换在这里可以提供帮助。需要做的就是将数据转换到另一个角度，
 从时间视图(x 轴是时间)到频率视图(x 轴将是波频率)
 
-#### 从时域到频域的转换
+### 从时域到频域的转换
 
 可以使用 `numpy.fft` 或 `scipy.fft` 进行傅里叶转换，PyTorch1.8 以后也增加了 `torch.fft`。
 `scipy.fft` 非常方便且功能齐全，但是如果想使用其他模块或者根据公式构建自己的一个也是没问题的
@@ -243,7 +227,6 @@ plt.rcParams.update({
 from scipy.fft import rfft, rfftfreq
 # from numpy.fft import rfft, rfftfreq
 # from torch.fft import rfft, rfftfreq
-
 
 # ------------------------------
 # fft transform
@@ -267,7 +250,7 @@ plt.show()
 上图为原始波的频域视图，x 轴表示频率。一些在时域看起来很复杂的东西现在被转换成非常简单的频域数据。
 这两个峰代表两个正弦波的频率，一种波是 50Hz，另一种是 120Hz，其他频率就是噪声很容易去除
 
-#### 去除噪声频率
+### 去除噪声频率
 
 将频域数据中频率为噪声的数据设置为 0，除了 50Hz 和 120Hz
 
@@ -283,7 +266,7 @@ plt.show()
 
 ![img](images/fft_filter_noise.png)
 
-#### 从频域到时域的转换
+### 从频域到时域的转换
 
 将频域数据转换回时域数据
 
@@ -321,44 +304,32 @@ x = np.random.random(1024)
 np.allclose(dft(x), fft(x))
 ```
 
-### 周期性检测
+## 周期性检测
 
 对于一条具备周期性的时间序列, 它本身就很接近正弦波, 所以它的组成里一定包含一个显著的正弦波, 
 周期就是该正弦波的周期, 而这个正弦波可以通过傅里叶变换找到, 它将时序数据展开成
 三角函数的线性组合, 得到每个展开项的系数, 就是傅里叶系数. 
 傅里叶系数越大, 表明它所对应的正弦波的周期就越有可能是这份数据的周期. 
 
-### 季节性检测
+## 季节性检测
 
 * https://anomaly.io/detect-seasonality-using-fourier-transform-r/
 
-### TODO
-
-* [An Interactive Guide To The Fourier Transform](https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/)
-
-# 小波分析
-
-小波分析的维基百科介绍：
-
-> **小波分析**（英语：wavelet analysis）或**小波变换**（英语：wavelet transform）是指用有限长或快速衰减的“母小波”（mother wavelet）的振荡波形来表示信号。该波形被缩放和平移以匹配输入的信号。
->
-> “小波”（英语：wavelet）一词由吉恩·莫莱特和阿列克斯·格罗斯曼在 1980 年代早期提出。他们用的是法语词 ondelette，意思就是“小波”。后来在英语里，“onde” 被改为 “wave” 而成了 wavelet。
->
-> 小波变化的发展，承袭 Gabor transform 的局部化思想，并且克服了傅里叶和 Gabor transform 的部分缺陷，小波变换提供了一个可以调变的时频窗口，窗口的宽度 (width) 随着频率变化，频率增高时，时间窗口的宽度就会变窄，以提高分辨率．小波在整个时间范围内的振幅平均值为0，具有有限的持续时间和突变的频率与震幅，可以是不规则，或不对称的信号。
->
-> 小波变换分成两个大类：离散小波变换 (DWT)  和连续小波变换 (CWT)。两者的主要区别在于，连续变换在所有可能的缩放和平移上操作，而离散变换采用所有缩放和平移值的特定子集。
-
-## 小波分析的应用
-
 # 参考资料
 
-* https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2
-* https://www.leiphone.com/category/yanxishe/HJWOsm2lCtCIpVVK.html
-* https://www.jezzamon.com/fourier/zh-cn.html
-* https://github.com/Jezzamonn/fourier
-* https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
-* https://zh.wikipedia.org/wiki/%E5%B0%8F%E6%B3%A2%E5%88%86%E6%9E%90
-* http://users.rowan.edu/~polikar/WTpart1.html
-* http://users.rowan.edu/~polikar/WTpart2.html
-* http://users.rowan.edu/~polikar/WTpart3.html
+* [维基百科](https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2)
+* [如果看了这篇文章你还不懂傅里叶变换，那就过来掐死我吧（上）](https://www.leiphone.com/category/yanxishe/HJWOsm2lCtCIpVVK.html)
+* [傅里叶变换交互式入门](https://www.jezzamon.com/fourier/zh-cn.html)
+* [An Interactive Introduction to Fourier Transforms](https://github.com/Jezzamonn/fourier)
+* [An Interactive Guide To The Fourier Transform](https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/)
+* [Fourier Transform: A R Tutorial](http://www.di.fc.ul.pt/~jpn/r/fourier/fourier.html)
+* [十分简明易懂的FFT（快速傅里叶变换）](https://blog.csdn.net/enjoy_pascal/article/details/81478582)
+* [这次终于彻底理解了傅里叶变换](https://mp.weixin.qq.com/s/5HOOSdstFjlYzKW7ek73Yw)
+* [一小时学会快速傅里叶变换（Fast Fourier Transform）](https://zhuanlan.zhihu.com/p/31584464)
+* [使用傅立叶变换清理时间序列数据噪声](https://cloud.tencent.com/developer/article/1891362)
+* [Fourier Transforms With scipy.fft: Python Signal Processing](https://realpython.com/python-scipy-fft/)
+* [Understanding the FFT Algorithm](http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/)
+* [Frequency Domain and Fourier Transforms](https://www.princeton.edu/~cuff/ele201/kulkarni_text/frequency.pdf)
+* [Denoising Data with FFT(Python)](https://www.youtube.com/watch?v=s2K1JfNR7Sc&ab_channel=SteveBrunton)
+* [The FFT Algorithm — Simple Step by Step](https://www.youtube.com/watch?v=htCj9exbGo0&ab_channel=SimonXu)
 

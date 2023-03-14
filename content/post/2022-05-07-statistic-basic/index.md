@@ -77,6 +77,7 @@ details[open] summary {
     - [选择检验统计量并给出拒绝域形式](#选择检验统计量并给出拒绝域形式)
     - [选择显著性水平](#选择显著性水平)
     - [常用假设检验](#常用假设检验)
+    - [正态性检验](#正态性检验)
   - [抽样分布](#抽样分布-1)
 - [偏度、峰度](#偏度峰度)
   - [偏度](#偏度)
@@ -309,6 +310,10 @@ details[open] summary {
 
 1. 卡方检验
 2. t 检验
+
+### 正态性检验
+
+* https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html
 
 
 ## 抽样分布

@@ -32,6 +32,7 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [安装](#安装)
 - [使用示例](#使用示例)
   - [构建数据集](#构建数据集)
   - [特征工程](#特征工程)
@@ -43,6 +44,14 @@ details[open] summary {
   - [预测](#预测)
 - [参考](#参考)
 </p></details><p></p>
+
+
+# 安装
+
+```bash
+$ pip install cesium
+```
+
 
 
 
@@ -216,8 +225,6 @@ model_dwt.fit(
     eeg["classes"][train_idx],
 )
 ```
-
-
 
 ## 预测
 
