@@ -662,4 +662,5 @@ Outputs:
 * [imbalanced-learn documentation](https://imbalanced-learn.org/stable/)
 * [Adasyn: adaptive synthetic sampling approach for imbalanced learning](https://sci2s.ugr.es/keel/pdf/algorithm/congreso/2008-He-ieee.pdf)
 * [不平衡数据集的建模的技巧和策略](https://mp.weixin.qq.com/s/cfT3t1MXMgwc6d6xaVHGCw)
+* [样本筛选](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247491048&idx=1&sn=0f5d11e71de65f56471de4dcf2e14800&chksm=c3290467f45e8d71855b9e222b0056333adc137df33c5938a0d079077486cdb22fb416ecf396&scene=21#wechat_redirect)
 

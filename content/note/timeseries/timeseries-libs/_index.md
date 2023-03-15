@@ -1,5 +1,5 @@
 ---
-title: Python 工具库
+title: 工具库
 subtitle: Python Libraries
 list_pages: true
 # order_by: title
@@ -11,4 +11,5 @@ list_pages: true
 > 4. NeuralProphet
 > 5. GluonTS
 > 6. sktime
+> 7. cesium
 
