@@ -48,7 +48,7 @@ details[open] summary {
   - [Docker 架构](#docker-架构)
     - [Docker 架构概述](#docker-架构概述)
     - [Docker Client(客户端) -- `docker`](#docker-client客户端----docker)
-    - [DOCKER_HOST](#docker_host)
+    - [DOCKER\_HOST](#docker_host)
     - [Docker Registry(仓库)](#docker-registry仓库)
     - [Docker Services](#docker-services)
   - [docker run 命令示例](#docker-run-命令示例)
@@ -104,6 +104,7 @@ details[open] summary {
   - [Docker 安装 PyTorch](#docker-安装-pytorch)
 - [Docker 使用示例](#docker-使用示例)
   - [公司工作站环境](#公司工作站环境)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -1068,4 +1069,8 @@ $ Ctrl + P + Q
 - torch 环境的 docker, name 是 torch_env, 已运行 jupyter notebook, 192.168.0.66:6666
 - 初次进入需要密码
 - 挂载的目录都是 /workspace/dataSets 挂载宿主机 /mnt/dataSets
+
+# 参考
+
+* [3W 字的 Docker 教程](https://mp.weixin.qq.com/s/xbqLhBIBbIkJKGwSDs_G2w)
 

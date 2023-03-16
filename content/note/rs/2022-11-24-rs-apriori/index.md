@@ -34,13 +34,13 @@ details[open] summary {
 - [Apriori 关联分析概述](#apriori-关联分析概述)
 - [Apriori 关联分析概念](#apriori-关联分析概念)
   - [支持度 Support](#支持度-support)
-    - [计算方式是](#计算方式是)
+    - [计算方式](#计算方式)
     - [举例说明](#举例说明)
   - [置信度 Confidence](#置信度-confidence)
-    - [计算方式](#计算方式)
+    - [计算方式](#计算方式-1)
     - [举例说明](#举例说明-1)
   - [提深度 Lift](#提深度-lift)
-    - [计算方式](#计算方式-1)
+    - [计算方式](#计算方式-2)
     - [举例说明](#举例说明-2)
 - [Apriori 关联分析算法](#apriori-关联分析算法)
   - [算法思想](#算法思想)
@@ -75,7 +75,7 @@ details[open] summary {
 如果一个物品本身购买的人就不多，那么再怎么提升，也不会高到哪去。
 所以从效率和价值的角度来说，肯定是优先找出那些人们频繁购买的物品的关联物品
 
-既然要找出物品的关联规则有两步，先介绍如何用 Apriori 找出物品的频繁项集，
+要找出物品的关联规则有两步，先介绍如何用 Apriori 找出物品的频繁项集，
 然后在 Apriori 处理后的频繁项集的基础上，进行物品的关联分析
 
 # Apriori 关联分析概念
@@ -94,7 +94,7 @@ details[open] summary {
 
 支持度可以理解为物品当前的流行程度
 
-### 计算方式是
+### 计算方式
 
 `$$Support(A) = \frac{包含 A 的记录数量}{总的记录数量}$$`
 
@@ -157,7 +157,7 @@ Apriori 的作用是根据物品间的支持度找出物品中的频繁项集。
 假设有 N 个物品，那么一共需要计算 `$2^{N-1}$` 次。每增加一个物品，数量级是成指数增长。
 而 Apriori 就是一种找出频繁项集的高效算法。它的核心就是下面这句话
 
-> 某个项集是频繁项集的，那么它的所有自己也是频繁项集
+> 某个项集是频繁项集的，那么它的所有子集也是频繁项集
 
 这句话看起来是没什么用，但是反过来就很有用了：
 
@@ -181,8 +181,14 @@ Apriori 的作用是根据物品间的支持度找出物品中的频繁项集。
 
 ### Apriori 关联分析参数
 
+* `mlxtend.frequent_patterns.apriori`
+
 ```python
-def apriori(df, min_support = 0.5, use_colnames = False, max_len = None):
+
+def apriori(df, 
+            min_support = 0.5, 
+            use_colnames = False, 
+            max_len = None):
     """
     df：数据集
     min_support：给定的最小支持度
@@ -271,12 +277,13 @@ print(freq.tail())
 
 ## 算法实现
 
-
-
 ### Apriori 关联规则参数
 
 ```python
-def association_rules(df, metric = "confidence", min_threshold = 0.8, support_only = False):
+def association_rules(df, 
+                      metric = "confidence", 
+                      min_threshold = 0.8, 
+                      support_only = False):
     """
     df：Apriori 计算后的频繁项集
     metric：可选值 ['support', 'confidence', 'lift', 'leverage', 'conviction']

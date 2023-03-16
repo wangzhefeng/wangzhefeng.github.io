@@ -193,6 +193,8 @@ details[open] summary {
 
 单源最短路径
 
+* [基于Dijkstra算法的武汉地铁路径规划](https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247543903&idx=1&sn=a8b6acf4fd762353437a8c0734780d40&chksm=e873fd12df04740490bee9aa4e3327de2e24ed451117be76eb3e749e1d7d3049cc08454b1a9b&cur_album_id=1610940301446037510&scene=189#wechat_redirect)
+
 ### 佛洛伊德算法 Floyd
 
 

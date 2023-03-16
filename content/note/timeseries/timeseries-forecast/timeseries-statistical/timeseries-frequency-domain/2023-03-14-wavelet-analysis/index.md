@@ -212,4 +212,4 @@ cA, cD = pywt.dwt([1, 2, 3, 4], "db1")
 * [维基百科](https://zh.wikipedia.org/wiki/%E5%B0%8F%E6%B3%A2%E5%88%86%E6%9E%90)
 * [The Wavelet Tutorial](https://users.rowan.edu/~polikar/WTtutorial.html)
 * [PyWavelets](https://pywavelets.readthedocs.io/en/latest/index.html)
-
+* [信号与频谱](https://cloud.tencent.com/developer/article/1023129?from=article.detail.1891362)

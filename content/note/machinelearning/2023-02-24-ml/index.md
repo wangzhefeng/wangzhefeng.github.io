@@ -50,6 +50,8 @@ details[open] summary {
 
 * [机器学习入门清单及路线](https://mp.weixin.qq.com/s/KeD9kPG8PowlKrz69zSHNQ)
 * [机器学习初学者易踩的5个坑](https://mp.weixin.qq.com/s/6r4FX7DEIUHE8pnYkftXSA)
+* [机器学习43条军规：解密谷歌机器学习工程最佳实践（上）](https://zhuanlan.zhihu.com/p/29409286)
+* [机器学习43条军规：解密谷歌机器学习工程最佳实践（下）](https://zhuanlan.zhihu.com/p/29446616)
 
 # 机器学习系统的种类
 

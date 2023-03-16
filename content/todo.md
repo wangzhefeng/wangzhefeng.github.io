@@ -40,6 +40,9 @@ details[open] summary {
 
 * [搭建私有云](https://mp.weixin.qq.com/s/E9rrjGtV5RJwxvtICgrOxQ)
 * [Logging in Python](https://realpython.com/python-logging/)
+* [Asynchronous HTTP Client/Server for asyncio and Python](https://docs.aiohttp.org/en/stable/client_quickstart.html)
+* [Python-100-Days](https://github.com/jackfrued/Python-100-Days)
+* [Colossal-AI](https://github.com/hpcaitech/ColossalAI/blob/main/README-zh-Hans.md)
 
 ### Timeseries
 
