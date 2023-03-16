@@ -39,6 +39,7 @@ details[open] summary {
 ### NAS
 
 * [搭建私有云](https://mp.weixin.qq.com/s/E9rrjGtV5RJwxvtICgrOxQ)
+* [Logging in Python](https://realpython.com/python-logging/)
 
 ### Timeseries
 

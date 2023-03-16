@@ -13,4 +13,4 @@ tags:
 # 参考
 
 * [Paper](https://arxiv.org/pdf/1704.04110.pdf)
-
+* [DeepAR Forecasting Algorithm](https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html)

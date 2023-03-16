@@ -35,33 +35,16 @@ details[open] summary {
 - [不平衡数据集的处理方法](#不平衡数据集的处理方法)
   - [处理不平衡数据集的技巧](#处理不平衡数据集的技巧)
   - [在不平衡数据集上提高模型性能的策略](#在不平衡数据集上提高模型性能的策略)
-  - [过采样 Over-sampling](#过采样-over-sampling)
-    - [Random Over Sampler](#random-over-sampler)
-    - [SMOTE](#smote)
-    - [ANASYN](#anasyn)
-    - [Borderline SMOTE](#borderline-smote)
-    - [SMOTENC：处理类别型数据](#smotenc处理类别型数据)
-    - [SMOTEN：处理类别型数据](#smoten处理类别型数据)
-    - [SVM SMOTE](#svm-smote)
-    - [KMeans SMOTE](#kmeans-smote)
-  - [降采样 Under-sampling](#降采样-under-sampling)
-    - [原型生成](#原型生成)
-    - [原型选择](#原型选择)
-      - [Controlled 降采样](#controlled-降采样)
-      - [Cleaning 降采样](#cleaning-降采样)
-  - [联合采样 Combination of over and under sampling](#联合采样-combination-of-over-and-under-sampling)
-  - [集成采样 Ensemble of samplers](#集成采样-ensemble-of-samplers)
-  - [其他](#其他)
 - [算法](#算法)
   - [随机过采样](#随机过采样)
-  - [SMOTE](#smote-1)
+  - [SMOTE](#smote)
     - [SMOTE 算法简介](#smote-算法简介)
     - [SMOTE 算法的缺陷](#smote-算法的缺陷)
     - [针对 SMOTE 算法的进一步改进](#针对-smote-算法的进一步改进)
   - [ADASYN](#adasyn)
-  - [Borderline SMOTE](#borderline-smote-1)
-  - [SVM SMOTE](#svm-smote-1)
-  - [KMeans SMOTE](#kmeans-smote-1)
+  - [Borderline SMOTE](#borderline-smote)
+  - [SVM SMOTE](#svm-smote)
+  - [KMeans SMOTE](#kmeans-smote)
   - [联合采样](#联合采样)
     - [SMOTE Tomek](#smote-tomek)
     - [SMOTE ENN](#smote-enn)
@@ -83,6 +66,23 @@ details[open] summary {
 - [imblearn](#imblearn)
   - [安装](#安装)
   - [使用](#使用)
+  - [过采样](#过采样)
+    - [Random Over Sampler](#random-over-sampler)
+    - [SMOTE](#smote-1)
+    - [ANASYN](#anasyn)
+    - [Borderline SMOTE](#borderline-smote-1)
+    - [SMOTENC](#smotenc)
+    - [SMOTEN](#smoten)
+    - [SVM SMOTE](#svm-smote-1)
+    - [KMeans SMOTE](#kmeans-smote-1)
+  - [降采样](#降采样)
+    - [原型生成](#原型生成)
+    - [原型选择](#原型选择)
+      - [Controlled 降采样](#controlled-降采样)
+      - [Cleaning 降采样](#cleaning-降采样)
+  - [联合采样](#联合采样-1)
+  - [集成采样](#集成采样)
+  - [其他](#其他)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -157,322 +157,6 @@ details[open] summary {
 在收集更多数据、生成合成样本、使用领域知识专注于重要样本，
 以及使用异常检测等先进技术是一些可用于提高模型在不平衡数据集上的性能的策略。
 这些策略可以帮助平衡数据集，为模型提供更多示例以供学习，并识别数据集中信息量最大的示例
-
-## 过采样 Over-sampling
-
-* SMOTE
-    - `SMOTE`
-* Borderline SMOTE
-    - `BorderlineSMOTE`
-* SMOTE NC
-    - `SMOTENC`
-* SMOTEN
-    - `SMOTEN`
-* SVM SMOTE
-    - `SVMSMOTE`
-* KMeans SMOTE
-    - `KMeansSMOTE`
-* ADASYN
-    - `ADASYN`
-
-* `imblearn.over_sampling`
-    - `RandomOverSampler`
-    - `ADASYN`
-    - `BorderlineSMOTE`
-    - `KMeansSMOTE`
-    - `SMOTE`
-    - `SMOTENC`
-    - `SVMSMOTE`
-
-### Random Over Sampler
-
-> * Naive Strategy: generate new samples by randomly sampling with replacement the current available samples
-> * API: `imblearn.over_sampling.RandomOverSampler`
-
-随机过采样：
-
-```python
-from sklearn.datasets import make_classification
-from imblearn.over_sampling import RandomOverSampler
-from collections import Counter
-from sklearn.svm import LinearSVC
-
-# data
-X, y = make_classificaion(
-    n_samples = 5000,
-    n_features = 2,
-    n_informative = 2,
-    n_redundant = 0, 
-    n_repeated = 0,
-    n_classes = 3,
-    n_clusters_per_class = 1,
-    weights = [0.01, 0.05, 0.94],
-    class_sep = 0.8,
-    random_state = 0
-)
-
-# resample
-ros = RandomOverSampler(random_state = 0)
-X_resampled, y_resampled = ros.fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-
-# model
-clf = LinearSVC()
-clf.fit(X_resampled, y_resampled)
-```
-
-随机过采样对异构数据进行采样：
-
-```python
-import numpy as np
-from imblearn.over_sampling import RandomOverSampler
-
-# data
-X_hetero = np.array(
-    [["xxx", 1, 1.0],
-     ["yyy", 2, 2.0],
-     ["zzz", 3, 3.0]],
-    dtype = object
-)
-y_hetero = np.array([0, 0, 1])
-
-# 过采样
-ros = RandomOverSampler(random_state = 0)
-X_resampled, y_resampled = ros.fit_resample(X_hetero, y_hetero)
-print(X_resampled)
-print(y_resampled)
-```
-
-随机过采样支持 Pandas DataFrame：
-
-```python
-from sklearn.datasets import fetch_openml
-from imblearn.over_sampling import RandomOverSampler
-
-# data
-df_adult, y_adult = fetch_openml(
-    "adult",
-    version = 2,
-    as_frame = True,
-    return_X_y = True
-)
-df_adult.head()
-
-# 过采样
-ros = RandomOverSampler(random_state = 0)
-df_resampled, y_resampled = ros.fit_resample(df_adult, y_adult)
-df_resampled.head()
-```
-
-随机过采样示例(Random Over-Sampling Examples)[Training and assessing classification rules with imbalanced data](https://doi.org/10.1007/s10618-012-0295-5)：
-
-### SMOTE
-
-```python
-from imblearn.over_sampling import ADASYN
-
-X_resampled, y_resampled = SMOTE().fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-
-clf_smote = LinearSVC().fit(X_resampled, y_resampled)
-```
-
-### ANASYN
-
-```python
-from imblearn.over_sampling import ADASYN
-
-X_resampled, y_resampled = ADASYN().fit(X, y)
-print(sorted(Counter(y_resampled).items()))
-
-clf_adasyn = LinearSVC().fit(X_resampled, y_resampled)
-```
-
-### Borderline SMOTE
-
-```python
-from imblearn.over_sampling import BorderlineSMOTE
-
-X_resampled, y_resampled = BorderlineSMOTE().fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-```
-
-### SMOTENC：处理类别型数据
-
-```python
-import numpy as np
-from imblearn.over_sampling import SMOTENC
-
-rng = np.random.RandomState(42)
-n_samples = 50
-X = np.empty((n_samples, 3), dtype = object)
-X[:, 0] = rng.choice(["A", "B", "C"], size = n_samples).astype(object)
-X[:, 1] = rng.randn(n_samples)
-X[:, 2] = rng.randint(3, size = n_samples)
-y = np.array([0] * 20 + [1] * 30)
-print(sorted(Counter(y).items()))
-
-
-smote_nc = SMOTENC(categorical_features = [0, 2], random_state = 0)
-X_resampled, y_resampled = smote_nc.fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-print(X_resampled[-5:])
-```
-
-### SMOTEN：处理类别型数据
-
-```python
-import numpy as np
-from imblearn.over_sampling import SMOTEN
-
-X = np.array(
-    ["green"] * 5 + ["red"] * 10 + ["blue"] * 7, 
-    dtype = object
-).reshape(-1, 1)
-y = np.array(
-    ["apple"] * 5 + ["not apple"] * 3 + ["apple"] * 7 + 
-    ["not apple"] * 5 + ["apple"] * 2, 
-    dtype = object
-)
-
-sampler = SMOTEN(random_state = 0)
-X_res, y_res = sampler.fit_resample(X, y)
-X_res[y.size:]
-y_res[y.size:]
-```
-
-### SVM SMOTE
-
-```python
-
-```
-
-### KMeans SMOTE
-
-```python
-
-```
-
-
-
-
-
-
-
-
-
-
-
-## 降采样 Under-sampling
-
-* imblearn.under_sampling
-    - Prototype generation
-        - `ClusterCentroids()`
-    - Prototype selection
-        - `CondensedNearestNeighbour()`
-        - `EditedNearestNeighbours()`
-        - `RepeatedEditedNearestNeighbours()`
-        - `AllKNN()`
-        - `InstanceHardnessThreshold()`
-        - `NearMiss()`
-        - `NeighbourhoodCleaningRule()`
-        - `OneSidedSelection()`
-        - `RandomUnderSampler()`
-        - `TomekLinks()`
-
-### 原型生成
-
-给定原始数据集 `$S$`, 原型生成算法会生成一个新的集合 `$S'$`。其中：
-
-* `$|S'| < |S|$`
-* `$S' \not \subset S$`
-
-换句话说，原型生成技术将减少目标类中的样本数量，但剩余的样本是从原始集合中生成的，而不是从中选择的。
-`ClusterCentroids` 利用 K-means 来减少样本数量。因此，每个类将使用 K-means 方法的质心而不是原始样本进行合成
-
-```python
-from collections import Counter
-from sklearn.datasets import make_classification
-from imblearn.under_sampling import ClusterCentroids
-
-X, y = make_classification(
-    n_samples = 5000,
-    n_features = 2, 
-    n_informative = 2,
-    n_redundant = 0,
-    n_repeated = 0,
-    n_classes = 3,
-    n_clusters_per_class = 1,
-    weights = [0.01, 0.05, 0.94],
-    class_sep = 0.8,
-    random_state = 0
-)
-print(sorted(Counter(y).items()))
-
-cc = ClusterCentroids(random_state = 0)
-X_resampled, y_resampled = cc.fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-```
-
-### 原型选择
-
-与原型生成算法相反，原型选择算法将从原始集合中选择样本 
-. 所以， 
-被定义为
-和
-.
-
-此外，这些算法可以分为两组：
-
-1. 受控欠采样技术和
-2. 清洁欠采样技术
-
-第一组方法允许采用欠采样策略，其中样本数量在由用户指定。相比之下，清洁欠采样技术不允许此规范，并且旨在清洁特征空间
-
-#### Controlled 降采样
-
-```python
-from imblearn.under_sampling import RandomUnderSampler
-
-rus = RandomUnderSampler(random_state = 0)
-X_resampled, y_resampled = rus.fit_resample(X, y)
-print(sorted(Counter(y_resampled).items()))
-```
-
-
-
-#### Cleaning 降采样
-
-Tomek's links：
-
-
-
-Condensed nearest neighbors and derived algorithms
-
-
-Instance hardness threshold：
-
-
-
-## 联合采样 Combination of over and under sampling
-
-* imblearn.combine
-    - imblearn.combine.SMOTEENN
-    - imblearn.combine.SMOTETomek
-
-## 集成采样 Ensemble of samplers
-
-* imblearn.ensemble
-
-
-## 其他
-
-* imblearn.keras
-* imblearn.tensorflow
-* imblearn.pipeline
-* imblearn.metrics
-* imblearn.datasets
-* imblearn.utils
 
 # 算法
 
@@ -655,6 +339,317 @@ Outputs:
     - 1-D `numpy.ndarray`
     - `pandas.Series`
 
+
+## 过采样
+
+> Over-sampling
+
+* SMOTE
+    - `SMOTE`
+* Borderline SMOTE
+    - `BorderlineSMOTE`
+* SMOTE NC
+    - `SMOTENC`
+* SMOTEN
+    - `SMOTEN`
+* SVM SMOTE
+    - `SVMSMOTE`
+* KMeans SMOTE
+    - `KMeansSMOTE`
+* ADASYN
+    - `ADASYN`
+
+* `imblearn.over_sampling`
+    - `RandomOverSampler`
+    - `ADASYN`
+    - `BorderlineSMOTE`
+    - `KMeansSMOTE`
+    - `SMOTE`
+    - `SMOTENC`
+    - `SVMSMOTE`
+
+### Random Over Sampler
+
+> * Naive Strategy: generate new samples by randomly sampling with replacement the current available samples
+> * API: `imblearn.over_sampling.RandomOverSampler`
+
+随机过采样：
+
+```python
+from sklearn.datasets import make_classification
+from imblearn.over_sampling import RandomOverSampler
+from collections import Counter
+from sklearn.svm import LinearSVC
+
+# data
+X, y = make_classificaion(
+    n_samples = 5000,
+    n_features = 2,
+    n_informative = 2,
+    n_redundant = 0, 
+    n_repeated = 0,
+    n_classes = 3,
+    n_clusters_per_class = 1,
+    weights = [0.01, 0.05, 0.94],
+    class_sep = 0.8,
+    random_state = 0
+)
+
+# resample
+ros = RandomOverSampler(random_state = 0)
+X_resampled, y_resampled = ros.fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+
+# model
+clf = LinearSVC()
+clf.fit(X_resampled, y_resampled)
+```
+
+随机过采样对异构数据进行采样：
+
+```python
+import numpy as np
+from imblearn.over_sampling import RandomOverSampler
+
+# data
+X_hetero = np.array(
+    [["xxx", 1, 1.0],
+     ["yyy", 2, 2.0],
+     ["zzz", 3, 3.0]],
+    dtype = object
+)
+y_hetero = np.array([0, 0, 1])
+
+# 过采样
+ros = RandomOverSampler(random_state = 0)
+X_resampled, y_resampled = ros.fit_resample(X_hetero, y_hetero)
+print(X_resampled)
+print(y_resampled)
+```
+
+随机过采样支持 Pandas DataFrame：
+
+```python
+from sklearn.datasets import fetch_openml
+from imblearn.over_sampling import RandomOverSampler
+
+# data
+df_adult, y_adult = fetch_openml(
+    "adult",
+    version = 2,
+    as_frame = True,
+    return_X_y = True
+)
+df_adult.head()
+
+# 过采样
+ros = RandomOverSampler(random_state = 0)
+df_resampled, y_resampled = ros.fit_resample(df_adult, y_adult)
+df_resampled.head()
+```
+
+随机过采样示例(Random Over-Sampling Examples)[Training and assessing classification rules with imbalanced data](https://doi.org/10.1007/s10618-012-0295-5)：
+
+### SMOTE
+
+```python
+from imblearn.over_sampling import ADASYN
+
+X_resampled, y_resampled = SMOTE().fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+
+clf_smote = LinearSVC().fit(X_resampled, y_resampled)
+```
+
+### ANASYN
+
+```python
+from imblearn.over_sampling import ADASYN
+
+X_resampled, y_resampled = ADASYN().fit(X, y)
+print(sorted(Counter(y_resampled).items()))
+
+clf_adasyn = LinearSVC().fit(X_resampled, y_resampled)
+```
+
+### Borderline SMOTE
+
+```python
+from imblearn.over_sampling import BorderlineSMOTE
+
+X_resampled, y_resampled = BorderlineSMOTE().fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+```
+
+### SMOTENC
+
+> 处理类别型数据
+
+```python
+import numpy as np
+from imblearn.over_sampling import SMOTENC
+
+rng = np.random.RandomState(42)
+n_samples = 50
+X = np.empty((n_samples, 3), dtype = object)
+X[:, 0] = rng.choice(["A", "B", "C"], size = n_samples).astype(object)
+X[:, 1] = rng.randn(n_samples)
+X[:, 2] = rng.randint(3, size = n_samples)
+y = np.array([0] * 20 + [1] * 30)
+print(sorted(Counter(y).items()))
+
+
+smote_nc = SMOTENC(categorical_features = [0, 2], random_state = 0)
+X_resampled, y_resampled = smote_nc.fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+print(X_resampled[-5:])
+```
+
+### SMOTEN
+
+> 处理类别型数据
+
+```python
+import numpy as np
+from imblearn.over_sampling import SMOTEN
+
+X = np.array(
+    ["green"] * 5 + ["red"] * 10 + ["blue"] * 7, 
+    dtype = object
+).reshape(-1, 1)
+y = np.array(
+    ["apple"] * 5 + ["not apple"] * 3 + ["apple"] * 7 + 
+    ["not apple"] * 5 + ["apple"] * 2, 
+    dtype = object
+)
+
+sampler = SMOTEN(random_state = 0)
+X_res, y_res = sampler.fit_resample(X, y)
+X_res[y.size:]
+y_res[y.size:]
+```
+
+### SVM SMOTE
+
+```python
+
+```
+
+### KMeans SMOTE
+
+```python
+
+```
+
+## 降采样
+
+> Under-sampling
+
+* imblearn.under_sampling
+    - Prototype generation
+        - `ClusterCentroids()`
+    - Prototype selection
+        - `CondensedNearestNeighbour()`
+        - `EditedNearestNeighbours()`
+        - `RepeatedEditedNearestNeighbours()`
+        - `AllKNN()`
+        - `InstanceHardnessThreshold()`
+        - `NearMiss()`
+        - `NeighbourhoodCleaningRule()`
+        - `OneSidedSelection()`
+        - `RandomUnderSampler()`
+        - `TomekLinks()`
+
+### 原型生成
+
+给定原始数据集 `$S$`, 原型生成算法会生成一个新的集合 `$S'$`。其中：
+
+* `$|S'| < |S|$`
+* `$S' \not \subset S$`
+
+换句话说，原型生成技术将减少目标类中的样本数量，但剩余的样本是从原始集合中生成的，而不是从中选择的。
+`ClusterCentroids` 利用 K-means 来减少样本数量。因此，每个类将使用 K-means 方法的质心而不是原始样本进行合成
+
+```python
+from collections import Counter
+from sklearn.datasets import make_classification
+from imblearn.under_sampling import ClusterCentroids
+
+X, y = make_classification(
+    n_samples = 5000,
+    n_features = 2, 
+    n_informative = 2,
+    n_redundant = 0,
+    n_repeated = 0,
+    n_classes = 3,
+    n_clusters_per_class = 1,
+    weights = [0.01, 0.05, 0.94],
+    class_sep = 0.8,
+    random_state = 0
+)
+print(sorted(Counter(y).items()))
+
+cc = ClusterCentroids(random_state = 0)
+X_resampled, y_resampled = cc.fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+```
+
+### 原型选择
+
+与原型生成算法相反，原型选择算法将从原始集合中选择样本 
+. 所以， 
+被定义为
+和
+.
+
+此外，这些算法可以分为两组：
+
+1. 受控欠采样技术和
+2. 清洁欠采样技术
+
+第一组方法允许采用欠采样策略，其中样本数量在由用户指定。相比之下，清洁欠采样技术不允许此规范，并且旨在清洁特征空间
+
+#### Controlled 降采样
+
+```python
+from imblearn.under_sampling import RandomUnderSampler
+
+rus = RandomUnderSampler(random_state = 0)
+X_resampled, y_resampled = rus.fit_resample(X, y)
+print(sorted(Counter(y_resampled).items()))
+```
+
+#### Cleaning 降采样
+
+Tomek's links：
+
+Condensed nearest neighbors and derived algorithms
+
+Instance hardness threshold：
+
+## 联合采样
+
+> Combination of over and under sampling
+
+* imblearn.combine
+    - imblearn.combine.SMOTEENN
+    - imblearn.combine.SMOTETomek
+
+## 集成采样
+
+> Ensemble of samplers
+
+* imblearn.ensemble
+
+## 其他
+
+* imblearn.keras
+* imblearn.tensorflow
+* imblearn.pipeline
+* imblearn.metrics
+* imblearn.datasets
+* imblearn.utils
+
 # 参考
 
 * [SMOTE](https://www.jair.org/index.php/jair/article/view/10302/24590)
@@ -663,4 +658,3 @@ Outputs:
 * [Adasyn: adaptive synthetic sampling approach for imbalanced learning](https://sci2s.ugr.es/keel/pdf/algorithm/congreso/2008-He-ieee.pdf)
 * [不平衡数据集的建模的技巧和策略](https://mp.weixin.qq.com/s/cfT3t1MXMgwc6d6xaVHGCw)
 * [样本筛选](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247491048&idx=1&sn=0f5d11e71de65f56471de4dcf2e14800&chksm=c3290467f45e8d71855b9e222b0056333adc137df33c5938a0d079077486cdb22fb416ecf396&scene=21#wechat_redirect)
-

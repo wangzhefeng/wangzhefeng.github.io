@@ -40,6 +40,7 @@ details[open] summary {
   - [MA(`$q$`) 模型应用](#maq-模型应用)
 - [ARMA 模型](#arma-模型)
   - [ARMA(`$p$`, `$q$`) 模型](#armap-q-模型)
+- [SARIMA](#sarima)
   - [ARMA(`$p$`, `$q$`) 模型应用](#armap-q-模型应用)
 - [AM 和 AM 以及 ARMA 建模流程](#am-和-am-以及-arma-建模流程)
   - [计算 ACF 和 PACF](#计算-acf-和-pacf)
@@ -198,6 +199,12 @@ ARMA 模型的另一种形式：
 当 `$p = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 MA(`$q$`) 模型。
 所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例，它们统称为 ARMA 模型。
 而 ARMA(`$p$`, `$p$`) 模型的统计性质也正是 AR(`$p$`) 模型和 MA(`$p$`) 模型统计性质的有机结合
+
+# SARIMA
+
+
+
+
 
 ## ARMA(`$p$`, `$q$`) 模型应用
 
@@ -393,4 +400,4 @@ AIC 越小，模型越优秀。但 AIC 有不足，就是 AIC 的拟合误差会
 * [时间序列统计分析](https://mp.weixin.qq.com/s/INZgM6hLSEpboaNhS22CaA)
 * [平稳时序分析](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486537&idx=1&sn=03cc507873683e4ad030b1bec8305c39&chksm=fa041222cd739b34e18c209b91f5c4da9ea9aa4162e46ffdaa5a0e4e18f784ca26b2d3e34092&scene=178&cur_album_id=1577157748566310916#rd)
 * [Moving-average model error terms](https://stats.stackexchange.com/questions/26024/moving-average-model-error-terms)
-
+* [季节性自回归整合滑动平均模型（SARIMA）](https://mp.weixin.qq.com/s?__biz=MzkzMTMyMDQ0Mw==&mid=2247483973&idx=1&sn=f9f3f84c5db03e3c2235620435cd75f1&chksm=c26d8551f51a0c47b84185f379c69832041a677f6c3004ac018e3f8ffe67e960d0593f99a87c&scene=21#wechat_redirect)
