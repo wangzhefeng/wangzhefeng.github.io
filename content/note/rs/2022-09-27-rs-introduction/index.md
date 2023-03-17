@@ -6,7 +6,7 @@ slug: rs-introduction
 categories:
   - recommended system
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

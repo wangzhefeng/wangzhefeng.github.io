@@ -175,4 +175,5 @@ print(".匹配所有模式:", re.findall(pattern, text, re.S))
 
 1. [re 模块官方文档](https://docs.python.org/zh-cn/3.8/library/re.html)
 2. [re 模块库源码](https://github.com/python/cpython/blob/3.8/Lib/re.py)
-
+3. [Python正则表达式](https://mp.weixin.qq.com/s/iZk1CX9VjCcHiXVOEwyWGg)
+4. [正则表达式](https://mp.weixin.qq.com/s?__biz=MzI0OTc0MzAwNA==&mid=2247486276&idx=1&sn=ed050c9a691ffd828b86be9edfba73b4&chksm=e98d98b7defa11a1447aca8db5599100cbc8a19c1a8422dd6f84051df643eae1ce49510ef217&scene=21#wechat_redirect)

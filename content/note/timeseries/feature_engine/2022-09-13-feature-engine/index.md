@@ -31,25 +31,25 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [TODO](#todo)
 - [时间序列特征](#时间序列特征)
-  - [离散时间特征](#离散时间特征)
-    - [基础周期特征](#基础周期特征)
-    - [特殊周期特征](#特殊周期特征)
-  - [连续时间特征](#连续时间特征)
-- [基础周期特征](#基础周期特征-1)
-  - [日期时间特征](#日期时间特征)
+  - [动态特征](#动态特征)
+    - [离散时间特征](#离散时间特征)
+    - [连续时间特征](#连续时间特征)
+  - [静态特征](#静态特征)
+    - [类别型特征](#类别型特征)
+    - [数值型特征](#数值型特征)
+- [动态特征](#动态特征-1)
+  - [基础周期特征](#基础周期特征)
     - [日期特征](#日期特征)
     - [时间特征](#时间特征)
-- [特殊周期特征](#特殊周期特征-1)
-  - [月份特征](#月份特征)
-  - [星期特征](#星期特征)
-  - [节假日特征](#节假日特征)
-  - [组合特征](#组合特征)
-- [连续时间特征](#连续时间特征-1)
-  - [持续时间](#持续时间)
-  - [间隔时间](#间隔时间)
-- [动态特征](#动态特征)
+  - [特殊周期特征](#特殊周期特征)
+    - [月份特征](#月份特征)
+    - [星期特征](#星期特征)
+    - [节假日特征](#节假日特征)
+    - [组合特征](#组合特征)
+  - [连续时间特征](#连续时间特征-1)
+    - [持续时间](#持续时间)
+    - [间隔时间](#间隔时间)
   - [滞后特征](#滞后特征)
     - [创建滞后特征](#创建滞后特征)
   - [窗口特征](#窗口特征)
@@ -59,9 +59,6 @@ details[open] summary {
     - [峰值特征](#峰值特征)
     - [Python API](#python-api)
   - [滞后窗口统计特征](#滞后窗口统计特征)
-- [静态特征](#静态特征)
-  - [类别型特征](#类别型特征)
-  - [数值型特征](#数值型特征)
 - [交叉特征](#交叉特征)
   - [类别特征与类别特征](#类别特征与类别特征)
   - [连续特征与类别特征](#连续特征与类别特征)
@@ -83,25 +80,11 @@ details[open] summary {
     - [时频分析](#时频分析)
   - [降维转化特征](#降维转化特征)
 - [基于神经网络的特征工程](#基于神经网络的特征工程)
-- [时间序列预处理](#时间序列预处理)
-  - [时间序列示例数据](#时间序列示例数据)
-  - [标准化和中心化](#标准化和中心化)
-    - [标准化](#标准化)
-    - [中心化](#中心化)
-  - [归一化](#归一化)
-    - [归一化](#归一化-1)
-    - [平均归一化](#平均归一化)
-    - [什么时候用归一化？什么时候用标准化？](#什么时候用归一化什么时候用标准化)
-  - [定量特征二值化](#定量特征二值化)
-- [时间序列分类特征](#时间序列分类特征)
+- [分类特征](#分类特征)
   - [字典特征](#字典特征)
   - [形态特征(Shapelet)](#形态特征shapelet)
 - [参考](#参考)
 </p></details><p></p>
-
-# TODO
-
-* [多元时间序列特征工程的指南](https://mp.weixin.qq.com/s/D79CaZyQLB0ILqid7qgxsg)
 
 # 时间序列特征
 
@@ -120,9 +103,11 @@ details[open] summary {
 * 对标签做个平滑效果可能会显著提升
 * 多做数据分析, 多清洗数据
 
-## 离散时间特征
+## 动态特征
 
-### 基础周期特征
+### 离散时间特征
+
+基础周期特征：
 
 - 年特征
     - 年
@@ -168,7 +153,7 @@ details[open] summary {
 > - 如果类别比较多, 可以尝试平均数编码(Mean Encoding)
 > - 或者取 cos/sin 将数值的首位衔接起来, 比如说 23 点与 0 点很近, 星期一和星期天很近
 
-### 特殊周期特征
+特殊周期特征：
 
 - 星期特征
     - 一周中的星期几
@@ -191,7 +176,7 @@ details[open] summary {
 > - 节假日前/后可能会出现数据波动
 > - 不放假的人造节日如 5.20、6.18、11.11 等也需要考虑一下
 
-## 连续时间特征
+### 连续时间特征
 
 > 时间差
 
@@ -201,7 +186,46 @@ details[open] summary {
     - 距离假期的前后时长(节假日前、后可能出现明显的数据波动)
     - 上次购买距离现在购买的时间间隔
 
-# 基础周期特征
+## 静态特征
+
+静态特征即随着时间的变化，不会发生变化的信息
+
+除了最细粒度的唯一键，还可以加入其它形式的静态特征
+
+* 例如商品属于的大类、中类、小类，门店的地理位置特性，股票所属的行业等等
+* 除了类别型，静态特征也可能是数值型，例如商品的重量，规格，一般是保持不变的
+
+### 类别型特征
+
+另外一类最常见的基础特征，就是区分不同序列的类别特征，
+例如不同的门店，商品，或者不同的股票代码等
+
+通过加入这个类别特征，就可以把不同的时间序列数据放在一张大表中统一训练了。
+模型理论上来说可以自动学习到这些类别之间的相似性，提升泛化能力
+
+### 数值型特征
+
+* 商品重量
+* 商品规格
+
+# 动态特征
+
+Lag 特征、日期时间衍生特征这类属于动态特征。随着时间变化会发生改变。这其中又可以分成两类：
+
+* 一类是在预测时无法提前获取到的信息，例如预测值本身，跟预测值相关的不可知信息，如未来的客流量，点击量等
+    - 对于这类信息，只能严格在历史窗口范围内做各种特征构建的处理，一般以 lag 为主
+* 另一类则是可以提前获取到的信息，例如有明确的定价计划，可以预知在 T+1 时计划售卖的商品价格是多少
+    - 对于这类特征，则可以直接像静态特征那样直接加入对应时间点的信息进去
+
+将时间序列在时间轴上划分窗口是一个常用且有效的方法，
+包括滑动窗口（根据指定的单位长度来框住时间序列，每次滑动一个单位），
+与滚动窗口（根据指定的单位长度来框住时间序列，每次滑动窗口长度的多个单位）
+
+窗口分析对平滑噪声或粗糙的数据非常有用，比如移动平均法等，这种方式结合基础的统计方法，
+即按照时间的顺序对每一个时间段的数据进行统计，从而可以得到每个时间段内目标所体现的特征，
+进而从连续的时间片段中，通过对同一特征在不同时间维度下的分析，得到数据整体的变化趋势
+
+## 基础周期特征
 
 几乎所有的日期时间都可以被拆解为：年-月-日-小时-分钟-秒-毫秒 的形式。
 虽然拆解很简单，但是里面会含有非常多的潜在重要信息，如果直接对时间信息进行 Label 编码，
@@ -226,13 +250,10 @@ details[open] summary {
 
 ![img](images/datetime_fe.png)
 
-## 日期时间特征
-
 ### 日期特征
 
 ```python
 import pandas as pd
-
 
 data = pd.read_csv('Train_SU63ISt.csv')
 data['Datetime'] = pd.to_datetime(data['Datetime'],format='%d-%m-%Y %H:%M')
@@ -252,7 +273,6 @@ data.head()
 ```python
 import pandas as pd
 
-
 data = pd.read_csv('Train_SU63ISt.csv')
 data['Datetime'] = pd.to_datetime(data['Datetime'],format='%d-%m-%Y %H:%M')
 
@@ -262,7 +282,7 @@ data['minute'] = data['Datetime'].dt.minute
 data.head()
 ```
 
-# 特殊周期特征
+## 特殊周期特征
 
 特殊周期特征指比如对月、星期、节假日等的特征：
 
@@ -285,23 +305,54 @@ data.head()
           在另外一些问题中，节假日如果是连着周六周日的，那么这些信息也都是非常重要的组合特征，
           因为这意味着我们的假期可能延长了，所以会是一种较强的信号
 
-## 月份特征
+### 月份特征
 
 该特征经常适用于关于以月为单位的预估问题，例如预估某个公司每个月的产值，某个景点的旅游人数，
 这个时候每个月中工作日的天数以及休假的天数就是非常重要的信息。比如：
 
 ![img](images/month_info.png)
 
-## 星期特征
+```python
+def month_features(timeindex, timeformat: str):
+    n = len(timeindex)
+    features = np.zeros((n, 1))
+    features[:, 0] = timeindex.month.values / 12
+    return features
+```
 
-## 节假日特征
+### 星期特征
 
-## 组合特征
+```python
+def week_features(timeindex, timeformat: str):
+    n = len(timeindex)
+    features = np.zeros((n, 1))
+    features[:, 0] = timeindex.weekday.values / 6
+    return features
+```
 
+### 节假日特征
 
+```python
+def holidays_features(timeindex, timeformat: str, holidays: tuple):
+    n = len(timeindex)
+    features = np.zeros((n, 1))
+    for i in range(n):
+        if timeindex[i].strftime(timeformat) in holidays:
+            features[i, 0] = 1
+    return features
 
+holidays = (
+    '20130813', '20130902', '20131001', '20131111', 
+    '20130919', '20131225', '20140101', '20140130', 
+    '20140131', '20140214', '20140405', '20140501', 
+    '20140602', '20140802', '20140901', '20140908'
+)
 
-# 连续时间特征
+```
+
+### 组合特征
+
+## 连续时间特征
 
 > 相邻时间差
 
@@ -314,26 +365,9 @@ data.head()
 发现出现大量的相邻时间差时 10 分钟和 60 分钟的，原来是该用户喜欢工作 60 分钟就休息 10 分钟，
 此时相邻时间差频率编码就可以协助发现此类信息
 
-## 持续时间
+### 持续时间
 
-## 间隔时间
-
-# 动态特征
-
-Lag 特征、日期时间衍生特征这类属于动态特征。随着时间变化会发生改变。这其中又可以分成两类：
-
-* 一类是在预测时无法提前获取到的信息，例如预测值本身，跟预测值相关的不可知信息，如未来的客流量，点击量等
-    - 对于这类信息，只能严格在历史窗口范围内做各种特征构建的处理，一般以 lag 为主
-* 另一类则是可以提前获取到的信息，例如有明确的定价计划，可以预知在 T+1 时计划售卖的商品价格是多少
-    - 对于这类特征，则可以直接像静态特征那样直接加入对应时间点的信息进去
-
-将时间序列在时间轴上划分窗口是一个常用且有效的方法，
-包括滑动窗口（根据指定的单位长度来框住时间序列，每次滑动一个单位），
-与滚动窗口（根据指定的单位长度来框住时间序列，每次滑动窗口长度的多个单位）
-
-窗口分析对平滑噪声或粗糙的数据非常有用，比如移动平均法等，这种方式结合基础的统计方法，
-即按照时间的顺序对每一个时间段的数据进行统计，从而可以得到每个时间段内目标所体现的特征，
-进而从连续的时间片段中，通过对同一特征在不同时间维度下的分析，得到数据整体的变化趋势
+### 间隔时间
 
 ## 滞后特征
 
@@ -672,28 +706,6 @@ data_df['ago_7_day_num_events'] = data_df['num_events'].shift(1 * 24)
 
 
 
-# 静态特征
-
-静态特征即随着时间的变化，不会发生变化的信息
-
-除了最细粒度的唯一键，还可以加入其它形式的静态特征
-
-* 例如商品属于的大类、中类、小类，门店的地理位置特性，股票所属的行业等等
-* 除了类别型，静态特征也可能是数值型，例如商品的重量，规格，一般是保持不变的
-
-## 类别型特征
-
-另外一类最常见的基础特征，就是区分不同序列的类别特征，
-例如不同的门店，商品，或者不同的股票代码等
-
-通过加入这个类别特征，就可以把不同的时间序列数据放在一张大表中统一训练了。
-模型理论上来说可以自动学习到这些类别之间的相似性，提升泛化能力
-
-## 数值型特征
-
-* 商品重量
-* 商品规格
-
 # 交叉特征
 
 特征交叉一般从重要特征下手, 慢工出细活
@@ -897,226 +909,7 @@ Encoder 的输出可以当做一个输入被“压缩”的向量，那么当网
 
 ![img](images/encoder_decoder.png)
 
-
-# 时间序列预处理
-
-一般来说，真实世界的时间序列常常取值范围多样，长短不一，形态各异。
-如果要做统一的分析，需要我们进行初步的处理，将时间序列整合到统一的范畴下，进行分析。
-这里基本的方法有：标准化、归一化、定量特征二值化
-
-## 时间序列示例数据
-
-[澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
-
-```python
-import pandas as pd 
-from pandas import Grouper
-import matplotlib.pyplot as plt 
-
-series = pd.read_csv(
-    "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-    header = 0,
-    index_col = 0, 
-    parse_dates = True,
-    date_parser = lambda dates: pd.to_datetime(dates, format = '%Y-%m-%d'),
-    squeeze = True
-)
-print(series.head())
-```
-
-```
-Date
-1981-01-01    20.7
-1981-01-02    17.9
-1981-01-03    18.8
-1981-01-04    14.6
-1981-01-05    15.8
-Name: Temp, dtype: float64
-```
-
-```python
-series.plot()
-plt.show()
-```
-
-![img](images/line.png)
-
-```python
-series.hist()
-plt.show()
-```
-
-![img](images/hist.png)
-
-
-## 标准化和中心化
-
-### 标准化
-
-标准化是使时间序列中的数值符合平均值为 0，标准差为 1。具体来说，
-对于给定的时间序列 `$\{x_{1}, x_{2}, \ldots, x_{t}, \ldots, x_{T}\}$`，
-有如下公式：
-
-`$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{std(\{x_{t}\}_{t}^{T})}$$`
-
-```python
-from pandas import read_csv
-from sklearn.preprocessing import StandarScaler
-from math import sqrt
-
-# Data
-series = pd.read_csv(
-    "daily-minimum-temperatures-in-me.csv", 
-    header = 0,
-    index_col = 0
-)
-print(series.head())
-values = series.values
-values = values.reshape((len(values), 1))
-
-# Standardization
-scaler = StandardScaler()
-scaler = scaler.fit(values)
-print("Mean: %f, StandardDeviation: %f" % (scaler.mean_, sqrt(scaler.var_)))
-
-# 标准化
-normalized = scaler.transform(values)
-for i in range(5):
-    print(normalized[i])
-
-# 逆变换
-inversed = scaler.inverse_transform(normalized)
-for i in range(5):
-    print(inversed[i])
-```
-
-```python
-normalized.plot()
-```
-
-![img](images/line_standard.png)
-
-
-```python
-inversed.plot()
-```
-
-![img](images/line_inversed_standard.png)
-
-### 中心化
-
-标准化的目标是将原始数据分布转换为标准正态分布，它和整体样本分布有关，
-每个样本点都能对标准化产生影响。这里，如果只考虑将均值缩放到 0，
-不考虑标准差的话，为数据中心化处理：
-
-`$$\hat{x}_{t} = x_{t} - mean(\{x_{t}\}_{t}^{T})$$`
-
-## 归一化
-
-归一化是将样本的特征值转换到同一范围（量纲）下，把数据映射到 `$[0, 1]$` 或 `$[-1, 1]$` 区间内，
-它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的
-
-```python
-import pandas as pd 
-from sklearn.preprocessing import MinMaxScaler
-
-# Data
-series = pd.read_csv(
-    "daily-minimum-temperautures-in-me.csv", 
-    header = 0, 
-    index_col = 0
-)
-print(series.head())
-values = series.values
-values = values.reshape((len(values), 1))
-
-# Normalization
-scaler = MinMaxScaler(feature_range = (0, 1))
-scaler = scaler.fit(values)
-print("Min: %f, Max: %f" % (scaler.data_min_, scaler.data_max_))
-
-# 正规化
-normalized = scaler.transform(values)
-for i in range(5):
-    print(normalized[i])
-
-# 逆变换
-inversed = scaler.inverse_transform(normalized)
-for i in range(5):
-    print(inversed[i])
-```
-
-``` 
-            Temp
-Date            
-1981-01-02  17.9
-1981-01-03  18.8
-1981-01-04  14.6
-1981-01-05  15.8
-1981-01-06  15.8
-Min: 0.000000, Max: 26.300000
-
-[0.68060837]
-[0.7148289]
-[0.55513308]
-[0.60076046]
-[0.60076046]
-[17.9]
-[18.8]
-[14.6]
-[15.8]
-[15.8]
-```
-
-```python
-normalized.plot()
-```
-
-![img](images/line_normalized.png)
-
-
-```python
-inversed.plot()
-```
-
-![img](images/line_inversed_normalized.png)
-
-
-### 归一化
-
-把数据映射到 `$[0, 1]$` 范围之内进行处理，可以更加便捷快速。具体公式如下：
-
-`$$\hat{x}_{t} = \frac{x_{t} - min(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
-
-### 平均归一化
-
-`$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
-
-### 什么时候用归一化？什么时候用标准化？
-
-* 如果对输出结果范围有要求，用归一化
-* 如果数据较为稳定，不存在极端的最大最小值，用归一化
-* 如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
-
-## 定量特征二值化
-
-如果不需要数据的连续信息，只需要对定量的特征进行“好与坏”的划分，
-可以使用定量特征二值化来剔除冗余信息
-
-举个例子，银行对 5 名客户的征信进行打分，分别为 50，60，70，80，90。
-现在，不在乎一个人的征信多少分，只在乎他的征信好与坏（如大于 90 为好，低于 90 就不好）；
-再比如学生成绩，大于 60 及格，小于 60 就不及格。这种“好与坏”、
-“及格与不及格”的关系可以转化为 0-1 变量，这就是二值化。变化方式如下所示：
-
-`$$\begin{cases}
-\hat{x}_{t} = 1, x_{t} > threshold \\
-\hat{x}_{t} = 0, x_{t} \leq threshold
-\end{cases}$$`
-
-也可以设计更多的规则，进行多值化的处理
-
-
-# 时间序列分类特征
+# 分类特征
 
 分类特征一般结合具体的任务，比如时序预测，时序分类等，常常有标签（Label）信息来引导，
 其分析的特征也为具体的任务所服务，是一类常用的特征分析方法，
@@ -1146,9 +939,9 @@ inversed.plot()
 
 # 参考
 
+* [多元时间序列特征工程的指南](https://mp.weixin.qq.com/s/D79CaZyQLB0ILqid7qgxsg)
 * [时间序列特征工程](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247485154&idx=1&sn=e2b24a279902b6ddee1c3b83a9e3dd56&chksm=cecef317f9b97a01b86245fc7a8797b7618d752fdf6a589733bef3ddd07cb70a30f78b538899&cur_album_id=1588681516295979011&scene=189#wechat_redirect)
 * [主成分分析](https://mp.weixin.qq.com/s?__biz=MjM5MjAxMDM4MA==&mid=2651890105&idx=1&sn=3c425c538dacd67b1732948c5c015b46&scene=21#wechat_redirect)
 * [单时间变量特征](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494531&idx=1&sn=da6bf51fa17b4d24bf568d1c21c56ffa&chksm=c32af20cf45d7b1ab7d11ef9649b0af8d72ae5f34814a5ebd7cb00210c3d70d36d66d2fc4b0b&scene=21#wechat_redirect)
 * [时间序列之峰值特征](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247502097&idx=1&sn=6ee594a0d6d706d865cd0609f9ee353b&chksm=c32ad09ef45d598815973158782708cb1640294168664b298a18cf4c66d59c87e16f0dba041b&scene=178&cur_album_id=1698941448517173254#rd)
 * [scipy.signal.find_peaks](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html)
-

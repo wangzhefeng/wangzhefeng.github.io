@@ -9,3 +9,5 @@ order_by: title
 * [auto-sklearn](https://automl.github.io/auto-sklearn/master/index.html#)
 * [PyCaret](https://github.com/pycaret/pycaret)
 * [fastai](https://docs.fast.ai/)
+* [表格类数据模型](https://zhuanlan.zhihu.com/p/381323980)
+

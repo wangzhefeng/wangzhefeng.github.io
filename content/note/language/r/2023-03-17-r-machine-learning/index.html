@@ -1,0 +1,1215 @@
+---
+title: Titanic 分类
+author: 王哲峰
+date: '2023-03-17'
+slug: r-machine-learning
+categories:
+  - machinelearning
+tags:
+  - model
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="content" class="section level1">
+<h1>Content</h1>
+<ol style="list-style-type: decimal">
+<li>问题描述及理解</li>
+<li>数据描述及理解</li>
+<li>模型的选择及模型对数据的要求(模型假设)
+<ul>
+<li>LDA QDA</li>
+<li>Logistic Regression</li>
+<li>KNN</li>
+<li>C4.5</li>
+<li>CART</li>
+<li>SVM</li>
+<li>Naive Bayes</li>
+<li>Bagging</li>
+<li>AdaBoost</li>
+<li>GBM</li>
+<li>Xgboost</li>
+<li>Random Forest</li>
+<li>EM</li>
+<li>Kmeans</li>
+<li>Apriori</li>
+<li>PageRank</li>
+<li>…</li>
+</ul></li>
+<li>根据模型的限制对数据进行预处理
+<ul>
+<li>把变量分类</li>
+<li>探索性数据分析
+<ul>
+<li>描述性分析</li>
+<li>可视化分析</li>
+</ul></li>
+<li>数据变换
+<ul>
+<li>Skewness Transformation e1071::skewness() hist() lattice::histogram, caret::BoxCoxTrans() %&gt;% predict(), MASS::boxcox() preProcess() %&gt;% predict()…</li>
+<li>Centering and Scaling Scale(), caret::preProces() %&gt;% predict()…</li>
+</ul></li>
+<li>缺失值处理missing value : impute
+<ul>
+<li>impute::impute.knn(), preProcess() %&gt;% predict</li>
+</ul></li>
+<li>特征提取Feature extraction : PCA
+<ul>
+<li>prcomp() need to center and scale, preProcess() %&gt;% predict()</li>
+</ul></li>
+<li>异常值处理Outlier : Spatial Sign
+<ul>
+<li>spatialSign(), preProcess() %&gt;% predict()</li>
+</ul></li>
+<li>过滤filter for near-zero variance predictors
+<ul>
+<li>caret::nearZeroVar()</li>
+</ul></li>
+<li>filter on between-predictor correlations
+<ul>
+<li>cor() corrplot::corrplot(), caret::findCorrelayions(), subselect</li>
+</ul></li>
+<li>构造哑变量 Create Dummy Variable
+<ul>
+<li>caret::dummyVars() %&gt;% predict()</li>
+</ul></li>
+<li>Feature Selection</li>
+<li>数据集分割 Data Split
+<ul>
+<li>caret::createDataPartition()</li>
+</ul></li>
+<li>…</li>
+</ul></li>
+<li>建立预测模型
+<ul>
+<li>模型调节(Model Tuning) – 模型的Tuning Parameter, 避免Overfitting</li>
+<li>数据重抽样方法(Data Split) – Bootstrap CV,估计出模型表现的平均结果</li>
+<li>模型评估(Model Evaluation) – 模型表现好坏的准则, 选择出Optional Tuning Parameter</li>
+<li>模型选择(Model Selection) – 根据选出的最优调节参数, 选择出Final MOdel</li>
+</ul></li>
+<li>利用建立的最终模型(Final Model)对测试数据(Test)进行预测并产生提交结果(my_solution)</li>
+<li>总结
+<ul>
+<li>优点</li>
+<li>不足</li>
+</ul></li>
+</ol>
+</div>
+<div id="问题描述及理解" class="section level1">
+<h1>1.问题描述及理解</h1>
+<ul>
+<li><a href="https://www.kaggle.com/c/titanic">Kaggle Contest: Predicting Survival on the Titanic</a></li>
+</ul>
+<div id="from-kaggles-competition-details" class="section level2">
+<h2>From Kaggle’s competition details:</h2>
+<blockquote>
+<p>Description:
+The sinking of the RMS Titanic is one of the most infamous shipwrecks in history. On April 15, 1912, during her maiden voyage, the Titanic sank after colliding with an iceberg, killing 1502 out of 2224 passengers and crew. This sensational tragedy shocked the international community and led to better safety regulations for ships.<em>One of the reasons that the shipwreck led to such loss of life was that there were not enough lifeboats for the passengers and crew</em>. Although there was some element of luck involved in surviving the sinking, some groups of people were more likely to survive than others, such as <em>women</em>, <em>children</em>, and <em>the upper-class</em>.</p>
+</blockquote>
+<blockquote>
+<p>Objective:
+Apply the tools of machine learning to predict which passengers survived the tragedy.</p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.kaggle.com/c/titanic/data">Data</a></p>
+</blockquote>
+</div>
+</div>
+<div id="数据描述及理解" class="section level1">
+<h1>2.数据描述及理解</h1>
+<div id="variable-description" class="section level2">
+<h2>Variable Description:</h2>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="77%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>variable name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Survived</td>
+<td>Survival (0 = No; 1 = Yes)</td>
+</tr>
+<tr class="even">
+<td>Pclass</td>
+<td>Passenger Class (1 = 1st; 2 = 2nd; 3 = 3rd)</td>
+</tr>
+<tr class="odd">
+<td>Name</td>
+<td>Name</td>
+</tr>
+<tr class="even">
+<td>Sex</td>
+<td>Sex</td>
+</tr>
+<tr class="odd">
+<td>Age</td>
+<td>Age</td>
+</tr>
+<tr class="even">
+<td>SibSp</td>
+<td>Number of Siblings/Spouses Aboard</td>
+</tr>
+<tr class="odd">
+<td>Parch</td>
+<td>Number of Parents/Children Aboard</td>
+</tr>
+<tr class="even">
+<td>Ticket</td>
+<td>Ticket Number</td>
+</tr>
+<tr class="odd">
+<td>Fare</td>
+<td>Passenger Fare</td>
+</tr>
+<tr class="even">
+<td>Cabin</td>
+<td>Cabin</td>
+</tr>
+<tr class="odd">
+<td>Embarked</td>
+<td>Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southampton)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="special-note" class="section level2">
+<h2>Special Note:</h2>
+<ul>
+<li>Pclass is a proxy for socio-economic status (SES) [1st ~ Upper; 2nd ~ Middle; 3rd ~ Lower]<br />
+</li>
+<li>Age is in Years; Fractional if Age less than One (1) If the Age is Estimated, it is in the form xx.5</li>
+<li>With respect to the family relation variables (i.e. sibsp and parch) some relations were ignored. The following are the definitions used for sibsp and parch :
+<ul>
+<li><p>Sibling: Brother, Sister, Stepbrother, or Stepsister of Passenger Aboard Titanic<br />
+</p></li>
+<li><p>Spouse: Husband or Wife of Passenger Aboard Titanic (Mistresses and Fiances Ignored)<br />
+</p></li>
+<li><p>Parent: Mother or Father of Passenger Aboard Titanic<br />
+</p></li>
+<li><p>Child: Son, Daughter, Stepson, or Stepdaughter of Passenger Aboard Titanic</p></li>
+<li><p>Other family relatives excluded from this study include cousins, nephews/nieces, aunts/uncles, and in-laws. Some children travelled only with a nanny, therefore parch=0 for them. As well, some travelled with very close friends or neighbors in a village, however, the definitions do not support such relations.</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="载入全局用到的包" class="section level2">
+<h2>载入全局用到的包</h2>
+<pre><code>library(printr)</code></pre>
+<pre class="r"><code>library(caret)
+library(ggplot2)
+library(dplyr)</code></pre>
+</div>
+<div id="读取数据" class="section level2">
+<h2>读取数据</h2>
+<pre class="r"><code>## Method 1  
+# setwd(&quot;D:/My Directory/DM/Titanic/data&quot;)
+train = read.csv(&quot;train.csv&quot;, na.strings = c(&#39;NA&#39;, &#39;&#39;), stringsAsFactors = F)
+test = read.csv(&quot;test.csv&quot;, na.strings = c(&#39;NA&#39;, &#39;&#39;), stringsAsFactors = F)
+## Method 2
+# train = read.csv(url(&quot;http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv&quot;), na.strings = c(&quot;NA&quot;, &quot;&quot;))
+# test = read.csv(url(&quot;http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv&quot;), na.strings = c(&quot;NA&quot;, &quot;&quot;))</code></pre>
+</div>
+<div id="查看数据集状态" class="section level2">
+<h2>查看数据集状态</h2>
+<pre class="r"><code>train = tbl_df(train)
+train
+str(train)
+head(train)
+sapply(train, class)
+sapply(train, function(x) sum(is.na(x)))
+str(test)
+sapply(test, class)
+sapply(test, function(x) sum(is.na(x)))</code></pre>
+</div>
+</div>
+<div id="模型的选择及模型对数据的要求模型假设" class="section level1">
+<h1>3.模型的选择及模型对数据的要求(模型假设)</h1>
+</div>
+<div id="根据模型的限制对数据进行预处理" class="section level1">
+<h1>4.根据模型的限制对数据进行预处理</h1>
+<div id="把变量分类" class="section level2">
+<h2>(0)把变量分类</h2>
+<pre class="r"><code>numTrainPredictor = train[, c(6, 10)]
+
+facTrainPredictor = train[, -c(6, 10)]
+
+Response = train[, 2]</code></pre>
+</div>
+<div id="探索性数据分析understanding-data" class="section level2">
+<h2>(1)探索性数据分析/Understanding data</h2>
+<div id="i描述性统计分析" class="section level3">
+<h3>(i)描述性统计分析</h3>
+<pre class="r"><code>summary(mutate(train, PassengerId = NULL))
+Hmisc::describe(mutate(train, PassengerId = NULL))</code></pre>
+</div>
+<div id="ii数据可视化分析" class="section level3">
+<h3>(ii)数据可视化分析</h3>
+<table>
+<thead>
+<tr class="header">
+<th>没有进行可视化的变量</th>
+<th>变量类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PassengerId</td>
+<td>乘客序列号</td>
+</tr>
+<tr class="even">
+<td>Name</td>
+<td>名字</td>
+</tr>
+<tr class="odd">
+<td>Ticket</td>
+<td>船票编号</td>
+</tr>
+<tr class="even">
+<td>Cabin</td>
+<td>船舱编号</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>进行可视化的变量</th>
+<th>变量类型</th>
+<th>图形</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Survived</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="even">
+<td>Pclass</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="odd">
+<td>Sex</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="even">
+<td>SibSp</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="odd">
+<td>Parch</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="even">
+<td>Embarked</td>
+<td>类别型</td>
+<td>条形图</td>
+</tr>
+<tr class="odd">
+<td>Age</td>
+<td>数值型</td>
+<td>直方图</td>
+</tr>
+<tr class="even">
+<td>Fare</td>
+<td>数值型</td>
+<td>直方图</td>
+</tr>
+</tbody>
+</table>
+<div id="survived" class="section level4">
+<h4>Survived</h4>
+<pre class="r"><code>table(train$Survived)</code></pre>
+<div id="method-1" class="section level5">
+<h5>Method 1</h5>
+<pre class="r"><code>barplot(table(train$Survived), 
+        names.arg = c(&quot;Perished&quot;, &quot;Survived&quot;),
+        main=&quot;Survived (passenger fate)&quot;, col=&quot;black&quot;)</code></pre>
+</div>
+<div id="method-2" class="section level5">
+<h5>Method 2</h5>
+<pre class="r"><code>ggplot(data = train, aes(x = factor(Survived), fill = factor(Survived))) + 
+    geom_bar() + 
+    ggtitle(&quot;Survived (passenger fate)&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    theme_bw()</code></pre>
+</div>
+</div>
+<div id="pclass" class="section level4">
+<h4>Pclass</h4>
+<pre class="r"><code>table(train$Pclass)</code></pre>
+<div id="method-1-1" class="section level5">
+<h5>Method 1</h5>
+<pre class="r"><code>barplot(table(train$Pclass), 
+        names.arg = c(&quot;first&quot;, &quot;second&quot;, &quot;third&quot;),
+        main = &quot;Pclass (passenger traveling class)&quot;, col = &quot;firebrick&quot;)</code></pre>
+</div>
+<div id="method-2-1" class="section level5">
+<h5>Method 2</h5>
+<pre class="r"><code>ggplot(data = train, aes(x = factor(Pclass), fill = factor(Pclass))) + 
+    geom_bar() + 
+    ggtitle(&quot;Pclass (passenger traveling class)&quot;) + 
+    xlab(&quot;Pclass&quot;) + 
+    theme_bw()</code></pre>
+<pre class="r"><code>table(train$Survived, train$Pclass)
+ggplot(data = train, aes(x = factor(Pclass))) + 
+    geom_bar() + 
+    facet_grid(. ~ Survived) + 
+    ggtitle(&quot;Passenger survived or not at each Pclass&quot;) + 
+    xlab(&quot;Pclass&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(Survived))) + 
+    geom_bar() + 
+    facet_grid(. ~ Pclass) + 
+    ggtitle(&quot;Passenger survived or not at each Pclass&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(Survived), fill = factor(Pclass))) + 
+    geom_bar() + 
+    ggtitle(&quot;Passenger survived or not at each Pclass&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(Pclass), fill = factor(Survived))) + 
+    geom_bar() + 
+    ggtitle(&quot;Passenger survived or not at each Pclass&quot;) + 
+    xlab(&quot;Pclass&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()</code></pre>
+</div>
+</div>
+<div id="sex" class="section level4">
+<h4>Sex</h4>
+<pre class="r"><code>table(train$Sex)</code></pre>
+<div id="method-1-2" class="section level5">
+<h5>Method 1</h5>
+<pre class="r"><code>barplot(table(train$Sex), main=&quot;Sex (gender)&quot;, col=&quot;darkviolet&quot;)</code></pre>
+</div>
+<div id="method-2-2" class="section level5">
+<h5>Method 2</h5>
+<pre class="r"><code>ggplot(data = train, aes(x = factor(Sex), fill = factor(Sex))) + 
+    geom_bar() + 
+    ggtitle(&quot;Sex (gender)&quot;) + 
+    xlab(&quot;Sex&quot;) + 
+    theme_bw()</code></pre>
+<pre class="r"><code>table(train$Survived, train$Sex)
+ggplot(data = train, aes(x = factor(Survived))) + 
+    geom_bar() + 
+    facet_grid(. ~ Sex) + 
+    ggtitle(&quot;Passenger survuved or not in different Sex&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(Survived), fill = factor(Sex))) + 
+    geom_bar() + 
+    ggtitle(&quot;Passenger survived or not in different Sex&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()</code></pre>
+</div>
+</div>
+<div id="age" class="section level4">
+<h4>Age</h4>
+<pre class="r"><code>hist(train$Age, main=&quot;Age&quot;, xlab = NULL, col=&quot;brown&quot;)
+ggplot(data = train, aes(x = Age)) + geom_histogram() + ggtitle(&quot;Age&quot;) + theme_bw()</code></pre>
+</div>
+<div id="sibsp" class="section level4">
+<h4>SibSp</h4>
+<pre class="r"><code>table(train$SibSp)</code></pre>
+<div id="method-1-3" class="section level5">
+<h5>Method 1</h5>
+<pre class="r"><code>barplot(table(train$SibSp), main=&quot;SibSp (siblings + spouse aboard)&quot;, col=&quot;darkblue&quot;)</code></pre>
+</div>
+<div id="method-2-3" class="section level5">
+<h5>Method 2</h5>
+<pre class="r"><code>ggplot(data = train, aes(x = factor(SibSp), fill = factor(SibSp))) + 
+    geom_bar() + 
+    ggtitle(&quot;SibSp (siblings + spouse aboard&quot;) + 
+    xlab(&quot;SibSp&quot;) + 
+    theme_bw()</code></pre>
+<pre class="r"><code>table(train$Survived, train$SibSp)
+ggplot(data = train, aes(x = factor(Survived))) + 
+    geom_bar() + 
+    facet_grid(. ~ SibSp) + 
+    ggtitle(&quot;Passenger survuved or not in different SibSp&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(Survived), fill = factor(SibSp))) + 
+    geom_bar() + 
+    ggtitle(&quot;Passenger survived or not in different Sibsp&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()
+ggplot(data = train, aes(x = factor(SibSp), fill = factor(Survived))) + 
+    geom_bar() + 
+    ggtitle(&quot;Passenger survived or not in different Sibsp&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()</code></pre>
+</div>
+</div>
+<div id="pach" class="section level4">
+<h4>Pach</h4>
+<pre class="r"><code>table(train$Parch)
+barplot(table(train$Parch), main=&quot;Parch (parents + kids aboard)&quot;, col=&quot;gray50&quot;)
+table(train$Survived, train$Parch)
+ggplot(data = train, aes(x = factor(Survived))) + 
+    geom_bar() + 
+    facet_grid(. ~ Parch) + 
+    ggtitle(&quot;Passenger survuved or not in different Parch&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()</code></pre>
+</div>
+<div id="fare" class="section level4">
+<h4>Fare</h4>
+<pre class="r"><code>hist(train$Fare, main=&quot;Fare (fee paid for ticket[s])&quot;, xlab = NULL, col=&quot;darkgreen&quot;)</code></pre>
+</div>
+<div id="embarked" class="section level4">
+<h4>Embarked</h4>
+<pre class="r"><code>table(train$Embarked)
+barplot(table(train$Embarked), 
+        names.arg = c(&quot;Cherbourg&quot;, &quot;Queenstown&quot;, &quot;Southampton&quot;),
+        main=&quot;Embarked (port of embarkation)&quot;, col=&quot;sienna&quot;)
+table(train$Survived, train$Embarked)
+ggplot(data = train, aes(x = factor(Survived))) + 
+    geom_bar() + 
+    facet_grid(. ~ Embarked) + 
+    ggtitle(&quot;Passenger survuved or not in different Embarked&quot;) + 
+    xlab(&quot;Survived&quot;) + 
+    ylab(&quot;Passenger Count&quot;) + 
+    theme_bw()</code></pre>
+</div>
+<div id="iii数据变换" class="section level4">
+<h4>(iii)数据变换</h4>
+</div>
+</div>
+<div id="缺失值处理" class="section level3">
+<h3>(2)缺失值处理</h3>
+</div>
+<div id="missing-variables-age-fare-cabin-embarked" class="section level3">
+<h3><span class="red">Missing variables : Age, Fare, Cabin, Embarked</span></h3>
+<div id="all-data-both-training-and-test-set" class="section level4">
+<h4>All data, both training and test set:</h4>
+<pre class="r"><code>test$Survived = NA
+all_data = rbind(train, test)
+sapply(all_data, function(x) sum(is.na(x)))</code></pre>
+</div>
+<div id="缺失值可视化" class="section level4">
+<h4>缺失值可视化</h4>
+<pre class="r"><code>library(Amelia)
+missmap(all_data, main=&quot;Titanic Training Data - Missings Map&quot;, 
+        col=c(&quot;yellow&quot;, &quot;black&quot;), legend=FALSE)</code></pre>
+</div>
+<div id="fill-in-missing-age-values" class="section level4">
+<h4>Fill in missing Age values:</h4>
+<pre class="r"><code>library(rpart)
+predicted_age &lt;- rpart(Age ~ Pclass + Sex + SibSp + Parch + Fare + Embarked,
+                       data = all_data[!is.na(all_data$Age), ], method = &quot;anova&quot;)
+all_data$Age[is.na(all_data$Age)] &lt;- predict(predicted_age, all_data[is.na(all_data$Age), ])</code></pre>
+</div>
+<div id="replace-fare-value-of-passenger-on-row-1044-with-the-median-fare-value" class="section level4">
+<h4>Replace fare value of Passenger on row 1044 with the median fare value:</h4>
+<pre class="r"><code>all_data$Fare[1044] &lt;- median(all_data$Fare, na.rm = TRUE)</code></pre>
+</div>
+<div id="passenger-on-row-62-and-830-do-not-have-a-value-for-embarkment.-since-many-passengers-embarked-at-southampton-give-them-the-value-s-and-code-all-embarkment-codes-as-factors." class="section level4">
+<h4>Passenger on row 62 and 830 do not have a value for embarkment. Since many passengers embarked at Southampton, give them the value S and code all embarkment codes as factors.</h4>
+<pre class="r"><code>all_data$Embarked[c(62,830)] = &quot;S&quot;
+all_data$Embarked &lt;- factor(all_data$Embarked)</code></pre>
+</div>
+<div id="delete-the-cabin-name-ticket-varables" class="section level4">
+<h4>Delete the Cabin Name Ticket Varables</h4>
+<pre class="r"><code>all_data = all_data[, -c(11, 9, 4)]</code></pre>
+</div>
+<div id="处理缺失值后的数据" class="section level4">
+<h4>处理缺失值后的数据</h4>
+<pre class="r"><code>sapply(all_data, function(x) sum(is.na(x)))
+train = all_data[1:891, ]
+test = all_data[892:1309, -2]
+dim(train)
+dim(test)</code></pre>
+</div>
+</div>
+<div id="create-dummary-variables" class="section level3">
+<h3>(3)Create dummary variables</h3>
+<div id="method-1-4" class="section level4">
+<h4>method 1</h4>
+<pre class="r"><code>dummies = dummyVars(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+                    data = train)
+train2 =  predict(dummies, newdata = train)
+train2 = as.data.frame(train2)
+train2 = cbind(train[, 1:2], train2)
+head(train2)</code></pre>
+</div>
+<div id="method-2-4" class="section level4">
+<h4>method 2</h4>
+<pre class="r"><code>dummies = model.matrix(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data = train)
+train3 = as.data.frame(dummies)
+head(train3)</code></pre>
+</div>
+</div>
+<div id="split-training-and-testing-data-set" class="section level3">
+<h3>(4)Split training and testing data set</h3>
+<div id="training-testing-data-set" class="section level4">
+<h4>Training / testing data set</h4>
+<pre class="r"><code>set.seed(123)
+inTrain = sample(1:2, dim(train)[1], replace = TRUE, prob = c(0.8, 0.2))
+training = train[inTrain == 1, ]
+testing = train[inTrain == 2, ]
+head(training)
+dim(training)
+dim(testing)
+
+set.seed(123)
+inTrain = createDataPartition(y = train$Survived, p = 0.8, list = FALSE)
+training = train[inTrain, ]
+testing = train[-inTrain, ]
+head(training)
+dim(training)
+dim(testing)
+
+set.seed(123)
+inTrain = sample(1:2, dim(train2)[1], replace = TRUE, prob = c(0.8, 0.2))
+training2 = train2[inTrain == 1, ]
+testing2 = train2[inTrain == 2, ]
+head(training2)
+dim(training2)
+dim(testing2)
+
+set.seed(123)
+inTrain = createDataPartition(y = train2$Survived, p = 0.8, list = FALSE)
+training2 = train2[inTrain, ]
+testing2 = train2[-inTrain, ]
+head(training2)
+dim(training2)
+dim(testing2)</code></pre>
+</div>
+<div id="folds-cv" class="section level4">
+<h4>5-folds CV</h4>
+<pre class="r"><code>set.seed(123)
+folds1 = createFolds(y = train$Survived, k = 5, list = FALSE, returnTrain = TRUE)
+table(folds1)
+sapply(folds1, length)</code></pre>
+</div>
+<div id="repeat-5-folds-cv" class="section level4">
+<h4>repeat 5-folds cv</h4>
+<pre class="r"><code>set.seed(123)
+folds2 = createMultiFolds(y = train$Survived, k = 5, times = 3)
+sapply(folds2, length)</code></pre>
+</div>
+<div id="bootstrap" class="section level4">
+<h4>Bootstrap</h4>
+<pre class="r"><code>set.seed(123)
+resamples = createResample(y = train$Survived, times = 10, list = TRUE)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="建立预测模型" class="section level1">
+<h1>4.建立预测模型</h1>
+<div id="logistic-regression" class="section level2">
+<h2>(1) Logistic Regression</h2>
+<div id="training-the-model" class="section level3">
+<h3>Training the model</h3>
+<pre class="r"><code>logit.model = glm(Survived ~ ., data = training, family = &quot;binomial&quot;)
+summary(logit.model)
+logit.response = predict(logit.model, testing, type = &quot;response&quot;)
+logit.predict = ifelse(logit.response &gt; 0.5, &quot;1&quot;, &quot;0&quot;)</code></pre>
+</div>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<pre class="r"><code>### ConfusionMatrix
+table(Predict = logit.predict, Survived = testing$Survived)
+logit.accuracy = mean(logit.predict == testing$Survived)
+logit.accuracy</code></pre>
+<pre><code># contrasts(Survived)</code></pre>
+<pre class="r"><code>confusionM = confusionMatrix(logit.predict, testing$Survived)
+confusionM</code></pre>
+<pre class="r"><code>names(confusionM)
+confusionM$positive
+confusionM$table
+confusionM$overall
+confusionM$byClass
+confusionM$dots</code></pre>
+<div id="roc-culer" class="section level3">
+<h3>ROC culer</h3>
+<pre class="r"><code>library(pROC)
+logitROC = roc(testing$Survived, logit.response,
+               levels = levels(as.factor(testing$Survived)))
+plot(logitROC, type = &quot;S&quot;, print.thres = 0.5)</code></pre>
+</div>
+</div>
+</div>
+<div id="利用建立的模型对测试数据进行预测并产生提交结果" class="section level1">
+<h1>5.利用建立的模型对测试数据进行预测并产生提交结果</h1>
+</div>
+<div id="总结" class="section level1">
+<h1>6.总结</h1>
+<pre class="r"><code># 载入R包
+if(!require(tidyverse)) install.packages(&quot;tidyverse&quot;)
+if(!require(ggplot2)) install.packages(&quot;ggplot2&quot;)
+if(!require(scales)) install.packages(&quot;scales&quot;)
+if(!require(ggthemes)) install.packages(&quot;ggthemes&quot;)
+if(!require(readr)) install.packages(&quot;readr&quot;)
+if(!require(mice)) install.packages(&quot;mice&quot;)
+if(!require(caret)) install.packages(&quot;caret&quot;)
+if(!require(rpart)) install.packages(&quot;rpart&quot;)
+if(!require(gbm)) install.packages(&quot;gbm&quot;)
+if(!require(randomForest)) install.packages(&quot;randomForest&quot;)
+if(!require(odbc)) install.packages(&quot;odbc&quot;)
+if(!require(DBI)) install.packages(&quot;DBI&quot;)
+if(!require(Amelia)) install.packages(&quot;Amelia&quot;)
+
+# *********************************************************************
+# 载入训练数据和测试数据
+conn = DBI::dbConnect(odbc::odbc(),
+                      Driver = &quot;SQL Server&quot;,
+                      Server = &quot;WANGZF-PC&quot;,
+                      Database = &quot;tinker&quot;,
+                      UID = &quot;tinker.wang&quot;,
+                      PWD = &quot;alvin123&quot;,
+                      Port = 1433)
+
+train = dbReadTable(conn, &quot;titanic_train&quot;)
+test = dbReadTable(conn, &quot;titanic_test&quot;)
+# train = readr::read_csv(file = &quot;E:/machinelearning/pro_Titanic/data/train.csv&quot;)
+# test = readr::read_csv(file = &quot;E:/machinelearning/pro_Titanic/data/test.csv&quot;)
+all = dplyr::bind_rows(train, test)
+
+
+# *********************************************************************
+# 数据探索性分析
+# *********************************************************************
+# 数据
+str(all)
+
+# 数据概览
+summary(all)
+Hmisc::describe(all)
+
+
+# 数据类型检查
+numCols = c(&quot;Age&quot;, &quot;SibSp&quot;, &quot;Parch&quot;, &quot;Fare&quot;)
+cateCols = c(&quot;Survived&quot;, &quot;Pclass&quot;, &quot;Name&quot;, &quot;Sex&quot;, &quot;Ticket&quot;, &quot;Cabin&quot;, &quot;Embarked&quot;)
+orderedCateCols = c(&quot;Pclass&quot;)
+
+# 数据缺失值检查
+md.pattern(all)
+sapply(all, function(x) sum(is.na(x)))
+
+
+# 异常值检查, 处理
+# Age &lt; 1
+all %&gt;% filter(Age &lt; 1 &amp; Fare == &#39;151.5500&#39;)
+
+all %&gt;% 
+    filter(Age &lt; 1) %&gt;% 
+    ggplot(mapping = aes(x = Age, y = Fare)) +
+    geom_point(mapping = aes(colour = factor(Pclass)), size = 2)
+
+
+# Fare == 0
+all %&gt;% filter(Fare == 0)
+
+# all %&gt;% 
+#     filter(Fare &gt; 0) %&gt;%
+#     group_by(Pclass) %&gt;%
+#     summarise(Fare_Med = median(Fare), 
+#               Fare_Mean = mean(Fare))
+# 
+# all[all$Fare == 0 &amp; all$Pclass == 1 &amp; !is.na(all$Fare), ]$Fare = 
+#     median(all[all$Fare &gt; 0 &amp; all$Pclass == 1, ]$Fare, na.rm = TRUE)
+# all[all$Fare == 0 &amp; all$Pclass == 2 &amp; !is.na(all$Fare), ]$Fare = 
+#     median(all[all$Fare &gt; 0 &amp; all$Pclass == 2, ]$Fare, na.rm = TRUE)
+# all[all$Fare == 0 &amp; all$Pclass == 3 &amp; !is.na(all$Fare), ]$Fare = 
+#     median(all[all$Fare &gt; 0 &amp; all$Pclass == 3, ]$Fare, na.rm = TRUE)
+
+
+# *********************************************************************
+# 特征工程 1
+# *************************************************
+# Problem 1: 能否根据乘客名字推断乘客之间的关系？
+# *************************************************
+# 1. Grab title from passenger names
+all = all %&gt;% dplyr::mutate(Title = gsub(&quot;(.*, )|(\\..*)&quot;, &quot;&quot;, Name)) # (.*, )|(..*)
+# Show title counts by sex (有些是军人)
+table(all$Sex, all$Title)
+# Title with very low cell counts to be combined to &quot;rare&quot; level
+rare_title = c(&quot;Capt&quot;, &quot;Col&quot;, &quot;Don&quot;, &quot;Jonkheer&quot;, &quot;Major&quot;, &quot;Rev&quot;, &quot;Sir&quot;)
+all$Title[all$Title == &quot;Mlle&quot;] = &quot;Miss&quot;
+all$Title[all$Title == &quot;Ms&quot;] = &quot;Miss&quot;
+all$Title[all$Title %in% c(&quot;Mme&quot;, &quot;Lady&quot;, &quot;Dona&quot;, &quot;the Countess&quot;)] = &quot;Mrs&quot;
+all$Title[all$Title == &quot;Dr&quot; &amp; all$Sex == &#39;female&#39;] = &quot;Mrs&quot;
+all$Title[all$Title == &quot;Dr&quot; &amp; all$Sex == &quot;male&quot;] = &quot;Mr&quot;
+all$Title[all$Title %in% rare_title] = &quot;Mr&quot;
+table(all$Sex, all$Title)
+
+# 2. Grab surname from passenger name
+all = all %&gt;% 
+    dplyr::mutate(Surname = sapply(Name, 
+                                   function(x) strsplit(x, split = &#39;[,.]&#39;)[[1]][1]))
+
+# Unique Surnames
+nlevels(factor(all$Surname))
+
+family = all %&gt;% 
+    # select(Surname, Name, Age, Sex, Embarked, Pclass, Cabin, Ticket, SibSp, Parch) %&gt;%
+    arrange(Surname) %&gt;%
+    filter(SibSp != 0 | Parch != 0)
+family
+
+# *************************************************
+# Problem 2: 一个家庭中的成员是否是一起沉入海水中还是游在一起？
+# *************************************************
+# Create a family size variable including the passenger themselves
+all = all %&gt;% dplyr::mutate(FamilySize = SibSp + Parch + 1)
+
+# Create a family variable 
+all = all %&gt;% dplyr::mutate(Family = paste(Surname, FamilySize, sep = &quot;_&quot;))
+
+# Visualize the relationship between family size &amp; survival
+ggplot(data = all[1:dim(train)[1], ], 
+       mapping = aes(x = FamilySize, fill = factor(Survived))) +
+    geom_bar(stat = &quot;count&quot;, position = &quot;dodge&quot;) +
+    scale_x_continuous(breaks = c(1:11)) +
+    labs(x = &quot;Family Size&quot;)
+
+# Discretize family size
+all$FamilySizeD[all$FamilySize == 1] = &quot;singleton&quot;
+all$FamilySizeD[all$FamilySize &lt;= 4 &amp; all$FamilySize &gt; 1] = &quot;small&quot;
+all$FamilySizeD[all$FamilySize &gt; 4] = &quot;large&quot;
+
+# Show family size by survival using a mosaic plot
+mosaicplot(table(all$FamilySizeD, all$Survived), 
+           main = &quot;Family Size by Survival&quot;, 
+           shade = TRUE)
+
+
+# *************************************************
+# Passenger cabin
+# *************************************************
+all = all %&gt;% 
+    dplyr::mutate(Deck = factor(sapply(Cabin, 
+                                       function(x) strsplit(x, NULL)[[1]][1])))
+
+
+# *********************************************************************
+# 缺失值处理
+# *********************************************************************
+# *************************************************
+# 缺失值检查
+# *************************************************
+md.pattern(all)
+
+all %&gt;% 
+    sapply(function(x) sum(is.na(x))) %&gt;% 
+    knitr::kable()
+
+
+missmap(all, main = &quot;Titanic Data - Missings Map&quot;, col = c(&quot;yellow&quot;, &quot;black&quot;), legend = FALSE)
+# *************************************************
+# 分析存在缺失的预测变量, 并填充
+# *************************************************
+# *************************************************
+# Fare -- 1
+# *************************************************
+all %&gt;% 
+    filter(is.na(Fare)) %&gt;%
+    select(c(PassengerId, Pclass, Fare, Embarked))
+
+Pclass3_EmbarkedS = all %&gt;% 
+    filter(Pclass == &#39;3&#39; &amp; Embarked == &#39;S&#39;) %&gt;%
+    select(c(PassengerId, Pclass, Fare, Embarked))
+
+
+ggplot(data = Pclass3_EmbarkedS, mapping = aes(x = Fare)) +
+    geom_density(fill = &quot;#99b6ff&quot;, alpha = 0.4) +
+    geom_vline(mapping = aes(xintercept = median(Fare, na.rm = TRUE)),
+               colour = &quot;red&quot;,
+               linetype = &quot;dashed&quot;,
+               lwd = 1) +
+    scale_x_continuous(labels = dollar_format()) +
+    theme_few()
+
+all$Fare[1044] = median(all[all$Pclass == &#39;3&#39; &amp; all$Embarked == &quot;S&quot;, ]$Fare, 
+                        na.rm = TRUE)
+# *************************************************
+# Embarked -- 2
+# *************************************************
+all %&gt;% 
+    select(c(Pclass, Fare, Embarked)) %&gt;% 
+    filter(is.na(Embarked))
+
+None_Embarked_Nas = all %&gt;% 
+    select(c(PassengerId, Pclass, Fare, Embarked, Age)) %&gt;%
+    filter(!is.na(Embarked)) %&gt;%
+    arrange(Fare)
+
+
+ggplot(data = None_Embarked_Nas,
+       mapping = aes(x = Embarked, y = Fare, fill = factor(Pclass))) +
+    geom_boxplot() +
+    geom_hline(mapping = aes(yintercept = 80), 
+               colour = &quot;red&quot;,
+               linetype = &quot;dashed&quot;,
+               lwd = 1) +
+    scale_y_continuous(labels = dollar_format()) +
+    theme_calc()
+
+all$Embarked[c(62, 830)] = &quot;C&quot;
+
+# *************************************************
+# Age -- 263
+# method 1 -- rpart
+# method 2 -- mice
+# *************************************************
+# mice
+factor_var = c(&quot;PassengerId&quot;, &quot;Pclass&quot;, &quot;Sex&quot;, &quot;Embarked&quot;, 
+               &quot;Title&quot;, &quot;Surname&quot;, &quot;Family&quot;, &quot;FamilySizeD&quot;)
+all[factor_var] = all %&gt;%
+    select(factor_var) %&gt;%
+    lapply(function(x) as.factor(x))
+set.seed(129)
+mice_mod = mice(all[, !names(all) %in% c(&quot;PassengerId&quot;, &quot;Name&quot;, &quot;Ticket&quot;, 
+                                         &quot;Cabin&quot;, &quot;Family&quot;, &quot;Surname&quot;, 
+                                         &quot;Survived&quot;)],
+                method = &quot;rf&quot;)
+mice_output = complete(mice_mod)
+mice_output
+
+# rpart
+library(rpart)
+predicted_age &lt;- rpart(Age ~ Pclass + Sex + SibSp + Parch + Fare + Embarked,
+                       data = all_data[!is.na(all_data$Age), ], 
+                       method = &quot;anova&quot;)
+all_data$Age[is.na(all_data$Age)] &lt;- predict(predicted_age,
+                                             all_data[is.na(all_data$Age), ])
+
+
+op = par(mfrow = c(1, 2))
+hist(all$Age, freq = FALSE, main = &quot;Age: Original Data&quot;, 
+     col = &quot;darkgreen&quot;, ylim = c(0, 0.04))
+hist(mice_output$Age, freq = FALSE, main = &quot;Age: MICE Output&quot;,
+     col = &quot;lightgreen&quot;, ylim = c(0, 0.04))
+
+all$Age = mice_output$Age
+par(op)
+# *************************************************
+# Cabin -- 1014 Deck -- 1014
+# *************************************************
+
+# *********************************************************************
+# 特征工程 2
+# *********************************************************************
+# Child : Age &lt; 18
+# Mother: Sex == &quot;female&quot; &amp; Age &gt;= 18 &amp; Child &gt; 0 &amp; Title != &quot;Miss&quot;
+ggplot(data = all[1:891, ], mapping = aes(x = Age, fill = factor(Survived))) +
+    geom_histogram() +
+    facet_grid(. ~ Sex) +
+    theme_calc()
+
+
+all = all %&gt;% mutate(Child = ifelse(Age &lt; 18, &quot;Child&quot;, &quot;Adult&quot;))
+all$Child = all$Child %&gt;% factor()
+table(all$Child, all$Survived)
+
+all = all %&gt;%
+    mutate(Mother = ifelse(Sex == &quot;female&quot; &amp; Parch &gt; 0 &amp; Age &gt; 18 &amp; Title != &quot;Miss&quot;, 
+                           &quot;Mother&quot;, &quot;Not Mother&quot;))
+all$Mother = all$Mother %&gt;% factor()
+table(all$Mother, all$Survived)
+
+md.pattern(all)
+# *********************************************************************
+# 数据重编码
+# *********************************************************************
+# Create dummary variables
+# method 1
+dummies = dummyVars(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+                    data = train)
+train2 =  predict(dummies, newdata = train)
+train2 = as.data.frame(train2)
+train2 = cbind(train[, 1:2], train2)
+head(train2)
+
+# method 2
+dummies = model.matrix(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked,
+                       data = train)
+train3 = as.data.frame(dummies)
+head(train3)
+# *********************************************************************
+# 数据分割 —— cross validation(10 folds)
+# *********************************************************************
+# Split training and testing data set
+set.seed(123)
+inTrain = sample(1:2, dim(train)[1], replace = TRUE, prob = c(0.8, 0.2))
+training = train[inTrain == 1, ]
+testing = train[inTrain == 2, ]
+head(training)
+dim(training)
+dim(testing)
+
+set.seed(123)
+inTrain = createDataPartition(y = train$Survived, p = 0.8, list = FALSE)
+training = train[inTrain, ]
+testing = train[-inTrain, ]
+head(training)
+dim(training)
+dim(testing)
+
+set.seed(123)
+inTrain = sample(1:2, dim(train2)[1], replace = TRUE, prob = c(0.8, 0.2))
+training2 = train2[inTrain == 1, ]
+testing2 = train2[inTrain == 2, ]
+head(training2)
+dim(training2)
+dim(testing2)
+
+set.seed(123)
+inTrain = createDataPartition(y = train2$Survived, p = 0.8, list = FALSE)
+training2 = train2[inTrain, ]
+testing2 = train2[-inTrain, ]
+head(training2)
+dim(training2)
+dim(testing2)
+
+## 5-folds CV
+set.seed(123)
+folds = createFolds(y = train$Survived, k = 5, list = FALSE, returnTrain = TRUE)
+table(folds)
+sapply(folds, length)
+
+## repeat 5-folds cv
+set.seed(123)
+folds = createMultiFolds(y = train$Survived, k = 5, list = FALSE, times = 3)
+sapply(folds, length)
+
+## Bootstrap
+set.seed(123)
+resamples = createResample(y = train$Survived, times = 10, list = TRUE)
+
+
+train = all[1:891, ]
+test = all[892:1309, ]
+
+# *********************************************************************
+# Modeling 
+# *********************************************************************
+# *************************************************
+# Logistic Regression (LR)
+# *************************************************
+# *************************************************
+# Random Forest (RF)
+# *************************************************
+set.seed(754)
+rf_model = randomForest(factor(Survived) ~ Pclass + Sex + Age + SibSp + 
+                                           Parch + Fare + Embarked + Title + 
+                                           FamilySizeD + Child + Mother,
+                        data = train)
+plot(rf_model, ylim = c(0, 0.36))
+legend(&quot;topright&quot;, colnames(rf_model$err.rate), col = 1:3, fill = 1:3)
+
+# Variable importance 
+# Get importance
+importance = importance(rf_model)
+varImportance = data.frame(Variables = row.names(importance),
+                           Importance = round(importance[, &quot;MeanDecreaseGini&quot;], 2))
+# Create a rank variable based on importance
+rankImportance = varImportance %&gt;%
+    mutate(Rank = paste0(&quot;#&quot;, dense_rank(desc(Importance))))
+
+# relative importance of variable
+ggplot(data = rankImportance,
+       mapping = aes(x = reorder(Variables, Importance),
+                     y = Importance,
+                     fill = Importance)) +
+    geom_bar(stat = &quot;identity&quot;) +
+    geom_text(mapping = aes(x = Variables, y = 0.5, label = Rank),
+              hjust = 0, vjust = 0.55, size = 4, colour = &quot;red&quot;) +
+    labs(x = &quot;Variable&quot;) +
+    coord_flip() +
+    theme_few()
+
+
+# Prediction
+prediction = predict(rf_model, test)
+
+# Save the solution to a dataframe with two columns
+solution = data.frame(PassengerID = test$PassengerId, 
+                      Survived = prediction)
+# write_csv(solution, file = &quot;rf_mod_Solution.csv&quot;)
+
+# *************************************************
+# GBDT
+# *************************************************
+
+################################################################################
+################################################################################
+# 4. Training the Classification Models
+######################################################################
+####                  logistic regression                         ####
+######################################################################
+## Training the model
+logit.model = glm(Survived ~ ., data = training, family = &quot;binomial&quot;)
+summary(logit.model)
+logit.response = predict(logit.model, testing, type = &quot;response&quot;)
+logit.predict = ifelse(logit.response &gt; 0.5, &quot;1&quot;, &quot;0&quot;)
+
+## Results
+### confusionMatrix
+table(Predict = logit.predict, Survived = testing$Survived)
+logit.accuracy = mean(logit.predict == testing$Survived)
+logit.accuracy
+
+# contrasts(Survived)
+
+confusionM = confusionMatrix(logit.predict, testing$Survived)
+confusionM
+
+names(confusionM)
+confusionM$positive
+confusionM$table
+confusionM$overall
+confusionM$byClass
+confusionM$dots
+
+### ROC culer
+library(pROC)
+logitROC = roc(testing$Survived, logit.response,
+               levels = levels(as.factor(testing$Survived)))
+plot(logitROC, type = &quot;S&quot;, print.thres = 0.5)
+###############################################################################
+### Model Evalulation - 10-folds CV
+confusion = list(NA)
+for(i in 1:5) {
+    training1 = train[folds != i, ]
+    testing1 = train[folds == i, ]
+    logit.model1 = glm(Survived ~ ., data = training1, family = &quot;binomial&quot;)
+    logit.response1 = predict(logit.model1, testing1, type = &quot;response&quot;)
+    logit.predict1 = ifelse(logit.response1 &gt; 0.5, &quot;1&quot;, &quot;0&quot;)
+    confusion[[i]] = confusionMatrix(logit.predict1, testing1$Survived)
+}
+confusion
+## Solution
+my.prediction = predict(rpart.model, newdata = test, type = &quot;class&quot;)
+my_solution = data.frame(PassengerId = test$PassengerId, Survived = rpart.prediction)
+nrow(my_solution)
+write.csv(my_solution, file = &quot;F:/Rworkd/my_solution/my_solution.csv&quot;,
+          row.names = FALSE)
+
+##########################################################################
+##########################################################################
+library(caret)
+set.seed(1056)
+Contr = trainControl(method = &quot;repeatedcv&quot;, repeats = 5)
+logistic.fit = train(Survived ~., data = training, 
+                     method = &quot;glm&quot;, 
+                     trControl = Contr)
+logistic.predict = predict(logistic.fit, newdata = testing, type = &quot;response&quot;)
+
+
+## Solution
+my.prediction = predict(rpart.model, newdata = test, type = &quot;class&quot;)
+my_solution = data.frame(PassengerId = test$PassengerId, 
+                         Survived = rpart.prediction)
+nrow(my_solution)
+write.csv(my_solution, file = &quot;F:/Rworkd/my_solution/my_solution.csv&quot;,
+          row.names = FALSE)
+
+######################################################################
+####        classification and regression trees                   ####
+######################################################################
+training_two$family_size &lt;- train$SibSp + train$Parch + 1
+
+library(rpart)
+rpart.model = rpart(
+    Survived ~ .,
+    data = training,
+    method = &quot;class&quot;,
+    control = rpart.control(minsplit = 50, cp = 0.01)
+)
+                    
+                    
+summary(rpart.model)
+## Visualizing the tree
+### method 1
+library(rpart)
+plot(rpart.model, compress = TRUE)
+text(rpart.model, use.n = TRUE)
+
+### method 2
+library(rattle)
+fancyRpartPlot(rpart.model)
+
+### method 3
+library(partykit)
+rpart1a = as.party(rpart.model)
+plot(rpart1a)
+
+rpart.predict = predict(rpart.model, testing, type = &quot;class&quot;)
+
+## table(rpart.predict, testing$Survived)
+## rpart.accuracy = mean(rpart.predict == testing$Survived)
+## rpart.accuracy
+
+confusionMatrix(rpart.predict, testing$Survived)
+
+# Create the ROC curve
+library(pROC)
+rpartROC = roc(testing$Survived, rpart.response,
+                levels = levels(as.factor(testing$Survived)))
+plot(rpartROC, type = &quot;S&quot;, print.thres = 0.5)
+
+
+## Solution
+my.prediction = predict(rpart.model, newdata = test, type = &quot;class&quot;)
+my_solution = data.frame(PassengerId = test$PassengerId, Survived = rpart.prediction)
+nrow(my_solution)
+write.csv(my_solution, file = &quot;F:/Rworkd/my_solution/my_solution.csv&quot;,
+            row.names = FALSE)
+
+###########################################################################
+
+cvCtrl = trainControl(method = &quot;repeatdecv&quot;, repeats = 3, 
+                        summaryFunction = twoClassSummary, 
+                        classProbs = FALSE)
+set.seed(1)
+rpartTune = train(Survived ~ ., 
+                    data = training, 
+                    method = &quot;rpart&quot;, 
+                    tuneLength = 30, 
+                    metric = &quot;ROC&quot;, 
+                    trControl = cvCtrl)
+rpartTune
+plot(rpartTune, scales = list(x = list(log = 10)))
+rpartPred = predict(rpartTune, testing)
+confusionMatrix(rpartPred2, testing$Species)
+rpartProbs = predict(rpartTune, testing, type = &quot;prob&quot;)
+head(rpartProbs)
+## Create the ROC curve
+library(pROC)
+rpartROC = roc(testing$Species, rpartProbs[, &quot;PS&quot;],
+                levels = rev(testProbs$Class))
+rpartROC
+plot(rpartROC, type = &quot;S&quot;, print.thres = 0.5)
+## Solution
+my.prediction = predict(rpart.model, newdata = test, type = &quot;class&quot;)
+my_solution = data.frame(PassengerId = test$PassengerId, Survived = rpart.prediction)
+nrow(my_solution)
+write.csv(my_solution, file = &quot;F:/Rworkd/my_solution/my_solution.csv&quot;,
+            row.names = FALSE)</code></pre>
+</div>

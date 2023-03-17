@@ -31,6 +31,15 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [时间序列预处理简介](#时间序列预处理简介)
+- [标准化和中心化](#标准化和中心化)
+  - [标准化](#标准化)
+  - [中心化](#中心化)
+- [归一化](#归一化)
+  - [归一化](#归一化-1)
+  - [平均归一化](#平均归一化)
+  - [什么时候用归一化？什么时候用标准化？](#什么时候用归一化什么时候用标准化)
+- [定量特征二值化](#定量特征二值化)
 - [时间序列聚合](#时间序列聚合)
   - [Pandas 重采样](#pandas-重采样)
     - [API](#api)
@@ -62,6 +71,218 @@ details[open] summary {
   - [小波分析](#小波分析)
 </p></details><p></p>
 
+# 时间序列预处理简介
+
+一般来说，真实世界的时间序列常常取值范围多样，长短不一，形态各异。
+如果要做统一的分析，需要我们进行初步的处理，将时间序列整合到统一的范畴下，进行分析。
+这里基本的方法有：标准化、归一化、定量特征二值化
+
+时间序列示例数据：
+
+[澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
+
+```python
+import pandas as pd 
+from pandas import Grouper
+import matplotlib.pyplot as plt 
+
+series = pd.read_csv(
+    "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+    header = 0,
+    index_col = 0, 
+    parse_dates = True,
+    date_parser = lambda dates: pd.to_datetime(dates, format = '%Y-%m-%d'),
+    squeeze = True
+)
+print(series.head())
+```
+
+```
+Date
+1981-01-01    20.7
+1981-01-02    17.9
+1981-01-03    18.8
+1981-01-04    14.6
+1981-01-05    15.8
+Name: Temp, dtype: float64
+```
+
+```python
+series.plot()
+plt.show()
+```
+
+![img](images/line.png)
+
+```python
+series.hist()
+plt.show()
+```
+
+![img](images/hist.png)
+
+# 标准化和中心化
+
+## 标准化
+
+标准化是使时间序列中的数值符合平均值为 0，标准差为 1。具体来说，
+对于给定的时间序列 `$\{x_{1}, x_{2}, \ldots, x_{t}, \ldots, x_{T}\}$`，
+有如下公式：
+
+`$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{std(\{x_{t}\}_{t}^{T})}$$`
+
+```python
+from pandas import read_csv
+from sklearn.preprocessing import StandarScaler
+from math import sqrt
+
+# Data
+series = pd.read_csv(
+    "daily-minimum-temperatures-in-me.csv", 
+    header = 0,
+    index_col = 0
+)
+print(series.head())
+values = series.values
+values = values.reshape((len(values), 1))
+
+# Standardization
+scaler = StandardScaler()
+scaler = scaler.fit(values)
+print("Mean: %f, StandardDeviation: %f" % (scaler.mean_, sqrt(scaler.var_)))
+
+# 标准化
+normalized = scaler.transform(values)
+for i in range(5):
+    print(normalized[i])
+
+# 逆变换
+inversed = scaler.inverse_transform(normalized)
+for i in range(5):
+    print(inversed[i])
+```
+
+```python
+normalized.plot()
+```
+
+![img](images/line_standard.png)
+
+```python
+inversed.plot()
+```
+
+![img](images/line_inversed_standard.png)
+
+## 中心化
+
+标准化的目标是将原始数据分布转换为标准正态分布，它和整体样本分布有关，
+每个样本点都能对标准化产生影响。这里，如果只考虑将均值缩放到 0，
+不考虑标准差的话，为数据中心化处理：
+
+`$$\hat{x}_{t} = x_{t} - mean(\{x_{t}\}_{t}^{T})$$`
+
+# 归一化
+
+归一化是将样本的特征值转换到同一范围（量纲）下，把数据映射到 `$[0, 1]$` 或 `$[-1, 1]$` 区间内，
+它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的
+
+```python
+import pandas as pd 
+from sklearn.preprocessing import MinMaxScaler
+
+# Data
+series = pd.read_csv(
+    "daily-minimum-temperautures-in-me.csv", 
+    header = 0, 
+    index_col = 0
+)
+print(series.head())
+values = series.values
+values = values.reshape((len(values), 1))
+
+# Normalization
+scaler = MinMaxScaler(feature_range = (0, 1))
+scaler = scaler.fit(values)
+print("Min: %f, Max: %f" % (scaler.data_min_, scaler.data_max_))
+
+# 正规化
+normalized = scaler.transform(values)
+for i in range(5):
+    print(normalized[i])
+
+# 逆变换
+inversed = scaler.inverse_transform(normalized)
+for i in range(5):
+    print(inversed[i])
+```
+
+``` 
+            Temp
+Date            
+1981-01-02  17.9
+1981-01-03  18.8
+1981-01-04  14.6
+1981-01-05  15.8
+1981-01-06  15.8
+Min: 0.000000, Max: 26.300000
+
+[0.68060837]
+[0.7148289]
+[0.55513308]
+[0.60076046]
+[0.60076046]
+[17.9]
+[18.8]
+[14.6]
+[15.8]
+[15.8]
+```
+
+```python
+normalized.plot()
+```
+
+![img](images/line_normalized.png)
+
+```python
+inversed.plot()
+```
+
+![img](images/line_inversed_normalized.png)
+
+## 归一化
+
+把数据映射到 `$[0, 1]$` 范围之内进行处理，可以更加便捷快速。具体公式如下：
+
+`$$\hat{x}_{t} = \frac{x_{t} - min(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
+
+## 平均归一化
+
+`$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
+
+## 什么时候用归一化？什么时候用标准化？
+
+* 如果对输出结果范围有要求，用归一化
+* 如果数据较为稳定，不存在极端的最大最小值，用归一化
+* 如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
+
+# 定量特征二值化
+
+如果不需要数据的连续信息，只需要对定量的特征进行“好与坏”的划分，
+可以使用定量特征二值化来剔除冗余信息
+
+举个例子，银行对 5 名客户的征信进行打分，分别为 50，60，70，80，90。
+现在，不在乎一个人的征信多少分，只在乎他的征信好与坏（如大于 90 为好，低于 90 就不好）；
+再比如学生成绩，大于 60 及格，小于 60 就不及格。这种“好与坏”、
+“及格与不及格”的关系可以转化为 0-1 变量，这就是二值化。变化方式如下所示：
+
+`$$\begin{cases}
+\hat{x}_{t} = 1, x_{t} > threshold \\
+\hat{x}_{t} = 0, x_{t} \leq threshold
+\end{cases}$$`
+
+也可以设计更多的规则，进行多值化的处理
 
 # 时间序列聚合
 
@@ -187,10 +408,6 @@ Freq: D, Length: 100, dtype: float64
 ```
 
 ### 升采样
-
-
-
-
 
 ### 降采样
 
@@ -379,7 +596,6 @@ plt.show()
 
 ![img](images/scipy_resample2.png)
 
-
 # 时间序列缺失处理
 
 最常用的处理缺失值的方法包括填补(imputation) 和删除(deletion)两种
@@ -485,7 +701,6 @@ pandas.DataFrame.interpolate(
 - `**kwargs`
    - 传递给插值函数的参数
 
-
 ```python
 s = pd.Series([])
 df = pd.DataFrame({})
@@ -567,23 +782,6 @@ ynew5 = f5(xnew)
 ### Spline interpolation
 
 ### Using radial basis functions for smoothing/interpolate
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # 时间序列降噪
 

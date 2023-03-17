@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2023-03-16'
 slug: rs-ctr-gbdt-lr
 categories:
-  - machinelearning
+  - recommended system
 tags:
   - model
 ---

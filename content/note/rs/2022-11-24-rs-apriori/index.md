@@ -1,10 +1,11 @@
 ---
-title: Apriori 关联分析
+title: 关联分析
+subtitle: Apriori
 author: 王哲峰
 date: '2022-11-24'
 slug: rs-apriori
 categories:
-  - machinelearning
+  - recommended system
 tags:
   - model
 ---

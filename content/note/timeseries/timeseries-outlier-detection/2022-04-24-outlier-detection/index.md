@@ -50,7 +50,7 @@ details[open] summary {
   - [基于距离的方法](#基于距离的方法)
     - [KNN](#knn)
   - [基于密度的方法](#基于密度的方法)
-    - [Local Outlier Factor(LOF)](#local-outlier-factorlof)
+    - [LOF](#lof)
     - [Connectivity-Based Outlier Factor(COF)](#connectivity-based-outlier-factorcof)
     - [Stochastic Outlier Selection(SOS)](#stochastic-outlier-selectionsos)
   - [基于聚类的方法](#基于聚类的方法)
@@ -67,6 +67,8 @@ details[open] summary {
     - [One-Class SVM](#one-class-svm)
   - [基于预测的方法](#基于预测的方法)
     - [ARIMA](#arima)
+  - [One-Class SVM](#one-class-svm-1)
+  - [组内方差法](#组内方差法)
   - [基于神经网络方法](#基于神经网络方法)
     - [特征提取](#特征提取)
       - [预训练模型](#预训练模型)
@@ -322,7 +324,9 @@ y_train_scores = clf.decision_scores_
 
 ## 基于密度的方法
 
-### Local Outlier Factor(LOF)
+### LOF
+
+> Local Outlier Factor, LOF
 
 LOF 是基于密度的经典算法，通过给每个数据点都分配一个依赖于邻域密度的离群因子 LOF，
 进而判断该数据点是否为离群点。它的好处在于可以量化每个数据点的异常程度(outlierness)
@@ -831,6 +835,13 @@ n_error_outlier = y_pred[y_pred == -1].size
 ### ARIMA
 
 
+
+## One-Class SVM
+
+## 组内方差法
+
+
+
 ## 基于神经网络方法
 
 ![img](images/models_deeplearning.png)
@@ -929,6 +940,9 @@ n_error_outlier = y_pred[y_pred == -1].size
 ### 深度相关的代表性模型
 
 ![img](images/deep_models.png)
+
+
+
 
 # 异常检测数据集
 
