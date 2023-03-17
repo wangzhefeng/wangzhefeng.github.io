@@ -33,14 +33,14 @@ details[open] summary {
 
 - [构建 NLP Pipeline](#构建-nlp-pipeline)
   - [数据](#数据)
-  - [Step 1: 分句(Sentence Segmentation)](#step-1-分句sentence-segmentation)
-  - [Step 2: 分词(Word Tokenization)](#step-2-分词word-tokenization)
-  - [词性标注(Predicting Parts of Speech for Each Token)](#词性标注predicting-parts-of-speech-for-each-token)
+  - [分句](#分句)
+  - [分词](#分词)
+  - [词性标注](#词性标注)
   - [Text Lemmatization](#text-lemmatization)
     - [示例](#示例)
     - [London 句子示例](#london-句子示例)
-  - [识别停用词(Identifying Stop Words)](#识别停用词identifying-stop-words)
-  - [句法依赖分析(Dependency Parsing)](#句法依赖分析dependency-parsing)
+  - [识别停用词](#识别停用词)
+  - [句法依赖分析](#句法依赖分析)
   - [命名实体识别](#命名实体识别)
   - [共指解析](#共指解析)
 - [构建 Python NLP Pipeline](#构建-python-nlp-pipeline)
@@ -67,15 +67,20 @@ by the Romans, who named it Londinium.
 - London was settled by Romans
 - and so on
 
-## Step 1: 分句(Sentence Segmentation)
+## 分句
+
+> Sentence Segmentation
 
 NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
-- 1."London is the capital and most populous city of England and the United Kingdom."
-- 2."Standing on the River Thames in the south east of the island of Great Britain, London has been a major settlement for two millennia."
-- 3."It was founded by the Romans, who named it Londinium."
+1. "London is the capital and most populous city of England and the United Kingdom."
+2. "Standing on the River Thames in the south east of the island of Great Britain, 
+  London has been a major settlement for two millennia."
+3. "It was founded by the Romans, who named it Londinium."
 
-## Step 2: 分词(Word Tokenization)
+## 分词
+
+> Word Tokenization
 
 * 句子:
 
@@ -86,9 +91,11 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 ![img](images/London_word.png)
 
 Tokenization 对于英文来说非常容易, 可以根据单词之间的空格对文本句子进行分割。
-并且, 也可以将标点符号也看成一种分割符, 因为标点符号也是有意义的。
+并且, 也可以将标点符号也看成一种分割符, 因为标点符号也是有意义的
 
-## 词性标注(Predicting Parts of Speech for Each Token)
+## 词性标注
+
+> Predicting Parts of Speech for Each Token
 
 通过词性标注, 可以知道每个词在句子中的角色, 即词性, 词性包括名词(noun)、
 动词(verb)、形容词(adjective)等等, 这样可以帮助计算机理解句子的意思.
@@ -135,7 +142,9 @@ Tokenization 对于英文来说非常容易, 可以根据单词之间的空格�
 
 ![img](images/sentence3.png)
 
-## 识别停用词(Identifying Stop Words)
+## 识别停用词
+
+> Identifying Stop Words
 
 停用词的识别主要是用来考虑句子中每个单词的重要性。
 
@@ -153,7 +162,9 @@ Tokenization 对于英文来说非常容易, 可以根据单词之间的空格�
 - 例如:如果要构建摇滚乐队搜索引擎, 则要确保不要过滤到单词 "The"。因为, "The" 一词
   会经常出现在乐队的名字中, 比如 1980年代的注明摇滚乐队 "The The!".
 
-## 句法依赖分析(Dependency Parsing)
+## 句法依赖分析
+
+> Dependency Parsing
 
 ## 命名实体识别
 
