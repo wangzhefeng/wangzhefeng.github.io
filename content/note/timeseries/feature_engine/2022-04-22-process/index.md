@@ -69,6 +69,14 @@ details[open] summary {
   - [移动平均](#移动平均)
   - [傅里叶变换](#傅里叶变换)
   - [小波分析](#小波分析)
+- [时间序列处理技巧](#时间序列处理技巧)
+  - [时区](#时区)
+    - [API](#api-2)
+    - [原理](#原理)
+    - [示例](#示例)
+  - [重采样](#重采样)
+  - [缺失值填充](#缺失值填充)
+- [参考](#参考)
 </p></details><p></p>
 
 # 时间序列预处理简介
@@ -796,4 +804,68 @@ ynew5 = f5(xnew)
 然后应用傅里叶变换得到滤波后的时间序列
 
 ## 小波分析
+
+
+# 时间序列处理技巧
+
+## 时区
+
+### API
+
+* pandas.to_datetime(df.index)
+
+### 原理
+
+本地化是什么意思？
+
+* 本地化意味着将给定的时区更改为目标或所需的时区。这样做不会改变数据集中的任何内容，
+  只是日期和时间将显示在所选择的时区中
+
+为什么需要它？
+
+* 如果你拿到的时间序列数据集是 UTC 格式的，而你的客户要求你根据例如美洲时区来处理气候数据。
+  你就需要在将其提供给模型之前对其进行更改，因为如果您不这样做模型将生成的结果将全部基于 UTC
+
+如何修改？
+
+* 只需要更改数据集的索引部分
+
+### 示例
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# data
+df = pd.DataFrame({
+    "ts": pd.datetime_range(),
+    "value": range(10),
+})
+
+# 制作日期时间类型的索引
+df.index = pd.to_datetime(df.index)
+
+# 数据集的索引部分发生变化。日期和时间和以前一样，但现在它在最后显示 +00:00
+# 这意味着 pandas 现在将索引识别为 UTC 时区的时间实例
+df.index = df.index.tz_localize("UTC")
+
+# 现在可以专注于将 UTC 时区转换为我们想要的时区
+df.index = df.index.tz_convert("Asia/Qatar")
+```
+
+## 重采样
+
+```python
+resampled_df = df["value"].resample("1D")  # object
+resampled_df.mean()  # agg
+resampled_df = resampled_df.mean().to_frame()  # 转换成 DateFrame
+```
+
+## 缺失值填充
+
+
+# 参考
+
+* [用于时间序列数据整理的Pandas函数](https://mp.weixin.qq.com/s/uy8jduqnA0tQM7qC476XSQ)
 

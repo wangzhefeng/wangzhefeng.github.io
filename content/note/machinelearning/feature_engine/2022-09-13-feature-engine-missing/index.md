@@ -33,15 +33,16 @@ details[open] summary {
 
 - [缺失值处理理论](#缺失值处理理论)
 - [缺失值处理实战](#缺失值处理实战)
+  - [math](#math)
+  - [Numpy](#numpy)
   - [Pandas](#pandas)
   - [Scipy](#scipy)
-  - [其他](#其他)
+  - [Missingno](#missingno)
 - [缺失值插值](#缺失值插值)
   - [Pandas 插值](#pandas-插值)
   - [Scipy 插值](#scipy-插值)
 - [参考](#参考)
 </p></details><p></p>
-
 
 # 缺失值处理理论
 
@@ -70,6 +71,14 @@ details[open] summary {
 
 # 缺失值处理实战
 
+## math
+
+* `isnan()`
+
+## Numpy
+
+* `numpy.isna()`
+
 ## Pandas
 
 1. Python 缺失值类型
@@ -85,6 +94,10 @@ details[open] summary {
     - `.isna()`
     - `pd.notna()`
     - `.notna()`
+    - `pd.isnull()`
+    - `pd.notnull()`
+    - `pd.Series.notna()`
+    - `pd.DataFrame.notna()`
 4. 缺失值填充
     - `.fillna()`
        - `.where(pd.notna(df), dict(), axis = "columns")`
@@ -99,7 +112,36 @@ details[open] summary {
 
 ## Scipy
 
-## 其他
+
+## Missingno
+
+```bash
+$ pip install missingno
+```
+
+```python
+import pandas as pd
+import missingno as msno
+
+# data
+df = pd.read_csv(data.csv)
+
+# matrix
+msno.matrix(df)
+
+# bar chart
+msno.bar(df)
+
+# heatmap
+msno.heatmap(df)
+```
+
+
+
+
+
+
+
 
 # 缺失值插值
 

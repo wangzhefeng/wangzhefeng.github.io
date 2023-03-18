@@ -616,6 +616,8 @@ print(df.head())
 
 ### 峰值特征
 
+> * [scipy.signal.find_peaks](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html)
+
 序列中峰值的个数，序列中峰值的个数可以间接反映序列的波动情况，
 这在非常多的问题中都有着非常强的物理意义，例如：
 

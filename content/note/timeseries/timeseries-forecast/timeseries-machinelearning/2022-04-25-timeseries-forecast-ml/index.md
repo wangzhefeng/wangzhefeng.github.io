@@ -46,9 +46,9 @@ details[open] summary {
     - [递归多目标回归](#递归多目标回归)
   - [多变量预测](#多变量预测)
   - [递归预测](#递归预测-1)
-  - [直接预测 Direct Forecasting](#直接预测-direct-forecasting)
-  - [堆叠预测 Stacking Forecasting](#堆叠预测-stacking-forecasting)
-  - [修正预测 Rectified Forecasting](#修正预测-rectified-forecasting)
+  - [直接预测](#直接预测)
+  - [堆叠预测](#堆叠预测)
+  - [修正预测](#修正预测)
 - [参考文章](#参考文章)
 </p></details><p></p>
 
@@ -75,6 +75,21 @@ details[open] summary {
 但是，用机器学习算法做时间序列预测，处理的数据会变得很需要技巧。
 对于普通的截面数据，在构建特征和分割数据（比如做 K-fold CV）的时候不需要考虑时间窗口。
 而对于时间序列，时间必须考虑在内，否则模型基本无效。因此在数据处理上，后者的复杂度比前者要大
+
+![img](images/ts_ml.png)
+
+![img](images/lags.png)
+
+
+![img](images/cv.png)
+
+
+![img](images/cv_ts.png)
+
+
+
+
+
 
 ## 时间序列初始数据集
 
@@ -144,6 +159,14 @@ details[open] summary {
 拿新数据构建未来特征，然后把这些特征加入到从训练集上训练出的预测模型中去，即可得到任务需要的最终预测值。
 这里需要注意，划多少个时间窗口因数据而异。此外，数据的历史窗口（图上深绿部分）和未来窗口（图上浅绿部分）可以是定长也可以是变长，
 看具体情况
+
+
+
+
+
+
+
+
 
 # 时间序列预测方法
 
@@ -266,11 +289,26 @@ dirrec.predict(X_ts)
 
 ## 递归预测 
 
-## 直接预测 Direct Forecasting
+## 直接预测
 
-## 堆叠预测 Stacking Forecasting
+> Direct Forecasting
 
-## 修正预测 Rectified Forecasting
+## 堆叠预测
+
+> Stacking Forecasting
+
+## 修正预测
+
+> Rectified Forecasting
+
+
+
+
+
+
+
+
+
 
 
 
