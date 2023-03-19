@@ -1464,4 +1464,4 @@ $ service mysqld restart
 * [Ubuntu 16.04安装MySQL及问题解决](https://www.linuxidc.com/Linux/2017-05/143861.htm)
 * [数据库八股文背诵版](https://zhuanlan.zhihu.com/p/366840427)
 * [主流数据库](https://zhuanlan.zhihu.com/p/70361894)
-
+* [为什么MySQL数据库数据量大了要进行分库分表](https://www.zhihu.com/question/459955079/answer/1904557377)

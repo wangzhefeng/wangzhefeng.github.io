@@ -43,6 +43,11 @@ tags:
 
 
 
+# 时间序列 Transformer
+
+* https://mp.weixin.qq.com/s/OjK7Q7DSoTM_p1MLye9RWw
+
+
 # 参考
 
 * [Transformer的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)

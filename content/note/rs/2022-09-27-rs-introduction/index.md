@@ -478,4 +478,5 @@ AB 测试一般把用户随机进行划分为对照组(A 组,不添加改进点)
 * [Kaggle Topk商品推荐方案总结](https://mp.weixin.qq.com/s/YiyQ7xEdmUiUTl34kfBsJg)
 * [推荐系统常用模型总结](https://mp.weixin.qq.com/s/QoDH8gTpeEQe0kHeWS48Pg)
 * [推荐系统整体架构总结](https://mp.weixin.qq.com/s?__biz=MzI4MTQ2NjU5NA==&mid=2247519716&idx=1&sn=6fee88c0bf901293d75128a5bf8e9252&chksm=ebaa0e69dcdd877fbcb54d17c2debd5cad853af6a9c7c0b285f3bb1a1a2ef3a1d845e3de6018&cur_album_id=2670090714638352386&scene=189#wechat_redirect)
-
+* https://blog.csdn.net/wuzhongqiang/category_10128687.html
+* https://github.com/zhongqiangwu960812/AI-RecommenderSystem
