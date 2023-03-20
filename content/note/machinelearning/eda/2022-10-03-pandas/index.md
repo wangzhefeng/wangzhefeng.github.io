@@ -443,9 +443,9 @@ df_droped.asfreq("MS")
 df_droped.groupby(pd.Grouper(freq = "MS")).first()
 ```
 
-
 # 参考
 
 * [Python 自动探索性数据分析神库](https://mp.weixin.qq.com/s/F9Ixe9_d4XDxK-MJOMaVqQ)
 * [用 Pyjanitor 更好地进行数据清洗与处理](https://mp.weixin.qq.com/s/9AasPTO-7Caku3_5CMj5kQ)
 * [超强图解 Pandas 18 招](https://mp.weixin.qq.com/s/FqgsH4IP3QeQHYbKDuKPDg)
+* [Pandas 链式操作](https://towardsdatascience.com/the-unreasonable-effectiveness-of-method-chaining-in-pandas-15c2109e3c69)

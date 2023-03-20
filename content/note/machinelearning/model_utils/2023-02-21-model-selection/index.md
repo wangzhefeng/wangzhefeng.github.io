@@ -385,6 +385,8 @@ print(best)
 计算会越发昂贵。在知乎《为什么基于贝叶斯优化的自动调参没有大范围使用？》中，
 很多知乎主也给出了很认真的回复
 
+* [Bayesian Optimization](https://github.com/fmfn/BayesianOptimization)
+
 ## HyperBand
 
 除了搜索、随机搜索和贝叶斯优化，还有其它自动调参方式。例如 Hyperband optimization，

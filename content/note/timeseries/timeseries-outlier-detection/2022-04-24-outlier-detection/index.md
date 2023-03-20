@@ -47,6 +47,7 @@ details[open] summary {
     - [Z-score](#z-score)
     - [boxplot](#boxplot)
     - [Grubbs 检验](#grubbs-检验)
+    - [Elliptic Envelope](#elliptic-envelope)
   - [基于距离的方法](#基于距离的方法)
     - [KNN](#knn)
   - [基于密度的方法](#基于密度的方法)
@@ -67,6 +68,9 @@ details[open] summary {
     - [One-Class SVM](#one-class-svm)
   - [基于预测的方法](#基于预测的方法)
     - [ARIMA](#arima)
+  - [基于时序分解的方法](#基于时序分解的方法)
+    - [STL](#stl)
+    - [Twitter Seasonal Hybrid ESD:](#twitter-seasonal-hybrid-esd)
   - [One-Class SVM](#one-class-svm-1)
   - [组内方差法](#组内方差法)
   - [基于神经网络方法](#基于神经网络方法)
@@ -143,17 +147,31 @@ details[open] summary {
 
 ### 点异常值
 
-* 相对于全局其他数据的异常实例。某些点与全局大多数都不一样
+> Point Anomaly
+
+点异常指：一个值的突然上升或下降，相对于全局其他数据的异常实例，某些点与全局大多数都不一样
+
+例如，夏季月份您家中的电力消耗增加
 
 ### 上下文异常值
 
-* 上下文异常通常在它们自己的上下文中具有相对较大/较小的值，但不是全局的。
-  即某个时间点的表现与前后时间段内存在较大差异
+> Contextual Anomaly
+
+上下文异常通常在它们自己的上下文中具有相对较大/较小的值，但不是全局的。
+即某个时间点的表现与前后时间段内存在较大差异
+
+例如，一个人在锻炼时心率达到 150 BPM 可能是正常的，但在凌晨 4 点保持相同的 BPM 则令人担忧。
+这是一个上下文异常，上下文是人们通常在凌晨 4 点睡着了
 
 ### 集体异常值
 
-* 相对于整个数据集异常的相关异常数据实例的集合。
-  即个体不存在异常, 但是个体同时出现表现出异常状态
+> Collective Anomaly
+
+集体异常是趋势的其余部分的持续变化。这也可能是一组点异常。
+相对于整个数据集异常的相关异常数据实例的集合。
+即个体不存在异常, 但是个体同时出现表现出异常状态
+
+例如，夏季月份您家中的电力消耗增加
 
 ## 深度方法分类
 
@@ -295,6 +313,13 @@ print(grubbs.min_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
 print(grubbs.max_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
 print(grubbs.max_test_indices([8, 9, 10, 50, 9], alpha = 0.05))
 ```
+
+### Elliptic Envelope
+
+> Elliptic Envelope，椭圆包格
+
+* https://scikit-learn.org/stable/modules/generated/sklearn.covariance.EllipticEnvelope.html
+* https://blog.csdn.net/qq_40177015/article/details/117264517
 
 ## 基于距离的方法
 
@@ -833,6 +858,23 @@ n_error_outlier = y_pred[y_pred == -1].size
 ![img](images/predict_method.png)
 
 ### ARIMA
+
+可用于通过使用预测值与实际值之间的差异来查找异常
+
+## 基于时序分解的方法
+
+### STL
+
+> Seasonal-Trend decomposition using Loess
+
+去除(隔离)时间序列数据中的模式，所以留下的任何东西都是“不规则的”，因此是异常的
+
+![img](images/stl.png)
+
+### Twitter Seasonal Hybrid ESD:
+
+SH-ESD 是建立在 ESD(Extreme Studentized Deviate)上的。该方法是基于使用时间序列分解和统计检验
+
 
 
 

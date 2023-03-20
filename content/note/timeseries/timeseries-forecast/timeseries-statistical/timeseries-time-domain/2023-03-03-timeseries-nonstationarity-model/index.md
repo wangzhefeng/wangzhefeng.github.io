@@ -37,6 +37,7 @@ details[open] summary {
   - [方差齐性检验](#方差齐性检验)
     - [残差图](#残差图)
     - [残差平方图](#残差平方图)
+    - [假设检验](#假设检验)
 - [ARIMA 模型](#arima-模型)
   - [ARIMA(`$p$`, `$d$`, `$q$`) 模型](#arimap-d-q-模型)
   - [差分运算](#差分运算)
@@ -122,6 +123,84 @@ details[open] summary {
 残差平方图是对一阶差分后的时序求平均后的图。差分是抽取波动性，平方是把差分变正数
 
 ![img](images/res_2.png)
+
+### 假设检验
+
+使用统计检验来检查时间序列是否为异方差序列主要有三种方法：
+
+* White Test
+* Breusch-Pagan Test
+* Goldfeld-Quandt Test
+
+这些检验的主要输入是回归模型的残差(如普通最小二乘法)。零假设是残差的分布方差相等。
+如果 `$p$` 值小于显著性水平，则拒绝该假设。这就说明时间序列是异方差的，检验显著性水平通常设置为 0.05
+
+```python
+import pandas as pd
+import statsmodels.stats.api as sms
+from statsmodels.formula.api import ols
+
+TEST_NAMES = ["White", "Breusch-Pagan", "Goldfeld-Quandt"]
+FORMULA = 'value ~ time'
+
+
+class Heteroskedasticity:
+ 
+    @staticmethod
+    def het_tests(series: pd.Series, test: str) -> float:
+        """
+        Testing for heteroskedasticity
+
+        Parameters:
+            series: Univariate time series as pd.Series
+            test: String denoting the test. One of 'White','Goldfeld-Quandt', or 'Breusch-Pagan'
+        Return:
+            p-value as a float.
+ 
+        If the p-value is high, we accept the null hypothesis that the data is homoskedastic
+        """
+        assert test in TEST_NAMES, 'Unknown test'
+ 
+        series = series.reset_index(drop = True).reset_index()
+        series.columns = ['time', 'value']
+        series['time'] += 1
+ 
+        olsr = ols(FORMULA, series).fit()
+ 
+        if test == 'White':
+            _, p_value, _, _ = sms.het_white(olsr.resid, olsr.model.exog)
+        elif test == 'Goldfeld-Quandt':
+            _, p_value, _ = sms.het_goldfeldquandt(olsr.resid, olsr.model.exog, alternative='two-sided')
+        else:
+            _, p_value, _, _ = sms.het_breuschpagan(olsr.resid, olsr.model.exog)
+ 
+        return p_value
+ 
+    @classmethod
+    def run_all_tests(cls, series: pd.Series):
+        test_results = {k: cls.het_tests(series, k) for k in TEST_NAMES}
+ 
+        return test_results
+```
+
+使用实例：
+
+```python
+from pmdarima.datasets import load_airpassengers
+ 
+# https://github.com/vcerqueira/blog/blob/main/src/heteroskedasticity.py
+from src.heteroskedasticity import Heteroskedasticity
+
+series = load_airpassengers(True)
+
+test_results = Heteroskedasticity.run_all_tests(series)
+
+# {'Breusch-Pagan': 4.55e-07,
+# 'Goldfeld-Quandt': 8.81e-13,
+# 'White': 4.34e-07}
+```
+
+
 
 # ARIMA 模型
 
@@ -514,4 +593,4 @@ GARCH 模型本质上就是在 ARCH 上加入了 `$p$` 阶自相关性（我理�
 
 * [非平稳时序分析 (同方差)](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486538&idx=1&sn=998daad088940387c00016611049c23a&chksm=fa041221cd739b375a97adba05afb6c085783731d075937d6712583f7798e7d0ed2c436ff784&scene=178&cur_album_id=1577157748566310916#rd)
 * [非平稳时序分析 (异方差)](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486539&idx=1&sn=e829d3372e728a32abc25af97cbd70ed&chksm=fa041220cd739b3660811059434a2f3aa66dd98c018209d923f610813bc45232024b445454ab&scene=178&cur_album_id=1577157748566310916#rd)
-
+* [时间序列中的异方差检测](https://mp.weixin.qq.com/s/FrNk-Od6cKsLY9d1feb6ww)

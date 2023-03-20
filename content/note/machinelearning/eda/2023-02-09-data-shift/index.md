@@ -3,7 +3,7 @@ title: 数据集偏移
 subtitle: 训练集、测试集分布探索分析
 author: 王哲峰
 date: '2023-02-09'
-slug: train-test-distribution
+slug: data-shift
 categories:
   - data analysis
 tags:

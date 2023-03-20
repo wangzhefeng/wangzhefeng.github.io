@@ -1,5 +1,5 @@
 ---
-title: Python 针对比较大的数据集处理方法、工具
+title: Python 大数据集处理
 author: 王哲峰
 date: '2022-07-24'
 slug: python-bigdata
