@@ -295,4 +295,6 @@ tfdv.display_anomalies(anomalies)
 
 * [机器学习模型验证，这 3 个 Python 包可轻松解决 95% 的需求](https://mp.weixin.qq.com/s?__biz=MzA3MTM5MDYyMA==&mid=2656763105&idx=1&sn=2c481069a1d2849b1f816075ba122df9&chksm=84801812b3f79104a6ec6f26db92dc452342ebcce6fcb6ff2928d966d9ea90d182baed1a2b52&scene=132#wechat_redirect)
 * [交叉验证常见的6个错误](https://mp.weixin.qq.com/s/OirhNWfpz-mRJpSb_CwIXA)
+* [综述论文：机器学习中的模型评价、模型选择与算法选择](https://mp.weixin.qq.com/s/F7mgeYGzTxO6jFeIbqHbqw)
+* [验证策略设计](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247493351&idx=1&sn=d4144b64da66d4bc91ed0716596476ce&chksm=c32aff68f45d767e7392de9fc12814a229130d6ca0c41764ba1fbcb437a909a7560a22d9cd09&scene=21#wechat_redirect)
 
