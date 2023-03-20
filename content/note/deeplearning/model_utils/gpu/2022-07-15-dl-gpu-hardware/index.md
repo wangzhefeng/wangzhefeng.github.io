@@ -1,5 +1,5 @@
 ---
-title: DL GPU-hardware
+title: GPU 硬件
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-gpu-hardware

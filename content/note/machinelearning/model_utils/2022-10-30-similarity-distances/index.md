@@ -451,4 +451,6 @@ DTW 距离的计算是一个动态规划过程，先用欧式距离初始化矩�
 
 * [[1] 时间序列聚类](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484837&idx=1&sn=cdc922e6a213064485113bbb9b8e911e&chksm=cecef050f9b9794672f0227b36212a1fcf8acb1916c6e12e923bcdf5e9ac71b0aa9e7bb7f58d&scene=21#wechat_redirect)
 * [[2] 一文读懂常见的9种距离度量方法](https://mp.weixin.qq.com/s/UrCSFonkg0nYxwtLPWlSxA)
+* [distance Lib](https://github.com/doukremt/distance)
+* [spatial.distance](https://docs.scipy.org/doc/scipy/reference/spatial.distance.html)
 

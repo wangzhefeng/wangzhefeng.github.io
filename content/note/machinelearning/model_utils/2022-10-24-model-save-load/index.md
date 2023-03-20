@@ -182,6 +182,7 @@ if __name__ == "__main__":
 
 # 参考
 
-- https://scikit-learn.org/stable/model_persistence.html
-* https://zhuanlan.zhihu.com/p/92691256
-
+* [Model persistence](https://scikit-learn.org/stable/model_persistence.html)
+* [风控模型上线部署流程](https://zhuanlan.zhihu.com/p/92691256)
+* [使用PMML部署机器学习模型](https://zhuanlan.zhihu.com/p/79197337)
+* [PMML实现模型上线](https://zhuanlan.zhihu.com/p/39021238)
