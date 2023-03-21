@@ -2,7 +2,7 @@
 title: seq2seq
 author: 王哲峰
 date: '2022-04-05'
-slug: seq2seq
+slug: dl-seq2seq
 categories:
   - nlp
 tags:

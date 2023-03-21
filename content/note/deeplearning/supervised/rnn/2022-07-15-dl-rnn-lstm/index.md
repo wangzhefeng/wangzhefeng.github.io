@@ -1,5 +1,5 @@
 ---
-title: RNN LSTM
+title: LSTM
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-rnn-lstm
@@ -41,7 +41,7 @@ details[open] summary {
   - [LSTM 分步分解](#lstm-分步分解)
 - [LSTM 变形](#lstm-变形)
   - [LSTM + peephole connections](#lstm--peephole-connections)
-  - [LSTM + coupled & input gates](#lstm--coupled--input-gates)
+  - [LSTM + coupled \& input gates](#lstm--coupled--input-gates)
   - [GRU, Gated Recurrent Unit](#gru-gated-recurrent-unit)
 - [参考文章](#参考文章)
 </p></details><p></p>

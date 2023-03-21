@@ -1,5 +1,5 @@
 ---
-title: CNN
+title: CNN 概览
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-cnn
@@ -33,11 +33,11 @@ details[open] summary {
 
 - [CNN 发展历史](#cnn-发展历史)
 - [CNN 整体结构](#cnn-整体结构)
-- [卷积层 Convolutional layer](#卷积层-convolutional-layer)
+- [卷积层](#卷积层)
   - [卷积的含义](#卷积的含义)
     - [卷积的数学解释](#卷积的数学解释)
     - [卷积的图形解释](#卷积的图形解释)
-  - [卷积的类型](#卷积的类型)
+  - [卷积类型](#卷积类型)
     - [单通道卷积](#单通道卷积)
     - [多通道卷积](#多通道卷积)
     - [3D 卷积](#3d-卷积)
@@ -49,7 +49,7 @@ details[open] summary {
   - [卷积填充](#卷积填充)
   - [卷积输出维度](#卷积输出维度)
   - [卷积滤波器初始化和学习](#卷积滤波器初始化和学习)
-- [池化层 Pooling layer](#池化层-pooling-layer)
+- [池化层](#池化层)
   - [池化层介绍](#池化层介绍)
   - [池化层的作用](#池化层的作用)
   - [池化层操作](#池化层操作)
@@ -59,46 +59,46 @@ details[open] summary {
 
 # CNN 发展历史
 
-CNN 在计算机视觉的三大领域: **图像识别** 、**目标检测**、
-**语义分割(图像分割)** 有着广泛的应用
+CNN 在计算机视觉的三大领域: **图像识别** 、**目标检测**、**语义分割(图像分割)** 有着广泛的应用
 
-1985年, Rumelhart 和 Hinton 等人提出了 
-**BP神经网络** ([Learning internal representations by error propagation, 1985](https://web.stanford.edu/class/psych209a/ReadingsByDate/02_06/PDPVolIChapter8.pdf)), 即著名的反向传播算法训练神经网络模型, 奠定了神经网络的理论基础
+1985年，Rumelhart 和 Hinton 等人提出了 [BP 神经网络](https://web.stanford.edu/class/psych209a/ReadingsByDate/02_06/PDPVolIChapter8.pdf)，
+即著名的反向传播算法训练神经网络模型，奠定了神经网络的理论基础
 
-深度学习三巨头(Yann LeCun, Geoffrey Hinton, Yoshua Bengio)之一 Yann LeCun 在 BP 神经网络提出之后三年, 发现可以用 BP 算法训练一种构造出来的多层卷积网络结构, 
-并用其训练出来的卷积网络识别手写数字。在 [Backpropagation applied to handwritten zip code recognition, 1989](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf) 一文中, LeCun 正式提出了 **卷积神经网络(Convolutional Neural Network,CNN)** 的概念
+深度学习三巨头(Yann LeCun, Geoffrey Hinton, Yoshua Bengio)之一 Yann LeCun 在 BP 神经网络提出之后三年，
+发现可以用 BP 算法训练一种构造出来的多层卷积网络结构，并用其训练出来的卷积网络识别手写数字。
+LeCun 正式提出了[卷积神经网络(Convolutional Neural Network, CNN)](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf)的概念
 
-LeCun 正式提出 CNN 概念之后, 在 1998年 提出了 CNN 的开山之作 —— **LeNet-5 网络** ([Gradient-based learning applied to document recognition, 1998](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf))
+LeCun 正式提出 CNN 概念之后，在 1998年 提出了 CNN 的开山之作：[LeNet-5 网络](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf)
 
-进入21世纪后, 由于计算能力和可解释性等多方面的原因, 神经网络的发展经历了短暂的低谷, 
-直到 2012 年 ILSVRC 大赛上 **AlexNet** 一举夺魁, 此后大数据兴起, 
-以 CNN 为代表的深度学习方法逐渐成为计算机视觉、语音识别和自然语言处理等领域的主流方法, 
+进入 21 世纪后，由于计算能力和可解释性等多方面的原因，神经网络的发展经历了短暂的低谷，
+直到 2012 年 ILSVRC 大赛上 AlexNet 一举夺魁，此后大数据兴起，
+以 CNN 为代表的深度学习方法逐渐成为计算机视觉、语音识别和自然语言处理等领域的主流方法，
 CNN 才开始正式发展起来
 
 # CNN 整体结构
 
-全连接的神经网络或 DNN 中, Affine 层后面跟着激活函数 ReLU 层。最后是 Affine 层加 Softmax 层输出最终结果(概率)，但是全连接层存在一些问题:
+全连接的神经网络或 DNN 中，Affine 层后面跟着激活函数 ReLU 层。最后是 Affine 层加 Softmax 层输出最终结果(概率)，
+但是全连接层存在一些问题：
 
-* 因为图像是 3 维的, 这个形状应该含有重要的空间信息。比如, 
-  空间上相邻的像素为相似的值、RGB 的各个通道之间分别有密切的关联性、
-  相距较远的像素之间没有什么关联等
-* 全连接层会忽略数据的形状, 它会将输入数据作为相同的神经元(同一维度的神经元)处理, 
+* 因为图像是 3 维的，这个形状应该含有重要的空间信息。比如，空间上相邻的像素为相似的值、
+  RGB 的各个通道之间分别有密切的关联性、相距较远的像素之间没有什么关联等
+* 全连接层会忽略数据的形状，它会将输入数据作为相同的神经元(同一维度的神经元)处理，
   所以无法利用与形状相关的信息
 
-一个典型的 CNN 通常包括下面这三层:
+一个典型的 CNN 通常包括下面这三层：
 
 * **卷积层(Convolutional layer)**
-    - CNN 相较于 DNN, 其主要区别就在于卷积层, 
-      卷积层的存在使得神经网络具备更强的学习和特征提取能力
-    - 卷积层可以保持数据形状不变, 当输入数据是图像时, 
-      卷积层会以 3 维数据的形式接收输入数据, 并同样以 3 维数据的形式输出至下一层。
-      因此, 在 CNN 中, 可以正确理解图像等具有形状的数据
+    - CNN 相较于 DNN，其主要区别就在于卷积层，卷积层的存在使得神经网络具备更强的学习和特征提取能力
+    - 卷积层可以保持数据形状不变，当输入数据是图像时，卷积层会以 3 维数据的形式接收输入数据，
+      并同样以 3 维数据的形式输出至下一层。因此，在 CNN 中，可以正确理解图像等具有形状的数据
 - **池化层(Pooling layer)**
-    - CNN 中在卷积层后面会跟着一个池化层, 池化层的存在使得 CNN 的稳健性更好
+    - CNN 中在卷积层后面会跟着一个池化层，池化层的存在使得 CNN 的稳健性更好
 - **全连接层(Full Connected layer)**
     - CNN 的最后是 DNN 中常见的全连接层
 
-# 卷积层 Convolutional layer
+# 卷积层 
+
+> Convolutional layer
 
 ## 卷积的含义
 
@@ -153,7 +153,7 @@ CNN 才开始正式发展起来
 
 ![img](images/conv_sum.png)
 
-## 卷积的类型
+## 卷积类型
 
 因为图像有单通道图像(灰度图)和多通道图(RGB 图)，所以对应常规卷积方式可以分为单通道卷积和多通道卷积。
 二者本质上并无太大差异，无非对每个通道都要进行卷积而已。
@@ -362,7 +362,9 @@ ax[1].imshow(x_pad[0, :, :, 0])
 * 在训练 CNN 时, 需要初始化滤波器中的卷积参数, 在训练中不断迭代得到最好的滤波器参数; 
 * 卷积层的参数通常在于滤波器, 可以计算一个滤波器的参数数量为 `$f \times f \times nc$` , 其中 `$nc$` 是通道数量
 
-# 池化层 Pooling layer
+# 池化层
+
+> Pooling layer
 
 ## 池化层介绍
 
@@ -405,12 +407,4 @@ ax[1].imshow(x_pad[0, :, :, 0])
 # 参考
 
 * [CNN卷积方法一览](https://mp.weixin.qq.com/s/9RvkFMOxmUTdZGDqjZfELw)
-* [如何理解卷积神经网络的结构](https://zhuanlan.zhihu.com/p/31249821)
-* [什么是卷积](https://zhuanlan.zhihu.com/p/30994790)
-* [图像卷积与滤波的一些知识点](https://blog.csdn.net/zouxy09/article/details/49080029)
-* [卷积层是如何提取特征的](https://zhuanlan.zhihu.com/p/31657315)
-* [什么是采样层](https://zhuanlan.zhihu.com/p/32299939)
-* [什么是激活函数](https://zhuanlan.zhihu.com/p/32824193)
-* [什么是全连接层](https://zhuanlan.zhihu.com/p/33841176)
-* [图片在卷积神经网络中是怎么变化的](https://zhuanlan.zhihu.com/p/34222451)
 

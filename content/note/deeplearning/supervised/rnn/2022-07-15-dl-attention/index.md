@@ -1,8 +1,9 @@
 ---
-title: RNN-Attention-Augmented
+title: Attention
+subtitle: Augmented
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-rnn-attention-augmented
+slug: dl-attention
 categories:
   - deeplearning
 tags:
