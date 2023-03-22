@@ -1,5 +1,5 @@
 ---
-title: NLP--知识图谱
+title: NLP-知识图谱
 author: 王哲峰
 date: '2022-04-05'
 slug: nlp-app-kg

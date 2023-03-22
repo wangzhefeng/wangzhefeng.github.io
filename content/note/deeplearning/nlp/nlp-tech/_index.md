@@ -1,6 +1,6 @@
 ---
-title: 自然语言处理
-subtitle: NLP
+title: NLP 主题
+subtitle: NLP Topic
 list_pages: true
 # order_by: title
 ---

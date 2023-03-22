@@ -32,11 +32,11 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [隐藏层](#隐藏层)
-  - [Linear](#linear)
+  - [恒等函数](#恒等函数)
   - [Sigmoid](#sigmoid)
-    - [Logistic 函数](#logistic-函数)
-    - [Tanh 函数](#tanh-函数)
-    - [Hard-Logistic 函数和 Hard-Tanh 函数](#hard-logistic-函数和-hard-tanh-函数)
+    - [Logistic](#logistic)
+    - [Tanh](#tanh)
+    - [Hard-Logistic 和 Hard-Tanh](#hard-logistic-和-hard-tanh)
   - [ReLU](#relu)
     - [ReLU](#relu-1)
     - [Leaky ReLU](#leaky-relu)
@@ -47,8 +47,8 @@ details[open] summary {
   - [Swish](#swish)
   - [Softmax](#softmax)
 - [输出层](#输出层)
-  - [恒等函数](#恒等函数)
-  - [Softmax 函数](#softmax-函数)
+  - [恒等函数](#恒等函数-1)
+  - [Softmax](#softmax-1)
   - [Sigmoid](#sigmoid-1)
   - [神经元数量](#神经元数量)
 - [参考](#参考)
@@ -69,7 +69,9 @@ details[open] summary {
 目前，深度学习中最流行的激活函数是 ReLU，但也有新推出的激活函数，例如 swish、GELU，
 据称效果优于 ReLU 激活函数
 
-## Linear
+## 恒等函数
+
+> Linear
 
 线性激活函数是一种简单的线性函数，基本上，输入到输出过程中不经过修改
 
@@ -88,7 +90,7 @@ Tanh 函数的输出是零中心化(Zero-Centered)，而 Logistic 函数的输�
 非零中心化的输出会使得其后一层的神经元的输入发生偏置偏移(Bias Shift)，
 并进一步使得梯度下降的收敛速度变慢
 
-### Logistic 函数
+### Logistic
 
 Logistic 型函数将实数压缩到 `$(0, 1)$` 区间内。一般只在二分类的最后输出层使用
 
@@ -115,7 +117,7 @@ Logistic 函数的三个主要缺陷：
 3. 计算成本高昂
     - 指数函数(`$e^{x}$`)与其他非线性激活函数相比，计算成本高昂
 
-### Tanh 函数
+### Tanh
 
 Tanh(Hyperbolic Tangent)函数，双曲正切函数，也是一种 Sigmoid 型函数。
 Tanh 函数可以看作放大并平移的 Logistic 函数，将实数压缩到 `$[-1, 1]$` 区间内，
@@ -133,7 +135,7 @@ Tanh 函数可以看作放大并平移的 Logistic 函数，将实数压缩到 `
 1. 有梯度消失的问题，因此在饱和时也会杀死梯度
 2. 计算复杂度高
 
-### Hard-Logistic 函数和 Hard-Tanh 函数
+### Hard-Logistic 和 Hard-Tanh
 
 Logistic 函数和 Tanh 函数都是 Sigmoid 型函数，具有饱和性，但是计算开销较大。
 因为这两个函数都是在中间(0 附近)近似线性，两端饱和。因此，这两个函数可以通过分段函数来近似
@@ -325,7 +327,7 @@ Softmax 函数针对溢出问题的改进:
 
 `$$\sigma(x) = x$$`
 
-## Softmax 函数
+## Softmax
 
 `$$y_k = \frac{e^{a_{k}}}{\sum_{i=1}^{n}e^{a_i}}$$`
 

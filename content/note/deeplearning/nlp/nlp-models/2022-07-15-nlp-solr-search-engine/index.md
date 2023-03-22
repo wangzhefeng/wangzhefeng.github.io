@@ -1,5 +1,5 @@
 ---
-title: NLP--Solr 搜索引擎
+title: NLP-Solr 搜索引擎
 author: 王哲峰
 date: '2022-04-05'
 slug: nlp-solr-search-engine

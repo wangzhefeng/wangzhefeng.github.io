@@ -1,5 +1,5 @@
 ---
-title: NLP-utils-spaCy
+title: NLP-spaCy
 author: 王哲峰
 date: '2022-04-05'
 slug: nlp-spacy

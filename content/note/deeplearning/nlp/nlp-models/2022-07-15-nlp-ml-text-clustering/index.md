@@ -1,5 +1,5 @@
 ---
-title: NLP--文本聚类
+title: NLP-文本聚类
 author: 王哲峰
 date: '2022-04-05'
 slug: nlp-text-clustering
@@ -80,5 +80,4 @@ details[open] summary {
     - 最近归类法
         - 划分方法就是决定当前对象应该分到哪个簇中。
         - 划分方法中最为流行的是最近归类法, 即将当前对象归类与最近的聚类点
-
 

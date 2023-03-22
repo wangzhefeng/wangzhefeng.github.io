@@ -9,9 +9,34 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [NLP 问答系统简介](#nlp-问答系统简介)
+- [基于关键词匹配的 NLP 问答系统](#基于关键词匹配的-nlp-问答系统)
+- [基于相似度匹配的 NLP 问答系统](#基于相似度匹配的-nlp-问答系统)
+</p></details><p></p>
 
 # NLP 问答系统简介
-
 
 # 基于关键词匹配的 NLP 问答系统
 
