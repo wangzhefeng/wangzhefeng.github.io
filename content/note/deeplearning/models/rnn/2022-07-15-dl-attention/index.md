@@ -164,4 +164,7 @@ Attention，在这种意义下可以被认为是大量信息的选择性总结�
 
 # 参考
 
-*  [Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf) 
+* [Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf) 
+* [NLP中的Attention原理和源码解析](https://zhuanlan.zhihu.com/p/43493999)
+* [图解 Attention](https://zhuanlan.zhihu.com/p/265182368)
+* [Transformer模型原理详解](https://zhuanlan.zhihu.com/p/44121378)

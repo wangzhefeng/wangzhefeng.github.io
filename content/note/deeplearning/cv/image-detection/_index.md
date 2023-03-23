@@ -9,12 +9,11 @@ list_pages: true
 
 ## 文章
 
-* [用 python+grpc+yolo 进行目标检测](https://mp.weixin.qq.com/s/z_M_b5B3MQtJNkf4jpv7fg)
-* [深入浅出Yolov3和Yolov4](https://mp.weixin.qq.com/s/6BtGYlEMwQweeGRWWqSTpQ)
-* [使用YOLOv5模型进行目标检测](https://mp.weixin.qq.com/s/JgoaLeYTAhDUnQ-ZLEvxow)
+* [用 python + grpc + yolo 进行目标检测](https://mp.weixin.qq.com/s/z_M_b5B3MQtJNkf4jpv7fg)
+* [深入浅出 Yolov3 和 Yolov4](https://mp.weixin.qq.com/s/6BtGYlEMwQweeGRWWqSTpQ)
+* [使用 YOLOv5 模型进行目标检测](https://mp.weixin.qq.com/s/JgoaLeYTAhDUnQ-ZLEvxow)
 * [学习使用计算机视觉进行人脸检测](https://mp.weixin.qq.com/s/3iFDnGb1Hlf-J_6qzu05gA)
-* [目标检测YOLO系列算法的进化史](https://mp.weixin.qq.com/s/nEk1jlmgcuz-PY2GlgbQkA)
-
+* [目标检测 YOLO 系列算法的进化史](https://mp.weixin.qq.com/s/nEk1jlmgcuz-PY2GlgbQkA)
 
 ## 文档
 

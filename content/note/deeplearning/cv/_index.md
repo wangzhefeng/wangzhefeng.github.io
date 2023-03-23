@@ -24,14 +24,13 @@ order_by: title
 
 ## 文章
 
-* [2023 最新计算机视觉学习路线（入门篇）](https://mp.weixin.qq.com/s/CSo8TzC7WjVkPJ2XCI2aCg)
-* [2022最新计算机视觉学习路线(入门篇)](https://mp.weixin.qq.com/s/lU2wQhyYBceSgWtduVTjHg)
+* [2023 最新计算机视觉学习路线(入门篇)](https://mp.weixin.qq.com/s/CSo8TzC7WjVkPJ2XCI2aCg)
+* [2022 最新计算机视觉学习路线(入门篇)](https://mp.weixin.qq.com/s/lU2wQhyYBceSgWtduVTjHg)
 * [图像识别系统](https://mp.weixin.qq.com/s/QS-yeyTjK_xqleIPsIL3tg)
 * [使用 CV2 和 Keras OCR 从图像中删除文本](https://mp.weixin.qq.com/s/I1_2xGMGxBkUK7gMyrE9gQ) 
 * [Keras OCR](https://keras-ocr.readthedocs.io/en/latest/examples/index.html)
 * [OpenCV](https://opencv24-python-tutorials.readthedocs.io/en/latest/index.html)
 * [建立重复图像查找系统](https://mp.weixin.qq.com/s/BE_07eA3nDBsEKyB4jcVoA)
-
+* [构建计算机视觉的知识体系](https://zhuanlan.zhihu.com/p/383787715)
 
 ## 文档
-
