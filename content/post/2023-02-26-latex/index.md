@@ -77,6 +77,10 @@ details[open] summary {
 - [AMS 二元运算符](#ams-二元运算符)
 - [AMS 其他符号](#ams-其他符号)
 - [数学字母](#数学字母)
+- [其他](#其他)
+  - [矩阵](#矩阵)
+  - [等号对齐](#等号对齐)
+  - [方程组](#方程组)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -220,6 +224,89 @@ details[open] summary {
 
 # 数学字母
 
+
+# 其他
+
+## 矩阵
+
+```
+`$$\begin{matrix}
+1 & 0 \\
+0 & 1
+\end{matrix}$$`
+```
+
+`$$\begin{matrix}
+1 & 0 \\
+0 & 1
+\end{matrix}$$`
+
+```
+`$$\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}$$`
+```
+
+`$$\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}$$`
+
+```
+`$$\begin{Bmatrix}
+1 & 0 \\
+0 & 1
+\end{Bmatrix}$$`
+```
+
+`$$\begin{Bmatrix}
+1 & 0 \\
+0 & 1
+\end{Bmatrix}$$`
+
+## 等号对齐
+
+```
+`$$\begin{align}
+f(x) 
+&= (x + 1)^{2} \\
+&= x^{2} + 2x + 1
+\end{align}$$`
+```
+
+`$$\begin{align}
+f(x) 
+&= (x + 1)^{2} \\
+&= x^{2} + 2x + 1
+\end{align}$$`
+
+
+## 方程组
+
+```
+`$$f(x) = \begin{cases}
+0, x > 0, \\
+1, x \leq 0
+\end{cases}$$`
+```
+
+`$$f(x) = \begin{cases}
+0, x > 0, \\
+1, x \leq 0
+\end{cases}$$`
+
+```
+`$$\begin{cases}
+x + 1 = 0 \\
+x + 2 = 1
+\end{cases}$$`
+```
+
+`$$\begin{cases}
+x + 1 = 0 \\
+x + 2 = 1
+\end{cases}$$`
 
 # 参考
 

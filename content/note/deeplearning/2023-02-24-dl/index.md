@@ -1,5 +1,5 @@
 ---
-title: 深度学习综述
+title: 深度学习
 author: 王哲峰
 date: '2023-02-24'
 slug: dl
@@ -8,7 +8,6 @@ categories:
 tags:
   - note
 ---
-
 
 # 业务方向
 
