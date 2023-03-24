@@ -36,3 +36,4 @@ GoogLeNet(Going Deeper with Convolutions，2014) 在借鉴此前 1x1 卷积思�
 
 # 参考
 
+* [GoogLeNet(Inception V3)网络的搭建与实现](https://blog.csdn.net/loveliuzz/article/details/79135583)

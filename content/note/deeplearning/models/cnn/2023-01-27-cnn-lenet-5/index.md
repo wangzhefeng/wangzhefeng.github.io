@@ -95,3 +95,4 @@ LeNet-5 共有 5 层(输入输出层不计入层数，池化层与卷积层算 1
 # 参考
 
 * [Gradient-Based Learning Applied to Document Recognition](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf)
+* [卷积神经网络（CNN）基础及经典模型介绍](https://zhuanlan.zhihu.com/p/344562609)
