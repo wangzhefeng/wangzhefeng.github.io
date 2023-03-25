@@ -39,7 +39,6 @@ details[open] summary {
 - [总结](#总结)
 </p></details><p></p>
 
-
 # 概述
 
 ![images](images/GPU.png)
@@ -112,8 +111,5 @@ CPU。至于整机配置, 尽量参考网上推荐的中高档的配置就好。
 
 # 总结
 
-- 在预算范围内, 尽可能买较新的 GPU
-- 整机配置需要考虑到 GPU 的功耗、散热、体积等
-
-![images](images/work_hub.png)
-
+* 在预算范围内, 尽可能买较新的 GPU
+* 整机配置需要考虑到 GPU 的功耗、散热、体积等

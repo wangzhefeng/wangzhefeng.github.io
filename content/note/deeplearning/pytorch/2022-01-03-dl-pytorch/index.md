@@ -1,8 +1,8 @@
 ---
 title: PyTorch 概述
 author: 王哲峰
-date: '2023-01-03'
-slug: dl-pytorch-summary
+date: '2022-01-03'
+slug: dl-pytorch
 categories:
   - pytorch
 tags:
@@ -60,40 +60,35 @@ PyTorch 是一个基于 Python 的机器学习库。它主要提供了两种核�
 
 PyTorch 的主要优点：
 
-* 简洁易懂：PyTorch 的 API 设计的相当简洁一致。
-  基本上就是 `tensor`, `autograd`, `nn` 三级封装
+* 简洁易懂：PyTorch 的 API 设计的相当简洁一致。基本上就是 `tensor`、`autograd`、`nn` 三级封装
 * 便于调试：PyTorch 采用动态图，可以像普通 Python 代码一样进行调试
-* 强大高效：PyTorch 提供了非常丰富的模型组件，可以快速实现想法。
-  并且运行速度很快。目前大部分深度学习相关的 Paper 都是用 PyTorch 实现的
+* 强大高效：PyTorch 提供了非常丰富的模型组件，可以快速实现想法。并且运行速度很快。
+  目前大部分深度学习相关的论文都是用 PyTorch 实现的
 
-俗话说，万丈高楼平地起，PyTorch 这座大厦也有它的地基。
-PyTorch 底层最核心的概念是张量、动态计算图以及自动微分
+俗话说，万丈高楼平地起，PyTorch 这座大厦也有它的地基。PyTorch 底层最核心的概念是张量、动态计算图以及自动微分
 
 # PyTorch 层次结构
 
-![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5hw3zgu7ij212w0lwjt3.jpg)
-
 PyTorch 的层次结构从低到高可以分成如下五层：
 
-* 最底层为硬件层，PyTorch 支持 CPU、GPU 加入计算资源池
-* 第二层为 C++ 实现的内核
-* 第三层为 Python 实现的操作符，提供了封装 C++ 内核的低级 API 指令，
-  主要包括各种张量操作算子、自动微分、变量管理
-    - 如 `torch.tensor`, `torch.cat`, `torch.autograd.grad`, `torch.nn.Module`
-    - 如果把模型比作一个房子，那么第三层 API 就是模型之砖
-* 第四层为 Python 实现的模型组件，对低级 API 进行了函数封装，
-  主要包括各种模型层、损失函数、优化器、数据管道等等
-    - 如 `torch.nn.Linear`, `torch.nn.BCE`, `torch.optim.Adam`, 
-      `torch.utils.data.DataLoader`
-    - 如果把模型比作一个房子，那么第四层 API 就是模型之墙
-* 第五层为 Python 实现的模型接口，PyTorch 没有官方的高阶 API，但有一些第三方的高阶 API 库
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5hw3zgu7ij212w0lwjt3.jpg)
+
+1. 最底层为硬件层，PyTorch 支持 CPU、GPU、TPU 加入计算资源池
+2. 第二层为 C++ 实现的内核
+3. 第三层为 Python 实现的操作符，提供了封装 C++ 内核的低级 API 指令，主要包括各种张量操作算子、自动微分、变量管理。
+   如果把模型比作一个房子，那么第三层 API 就是模型之砖
+    - 如 `torch.tensor`、`torch.cat`、`torch.autograd.grad`、`torch.nn.Module`
+4. 第四层为 Python 实现的模型组件，对低级 API 进行了函数封装，主要包括各种模型层、损失函数、优化器、数据管道等等。
+   如果把模型比作一个房子，那么第四层 API 就是模型之墙
+    - 如 `torch.nn.Linear`、`torch.nn.BCE`、`torch.optim.Adam`、`torch.utils.data.DataLoader`
+5. 第五层为 Python 实现的模型接口，PyTorch 没有官方的高阶 API，但有一些第三方的高阶 API 库。
+   如果把模型比作一个房子，那么第五层 API 就是模型本身，即模型之屋
     - [pytorch_lightning](https://www.pytorchlightning.ai/)
     - [torchkeras](https://github.com/lyhue1991/torchkeras)
         - 为了便于训练模型，这个仓库仿照 keras 中的模型接口，
           封装了 PyTorch 的高阶模型接口 `torchkeras.KerasModel`
         - 此外，该仓库同样通过引用和借鉴 `pytorch_lightning` 的一些能力，
           设计了一个和 `torchkeras.KerasModel` 功能类似的高阶模型接口 `torchkeras.LightModel`，功能更加强大
-    - 如果把模型比作一个房子，那么第五层 API 就是模型本身，即模型之屋
 
 # PyTorch 低阶 API
 

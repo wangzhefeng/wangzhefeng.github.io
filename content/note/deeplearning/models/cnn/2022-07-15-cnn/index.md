@@ -407,4 +407,5 @@ ax[1].imshow(x_pad[0, :, :, 0])
 # 参考
 
 * [CNN卷积方法一览](https://mp.weixin.qq.com/s/9RvkFMOxmUTdZGDqjZfELw)
+* [Kernel](https://en.wikipedia.org/wiki/Kernel_(image_processing)?ref=blog.paperspace.com)
 

@@ -1,5 +1,5 @@
 ---
-title: PyTorch 张量创建及操作
+title: PyTorch 张量
 author: 王哲峰
 date: '2022-07-16'
 slug: dl-pytorch-api-tensor
@@ -35,6 +35,7 @@ details[open] summary {
   - [tensor](#tensor)
   - [tensor 与 variable](#tensor-与-variable)
 - [tensor 数据类型](#tensor-数据类型)
+  - [基本数据类型](#基本数据类型)
   - [自动推断数据类型](#自动推断数据类型)
   - [指定数据类型](#指定数据类型)
   - [使用特定类型构造函数](#使用特定类型构造函数)
@@ -46,12 +47,20 @@ details[open] summary {
   - [三维张量](#三维张量)
   - [四维张量](#四维张量)
 - [tensor 尺寸](#tensor-尺寸)
+  - [标量](#标量-1)
+  - [向量](#向量-1)
+  - [矩阵](#矩阵-1)
+  - [三维张量](#三维张量-1)
+  - [四维张量](#四维张量-1)
 - [tensor 设备](#tensor-设备)
 - [tensor 创建](#tensor-创建)
   - [直接创建](#直接创建)
-  - [tensor 和 numpy array](#tensor-和-numpy-array)
-    - [numpy array To torch tensor](#numpy-array-to-torch-tensor)
-    - [torch tensor To numpy array](#torch-tensor-to-numpy-array)
+    - [tensor](#tensor-1)
+    - [tensor 和 array](#tensor-和-array)
+  - [依数值创建](#依数值创建)
+  - [依概率分布创建](#依概率分布创建)
+    - [设置随机数种子](#设置随机数种子)
+    - [生成随机数 tensor](#生成随机数-tensor)
 - [tensor 结构操作](#tensor-结构操作)
   - [拼接和分割](#拼接和分割)
     - [cat](#cat)
@@ -86,33 +95,26 @@ details[open] summary {
     - [规则](#规则)
     - [einsum 基础范例](#einsum-基础范例)
     - [einsum 高级范例](#einsum-高级范例)
-- [torch 随机采样](#torch-随机采样)
-  - [设置随机数种子](#设置随机数种子)
-  - [生成随机数 tensor](#生成随机数-tensor)
 - [torch 广播机制](#torch-广播机制)
 - [参考](#参考)
 </p></details><p></p>
 
 # tensor 介绍
 
-tensor 是 PyTorch 中最基本的概念, 其参与了整个运算过程, 
-这里主要介绍 tensor 的概念和属性, 如 data, variable, device 等,
-并且介绍 tensor 的基本创建方法, 如直接创建、依数值创建、依概率分布创建等
-
-* [PyTorch Doc](https://pytorch.org/docs/stable/tensors.html#)
+tensor 是 PyTorch 中最基本的概念，其参与了整个运算过程，
+这里主要介绍 tensor 的概念和属性，如 data，variable，device 等，
+并且介绍 tensor 的基本创建方法，如直接创建、依数值创建、依概率分布创建等
 
 ## tensor
 
-tensor 其实是多维数组,它是标量、向量、矩阵的高维拓展
+tensor 其实是多维数组，它是标量、向量、矩阵的高维拓展
 
 ## tensor 与 variable
 
-在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor, 
-但是 variable 这个数据类型对于理解 tensor 来说很有帮助,
-variable 是 `torch.autograd` 中的数据类型
+variable(已经没用了) 是 `torch.autograd` 中的数据类型，
+在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor，但是 variable 这个数据类型对于理解 tensor 来说很有帮助
 
-variable(`torch.autograd.variable`)(已经没用了) 有 5 个属性, 
-这些属性都是为了 tensor 的自动求导而设置的:
+variable(`torch.autograd.variable`) 有 5 个属性，这些属性都是为了 tensor 的自动求导而设置的：
 
 * `data`
 * `grad`
@@ -128,33 +130,35 @@ tensor(`torch.tensor`) 有 8 个属性:
     - `dtype`
         - tensor 的数据类型
     - `dim()`
-        - 维度
+        - tensofr 的维度
     - `shape`、`size()`
         - tensor 的形状
     - `device`
-        - tensor 所在的设备, gpu/cup, tensor 放在 gpu 上才能使用加速
+        - tensor 所在的设备，gpu(`cuda`)/cpu(`cpu`)，tensor 放在 gpu 上才能使用加速
 * 与梯度求导相关
-    - `requires_grad`
-        - 是否需要梯度
     - `grad`
         - `data` 的梯度
     - `grad_fn`
-        - fn 表示 function 的意思，记录创建 tensor 时用到的方法
+        - `fn` 表示 function 的意思，记录创建 tensor 时用到的方法
+    - `requires_grad`
+        - 是否需要梯度 
     - `is_leaf`
         - 是否是叶子节点(tensor)
 
 # tensor 数据类型
 
-tensor 的数据类型和 numpy array 基本一一对应，但是不支持 str 类型，包括:
+## 基本数据类型
 
-* `torch.float64`(`torch.double`)
-* `torch.float32`(`torch.float`)
-* `torch.float16`
-* `torch.int64`(`torch.long`)
-* `torch.int32`(`torch.int`)
-* `torch.int16`
-* `torch.int8`
+tensor 的数据类型和 numpy `array` 基本一一对应，但是不支持 `str` 类型，包括：
+
 * `torch.uint8`
+* `torch.int8`
+* `torch.int16`
+* `torch.int32`(`torch.int`)
+* `torch.int64`(`torch.long`)
+* `torch.float16`
+* `torch.float32`(`torch.float`)
+* `torch.float64`(`torch.double`)
 * `torch.bool`
 
 一般神经网络建模使用的都是 `torch.float32`
@@ -174,6 +178,8 @@ print(b, b.dtype)  # tensor(True) torch.bool
 
 ## 指定数据类型
 
+* `dtype` 参数
+
 ```python
 i = torch.tensor(1, dtype = torch.int32)
 print(i, i.dtype)  # tensor(1, dtype=torch.int32) torch.int32
@@ -184,20 +190,26 @@ print(x, x.dtype)  # tensor(2., dtype=torch.float64) torch.float64
 
 ## 使用特定类型构造函数
 
+* `torch.IntTensor()`
+* `torch.Tensor(sequence)`
+* `torch.BoolTensor(sequence)`
+
 ```python
-# cup tensor
 i = torch.IntTensor(1)
 print(i, i.dtype)  # tensor([0], dtype=torch.int32) torch.int32
 
 x = torch.Tensor(np.array(2.0))
 print(x, x.dtype)  # tensor(2.) torch.float32
 
-# cup tensor
 b = torch.BoolTensor(np.array([1, 0, 2, 0]))
 print(b, b.dtype)  # tensor([ True, False,  True, False]) torch.bool
 ```
 
 ## 不同类型转换
+
+* `.float()`
+* `.type(type)`
+* `.type_as(tensor)`
 
 ```python
 i = torch.tensor(1)
@@ -227,7 +239,6 @@ print(z, z.dtype)  # tensor(1.) torch.float32
 
 ```python
 scalar = torch.tensor(True)
-print(scalar)  # tensor(True)
 print(scalar.dim())  # 0
 ```
 
@@ -235,7 +246,6 @@ print(scalar.dim())  # 0
 
 ```python
 vector = torch.tensor([1.0, 2.0, 3.0, 4.0])
-print(vector)  # tensor([1., 2., 3., 4.])
 print(vector.dim())  # 1
 ```
 
@@ -246,7 +256,6 @@ matrix = torch.tensor(
     [[1.0, 2.0],
      [3.0, 4.0]]
 )
-print(matrix)  # tensor([[1.0, 2.0],[3.0, 4.0]])
 print(matrix.dim())  # 2
 ```
 
@@ -259,7 +268,6 @@ tensor3 = torch.tensor(
      [[5.0, 6.0],
       [7.0, 8.0]]]
 )
-print(tensor3)
 print(tensor3.dim())  # 3
 ```
 
@@ -276,7 +284,6 @@ tensor4 = torch.tensor(
       [[7.0,7.0],
        [8.0,8.0]]]]
 )
-print(tensor4)
 print(tensor4.dim())  # 4
 ```
 
@@ -285,17 +292,23 @@ print(tensor4.dim())  # 4
 * 可以使用 `shape` 属性或者 `size()` 方法查看张量在每一维的长度
 * 可以使用 `view()` 方法改变张量的尺寸，如果 `view()` 方法改变尺寸失败，可以使用 `reshape()` 方法
 
+## 标量
+
 ```python
 scalar = torch.tensor(True)
 print(scalar.size())  # torch.Size([])
 print(scalar.shape)  # torch.Size([])
 ```
 
+## 向量
+
 ```python
 vector = torch.tensor([1.0, 2.0, 3.0, 4.0])
 print(vector.size())  # torch.Size([4])
 print(vector.shape)  # torch.Size([4])
 ```
+
+## 矩阵
 
 ```python
 matrix = torch.tensor(
@@ -306,19 +319,52 @@ print(matrix.size())  # torch.Size([2, 2])
 print(matrix.shape)  # torch.Size([2, 2])
 ```
 
-# tensor 设备
-
-* CUDA 可用
-* 使用 `torch.device` 对象将 tensors 移出或放入 GPU
+## 三维张量
 
 ```python
+tensor3 = torch.tensor(
+    [[[1.0, 2.0],
+      [3.0, 4.0]],
+     [[5.0, 6.0],
+      [7.0, 8.0]]]
+)
+print(tensor3.size())  # torch.Size([2, 2, 2])
+print(tensor3.shape)  # torch.Size([2, 2, 2])
+```
+
+## 四维张量
+
+```python
+tensor4 = torch.tensor(
+    [[[[1.0,1.0],
+       [2.0,2.0]],
+      [[3.0,3.0],
+       [4.0,4.0]]],
+     [[[5.0,5.0],
+       [6.0,6.0]],
+      [[7.0,7.0],
+       [8.0,8.0]]]]
+)
+print(tensor4.size())  # torch.Size([2, 2, 2, 2])
+print(tensor4.shape)  # torch.Size([2, 2, 2, 2])
+```
+
+# tensor 设备
+
+如果 CUDA 可用，可以使用 `torch.device` 对象将 tensors 移出或放入 GPU
+
+```python
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# tensor
 x = torch.tensor([1])
-if torch.cuda.is_available():
-    device = torch.device("cuda")  # a cuda device object
-    y = torch.ones_like(x, device = device)  # directly create a tensor on gpu
-    x = x.to(device)  # or just use strings `.to("cuda")`
-    z = x + y
-    z.to("cpu", torch.double)  # `.to` can also change dtype together!
+# directly create a tensor on gpu
+y = torch.ones_like(x, device = device)
+# or just use strings `.to("cuda")`
+x = x.to(device)
+# `.to` can also change dtype together
+z = x + y
+z.to("cpu", torch.double)
 ```
 
 # tensor 创建
@@ -330,26 +376,28 @@ if torch.cuda.is_available():
     - `torch.empty()`
     - `torch.ones()`
     - `torch.zeros()`
-    - `torch.eye()`: 单位矩阵
-    - `torch.diag()`: 对角矩阵
+    - `torch.eye()`：单位矩阵
+    - `torch.diag()`：对角矩阵
     - `torch.fill_()`
     - `torch.arange()`
     - `torch.linspace()`
 * 依概率分布创建
     - `torch.manual_seed()`
-    - `torch.normal()`: 标准正态
-    - `torch.randn()`: 正态分布
-    - `torch.rand()`: 均匀分布
+    - `torch.normal()`：标准正态
+    - `torch.randn()`：正态分布
+    - `torch.rand()`：均匀分布
     - `torch.randint()`
-    - `torch.randperm()`: 整数随机排列
+    - `torch.randperm()`：整数随机排列
 
 ## 直接创建
+
+### tensor
 
 * API
 
 ```python
 torch.tensor(
-    data,  # list, numpy
+    data,  # scale, list, numpy
     dtype = none,
     device = none,
     requires_grad = false,
@@ -366,119 +414,165 @@ t = torch.tensor(arr, device = "cuda")
 print(t)
 ```
 
-## tensor 和 numpy array
+### tensor 和 array
 
-* 可以用 `numpy()` 方法从 tensor 得到 numpy array，
-  也可以用 `torch.from_numpy()` 从 numpy array 得到 tensor。
-  这两种方法关联的 tensor 与原 numpy array 是共享内存的，
-  当修改其中一个数据的时候，另一个的值也会被改动
+可以用 `tensor.numpy()` 方法从 tensor 得到 numpy array，也可以用 `torch.from_numpy(array)` 从 numpy array 得到 tensor。
+这两种方法关联的 tensor 与 numpy array 是共享内存的，当修改其中一个数据的时候，另一个的值也会被改动
+
+1. numpy array To torch tensor
 
 ```python
 import numpy as np
 import torch
 
-arr = np.zeros(3)
-tensor = torch.from_numpy(arr)
-print("before add 1:")
-print(arr)
-print(tensor)
-
-print("\nafter add 1:")
-np.add(arr, 1, out = arr)
-print(arr)
-print(tensor)
-```
-
-* 如果有需要，可以用张量的 `clone()` 方法拷贝 tensor，中断这种关联
-
-```python
-tensor = torch.zeros(3)
-
-# 使用 clone 方法拷贝张量, 拷贝后的张量和原始张量内存独立
-arr = tensor.clone().numpy()  # 也可以使用 tensor.data.numpy()
-print("before add 1:")
-print(tensor)
-print(arr)
-
-print("\nafter add 1:")
-# 使用带下划线的方法表示计算结果会返回给调用张量
-tensor.add_(1)
-print(tensor)
-print(arr)
-```
-
-* 可以使用 `item()` 方法从标量张量得到对应的 Python 数值
-
-```python
-scalar = torch.tensor(1.0)
-s = scalar.item()
-print(s)
-print(type(s))
-```
-
-* 使用 `tolist()` 方法从 tensor 得到对应的 Python 数值列表
-
-```python
-tensor = torch.rand(2,2)
-t = tensor.tolist()
-print(t)
-print(type(t))
-```
-
-### numpy array To torch tensor
-
-```python
-import numpy as np
-
+# numpy array
 a = np.ones(5)
+# torch tensor
 b = torch.from_numpy(a)
-np.add(a, 1, out = a)
+print(a)  # array([1., 1., 1., 1., 1.])
+print(a)  # tensor([1., 1., 1., 1., 1.], dtype=torch.float64)
 
-print(a)
-print(b)
+np.add(a, 1, out = a)  # array([2., 2., 2., 2., 2.])
+print(a)  # array([2., 2., 2., 2., 2.])
+print(b)  # array([2., 2., 2., 2., 2.])
 ```
 
-### torch tensor To numpy array
+2. torch tensor To numpy array
 
 ```python
 import torch
 
+# torch tensor
 a = torch.ones(5)
+# numpy array
 b = a.numpy()
-print(a)
-print(b)
+print(a)  # tensor([1., 1., 1., 1., 1.])
+print(b)  # array([1., 1., 1., 1., 1.], dtype=float32)
 
-a.add_(1)
-print(a)
-print(b)
+a.add_(1)  # tensor([2., 2., 2., 2., 2.])
+print(a)  # tensor([2., 2., 2., 2., 2.])
+print(b)  # array([2., 2., 2., 2., 2.], dtype=float32)
 ```
+
+3. 如果有需要，可以用张量的 `.clone()` 方法拷贝 tensor，中断这种关联
+
+```python
+import torch
+
+# torch tensor
+tensor = torch.zeros(3)
+# numpy array
+# 使用 clone 方法拷贝张量, 拷贝后的张量和原始张量内存独立
+arr = tensor.clone().numpy()  
+# 也可以使用 tensor.data.numpy()
+
+print("before add 1:")
+print(tensor)  # tensor([0., 0., 0.])
+print(arr)  # array([0., 0., 0.], dtype=float32)
+
+print("\nafter add 1:") # 使用带下划线的方法表示计算结果会返回给调用张量
+tensor.add_(1)  # tensor([1., 1., 1.])
+print(tensor)  # tensor([1., 1., 1.])
+print(arr)  # array([0., 0., 0.], dtype=float32)
+```
+
+4. 可以使用 `.item()` 方法从标量张量得到对应的 Python 数值
+
+```python
+import torch
+
+# tensor
+scalar = torch.tensor(1.0)
+# python scalar
+s = scalar.item()
+
+print(s)  # 1.0
+print(type(s))  # <class 'float'>
+```
+
+5. 使用 `tolist()` 方法从 tensor 得到对应的 Python 数值列表
+
+```python
+import torch
+
+# tensor
+tensor = torch.rand(2, 2)
+# python list
+t = tensor.tolist()
+
+print(t)  # [[0.3403051495552063, 0.6483253240585327], [0.243993878364563, 0.7659801244735718]]
+print(type(t))  # <class 'list'>
+```
+
+## 依数值创建
+
+* `torch.empty()`：空矩阵
+* `torch.ones()`
+* `torch.zeros()`
+* `torch.eye()`：单位矩阵
+* `torch.diag()`：对角矩阵
+* `torch.fill_()`
+* `torch.arange()`
+* `torch.linspace()`
+
+## 依概率分布创建
+
+### 设置随机数种子
+
+* `torch.seed()`
+    - 设置生成随机数的种子为非确定性随机数
+* `torch.manual_seed()`
+    - 设置生成随机数的种子
+* `torch.initial_seed()`
+    - 返回用于生成随机数的初始种子
+
+### 生成随机数 tensor
+
+* 从伯努利分布中提取二进制随机数(0 或 1)
+    - `torch.bernoulli()`
+* 正态分布
+    - `torch.normal()`：正态分布
+    - `torch.randn()`：标准正态分布
+    - `torch.randn_like()`：标准正态分布
+    - `torch.multinomial()`：多元正态分布
+* 均匀分布
+    - `torch.rand()`：`$[0, 1)$` 区间的均匀分布
+    - `torch.rand_like()`：`$[0, 1)$` 区间的均匀分布
+    - `torch.randint()`：从给定区间的均匀分布中取整数
+    - `torch.randint_like()`：从给定区间的均匀分布中取整数
+* 泊松分布
+    - `torch.pisson()`
+* 整数随机排列
+    - `torch.randperm()`：
 
 # tensor 结构操作
 
 * tensor 的拼接
     - `torch.cat()`
     - `torch.stack()`
+    - `torch.hstack()`
+    - `torch.vstack()`
 * tensor 的分割
     - `torch.split()` 
     - `torch.chunk()`
 * tensor 的索引和切片
     - `[]`、`[:]`、`[...]`...
     - 不规则切片
-        - `torch.index_select()`: 不规则切片
-        - `torch.masked_select()`: 不规则切片
-        - `torch.take()`: 不规则切片
+        - `torch.index_select()`：不规则切片
+        - `torch.masked_select()`：不规则切片
+        - `torch.take()`：不规则切片
     - `torch.gather()`
     - 如果要通过修改张量的部分元素值得到新的张量
-        - `torch.where()`: 可以理解为 if 的张量版本
-        - `torch.index_fill()`: 选取元素逻辑和 `torch.index_select` 相同 
-        - `torch.masked_fill()`: 选取元素逻辑和 `torch.masked_select` 相同
+        - `torch.where()`：可以理解为 if 的张量版本
+        - `torch.index_fill()`：选取元素逻辑和 `torch.index_select` 相同 
+        - `torch.masked_fill()`：选取元素逻辑和 `torch.masked_select` 相同
 * tensor 的变换
-    - `torch.view()` 
-    - `torch.reshape()`: 改变张量的形状
-    - `torch.squeeze()`: 减少维度
-    - `torch.unsqueeze()`: 增加维度
-    - `torch.transpose()`: 交换维度
-    - `torch.permute()`: 交换维度
+    - `torch.view()`：改变张量的形状
+    - `torch.reshape()`：改变张量的形状
+    - `torch.squeeze()`：减少维度
+    - `torch.unsqueeze()`：增加维度
+    - `torch.transpose()`：交换维度
+    - `torch.permute()`：交换维度
     - `torch.t`
 
 ## 拼接和分割
@@ -909,8 +1003,8 @@ tensor 数学运算主要有:
 * 标量运算
 * 向量运算
 * 矩阵运算
-* 爱因斯坦求和函数：进行任意阶张量运算
-    - `torch.einsum()` 
+* 任意阶张量运算
+    - 爱因斯坦求和函数 `torch.einsum()` 
 * 广播机制
 
 ## In-place 操作
@@ -918,9 +1012,9 @@ tensor 数学运算主要有:
 带有 `_` 后缀的操作叫做 in-place 操作，也就是就地计算的，
 比如下面的操作会直接改变 `$x$`：
 
-* x.add_(y)
-* x.copy_(y)
-* x.t_()
+* `x.add_(y)`
+* `x.copy_(y)`
+* `x.t_()`
 * ...
 
 ## 标量运算
@@ -933,32 +1027,11 @@ tensor 数学运算主要有:
 * 减
 * 乘
 * 除
-* 乘方
-* 三角函数
+* 求模
 * 指数
 * 对数
+* 三角函数
 * 逻辑比较运算符
-
-```python
-import numpy as np
-import torch
-
-a = torch.tensor([[1.0, 2], [-3, 4.0]])
-b = torch.tensor([[5.0, 6], [7.0, 8]])
-
-a + b
-a - b
-a * b
-a / b
-a ** 2  # 乘方
-a % 3  # 求模
-torch.div(a, b, rounding_mode = "floor")  # 地板除法
-a >= 2  # torch.ge(a, 2)
-(a >= 2) & (a <= 3)
-(a >= 2) | (a <= 3)
-a == 5  # torch.eq(a, 5)
-torch.sqrt(a)
-```
 
 ```python
 import numpy as np
@@ -970,6 +1043,18 @@ c = torch.tensor([6.0, 7.0])
 x = torch.tensor([2.6, -2.7])
 y = torch.tensor([0.9, -0.8, 100.0, -20.0, 0.7])
 
+a + b
+a - b
+a * b
+a / b
+torch.div(a, b, rounding_mode = "floor")  # 地板除法
+a % 3  # 求模
+a ** 2  # 乘方
+torch.sqrt(a)
+a >= 2  # torch.ge(a, 2)
+(a >= 2) & (a <= 3)
+(a >= 2) | (a <= 3)
+a == 5  # torch.eq(a, 5)
 torch.max(a, b)
 torch.min(a, b)
 torch.round(x)  # 保留整数部分，四舍五入
@@ -1014,7 +1099,8 @@ torch.cumsum(a, 0)
 torch.cumprod(a, 0)
 torch.cummax(a, 0).values
 torch.cummax(a, 0).indices
-torch.cummin(a, 0)
+torch.cummin(a, 0).values
+torch.cummin(a, 0).indices
 ```
 
 ### 排序
@@ -1362,34 +1448,6 @@ A = torch.softmax(torch.einsum("in,ijn->ij", Q, K) / d_k, -1)
 print(f"A.shape:{A.shape}")
 ```
 
-# torch 随机采样
-
-## 设置随机数种子
-
-* torch.seed()
-    - 设置生成随机数的种子为非确定性随机数
-* torch.manual_seed()
-    - 设置生成随机数的种子
-* torch.initial_seed()
-    - 返回用于生成随机数的初始种子
-
-## 生成随机数 tensor
-
-* bernoulli
-    - 从伯努利分布中提取二进制随机数(0 或 1)
-* 正态分布
-    - normal: 正态分布
-    - randn: 标准正态分布
-    - randn_like: 标准正态分布
-    - multinomial: 多元正态分布
-* 均匀分布
-    - rand: `$[0, 1)$` 区间的均匀分布
-    - rand_like: `$[0, 1)$` 区间的均匀分布
-    - randint: 从给定区间的均匀分布中取整数
-    - randint_like: 从给定区间的均匀分布中取整数
-* pisson
-    - 泊松分布
-
 # torch 广播机制
 
 PyTorch 的广播规则和 Numpy 是一样的:
@@ -1421,4 +1479,4 @@ a_broad + b_broad
 # 参考
 
 * [爱因斯坦求和约定](https://www.zhihu.com/question/439496333)
-
+* [PyTorch Doc](https://pytorch.org/docs/stable/tensors.html#)
