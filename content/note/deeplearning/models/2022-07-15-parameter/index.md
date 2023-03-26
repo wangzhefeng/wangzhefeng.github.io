@@ -2,7 +2,7 @@
 title: 参数初始化和超参数的调优
 author: 王哲峰
 date: '2022-07-15'
-slug: model-parameter
+slug: parameter
 categories:
   - deeplearning
 tags:

@@ -1,13 +1,13 @@
 ---
 title: DNN
 subtitle: 全连接前馈神经网络
-author: 王哲峰
-date: '2023-03-23'
-slug: dl-dnn
+list_pages: true
+# order_by: title
+date: '2023-03-26'
 categories:
-  - deeplearning
+    - deeplearning
 tags:
-  - model
+    - model
 ---
 
 <style>

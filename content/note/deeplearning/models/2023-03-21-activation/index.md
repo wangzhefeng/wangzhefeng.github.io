@@ -2,7 +2,7 @@
 title: 激活函数
 author: 王哲峰
 date: '2023-03-21'
-slug: model-activation
+slug: activation
 categories:
   - deeplearning
 tags:
