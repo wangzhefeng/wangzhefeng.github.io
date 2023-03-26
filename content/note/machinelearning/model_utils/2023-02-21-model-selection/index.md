@@ -412,3 +412,4 @@ Hyperband 和 BOHB 的开源代码可参考 HpBandSter库，这里不展开细�
 * [竞赛中的四种超参数搜索方法](https://mp.weixin.qq.com/s/Wx1WMvQQQUV46ckGbE3Eag)
 * [超参自动优化方法总结](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486214&idx=1&sn=b48781aa7ebb7efcca5dc756853e95a9&chksm=fa04156dcd739c7bf2d1c528450b8379deb5d17fea8610161f1c02dda150bceb9f3290b1f0e4&scene=178&cur_album_id=1577157748566310916#rd)
 * [贝叶斯优化与自动化实验设计](https://mp.weixin.qq.com/s/sMZAmf3h1XFnTHbycF61rQ)
+* [竞赛中的四种超参数搜索方法](https://mp.weixin.qq.com/s/Wx1WMvQQQUV46ckGbE3Eag)

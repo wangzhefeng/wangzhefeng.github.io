@@ -97,11 +97,9 @@ details[open] summary {
 
 ## 自适应学习 SwitchableNorm
 
-此外，有论文提出了一种可自适应学习的归一化：`SwitchableNorm`，
-可应用于各种场景且有一定的效果提升
+有论文提出了一种可自适应学习的归一化：`SwitchableNorm`，可应用于各种场景且有一定的效果提升
 
-`SwitchableNorm` 是将 BatchNorm、LayerNorm、InstanceNorm 结合，赋予权重，
-让网络自己去学习归一化层应该使用什么方法
+`SwitchableNorm` 是将 BatchNorm、LayerNorm、InstanceNorm 结合，赋予权重，让网络自己去学习归一化层应该使用什么方法
 
 ## 对 BatchNorm 需要注意的几点
 
@@ -703,5 +701,6 @@ class MultiHeadAttention(nn.Module):
 
 ## 参考
 
-- [Transformer知乎原理讲解](https://zhuanlan.zhihu.com/p/48508221)
-- [Transformer哈佛博客代码讲解](http://nlp.seas.harvard.edu/annotated-transformer/)
+* [Transformer知乎原理讲解](https://zhuanlan.zhihu.com/p/48508221)
+* [Transformer哈佛博客代码讲解](http://nlp.seas.harvard.edu/annotated-transformer/)
+* [Differentiable Learning-To-Normalize Via Switchable Normalization](https://arxiv.org/pdf/1806.10779.pdf)

@@ -37,10 +37,6 @@ details[open] summary {
   - [使用变长参数](#使用变长参数)
   - [使用 OrderedDict](#使用-ordereddict)
 - [继承 nn.Module 基类构建自定义模型](#继承-nnmodule-基类构建自定义模型)
-  - [模型类示例 1](#模型类示例-1)
-  - [模型类示例 2](#模型类示例-2)
-  - [模型层](#模型层)
-  - [模型参数](#模型参数)
 - [继承 nn.Module 基类构建模型并辅助应用模型容器进行封装](#继承-nnmodule-基类构建模型并辅助应用模型容器进行封装)
   - [nn.Sequential](#nnsequential)
   - [nn.ModuleList](#nnmodulelist)
@@ -52,6 +48,7 @@ details[open] summary {
 使用 PyTorch 通常有三种方式构建模型:
 
 * 使用 `torch.nn.Sequential` 按层顺序构建模型
+    - `add_module` 方法
 * 继承 `torch.nn.Module` 基类构建自定义模型
 * 继承 `torch.nn.Module` 基类构建模型并辅助应用模型容器进行封装
     - `torch.nn.Sequential`
@@ -70,17 +67,9 @@ from torch import nn
 from torchkeras import summary
 
 net = nn.Sequential()
-net.add_module("conv1", nn.Conv2d(
-    in_channels = 3, 
-    out_channels = 32, 
-    kernel_size = 3)
-)
+net.add_module("conv1", nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3))
 net.add_module("pool1", nn.MaxPool2d(kernel_size = 2,stride = 2))
-net.add_module("conv2", nn.Conv2d(
-    in_channels = 32, 
-    out_channels = 64, 
-    kernel_size = 5)
-)
+net.add_module("conv2", nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5))
 net.add_module("pool2", nn.MaxPool2d(kernel_size = 2, stride = 2))
 net.add_module("dropout", nn.Dropout2d(p = 0.1))
 net.add_module("adaptive_pool", nn.AdaptiveMaxPool2d((1, 1)))
@@ -101,7 +90,6 @@ summary(net, input_shape = (3, 32, 32))
 import torch
 from torch import nn
 from torchkeras import summary
-
 
 net = nn.Sequential(
     nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3),
@@ -142,13 +130,12 @@ net = nn.Sequential(
         ("linear2", nn.Linear(32, 1)),
     ])
 )
+
 print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
 # 继承 nn.Module 基类构建自定义模型
-
-## 模型类示例 1
 
 ```python
 from torch import nn
@@ -158,17 +145,17 @@ class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-         self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3)
-         self.pool1 = nn.MaxPool2d(kernel_size = 2, stride = 2)
-         self.conv2 = nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5)
-         self.pool2 = nn.MaxPool2d(kernel_size = 2, stride = 2)
-         self.dropout = nn.Dropout2d(p = 0.1)
-         self.adaptive_pool = nn.AdaptiveMaxPool2d((1, 1))
-         self.flatten = nn.Flatten()
-         self.linear1 = nn.Linear(64, 32)
-         self.relu = nn.ReLU()
-         self.linear2 = nn.Linear(32, 1)
-    
+        self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3)
+        self.pool1 = nn.MaxPool2d(kernel_size = 2, stride = 2)
+        self.conv2 = nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5)
+        self.pool2 = nn.MaxPool2d(kernel_size = 2, stride = 2)
+        self.dropout = nn.Dropout2d(p = 0.1)
+        self.adaptive_pool = nn.AdaptiveMaxPool2d((1, 1))
+        self.flatten = nn.Flatten()
+        self.linear1 = nn.Linear(64, 32)
+        self.relu = nn.ReLU()
+        self.linear2 = nn.Linear(32, 1)
+
     def forward(self, x):
         x = self.conv1(x)
         x = self.pool1(x)
@@ -182,130 +169,11 @@ class Net(nn.Module):
         y = self.linear2(x)
         return y
     
+# model
 net = Net()
+
 print(net)
 summary(net, input_shape = (3, 32, 32))
-```
-
-## 模型类示例 2
-
-```python
-import torch
-from torch import nn
-print(f"torch.__version__ = {torch.__version__}")
-
-
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-print(f"Using {device} device.")
-
-
-class NeuralNetwork(nn.Module):
-    def __init__(self):
-        super(NeuralNetwork, self).__init__()
-        self.flatten = nn.Flatten()
-        self.linear_relu_stack = nn.Sequential(
-            nn.Linear(28*28, 512),
-            nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10),
-        )
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear_relu_stack(x)
-        return logits
-
-model = NeuralNetwork().to(device)
-print(model)
-```
-
-```python
-# 模型输入
-X = torch.rand(1, 28, 28, device = device)
-
-# 模型训练
-logits = model(X)
-
-# 模型预测
-pred_probab = nn.Softmax(dim = 1)(logits)
-y_pred = pred_probab.argmax(1)
-print(f"Predicted class: {y_pred}")
-```
-
-## 模型层
-
-* 三通道图像
-
-```python
-import torch
-
-input_image = torch.rand(3, 28, 28)
-print(input_image.size())
-```
-
-* nn.Flatten
-
-```python
-from torch import nn
-
-flatten = nn.Flatten()
-flat_image = flatten(input_image)
-print(flat_image.size())
-```
-
-* nn.Linear
-
-```python
-from torch import nn
-
-layer1 = nn.Linear(in_features = 28 * 28, out_features = 20)
-hidden1 = layer1(flat_image)
-print(hidden1.size())
-```
-
-* nn.ReLU
-
-```python
-from torch import nn
-
-print(f"Before ReLU: {hidden1}\n\n")
-hidden1 = nn.ReLU()(hidden1)
-print(f"After ReLU: {hidden1}")
-```
-
-* nn.Sequential
-
-```python
-import torch
-from torch import nn
-
-seq_modules = nn.Sequential(
-    flatten,
-    layer1,
-    nn.ReLU(),
-    nn.Linear(20, 10)
-)
-input_image = torch.rand(3, 28, 28)
-logits = seq_modules(input_image)
-```
-
-* nn.Softmax
-
-```python
-from torch import nn
-
-softmax = nn.Softmax(dim = 1)
-pred_probab = softmax(logits)
-```
-
-## 模型参数
-
-```python
-print(f"Model structure: {model}\n\n")
-
-for name, param in model.named_parameters():
-    print(f"Layer: {name} | Size: {param.size()} | Values: {param[:2]}\n")
 ```
 
 # 继承 nn.Module 基类构建模型并辅助应用模型容器进行封装
@@ -320,7 +188,6 @@ for name, param in model.named_parameters():
 ```python
 import torch
 from torch import nn
-
 
 class Net(nn.Module):
     def __init__(self):
@@ -357,7 +224,6 @@ print(net)
 import torch
 from torch import nn
 
-
 class Net(nn.Module):
 
     def __init__(self):
@@ -391,7 +257,6 @@ print(net)
 ```python
 import torch
 from torch import nn
-
 
 class Net(nn.Module):
 
@@ -429,4 +294,3 @@ class Net(nn.Module):
 net = Net()
 print(net)
 ```
-

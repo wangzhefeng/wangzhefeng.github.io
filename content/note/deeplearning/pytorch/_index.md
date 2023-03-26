@@ -30,6 +30,7 @@ list_pages: true
 * https://github.com/lyhue1991/torchkeras
 * https://www.pytorchlightning.ai/
 * https://github.com/pytorch/serve
+* https://torchmetrics.readthedocs.io/en/stable/
 * [PyTorch Forecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html#)
 
 # 文档

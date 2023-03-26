@@ -49,15 +49,6 @@ details[open] summary {
   - [激活函数](#激活函数)
     - [模型可用的激活函数](#模型可用的激活函数)
     - [在模型中使用激活函数](#在模型中使用激活函数)
-  - [参数初始化](#参数初始化)
-    - [Initializers 的使用方法](#initializers-的使用方法)
-    - [常数初始化器](#常数初始化器)
-    - [分布初始化器](#分布初始化器)
-    - [矩阵初始化器](#矩阵初始化器)
-    - [LeCun 分布初始化器](#lecun-分布初始化器)
-    - [Glorot 分布初始化器](#glorot-分布初始化器)
-    - [He 正态分布和均匀分布初始化器](#he-正态分布和均匀分布初始化器)
-    - [自定义初始化器](#自定义初始化器)
   - [正则化](#正则化)
     - [Regularizers 的使用方法](#regularizers-的使用方法)
     - [可用的 Regularizers](#可用的-regularizers)
@@ -492,7 +483,6 @@ model.add(Activation)
 * GELU:
     - TODO
 
-
 ### 在模型中使用激活函数
 
 在 TensorFlow Keras 模型中使用激活函数一般有两种方式
@@ -518,94 +508,6 @@ model.add(layers.Dense(10))
 model.add(layers.Activation(tf.nn.softmax))
 model.summary()
 ```
-
-## 参数初始化
-
-### Initializers 的使用方法
-
-初始化定义了设置 Keras Layer 权重随机初始的方法
-
-- `kernel_initializer` 参数
-   - `"random_uniform"`
-- `bias_initializer` 参数
-
-### 常数初始化器
-
-- `tf.keras.initializers.Initializer()`
-    - 基类
-- `tf.keras.initializers.Zeros()`
-    - `0`
-- `tf.keras.initializers.Ones()`
-    - `1`
-- `tf.keras.initializers.Constant()`
-    - `tf.keras.initializers.Constant(value = 0)`
-        - `0`
-    - `tf.keras.initializers.Constant(value = 1)`
-        - `1`
-
-### 分布初始化器
-
-`tf.keras.initializers.RandomNormal(mean = 0.0, stddev = 0.05, seed = None)`
-   - 正态分布
-`tf.keras.initializers.RandomUniform(minval = 0.05, maxval = 0.05, seed = None)`
-   - 均匀分布
-`tf.keras.initializers.TruncatedNormal(mean = 0.0, stddev = 0.05, seed = None)`
-    - 截尾正态分布:生成的随机值与 `RandomNormal` 生成的类似, 
-      但是在距离平均值两个标准差之外的随机值将被丢弃并重新生成。
-      这是用来生成神经网络权重和滤波器的推荐初始化器
-
-### 矩阵初始化器
-
-`tf.keras.initializers.VarianveScaling(scale = 1.0, mode = "fan_in", distribution = "normal", seed = None)`
-    - 根据权值的尺寸调整其规模
-`tf.keras.initializers.Orthogonal(gain = 1.0, seed = None)`
-    - [随机正交矩阵](http://arxiv.org/abs/1312.6120)
-`tf.keras.initializers.Identity(gain = 1.0)`
-    - 生成单位矩阵的初始化器。仅用于 2D 方阵
-
-### LeCun 分布初始化器
-
-`tf.keras.initializers.lecun_normal()`
-
-- LeCun 正态分布初始化器
-- 它从以 0 为中心, 标准差为 `$stddev = \sqrt{\frac{1}{fanin}}$` 的截断正态分布中抽取样本,  
-  其中 `fanin` 是权值张量中的输入单位的数量
-
-`tf.keras.initializers.lecun_uniform()`
-
-- LeCun 均匀初始化器
-- 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{3}{fanin}}$`，
-  其中 `fanin` 是权值张量中的输入单位的数量
-
-### Glorot 分布初始化器
-
-`tf.keras.initializers.glorot_normal()`
-
-- Glorot 正态分布初始化器, 也称为 Xavier 正态分布初始化器
-- 它从以 0 为中心, 标准差为 `$stddev = \sqrt{\frac{2}{fanin + fanout}}$` 的截断正态分布中抽取样本, 
-  其中 `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
-
-
-`tf.keras.initializers.glorot_uniform()`
-
-- Glorot 均匀分布初始化器, 也称为 Xavier 均匀分布初始化器
-- 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{6}{fanin + fanout}}$`， 
-  `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
-
-### He 正态分布和均匀分布初始化器
-
-`tf.keras.initializers.he_normal()`: He 正态分布初始化器
-
-* 从以 0 为中心, 标准差为 `$stddev = \sqrt{\frac{2}{fanin}}$` 的截断正态分布中抽取样本, 
-  其中 `fanin` 是权值张量中的输入单位的数量
-
-`tf.keras.initializers.he_uniform()`: He 均匀分布方差缩放初始化器
-
-* 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 `limit` 是 `$\sqrt{\frac{6}{fan\_in}}$`，
- 其中 `fan_in` 是权值张量中的输入单位的数量
-
-### 自定义初始化器
-
 
 ## 正则化
 
