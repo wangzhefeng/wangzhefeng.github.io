@@ -32,19 +32,18 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [词汇表征概述](#词汇表征概述)
+- [词汇表征](#词汇表征)
   - [文本向量化简介](#文本向量化简介)
   - [文本向量化方法](#文本向量化方法)
     - [离散表示](#离散表示)
     - [分布式表示](#分布式表示)
   - [文本向量化流程](#文本向量化流程)
-- [词集模型](#词集模型)
+- [词集和词袋模型](#词集和词袋模型)
   - [One-Hot 表征](#one-hot-表征)
     - [One-Hot 算法简介](#one-hot-算法简介)
     - [One-Hot 的优缺点](#one-hot-的优缺点)
     - [One-Hot 算法示例](#one-hot-算法示例)
     - [One-Hot 算法实现](#one-hot-算法实现)
-- [基于统计的词袋模型](#基于统计的词袋模型)
   - [词袋模型](#词袋模型)
     - [词袋模型算法](#词袋模型算法)
     - [词袋模型示例](#词袋模型示例)
@@ -55,7 +54,6 @@ details[open] summary {
     - [Bi-gram 和 N-gram 算法示例](#bi-gram-和-n-gram-算法示例)
     - [Bi-gram 和 N-gram 优缺点](#bi-gram-和-n-gram-优缺点)
     - [Bi-gram 和 N-gram 算法实现](#bi-gram-和-n-gram-算法实现)
-- [基于频率的词袋模型](#基于频率的词袋模型)
   - [TF-IDF](#tf-idf)
     - [TF-IDF 算法简介](#tf-idf-算法简介)
     - [TF-IDF 算法示例](#tf-idf-算法示例)
@@ -70,43 +68,41 @@ details[open] summary {
     - [Count Vector 算法示例](#count-vector-算法示例)
     - [Count Vector 算法实现](#count-vector-算法实现)
 - [Word Embedding 简介](#word-embedding-简介)
-  - [word2vec](#word2vec)
-  - [NNLM](#nnlm)
-    - [NNLM 简介](#nnlm-简介)
-    - [NNLM 模型目标函数](#nnlm-模型目标函数)
+  - [神经网络语言模型](#神经网络语言模型)
+    - [NNLM 模型简介](#nnlm-模型简介)
     - [NNLM 模型解释](#nnlm-模型解释)
-  - [CBOW](#cbow)
-    - [CBOW 简介](#cbow-简介)
-    - [CBOW 模型解释](#cbow-模型解释)
-    - [CBOW 目标函数](#cbow-目标函数)
-    - [CBOW 创新点](#cbow-创新点)
-    - [CBOW 参考资料](#cbow-参考资料)
-  - [Skip-gram](#skip-gram)
-    - [Skip-gram 简介](#skip-gram-简介)
-    - [Skip-gram 模型解释](#skip-gram-模型解释)
-  - [Google word2vec 工具](#google-word2vec-工具)
-    - [word2vec 工具简介](#word2vec-工具简介)
+  - [word2vec](#word2vec)
+    - [word2vec 简介](#word2vec-简介)
     - [word2vec 核心思想](#word2vec-核心思想)
-    - [word2vec 模型](#word2vec-模型)
     - [word2vec 优点](#word2vec-优点)
-    - [训练 word2vec](#训练-word2vec)
-    - [训练一个 word2vec 词向量模型](#训练一个-word2vec-词向量模型)
-  - [GloVe](#glove)
-    - [GloVe 词向量简介](#glove-词向量简介)
-    - [Glove vs word2vec](#glove-vs-word2vec)
-  - [Fasttext](#fasttext)
-    - [Fasttext 算法简介](#fasttext-算法简介)
-    - [Fasttext 算法实现](#fasttext-算法实现)
-  - [para2vec](#para2vec)
-  - [doc2vec](#doc2vec)
+    - [word2vec 语言模型](#word2vec-语言模型)
+  - [CBOW](#cbow)
+    - [CBOW 模型概述](#cbow-模型概述)
+    - [CBOW 模型简介](#cbow-模型简介)
+    - [CBOW 模型解释](#cbow-模型解释)
   - [Word Embedding 模型](#word-embedding-模型)
     - [霍夫曼树](#霍夫曼树)
     - [层级 Softmax](#层级-softmax)
     - [负例采样](#负例采样)
+  - [Skip-gram](#skip-gram)
+    - [Skip-gram 模型概述](#skip-gram-模型概述)
+    - [Skip-gram 简介](#skip-gram-简介)
+    - [Skip-gram 模型解释](#skip-gram-模型解释)
+  - [GloVe](#glove)
+    - [GloVe 词向量简介](#glove-词向量简介)
+    - [GloVe vs word2vec](#glove-vs-word2vec)
+  - [fasttext](#fasttext)
+    - [fasttext 算法简介](#fasttext-算法简介)
+    - [fasttext 算法实现](#fasttext-算法实现)
+- [word2vec 工具](#word2vec-工具)
+  - [训练 word2vec](#训练-word2vec)
+    - [word2vec 版本](#word2vec-版本)
+    - [Gensim word2vec 示例](#gensim-word2vec-示例)
+  - [训练一个 word2vec 词向量模型](#训练一个-word2vec-词向量模型)
 - [参考](#参考)
 </p></details><p></p>
 
-# 词汇表征概述
+# 词汇表征
 
 在谈词嵌入和词向量等词汇表征方法之前，我们先来看一下将 NLP 作为监督机器学习任务时该怎样进行描述。
 假设以一句话为例：`"I want a glass of orange ____."`。我们要通过这句话的其他单词来预测划横线部分的单词。
@@ -117,7 +113,7 @@ details[open] summary {
 在 NLP 里面，最细粒度的表示就是词语，词语可以组成句子，句子再构成段落、篇章和文档。
 但是计算机并不认识这些词语，所以我们需要对以词汇为代表的自然语言进行数学上的表征。
 简单来说，我们需要将词汇转化为计算机可识别的数值形式，这种转化和表征方式目前主要有两种，
-一种是传统机器学习中的编码方式，另一种则是基于神经网络的词嵌入技术
+一种是传统机器学习中的 One-Hot 编码方式，另一种则是基于神经网络的词嵌入技术
 
 ## 文本向量化简介
 
@@ -176,7 +172,15 @@ Tomas Mikolov 2013 年在 ICLR 提出用于获取 Word Vector 的论文《Effici
     - NLP 相关任务中最常见的第一步是创建一个 **词表库**，并把每个词顺序编号
 2. 文本向量化
 
-# 词集模型
+# 词集和词袋模型
+
+* 基于统计的词袋模型
+    - 词袋模型
+    - Bi-gram 和 N-gram
+* 基于频率的词袋模型
+    - TF-IDF
+    - 共现矩阵
+    - Count Vector
 
 ## One-Hot 表征
 
@@ -322,8 +326,6 @@ if __name__ == "__main__":
     pass
 ```
 
-# 基于统计的词袋模型
-
 ## 词袋模型
 
 > 词袋，Bag of Word
@@ -462,8 +464,6 @@ John also likes to watch football games.     -> [0, 1, 1, 0, 0, 0, 1, 1, 1, 1]
 ```python
 # TODO
 ```
-
-# 基于频率的词袋模型
 
 ## TF-IDF
 
@@ -608,37 +608,15 @@ John likes to play basketball.
 
 词嵌入(Word Embedding)的基本想法就是将词汇表中的每个单词表示为一个普通的向量，这个向量不像 One-Hot 向量那样都是 0 或者 1，
 也没有 One-Hot 向量那样长，大概就是很普通的向量，比如长这样：`$[-0.91, 2, 1.8, -0.82, 0.65, \ldots]$`。
-这样的一种词汇表示方式就像是将词嵌入到了一种数学空间里面，所以叫做词嵌入。其中，word2vec 使用的就是这种词嵌入技术的一种
-
-那么如何进行词嵌入呢？或者说如何才能将词汇表征成很普通的向量形式？这需要通过神经网络进行训练，
+这样的一种词汇表示方式就像是将词嵌入到了一种数学空间里面，所以叫做词嵌入。那么如何进行词嵌入呢？
+或者说如何才能将词汇表征成很普通的向量形式？这需要通过神经网络进行训练，
 训练得到的网络权重形成的向量就是最终需要的东西，这种向量也叫词向量，word2vec 就是其中的典型技术
 
-## word2vec
+## 神经网络语言模型
 
-word2vec 是谷歌于 2013 年提出的一种 NLP 工具，其特点就是将词汇进行向量化，这样就可以定量的分析和挖掘词汇之间的联系。
-因而 word2vec 也是词嵌入表征的一种，只不过这种向量化表征需要经过神经网络训练得到，word2vec 作为现代 NLP 的核心思想和技术之一，
-有着非常广泛的影响
+> 神经网络语言模型，NNLM
 
-词汇表征问题解决之后，NLP 的核心便是建立语言模型。从深度学习的角度看，假设将 NLP 的语言模型看作是一个监督学习问题：
-即给定上下文词 `$X$`，输出中间词 `$Y$`，或者给定中间词 `$X$`，输出上下文词 `$Y$`。基于输入 `$X$` 和输出 `$Y$` 之间的映射便是语言模型。
-这样的一个语言模型的目的便是检查 `$X$` 和 `$Y$` 放在一起是否符合自然语言法则，更通俗一点说就是 `$X$` 和 `$Y$` 搁一起是不是人话
-
-word2vec 训练神经网络得到一个关于输入 `$X$` 和 输出 `$Y$` 之间的语言模型，关注重点并不是说要把这个模型训练的有多好，
-而是要获取训练好的神经网络权重，这个权重就是要拿来对输入词汇 `$X$` 的向量化表示。一旦拿到了训练语料所有词汇的词向量，
-接下来开展 NLP 研究工作就相对容易一些了。所以，基于监督学习的思想，word2vec 便是一种基于神经网络训练的自然语言模型
-
-word2vec 通常有两个版本的语言模型：
-
-- 一种是给定上下文词，需要我们来预测中间目标词，这种模型叫做连续词袋模型(Continuous Bag-of-Wods Model，CBOW)
-- 另一种是给定一个词语，根据这个词预测它的上下文，这种模型叫做 Skip-gram 模型。而且每个模型都有两种策略
-
-CBOW 和 Skip-gram 模型的原理示意图：
-
-![img](images/CBOW_Skip_gram.png)
-
-## NNLM
-
-### NNLM 简介
+### NNLM 模型简介
 
 2003 年提出了神经网络语言模型(Neural Network Language Model，NNLM)，
 其用前 `$n-1$` 个词预测第 `$n$` 个词的概率，并用神经网络搭建模型
@@ -647,14 +625,20 @@ NNLM 模型的基本结构：
 
 ![img](images/NNLM.png)
 
-### NNLM 模型目标函数
-  
-`$$L(\theta) = \sum_{t} log P(\omega_{t}|\omega_{t-n}, \omega_{t-n+1}, \cdots, \omega_{t-1})$$`
+NNLM 模型目标函数：
 
-使用非对称的前向窗口，长度为 `$n-1$` ，滑动窗口遍历整个语料库求和，使得目标概率最大化，其计算量正比于语料库的大小。
+`$$\begin{align}
+L(\theta) 
+&= P(\omega_{t} = i | context) \\
+&= f(i, \omega_{t-1}, \omega_{t-2}, \cdots, \omega_{t- n + 1}) \\
+&= g(i, C(\omega_{t-1}), C(\omega_{t-2}), \cdots, C(\omega_{t- n + 1})) \\
+&= \sum_{t} log P(\omega_{t} = i|\omega_{t-1}, \omega_{t-2}, \cdots, \omega_{t- n + 1}) 
+\end{align}$$`
+
+NNLM 模型使用非对称的前向窗口，长度为 `$n-1$` ，滑动窗口遍历整个语料库求和，使得目标概率最大化，其计算量正比于语料库的大小。
 同时，预测所有词的概率综合应为 1
 
-`$$\sum_{\omega \in \{vocabulary\}} P(\omega|\omega_{t-n+1}, \cdots, \omega_{t-1})$$`
+`$$\sum_{\omega \in \{vocabulary\}} P(\omega|\omega_{t-n+1}, \cdots, \omega_{t-1}) = 1$$`
 
 ### NNLM 模型解释
 
@@ -673,105 +657,27 @@ NNLM 模型的基本结构：
 
 此时的向量​就是原词​的分布式表示，其是稠密向量而非原来 One-Hot 的稀疏向量了
 
-在后面的隐藏层将这 n-1 个稠密的词向量进行拼接，如果每个词向量的维度为 D，则隐藏层的神经元个数为 (n-1)×D，
-然后接一个所有待预测词数量的全连接层，最后用 softmax 进行预测
+在后面的隐藏层将这 `$n-1$` 个稠密的词向量进行拼接，如果每个词向量的维度为 `$D$`，则隐藏层的神经元个数为 `$(n-1)\times D$`，
+然后接一个所有待预测词数量的全连接层，最后用 Softmax 进行预测
 
 可以看到，在隐藏层和分类层中间的计算量应该是很大的，word2vec 算法从这个角度出发对模型进行了简化。
-word2vec 不是单一的算法，而是两种算法的结合:连续词袋模型 (CBOW) 和跳字模型 (Skip-gram) 
+word2vec 不是单一的算法，而是两种算法的结合：连续词袋模型(CBOW)和跳字模型(Skip-gram) 
 
-## CBOW
+## word2vec
 
-### CBOW 简介
+### word2vec 简介
 
-CBOW 模型的应用场景是要根据上下文预测中间的词，所以输入便是上下文词，当然原始的单词是无法作为输入的，
-这里的输入仍然是每个词汇的 One-Hot 向量，输出 Y 为给定词汇表中每个词作为目标词的概率
+word2vec 是谷歌于 2013 年提出的一种 NLP 工具，其特点就是将词汇进行向量化，这样就可以定量的分析和挖掘词汇之间的联系。
+因而 word2vec 也是词嵌入表征的一种，只不过这种向量化表征需要经过神经网络训练得到，word2vec 作为现代 NLP 的核心思想和技术之一，
+有着非常广泛的影响
 
-CBOW 模型基本结构(Rong Xin)：
+从深度学习的角度看，假设将 NLP 的语言模型看作是一个监督学习问题：即给定上下文词 `$X$`，输出中间词 `$Y$`，
+或者给定中间词 `$X$`，输出上下文词 `$Y$`。基于输入 `$X$` 和输出 `$Y$` 之间的映射便是语言模型。
+这样的一个语言模型的目的便是检查 `$X$` 和 `$Y$` 放在一起是否符合自然语言法则，更通俗一点说就是 `$X$` 和 `$Y$` 搁一起是不是人话
 
-![img](images/CBOW.png)
-
-### CBOW 模型解释
-
-可见 CBOW 模型结构是一种普通的神经网络结构。主要包括输入层、中间隐藏层、最后的输出层。
-以输入、输出样本 `$(Context(w), w)$` 为例对 CBOW 模型的三个网络层进行简单说明，
-其中假设 `$Context(w)$` 由 `$w$` 前后各 `$c$` 个词构成。数学细节如下:
-
-* 输入层: 包含 `$Context(w)$` 中 2c 个词的词向量 `$v(Context(w)_{1}), v(Context(w)_{2}), \cdots, v(Context(w)_{2c}) \in R^{m}$`。
-  这里，`$m` 的含义同上表示词向量的长度;
-* 投影层: 将输入层的 `$2c$` 个向量做求和累加，即 `$x_{w}=\sum_{i=1}^{2c}v(Context(w)_{i}) \in R^{m}$`
-* 输出层: 输出层对应一颗二叉树，它是以语料中出现过的词当叶子节点，
-  以各词在语料中出现的次数当权值构造出来的 Huffman 树。在这棵 Huffman 树中，
-  叶子节点共 `$N(=|D|)$` 个，分别对应词典 `$D$` 中的词，非叶子节点 `$N-1$` 个(图中标成黄色的那些节点)。
-
-普通的基于神经网络的语言模型输出层一般就是利用 softmax 函数进行归一化计算，这种直接 softmax 的做法主要问题在于计算速度，
-尤其是我们采用了一个较大的词汇表的时候，对大的词汇表做求和运算，softmax 的分母运算会非常慢，直接影响到了模型性能。
-
-可以看到，上面提到的取消隐藏层，投影层求和平均都可以一定程度上减少计算量，但输出层的数量在那里，
-比如语料库有 500W 个词，那么隐藏层就要对 500W 个神经元进行全连接计算，这依然需要庞大的计算量。
-word2vec 算法又在这里进行了训练优化.
-
-除了分级 softmax 输出之外，还有一种叫做负采样的训练 trick
-
-### CBOW 目标函数
-
-`$$J = \sum_{\omega \in corpus} P(\omega | context(\omega))$$`
-
-### CBOW 创新点
-
-CBOW 在 NNLM 基础上有以下几点创新：
-
-1. 取消了隐藏层，减少了计算量
-2. 采用上下文划窗而不是前文划窗，即用上下文的词来预测当前词
-3. 投影层不再使用各向量拼接的方式，而是简单的求和平均
-
-### CBOW 参考资料
-
-* [狗熊会](https://mp.weixin.qq.com/s?__biz=MzI4ODY2NjYzMQ==&mid=2247484776&idx=1&sn=484bfa9299696f6e233227e05d0fb78c&chksm=ec3ba000db4c2916b2f79d98ea8fd5ea3326e638458af2c8d65a182bdebeda11e311649d954d&scene=21#wechat_redirect) 
-* https://www.cnblogs.com/peghoty/p/3857839.html
-* http://www.docin.com/p-2066429827.html
-
-## Skip-gram
-
-### Skip-gram 简介
-
-Skip-gram 模型的应用场景是要根据中间词预测上下文词，所以输入 `$x$` 是任意单词，
-输出 `$y$` 为给定词汇表中每个词作为上下文词的概率。
-
-* Skip-gram 模型基本结构
-
-![img](images/Skip-gram2.png)
-![img](images/Skip-gram.png)
-
-### Skip-gram 模型解释
-
-从上面的结构图可见，Skip-gram 模型与 CBOW 模型翻转，也是也是一种普通的神经网络结构，
-同样也包括输入层、中间隐藏层和最后的输出层。继续以输入输出样本 `$(Context(w), w)$` 为例
-对 Skip-gram 模型的三个网络层进行简单说明，其中假设 `$Context(w)$` 由 `$w$` 前后各 `$c$` 个词构成。数学细节如下:
-
-* 输入层: 只含当前样本的中心词 `$w$` 的词向量 `$v(w) \in R^{m}$` 
-* 投影层: 这是个恒等投影，把 `$v(w)$` 投影到 `$v(w)$`，因此，这个投影层其实是多余的。
-  这里之所以保留投影层主要是方便和 CBOW 模型的网络结构做对比
-* 输出层: 和 CBOW 模型一样，输出层也是一棵 Huffman 树
-
-Skip-gram 模型的训练方法也是基于损失函数的梯度计算，目标函数:
- 
-`$$L = \sum_{w \in C} log \prod_{u \in Context(w)} \prod_{j=2}^{l^{u}}\{[\sigma(v(w)^{T}\theta_{j-1}^{u})]^{1-d_{j}^{u}} \cdot [1-\sigma(v(w)^{T}\theta_{j-1}^{u})]^{d_{j}^{u}} \} \\
-= \sum_{w \in C} \sum_{u \in Context(w)} \sum_{j=2}^{l^{u}} {(1-d_{j}^{u}) \cdot log[\sigma(v(w)^{T}\theta_{j-1}^{u})] + d_{j}^{u} \cdot log[1 - \sigma(v(w)^{T}\theta_{u}^{j-1})]}$$`
-
-关于 CBOW 和 skip-gram 模型的更多数学细节，比如 Huffman 树、损失函数的推导等问题，
-从监督学习的角度来说，word2vec 本质上是一个基于神经网络的多分类问题，当输出词语非常多时，
-我们则需要一些像分级 Softmax 和负采样之类的 trick 来加速训练。但从自然语言处理的角度来说，
-word2vec 关注的并不是神经网络模型本身，而是训练之后得到的词汇的向量化表征。
-这种表征使得最后的词向量维度要远远小于词汇表大小，所以 word2vec 从本质上来说是一种降维操作。
-我们把数以万计的词汇从高维空间中降维到低维空间中，大大方便了后续的 NLP 分析任务
-
-## Google word2vec 工具
-
-### word2vec 工具简介
-
-`word2vec` 是 Google 在 2013 年发布的一个开源词向量建模工具。
-`word2vec` 使用的算法是 Bengio 等人在 2001 年提出的 Neural Network Language Model(NNLM) 算法
-`word2vec` 是一款将词表征为实数值向量的高效工具
+word2vec 训练神经网络得到一个关于输入 `$X$` 和 输出 `$Y$` 之间的语言模型，关注重点并不是说要把这个模型训练的有多好，
+而是要获取训练好的神经网络权重，这个权重就是要拿来对输入词汇 `$X$` 的向量化表示。一旦拿到了训练语料所有词汇的词向量，
+接下来开展 NLP 研究工作就相对容易一些了。所以，基于监督学习的思想，word2vec 便是一种基于神经网络训练的自然语言模型
 
 ### word2vec 核心思想
 
@@ -780,84 +686,171 @@ word2vec 关注的并不是神经网络模型本身，而是训练之后得到�
 1. 衡量词语之间的相似性，在于相邻词汇是否相识，这是基于语言学的“距离象似性”原理
 2. 词汇和它的上下文构成了一个象，当从语料库当中学习得到相识或者相近的象时，它们在语义上总是相识的
 
-### word2vec 模型
-
-* CBOW(Continuous Bag-Of-Words，连续的词袋模型)
-* Skip-Gram
-
 ### word2vec 优点
 
 高效，Mikolov 在论文中指出一个优化的单机版本一天可以训练上千亿个词
 
-### 训练 word2vec
+### word2vec 语言模型
 
-1. word2vec 版本
-    - Google `word2vec`
-        - https://github.com/dav/word2vec
-    - Gensim `word2vec`
-        - https://pypi.python.org/pypi/gensim
-    - C++ 11
-        - https://github.com/jdeng/word2vec
-    - Java 
-        - https://github.com/NLPchina/Word2VEC_java
-2. Gensim word2vec 示例：使用中文维基百科语料库作为训练库
-    - 2.1 数据预处理
-        - 大概等待 15min 左右，得到 280819 行文本，每行对应一个网页
+word2vec 通常有两个版本的语言模型：
 
-    ```python
-    from gensim.corpora import WikiCorpus
+* 一种是给定上下文词，需要我们来预测中间目标词，这种模型叫做：连续词袋模型(Continuous Bag-of-Wods，CBOW)
+* 另一种是给定一个词语，根据这个词预测它的上下文，这种模型叫做：跳元模型(Skip-gram)
 
-    space = " "
-    with open("wiki-zh-article.txt", "w", encoding = "utf8") as f:
-            wiki = WikiCorpus("zhwiki-latest-pages-articles.xml.bz2", lemmatize = False, dictionary = {})
-            for text in wiki.get_texts():
-            f.write(space.join(text) + "\n")
-    print("Finished Saved.")
-    ```
+CBOW 和 Skip-gram 模型的原理示意图：
 
-    - 2.2 繁体字处理
-        - 目的:            
-            - 因为维基语料库里面包含了繁体字和简体字，为了不影响后续分词，所以统一转化为简体字        
-        - 工具            
-            - [opencc](https://github.com/BYVoid/OpenCC)
+![img](images/CBOW_Skip_gram.png)
 
-        ```bash
-        opencc -i corpus.txt -o wiki-corpus.txt -c t2s.json
-        ```
+关于 CBOW 和 skip-gram 模型的更多数学细节，比如 Huffman 树、损失函数的推导等问题，
+从监督学习的角度来说，word2vec 本质上是一个基于神经网络的多分类问题，当输出词语非常多时，
+我们则需要一些像分级 Softmax 和负采样之类的技巧来加速训练。但从自然语言处理的角度来说，
+word2vec 关注的并不是神经网络模型本身，而是训练之后得到的词汇的向量化表征。
+这种表征使得最后的词向量维度要远远小于词汇表大小，所以 word2vec 从本质上来说是一种降维操作。
+我们把数以万计的词汇从高维空间中降维到低维空间中，大大方便了后续的 NLP 分析任务
 
-    - 2.3 分词
-        - 常用的分词工具为：
-            - jieba
-            - ICTCLAS(中科院)
-            - FudanNLP(复旦)
-        - `word2vec` 一般需要大规模语料库(GB 级别)，这些语料库需要进行一定的预处理，变为精准的分词，才能提升训练效果。常用大规模中文语料库:
-            - 维基百科中文语料(5.7G xml) https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles.xml.bz2
-                - 标题
-                - 分类
-                - 正文
-            - 搜狗实验室的搜狗 SouGouT(5TB 网页原版) https://www.sogou.com/labs/resource/t.php
+## CBOW
 
-### 训练一个 word2vec 词向量模型
+### CBOW 模型概述
 
-通常而言，训练一个词向量是一件非常昂贵的事情，我们一般会使用一些别人训练好的词向量模型来直接使用，
-很少情况下需要自己训练词向量，但这并不妨碍我们尝试来训练一个 word2vec 词向量模型进行试验
+![img](images/cbow_model.png)
+![img](images/cbow_model2.png)
 
-如何训练一个 skip-gram 模型，总体流程是
+### CBOW 模型简介
 
-1. 先下载要训练的文本语料
-2. 然后根据语料构造词汇表
-3. 再根据词汇表和 skip-gram 模型特点生成 skip-gram 训练样本
-4. 训练样本准备好之后即可定义 skip-gram 模型网络结构，损失函数和优化计算过程
-5. 最后保存训练好的词向量即可
+CBOW 模型的应用场景是要根据上下文预测中间的词，所以输入便是上下文词，当然原始的单词是无法作为输入的，
+这里的输入仍然是每个词汇的 One-Hot 向量，输出为给定词汇表中每个词作为目标词的概率
+
+CBOW 在 NNLM 基础上有以下几点创新：
+
+1. 取消了隐藏层，减少了计算量
+2. 采用上下文划窗而不是前文划窗，即用上下文的词来预测当前词
+3. 投影层不再使用各向量拼接的方式，而是简单的求和平均
+
+CBOW 目标函数为：
+
+`$$J = \sum_{\omega \in corpus} P(\omega | context(\omega))$$`
+
+可以看到，上面提到的取消隐藏层，投影层求和平均都可以一定程度上减少计算量，但输出层的数量在那里，
+比如语料库有 500W 个词，那么隐藏层就要对 500W 个神经元进行全连接计算，这依然需要庞大的计算量。
+word2vec 算法又在这里进行了训练优化
+
+### CBOW 模型解释
+
+CBOW 模型基本结构：
+
+![img](images/CBOW.png)
+
+可见 CBOW 模型结构是一种普通的神经网络结构。主要包括输入层、中间隐藏层、最后的输出层
+
+
+下面以输入、输出样本 `$(context(w), w)$` 为例对 CBOW 模型的三个网络层进行简单说明，
+其中假设 `$context(w)$` 由 `$w$` 前后各 `$c$` 个词构成。数学细节如下:
+
+![img](images/CBOW2.png)
+
+* 输入层: 包含 `$context(w)$` 中 2c 个词的词向量 
+  
+  `$$v(context(w)_{1}), v(context(w)_{2}), \cdots, v(context(w)_{2c}) \in R^{m}$$`
+  
+  这里，`$m$` 的含义同上表示词向量的长度
+
+* 投影层：将输入层的 `$2c$` 个向量做求和累加，即
+
+  `$$x_{w}=\sum_{i=1}^{2c}v(context(w)_{i}) \in R^{m}$$`
+
+* 输出层：输出层对应一颗二叉树，它是以语料中出现过的词当叶子节点，
+  以各词在语料中出现的次数当权值构造出来的 Huffman 树。在这棵 Huffman 树中，
+  叶子节点共 `$N(=|D|)$` 个，分别对应词典 `$D$` 中的词，非叶子节点 `$N-1$` 个(图中标成黄色的那些节点)。
+
+普通的基于神经网络的语言模型输出层一般就是利用 Softmax 函数进行归一化计算，这种直接 Softmax 的做法主要问题在于计算速度，
+尤其是我们采用了一个较大的词汇表的时候，对大的词汇表做求和运算，Softmax 的分母运算会非常慢，直接影响到了模型性能
+
+除了分级 Softmax 输出之外，还有一种叫做负采样的训练技巧
+
+## Word Embedding 模型
+
+### 霍夫曼树
+
+霍夫曼树是一棵特殊的二叉树，了解霍夫曼树之前先给出几个定义：
+
+* 路径长度：在二叉树路径上的分支数目，其等于路径上结点数减 1
+* 结点的权：给树的每个结点赋予一个非负的值
+* 结点的带权路径长度：根结点到该结点之间的路径长度与该节点权的乘积
+* 树的带权路径长度：所有叶子节点的带权路径长度之和
+
+霍夫曼树的定义为：在权为 `$\omega_{1}, \omega_{2}, \cdots, \omega_{n}$` ​的​ `$n$` 个叶子结点所构成的所有二叉树中，
+带权路径长度最小的二叉树称为最优二叉树或霍夫曼树
+
+可以看出，结点的权越小，其离树的根结点越远
+
+### 层级 Softmax
+
+word2vec 算法利用霍夫曼树，将平铺型 Softmax 压缩成层级 Softmax，不再使用全连接。
+具体做法是根据文本的词频统计，将词频赋给结点的权
+
+在霍夫曼树中，叶子结点是待预测的所有词，在每个子结点处，用 Sigmoid 激活后得到往左走的概率 `$p$`，
+往右走的概率为 `$1-p$`。最终训练的目标是最大化叶子结点处预测词的概率。
+
+层级 Softmax 的实现有点复杂，暂时先搞清楚大致原理
+
+### 负例采样
+
+> 负例采样，Negative Sampling
+
+负例采样的想法比较简单，假如有 `$m$` 个待预测的词，每次预测的一个正样本词，其他的 `$m-1$` 个词均为负样本。
+一方面正负样本数差别太大；另一方面，负样本中可能有很多不常用，或者词预测时概率基本为 0 的样本，
+我们不想在计算它们的概率上面消耗资源
+
+比如现在待预测的词有 100W 个，正常情况下，我们分类的全连接层需要 100W 个神经元，我们可以根据词语的出现频率进行负例采样，
+一个正样本加上采样出的比如说 999 个负样本，组成 1000 个新的分类全连接层
+
+采样尽量保持了跟原来一样的分布，具体做法是将 `$[0, 1]$` 区间均分为 108 份，然后根据词出现在语料库中的次数赋予每个词不同的份额
+
+`$$len(\omega) = \frac{counter(\omega)}{\sum_{\mu \in D} counter(\mu)}$$`
+
+然后在 `$[0, 1]$` 区间掷筛子，落在哪个区间就采样哪个样本。实际上，
+最终效果证明上式中取 `$counter(\omega)$` 的 `$\frac{3}{4}$` 次方效果最好，
+所以在应用汇总也是这么做的
+
+## Skip-gram
+
+### Skip-gram 模型概述
+
+![img](images/skip_gram_model.png)
+![img](images/skip_gram_model2.png)
+
+### Skip-gram 简介
+
+Skip-gram 模型的应用场景是要根据中间词预测上下文词，所以输入 `$x$` 是任意单词，
+输出 `$y$` 为给定词汇表中每个词作为上下文词的概率
+
+### Skip-gram 模型解释
+
+Skip-gram 模型基本结构：
+
+![img](images/Skip-gram2.png)
+<!-- ![img](images/Skip-gram.png) -->
+
+从上面的结构图可见，Skip-gram 模型与 CBOW 模型翻转，也是也是一种普通的神经网络结构，
+同样也包括输入层、中间隐藏层和最后的输出层。继续以输入输出样本 `$(context(w), w)$` 为例
+对 Skip-gram 模型的三个网络层进行简单说明，其中假设 `$context(w)$` 由 `$w$` 前后各 `$c$` 个词构成。数学细节如下:
+
+* 输入层：只含当前样本的中心词 `$w$` 的词向量 `$v(w) \in R^{m}$` 
+* 投影层：这是个恒等投影，把 `$v(w)$` 投影到 `$v(w)$`，因此，这个投影层其实是多余的。
+  这里之所以保留投影层主要是方便和 CBOW 模型的网络结构做对比
+* 输出层：和 CBOW 模型一样，输出层也是一棵 Huffman 树
+
+Skip-gram 模型的训练方法也是基于损失函数的梯度计算，目标函数:
+ 
+`$$L = \sum_{w \in C} log \prod_{u \in context(w)} \prod_{j=2}^{l^{u}}\{[\sigma(v(w)^{T}\theta_{j-1}^{u})]^{1-d_{j}^{u}} \cdot [1-\sigma(v(w)^{T}\theta_{j-1}^{u})]^{d_{j}^{u}} \} \\
+= \sum_{w \in C} \sum_{u \in context(w)} \sum_{j=2}^{l^{u}} {(1-d_{j}^{u}) \cdot log[\sigma(v(w)^{T}\theta_{j-1}^{u})] + d_{j}^{u} \cdot log[1 - \sigma(v(w)^{T}\theta_{u}^{j-1})]}$$`
 
 ## GloVe
 
-除了 word2vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
-Glove (Global Vectors for Word Representation) 词向量、
-fasttext 词向量等等。本节笔者将对 GloVe 词向量进行简单的介绍，
-并在此基础上对基于 GloVe 模型训练好的词向量计算预先相似度和语义近似与类比等分析。
+> 全局词向量表示，Global Vectors for Word Representation, GloVe
 
-* 通过余弦函数、欧几里得距离来获得相似词的库
+除了 word2vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
+GloVe 词向量、fasttext 词向量等等
 
 ### GloVe 词向量简介
    
@@ -866,7 +859,7 @@ GloVe 词向量模型基本步骤如下:
 
 1. 基于词共现矩阵收集词共现信息
     - 假设 `$X_{ij}$` 表示词汇 `$i$` 出现在词汇 `$j$` 上下文的概率，首先对语料库进行扫描，
-    对于每个词汇，我们定义一个 window_size，即每个单词向两边能够联系到的距离，在一句话中如果一个词距离中心词越远，
+    对于每个词汇，我们定义一个 `window_size`，即每个单词向两边能够联系到的距离，在一句话中如果一个词距离中心词越远，
     我们给与这个词的权重越低
 2. 对于每一组词，都有
 
@@ -905,13 +898,13 @@ GloVe 词向量模型基本步骤如下:
       比如要解决 `a is to b as c is to _` 这样的语义填空题，
       可以利用词汇之间的余弦相似性计算空格处到底填什么单词.
 
-### Glove vs word2vec
+### GloVe vs word2vec
 
 ![img](images/GloVe_vs_word2vec.png)
 
-## Fasttext
+## fasttext
 
-### Fasttext 算法简介
+### fasttext 算法简介
 
 fasttext 的模型与 CBOW 类似，实际上，fasttext 的确是由 CBOW 演变而来的。
 CBOW 预测上下文的中间词，fasttext 预测文本标签。与 word2vec 算法的衍生物相同，
@@ -919,13 +912,9 @@ CBOW 预测上下文的中间词，fasttext 预测文本标签。与 word2vec �
 
 ![img](images/fasttext.png)
 
-fasttext 的输入是一段词的序列，即一篇文章或一句话，输出是这段词序列属于某个类别的概率，
-所以，fasttext 是用来做文本分类任务的
-
-fasttext 中采用层级 softmax 做分类，这与 CBOW 相同。fasttext 算法中还考虑了词的顺序问题，即采用 N-gram，
-与之前介绍的离散表示法相同，如:
-
-* 今天天气非常不错，Bi-gram 的表示就是:今天、天天、天气、气非、非常、常不、不错
+1. fasttext 的输入是一段词的序列，即一篇文章或一句话，输出是这段词序列属于某个类别的概率，所以，fasttext 是用来做文本分类任务的
+2. fasttext 中采用层级 Softmax 做分类，这与 CBOW 相同。fasttext 算法中还考虑了词的顺序问题，即采用 N-gram，与之前介绍的离散表示法相同，如:
+    - 今天天气非常不错，Bi-gram 的表示就是:今天、天天、天气、气非、非常、常不、不错
 
 fasttext 做文本分类对文本的存储方式有要求:
 
@@ -939,7 +928,7 @@ __label__3, I like play football.
 
 * `__label__`:为实际类别的前缀，也可以自己定义
 
-### Fasttext 算法实现
+### fasttext 算法实现
 
 GitHub：
 
@@ -948,7 +937,13 @@ GitHub：
 示例:
 
 ```python
-classifier = fasttext.supervised(input_file, output, label_prefix = "__label__")
+import fasttext
+
+classifier = fasttext.supervised(
+    input_file, 
+    output, 
+    label_prefix = "__label__"
+)
 result = classifier.test(test_file)
 print(result.precision, result.recall)
 ```
@@ -959,61 +954,79 @@ print(result.precision, result.recall)
 * `output`：后缀为 `.model`，是保存的二进制文件
 * `label_prefix`：可以自定类别前缀
 
-## para2vec
+# word2vec 工具
 
-> para2vec，段落到向量
+## 训练 word2vec
 
-## doc2vec
+### word2vec 版本
 
-> doc2vec，文章到向量
+* Google `word2vec`
+    - https://github.com/dav/word2vec
+* Gensim `word2vec`
+    - https://pypi.python.org/pypi/gensim
+* C++ 11
+    - https://github.com/jdeng/word2vec
+* Java 
+    - https://github.com/NLPchina/Word2VEC_java
 
-## Word Embedding 模型
+### Gensim word2vec 示例
 
-### 霍夫曼树
+任务：使用中文维基百科语料库作为训练库
 
-霍夫曼树是一棵特殊的二叉树，了解霍夫曼树之前先给出几个定义：
+数据预处理：大概等待 15min 左右，得到 280819 行文本，每行对应一个网页
 
-* 路径长度：在二叉树路径上的分支数目，其等于路径上结点数减 1
-* 结点的权：给树的每个结点赋予一个非负的值
-* 结点的带权路径长度：根结点到该结点之间的路径长度与该节点权的乘积
-* 树的带权路径长度：所有叶子节点的带权路径长度之和
+```python
+from gensim.corpora import WikiCorpus
 
-霍夫曼树的定义为：在权为 `$\omega_{1}, \omega_{2}, \cdots, \omega_{n}$`  ​的​ `$n$` 个叶子结点所构成的所有二叉树中，
-带权路径长度最小的二叉树称为最优二叉树或霍夫曼树
+space = " "
+with open("wiki-zh-article.txt", "w", encoding = "utf8") as f:
+    wiki = WikiCorpus(
+        "zhwiki-latest-pages-articles.xml.bz2", 
+        lemmatize = False, 
+        dictionary = {}
+    )
+    for text in wiki.get_texts():
+        f.write(space.join(text) + "\n")
+print("Finished Saved.")
+```
 
-可以看出，结点的权越小，其离树的根结点越远
+繁体字处理：
 
-### 层级 Softmax
+* 目的:            
+    - 因为维基语料库里面包含了繁体字和简体字，为了不影响后续分词，所以统一转化为简体字        
+* 工具            
+    - [opencc](https://github.com/BYVoid/OpenCC)
 
-word2vec 算法利用霍夫曼树，将平铺型 softmax 压缩成层级 softmax，不再使用全连接。
-具体做法是根据文本的词频统计，将词频赋给结点的权
+    ```bash
+    $ opencc -i corpus.txt -o wiki-corpus.txt -c t2s.json
+    ```
 
-在霍夫曼树中，叶子结点是待预测的所有词，在每个子结点处，用 sigmoid 激活后得到往左走的概率 `$p$`，
-往右走的概率为 `$1-p$`。最终训练的目标是最大化叶子结点处预测词的概率。
+分词：
 
-层级 softmax 的实现有点复杂，暂时先搞清楚大致原理
+* 常用的分词工具为：
+    - jieba
+    - ICTCLAS(中科院)
+    - FudanNLP(复旦)
+* `word2vec` 一般需要大规模语料库(GB 级别)，这些语料库需要进行一定的预处理，变为精准的分词，才能提升训练效果。常用大规模中文语料库:
+    - [维基百科中文语料(5.7G xml)](https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles.xml.bz2)
+    - [搜狗实验室的搜狗 SouGouT(5TB 网页原版)](https://www.sogou.com/labs/resource/t.php)
 
-### 负例采样
+## 训练一个 word2vec 词向量模型
 
-> Negative Sampling
+通常而言，训练一个词向量是一件非常昂贵的事情，我们一般会使用一些别人训练好的词向量模型来直接使用，
+很少情况下需要自己训练词向量，但这并不妨碍我们尝试来训练一个 word2vec 词向量模型进行试验
 
-负例采样的想法比较简单，假如有 `$m$` 个待预测的词，每次预测的一个正样本词，其他的 `$m-1$` 个词均为负样本。
-一方面正负样本数差别太大；另一方面，负样本中可能有很多不常用，或者词预测时概率基本为 0 的样本，
-我们不想在计算它们的概率上面消耗资源
+如何训练一个 Skip-gram 模型，总体流程是
 
-比如现在待预测的词有 100W 个，正常情况下，我们分类的全连接层需要 100W 个神经元，我们可以根据词语的出现频率进行负例采样，
-一个正样本加上采样出的比如说 999 个负样本，组成 1000 个新的分类全连接层
-
-采样尽量保持了跟原来一样的分布，具体做法是将 `$[0, 1]$` 区间均分为 108 份，然后根据词出现在语料库中的次数赋予每个词不同的份额
-
-`$$len(\omega) = \frac{counter(\omega)}{\sum_{\mu \in D} counter(\mu)}$$`
-
-然后在 `$[0, 1]$` 区间掷筛子，落在哪个区间就采样哪个样本。实际上，
-最终效果证明上式中取 `$counter(\omega)$` 的 `$\frac{3}{4}$` 次方效果最好，
-所以在应用汇总也是这么做的
+1. 先下载要训练的文本语料
+2. 然后根据语料构造词汇表
+3. 再根据词汇表和 skip-gram 模型特点生成 skip-gram 训练样本
+4. 训练样本准备好之后即可定义 skip-gram 模型网络结构，损失函数和优化计算过程
+5. 最后保存训练好的词向量即可
 
 # 参考
 
+* [NLP中的文本表示方法](https://zhuanlan.zhihu.com/p/42310942)
 * [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/pdf/1301.3781.pdf) 
 * [Bag of Tricks for Efficient Text Classification](https://arxiv.org/pdf/1607.01759.pdf) 
 * [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) 
@@ -1023,3 +1036,6 @@ word2vec 算法利用霍夫曼树，将平铺型 softmax 压缩成层级 softmax
 * [白话文讲解Word2Vec](https://mp.weixin.qq.com/s/JtqepPGCFUiHIrgZnrcJ4g)
 * [秒懂词向量Word2vec的本质](https://zhuanlan.zhihu.com/p/26306795)
 * [sklearn.feature_extraction](https://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction)
+* [自然语言处理之word2vec](https://mp.weixin.qq.com/s?__biz=MzI4ODY2NjYzMQ==&mid=2247484776&idx=1&sn=484bfa9299696f6e233227e05d0fb78c&chksm=ec3ba000db4c2916b2f79d98ea8fd5ea3326e638458af2c8d65a182bdebeda11e311649d954d&scene=21#wechat_redirect) 
+* [word2vec 中的数学原理详解](https://www.cnblogs.com/peghoty/p/3857839.html)
+* [深度学习word2vec学习笔记](http://www.docin.com/p-2066429827.html)

@@ -34,17 +34,15 @@ details[open] summary {
 - [低阶 API](#低阶-api)
 - [中阶 API](#中阶-api)
 - [高阶 API](#高阶-api)
-  - [线性回归模型](#线性回归模型)
-    - [载入 Python 依赖](#载入-python-依赖)
-    - [数据准备](#数据准备)
-    - [模型构建](#模型构建)
-    - [模型训练](#模型训练)
-    - [模型结果可视化](#模型结果可视化)
+- [线性回归模型](#线性回归模型)
+  - [载入 Python 依赖](#载入-python-依赖)
+  - [数据准备](#数据准备)
+  - [模型构建](#模型构建)
+  - [模型训练](#模型训练)
+  - [模型结果可视化](#模型结果可视化)
 </p></details><p></p>
 
 # 低阶 API
-
-使用 TensorFlow 低阶 API 实现线性回归模型和 DNN 二分类模型
 
 低阶 API 主要包括:
 
@@ -52,12 +50,7 @@ details[open] summary {
 * 计算图
 * 自动微分
 
-
-
-
 # 中阶 API
-
-使用 TensorFlow 中阶 API 实现线性回归模型和 DNN 二分类模型
 
 TensorFlow 中阶 API 主要包括:
 
@@ -78,11 +71,9 @@ TensorFlow 高阶 API 主要包括:
 * 使用函数式 API 构建任意结构模型
 * 继承 `Model` 基类构建自定义模型
 
-使用 TensorFlow 高阶 API 实现线性回归模型和 DNN 二分类模型
+# 线性回归模型
 
-## 线性回归模型
-
-### 载入 Python 依赖
+## 载入 Python 依赖
 
 ```python
 import numpy as np
@@ -93,7 +84,7 @@ import tensorflow as tf
 from tensorflow.keras import models, layers, losses, metrics, optimizers
 ```
 
-### 数据准备
+## 数据准备
 
 * 生成数据
 
@@ -129,7 +120,7 @@ plt.ylabel("y", rotation = 0)
 plt.show()
 ```
 
-### 模型构建
+## 模型构建
 
 ```python
 tf.keras.backend.clear_session()
@@ -140,7 +131,7 @@ model.add(layers.Dense(1, input_shape = (2,)))
 model.summary()
 ```
 
-### 模型训练
+## 模型训练
 
 ```python
 model.compile(
@@ -154,7 +145,7 @@ tf.print(f"w = {model.layers[0].kernel}")
 tf.print(f"b = {model.layers[0].bias}")
 ```
 
-### 模型结果可视化
+## 模型结果可视化
 
 ```python
 %matplotlib inline
