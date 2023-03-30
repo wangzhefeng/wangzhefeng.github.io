@@ -41,25 +41,30 @@ details[open] summary {
   - [深度方法分类](#深度方法分类)
     - [点(Point)异常值](#点point异常值)
     - [模式(Pattern)异常值](#模式pattern异常值)
+- [时间序列异常检测数据集](#时间序列异常检测数据集)
+  - [SEQ](#seq)
+  - [其他](#其他)
 - [时间序列异常检测方法](#时间序列异常检测方法)
   - [基于统计分布的方法](#基于统计分布的方法)
-    - [3-sigma](#3-sigma)
-    - [Z-score](#z-score)
-    - [boxplot](#boxplot)
+    - [3-Sigma](#3-sigma)
+    - [Z-Score](#z-score)
+    - [Boxplot](#boxplot)
     - [Grubbs 检验](#grubbs-检验)
+  - [基于方差分析的方法](#基于方差分析的方法)
     - [Elliptic Envelope](#elliptic-envelope)
+    - [组内方差法](#组内方差法)
   - [基于距离的方法](#基于距离的方法)
     - [KNN](#knn)
   - [基于密度的方法](#基于密度的方法)
     - [LOF](#lof)
-    - [Connectivity-Based Outlier Factor(COF)](#connectivity-based-outlier-factorcof)
-    - [Stochastic Outlier Selection(SOS)](#stochastic-outlier-selectionsos)
+    - [COF](#cof)
+    - [SOS](#sos)
   - [基于聚类的方法](#基于聚类的方法)
-    - [K-means 聚类](#k-means-聚类)
+    - [K-Means 聚类](#k-means-聚类)
     - [DBSCAN](#dbscan)
     - [GMM](#gmm)
   - [基于树的方法](#基于树的方法)
-    - [Isolation Forest 孤立森林](#isolation-forest-孤立森林)
+    - [孤立森林](#孤立森林)
     - [RRCF](#rrcf)
   - [基于降维的方法](#基于降维的方法)
     - [PCA](#pca)
@@ -70,20 +75,13 @@ details[open] summary {
     - [ARIMA](#arima)
   - [基于时序分解的方法](#基于时序分解的方法)
     - [STL](#stl)
-    - [Twitter Seasonal Hybrid ESD:](#twitter-seasonal-hybrid-esd)
-  - [One-Class SVM](#one-class-svm-1)
-  - [组内方差法](#组内方差法)
+    - [SH-ESD](#sh-esd)
   - [基于神经网络方法](#基于神经网络方法)
     - [特征提取](#特征提取)
-      - [预训练模型](#预训练模型)
     - [学习常态特征表征](#学习常态特征表征)
       - [通用常态特征表征学习](#通用常态特征表征学习)
       - [依赖异常度量的特征表征学习](#依赖异常度量的特征表征学习)
     - [端对端异常分数学习](#端对端异常分数学习)
-    - [深度相关的代表性模型](#深度相关的代表性模型)
-- [异常检测数据集](#异常检测数据集)
-  - [SEQ](#seq)
-  - [其他](#其他)
 - [结论和方向](#结论和方向)
 - [参考](#参考)
 </p></details><p></p>
@@ -95,7 +93,7 @@ details[open] summary {
 * 在给定的数据集合中定义什么样的数据是异常的
 * 找到一个有效的方法来检测这样的异常数据
 
-按异常在时间序列中的不同表现形式, 时间序列异常一般可以分为 3 种，但也有其他角度的分类方法: 
+按异常在时间序列中的不同表现形式，时间序列异常一般可以分为 3 种，但也有其他角度的分类方法: 
 
 * 点异常值
     - 相对于全局其他数据的异常实例
@@ -169,7 +167,7 @@ details[open] summary {
 
 集体异常是趋势的其余部分的持续变化。这也可能是一组点异常。
 相对于整个数据集异常的相关异常数据实例的集合。
-即个体不存在异常, 但是个体同时出现表现出异常状态
+即个体不存在异常，但是个体同时出现表现出异常状态
 
 例如，夏季月份您家中的电力消耗增加
 
@@ -209,6 +207,17 @@ details[open] summary {
 * Trend outliers(异常趋势的局部子序列)
     - `$s(\tau(\cdot), \hat{\tau}(\cdot)) > \delta$`，其中，`$\delta$` 为异常判定的阈值
 
+# 时间序列异常检测数据集
+
+## SEQ
+
+基于 shapelet 函数，可以获取 35 个合成数据集(可称 NeurlIPS-TS synthestic datasets or SEQ),
+其中 20 个单变量，15 个多变量数据集。该数据集覆盖各类异常数据
+
+## 其他
+
+![img](images/data.png)
+
 # 时间序列异常检测方法
 
 ![img](images/models.png)
@@ -217,61 +226,39 @@ details[open] summary {
 
 ## 基于统计分布的方法
 
-基于统计的方法最直观，适用于几乎所有类型的时间序列。
-在这种方法中，异常值的上限和下限是根据特定的统计量创建的，
+基于统计的方法最直观，适用于几乎所有类型的时间序列。在这种方法中，异常值的上限和下限是根据特定的统计量创建的，
 例如：均值、标准差、Z 统计量、T 统计量、分布的百分位数
 
-### 3-sigma
+### 3-Sigma
 
-基于正态分布，3sigma 准则认为值在 `$(\mu - 3\sigma, \mu + 3\sigma)$` 区间的概率为 99.74%, 
-当数据分布超过这个区间时即认为是异常数据, 为提升准确率可采用同环比策略
+基于正态分布，3-Sigma 准则认为值在 `$(\mu - 3\sigma, \mu + 3\sigma)$` 区间的概率为 99.74%，
+当数据分布超过这个区间时即认为是异常数据，为提升准确率可采用同环比策略
+
+![img](images/3sigma.png)
 
 取整个序列的均值和标准差是不可取的，因为在这种情况下，边界将是静态的。
 边界应该在滚动窗口的基础上创建，就像考虑一组连续的观察来创建边界，
 然后转移到另一个窗口。该方法是一种高效、简单的离群点检测方法
 
-![img](images/3sigma.png)
+### Z-Score
 
-Python 实现异常检测的边界阈值:
+Z-Score 方法假定数据是高斯分布，异常值是分布尾部的数据点，因此远离数据的平均值。
+距离的远近取决于使用公式归一化数据集 `$z_{i}$` 的设定阈值 `$z_{threshold}$`
 
-```python
-def three_sigma(s):
-    mu, std = np.means(s), np.std(s)
-    lower, upper = mu - 3 * std, mu + 3 * std
+`$$z_{i} = \frac{x_{i} - \mu}{\sigma}$$`
 
-    return lower, upper
-```
+异常值也进行了标准化处理，如果绝对值大于 `$z_{threshold}$` 则认为该观测值为异常值：
 
-### Z-score
+`$$|z_{i}| > z_{threshold}$$`
 
-Z-score 为标准分数，测量数据点和平均值的距离，若测量值与平均值相差 2 个标准差，Z-score 为 2。
-当把 Z-score = 3 作为阈值去提出异常点时，便相当于 3sigma
+这里 `$z_{threshold}$` 一般设置为 2.5、3.0、3.5。当 `$z_{threshold} = 3$` 作为阈值去提出异常点时，
+便相当于 3-Sigma
 
-Python 实现 Z-score 计算:
-
-```python
-def z_score(s):
-    z_score = (s - np.mean(s)) / np.std(s)
-
-    return z_score
-```
-
-### boxplot
+### Boxplot
 
 箱线图是基于四分位距(IQR)检测异常点的
 
 ![img](images/boxplot.png)
-
-Python 实现异常检测的边界阈值:
-
-```python
-def boxplot(s):
-    q1, q3 = s.quantile(0.25), s.quantile(0.75)
-    iqr = q3 - q1
-    lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
-
-    return lower, upper
-```
 
 ### Grubbs 检验
 
@@ -280,8 +267,8 @@ Grubbs 检验常被用来检验服从正态分布的单变量数据集(univariat
 
 Grubbs 检验的原假设与备择假设如下：
 
-* H0: 数据集中没有异常值
-* H1: 数据集中有一个异常值
+* H0：数据集中没有异常值
+* H1：数据集中有一个异常值
 
 Grubbs 检验需要总体是正态分布。算法流程如下：
 
@@ -303,23 +290,18 @@ Grubbs 检验方法的局限：
 * 它的判断机制是“逐一剔除”，所以每个异常值都要单独计算整个步骤，数据量大吃不消
 * 需假定数据服从正态分布或近正态分布
 
-Python 实现 Grubbs 异常检测示例:
-
-```python
-from outliers import smirnov_grubbs as grubbs
-
-print(grubbs.test([8, 9, 10, 1, 9], alpha = 0.05))
-print(grubbs.min_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
-print(grubbs.max_test_outliers([8, 9, 10, 1, 9], alpha = 0.05))
-print(grubbs.max_test_indices([8, 9, 10, 50, 9], alpha = 0.05))
-```
+## 基于方差分析的方法
 
 ### Elliptic Envelope
 
 > Elliptic Envelope，椭圆包格
 
-* https://scikit-learn.org/stable/modules/generated/sklearn.covariance.EllipticEnvelope.html
-* https://blog.csdn.net/qq_40177015/article/details/117264517
+Elliptic Envelope 算法的思路是，假设常规数据隐含这一个已知的概率分布。基于这个假设，我们尝试确定数据的形状（边界），
+也可以将远离边界的样本点定义为异常点。sklearn 提供了一个 `sklearn.covariance.EllipticEnvelope` 类，
+它可以根据数据做一个鲁棒的协方差估计，然后学习到一个包围中心样本点并忽视离群点的椭圆
+
+### 组内方差法
+
 
 ## 基于距离的方法
 
@@ -331,34 +313,18 @@ KNN 依次计算每个样本与它最近的 `$K$` 个样本的平均距离，
 * 优点是不需要假设数据的分布
 * 缺点是仅可以找出全局异常点，无法找到局部异常点
 
-Python 实现 KNN 异常检测示例:
-
-```python
-from pyod.models.knn import KNN
-
-# 初始化检测器 clf
-clf = KNN(method = "mean", n_neighbors = 3)
-clf.fit(X_train)
-
-# 返回训练数据上的分类标签(0: 正常值, 1:异常值)
-y_train_pred = clf.labels_
-
-# 返回训练数据上的异常值(分数越大越异常)
-y_train_scores = clf.decision_scores_
-```
-
 ## 基于密度的方法
 
 ### LOF
 
-> Local Outlier Factor, LOF
+> Local Outlier Factor，LOF
 
 LOF 是基于密度的经典算法，通过给每个数据点都分配一个依赖于邻域密度的离群因子 LOF，
 进而判断该数据点是否为离群点。它的好处在于可以量化每个数据点的异常程度(outlierness)
 
 ![img](images/LOF.png)
 
-**数据点 P 的局部相对密度(局部异常因子, LOF)：** 
+**数据点 P 的局部相对密度(局部异常因子，LOF)：** 
 
 `$$LOF_{k}(P) = \frac{\sum_{N_{k}(P) \in O}\frac{lrd_{k}(O)}{lrd_{k}(P)}}{|N_{k}(P)|} \\
               = \frac{\frac{\sum_{N_{k}(P) \in O}lrd_{k}(O)}{|N_{k}(P)|}}{lrd_{k}(P)}$$`
@@ -373,7 +339,6 @@ LOF 是基于密度的经典算法，通过给每个数据点都分配一个依�
 
 **点 P 到点 O 的第 `$k$` 可达距离：**
 
-
 `$$reach\_dist_{k}(O, P) = max\{d_{k}(O), d(O, P)\}$$`
 
 其中:
@@ -386,25 +351,9 @@ LOF 是基于密度的经典算法，通过给每个数据点都分配一个依�
 * 对于每个数据点，计算它与其他所有点的距离，并按从近到远排序
 * 对于每个数据点，找到它的 K-Nearest-Neighbor，计算 LOF 得分
 
-Python 实现 LOF 算法示例：
+### COF
 
-```python
-from sklearn.neighbors import LocalOutlierFactor as LOF
-
-X = [[-1.1],
-     [0.2],
-     [100.1],
-     [0.3]]
-
-clf = LOF(n_neighbors = 2)
-
-res = clf.fit_predict(X)
-print(res)
-
-print(clf.negative_outlier_factor_)
-```
-
-### Connectivity-Based Outlier Factor(COF)
+> Connectivity-Based Outlier Factor，COF
 
 COF 是 LOF 的变种，相比于 LOF，COF 可以处理低密度下的异常值，
 COF 的局部密度是基于平均链式距离计算得到。
@@ -430,21 +379,9 @@ COF 的局部密度是基于平均链式距离计算得到。
 
 `$$COF(p) = \frac{ac\_distance(p)}{\frac{1}{k} \sum_{o \in N_{k}(p)} ac\_distance(o)}$$`
 
-Python 实现 COF 异常检测示例：
+### SOS
 
-```python
-from pyod.models.cof import COF
-
-cof = COF(
-    contamination = 0.06,  # 异常值所占的比例
-    n_neighbors = 20,  # 近邻数量
-)
-
-cof_label = cof.fit_predict(iris.values)
-print(f"检测出的异常值数量为：{np.sum(cof_label == 1)}")
-```
-
-### Stochastic Outlier Selection(SOS)
+> Stochastic Outlier Selection，SOS
 
 SOS 的思想是：当一个点和其它所有点的关联度(affinity)都很小的时候，它就是一个异常点。
 将特征矩阵(feature martrix)或者相异度矩阵(dissimilarity matrix)输入给 SOS 算法，
@@ -473,28 +410,11 @@ SOS 算法的流程：
 
     `$$p(x_{i} \in C_{0}) = \prod_{j \neq i}(1 - b_{ji})$$`
 
-
-Python 实现 SOS 异常检测算法示例：
-
-```python
-import pandas as pd
-from sksos import SOS
-
-# data
-iris = pd.read_csv("http://bit.ly/iris-csv")
-X = iris.drop("Name", axis = 1).values
-
-# model
-detector = SOS()
-iris["score"] = detector.predict(X)
-iris.sort_values("score", ascending = False).head(10)
-```
-
 ## 基于聚类的方法
 
-### K-means 聚类
+### K-Means 聚类
 
-K-means 聚类是一种无监督机器学习算法，经常用于检测时间序列数据中的异常值。
+K-Means 聚类是一种无监督机器学习算法，经常用于检测时间序列数据中的异常值。
 该算法查看数据集中的数据点，并将相似的数据点分组为 K 个聚类。
 通过测量数据点到其最近质心的距离来区分异常。
 如果距离大于某个阈值，则将该数据点标记为异常。
@@ -532,43 +452,15 @@ DBSCAN 算法具体处理流程如下:
 3. 如果选取的数据对象点 p 是边缘点，选取另一个数据对象点
 4. 重复以上 2、3 步，直到所有点被处理
 
-Python 实现 DBSCAN 异常检测示例:
-
-```python
-from sklearn.cluster import DBSCAN
-import numpy as np
-
-# 数据
-X = np.array(
-    [[1, 2],
-     [2, 2],
-     [2, 3],
-     [8, 7],
-     [8, 8],
-     [25, 80]]
-)
-
-# 聚类
-clustering = DBSCAN(eps = 3, min_samples = 2).fit(X)
-clustering.lables_
-```
-
-```
-array([ 0,  0,  0,  1,  1, -1])
-# 0，,0，,0：表示前三个样本被分为了一个群
-# 1, 1：中间两个被分为一个群
-# -1：最后一个为异常点，不属于任何一个群
-```
-
 ### GMM
-
-
 
 ## 基于树的方法
 
-### Isolation Forest 孤立森林
+### 孤立森林
 
-孤立森林(Isolation Forest, iForest)中的 “孤立” (isolation) 指的是 “把异常点从所有样本中孤立出来”，
+> Isolation Forest，孤立森林
+
+孤立森林(Isolation Forest，iForest)中的 “孤立” (isolation) 指的是 “把异常点从所有样本中孤立出来”，
 论文中的原文是 “separating an instance from the rest of the instances”。
 
 孤立森林是一种基于决策树的异常检测机器学习算法。它通过使用决策树的分区隔离给定特征集上的数据点来工作。
@@ -604,34 +496,6 @@ array([ 0,  0,  0,  1,  1, -1])
 异常分数 `$s$` 指数部分值域为 `$(-\infty, 0)$`，因此 `$s$` 值域为 `$(0, 1)$`。
 当 PathLength 越小，`$s$` 越接近 1，此时样本为异常值的概率越大
 
-Python 实现 iForest 异常检测示例：
-
-```python
-from sklearn.datasets import load_iris
-from sklearn.ensemble import IsolationForest
-
-data = load_iris(as_frame = True)
-X, y = data.data, data.target
-df = data.frame
-
-# 模型初始化
-iforest = IsolationForest(
-    n_estimators = 100,
-    max_samples = "auto",
-    contamination = 0.05,
-    max_features = 4,
-    bootstrap = False,
-    n_jobs = -1,
-    random_state = 1,
-)
-
-# 模型训练、预测
-df["label"] = iforest.fit_predict(X)
-
-# 模型预测
-df["scores"] = iforest.decision_function(X)
-```
-
 ### RRCF
 
 ## 基于降维的方法
@@ -657,8 +521,8 @@ PCA 在做特征值分解，会得到：
 
 `$$Score(x_{i}) = \sum_{j=1}^{n}d_{ij} = \sum_{j=1}^{n}\frac{(x_{i}^{T}) \cdot e_{j}}{}$$`
 
-其中，  为样本在重构空间里离特征向量的距离。若存在样本点偏离各主成分越远，  会越大，意味偏移程度大，异常分数高。  是特征值，用于归一化，使不同方向上的偏离程度具有可比性。
-
+其中，为样本在重构空间里离特征向量的距离。若存在样本点偏离各主成分越远，会越大，意味偏移程度大，异常分数高。
+是特征值，用于归一化，使不同方向上的偏离程度具有可比性
 
 在计算异常分数时，关于特征向量（即度量异常用的标杆）选择又有两种方式：
 
@@ -671,54 +535,13 @@ PCA 在做特征值分解，会得到：
 第二种做法，PCA 提取了数据的主要特征，如果一个数据样本不容易被重构出来，
 表示这个数据样本的特征跟整体数据样本的特征不一致，那么它显然就是一个异常的样本： 
 
-
-其中，是基于k维特征向量重构的样本。
+其中，是基于 k 维特征向量重构的样本
 
 基于低维特征进行数据样本的重构时，舍弃了较小的特征值对应的特征向量方向上的信息。
 换一句话说，重构误差其实主要来自较小的特征值对应的特征向量方向上的信息。
 基于这个直观的理解，PCA 在异常检测上的两种不同思路都会特别关注较小的特征值对应的特征向量。
 所以，我们说 PCA 在做异常检测时候的两种思路本质上是相似的，
 当然第一种方法还可以关注较大特征值对应的特征向量
-
-
-```python
-from sklearn.decomposition import PCA
-pca = PCA()
-pca.fit(centered_training_data)
-transformed_data = pca.transform(training_data)
-y = transformed_data
-
-# 计算异常分数
-lambdas = pca.singular_values_
-M = ((y*y)/lambdas)
-
-# 前k个特征向量和后r个特征向量
-q = 5
-print "Explained variance by first q terms: ", sum(pca.explained_variance_ratio_[:q])
-q_values = list(pca.singular_values_ < .2)
-r = q_values.index(True)
-
-# 对每个样本点进行距离求和的计算
-major_components = M[:,range(q)]
-minor_components = M[:,range(r, len(features))]
-major_components = np.sum(major_components, axis=1)
-minor_components = np.sum(minor_components, axis=1)
-
-# 人为设定c1、c2阈值
-components = pd.DataFrame({'major_components': major_components, 
-                               'minor_components': minor_components})
-c1 = components.quantile(0.99)['major_components']
-c2 = components.quantile(0.99)['minor_components']
-
-# 制作分类器
-def classifier(major_components, minor_components):  
-    major = major_components > c1
-    minor = minor_components > c2    
-    return np.logical_or(major,minor)
-
-results = classifier(major_components=major_components, minor_components=minor_components)
-```
-
 
 ### AutoEncoder
 
@@ -728,92 +551,6 @@ PCA 是线性降维，AutoEncoder 是非线性降维。根据正常数据训练�
 则视作为异常数据。需要注意的是，AutoEncoder 训练使用的数据是正常数据（即无异常值），
 这样才能得到重构后误差分布范围是多少以内是合理正常的。所以 AutoEncoder 在这里做异常检测时，
 算是一种有监督学习的方法
-
-```python
-import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense
-
-# 标准化数据
-scaler = preprocessing.MinMaxScaler()
-X_train = pd.DataFrame(scaler.fit_transform(dataset_train),
-                              columns=dataset_train.columns,
-                              index=dataset_train.index)
-# Random shuffle training data
-X_train.sample(frac=1)
-X_test = pd.DataFrame(scaler.transform(dataset_test),
-                             columns=dataset_test.columns,
-                             index=dataset_test.index)
-
-tf.random.set_seed(10)
-act_func = 'relu'
-# Input layer:
-model=Sequential()
-# First hidden layer, connected to input vector X.
-model.add(Dense(10,activation=act_func,
-                kernel_initializer='glorot_uniform',
-                kernel_regularizer=regularizers.l2(0.0),
-                input_shape=(X_train.shape[1],)
-               )
-         )
-model.add(Dense(2,activation=act_func,
-                kernel_initializer='glorot_uniform'))
-model.add(Dense(10,activation=act_func,
-                kernel_initializer='glorot_uniform'))
-model.add(Dense(X_train.shape[1],
-                kernel_initializer='glorot_uniform'))
-model.compile(loss='mse',optimizer='adam')
-print(model.summary())
-
-# Train model for 100 epochs, batch size of 10:
-NUM_EPOCHS=100
-BATCH_SIZE=10
-history=model.fit(np.array(X_train),np.array(X_train),
-                  batch_size=BATCH_SIZE,
-                  epochs=NUM_EPOCHS,
-                  validation_split=0.05,
-                  verbose = 1)
-
-plt.plot(history.history['loss'],
-         'b',
-         label='Training loss')
-plt.plot(history.history['val_loss'],
-         'r',
-         label='Validation loss')
-plt.legend(loc='upper right')
-plt.xlabel('Epochs')
-plt.ylabel('Loss, [mse]')
-plt.ylim([0,.1])
-plt.show()
-
-# 查看训练集还原的误差分布如何，以便制定正常的误差分布范围
-X_pred = model.predict(np.array(X_train))
-X_pred = pd.DataFrame(X_pred,
-                      columns=X_train.columns)
-X_pred.index = X_train.index
-
-scored = pd.DataFrame(index=X_train.index)
-scored['Loss_mae'] = np.mean(np.abs(X_pred-X_train), axis = 1)
-plt.figure()
-sns.distplot(scored['Loss_mae'],
-             bins = 10,
-             kde= True,
-            color = 'blue')
-plt.xlim([0.0,.5])
-
-# 误差阈值比对，找出异常值
-X_pred = model.predict(np.array(X_test))
-X_pred = pd.DataFrame(X_pred,
-                      columns=X_test.columns)
-X_pred.index = X_test.index
-threshod = 0.3
-scored = pd.DataFrame(index=X_test.index)
-scored['Loss_mae'] = np.mean(np.abs(X_pred-X_test), axis = 1)
-scored['Threshold'] = threshod
-scored['Anomaly'] = scored['Loss_mae'] > scored['Threshold']
-scored.head()
-```
-
 
 ## 基于分类的方法
 
@@ -840,16 +577,6 @@ One-Class SVM 又一种推导方式是 SVDD(Support Vector Domain Description，
 C 是调节松弛变量的影响大小，说的通俗一点就是，给那些需要松弛的数据点多少松弛空间，
 如果 C 比较小，会给离群点较大的弹性，使得它们可以不被包含进超球体
 
-```python
-from sklearn import svm
-
-clf = svm.OneClassSVM(nu = 0.1, kernel = "rfb", gamma = 0.1)
-clf.fit(X)
-
-y_pred = clf.predict(X)
-n_error_outlier = y_pred[y_pred == -1].size
-```
-
 ## 基于预测的方法
 
 对于单条时序数据，根据其预测出来的时序曲线和真实的数据相比，求出每个点的残差，
@@ -871,22 +598,19 @@ n_error_outlier = y_pred[y_pred == -1].size
 
 ![img](images/stl.png)
 
-### Twitter Seasonal Hybrid ESD:
+### SH-ESD 
+
+> Twitter Seasonal Hybrid ESD
 
 SH-ESD 是建立在 ESD(Extreme Studentized Deviate)上的。该方法是基于使用时间序列分解和统计检验
-
-
-
-
-## One-Class SVM
-
-## 组内方差法
-
-
 
 ## 基于神经网络方法
 
 ![img](images/models_deeplearning.png)
+
+深度相关的代表性模型：
+
+![img](images/deep_models.png)
 
 1. 特征提取
     - deep learning 和 anomaly detection 是分开的，deep learning 只负责特征提取
@@ -912,8 +636,6 @@ SH-ESD 是建立在 ESD(Extreme Studentized Deviate)上的。该方法是基于�
 * 特征提取和异常评分是独立分开的，通常会导致次优的异常评分
 * 预训练的深度模型通常仅限于特定类型的数据。(感觉更适用于图像，
   因为图像可以做分类预训练，个人对时序预训练了解的不是很多)
-
-#### 预训练模型
 
 ### 学习常态特征表征
 
@@ -979,24 +701,6 @@ SH-ESD 是建立在 ESD(Extreme Studentized Deviate)上的。该方法是基于�
 * Softmax 似然模型：特征交互的计算成本很大，而且模型依赖负样本的质量
 * 端到端的 one-class 分类模型：GAN 具有不稳定性，且仅限于半监督异常检测场景
 
-### 深度相关的代表性模型
-
-![img](images/deep_models.png)
-
-
-
-
-# 异常检测数据集
-
-## SEQ
-
-基于 shapelet 函数，可以获取 35 个合成数据集(可称 NeurlIPS-TS synthestic datasets or SEQ),
-其中 20 个单变量，15 个多变量数据集。该数据集覆盖各类异常数据
-
-## 其他
-
-![img](images/data.png)
-
 # 结论和方向
 
 把异常度量目标加入到表征学习中：表征学习时，一个关键问题是它们的目标函数是通用的，
@@ -1039,4 +743,4 @@ SH-ESD 是建立在 ESD(Extreme Studentized Deviate)上的。该方法是基于�
 * [[21]AutoEncoder](https://zhuanlan.zhihu.com/p/260882741)
 * [[22]利用 Autoencoder 进行无监督异常检测](https://zhuanlan.zhihu.com/p/46188296)
 * [[23]自编码器 AutoEncoder 解决异常检测问题](https://zhuanlan.zhihu.com/p/260882741)
-
+* [sklearn.covariance.EllipticEnvelope](https://scikit-learn.org/stable/modules/generated/sklearn.covariance.EllipticEnvelope.html)

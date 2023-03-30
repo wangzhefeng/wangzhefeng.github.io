@@ -1,6 +1,6 @@
 ---
 title: GluonTS
-subtitle: 概率预测
+subtitle: 深度学习、概率预测
 author: 王哲峰
 date: '2023-03-09'
 slug: timeseries-lib-gluonts
