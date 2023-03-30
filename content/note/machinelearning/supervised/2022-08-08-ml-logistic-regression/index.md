@@ -11,33 +11,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -59,32 +32,118 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [Logistic Regression 模型介绍](#logistic-regression-模型介绍)
-  - [模型原理](#模型原理)
-  - [模型原理](#模型原理-1)
-  - [模型原理](#模型原理-2)
-    - [损失函数推导](#损失函数推导)
-    - [损失函数优化方法](#损失函数优化方法)
-- [Logistic Regression 实现](#logistic-regression-实现)
+- [Logistic Regression 模型借简介](#logistic-regression-模型借简介)
+  - [模型基本原理](#模型基本原理)
+  - [模型损失函数](#模型损失函数)
+  - [模型原理解释](#模型原理解释)
+- [Logistic Regression 模型实现](#logistic-regression-模型实现)
   - [模型类型](#模型类型)
   - [模型形式](#模型形式)
   - [模型学习算法](#模型学习算法)
-- [Logistic Regression API](#logistic-regression-api)
-  - [LogisticRegression](#logisticregression)
-  - [SGDClassifier](#sgdclassifier)
-  - [LogisticRegressionCV](#logisticregressioncv)
-- [参考](#参考)
+  - [sklearn PI](#sklearn-pi)
+    - [LogisticRegression](#logisticregression)
+    - [SGDClassifier](#sgdclassifier)
+    - [LogisticRegressionCV](#logisticregressioncv)
 </p></details><p></p>
 
-# Logistic Regression 模型介绍
+# Logistic Regression 模型借简介
 
-逻辑回归是在线性回归的基础上加了一个 Sigmoid 函数（非线形）映射，使得逻辑回归成为了一个优秀的分类算法，
+逻辑回归是在线性回归的基础上加了一个 Sigmoid 函数（非线形）映射，使得逻辑回归成为了一个优秀的分类算法。
 学习逻辑回归模型，首先应该记住一句话：逻辑回归假设数据服从伯努利分布，通过极大化似然函数的方法，
 运用梯度下降来求解参数，来达到将数据二分类的目的
 
+## 模型基本原理
 
+**线性模型：**
 
-## 模型原理
+`$$y=f(x)=\omega \cdot x + b, y \in R$$`
+
+**二分类模型：**
+
+`$$y = f(x), y \in \{0, 1\}$$`
+
+**伯努利分布：**
+
+`$$y \sim b(0, p)$$`
+
+假设事件发生(`$y=1$`)的概率为:
+
+`$$p = P(y = 1)$$`
+
+那么事件不发生(`$y=0$`)的概率为: 
+
+`$$1-p = P(y = 0)$$`
+
+**事件发生的几率(The odds of experiencing an event)：**: 
+
+`$$odds = \frac{p}{1-p}$$`
+
+取对数: 
+
+`$$log(odds)= \log\Big(\frac{p}{1-p}\Big)$$`
+
+其中: 
+
+`$$log(odds) \in [-\infty, +\infty]$$`
+
+**线性模型：**
+
+`$$\log\Big(\frac{p}{1-p}\Big) = g(x) = \omega \cdot x + b, \log\Big(\frac{p}{1-p}\Big) \in [-\infty, +\infty]$$`
+
+因此: 
+
+`$$p = \frac{1}{1+e^{-g(x)}}$$`
+
+**Logistic Regression 模型：**
+
+`$$y = f(x), y \in \{0, 1\}$$`
+
+`$$\left\{\begin{array}{ll} P(y=1|x) =  \sigma(x) \\ P(y=0|x) = 1-\sigma(x) \end{array} \right.$$`
+
+其中 `$\sigma(x)$`  为 sigmoid 函数: 
+
+`$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
+
+## 模型损失函数
+
+**Logistic Regression 模型：**
+
+`$$y = f(x), y \in \{0, 1\}$$`
+
+`$$\left\{\begin{array}{ll} P(y=1|x) =  \sigma(x) \\ P(y=0|x) = 1-\sigma(x) \end{array} \right.$$`
+
+其中 `$\sigma(x)$` 为 Sigmoid 函数：
+
+`$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
+
+**极大似然估计思想：**
+
+给定数据集 `$\{(x_i, y_i)\}$`，其中：`$i = 1, 2, \ldots, N$`，`$x_i \in R^{p}$`，`$y_i \in \{0, 1\}$`
+
+似然函数：
+
+`$$l=\prod_{i=1}^{N}[\sigma(x_i)]^{y_{i}}[1-\sigma{x_i}]^{1-y_i}$$`
+
+对数似然函数：
+
+`$$\begin{eqnarray}L(\omega) & & {}= \log(l) \nonumber\\
+             & & {}= \log\prod_{i=1}^{N}[\sigma(x_i)]^{y_i}[1-\sigma(x_i)]^{1-y_i} \nonumber\\
+             & & {}= \sum_{i=1}^{N}\log[\sigma(x_i)]^{y_i}[1-\sigma(x_i)]^{1-y_i} \nonumber\\
+             & & {}= \sum_{i=1}^{N}[\log[\sigma(x_i)]^{y_i}+\log[1-\sigma(x_i)]^{1-y_i}] \nonumber\\
+             & & {}= \sum_{i=1}^{N}[y_i\log\sigma(x_i)+(1-y_i)\log[1-\sigma(x_i)]] \nonumber\\
+             & & {}= \sum_{i=1}^{N}[y_i\log\frac{\sigma(x_i)}{1-\sigma(x_i)}+log[1-\sigma(x_i)]] \nonumber\\
+             & & {}= \sum_{i=1}^{N}[y_i(\omega \cdot x_i)-\log(1+e^{\omega\cdot x_i})] \nonumber\\
+             & & {}= \sum_{i=1}^{N}[y_i\log P(Y=1|x)+(1-y_i)\log(1-P(Y=1|x))] \nonumber\\
+             & & {}= \sum_{i=1}^{N}[y_i\log \hat{y}_i+(1-y_i)\log(1-\hat{y}_i)] \nonumber
+   \end{eqnarray}$$`
+
+**损失函数：**
+
+负对数似然函数：
+
+`$$L(\omega) = - \sum_{i=1}^{N} [y_{i} \log \hat{y}_{i} + (1-y_{i}) \log(1- \hat{y}_{i})]$$`
+
+## 模型原理解释
 
 Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
 
@@ -126,104 +185,7 @@ Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`,
 使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
 负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 
 
-
-## 模型原理
-
-**线性模型:**
-
-`$$y=f(x)=\omega \cdot x + b, y \in R$$`
-
-**二分类模型:**
-
-`$$y = f(x), y \in \{0, 1\}$$`
-
-**伯努利分布:**
-
-`$$y \sim b(0, p)$$`
-
-假设事件发生(`$y=1$`)的概率为:
-
-`$$p = P(y = 1)$$`
-
-那么事件不发生(`$y=0$`)的概率为: 
-
-`$$1-p = P(y = 0)$$`
-
-**the odds of experiencing an event:**: 
-
-`$$odds = \frac{p}{1-p}$$`
-
-取对数: 
-
-`$$log(odds)= \log\Big(\frac{p}{1-p}\Big)$$`
-
-其中: 
-
-`$$log(odds) \in [-\infty, +\infty]$$`
-
-**线性模型:**
-
-`$$\log\Big(\frac{p}{1-p}\Big) = g(x) = \omega \cdot x + b, \log\Big(\frac{p}{1-p}\Big) \in [-\infty, +\infty]$$`
-
-因此: 
-
-`$$p = \frac{1}{1+e^{-g(x)}}$$`
-
-**Logistic Regression 模型:**
-
-`$$y = f(x), y \in \{0, 1\}$$`
-
-`$$\left\{\begin{array}{ll} P(y=1|x) =  \sigma(x) \\ P(y=0|x) = 1-\sigma(x) \end{array} \right.$$`
-
-其中 `$\sigma(x)$`  为 sigmoid 函数: 
-
-`$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
-
-## 模型原理
-
-### 损失函数推导
-
-**Logistic Regression 模型:**
-
-`$$y = f(x), y \in \{0, 1\}$$`
-
-`$$\left\{\begin{array}{ll} P(y=1|x) =  \sigma(x) \\ P(y=0|x) = 1-\sigma(x) \end{array} \right.$$`
-
-其中 `$\sigma(x)$` 为sigmoid函数: 
-
-`$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
-
-**极大似然估计思想:**
-
-给定数据集: `$\{(x_i, y_i)\}$`, 其中: `$i = 1, 2, \ldots, N$`, `$x_i \in R^p$`, `$y_i \in \{0, 1\}$` ；
-
-似然函数为: 
-
-`$$l=\prod_{i=1}^{N}[\sigma(x_i)]^{y_{i}}[1-\sigma{x_i}]^{1-y_i}$$`
-
-则对数似然函数为: 
-
-`$$\begin{eqnarray}L(\omega) & & {}= \log(l) \nonumber\\
-             & & {}= \log\prod_{i=1}^{N}[\sigma(x_i)]^{y_i}[1-\sigma(x_i)]^{1-y_i} \nonumber\\
-             & & {}= \sum_{i=1}^{N}\log[\sigma(x_i)]^{y_i}[1-\sigma(x_i)]^{1-y_i} \nonumber\\
-             & & {}= \sum_{i=1}^{N}[\log[\sigma(x_i)]^{y_i}+\log[1-\sigma(x_i)]^{1-y_i}] \nonumber\\
-             & & {}= \sum_{i=1}^{N}[y_i\log\sigma(x_i)+(1-y_i)\log[1-\sigma(x_i)]] \nonumber\\
-             & & {}= \sum_{i=1}^{N}[y_i\log\frac{\sigma(x_i)}{1-\sigma(x_i)}+log[1-\sigma(x_i)]] \nonumber\\
-             & & {}= \sum_{i=1}^{N}[y_i(\omega \cdot x_i)-\log(1+e^{\omega\cdot x_i})] \nonumber\\
-             & & {}= \sum_{i=1}^{N}[y_i\log P(Y=1|x)+(1-y_i)\log(1-P(Y=1|x))] \nonumber\\
-             & & {}= \sum_{i=1}^{N}[y_i\log \hat{y}_i+(1-y_i)\log(1-\hat{y}_i)] \nonumber
-   \end{eqnarray}$$`
-
-**Loss Function:**
-
-`$$L(\omega) = - \sum_{i=1}^{N} [y_{i} \log \hat{y}_{i} + (1-y_{i}) \log(1- \hat{y}_{i})]$$`
-
-### 损失函数优化方法
-
-- 梯度下降法
-- 拟牛顿法
-
-# Logistic Regression 实现
+# Logistic Regression 模型实现
 
 ## 模型类型
 
@@ -244,23 +206,25 @@ Logistic Regression with L2 正则化
 
 ## 模型学习算法
 
-- liblinear
-   - 坐标下降算法(coorinate descent algorithm, CD)
-   - 算法稳健
-- newton-cg
-- lbfgs
-   - 近似于Broyden-Fletcher-Goldfarb-Shanno算法的优化算法, 属于准牛顿方法
+> * 梯度下降法
+> * 拟牛顿法
+
+* `liblinear`
+   - 坐标下降算法(coorinate descent algorithm, CD)，算法稳健
+* `newton-cg`
+* `lbfgs`
+   - 近似于 Broyden-Fletcher-Goldfarb-Shanno 算法的优化算法, 属于准牛顿方法
    - 适用于小数据集, 高维数据集
-- sag
+* `sag`
    - 随机平均梯度下降(Stochastic Average Gradient descent)
    - 适用于大数据集, 高维数据集
-- saga
-   - sag算法的变体
+* `saga`
+   - `sag` 算法的变体
    - 适用于大数据集, 高维数据集
-- SGDClassifier with log loss
+* `SGDClassifier with log loss`
    - 适用于大数据集, 高维数据集
 
-# Logistic Regression API
+## sklearn PI
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -268,7 +232,7 @@ from sklearn.linear_model import LogisticRegressionCV
 from sklearn.linear_model import SGDClassifier 
 ```
 
-## LogisticRegression
+### LogisticRegression
 
 ```python
 lr = LogisticRegression(penalty = "l2", 
@@ -304,16 +268,16 @@ lr.intercept_
 lr.n_iter_
 ```
 
-- 多分类
-   - multi_class = "ovr": 使用one-vs-rest模式
-   - multi_class = "multinomial": 使用cross-entropy loss
-      - 仅支持: `solver in ["lbfgs", "sag", "newton-cg"]`
-- 其他
-   - `dual = True, penalty = "l2"`
-   - `solver in ["newton-cg", "sag", "lbfgs"], penalty = "l2"`
-   - `solver = "liblinear", penalty in ["l2", "l1"]`
+* 多分类
+    - `multi_class = "ovr"`：使用 one-vs-rest 模式
+    - `multi_class = "multinomial"`：使用 cross-entropy loss
+        - 仅支持: `solver in ["lbfgs", "sag", "newton-cg"]`
+* 其他
+    - `dual = True, penalty = "l2"`
+    - `solver in ["newton-cg", "sag", "lbfgs"], penalty = "l2"`
+    - `solver = "liblinear", penalty in ["l2", "l1"]`
 
-## SGDClassifier
+### SGDClassifier
 
 ```python
 # 使用SGD算法训练的线性分类器: SVM, Logistic Regression
@@ -341,7 +305,7 @@ sgdc_lr = SGDClassifier(loss = 'log',
                         n_iter = None)
 ```
 
-## LogisticRegressionCV
+### LogisticRegressionCV
 
 ```python
 import numpy as np
@@ -360,6 +324,3 @@ y = (y > 4).astype(np.int)
 for i, C in enmerate((1, 0.1, 0.01)):
     clf_l1_LR = LogisticRegression(C = C, penalty = "l1", )
 ```
-
-# 参考
-

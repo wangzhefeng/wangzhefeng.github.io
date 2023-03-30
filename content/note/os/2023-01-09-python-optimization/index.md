@@ -2,7 +2,7 @@
 title: Python 数值优化
 author: 王哲峰
 date: '2023-01-09'
-slug: optimize
+slug: python-optimizaion
 categories:
   - Python
 tags:
