@@ -1,5 +1,6 @@
 ---
-title: 异常值处理
+title: 异常值检测及处理
+subtitle: Anomaly Detection
 author: 王哲峰
 date: '2022-09-13'
 slug: feature-engine-outlier
