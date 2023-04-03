@@ -1,6 +1,6 @@
 ---
 title: ANN
-subtitle: 人工神经网络
+subtitle: Artificial Neural Networks
 author: 王哲峰
 date: '2022-07-12'
 slug: dl-ann

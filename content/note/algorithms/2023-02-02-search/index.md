@@ -2,7 +2,7 @@
 title: 搜索算法
 author: 王哲峰
 date: '2023-02-02'
-slug: algorithm-search
+slug: search
 categories:
   - algorithms
 tags:

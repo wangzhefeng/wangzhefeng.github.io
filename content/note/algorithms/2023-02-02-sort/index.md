@@ -2,7 +2,7 @@
 title: 排序算法
 author: 王哲峰
 date: '2023-02-02'
-slug: algorithm-sort
+slug: sort
 categories:
   - algorithms
 tags:
