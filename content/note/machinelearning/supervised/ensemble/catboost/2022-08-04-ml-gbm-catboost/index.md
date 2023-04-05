@@ -409,6 +409,6 @@ CatBoost 捕捉高阶依赖的类别特征组合成额外的类别特征，例�
 
 * [类别变量杀手 CatBoost](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247494038&idx=2&sn=936c63d7f3eb8ad9dccc04e65395655d&chksm=c32af019f45d790fade45a8ce74c8d6ca8f35a60ab8e82c594c9ab2ab923eefa99d096697e2f&scene=21#wechat_redirect)
 * [务实基础-CatBoost](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485769&idx=1&sn=93d8bdf347e1daeeb205ffbb54cd34f1&chksm=fa041722cd739e34fa385b7cd7fc55c5d440dbc16a69d656974a25077f525b57669ac957da89&scene=21#wechat_redirect)
-* [CatBoost GitHub tutorials](https://github.com/catboost/tutorials)
-* [CatBoost官方文档](https://catboost.ai/docs)
-* [CatBoost: unbiased boosting with categorical]()
+* [CatBoost GitHub](https://github.com/catboost/catboost)
+* [CatBoost Doc](https://catboost.ai/)
+* [CatBoost Paper](https://arxiv.org/pdf/1706.09516.pdf)

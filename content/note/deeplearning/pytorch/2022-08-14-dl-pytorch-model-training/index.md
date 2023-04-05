@@ -32,24 +32,14 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [模型训练简介](#模型训练简介)
-- [MNIST 数据集](#mnist-数据集)
-- [脚本风格](#脚本风格)
-  - [模型构建](#模型构建)
+  - [MNIST 数据集](#mnist-数据集)
+  - [神经网络示例](#神经网络示例)
   - [损失函数、优化器、评价指标](#损失函数优化器评价指标)
-  - [模型训练](#模型训练)
+- [脚本风格](#脚本风格)
 - [函数风格](#函数风格)
-  - [模型构建](#模型构建-1)
-  - [损失函数、优化器、评价指标](#损失函数优化器评价指标-1)
-  - [模型训练](#模型训练-1)
 - [类风格](#类风格)
-  - [类风格 torchkeras.KerasModel](#类风格-torchkeraskerasmodel)
-    - [模型构建](#模型构建-2)
-    - [损失函数、优化器、评价指标](#损失函数优化器评价指标-2)
-    - [模型训练](#模型训练-2)
-  - [类风格 torchkeras.LightModel](#类风格-torchkeraslightmodel)
-    - [模型构建](#模型构建-3)
-    - [损失函数、优化器、评价指标](#损失函数优化器评价指标-3)
-    - [模型训练](#模型训练-3)
+  - [KerasModel](#kerasmodel)
+  - [LightModel](#lightmodel)
 </p></details><p></p>
 
 # 模型训练简介
@@ -66,9 +56,18 @@ PyTorch 通常需要用户编写自定义训练循环，训练循环的代码风
 $ pip install torchkeras
 ```
 
-# MNIST 数据集
+## MNIST 数据集
 
 ```python
+import os
+import sys
+import time
+import datetime
+from tqdm import tqdm
+from copy import deepcopy
+
+import numpy as np
+import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -77,9 +76,25 @@ from torch import nn
 import torchvision
 from torchvision import datasets
 from torchvision import transforms
+from torchmetrics import Accuracy
+
 print(f"torch.__version__ = {torch.__version__}")
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
 
+# 注：
+#   多分类使用 torchmetrics 中的评估指标
+#   二分类使用 torchkeras.metrics 中的评估指标
 
+# log
+def printlog(info):
+    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("\n" + "==========" * 8 + "%s" % nowtime)
+    print(str(info) + "\n")
+```
+
+```python
 # 数据转换
 transform = transforms.Compose([
     transforms.ToTensor()
@@ -110,20 +125,19 @@ dl_val =  torch.utils.data.DataLoader(
     shuffle = False, 
     num_workers = 4
 )
-print(len(ds_train))
-print(len(ds_val))
+```
 
-
+```python
 # %matplolib inline
 # %config InlineBackend.figure_format = "svg"
 plt.figure(figsize = (8, 8))
 for i in range(9):
     # data
     img, label = ds_train[i]
-    img = torch.squeeze(img)
+    img = torch.squeeze(img).numpy()
     # plot
     ax = plt.subplot(3, 3, i + 1)
-    ax.imshow(img.numpy())
+    ax.imshow(img)
     ax.set_title(f"label = {label}")
     ax.set_xticks([])
     ax.set_yticks([])
@@ -132,49 +146,40 @@ plt.show()
 
 ![img](images/mnist.png)
 
-# 脚本风格
-
-脚本风格的训练循环最为常见
+## 神经网络示例
 
 ```python
-import os
-import sys
-import time
-import datetime
-from tqdm import tqdm
-from copy import deepcopy
-import numpy as np
-import pandas as pd
+class Net(nn.Module):
 
-import torch
-from torch import nn
-from torchmetrics import Accuracy
-
-# 注：
-#   多分类使用 torchmetrics 中的评估指标
-#   二分类使用 torchkeras.metrics 中的评估指标
-
-def printlog(info):
-    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("\n" + "==========" * 8 + "%s" % nowtime)
-    print(str(info) + "\n")
-```
-
-## 模型构建
-
-```python
-net = nn.Sequential()
-net.add_module("conv1", nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3))
-net.add_module("pool1", nn.MaxPool2d(kernel_size = 2, stride = 2))
-net.add_module("conv2", nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5))
-net.add_module("pool2", nn.MaxPool2d(kernel_size = 2, stride = 2))
-net.add_module("dropout", nn.Dropout2d(p = 0.1))
-net.add_module("adaptive_pool", nn.AdaptiveMaxPool2d((1, 1)))
-net.add_module("flatten", nn.Flatten())
-net.add_module("linear1", nn.Linear(64, 32))
-net.add_module("relu", nn.ReLU())
-net.add_module("linear2", nn.Linear(32, 10))
-
+    def __init__(self):
+        super(Net, self).__init__()
+        self.layers = nn.ModuleList([
+            nn.Conv2d(
+                in_channels = 1, 
+                out_channels = 32, 
+                kernel_size = 3
+            ),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            nn.Conv2d(
+                in_channels = 32, 
+                out_channels = 64, 
+                kernel_size = 5
+            ),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            nn.Dropout2d(p = 0.1),
+            nn.AdaptiveMaxPool2d((1, 1)),
+            nn.Flatten(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 10),
+        ])
+    
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer(x)
+        return x
+    
+net = Net()
 print(net)
 ```
 
@@ -187,11 +192,13 @@ loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
 # 评价指标
 metrics_dict = {
-    "acc": Accuracy(),
+    "acc": Accuracy(task = "binray"),
 }
 ```
 
-## 模型训练
+# 脚本风格
+
+脚本风格的训练循环最为常见
 
 ```python
 # epochs 相关设置
@@ -316,74 +323,6 @@ dfhistory = pd.DataFrame(history)
 # 函数风格
 
 函数风格是在脚本风格形式的基础上做了进一步的函数封装
-
-```python
-import os
-import sys
-import time
-import datetime
-from tqdm import tqdm
-from copy import deepcopy
-import numpy as np
-import pandas as pd
-
-import torch
-from torch import nn
-from torchmetrics import Accuracy
-
-# 注：
-#   多分类使用 torchmetrics 中的评估指标
-#   二分类使用 torchkeras.metrics 中的评估指标
-
-def printlog(info):
-    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("\n" + "==========" * 8 + "%s" % nowtime)
-    print(str(info) + "\n")
-```
-
-## 模型构建
-
-```python
-class Net(nn.Module):
-
-    def __init__(self):
-        super(Net, self).__init__()
-        self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Dropout2d(p = 0.1),
-            nn.AdaptiveMaxPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Linear(32, 10),
-        ])
-    
-    def forward(self, x):
-        for layer in self.layers:
-            x = layer(x)
-        return x
-    
-net = Net()
-print(net)
-```
-
-## 损失函数、优化器、评价指标
-
-```python
-# 损失函数
-loss_fn = nn.CrossEntropyLoss()
-# 优化器
-optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
-# 评价指标
-metrics_dict = {
-    "acc": Accuracy(),
-}
-```
-
-## 模型训练
 
 ```python
 class StepRunner:
@@ -573,86 +512,19 @@ df_history = train_model(
 
 # 类风格
 
-## 类风格 torchkeras.KerasModel
-
-使用 `torchkeras.KerasModel` 高阶 API 接口中的 `fit` 方法训练模型
-
 `torchkeras` 安装:
 
 ```bash
 $ pip install torchkeras
 ```
 
-```python
-import os
-import sys
-import time
-import numpy as np
-import pandas as pd
-import datetime
-from tqdm import tqdm
-from copy import deepcopy
+## KerasModel
 
-import torch
-from torch import nn
-from torchmetrics import Accuracy
+使用 `torchkeras.KerasModel` 高阶 API 接口中的 `fit` 方法训练模型
+
+```python
 from torchkeras import KerasModel
 
-# 注：
-#   多分类使用 torchmetrics 中的评估指标
-#   二分类使用 torchkeras.metrics 中的评估指标
-
-def printlog(info):
-    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("\n" + "==========" * 8 + "%s" % nowtime)
-    print(str(info) + "\n")
-```
-
-### 模型构建
-
-```python
-class Net(nn.Module):
-
-    def __init__(self):
-        super(Net, self).__init__()
-        self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Dropout2d(p = 0.1),
-            nn.AdaptiveMaxPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Linear(32, 10),
-        ])
-    
-    def forward(self, x):
-        for layer in self.layers:
-            x = layer(x)
-        return x
-    
-net = Net()
-print(net)
-```
-
-### 损失函数、优化器、评价指标
-
-```python
-# 损失函数
-loss_fn = nn.CrossEntropyLoss()
-# 优化器
-optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
-# 评价指标
-metrics_dict = {
-    "acc": Accuracy(),
-}
-```
-
-### 模型训练
-
-```python
 # 模型实例化
 model = KerasModel(
     net = net, 
@@ -672,83 +544,16 @@ model.fit(
 )
 ```
 
-## 类风格 torchkeras.LightModel
+## LightModel
 
 `torchkeras` 还提供了 `torchkeras.LightModel` 来支持跟多的功能。
 `torchkeras.LightModel` 借鉴了 `pytorch_lightning` 库中的很多功能，
 并演示了对 `pytorch_lightning` 的一种最佳实践
 
 ```python
-import os
-import sys
-import time
-import numpy as np
-import pandas as pd
-import datetime
-from tqdm import tqdm
-from copy import deepcopy
-
-import torch
-from torch import nn
-from torchmetrics import Accuracy
 from torchkeras import LightModel
 import pytorch_lightning as pl
 
-# 注：
-#   多分类使用 torchmetrics 中的评估指标
-#   二分类使用 torchkeras.metrics 中的评估指标
-
-def printlog(info):
-    nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("\n" + "==========" * 8 + "%s" % nowtime)
-    print(str(info) + "\n")
-```
-
-### 模型构建
-
-```python
-class Net(nn.Module):
-
-    def __init__(self):
-        super(Net, self).__init__()
-        self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 5),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
-            nn.Dropout2d(p = 0.1),
-            nn.AdaptiveMaxPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Linear(32, 10),
-        ])
-    
-    def forward(self, x):
-        for layer in self.layers:
-            x = layer(x)
-        return x
-    
-net = Net()
-print(net)
-```
-
-### 损失函数、优化器、评价指标
-
-```python
-# 损失函数
-loss_fn = nn.CrossEntropyLoss()
-# 优化器
-optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
-# 评价指标
-metrics_dict = {
-    "acc": Accuracy(),
-}
-```
-
-### 模型训练
-
-```python
 # 模型实例化
 model = LightModel(
     net = net, 

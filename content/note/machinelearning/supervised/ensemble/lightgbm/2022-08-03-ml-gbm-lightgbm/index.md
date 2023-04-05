@@ -377,11 +377,10 @@ PV-tree 不需要对所有特征进行通信，所以通信损失低。基于投
 # 参考
 
 * [Lightgbm: A highly efficient gradient boosting decision tree](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.pdf)
-* [GitHub-Python-Package](https://github.com/Microsoft/LightGBM/tree/master/python-package)
-* [GitHub-R-Package](https://github.com/Microsoft/LightGBM/tree/master/R-package)
-* [GitHub-LightGBM](https://github.com/Microsoft/LightGBM)
-* [Doc-LightGBM](https://lightgbm.readthedocs.io/en/latest/)
+* [LightGBM GitHub](https://github.com/Microsoft/LightGBM)
+* [LightGBM Doc](https://lightgbm.readthedocs.io/en/latest/)
 * [Python Guide](https://github.com/microsoft/LightGBM/tree/master/examples/python-guide)
+* [LightGBM 中文文档](https://lightgbm.apachecn.org/#/)
 * [微软亚洲研究院：《开源|LightGBM：三天内收获 GitHub 1000 星》]()
 * [百度百科：《图着色问题》]()
 * [知乎：白话机器学习《算法理论+实战之 LightGBM 算法》]()
@@ -392,4 +391,5 @@ PV-tree 不需要对所有特征进行通信，所以通信损失低。基于投
 * [务实基础-LightGBM](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247485561&idx=1&sn=877a955ac5f4c77ccf2fce6deba5a5d0&chksm=fa041612cd739f04f13a69e5e4f0236b1eb610149446101226597ff9d1daa84ff1ccc7787384&cur_album_id=1577157748566310916&scene=189#wechat_redirect)
 * [Kaggle神器LightGBM最全解读](https://mp.weixin.qq.com/s/64xfT9WIgF3yEExpSxyshQ)
 * [LightGBM](https://blog.csdn.net/wuzhongqiang/article/details/105350579)
-
+* [LightGBM——提升机器算法（图解+理论+安装方法+python代码）](https://mp.weixin.qq.com/s/12W4oN3qiAOx8J1OzLvkYw)
+* [LightGBM——提升机器算法](https://blog.csdn.net/huacha__/article/details/81057150#%E7%94%A8python%E5%AE%9E%E7%8E%B0LightGBM%E7%AE%97%E6%B3%95)

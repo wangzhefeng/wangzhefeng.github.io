@@ -67,6 +67,8 @@ details[open] summary {
     - [Jiterator](#jiterator)
 </p></details><p></p>
 
+* [当代研究生应当掌握的5种Pytorch并行训练方法（单机多卡）](https://mp.weixin.qq.com/s/mwGr69QlUBb2naqJXj__0g)
+* [Distribution is all you need](https://github.com/tczhangzhi/pytorch-distributed)
 
 深度学习模型训练过程的耗时主要来自于两个部分，一部分来自数据准备，另一部分来自参数迭代。
 当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。

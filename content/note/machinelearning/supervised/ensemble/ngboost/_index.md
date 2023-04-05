@@ -6,6 +6,6 @@ order_by: title
 ---
 
 
-* https://zhuanlan.zhihu.com/p/473117128
-* https://stanfordmlgroup.github.io/projects/ngboost/
-* https://drive.google.com/file/d/183BWFAdFms81MKy6hSku8qI97OwS_JH_/view
+* [NgBoost GitHub](https://github.com/stanfordmlgroup/ngboost)
+* [NgBoost Paper](https://arxiv.org/pdf/1910.03225.pdf)
+* [NGBoost: Natural Gradient Boosting for Probabilistic Prediction](https://stanfordmlgroup.github.io/projects/ngboost/)
