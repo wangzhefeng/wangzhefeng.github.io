@@ -1,12 +1,13 @@
 ---
-title: 模型参数调优
+title: 模型选择
+subtitle: Model Selection
 author: 王哲峰
-date: '2023-02-21'
-slug: model-selection
+date: '2023-04-07'
+slug: model-tuning
 categories:
   - machinelearning
 tags:
-  - machinelearning
+  - tool
 ---
 
 <style>
@@ -31,27 +32,9 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [模型调优简介](#模型调优简介)
-- [模型调优方法](#模型调优方法)
-  - [Grid Search](#grid-search)
-    - [示例](#示例)
-  - [Randomized Search](#randomized-search)
-    - [示例](#示例-1)
-  - [Halving Grid Search](#halving-grid-search)
-    - [示例](#示例-2)
-  - [Halving Random Search](#halving-random-search)
-    - [示例](#示例-3)
-  - [贝叶斯优化](#贝叶斯优化)
-    - [代理模型](#代理模型)
-    - [采集函数](#采集函数)
-    - [贝叶斯优化步骤](#贝叶斯优化步骤)
-    - [Hyperopt 库](#hyperopt-库)
-    - [贝叶斯优化的使用情况](#贝叶斯优化的使用情况)
-  - [HyperBand](#hyperband)
-- [模型调优工具](#模型调优工具)
-  - [Optuna](#optuna)
-- [参考](#参考)
+- [TODO](#TODO)
 </p></details><p></p>
+
 
 # 模型调优简介
 
@@ -395,17 +378,6 @@ Hyperband 本质上是随机搜索的一种变种，它使用早停策略和 Scc
 
 在 Hyperband 之后，还出现了 BOHB，它混合了贝叶斯优化和 Hyperband。
 Hyperband 和 BOHB 的开源代码可参考 HpBandSter库，这里不展开细讲
-
-# 模型调优工具
-
-## Optuna
-
-* [GitHub](https://github.com/optuna/optuna)
-* [optuna可视化调参魔法指南](https://mp.weixin.qq.com/s/RUdYg6OBPIT5jR9ndHiDXg)
-
-
-
-
 
 # 参考
 
