@@ -31,16 +31,21 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [AutoTS 安装](#autots-安装)
-- [简单示例](#简单示例)
-- [数据格式](#数据格式)
-- [仅支持宽数据的低阶 API](#仅支持宽数据的低阶-api)
-- [快速和大数据](#快速和大数据)
-  - [使用适当的模型列表，尤其是预定义的列表](#使用适当的模型列表尤其是预定义的列表)
+- [AutoTS 简介](#autots-简介)
+- [AutoTS 使用](#autots-使用)
+  - [AutoTS 安装](#autots-安装)
+  - [简单示例](#简单示例)
+  - [数据格式](#数据格式)
+  - [仅支持宽数据的低阶 API](#仅支持宽数据的低阶-api)
+  - [快速和大数据](#快速和大数据)
+    - [使用适当的模型列表，尤其是预定义的列表](#使用适当的模型列表尤其是预定义的列表)
 - [参考](#参考)
 </p></details><p></p>
 
-AutoTS is a time series package for Python designed for rapidly deploying high-accuracy forecasts at scale.
+# AutoTS 简介
+
+> AutoTS is a time series package for Python designed for 
+> rapidly deploying high-accuracy forecasts at scale.
 
 * 朴素模型
 * 统计模型
@@ -50,13 +55,15 @@ AutoTS is a time series package for Python designed for rapidly deploying high-a
 所有模型都支持预测多变量（多个时间序列）输出，还支持概率（上限/下限）预测。
 大多数模型可以轻松扩展到数万甚至数十万个输入序列。许多模型还支持传入用户定义的外生回归变量
 
-# AutoTS 安装
+# AutoTS 使用
+
+## AutoTS 安装
 
 ```bash
 $ pip install autots
 ```
 
-# 简单示例
+## 简单示例
 
 ```python
 from autots.datasets import load_monthly
@@ -83,19 +90,17 @@ model = model.fit(
 print(model)
 ```
 
-
-
-# 数据格式
+## 数据格式
 
 * 宽格式
-    - `pandas.DataFrame` with a `pandas.DatetimeIndex`
+    - `pandas.DataFrame(pandas.DatetimeIndex, ...)`
     - 每一列都是一个不同的序列
 * 长格式
-    - Date: `date_col`
-    - Series ID: `id_col`
+    - Date: `date_col`，可识别为 pandas `datetime` 格式
+    - Series ID: `id_col`，对于单时间序列为 `None`
     - Value: `value_col`
 
-# 仅支持宽数据的低阶 API
+## 仅支持宽数据的低阶 API
 
 ```python
 from autots import AutoTS
@@ -151,12 +156,9 @@ model_results = model.results()
 validation_results = model.results("validation")
 ```
 
+## 快速和大数据
 
-
-
-# 快速和大数据
-
-## 使用适当的模型列表，尤其是预定义的列表
+### 使用适当的模型列表，尤其是预定义的列表
 
 查看预定义列表:
 
@@ -170,10 +172,7 @@ from autots.models.model_list import model_lists
     - "n_jobs"
     - "auto"
 
-
-
 # 参考
 
 * [GitHub](https://github.com/winedarksea/AutoTS)
 * [Document](https://winedarksea.github.io/AutoTS/build/html/index.html)
-

@@ -32,70 +32,106 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [Spark](#spark)
-- [Spark 初始化](#spark-初始化)
-  - [SparkContext 创建](#sparkcontext-创建)
-  - [SparkContext 配置](#sparkcontext-配置)
-  - [SparkContext 查看](#sparkcontext-查看)
-  - [Shell 初始化 Spark](#shell-初始化-spark)
-- [加载数据](#加载数据)
-  - [Parallelized Collections](#parallelized-collections)
-  - [加载外部数据](#加载外部数据)
-- [检索 RDD 信息](#检索-rdd-信息)
-  - [基本信息](#基本信息)
-  - [统计信息](#统计信息)
-- [Applying 函数](#applying-函数)
-- [数据筛选](#数据筛选)
-  - [获取数据](#获取数据)
-  - [随机采样](#随机采样)
-  - [筛选数据](#筛选数据)
-- [迭代](#迭代)
-- [数据重塑](#数据重塑)
-  - [Reducing](#reducing)
-  - [Grouping by](#grouping-by)
-  - [Aggregating](#aggregating)
-- [数学操作](#数学操作)
-- [排序](#排序)
-- [Repartitioning](#repartitioning)
-- [保存](#保存)
-- [Stopping SparkContext](#stopping-sparkcontext)
-- [Execution](#execution)
+- [Spark Core](#spark-core)
+  - [Public Classes](#public-classes)
+  - [Spark Context APIs](#spark-context-apis)
+  - [RDD APIs](#rdd-apis)
+  - [Broadcast 和 Accumulator](#broadcast-和-accumulator)
+  - [Management](#management)
+  - [Spark 初始化](#spark-初始化)
+    - [SparkContext 配置与创建](#sparkcontext-配置与创建)
+    - [Shell 初始化 Spark](#shell-初始化-spark)
+  - [加载数据](#加载数据)
+    - [Parallelized Collections](#parallelized-collections)
+    - [加载外部数据](#加载外部数据)
+  - [检索 RDD 信息](#检索-rdd-信息)
+    - [基本信息](#基本信息)
+    - [统计信息](#统计信息)
+  - [Applying 函数](#applying-函数)
+  - [数据筛选](#数据筛选)
+    - [获取数据](#获取数据)
+    - [随机采样](#随机采样)
+    - [筛选数据](#筛选数据)
+  - [迭代](#迭代)
+  - [数据重塑](#数据重塑)
+    - [Reducing](#reducing)
+    - [Grouping by](#grouping-by)
+    - [Aggregating](#aggregating)
+  - [数学操作](#数学操作)
+  - [排序](#排序)
+  - [Repartitioning](#repartitioning)
+  - [保存](#保存)
+  - [Stopping SparkContext](#stopping-sparkcontext)
+  - [Execution](#execution)
+- [PySpark SparkSQL](#pyspark-sparksql)
+  - [SparkSession](#sparksession)
+  - [DataFrame](#dataframe)
+    - [Row 和 Column](#row-和-column)
+    - [Observation](#observation)
+    - [DataFrame 读写](#dataframe-读写)
+    - [GroupedData](#groupeddata)
+    - [DataFrameNaFunctions](#dataframenafunctions)
+    - [DataFameStatFunctions](#datafamestatfunctions)
+    - [Window](#window)
+  - [PandasCogroupedOps](#pandascogroupedops)
+- [Pandas API on Spark](#pandas-api-on-spark)
+- [MLlib](#mllib)
+  - [基于 DataFrame](#基于-dataframe)
+  - [基于 RDD](#基于-rdd)
+- [Streaming](#streaming)
+  - [Structured Streaming](#structured-streaming)
+    - [Core Classes](#core-classes)
+    - [Input 和 Output](#input-和-output)
+    - [Query Management](#query-management)
+  - [Spark Streaming](#spark-streaming)
+    - [Core Classes](#core-classes-1)
+    - [Streaming Management](#streaming-management)
+    - [Input 和 Output](#input-和-output-1)
+    - [Transformations 和 Actions](#transformations-和-actions)
+    - [Kinesis](#kinesis)
+- [资源管理](#资源管理)
+  - [Resource](#resource)
+  - [Executor](#executor)
+  - [Task](#task)
 </p></details><p></p>
-
 
 # Spark
 
 PySpark is the Spark Python API that exposes the Spark programming model to Python.
 
-# Spark 初始化
+# Spark Core
 
-## SparkContext 创建
+## Public Classes
 
-```python
-from pyspark import SparkContext
 
-sc = SparkContext(master = "local[2]")
-```
+## Spark Context APIs
 
-## SparkContext 配置
+
+## RDD APIs
+
+
+## Broadcast 和 Accumulator
+
+
+## Management
+
+
+
+## Spark 初始化
+
+### SparkContext 配置与创建
 
 ```python
 from pyspark import SparkConf, SparkContext
 
 conf = (
    SparkConf()
-      .setMaster("local")
+      .setMaster(master = "local")
       .setAppName("My app")
       .set("spark.executor.memory", "lg")
 )
 sc = SparkContext(conf = conf)
-```
 
-## SparkContext 查看
-
-```python
-from pyspark import SparkContext
-
-sc = SparkContext(master = "local[2]")
 sc.version                # Retrieve SparkContext version
 sc.pythonVer              # Retrieve Python version
 sc.master                 # Master URL to connect to
@@ -107,16 +143,16 @@ sc.defaultParallelism     # Return default level of parallelism
 sc.defaultMinPartitions   # Default minimum number of partitions for RDDs
 ```
 
-## Shell 初始化 Spark
+### Shell 初始化 Spark
 
 ```bash
 $ ./bin/sparkshell master local[2]
 $ ./bin/pyspark master local[4] pyfiles copy.py
 ```
 
-# 加载数据
+## 加载数据
 
-## Parallelized Collections
+### Parallelized Collections
 
 ```python
 from pyspark import SparkContext
@@ -129,7 +165,7 @@ rdd3 = sc.parallelize(range(100))
 rdd4 = sc.parallelize([("a", ["x", "y", "z"]), ("b", ["p", "r"])])
 ```
 
-## 加载外部数据
+### 加载外部数据
 
 ```python
 from pyspark import SparkContext
@@ -140,9 +176,9 @@ textFile = sc.textFile("/my/directory/*.txt")
 textFile2 = sc.wholeTextFiles("/my/directory/")
 ```
 
-# 检索 RDD 信息
+## 检索 RDD 信息
 
-## 基本信息
+### 基本信息
 
 ```python
 rdd.getNumPartitions()
@@ -154,7 +190,7 @@ rdd3.sum()
 sc.parallelize([]).isEmpty()
 ```
 
-## 统计信息
+### 统计信息
 
 ```python
 rdd3.max()
@@ -166,7 +202,7 @@ rdd3.histogram(3)
 rdd3.stats()
 ```
 
-# Applying 函数
+## Applying 函数
 
 ```python
 rdd.map(lambda x: x + (x[1], x[0])).collect()
@@ -175,9 +211,9 @@ rdd5.collect()
 rdd4.flatMapValues(lambda x: x).collect()
 ```
 
-# 数据筛选
+## 数据筛选
 
-## 获取数据
+### 获取数据
 
 ```python
 rdd.collect()
@@ -186,13 +222,13 @@ rdd.first()
 rdd.top(2)
 ```
 
-## 随机采样
+### 随机采样
 
 ```python
 rdd3.sample(False, 0.15, 81).collect()
 ```
 
-## 筛选数据
+### 筛选数据
 
 ```python
 rdd.filter(lambda x: "a" in x).collect()
@@ -200,7 +236,7 @@ rdd5.distinct().collect()
 rdd.keys().collect()
 ```
 
-# 迭代
+## 迭代
 
 ```python
 def g(x):
@@ -209,23 +245,23 @@ def g(x):
 rdd.foreach(g)
 ```
 
-# 数据重塑
+## 数据重塑
 
-## Reducing
+### Reducing
 
 ```python
 rdd.reduceByKey(lambda x, y: x + y).collect()
 rdd.reduce(lambda a, b: a + b)
 ```
 
-## Grouping by
+### Grouping by
 
 ```python
 rdd3.groupBy(lambda x: x % 2).mapValues(list).collect()
 rdd.groupByKey().mapValues(list).collet()
 ```
 
-## Aggregating
+### Aggregating
 
 ```python
 seqOp = (lambda x, y: (x[0] + y, x[1] + 1))
@@ -237,7 +273,7 @@ rdd.foldByKey(0, add).collect()
 rdd3.keyBy(lambda x: x + x).collect()
 ```
 
-# 数学操作
+## 数学操作
 
 ```python
 rdd.subtract(rdd2)
@@ -245,36 +281,131 @@ rdd2.subtractByKey(rdd)
 rdd.cartesian(rdd2).collect()
 ```
 
-# 排序
+## 排序
 
 ```python
 rdd2.sortBy(lambda x: x[1]).collect()
 rdd2.sortByKey().collect()
 ```
 
-# Repartitioning
+## Repartitioning
 
 ```python
 rdd.repartition(4)
 rdd.coalesce()
 ```
 
-# 保存
+## 保存
 
 ```python
 rdd.saveAsTextFile("rdd.txt")
 rdd.saveAsHadoopFile("hdfs://namenodehost/parent/child", "org.apache.hadoop.mapred.TextOutputFormat")
 ```
 
-# Stopping SparkContext
+## Stopping SparkContext
 
 ```python
 sc.stop()
 ```
 
-# Execution
+## Execution
 
 ```bash
 $ ./bin/sparksubmit examples/src/main/python/pi.py
 ```
 
+# PySpark SparkSQL
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession()
+```
+
+## SparkSession
+
+* Catalog
+
+
+## DataFrame
+
+### Row 和 Column
+
+### Observation
+
+
+### DataFrame 读写
+
+* DataFrameReader
+* DataFrameWriter
+
+
+### GroupedData
+
+### DataFrameNaFunctions
+
+### DataFameStatFunctions
+
+### Window
+
+## PandasCogroupedOps
+
+
+
+# Pandas API on Spark
+
+
+
+# MLlib
+
+## 基于 DataFrame
+
+## 基于 RDD
+
+# Streaming
+
+## Structured Streaming
+
+### Core Classes
+
+
+### Input 和 Output
+
+
+### Query Management
+
+## Spark Streaming
+
+### Core Classes
+
+### Streaming Management
+
+### Input 和 Output
+
+
+### Transformations 和 Actions
+
+
+### Kinesis
+
+
+
+# 资源管理
+
+> Resource Management
+
+## Resource
+
+* ResourceInformation
+* ResourceProfile
+* ResourceProfileBuilder()
+
+## Executor
+
+* ExecutorResourceRequest
+* ExecutorResourceRequests
+
+## Task
+
+* TaskResourceRequest
+* TaskResourceRequests
