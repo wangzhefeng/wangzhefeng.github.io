@@ -1,5 +1,5 @@
 ---
-title: nonlinear-programming
+title: 非线性规划
 author: 王哲峰
 date: '2023-03-30'
 slug: nonlinear-programming

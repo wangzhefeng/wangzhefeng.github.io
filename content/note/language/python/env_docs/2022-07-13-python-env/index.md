@@ -56,38 +56,36 @@ details[open] summary {
 - [Python 环境使用需求](#python-环境使用需求)
   - [检查 Python 环境](#检查-python-环境)
   - [检查 Python 安装的位置](#检查-python-安装的位置)
-- [安装、卸载 Python3 环境](#安装卸载-python3-环境)
+- [安装和卸载 Python3 环境](#安装和卸载-python3-环境)
   - [macOS](#macos)
     - [Python.org 安装](#pythonorg-安装)
     - [Brew 安装](#brew-安装)
-    - [Anaconda 安装](#anaconda-安装)
-    - [Minconda 安装](#minconda-安装)
+    - [Anaconda](#anaconda)
+    - [Minconda](#minconda)
+      - [安装](#安装)
+      - [更新](#更新)
+      - [卸载](#卸载)
     - [pyenv 安装](#pyenv-安装)
   - [Ubuntu](#ubuntu)
     - [Linux Version](#linux-version)
     - [安装 Python 3.7](#安装-python-37)
-    - [安装完成后, 修改 python3 的默认指向](#安装完成后-修改-python3-的默认指向)
+    - [修改 python3 的默认指向](#修改-python3-的默认指向)
     - [卸载 Python 3.7](#卸载-python-37)
   - [Windows](#windows)
-    - [官网下载安装、手动配置环境变量](#官网下载安装手动配置环境变量)
+    - [官网下载安装](#官网下载安装)
     - [Chocolatey 安装](#chocolatey-安装)
 - [创建 Python 虚拟环境](#创建-python-虚拟环境)
   - [virtualenv](#virtualenv)
   - [conda](#conda)
   - [pyenv](#pyenv)
     - [安装 pyenv](#安装-pyenv)
-    - [安装、卸载 Python](#安装卸载-python)
+    - [安装和卸载 Python](#安装和卸载-python)
     - [切换 Python 版本](#切换-python-版本)
     - [构建 Python 虚拟环境](#构建-python-虚拟环境)
     - [使用多个 Python 环境](#使用多个-python-环境)
     - [探索 pyenv 命令](#探索-pyenv-命令)
 - [Python 项目管理](#python-项目管理)
   - [requirements.txt](#requirementstxt)
-  - [README.md](#readmemd)
-  - [Changelog](#changelog)
-  - [Doc](#doc)
-  - [unittest](#unittest)
-  - [setup.py](#setuppy)
 </p></details><p></p>
 
 
@@ -122,7 +120,7 @@ $ which pip
 $ which pip3
 ```
 
-# 安装、卸载 Python3 环境
+# 安装和卸载 Python3 环境
 
 ## macOS
 
@@ -157,56 +155,72 @@ $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ python get-pip.py
 ```
 
-### Anaconda 安装
+### Anaconda
 
-- TODO
+* TODO
 
-### Minconda 安装
+### Minconda
 
-1. Installing on macOS
-   - 1.Download the installer:
-      - `Miniconda - Conda documentation <https://docs.conda.io/en/latest/miniconda.html>`__
-   - 2.Verify installer hashes:
-      - `Downloading conda - conda 4.8.3.post5+125413ca documentation <https://conda.io/projects/conda/en/latest/user-guide/install/download.html#hash-verification>`__
+#### 安装
 
+> Installing on macOS
+
+1. Download the installer:
+    - [Miniconda - Conda documentation](https://docs.conda.io/en/latest/miniconda.html)
+2. Verify installer hashes:
+    - [Downloading conda - conda 4.8.3.post5+125413ca documentation](https://conda.io/projects/conda/en/latest/user-guide/install/download.html#hash-verification)
+
+```bash
+$ shasum -a 256 filename
+```
+
+3. Install
+
+```bash
+$ bash Miniconda3-lastest-MacOSX-x86_64.sh         
+```
+
+4. Follow the prompts on the installer screens
+    - If you are unsure about any setting, accept the defaults. You can change them later
+5. To make the changes take effect, close and then re-open your terminal window
+6. Test your installation
+    - In your terminal window or Anaconda Prompt, run the command 
+  
     ```bash
-    $ shasum -a 256 filename
+    conda list
     ```
 
-   - 3.Install:
+    - A list of installed packages appears if it has been installed correctly
+
+#### 更新
+
+> Updating Miniconda on macOS
+
+1. Open a terminal window
+2. Navigate to the `miniconda` directory
+3. Run `conda update conda`
+
+#### 卸载
+
+> Uninstall Miniconda on macOS
+
+1. Open a terminal window
+2. Remove the entire Miniconda install directory with
+
+```bash
+$ rm -rf ~/miniconda
+```
+
+3. OPTIONAL: Edit `~/.bash_profile` to remove the Miniconda directory from your PATH environment variable
+4. Remove the following hidden file and folders that may have been created in the home directory:
+    - `.condarc` file
+    - `.conda` directory
+    - `.continuum` directory
+    - By running:
 
     ```bash
-    $ bash Miniconda3-lastest-MacOSX-x86_64.sh         
+    $ rm -rf ~/.condarc ~/.conda ~/.continuum
     ```
-
-   - 4.Follow the prompts on the installer screens.
-      - If you are unsure about any setting, accept the defaults. You can change them later.
-   - 5.To make the changes take effect, close and then re-open your terminal window.
-   - 6.Test your installation. In your terminal window or Anaconda Prompt, run the command `conda list`.
-      - A list of installed packages appears if it has been installed correctly.
-
-2. Updating Miniconda on macOS
-   - 1.Open a terminal window.
-   - 2.Navigate to the `miniconda` directory.
-   - 3.Run `conda update conda`.
-3. Uninstall Miniconda on macOS
-   - 1.Open a terminal window.
-   - 2.Remove the entire Miniconda install directory with:
-
-    ```bash
-    $ rm -rf ~/miniconda
-    ```
-
-    - 3.OPTIONAL: Edit `~/.bash_profile` to remove the Miniconda directory from your PATH environment variable.
-    - 4.Remove the following hidden file and folders that may have been created in the home directory:
-      - `.condarc` file
-      - `.conda` directory
-      - `.continuum` directory
-      - By running:
-
-        ```bash
-        $ rm -rf ~/.condarc ~/.conda ~/.continuum
-        ```
 
 ### pyenv 安装
 
@@ -265,7 +279,7 @@ sudo install virtualenv
 sudo install virtualenvwrapper
 ```
 
-### 安装完成后, 修改 python3 的默认指向
+### 修改 python3 的默认指向
 
 ```bash
 # 删除软连接
@@ -310,26 +324,23 @@ $ sudo apt-get purge [--auto-remove] python3.7
 
 ## Windows
  
-### 官网下载安装、手动配置环境变量
+### 官网下载安装
 
-- https://www.python.org/downloads/windows/
+* https://www.python.org/downloads/windows/
 
-注意: 
-
-- 升级系统 pip 可能会导致问题。如果不是在虚拟环境中, 
-    请针对下面的命令使用 `python3 -m pip`。
-    这样可以确保您升级并使用 Python pip, 而不是系统 pip。
+注意：升级系统 pip 可能会导致问题。如果不是在虚拟环境中，请针对下面的命令使用 `python3 -m pip`。
+这样可以确保您升级并使用 Python pip，而不是系统 pip
 
 ### Chocolatey 安装
 
 1. 环境
-   - Windows 7+ / Windows Server 2003+
-   - PowerShell v2+ (minimum is v3 for install from this website due to TLS 1.2 requirement)
-   - .NET Framework 4+ (the installation will attempt to install .NET 4.0 
-     if you do not have it installed)(minimum is 4.5 for install from this 
-     website due to TLS 1.2 requirement)
+    - Windows 7+ / Windows Server 2003+
+    - PowerShell v2+ (minimum is v3 for install from this website due to TLS 1.2 requirement)
+    - .NET Framework 4+ (the installation will attempt to install .NET 4.0 
+       if you do not have it installed)(minimum is 4.5 for install from this 
+       website due to TLS 1.2 requirement)
 2. 安装 Chocolatey
-   - [Installing Chocolatey](https://chocolatey.org/install#individual)
+    - [Installing Chocolatey](https://chocolatey.org/install#individual)
 3. 安装 Python 3
 
 ```bash
@@ -385,59 +396,58 @@ $ source activate venv
 5. 自动激活不同的 Python 版本和虚拟环境
 
 
-* 这里只介绍 Linux 和 macOS 的使用, 对于 Windows 用户参考 https://github.com/pyenv-win/pyenv-win
-* [好家伙，妥妥的 Python Master](https://mp.weixin.qq.com/s/M7dmRl3fSujNKRETEXlhSg)
+> 这里只介绍 Linux 和 macOS 的使用, 对于 Windows 用户参考 https://github.com/pyenv-win/pyenv-win。
+> 还有一篇详细介绍的文章：[好家伙，妥妥的 Python Master](https://mp.weixin.qq.com/s/M7dmRl3fSujNKRETEXlhSg)
 
 ### 安装 pyenv
 
 1. 构建依赖
 
-在安装 pyenv 之前, 需要安装一些操作系统特定的依赖项, 这些依赖项主要是用 C 编写的开发应用程序, 
-并且是必需的, 因为 pyenv 是通过从源码构建来安装 Python 的
+   在安装 pyenv 之前, 需要安装一些操作系统特定的依赖项, 这些依赖项主要是用 C 编写的开发应用程序, 
+   并且是必需的, 因为 pyenv 是通过从源码构建来安装 Python 的
 
-- Ubuntu/Debian
+    * Ubuntu/Debian
 
-```bash
-$ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
-```
+    ```bash
+    $ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+    libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+    ```
 
-- Fedora/CentOS/RHEL
+    * Fedora/CentOS/RHEL
 
-```bash
-$ sudo yum install gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
-sqlite-devel openssl-devel xz xz-devel libffi-devel
-```
+    ```bash
+    $ sudo yum install gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
+    sqlite-devel openssl-devel xz xz-devel libffi-devel
+    ```
 
-- Alpine
+    * Alpine
 
-```bash
-$ apk add libffi-dev ncurses-dev openssl-dev readline-dev \
- tk-dev xz-dev zlib-dev
-```
+    ```bash
+    $ apk add libffi-dev ncurses-dev openssl-dev readline-dev \
+     tk-dev xz-dev zlib-dev
+    ```
 
-- openSUSE
+    * openSUSE
 
-```bash
-$ zypper in zlib-devel bzip2 libbz2-devel libffi-devel \
-libopenssl-devel readline-devel sqlite3 sqlite3-devel xz xz-devel
-```
+    ```bash
+    $ zypper in zlib-devel bzip2 libbz2-devel libffi-devel \
+    libopenssl-devel readline-devel sqlite3 sqlite3-devel xz xz-devel
+    ```
 
-- macOS
+    * macOS
 
-```bash
-$ brew install openssl readline sqlite3 xz zlib
-$ sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
-```
+    ```bash
+    $ brew install openssl readline sqlite3 xz zlib
+    $ sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+    ```
 
 2. 安装 pyenv(使用 pyenv-installer 项目), 安装内容:
-
-- 1.pyenv: pyenv 应用
-- 2.pyenv-virtualenv: pyenv 和虚拟环境的插件
-- 3.pyenv-update: pyenv 的更新插件
-- 4.pyenv-doctor: pyenv 及其构建依赖的验证插件
-- 5.pyenv-which-ext: 自动查找系统命令的插件
+    - pyenv: pyenv 应用
+    - pyenv-virtualenv: pyenv 和虚拟环境的插件
+    - pyenv-update: pyenv 的更新插件
+    - pyenv-doctor: pyenv 及其构建依赖的验证插件
+    - pyenv-which-ext: 自动查找系统命令的插件
 
 ```bash
 $ curl https://pyenv.run | bash
@@ -452,23 +462,21 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
-### 安装、卸载 Python
+### 安装和卸载 Python
 
 1. 查看使用 pyenv 可以安装的 Python 版本
-
    - 查看所有可用的 Cython 3.6~3.8
 
-```bash
-$ pyenv install --list | grep " 3\.[6,7.8]"
-```
+   ```bash
+   $ pyenv install --list | grep " 3\.[6,7.8]"
+   ```
 
    - 查看所有可用的 Jython 版本
 
-```bash
-
-$ pyenv install --list | grep "jython"
-$ pyenv install --list
-```
+   ```bash
+   $ pyenv install --list | grep "jython"
+   $ pyenv install --list
+   ```
 
 2. 确定要安装的 Python 版本后, 安装 Python
 
@@ -483,12 +491,16 @@ pyenv 安装的每个 Python 版本都位于 pyenv 的根目录中
 ```bash
 $ ls ~/.pyenv/version/
 3.7.10
+
 $ which python
 /Users/zfwang/.pyenv/shims/python
+
 $ which python3
 /Users/zfwang/.pyenv/shims/python3
+
 $ pyenv which python
 /Users/zfwang/.pyenv/versions/3.7.10/bin/python
+
 $ pyenv which python3
 /Users/zfwang/.pyenv/versions/3.7.10/bin/python3
 ```
@@ -503,7 +515,7 @@ $ pyenv uninstall 3.7.10
 
 ### 切换 Python 版本
 
-- pyenv 如何准确地解析使用的 Python 版本
+* pyenv 如何准确地解析使用的 Python 版本
 
 ![img](images/pyenv-pyramid.png)
 
@@ -657,7 +669,7 @@ $ pyenv shell 3.8-dev
 
 ## requirements.txt
 
-- Method 1:
+* Method 1:
 
 ```bash
 # 生成 requirements.txt
@@ -667,7 +679,7 @@ pip freeze --local > requirements.txt
 pip install -r requirements.txt
 ```
 
-- Method 2:
+* Method 2:
 
 ```bash
 pip install pipreqs
@@ -676,14 +688,3 @@ pip install pipreqs
 ```python
 pipreqs ./ encoding=utf-8
 ```
-
-## README.md
-
-## Changelog
-
-## Doc
-
-## unittest
-
-## setup.py
-
