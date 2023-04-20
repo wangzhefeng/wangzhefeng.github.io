@@ -1,11 +1,11 @@
 ---
-title: Python ENV and Docs
-subtitle: Python 环境配置与文档
+title: Python 环境配置与文档
+subtitle:
 list_pages: true
 # order_by: title
 ---
 
-# Python 项目管理
+## TODO
 
 优秀的仓库示例: 
 
@@ -13,3 +13,4 @@ list_pages: true
 * [Kenneth Reitz](https://kenreitz.org/)
 * [GitHub 仓库示例](https://github.com/navdeep-G/samplemod)
 
+## Docs

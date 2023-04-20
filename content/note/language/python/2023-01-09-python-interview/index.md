@@ -1,14 +1,13 @@
 ---
-title: 面试问题
+title: Python 面试问题
 author: 王哲峰
 date: '2023-01-09'
-slug: interview
+slug: python-interview
 categories:
   - Python
 tags:
   - tool
 ---
-
 
 <style>
 details {
@@ -32,23 +31,14 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [Python Tuple 赋值问题](#python-tuple-赋值问题)
 - [Python 数据结构](#python-数据结构)
+- [Python Tuple 赋值问题](#python-tuple-赋值问题)
 - [python buildin functions](#python-buildin-functions)
 - [python collections 库](#python-collections-库)
-- [Python lambda 表达式](#python-lambda-表达式)
-  - [lambda 表达式](#lambda-表达式)
-  - [为什么使用 lambda 表达式](#为什么使用-lambda-表达式)
-  - [嵌套 lambda 表达式和作用域](#嵌套-lambda-表达式和作用域)
-- [回调](#回调)
-- [Python OOP](#python-oop)
-- [Python单例(singleton Pattern)模式](#python单例singleton-pattern模式)
-- [信息熵, 信息增益, 信息增益率, Gini指数](#信息熵-信息增益-信息增益率-gini指数)
-- [信息熵、条件熵、联合熵、互信息、相对熵](#信息熵条件熵联合熵互信息相对熵)
-- [Python 中的 `深拷贝和浅拷贝 <https://docs.python.org/3.6/library/copy.html>`\_\_](#python-中的-深拷贝和浅拷贝-httpsdocspythonorg36librarycopyhtml__)
+- [Python 单例模式](#python-单例模式)
+- [Python 深拷贝和浅拷贝](#python-深拷贝和浅拷贝)
   - [浅拷贝](#浅拷贝)
   - [深拷贝](#深拷贝)
-- [介绍一下SVM的原理](#介绍一下svm的原理)
 - [Python 序列反转](#python-序列反转)
 - [Python 字典反转](#python-字典反转)
   - [压缩器](#压缩器)
@@ -56,36 +46,15 @@ details[open] summary {
 - [Python求众数](#python求众数)
   - [numpy.argmax(np.bincount())](#numpyargmaxnpbincount)
   - [scipy.stats](#scipystats)
-- [Pandas DataFrame 合并,连接 \& Numpy ndarray 合并, 连接](#pandas-dataframe-合并连接--numpy-ndarray-合并-连接)
+- [Panda 和 Numpy 连接](#panda-和-numpy-连接)
 - [字符串拼接](#字符串拼接)
   - [+=](#)
   - [% / .format()](#--format)
   - ["".join()](#join)
 - [随机数生成 (函数参数)](#随机数生成-函数参数)
-- [Python-Numpy `.ravel()`, `.flatten()`, `.flat()`](#python-numpy-ravel-flatten-flat)
+- [Python-Numpy](#python-numpy)
 - [解析字符串](#解析字符串)
 </p></details><p></p>
-
-# Python Tuple 赋值问题
-
-下面的代码输出什么结果?
-
-```python
-try:
-   a, b = (123,)
-except Exception as e:
-   print("Error:", e)
-finally:
-   print("End")
-```
-
-输出结果: 
-
-```
-> Error: Exception
-> End
-```
-
 
 # Python 数据结构
 
@@ -114,6 +83,27 @@ finally:
 - 列表、字典、元组可以包含任何种类的对象; 
 - 列表、字典、元组可以任意嵌套; 
 - 列表、字典可以动态地扩大克缩小; 
+
+# Python Tuple 赋值问题
+
+下面的代码输出什么结果?
+
+```python
+try:
+   a, b = (123,)
+except Exception as e:
+   print("Error:", e)
+finally:
+   print("End")
+```
+
+输出结果: 
+
+```
+> Error: Exception
+> End
+```
+
 
 # python buildin functions
 
@@ -281,7 +271,6 @@ isinstance(a, int)
 isinstance(a, [str, int, list])
 ```
 
-
 # python collections 库
 
 ```python
@@ -294,27 +283,9 @@ x = OrderedDict(a = 1, b = 2, c = 3)
 y = Counter("Hello World!")
 ```
 
-# Python lambda 表达式
+# Python 单例模式
 
-## lambda 表达式
-
-
-## 为什么使用 lambda 表达式
-
-
-## 嵌套 lambda 表达式和作用域
-
-
-# 回调
-
-
-
-# Python OOP
-
-- OOP提供了一种不同寻常而往往更有效的检查程序的方法, 利用这种设计, 分解代码, 把代码的冗余度降到最低, 并且通过定制现有的代码来编写新的程序, 而不是在原处进行修改; 
-- 类就是一些函数的包, 这些函数大量使用并处理内置对象类型. 不过类的设计是为了创建和管理新的对象, 并且他们也支持继承, 这是一种代码定制和复用的机制; 
-
-# Python单例(singleton Pattern)模式
+> Singleton Pattern
 
 - 单例模式介绍
     - 单例模式(Singleton Pattern): 主要目的是确保某一个类(class)中只有一个实例(instance)存在, 从而避免浪费内存资源; 
@@ -330,33 +301,22 @@ y = Counter("Hello World!")
         - 相关知识
         - 实现单例模式
 
-# 信息熵, 信息增益, 信息增益率, Gini指数
+# Python 深拷贝和浅拷贝 
 
-   - 信息熵(entropy)
-   - 是对信息随机性的度量, 又指信息能被压缩的极限, 用 *bit* 作为衡量信息的最小单位. 
-     一切信息所包含的信息量都是 *1 bit* 的整数倍. 计算机系统采用二进制进行编码, 一个0或1就是1 bit; 
-   - 信息熵越大表示越不确定, 随机性越大,
-   - 信息熵越小表示越确定, 随机性越小; 
+* https://docs.python.org/3.6/library/copy.html
 
-
-# 信息熵、条件熵、联合熵、互信息、相对熵
-
-**信息熵**:
-
-# Python 中的 `深拷贝和浅拷贝 <https://docs.python.org/3.6/library/copy.html>`__
-
-- 直接赋值
+* 直接赋值
    - 原始对象的引用, 别名. 赋值后的对象id相同, 对象类型相同, 对象值相同; 
    - 修改原对象, 赋值对象也会改变; 修改赋值对象, 原对象也会改变; 
       - 修改原对象中的可变元素, 赋值对象也会改变; 
       - 修改赋值对象中的可变元素, 原对象也会改变; 
-- 浅拷贝(shadow copy)
+* 浅拷贝(shadow copy)
    - 拷贝父对象, 不会拷贝对象内部的子对象. 浅拷贝后的对象id不同, 对象类型相同, 对象值相同; 
    - 修改原对象(可变), 浅拷贝对象不会改变; 修改浅拷贝对象(可变), 原对象也不会变; 
       - 修改原对象中的可变元素, 浅拷贝对象会改变; 
       - 修改浅拷贝对象中的可变元素, 原对象也会变; 
    - 仅仅复制了容器中元素的地址; 
-- 深拷贝(deepcopy)
+* 深拷贝(deepcopy)
    - 完全拷贝了父对象及其子对象(副本). 深拷贝后的对象id不同, 对象类型相同, 对象值相同; 
    - 修改原对象(可变), 深拷贝对象不改变; 修改深拷贝对象(可变), 原对象也不会变; 
       - 修改原对象中的可变元素, 深拷贝对象不会改变; 
@@ -400,28 +360,28 @@ print('d = ', d)
 
 ## 浅拷贝
 
-在Python中标识一个对象的唯一身份是: 对象的 `id, id(object)` (内存地址)、对象类型、对象值. 浅拷贝就是创建一个具有相同类型、相同值但不同`id` 的新对象. 
+在Python中标识一个对象的唯一身份是: 对象的 `id, id(object)` (内存地址)、对象类型、对象值. 
+浅拷贝就是创建一个具有相同类型、相同值但不同`id` 的新对象
 
-对可变对象, 对象的值一样可能包含有对其他对象的引用, 浅拷贝产生的新对象, 虽然具有完全不同的 `id` , 但是其值若包含可变对象, 这些对象和原始对象中的值包含同样的引用. 
+对可变对象, 对象的值一样可能包含有对其他对象的引用, 浅拷贝产生的新对象, 虽然具有完全不同的 `id`, 
+但是其值若包含可变对象, 这些对象和原始对象中的值包含同样的引用
 
-可见浅拷贝产生的新对象中可变对象的值发生改变时, 会对原对象的值产生副作用, 因为这些值是同一个引用. 
+可见浅拷贝产生的新对象中可变对象的值发生改变时, 会对原对象的值产生副作用, 因为这些值是同一个引用
 
 浅拷贝仅仅对对象自身创建了一份拷贝, 而没有再进一步处理对象中包含的值, 
-因此使用浅拷贝的典型使用场景是:  **对象自身发生改变的同时需要保持对象中的值完全相同** , 比如: list排序. 
+因此使用浅拷贝的典型使用场景是:  **对象自身发生改变的同时需要保持对象中的值完全相同** , 
+比如: list 排序 
 
 ## 深拷贝
 
 深拷贝不仅拷贝了原始对象的地址, 也对其包含的值进行拷贝. 他会递归的查找对象中包含的其他对象的引用, 
-来完成更深层次拷贝. 因此, 深拷贝产生的副本可以随意修改而不需要担心会引起原始值的改变. 
+来完成更深层次拷贝. 因此, 深拷贝产生的副本可以随意修改而不需要担心会引起原始值的改变
 
 值的注意的是, 深拷贝并非完完全全递归查找所有对象, 因为一旦对象引用了自身, 
 完全递归可能会导致无限循环. 一个对象被拷贝了, python会对该对象做个标记, 
-如果还有其他需要拷贝的对象引用着该对象, 他们的拷贝其实指的是同一份拷贝. 
+如果还有其他需要拷贝的对象引用着该对象, 他们的拷贝其实指的是同一份拷贝
 
 使用 `__copy__` 和 `__deepcopy` 可以完成对一个对象拷贝的定制
-
-
-# 介绍一下SVM的原理
 
 # Python 序列反转
 
@@ -516,13 +476,15 @@ nums_mode_v2 = stats.mode(nums)[0][0]
 print(nums_mode_v2)
 ```
 
-# Pandas DataFrame 合并,连接 & Numpy ndarray 合并, 连接
+# Panda 和 Numpy 连接
 
-- DataFrame
+> Pandas DataFrame 合并,连接 & Numpy ndarray 合并, 连接
+
+* DataFrame
    - merge
    - join
    - concat
-- ndarray
+* ndarray
    - concatenate
    - vstack
    - row_stack
@@ -597,8 +559,9 @@ np.random.chisquare(5)
 np.random.gamma(5)
 ```
 
-# Python-Numpy `.ravel()`, `.flatten()`, `.flat()`
+# Python-Numpy
 
+* `.ravel()`, `.flatten()`, `.flat()`
    - 功能: 将多维array降为一维array
    - 拷贝(copy): 对拷贝所做的修改不会影响原始数组
    - 视图(view): 对视图所做的修改会影响原始数组
@@ -691,3 +654,4 @@ while True:
         str_index = int(str(e).split(" ")[-1][:-1])
         string = string[:str_index - 1] + string[str_index:]
 ```
+

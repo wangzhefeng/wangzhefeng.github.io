@@ -9,8 +9,41 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
+- [动机](#动机)
+  - [类型提示](#类型提示)
+  - [错误检查](#错误检查)
+- [声明类型](#声明类型)
+  - [简单类型](#简单类型)
+  - [嵌套类型](#嵌套类型)
+    - [List](#list)
+    - [Tuple 和 Set](#tuple-和-set)
+    - [Dict](#dict)
+  - [类作为类型](#类作为类型)
+- [Pydantic 模型](#pydantic-模型)
+- [FastAPI 中的类型提示](#fastapi-中的类型提示)
+</p></details><p></p>
 
 # 动机
 

@@ -1,5 +1,5 @@
 ---
-title: python-iter
+title: Python 迭代
 author: 王哲峰
 date: '2023-01-09'
 slug: python-iter
@@ -8,8 +8,6 @@ categories:
 tags:
   - tool
 ---
-
-
 
 Python Iter
 

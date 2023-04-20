@@ -9,26 +9,9 @@ tags:
   - tool
 ---
 
-
-
-
-# Python 数字
-
-
 # Python String
 
-
 ```python
-# -*- coding: utf-8 -*-
-
-
-import os
-import sys
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
 # 字符串方法
 mystr = "\t WangZhefeng \n"
 print(mystr.lower())
@@ -40,6 +23,7 @@ print(mystr.replace("Zhe", "zhe"))
 print(mystr.strip())
 print(mystr.rstrip())
 print(mystr.lstrip())
+
 mystr2 = "aaa,bbb,ccc"
 print(mystr2.split(","))
 mystr3 = "a b\nc\nd"
@@ -50,6 +34,7 @@ print(' '.join(["A", "dead", "parrot"]))
 print(string.ascii_lowercase)
 print(string.ascii_uppercase)
 print(string.whitespace)
+
 mystr = "xxaaxxaa"
 print("SPAM".join(mystr.split("aa")))
 print(int("42"))
@@ -61,14 +46,6 @@ print("{:d}".format(42))
 print("42" + str(1))
 print(int("42") + 1)
 ```
-
-# Python 列表
-
-
-# Python 元组
-
-
-# Python 字典
 
 ## 字典中的键映射多个值
 
