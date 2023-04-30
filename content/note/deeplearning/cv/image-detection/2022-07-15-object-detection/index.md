@@ -2,7 +2,7 @@
 title: 图像目标检测
 author: 王哲峰
 date: '2022-07-15'
-slug: image-detection
+slug: object-detection
 categories:
   - deeplearning
 tags:

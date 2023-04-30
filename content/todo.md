@@ -60,13 +60,17 @@ details[open] summary {
 ### Deeplearning
 
 * [Horovod分布式计算原理与代码实现](https://mp.weixin.qq.com/s/wNeCGMSRF0jg7yNJ_s6dWw)
+* https://github.com/lyhue1991/torchkeras
+* https://www.pytorchlightning.ai/
+* https://github.com/pytorch/serve
+* https://torchmetrics.readthedocs.io/en/stable/
+* [PyTorch Forecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html#)
 
 ### Tools
 
-* [ ] [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
+* [Python 数据统计分析: scikit-posthocs](https://mp.weixin.qq.com/s/m1fT9vxG_0nHIEspmWPPyg)
 * [分布式统计计算方法简介](https://mp.weixin.qq.com/s/OOpjBBLVqg77Ao9s6KZ5vg)
 * [洗牌算法](https://mp.weixin.qq.com/s/gudVQFhoUi_d3jBNyamYvA)
-
 
 ### Spark
 
@@ -85,4 +89,3 @@ details[open] summary {
 | 周五 | 朝九晚六；晚上看本周文章 |
 | 周六 | 上午睡觉、打扫；下午看 R |
 | 周日 | 上午看书、下午整理 Blog |
-

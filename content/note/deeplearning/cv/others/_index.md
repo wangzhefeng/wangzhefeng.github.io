@@ -1,6 +1,6 @@
 ---
-title: 计算机视觉-视屏、音频
-subtitle: Computer Vision-Video、Audio
+title: 视屏和音频
+subtitle: Video and Audio
 list_pages: true
 order_by: title
 ---

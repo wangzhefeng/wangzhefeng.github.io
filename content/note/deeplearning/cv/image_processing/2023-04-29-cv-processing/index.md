@@ -1,11 +1,41 @@
 ---
-title: 图像处理
-subtitle: Image Processing
-list_pages: true
-# order_by: title
+title: 图像处理概览
+author: 王哲峰
+date: '2023-04-29'
+slug: cv-processing
+categories:
+  - computer vision
+tags:
+  - tool
 ---
 
-## 图像处理概述
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [图像处理概述](#图像处理概述)
+- [图像处理基本操作](#图像处理基本操作)
+</p></details><p></p>
+
+# 图像处理概述
 
 推荐使用 OpenCV 而不是 Pillow 和 Matplotlib，因为 OpenCV 具有更多的功能。
 但是，只在显示图像或进行批量图像处理时使用 Pillow。
@@ -44,11 +74,4 @@ list_pages: true
 * Flip 翻转
     - Horizontal Flip
     - Vertical Flip
-
-# TODO
-
-* [https://mp.weixin.qq.com/s/AgD3F__BsOlopB4Igy5WrA](https://mp.weixin.qq.com/s/AgD3F__BsOlopB4Igy5WrA)
-* [图像上的 OpenCV 算术运算](https://mp.weixin.qq.com/s/6hCjjUi9H5RiP_ijdTuFIA)
-
-## 文档
 
