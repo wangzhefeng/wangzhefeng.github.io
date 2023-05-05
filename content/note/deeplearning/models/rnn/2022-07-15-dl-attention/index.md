@@ -46,7 +46,7 @@ details[open] summary {
 - [参考](#参考)
 </p></details><p></p>
 
-seq2seq 模型虽然强大, 但如果仅仅是单一使用的话, 效果会大打折扣。
+seq2seq 模型虽然强大，但如果仅仅是单一使用的话，效果会大打折扣。
 本节要介绍的注意力模型就是基于 encoder-deocder 框架下的一种模拟人类注意力直觉的一种模型
 
 # 为什么需要 Attention

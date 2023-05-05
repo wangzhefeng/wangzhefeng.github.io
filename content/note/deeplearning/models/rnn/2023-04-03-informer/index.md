@@ -1,13 +1,17 @@
 ---
-title: infermer
+title: Informer
 author: 王哲峰
 date: '2023-04-03'
-slug: infermer
+slug: informer
 categories:
   - deeplearning
 tags:
   - model
 ---
+
+
+
+
 
 
 # 时间序列 Transformer

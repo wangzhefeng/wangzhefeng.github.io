@@ -46,7 +46,10 @@ details[open] summary {
   - [LSTM + peephole connections](#lstm--peephole-connections)
   - [LSTM + coupled \& input gates](#lstm--coupled--input-gates)
   - [GRU](#gru)
-- [参考文章](#参考文章)
+- [LSTM 结构解析](#lstm-结构解析)
+- [LSTM 数学表示](#lstm-数学表示)
+- [LSTM 解释](#lstm-解释)
+- [参考](#参考)
 </p></details><p></p>
 
 # LSTM 简介
@@ -182,7 +185,29 @@ LSTM 提供了单独的输出门
 
 ![img](images/LSTM_GRU.png)
 
-# 参考文章
+# LSTM 结构解析
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5o1d0limwj21n80qg0vb.jpg)
+
+# LSTM 数学表示
+
+`$$\begin{align}
+i_{t}=\sigma\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \tag{1} \\
+f_{t}=\sigma\left(W_{f} x_{t}+U_{f} h_{t-1}+b_{f}\right) \tag{2} \\
+o_{t}=\sigma\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \tag{3} \\
+\tilde{c}_{t}=\tanh \left(W_{c} x_{t}+U_{c} h_{t-1}+b_{c}\right) \tag{4} \\
+c_{t}=f_{t} \odot c_{t-1}+i_{t} \odot \tilde{c}_{t} \tag{5} \\
+h_{t}=o_{t} \odot \tanh \left(c_{t}\right) \tag{6}
+\end{align}$$`
+
+# LSTM 解释
+
+* LSTM 通过引入了三个门来控制信息的传递，分别是遗忘门、输入门、输出门。三个门的作用为：
+    - 遗忘门：遗忘门 `$f_t$` 控制上一时刻的内部状态，需要遗忘多少信息
+    - 输入门：输入门 `$i_t$` 控制当前时刻的候选状态，有多少信息需要保存
+    - 输出门：输出门 `$o_t$` 控制当前时刻的内部状态，有多少信息需要输出给外部状态
+
+# 参考
 
 * [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
 * [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/)

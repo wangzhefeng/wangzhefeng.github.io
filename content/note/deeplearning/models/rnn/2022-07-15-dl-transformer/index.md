@@ -47,6 +47,10 @@ details[open] summary {
   - [Linear 和 Softmax 层](#linear-和-softmax-层)
 - [训练概要](#训练概要)
 - [损失函数](#损失函数)
+  - [Transformer 结构解析](#transformer-结构解析)
+  - [Transformer 数学表示](#transformer-数学表示)
+  - [Transformer 要点问题](#transformer-要点问题)
+  - [PyTorch 示例](#pytorch-示例)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -370,9 +374,171 @@ encoder-decoder attention 层工作就像 multi-head self-attention，除了它�
 beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设都被保留在 memory 中)，
 然后 top_beams 也是 2 个(意味着我们会返回 2 个翻译)，这些都是超参可以调整的
 
+
+## Transformer 结构解析
+
+![img](images/Transformer.jpg)
+
+## Transformer 数学表示
+
+`$$\operatorname{Attention}(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V$$`
+
+`$$\begin{aligned}
+\operatorname{MultiHead}(Q, K, V) &=\operatorname{Concat}\left(\operatorname{head}_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O} \\
+\text { where }\, head_{i} &=\operatorname{Attention}\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)
+\end{aligned}$$`
+
+## Transformer 要点问题
+
+1. Transformer 是如何解决长距离依赖的问题的？
+    - Transformer 是通过引入 Scale-Dot-Product 注意力机制来融合序列上不同位置的信息，从而解决长距离依赖问题。
+      以文本数据为例，在循环神经网络 LSTM 结构中，输入序列上相距很远的两个单词无法直接发生交互，
+      只能通过隐藏层输出或者细胞状态按照时间步骤一个一个向后进行传递。
+      对于两个在序列上相距非常远的单词，中间经过的其它单词让隐藏层输出和细胞状态混入了太多的信息，
+      很难有效地捕捉这种长距离依赖特征。但是在 Scale-Dot-Product 注意力机制中，
+      序列上的每个单词都会和其它所有单词做一次点积计算注意力得分，
+      这种注意力机制中单词之间的交互是强制的不受距离影响的，所以可以解决长距离依赖问题
+2. Transformer 在训练和测试阶段可以在时间(序列)维度上进行并行吗？
+    - 在训练阶段，Encoder 和 Decoder 在时间(序列)维度都是并行的；
+      在测试阶段，Encoder 在序列维度是并行的，Decoder 是串行的
+    - 首先，Encoder 部分在训练阶段和预测阶段都可以并行比较好理解，
+      无论在训练还是预测阶段，它干的事情都是把已知的完整输入编码成 memory，
+      在序列维度可以并行
+    - 对于 Decoder 部分有些微妙。在预测阶段 Decoder 肯定是不能并行的，因为 Decoder 实际上是一个自回归，
+      它前面 `$k-1$` 位置的输出会变成第 `$k$` 位的输入的。前面没有计算完，后面是拿不到输入的，肯定不可以并行。
+      那么训练阶段能否并行呢？虽然训练阶段知道了全部的解码结果，但是训练阶段要和预测阶段一致啊，
+      前面的解码输出不能受到后面解码结果的影响啊。
+      但 Transformer 通过在 Decoder 中巧妙地引入 Mask 技巧，使得在用 Attention 机制做序列特征融合的时候，
+      每个单词对位于它之后的单词的注意力得分都为 0，这样就保证了前面的解码输出不会受到后面解码结果的影响，
+      因此 Decoder 在训练阶段可以在序列维度做并行
+3. Scaled-Dot Product Attention 为什么要除以 `$\sqrt{d_k}$`?
+    - 为了避免 `$d_k$` 变得很大时 softmax 函数的梯度趋于 0。
+      假设 Q 和 K 中的取出的两个向量 `$q$` 和 `$k$` 的每个元素值都是正态随机分布，
+      数学上可以证明两个独立的正态随机变量的积依然是一个正态随机变量，
+      那么两个向量做点积，会得到 `$d_k$` 个正态随机变量的和，
+      数学上 `$d_k$` 个正态随机变量的和依然是一个正态随机变量，
+      其方差是原来的 `$d_k$` 倍，标准差是原来的 `$\sqrt{d_k}$` 倍。
+      如果不做 scale, 当 `$d_k$` 很大时，求得的 `$QK^T$` 元素的绝对值容易很大，
+      导致落在 softmax 的极端区域(趋于 0 或者 1)，极端区域 softmax 函数的梯度值趋于 0，
+      不利于模型学习。除以 `$\sqrt{d_k}$`，恰好做了归一，不受 `$d_k$` 变化影响
+4. MultiHeadAttention 的参数数量和 head 数量有何关系?
+    - MultiHeadAttention 的参数数量和 head 数量无关。
+      多头注意力的参数来自对 QKV 的三个变换矩阵以及多头结果 concat 后的输出变换矩阵。
+      假设嵌入向量的长度是 d_model, 一共有 h 个 head. 对每个 head，
+      `$W_{i}^{Q},W_{i}^{K},W_{i}^{V}$` 这三个变换矩阵的尺寸都是 `$d_model \times (d_model/h)$`，
+      所以 h 个 head 总的参数数量就是 `$3 \times d_model \times (d_model/h) \times h = 3 \times d_model \times d_model$`。
+      它们的输出向量长度都变成 `$d_model/h$`，经过 attention 作用后向量长度保持，
+      h 个 head 的输出拼接到一起后向量长度还是 d_model，
+      所以最后输出变换矩阵的尺寸是 `$d_model×d_model$`。
+      因此，MultiHeadAttention 的参数数量为 `$4 \times d_model \times d_model$`，和 head 数量无关
+5. Transformer 有什么缺点？
+    - Transformer 主要的缺点有两个，一个是注意力机制相对序列长度的复杂度是 `$O(n^2)$`，第二个是对位置信息的
+        - 第一，Transformer 在用 Attention 机制做序列特征融合的时候，
+          每两个单词之间都要计算点积获得注意力得分，这个计算复杂度和序列的长度平方成正比，
+          对于一些特别长的序列，可能存在着性能瓶颈，有一些针对这个问题的改进方案如 Linformer
+        - 第二个是 Transformer 通过引入注意力机制两两位置做点乘来融合序列特征，
+          而不是像循环神经网络那样由先到后地处理序列中的数据，导致丢失了单词之间的位置信息关系，
+          通过在输入中引入正余弦函数构造的位置编码 PositionEncoding 一定程度上补充了位置信息，
+          但还是不如循环神经网络那样自然和高效
+
+
+## PyTorch 示例
+
+```python
+import torch 
+from torch import nn 
+
+#验证MultiheadAttention和head数量无关
+inputs = torch.randn(8,200,64) #batch_size, seq_length, features
+
+attention_h8 = nn.MultiheadAttention(
+    embed_dim = 64,
+    num_heads = 8,
+    bias=True,
+    batch_first=True
+)
+
+attention_h16 = nn.MultiheadAttention(
+    embed_dim = 64,
+    num_heads = 16,
+    bias=True,
+    batch_first=True
+)
+
+
+out_h8 = attention_h8(inputs,inputs,inputs)
+out_h16 = attention_h16(inputs,inputs,inputs)
+
+from torchkeras import summary 
+summary(attention_h8,input_data_args=(inputs,inputs,inputs));
+
+summary(attention_h16,input_data_args=(inputs,inputs,inputs));
+```
+
+
+```python
+import torch 
+from torch import nn 
+from copy import deepcopy
+
+#多头注意力的一种简洁实现
+
+class ScaledDotProductAttention(nn.Module):
+    "Compute 'Scaled Dot Product Attention'"
+    def __init__(self):
+        super(ScaledDotProductAttention, self).__init__()
+
+    def forward(self,query, key, value, mask=None, dropout=None):
+        d_k = query.size(-1)
+        scores = query@key.transpose(-2,-1) / d_k**0.5     
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e20)
+        p_attn = F.softmax(scores, dim = -1)
+        if dropout is not None:
+            p_attn = dropout(p_attn)
+        return p_attn@value, p_attn
+    
+class MultiHeadAttention(nn.Module):
+    def __init__(self, h, d_model, dropout=0.1):
+        "Take in model size and number of heads."
+        super(MultiHeadAttention, self).__init__()
+        assert d_model % h == 0
+        # We assume d_v always equals d_k
+        self.d_k = d_model // h
+        self.h = h
+        self.linears = nn.ModuleList([deepcopy(nn.Linear(d_model, d_model)) for _ in range(4)])
+        
+        self.attn = None
+        self.dropout = nn.Dropout(p=dropout)
+        self.attention = ScaledDotProductAttention()
+        
+    def forward(self, query, key, value, mask=None):
+        "Implements Figure 2"
+        if mask is not None:
+            # Same mask applied to all h heads.
+            mask = mask.unsqueeze(1)
+        nbatches = query.size(0)
+        
+        # 1) Do all the linear projections in batch from d_model => h x d_k 
+        query, key, value = \
+            [l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
+             for l, x in zip(self.linears, (query, key, value))]
+        
+        # 2) Apply attention on all the projected vectors in batch. 
+        x, self.attn = self.attention(query, key, value, mask=mask, 
+                                 dropout=self.dropout)
+        
+        # 3) "Concat" using a view and apply a final linear. 
+        x = x.transpose(1, 2).contiguous() \
+             .view(nbatches, -1, self.h * self.d_k)
+        return self.linears[-1](x)
+```
+
 # 参考
 
 * [Transformer](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486160&idx=1&sn=2dfdedb2edbca76a0c7b110ca9952e98&chksm=fa0414bbcd739dad0ccd604f6dd5ed99e8ab7f713ecafc17dd056fc91ad85968844e70bbf398&scene=178&cur_album_id=1577157748566310916#rd)
 * [Hugging Face](https://huggingface.co/docs/transformers/quicktour)
 * [🤗 Transformers 教程：pipeline一键预测](https://mp.weixin.qq.com/s/1dtk5gCa7C-wyVQ9vIuRYw)
 * [Transformer的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)
+* [Transformer 知乎原理讲解](https://zhuanlan.zhihu.com/p/48508221)
+* [Transformer 哈佛博客代码讲解](http://nlp.seas.harvard.edu/annotated-transformer/)

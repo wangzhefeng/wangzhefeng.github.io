@@ -36,14 +36,14 @@ details[open] summary {
 - [解码器](#解码器)
 - [训练模型](#训练模型)
 - [总结](#总结)
-- [参考文献](#参考文献)
+- [参考](#参考)
 </p></details><p></p>
 
 # seq2seq 简介
 
 自然语言处理的很多应用中，输入和输出都可以是不定长序列。当输入和输出都是不定长序列时，
 我们可以使用 **编码器—解码器(encoder-decoder)** 或者 **seq2seq** 模型。
-这两个模型本质上都用到了两个循环神经网络，分别叫做 **编码器** 和 **解码器**
+这两个模型本质上都用到了两个循环神经网络(RNN)，分别叫做 **编码器** 和 **解码器**
 
 * 编码器用来分析输入序列
 * 解码器用来生成输出序列
@@ -134,7 +134,7 @@ P(y_{1}, \ldots, y_{T'} \mid x_{1}, \ldots, x_{T})
 * encoder-decoder 使用了两个循环神经网络
 * 在 encoder-decoder 的训练中，可以采用强制教学
 
-# 参考文献
+# 参考
 
 * [1] Cho，K.，Van Merriënboer，B.，Gulcehre，C.，Bahdanau，D.，Bougares，F.，Schwenk，H.，& Bengio, y. (2014). [Learning phrase representations using RNN encoder-decoder for statistical machine translation.]() arXiv preprint arXiv:1406.1078.
 * [2] Sutskever，I.，Vinyals，O.，& Le，Q. V. (2014). [Sequence to sequence learning with neural networks.]() In Advances in neural information processing systems (pp. 3104-3112).

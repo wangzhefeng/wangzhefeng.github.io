@@ -6,16 +6,15 @@ disable_highlight: true
 
 ##
 
-2017 年我从上海大学数学系毕业，开始了在上海工作的日子。
+<!-- 2017 年我从上海大学数学系毕业，开始了在上海工作的日子。
 工作之余在家听音乐、看书、睡觉，时不时看看 Dota2。
-偶尔在这里写文章、写笔记，记录生活，记录学习。
-无论窗外如何嘈杂，都要静下心来思考，充实自己的内心、头脑。
+偶尔在这里写文章、写笔记，记录生活，记录学习。 -->
 
-关于统计，邱东在哲学家培根曾经说过话的基础上加上了对统计的理解：
+<!-- 关于统计，邱东在哲学家培根曾经说过话的基础上加上了对统计的理解： -->
 
-> “历史使人明智，诗歌使人巧慧，数学使人精细，博物使人深沉，伦理使人庄重，逻辑与修辞使人善辩，统计使人豁达”
+> 历史使人明智，诗歌使人巧慧，数学使人精细，博物使人深沉，伦理使人庄重，逻辑与修辞使人善辩，统计使人豁达
 
-关于理想，北宋大儒张载（张横渠）代表有历史责任感的文人提出了自己的的生命理想，
+<!-- 关于理想，北宋大儒张载（张横渠）代表有历史责任感的文人提出了自己的的生命理想，
 为历代志士传颂不辍，被称为“横渠四句”：
 
 > “为天地立心，为生民立命，为往圣继绝学，为万世开太平”
@@ -33,8 +32,7 @@ disable_highlight: true
 
 关于人生，钟叔河说：
 
-> “我小的时候，最高的追求，就是能够像我父亲一样的，能够有一个职业，能够养家糊口，能够读几本书，过一辈子。”
-
+> “我小的时候，最高的追求，就是能够像我父亲一样的，能够有一个职业，能够养家糊口，能够读几本书，过一辈子。” -->
 
 <!-- 喜欢的一段视频：
 <div class="plyr__video-embed" id="player" width="100%">
@@ -50,7 +48,8 @@ disable_highlight: true
 -->
 
 
-<!-- ### TODO
+<!-- 
+### TODO
 
 * :white_check_mark: 评论在一些页面不启用
 * :white_check_mark: 集成 Disqus 和 Utterances 到评论区
@@ -69,9 +68,35 @@ disable_highlight: true
 * :white_check_mark: 微信屏蔽问题处理
     - [x] 申请恢复访问
     - [x] 部署相关文件
-* :white_check_mark: 添加 favicon.ico -->
+* :white_check_mark: 添加 favicon.ico
+ -->
 
 ##
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 [<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.png" width="7%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
 

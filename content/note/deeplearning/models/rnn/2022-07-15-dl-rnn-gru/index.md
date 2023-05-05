@@ -43,6 +43,7 @@ details[open] summary {
   - [Reset gate](#reset-gate)
   - [Current memery content](#current-memery-content)
   - [Final memory at current time step](#final-memory-at-current-time-step)
+- [参考](#参考)
 </p></details><p></p>
 
 # GRU
@@ -161,3 +162,6 @@ The reset gate is used from the model to decide how much of the past information
 
 `$$h_{t} = z_{t} \odot h_{t-1} + (1-z_{t}) \odot h_{t}^{'})$$`
 
+# 参考
+
+* [LSTM 与 GRU的原理](https://zhuanlan.zhihu.com/p/184937263)

@@ -1,6 +1,6 @@
 ---
-title: 深度学习模型
-subtitle: Deep Learning Models
+title: 模型结构
+subtitle: Models Structure
 list_pages: true
 # order_by: title
 ---
