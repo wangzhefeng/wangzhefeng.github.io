@@ -4,9 +4,9 @@ author: 王哲峰
 date: '2022-04-05'
 slug: dl-bert
 categories:
-  - nlp
+  - depplearning
 tags:
-  - tool
+  - model
 ---
 
 <style>

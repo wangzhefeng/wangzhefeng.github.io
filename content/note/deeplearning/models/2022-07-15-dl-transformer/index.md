@@ -1,12 +1,13 @@
 ---
 title: Transformer
+subtitle: All Attention
 author: 王哲峰
 date: '2022-04-05'
 slug: dl-transformer
 categories:
-  - nlp
+  - deeplearning
 tags:
-  - tool
+  - model
 ---
 
 <style>
@@ -55,7 +56,7 @@ details[open] summary {
 </p></details><p></p>
 
 Transformer 是 Google 在 2017 年提出的一个 NLP 模型，适用于机器翻译任务。
-它不依赖于使用 CNN 和 RNN，而是基于关注机制(Attention)构建网络结构
+它不依赖于使用 CNN 和 RNN，而是基于注意力机制(Attention Mechanism)构建网络结构
 
 # Transformer 整体架构架构
 
@@ -538,6 +539,6 @@ class MultiHeadAttention(nn.Module):
 * [Transformer](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486160&idx=1&sn=2dfdedb2edbca76a0c7b110ca9952e98&chksm=fa0414bbcd739dad0ccd604f6dd5ed99e8ab7f713ecafc17dd056fc91ad85968844e70bbf398&scene=178&cur_album_id=1577157748566310916#rd)
 * [Hugging Face](https://huggingface.co/docs/transformers/quicktour)
 * [🤗 Transformers 教程：pipeline一键预测](https://mp.weixin.qq.com/s/1dtk5gCa7C-wyVQ9vIuRYw)
-* [Transformer的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)
+* [Transformer 的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)
 * [Transformer 知乎原理讲解](https://zhuanlan.zhihu.com/p/48508221)
 * [Transformer 哈佛博客代码讲解](http://nlp.seas.harvard.edu/annotated-transformer/)

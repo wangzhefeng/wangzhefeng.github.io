@@ -7,7 +7,7 @@ categories:
   - timeseries
   - deeplearning
 tags:
-  - tool
+  - model
 ---
 
 # Time2Vec
