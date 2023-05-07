@@ -64,7 +64,7 @@ details[open] summary {
 </p></details><p></p>
 
 
-一般地，各种 RNN 序列模型层(RNN, GRU, LSTM 等)可以用函数表示如下:
+一般地，各种 RNN 序列模型层(RNN、GRU、LSTM 等)可以用函数表示如下:
 
 `$$h_t = f(h_{t-1},i_t)$$`
 
