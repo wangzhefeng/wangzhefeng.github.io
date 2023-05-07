@@ -47,10 +47,10 @@ details[open] summary {
   - [Linear 和 Softmax 层](#linear-和-softmax-层)
 - [训练概要](#训练概要)
 - [损失函数](#损失函数)
-  - [Transformer 结构解析](#transformer-结构解析)
-  - [Transformer 数学表示](#transformer-数学表示)
-  - [Transformer 要点问题](#transformer-要点问题)
-  - [PyTorch 示例](#pytorch-示例)
+- [Transformer 结构解析](#transformer-结构解析)
+- [Transformer 数学表示](#transformer-数学表示)
+- [Transformer 要点问题](#transformer-要点问题)
+- [PyTorch 示例](#pytorch-示例)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -375,11 +375,11 @@ beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设
 然后 top_beams 也是 2 个(意味着我们会返回 2 个翻译)，这些都是超参可以调整的
 
 
-## Transformer 结构解析
+# Transformer 结构解析
 
-![img](images/Transformer.jpg)
+![img](images/transformer.jpg)
 
-## Transformer 数学表示
+# Transformer 数学表示
 
 `$$\operatorname{Attention}(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V$$`
 
@@ -388,7 +388,7 @@ beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设
 \text { where }\, head_{i} &=\operatorname{Attention}\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)
 \end{aligned}$$`
 
-## Transformer 要点问题
+# Transformer 要点问题
 
 1. Transformer 是如何解决长距离依赖的问题的？
     - Transformer 是通过引入 Scale-Dot-Product 注意力机制来融合序列上不同位置的信息，从而解决长距离依赖问题。
@@ -441,8 +441,7 @@ beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设
           通过在输入中引入正余弦函数构造的位置编码 PositionEncoding 一定程度上补充了位置信息，
           但还是不如循环神经网络那样自然和高效
 
-
-## PyTorch 示例
+# PyTorch 示例
 
 ```python
 import torch 
