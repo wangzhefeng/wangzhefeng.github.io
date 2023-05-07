@@ -1,5 +1,5 @@
 ---
-title: Seq2Seq 模型
+title: Seq2Seq
 subtitle: Encoder-Decoder
 author: 王哲峰
 date: '2022-04-05'

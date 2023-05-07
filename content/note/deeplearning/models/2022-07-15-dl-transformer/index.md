@@ -32,35 +32,47 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [Transformer 整体架构架构](#transformer-整体架构架构)
-  - [Transformer 架构](#transformer-架构)
-  - [Transformer 输入](#transformer-输入)
+- [Transformer 架构](#transformer-架构)
+  - [Transformer 模型架构](#transformer-模型架构)
+  - [Transformer 数学表示](#transformer-数学表示)
+  - [Transformer 架构解析](#transformer-架构解析)
+  - [Transformer 模型输入](#transformer-模型输入)
 - [编码模块](#编码模块)
-  - [从高处看 Self-attention](#从高处看-self-attention)
-  - [从细节看 Self-attention](#从细节看-self-attention)
-    - [Self-attention 的向量计算](#self-attention-的向量计算)
-    - [Self-attention 的矩阵计算](#self-attention-的矩阵计算)
+  - [从高处看 Self-Attention](#从高处看-self-attention)
+  - [从细节看 Self-Attention](#从细节看-self-attention)
+    - [Self-Attention 的向量计算](#self-attention-的向量计算)
+    - [Self-Attention 的矩阵计算](#self-attention-的矩阵计算)
   - [Multi-head 机制](#multi-head-机制)
-  - [使用位置编码表征序列顺序](#使用位置编码表征序列顺序)
+  - [Positional Encoding](#positional-encoding)
   - [残差项](#残差项)
 - [解码模块](#解码模块)
   - [Encoder-Deocder Attention 层](#encoder-deocder-attention-层)
   - [Linear 和 Softmax 层](#linear-和-softmax-层)
 - [训练概要](#训练概要)
 - [损失函数](#损失函数)
-- [Transformer 结构解析](#transformer-结构解析)
-- [Transformer 数学表示](#transformer-数学表示)
 - [Transformer 要点问题](#transformer-要点问题)
-- [PyTorch 示例](#pytorch-示例)
 - [参考](#参考)
 </p></details><p></p>
+
+# Transformer 架构
+
+## Transformer 模型架构
 
 Transformer 是 Google 在 2017 年提出的一个 NLP 模型，适用于机器翻译任务。
 它不依赖于使用 CNN 和 RNN，而是基于注意力机制(Attention Mechanism)构建网络结构
 
-# Transformer 整体架构架构
+![img](images/transformer.png)
 
-## Transformer 架构
+## Transformer 数学表示
+
+`$$\operatorname{Attention}(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V$$`
+
+`$$\begin{aligned}
+\operatorname{MultiHead}(Q, K, V) &=\operatorname{Concat}\left(\operatorname{head}_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O} \\
+\text { where }\, head_{i} &=\operatorname{Attention}\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)
+\end{aligned}$$`
+
+## Transformer 架构解析
 
 如果把 Transformer 模型当作黑盒，在机器翻译任务里，模型接受一种语言的句子，输出另一种语言的翻译句子
 
@@ -71,7 +83,7 @@ Transformer 是 Google 在 2017 年提出的一个 NLP 模型，适用于机器�
 ![img](images/ed.png)
 
 编码模块有多个编码器堆叠而成 (论文堆了 6 个，数字 6 没有特别规定，可以自行修改进行实验)，
-解码模块也堆叠了 6 个解码器
+解码模块也堆叠了 6 个解码器，Transformer 模型结构中左侧和右侧的 `$Nx$` 就是指编码器或解码器的个数，这里 `$N6$`
 
 ![img](images/ed2.png)
 
@@ -89,7 +101,7 @@ Transformer 是 Google 在 2017 年提出的一个 NLP 模型，适用于机器�
 
 ![img](images/ed4.png)
 
-## Transformer 输入
+## Transformer 模型输入
 
 我们已经看过模型的主要模块，现在来看下，向量/张量是如何在这些模块中，从输入到输出。
 以 NLP 常见应用的为例，我们用一个 Embedding 算法将每个输入词转化为一个向量：
@@ -120,7 +132,7 @@ Word Embedding 只发生在编码器的最底端，对于所有编码器来说�
 > Transformer 作者也因此称之为 position-wise fully connected feed-forward network。
 > 而 self-attention 层则是多个词向量共用的
 
-## 从高处看 Self-attention
+## 从高处看 Self-Attention
 
 不要被 “self-attention” 这词迷惑了，它不是我们熟悉的含义。直到阅读了《Attention is all you need》原文，
 才弄明白了此概念。让我们来看下它具体怎么工作的
@@ -141,22 +153,22 @@ Transformer 的 self-attention 是将对相关词的理解融入到当前词的�
 
 ![img](images/self-attention1.png)
 
-## 从细节看 Self-attention
+## 从细节看 Self-Attention
 
 首先，看下如何使用向量计算 self-attention，然后进一步看如何使用矩阵实施计算
 
-### Self-attention 的向量计算
+### Self-Attention 的向量计算
 
 1. 第一步在计算 self-attention 中，是对编码器的每个输入向量 (即每个词的向量) 创建 3 个向量。
 对于每个词，我们会创建 Query 向量、Key 向量和 Value 向量，将三个权重矩阵乘以词向量便可得到这三个向量，
 这三个矩阵会在训练过程中不断学习
 
-那什么是 Query 向量、Key 向量和 Value 向量呢？对于计算和思考 attention 来说，提取它们是有益的。
-一旦你往下了解 attention 是如何计算，你就会了解到每个向量是扮演着什么角色了
-
 ![img](images/self-attention2.png)
 
-> 注意，相比于词向量 (512维)，这三个向量的维度是偏小的 (64维)。三向量不是一定要小，
+> * 那什么是 Query 向量、Key 向量和 Value 向量呢？对于计算和思考 attention 来说，提取它们是有益的。
+> 一旦你往下了解 attention 是如何计算，你就会了解到每个向量是扮演着什么角色了
+> 
+> * 注意：相比于词向量 (512维)，这三个向量的维度是偏小的 (64维)。三向量不是一定要小，
 > 这是为了让 Multi-head Attention 的计算是连续的 (补充: 这里可能比较模糊，其实是这样的，self-attention 其实是个 multi-head 的形式，
 > 即多个 attention 模块，原论文是说有 8 个并行的 attention 层，这样若总维度为 512，那会变为 512/8=64 维，
 > 相当于全 512 维度输入 single-head attention 变为了 64 维输入 Multi-head Attention，如下图所示)
@@ -187,7 +199,7 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
 上面就是 self-attention 层的计算过程，结果向量可以输入给 feed-forword 神经网络。
 在真实应用中，是使用矩阵计算加快处理速度，所以让我们看下单词级别的矩阵计算
 
-### Self-attention 的矩阵计算
+### Self-Attention 的矩阵计算
 
 1. 第一步是计算 Query、Key 和 Value 矩阵，我们是通过打包词向量成矩阵 `$X$`，
    然后分别乘上三个可学习的权重矩阵 `$(W^{Q}, W^{K}, W^{V})$`。在矩阵 `$X$` 中，每一行对应输入句子中每一个单词，
@@ -201,14 +213,14 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
 
 ## Multi-head 机制
 
-论文在 self-attention 层前还加入了 “multi-headed” 的关注机制，它从两方面提升了 attention 层的表现：
+论文在 self-attention 层前还加入了 “multi-headed” 的 Attention 机制，它从两方面提升了 attention 层的表现：
 
-1. Multi-head Attention 增强了模型关注不同位置的能力。
+1. Multi-head Attention 增强了模型关注不同位置的能力
    - 是的，在以上例子中，`$z_{1}$` 没怎么包括其他词编码的信息 (例过于关注 “it” 并不能带来很多信息)，
      但实际上可能是由真实值所控制的 (例如关注 “it” 指代的 “The animal” 会对模型更好)，
      所以如果我们翻译 “The animal didn’t cross the street because it was too tired”，
-     多头关注能帮助我们知道 “it” 指代的是哪个词，从而提升模型表现。
-2. Multi-head 机制给 attention 层带来多个 “表征子空间”
+     多头关注能帮助我们知道 “it” 指代的是哪个词，从而提升模型表现
+2. Multi-head 机制给 Attention 层带来多个 “表征子空间”
     - 我们晚点会看到，Multi-head Attention 不只是 1 个，而是多个 Query/Key/Value 矩阵 (Transformer 用了 8 个关注头，
       所以对于每个编码器/解码器，我们有 8 组)，每组都是随机初始化。然后，训练之后，
        每组会将输入向量 (或者是来自更低部编码器/解码器的向量) 映射到不同的表征空间
@@ -216,7 +228,7 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
     ![img](images/m-attention1.png)
 
     - 在 Multi-head Attention 下，我们对每个头都有独立的 Q/K/V 权重矩阵，因此每个头会生成不同的 Q/K/V 矩阵。
-      正如我们之前所做，我们将X和 `$W^{Q}$`/ `$W^{K}$` / `$W^{V}$` 矩阵相乘便可得到 Q/K/V 矩阵。
+      正如我们之前所做，我们将 `$X$` 和 `$W^{Q}$`/ `$W^{K}$` / `$W^{V}$` 矩阵相乘便可得到 Q/K/V 矩阵。
       如果我们按上面方式去计算，8 次与不同权重矩阵相乘会得到 8 个不同的Z矩阵
 
     ![img](images/m-attention2.png)
@@ -234,7 +246,9 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
 
 ![img](images/m-attention5.png)
 
-## 使用位置编码表征序列顺序
+## Positional Encoding 
+
+> 使用位置编码表征序列顺序
 
 说了那么久，有件事没讲，怎么去将输入序列的词顺序考虑进模型呢？(补充：需要考虑词顺序是因为 Transformer 没有循环网络和卷积网络，
 因此需要告诉模型词的相对/绝对位置)
@@ -249,25 +263,29 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
 
 ![img](images/position_encoding2.png)
 
-这个指定模式是怎样的？如下图所示，每行对应的是一个词向量的位置编码，所以第一行是我们要加到输入序列中第一个词 embedding 的向量。
-每行包含 512 个值，每个值范围在 -1 到 1 之间。我们对值进行着色可视化
+> 这个指定模式是怎样的？如下图所示，每行对应的是一个词向量的位置编码，所以第一行是我们要加到输入序列中第一个词 embedding 的向量。
+> 每行包含 512 个值，每个值范围在 -1 到 1 之间。我们对值进行着色可视化
+> 
+> ![img](images/position_encoding3.png)
+> 
+> 位置编码的公式在[《Visualizing A Neural Machine Translation Model (Mechanics of Seq2seq Models With Attention)》](https://jalammar.github.io/>visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/) 有提及，你也能看在 `get_timing_signal_1d()` 里位置编码的代码。
+> 这不是位置编码的唯一方法，但它能处理不可见长度的序列 (例如我们训练好的模型被要求去翻译一个超过我们训练集句子长度的句子)。
+> 
+> 以上展示的位置编码在 Tensor2Tensor (论文的开源代码) 实现里是合并 `$sin()$` 和 `$cos()$`，
+> 但是论文不在论文展示的又不一样，论文是交叉使用两种 signals (即偶数位置使用 `$sin()$`，奇数位置使用 `$cos()$`)，
+> 下图便是论文生成方式得到的：
+> 
+> ![img](images/position_encoding4.png)
 
-![img](images/position_encoding3.png)
+这里作者提到了两种方法：
 
-位置编码的公式在论文 (section 3.5) 有提及，你也能看在 `get_timing_signal_1d()` 里位置编码的代码。
-这不是位置编码的唯一方法，但它能处理不可见长度的序列 (例如我们训练好的模型被要求去翻译一个超过我们训练集句子长度的句子)。
+1. 用不同频率的sine和cosine函数直接计算
+2. 学习出一份positional embedding（参考文献）
 
-以上展示的位置编码在 Tensor2Tensor (论文的开源代码) 实现里是合并 `$sin()$` 和 `$cos()$`，
-但是论文不在论文展示的又不一样，论文是交叉使用两种 signals (即偶数位置使用 `$sin()$`，奇数位置使用 `$cos()$`)，
-下图便是论文生成方式得到的：
+经过实验发现两者的结果一样，所以最后选择了第一种方法，位置编码的公式如下：
 
-![img](images/position_encoding4.png)
-
-位置编码的公式如下：
-
-`$$PE_{(pos, 2i)} = sin(\frac{pos}{10000^{\frac{2i}{d_{model}}}})$$`
-
-`$$PE_{(pos, 2i + 1)} = cos(\frac{pos}{10000^{\frac{2i}{d_{model}}}})$$`
+`$$PE_{(pos, 2i)} = sin\Bigg(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\Bigg)$$`
+`$$PE_{(pos, 2i + 1)} = cos\Bigg(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\Bigg)$$`
 
 其中：
 
@@ -276,6 +294,17 @@ Query 向量和 Key 向量点乘便可得到分数，所以如果我们对位置
 * `$2i$` 代表偶数维度
 * `$2i+1$` 代表奇数维度
 * `$d_{model}$` 为 512
+
+作者提到，方法 1 的好处有两点：
+
+1. 任意位置的 `$PE_{pos+k}$` 都可以被 `$PE_{pos}$` 的线性函数表示，三角函数特性复习下：
+
+`$$cos(\alpha + \beta) = cos(\alpha)cos(\beta) - sin(\alpha)sin(\beta)$$`
+`$$sin(\alpha + \beta) = sin(\alpha)cos(\beta) + cos(\alpha)sin(\beta)$$`
+
+2. 如果是学习到的 Positional Embedding，(个人认为，没看论文)会像词向量一样受限于词典大小。
+   也就是只能学习到 “位置 2 对应的向量是 (1,1,1,2)” 这样的表示。所以用三角公式明显不受序列长度的限制，
+   也就是可以对比所遇到序列的更长的序列进行表示
 
 ## 残差项
 
@@ -351,7 +380,7 @@ encoder-decoder attention 层工作就像 multi-head self-attention，除了它�
 
 ![img](images/loss1.png)
 
-我们怎么对比两个概率分布？简单相减就好(对于细节，可以看交叉熵和 KL散度相关资料)。
+我们怎么对比两个概率分布？简单相减就好(对于细节，可以看交叉熵和 KL 散度相关资料)。
 注意这只是个最简单的例子，更真实情况下，我们会用一个句子，例如 `je suis étudiant`，
 期待输出 `i am a student`。在这里是希望我们模型能够成功输出概率分布：
 
@@ -374,20 +403,6 @@ encoder-decoder attention 层工作就像 multi-head self-attention，除了它�
 那么便保留 'I' 作为第一词，不断重复这个过程。在我们例子中，
 beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设都被保留在 memory 中)，
 然后 top_beams 也是 2 个(意味着我们会返回 2 个翻译)，这些都是超参可以调整的
-
-
-# Transformer 结构解析
-
-![img](images/transformer.jpg)
-
-# Transformer 数学表示
-
-`$$\operatorname{Attention}(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V$$`
-
-`$$\begin{aligned}
-\operatorname{MultiHead}(Q, K, V) &=\operatorname{Concat}\left(\operatorname{head}_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O} \\
-\text { where }\, head_{i} &=\operatorname{Attention}\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)
-\end{aligned}$$`
 
 # Transformer 要点问题
 
@@ -442,103 +457,22 @@ beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设
           通过在输入中引入正余弦函数构造的位置编码 PositionEncoding 一定程度上补充了位置信息，
           但还是不如循环神经网络那样自然和高效
 
-# PyTorch 示例
-
-```python
-import torch 
-from torch import nn 
-
-#验证MultiheadAttention和head数量无关
-inputs = torch.randn(8,200,64) #batch_size, seq_length, features
-
-attention_h8 = nn.MultiheadAttention(
-    embed_dim = 64,
-    num_heads = 8,
-    bias=True,
-    batch_first=True
-)
-
-attention_h16 = nn.MultiheadAttention(
-    embed_dim = 64,
-    num_heads = 16,
-    bias=True,
-    batch_first=True
-)
-
-
-out_h8 = attention_h8(inputs,inputs,inputs)
-out_h16 = attention_h16(inputs,inputs,inputs)
-
-from torchkeras import summary 
-summary(attention_h8,input_data_args=(inputs,inputs,inputs));
-
-summary(attention_h16,input_data_args=(inputs,inputs,inputs));
-```
-
-
-```python
-import torch 
-from torch import nn 
-from copy import deepcopy
-
-#多头注意力的一种简洁实现
-
-class ScaledDotProductAttention(nn.Module):
-    "Compute 'Scaled Dot Product Attention'"
-    def __init__(self):
-        super(ScaledDotProductAttention, self).__init__()
-
-    def forward(self,query, key, value, mask=None, dropout=None):
-        d_k = query.size(-1)
-        scores = query@key.transpose(-2,-1) / d_k**0.5     
-        if mask is not None:
-            scores = scores.masked_fill(mask == 0, -1e20)
-        p_attn = F.softmax(scores, dim = -1)
-        if dropout is not None:
-            p_attn = dropout(p_attn)
-        return p_attn@value, p_attn
-    
-class MultiHeadAttention(nn.Module):
-    def __init__(self, h, d_model, dropout=0.1):
-        "Take in model size and number of heads."
-        super(MultiHeadAttention, self).__init__()
-        assert d_model % h == 0
-        # We assume d_v always equals d_k
-        self.d_k = d_model // h
-        self.h = h
-        self.linears = nn.ModuleList([deepcopy(nn.Linear(d_model, d_model)) for _ in range(4)])
-        
-        self.attn = None
-        self.dropout = nn.Dropout(p=dropout)
-        self.attention = ScaledDotProductAttention()
-        
-    def forward(self, query, key, value, mask=None):
-        "Implements Figure 2"
-        if mask is not None:
-            # Same mask applied to all h heads.
-            mask = mask.unsqueeze(1)
-        nbatches = query.size(0)
-        
-        # 1) Do all the linear projections in batch from d_model => h x d_k 
-        query, key, value = \
-            [l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
-             for l, x in zip(self.linears, (query, key, value))]
-        
-        # 2) Apply attention on all the projected vectors in batch. 
-        x, self.attn = self.attention(query, key, value, mask=mask, 
-                                 dropout=self.dropout)
-        
-        # 3) "Concat" using a view and apply a final linear. 
-        x = x.transpose(1, 2).contiguous() \
-             .view(nbatches, -1, self.h * self.d_k)
-        return self.linears[-1](x)
-```
-
 # 参考
 
 * [Transformer](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486160&idx=1&sn=2dfdedb2edbca76a0c7b110ca9952e98&chksm=fa0414bbcd739dad0ccd604f6dd5ed99e8ab7f713ecafc17dd056fc91ad85968844e70bbf398&scene=178&cur_album_id=1577157748566310916#rd)
+* [Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf)
+* [《The Illustrated Transformer》](http://jalammar.github.io/illustrated-transformer/)
+* [《Visualizing A Neural Machine Translation Model (Mechanics of Seq2seq Models With Attention)》](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)
 * [Hugging Face](https://huggingface.co/docs/transformers/quicktour)
 * [🤗 Transformers 教程：pipeline一键预测](https://mp.weixin.qq.com/s/1dtk5gCa7C-wyVQ9vIuRYw)
-* [Transformer 的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)
-* [Transformer 知乎原理讲解](https://zhuanlan.zhihu.com/p/48508221)
-* [Transformer 哈佛博客代码讲解](http://nlp.seas.harvard.edu/annotated-transformer/)
+* [Transformer的一家](https://mp.weixin.qq.com/s/ArzUQHQ-imSpWRPt6XG9FQ)
+* [详解Transformer ](https://zhuanlan.zhihu.com/p/48508221)
+* [深度学习中的注意力机制](https://blog.csdn.net/malefactor/article/details/78767781)
+* [Self-Attention和Transformer](https://luweikxy.gitbook.io/machine-learning-notes/self-attention-and-transformer)
+* [The Annotated Transformer](http://nlp.seas.harvard.edu/annotated-transformer/#background)
+* [Tensor2Tensor notebook](https://colab.research.google.com/github/tensorflow/tensor2tensor/blob/master/tensor2tensor/notebooks/hello_t2t.ipynb)
+* [get_timing_signal_1d()](https://github.com/tensorflow/tensor2tensor/blob/23bd23b9830059fbc349381b70d9429b5c40a139/tensor2tensor/layers/common_attention.py)
+* [transformer_positional_encoding_graph.ipynb](https://github.com/jalammar/jalammar.github.io/blob/master/notebookes/transformer/transformer_positional_encoding_graph.ipynb)
+* [《Transformer: A Novel Neural Network Architecture for Language Understanding》](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)
+* [Tensor2Tensor announcement](https://ai.googleblog.com/2017/06/accelerating-deep-learning-research.html)
+* [Łukasz Kaiser’s talk](https://www.youtube.com/watch?v=rBCqOTEfxvg)

@@ -1,6 +1,5 @@
 ---
 title: Attention
-subtitle: Augmented
 author: 王哲峰
 date: '2022-07-15'
 slug: dl-attention
@@ -489,5 +488,4 @@ Attention 代表了一种更为广泛的运算。我们之前学习的是 Attent
 
 * [图解 Attention](https://zhuanlan.zhihu.com/p/265182368)
 * [Visualizing A Neural Machine Translation Model (Mechanics of Seq2seq Models With Attention)](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)
-* [Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf) 
 * [深度学习中 Attention Mechanism 详细介绍](https://zhuanlan.zhihu.com/p/31547842)
