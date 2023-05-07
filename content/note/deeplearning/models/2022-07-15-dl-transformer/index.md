@@ -79,11 +79,11 @@ Transformer 是 Google 在 2017 年提出的一个 NLP 模型，适用于机器�
 
 ![img](images/ed3.png)
 
-编码器的输入首先流入一个自关注层 (self-attention layer) - 当编码器对某个特定单词进行编码时，
+编码器的输入首先流入一个自关注层(self-attention layer)，当编码器对某个特定单词进行编码时，
 该层会帮助编码器关注输入句子中的其它单词。后续会详细讲这块
 
-自关注层的输出会被喂入前馈神经网络 (feed-forward neural network)，每个输入位置上都有一个前馈神经网络，
-它们之间是相互独立的 (补充: 论文说前馈神经网络是 point-wise)
+自关注层(self-attention layer)的输出会被喂入前馈神经网络 (feed-forward neural network)，
+每个输入位置上都有一个前馈神经网络，它们之间是相互独立的 (补充: 论文说前馈神经网络是 point-wise)
 
 解码器也有编码器的这两层，但是在它们中间还有个关注层，帮助解码器关注输入句子的相关部分 (跟 seq2seq 模型里的关注机制类似)
 
