@@ -3,7 +3,7 @@ title: Word Embedding
 subtitle: Sequence Representation
 author: 王哲峰
 date: '2023-03-21'
-slug: dl-embedding
+slug: embedding
 categories:
   - deeplearning
 tags: 

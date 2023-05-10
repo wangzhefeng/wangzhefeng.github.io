@@ -1,9 +1,10 @@
 ---
-title: NLP-fastText
+title: NLP fastText
 author: 王哲峰
 date: '2022-04-05'
-slug: nlp-fasttext
+slug: fasttext
 categories:
+  - deeplearning
   - nlp
 tags:
   - tool
