@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>统计学知识 – wangzhefeng – Blogs</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="概述
+
+" />
+    <meta property="og:description" content="概述
+
+" />
+    
+    <meta name="author" content="wangzhefeng" />
+
+    
+    <meta property="og:title" content="统计学知识" />
+    <meta property="twitter:title" content="统计学知识" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="wangzhefeng - Blogs" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="/images/logo.jpg" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">wangzhefeng</a></h1>
+            <p class="site-description">Blogs</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>统计学知识</h1>
+
+  <div class="entry">
+    <h1 id="概述">概述</h1>
+
+<p>整理一下统计学中常用的概念、方法论. 作为一个统计学出身的人, 遇到这些问题时希望不要被难倒</p>
+
+<p>内容大致包含：</p>
+
+<ul>
+  <li>大数定律、中心极限定理</li>
+  <li>贝叶斯公式、贝叶斯定理</li>
+  <li>参数估计
+    <ul>
+      <li>点估计、区间估计</li>
+    </ul>
+  </li>
+  <li>最大似然估计与EM算法</li>
+  <li>假设检验
+    <ul>
+      <li>A/B test</li>
+    </ul>
+  </li>
+  <li>方差分析</li>
+  <li>回归分析</li>
+  <li>主成分分析</li>
+  <li>因子分析</li>
+  <li>聚类分析</li>
+  <li>统计显著性</li>
+</ul>
+
+<h1 id="大数定律与中心极限定理">大数定律与中心极限定理</h1>
+
+<p>在统计学中, 大数定律又称大数法则、大数率, 是描述相当多次数重复实验的结果的定律; 
+根据这个定律, 样本数量越多, 则其算术平均值就有越高的概率接近期望值.</p>
+
+<h2 id="大数定律">大数定律</h2>
+
+<p>若 <code class="language-plaintext highlighter-rouge">$\xi_1, \xi_2,...,\xi_n,...$</code> 是随机变量序列, 令</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\eta_{n} = \frac{\xi_1+\xi_2+...+\xi_n}{n}$$</code></p>
+
+<p>若存在常数序列 <code class="language-plaintext highlighter-rouge">$a_1,a_2,...,a_n,...$</code> 对任何的正数 <code class="language-plaintext highlighter-rouge">$\epsilon$</code>, 恒有</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\lim\limits_{n \to \infty}P(|\eta_n-a_n|&lt;\epsilon)=1$$</code></p>
+
+<p>则称序列 <code class="language-plaintext highlighter-rouge">${\epsilon_n}$</code> 服从 <strong>大数定律</strong>(或<strong>大数法则</strong>).</p>
+
+<h3 id="切比雪夫chebyishev不等式">切比雪夫(Chebyishev)不等式</h3>
+
+<h3 id="切比雪夫定理的特殊情况">切比雪夫定理的特殊情况</h3>
+
+<h3 id="伯努利大数定理">伯努利大数定理</h3>
+
+<h3 id="辛钦大数定理">辛钦大数定理</h3>
+
+<h2 id="中心极限定理">中心极限定理</h2>
+
+<p>对于独立随机变量序列 <code class="language-plaintext highlighter-rouge">$\xi_1, \xi_2,...,\xi_n,...$</code>, 
+假定 <code class="language-plaintext highlighter-rouge">$E(\xi_n)$</code> 和 <code class="language-plaintext highlighter-rouge">$D(\xi_n)$</code> 都存在, 令</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\zeta_n=\frac{\sum_{i=1}^{n}\xi_i-\sum_{i=1}^{n}E(\xi_i)}{\sqrt{\sum_{i=1}^{n}}}$$</code></p>
+
+<p>若</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\lim\limits_{n \to \infty}P(\zeta_n &lt; x)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x}e^{\frac{-t^2}{2}}dt$$</code></p>
+
+<p>则称序列 <code class="language-plaintext highlighter-rouge">${\xi_n}$</code> 服从 <strong>中心极限定理(Central Limit Theorem)</strong>.</p>
+
+<h3 id="同分布的中心极限定理">同分布的中心极限定理</h3>
+
+<h3 id="德莫佛拉普拉斯定理">德莫佛－拉普拉斯定理</h3>
+
+<h1 id="统计推断理论">统计推断理论</h1>
+
+<ul>
+  <li>抽样分布</li>
+  <li>参数估计
+    <ul>
+      <li>点估计</li>
+      <li>区间估计</li>
+    </ul>
+  </li>
+  <li>假设检验
+    <ul>
+      <li>参数假设检验问题</li>
+      <li>非参数假设检验问题</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="抽样分布">抽样分布</h1>
+
+<h1 id="参数估计">参数估计</h1>
+
+<h2 id="点估计">点估计</h2>
+
+<h2 id="区间估计">区间估计</h2>
+
+<h1 id="假设检验">假设检验</h1>
+
+<p>假设检验(Hypothesis Test)是由 K.Pearson 于 20 世纪初提出的，
+之后由费希尔进行了细化, 并最终由 Neyman 和 E.Pearson 提出了较完整的假设检验理论</p>
+
+<h2 id="统计显著性">统计显著性</h2>
+
+<p>显著性、统计显著性(Statistical Significance)是指零假设为真的情况下拒绝零假设所要承担的风险水平，
+又叫概率水平，或者显著水平(Significant Level)</p>
+
+<p>显著性的含义是指两个群体的态度之间的任何差异是由于系统因素而不是偶然因素的影响。
+假定控制了可能影响两个群体之间差异的所有其他因素，因此，余下的解释就是所推断的因素，
+而这个因素不能够 100% 保证，所以有一定的概率值，叫显著性水平</p>
+
+<p>总的来说，它表示群体之间得以相互区别的能力。在统计假设检验中，公认的小概率事件的概率值被称为统计假设检验的显著性水平，
+对同一量，进行多次计量，然后算出平均值</p>
+
+<h2 id="假设检验的基本思想">假设检验的基本思想</h2>
+
+<p>假如实验结果与原假设 <code class="language-plaintext highlighter-rouge">$H$</code> 发生矛盾就拒绝原假设 <code class="language-plaintext highlighter-rouge">$H$</code>，否则就接受原假设 <code class="language-plaintext highlighter-rouge">$H$</code></p>
+
+<p>假如对某个指标 <code class="language-plaintext highlighter-rouge">$\theta$</code> 进行检测，检测的临界值为 <code class="language-plaintext highlighter-rouge">$\theta_0$</code>，
+即如果 <code class="language-plaintext highlighter-rouge">$\theta \geq \theta_0$</code> 则认为指标 <code class="language-plaintext highlighter-rouge">$\theta$</code> 合格；
+如果 <code class="language-plaintext highlighter-rouge">$\theta &lt; \theta_0$</code>，则认为指标 <code class="language-plaintext highlighter-rouge">$\theta$</code> 不合格</p>
+
+<p>因此命题 “<code class="language-plaintext highlighter-rouge">$\theta \geq \theta_0$</code>” 将涉及如下两个参数集合:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\Theta_0 = \{\theta:\theta \geq \theta_0\}$$</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\Theta_1 = \{\theta:\theta &lt; \theta_0\}$$</code></p>
+
+<p>在统计学中，这两个非空不相交的参数集合都称作统计假设，简称假设。
+通过样本对一个假设作出”对”或”不对”的具体判断规则就称为该假设的一个检验或检验法则</p>
+
+<p>检验的结果若是否定该命题，则称拒绝这个假设，否则就称为接受该假设。
+若假设可用一个参数的集合表示，该假设检验问题称为参数假设检验，
+否则称为非参数假设检验问题，上面的问题就是一个参数假设检验问题，
+而对假设”总体为正态”作出检验的问题就是一个非参数假设检验问题</p>
+
+<h2 id="假设检验的基本步骤">假设检验的基本步骤</h2>
+
+<h3 id="建立假设">建立假设</h3>
+
+<p>假设的基本形式：</p>
+
+<ul>
+  <li>原假设(零假设，null hypothesis)：<code class="language-plaintext highlighter-rouge">$H_0:\theta\in \Theta_0$</code></li>
+  <li>对立假设(备择假设，alternative hypothesis)：<code class="language-plaintext highlighter-rouge">$H_1:\theta\in \Theta_1$</code></li>
+</ul>
+
+<p>假设的类别：</p>
+
+<ul>
+  <li>简单原假设：<code class="language-plaintext highlighter-rouge">$H_0:\theta = \theta_0$</code>
+    <ul>
+      <li>双侧(双边)假设
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">$H_0:\theta = \theta_0$</code> vs <code class="language-plaintext highlighter-rouge">$H_0:\theta \neq \theta_0$</code></li>
+        </ul>
+      </li>
+      <li>单侧(单边)假设
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">$H_0:\theta = \theta_0$</code> vs <code class="language-plaintext highlighter-rouge">$H_0:\theta &lt; \theta_0$</code> 或者
+<code class="language-plaintext highlighter-rouge">$H_0:\theta = \theta_0$</code> vs <code class="language-plaintext highlighter-rouge">$H_0:\theta &gt; \theta_0$</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>复杂(复合)原假设
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">$H_0:\theta \geq \theta_0$</code> 或者 <code class="language-plaintext highlighter-rouge">$H_0:\theta &lt; \theta_0$</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>在假设检验中，通常将不宜轻易加以否定的假设作为原假设</p>
+
+<h3 id="选择检验统计量并给出拒绝域形式">选择检验统计量并给出拒绝域形式</h3>
+
+<p>拒绝域：对于一个假设的检验就是指这样一个法则：当有了具体的样本后，
+按照该法则就可以决定是接受  <code class="language-plaintext highlighter-rouge">$H_0$</code> 还是拒绝 <code class="language-plaintext highlighter-rouge">$H_0$</code>，
+即检验就等价于把样本空间划分为两个互不相交的部分 <code class="language-plaintext highlighter-rouge">$W$</code> 和 <code class="language-plaintext highlighter-rouge">$\bar{W}$</code>，
+当样本属于 <code class="language-plaintext highlighter-rouge">$W$</code> 时，拒绝  <code class="language-plaintext highlighter-rouge">$H_0$</code>；否则接受 <code class="language-plaintext highlighter-rouge">$H_0$</code>，
+于是，称 <code class="language-plaintext highlighter-rouge">$W$</code> 为该检验的拒绝域，而称 <code class="language-plaintext highlighter-rouge">$\bar{W}$</code> 为接受域</p>
+
+<p>检验统计量：由样本对原假设进行检验总是通过一个统计量完成的，该统计量称为检验统计量</p>
+
+<h3 id="选择显著性水平">选择显著性水平</h3>
+
+<p>由于样本是随机的，当应用某种检验做判断时，可能做出正确的判断，也可能做出错误的判断</p>
+
+<ul>
+  <li>两种错误
+    <ul>
+      <li>当 <code class="language-plaintext highlighter-rouge">$\theta \in \Theta_0$</code> 时，样本由于随机性却落入了拒绝域 <code class="language-plaintext highlighter-rouge">$W$</code>，
+于是采取了拒绝原假设 <code class="language-plaintext highlighter-rouge">$H_0$</code> 的错误决策，称这样的错误为第一类错误(type I error)</li>
+      <li>当 <code class="language-plaintext highlighter-rouge">$\theta \in \Theta_1$</code> 时，样本由于随机性却落入了接受域  <code class="language-plaintext highlighter-rouge">$\bar{W}$</code>， 
+于是采取了接受原假设 <code class="language-plaintext highlighter-rouge">$H_0$</code> 的错误决策，称这样的错误为第一类错误(type II error)</li>
+    </ul>
+  </li>
+  <li>犯两种错误的概率：由于检验结果受样本的影响，具有随机性，于是，可用总体分布定义犯第一类，第二类错误的概率如下
+    <ul>
+      <li>犯第一类错误概率：<code class="language-plaintext highlighter-rouge">$\alpha=P_{\theta}(X \in W), \theta \in \Theta_0$</code></li>
+      <li>犯第二类错误概率：<code class="language-plaintext highlighter-rouge">$\beta=1-\alpha=P_{\theta}(X \in \bar{W}), \theta \in \Theta_1$</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>势函数、功效函数(power function)：每一个检验都无法避免犯错误的可能，但无法找到一个检验，使其犯两种错误的概率都尽可能地小</p>
+
+    <p><code class="language-plaintext highlighter-rouge">$$g(\theta) = P_{\theta}(X \in W), \theta \in \Theta_0 \cup \Theta_1$$</code></p>
+
+    <p>显然, 势函数 <code class="language-plaintext highlighter-rouge">$g(\theta)$</code> 是定义在参数空间  <code class="language-plaintext highlighter-rouge">$\Theta$</code> 上的一个函数, 当 <code class="language-plaintext highlighter-rouge">$\theta\in\Theta_0$</code> 时, 
+<code class="language-plaintext highlighter-rouge">$g(\theta)=\alpha=\alpha(\theta)$</code>, 当  <code class="language-plaintext highlighter-rouge">$\theta\in\Theta_1$</code> 时, 
+<code class="language-plaintext highlighter-rouge">$g(\theta)=1-\beta=1-\beta(\theta)$</code>, 犯两类错误的概率都是参数  <code class="language-plaintext highlighter-rouge">$\theta$</code> 的函数:</p>
+  </li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">$$g(\theta)=\left\{
+\begin{array}{l}
+\alpha(\theta)    &amp; &amp; {\theta\in\Theta_0}\\
+1-\beta(\theta)   &amp; &amp; {\theta\in\Theta_1}\\
+\end{array} \right.$$</code></p>
+
+<p>即</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\left\{
+\begin{array}{l}
+\alpha(\theta)=g(\theta)    &amp; &amp; {\theta\in\Theta_0}\\
+\beta(\theta)= 1-g(\theta)  &amp; &amp; {\theta\in\Theta_1}\\
+\end{array} \right.$$</code></p>
+
+<p>上面的函数说明, 在样本量给定的条件下, <code class="language-plaintext highlighter-rouge">$\alpha$</code> 与 <code class="language-plaintext highlighter-rouge">$\beta$</code> 中一个减小必导致另一个增大, 
+既然不能同时控制一个检验的犯第一类、第二类错误的概率, 只能采取折中方案, 
+通常的做法是仅限制犯第一类错误的概率, 也就是费希尔的显著性检验.</p>
+
+<ul>
+  <li>显著性水平
+    <ul>
+      <li>对检验问题 <code class="language-plaintext highlighter-rouge">$H_0:\theta\in\Theta_0$</code> vs <code class="language-plaintext highlighter-rouge">$H_1:\theta\in\Theta_1$</code>, 
+如果一个检验满足对任意的 <code class="language-plaintext highlighter-rouge">$\theta\in\Theta_0$</code> 都有: <code class="language-plaintext highlighter-rouge">$g(\theta)\leq\alpha$</code>, 
+则称该检验是显著性水平为 <code class="language-plaintext highlighter-rouge">$\alpha$</code> 的显著性检验, 简称水平为  <code class="language-plaintext highlighter-rouge">$\alpha$</code> 的检验.</li>
+      <li>提出显著性检验的概念就是要控制犯第一类错误的概率 <code class="language-plaintext highlighter-rouge">$\alpha$</code>, 但也不能使得 <code class="language-plaintext highlighter-rouge">$\alpha$</code> 
+过小(<code class="language-plaintext highlighter-rouge">$\alpha$</code> 过小会导致 <code class="language-plaintext highlighter-rouge">$\beta$</code> 过大), 在适当控制 <code class="language-plaintext highlighter-rouge">$\alpha$</code> 中制约 <code class="language-plaintext highlighter-rouge">$\alpha$</code>, 
+最常用的选择是 <code class="language-plaintext highlighter-rouge">$\alpha=0.05$</code>, <code class="language-plaintext highlighter-rouge">$\alpha=0.10$</code>, <code class="language-plaintext highlighter-rouge">$\alpha=0.01$</code></li>
+    </ul>
+  </li>
+  <li>给出拒绝域
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">$g(\theta_0)=\alpha$</code></li>
+      <li>显著性水平越小, 拒绝域越小;</li>
+    </ul>
+  </li>
+  <li>做出判断
+    <ul>
+      <li>在有了明确的拒绝域  <code class="language-plaintext highlighter-rouge">$W$</code> 后, 根据样本观测值就可以做出判断;</li>
+      <li>由样本观测值计算检验统计量, 由样本统计量是否属于拒绝域做出判断;</li>
+      <li>可能会出现这样的情况: 在一个较大的显著性水平下得到了拒绝原假设的结论, 
+而在一个较小的显著性水平下却得到了接受原假设的结论;</li>
+      <li>检验的  <code class="language-plaintext highlighter-rouge">$p$</code> 值(  <code class="language-plaintext highlighter-rouge">$p-value$</code>)
+        <ul>
+          <li>在一个假设检验问题中, 利用样本观测值能够做出拒绝原假设的最小显著性水平称为检验的p值, 
+这样由检验的p值与人们心中的显著性水平  <code class="language-plaintext highlighter-rouge">$\alpha$</code> 进行比较就可以很容易做出检验的结论:
+            <ul>
+              <li>如果 <code class="language-plaintext highlighter-rouge">$\alpha\geq p$</code>, 则在显著性水平  <code class="language-plaintext highlighter-rouge">$\alpha$</code> 下拒绝原假设;</li>
+              <li>如果 <code class="language-plaintext highlighter-rouge">$\alpha&lt; p$</code>, 则在显著性水平  <code class="language-plaintext highlighter-rouge">$\alpha$</code> 下接受原假设;</li>
+            </ul>
+          </li>
+          <li>假设检验可以从两个方面进行: 其一是建立拒绝域, 考察样本观测值是否落在拒绝域中, 
+  其二是根据样本观测值计算检验的p值, 通过将p值与事先设定的显著性水平进行比较</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="常用假设检验">常用假设检验</h3>
+
+<ol>
+  <li>卡方检验</li>
+  <li>t 检验</li>
+</ol>
+
+<h3 id="正态性检验">正态性检验</h3>
+
+<ul>
+  <li>https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html</li>
+</ul>
+
+<h2 id="抽样分布-1">抽样分布</h2>
+
+<h1 id="偏度峰度">偏度、峰度</h1>
+
+<h2 id="偏度">偏度</h2>
+
+<ul>
+  <li>偏度(skewness)又称偏态、偏态系数, 是描述数据分布偏斜方向和程度的度量, 
+其是衡量数据分布非对称程度的数字特征. 对于随机变量 <code class="language-plaintext highlighter-rouge">$X$</code>, 其偏度是样本的三阶标准化矩:</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">$$Skew(x) = E[(\frac{(X-\mu)^{3}}{\sigma})] = \frac{E(X^{3})-3\mu \sigma^{2} - \mu^{3}}{\sigma^{3}}$$</code></p>
+
+<ul>
+  <li>偏度的衡量是相对于正态分布来说, 正态分布的偏度为0. 因此说:
+    <ul>
+      <li>若数据分布是对称的, 偏度为0</li>
+      <li>若偏度 &gt; 0, 则可认为分布为右偏, 也叫正偏, 即分布有一条长尾在右</li>
+      <li>若偏度 &lt; 0, 则可认为分布为左偏, 也叫负偏, 即分布有一条长尾在左</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="峰度">峰度</h2>
+
+<p>峰度(Kurtosis)是描述数据分布陡峭或平滑的统计量, 通过对峰度的计算, 
+能够判定数据分布相对于正态分布而言是更陡峭还是平缓. 对于随机变量 <code class="language-plaintext highlighter-rouge">$X$</code>, 
+其峰度为样本的四阶标准中心矩</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$Kurt(x) = E[(\frac{(X-\mu)^{4}}{\sigma})] = \frac{E[(X-\mu)^4]}{(E[[(X-\mu)^2]])^2}$$</code></p>
+
+<ul>
+  <li>当峰度系数 &gt; 0, 从形态上看, 它相比于正态分布要更陡峭或尾部更厚</li>
+  <li>峰度系数 &lt; 0, 从形态上看, 则它相比于正态分布更平缓或尾部更薄</li>
+  <li>在实际环境当中, 如果一个分部是厚尾的, 这个分布往往比正态分布的尾部具有更大的”质量”, 即含又更多的极端值</li>
+  <li>常用的几个分布中, 正态分布的峰度为 0, 均匀分布的峰度为 -1.2, 指数分布的峰度为 6</li>
+</ul>
+
+<h1 id="回归分析">回归分析</h1>
+
+<h2 id="回归分析简介">回归分析简介</h2>
+
+<h2 id="回归分析理论">回归分析理论</h2>
+
+<h1 id="方差分析">方差分析</h1>
+
+<h2 id="方差分析简介">方差分析简介</h2>
+
+<p>对于多个总体均值的比较问题, 处理这类问题通常采用所谓的方差分析方法</p>
+
+<h2 id="方差分析理论">方差分析理论</h2>
+
+<h3 id="单因子方差分析">单因子方差分析</h3>
+
+<p>问题描述：</p>
+
+<p>通常, 在单因子试验中, 记因子为 <code class="language-plaintext highlighter-rouge">$A$</code> , 
+设其有 <code class="language-plaintext highlighter-rouge">$r$</code> 个水平, 记为 <code class="language-plaintext highlighter-rouge">$A_{1}, A_{2}, \cdots, A_{r}$</code> , 
+在每一个水平下考察的指标可以看成一个总体, 现有 <code class="language-plaintext highlighter-rouge">$r$</code> 个水平, 
+故有 <code class="language-plaintext highlighter-rouge">$r$</code> 个总体, 假定如下，并且这三个假定都可以用统计方法进行验证:</p>
+
+<ul>
+  <li>(1) 每一个总体均为正态总体, 记为 <code class="language-plaintext highlighter-rouge">$N(\mu_{i}, \sigma_{i}^{2}), i=1,2, \cdots, r$</code>. 利用正态性验证成立.</li>
+  <li>(2) 各总体的方差相同, 记为 <code class="language-plaintext highlighter-rouge">$\sigma_{1}^{2} = \sigma_{2}^{2} = \cdots = \sigma_{r}^{2} = \sigma^{2}$</code>. 利用方差齐性检验验证成立.</li>
+  <li>(3) 从每一总体中抽取的样本是相互独立的, 即所有的试验结果 <code class="language-plaintext highlighter-rouge">$y_{ij}$</code> 都相互独立. 可由随机化实现, 这里的随机化是指所有试验按随机次序进行.</li>
+</ul>
+
+<p>接下来要做的工作就是比较各水平下的均值是否相同，即要对如下的一个假设进行检验:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$H_{0}: \mu_{1} = \mu_{2} = \cdots = \mu_{r}.$$</code></p>
+
+<p>其备择假设为:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$H_{1}: \mu_{1}, \mu_{2}, \cdots, \mu_{r} 不全相等.$$</code></p>
+
+<blockquote>
+  <p>在不会引起误会的情况下 <code class="language-plaintext highlighter-rouge">$H_{1}$</code> 通常可省略不写.</p>
+</blockquote>
+
+<ul>
+  <li>问题讨论：
+    <ul>
+      <li>如果 <code class="language-plaintext highlighter-rouge">$H_{0}$</code> 成立，因子 <code class="language-plaintext highlighter-rouge">$A$</code> 的 <code class="language-plaintext highlighter-rouge">$r$</code> 个水平均值相同，
+称因子 <code class="language-plaintext highlighter-rouge">$A$</code> 的 <code class="language-plaintext highlighter-rouge">$r$</code> 个水平间没有显著差异，简称因子 <code class="language-plaintext highlighter-rouge">$A$</code> 不显著;</li>
+      <li>反之，当 <code class="language-plaintext highlighter-rouge">$H_{0}$</code> 不成立时，因子 <code class="language-plaintext highlighter-rouge">$A$</code> 的 <code class="language-plaintext highlighter-rouge">$r$</code> 个水平均值不全相同，
+这时称因子 <code class="language-plaintext highlighter-rouge">$A$</code> 的不同水平间有显著差异，简称因此 <code class="language-plaintext highlighter-rouge">$A$</code> 显著.</li>
+    </ul>
+  </li>
+  <li>进行试验:
+    <ul>
+      <li>为了对假设 <code class="language-plaintext highlighter-rouge">$H_{0}$</code> 进行试验，需要从每一水平下的总体抽取样本，
+设从第 <code class="language-plaintext highlighter-rouge">$i$</code> 个水平下的总体获得 <code class="language-plaintext highlighter-rouge">$m$</code> 个试验结果，
+记 <code class="language-plaintext highlighter-rouge">$y_{ij}$</code> 表示第 <code class="language-plaintext highlighter-rouge">$i$</code> 个总体的第 <code class="language-plaintext highlighter-rouge">$j$</code> 次重复试验结果，
+共得如下 <code class="language-plaintext highlighter-rouge">$r \times m$</code> 个试验结果:</li>
+    </ul>
+  </li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">$$y_{ij}, i = 1, 2, \cdots, r, j=1, 2, \cdots, m.$$</code></p>
+
+<ul>
+  <li>其中: <code class="language-plaintext highlighter-rouge">$r$</code> 为水平数，<code class="language-plaintext highlighter-rouge">$m$</code> 为重复数，<code class="language-plaintext highlighter-rouge">$i$</code> 为水平编号，<code class="language-plaintext highlighter-rouge">$j$</code> 为重复序号.
+    <ul>
+      <li>在水平 <code class="language-plaintext highlighter-rouge">$A_{i}$</code> 下的试验结果 <code class="language-plaintext highlighter-rouge">$y_{ij}$</code> 与该水平下的指标均值 <code class="language-plaintext highlighter-rouge">$\mu_{i}$</code> 一般总是有差距的，
+记 <code class="language-plaintext highlighter-rouge">$\epsilon_{ij} = y_{ij} - \mu_{i}$</code> , <code class="language-plaintext highlighter-rouge">$\epsilon_{ij}$</code> 称为随机误差，于是有:</li>
+    </ul>
+  </li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">$$y_{ij} = \mu_{i} + \epsilon_{ij}$$</code></p>
+
+<ul>
+  <li>上式称为试验结果 <code class="language-plaintext highlighter-rouge">$y_{ij}$</code> 的数据结构式, 把三个假定用于数据结构式就可以写出单因子方差分析的统计模型.</li>
+  <li>单因子方差分析的统计模型</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">$$\begin{cases}
+y_{ij} = \mu_{i} + \epsilon_{ij}, i = 1, 2, \cdots, r, j=1, 2, \cdots, m. \\
+诸 \epsilon_{ij} 相互独立，且都服从 N(0, \sigma^{2})
+\end{cases}$$</code></p>
+
+<blockquote>
+  <p>为了更好地描述数据，常在方差分析中引入总均值与水平效应的概念，
+  称诸 <code class="language-plaintext highlighter-rouge">$\mu_{i}$</code> 的平均(所有试验结果的均值的平均)为总均值，也称一般平均。</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">$$\mu = \frac{1}{r}(\mu_{1} + \mu_{2} + \cdots + \mu_{r}) = \frac{1}{r}\sum_{i=1}^{r}\mu_{i}$$</code></p>
+
+<p>称第 <code class="language-plaintext highlighter-rouge">$i$</code> 水平下的均值 <code class="language-plaintext highlighter-rouge">$\mu_{i}$</code> 与总均值 <code class="language-plaintext highlighter-rouge">$\mu$</code> 的差为因子 <code class="language-plaintext highlighter-rouge">$A$</code> 的第 <code class="language-plaintext highlighter-rouge">$i$</code> 水平的主效应，
+简称为 <code class="language-plaintext highlighter-rouge">$A_{i}$</code> 的水平效应:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$a_{i}=\mu_{i} - \mu, i = 1, 2, \cdots, r.$$</code></p>
+
+<p>容易看出第 <code class="language-plaintext highlighter-rouge">$i$</code> 个总体均值是由总均值与该水平效应叠加而成的:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\begin{cases}
+\sum_{i=1}^{r}a_{i}=0 \\
+\mu_{i} = \mu + a_{i}
+\end{cases}$$</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">$$\begin{cases}
+y_{ij} = \mu + a_{i} + \epsilon_{ij}, i = 1, 2, \cdots, r, j=1, 2, \cdots, m. \\
+\sum_{i=1}^{r}a_{i}=0, \\
+\epsilon_{ij} 相互独立，且都服从 N(0, \sigma^{2}).
+\end{cases}$$</code></p>
+
+<ul>
+  <li>单因子方差分析的假设</li>
+</ul>
+
+<p>原假设:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$H_{0}: a_{1} = a_{2} = \cdots = a_{r}.$$</code></p>
+
+<p>其备择假设为:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$H_{1}: a_{1}, a_{2}, \cdots, a_{r} 不全相等.$$</code></p>
+
+<h1 id="参考">参考</h1>
+
+<ul>
+  <li><a href="">概率论与数理统计</a></li>
+  <li><a href="">高等数理统计</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B">维基百科-大数定律</a></li>
+</ul>
+
+
+  </div>
+
+  <div class="date">
+    Written on May  7, 2022
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/wangzhefeng"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
