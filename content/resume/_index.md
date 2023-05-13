@@ -8,15 +8,15 @@ type: widget_page
 
 ## 基本信息
 
-* 出生年月: 1989.10
-* 职位: 数据分析师、算法工程师
+* 出生年月：1989.10
+* 职位：算法工程师
 
 ## 联系方式
 
-* Email: wangzhefengr@163.com
-* GitHub: https://github.com/wangzhefeng
-* Web: https://wangzhefeng.com/
-* 知乎: https://www.zhihu.com/people/wangzf7
+* Email：wangzf7@163.com
+* GitHub：https://github.com/wangzhefeng
+* Web：https://wangzhefeng.com/
+* 知乎：https://www.zhihu.com/people/wangzf7
 * 现居上海
 
 ## 研究方向
@@ -25,12 +25,11 @@ type: widget_page
 * 机器学习
 * 深度学习
 * 数据可视化
-* 前后端
 
 ## 教育背景
 
-* 2014.09 ~ 2017.07 上海大学理学院数学系，统计学专业，理学硕士
-* 2010.09 ~ 2014.07 潍坊学院数学与信息科学学院，统计学专业，理学学士
+* 2014.09 ~ 2017.07 上海大学，理学院数学系，统计学专业，理学硕士
+* 2010.09 ~ 2014.07 潍坊学院，数学与信息科学学院，统计学专业，理学学士
 
 ## 工作经历
 
@@ -40,7 +39,7 @@ type: widget_page
 
 ## 获得奖励
 
-* GUN, 没有
+* GUN，没有
 
 ## 发表论文
 

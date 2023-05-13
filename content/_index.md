@@ -4,7 +4,7 @@ disable_mathjax: true
 disable_highlight: true
 ---
 
-##
+###
 
 2017 年我从上海大学数学系毕业，开始了在上海工作的日子。
 工作之余在家听音乐、看书、睡觉，时不时看看 Dota2。
@@ -35,19 +35,6 @@ disable_highlight: true
 
 > “我小的时候，最高的追求，就是能够像我父亲一样的，能够有一个职业，能够养家糊口，能够读几本书，过一辈子。”
 
-<!-- 喜欢的一段视频：
-<div class="plyr__video-embed" id="player" width="100%">
-  <iframe
-    src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
-    allowfullscreen
-    allowtransparency
-    allow="autoplay"
-    width="100%"
-    height="400px"
-  ></iframe>
-</div>
--->
-
 ### TODO
 
 * :white_check_mark: 评论在一些页面不启用
@@ -70,4 +57,3 @@ disable_highlight: true
 * :white_check_mark: 添加 favicon.ico
 
 [<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.png" width="7%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
-

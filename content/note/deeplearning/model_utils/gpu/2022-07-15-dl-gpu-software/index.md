@@ -31,6 +31,10 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
+- [查看系统信息](#查看系统信息)
+  - [查看系统信息](#查看系统信息-1)
+  - [查看计算机处理器架构](#查看计算机处理器架构)
+  - [查看 Python 和 pip 版本](#查看-python-和-pip-版本)
 - [安装 Ubuntu 20.04](#安装-ubuntu-2004)
 - [安装 Nvidia 显卡驱动](#安装-nvidia-显卡驱动)
 - [安装 CUDA](#安装-cuda)
@@ -50,7 +54,90 @@ details[open] summary {
   - [研究](#研究)
 </p></details><p></p>
    
-> 系统: Ubuntu 20.04
+# 查看系统信息
+
+## 查看系统信息
+
+```bash
+$ uname -a
+Darwin Wangzf 22.4.0 Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64 x86_64
+
+$ sysctl kern.version
+kern.version: Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64
+
+$ sysctl kern.ostype
+kern.ostype: Darwin
+
+$ sysctl kern.osrelease
+kern.osrelease: 22.4.0
+
+$ sysctl kern.osrevision
+kern.osrevision: 199506
+
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		13.3.1
+ProductVersionExtra:	(a)
+BuildVersion:		22E772610a
+```
+
+## 查看计算机处理器架构
+
+* x86_64
+    - x64
+    - Inter64
+    - AMD64
+
+命令行：
+
+```bash
+$ uname -m
+```
+
+```
+x86_64
+```
+
+Python：
+
+```python
+import platform
+
+print(platform.architecture()[0])
+print(platform.machine())
+```
+
+```
+64bit
+x86_64
+```
+
+## 查看 Python 和 pip 版本
+
+Python：
+
+```bash
+$ which python3
+$ python3 --version
+```
+
+```
+/Users/zfwang/Applications/miniconda3/envs/paddle/bin/python3
+Python 3.10.9
+```
+
+pip：
+
+```bash
+$ python -m ensurepip
+$ pip --version
+```
+
+```
+Looking in links: /var/folders/mg/50rhj31j7m955hzvnjqw0w1m0000gn/T/tmpgbmm6lf3
+Requirement already satisfied: setuptools in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (66.0.0)
+Requirement already satisfied: pip in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (23.0.1)
+```
 
 # 安装 Ubuntu 20.04
 
