@@ -12,3 +12,4 @@ tags:
 # 参考
 
 * https://zhuanlan.zhihu.com/p/88438851
+* [T5-Base Model for Summarization, Sentiment, Classification, and Translation](https://pytorch.org/text/stable/tutorials/t5_demo.html)

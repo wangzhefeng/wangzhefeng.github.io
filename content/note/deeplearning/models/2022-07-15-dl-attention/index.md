@@ -67,6 +67,8 @@ details[open] summary {
 这样子无论输入中的关键词语有着怎样的先后次序，由于都被打包到中间层一起输入后方网络，
 Encoder-Decoder 网络都可以很好地处理这些词的输出位置和形式了
 
+![img](images/seq2seq.png)
+
 但是问题在于，中间状态由于来自于输入网络最后的隐藏层，一般来说它是一个大小固定的向量。
 既然是大小固定的向量，那么它能储存的信息就是有限的，当句子长度不断变长，
 由于后方的 Decoder 网络的所有信息都来自中间状态，中间状态需要表达的信息就越来越多。
@@ -489,3 +491,8 @@ Attention 代表了一种更为广泛的运算。我们之前学习的是 Attent
 * [图解 Attention](https://zhuanlan.zhihu.com/p/265182368)
 * [Visualizing A Neural Machine Translation Model (Mechanics of Seq2seq Models With Attention)](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)
 * [深度学习中 Attention Mechanism 详细介绍](https://zhuanlan.zhihu.com/p/31547842)
+* [小白都能看懂的超详细Attention机制详解](https://zhuanlan.zhihu.com/p/380892265)
+* [Attention 机制详解(1)](https://zhuanlan.zhihu.com/p/47063917)
+* [Attention 机制详解(2)-Self-Attention 与 Transformer](https://zhuanlan.zhihu.com/p/47282410)
+* [Attention 机制详解(3)-Attention 模型的应用](https://zhuanlan.zhihu.com/p/47613793)
+* [Multi-headed Self-attention机制介绍](https://zhuanlan.zhihu.com/p/365386753)

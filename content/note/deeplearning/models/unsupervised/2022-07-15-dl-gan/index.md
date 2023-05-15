@@ -42,6 +42,7 @@ details[open] summary {
   - [GAN 的核心思想和基本原理](#gan-的核心思想和基本原理)
   - [DCGAN 深度卷积对抗网络](#dcgan-深度卷积对抗网络)
   - [Keras 搭建一个 DCGAN](#keras-搭建一个-dcgan)
+- [参考](#参考)
 </p></details><p></p>
 
 # TODO
@@ -304,3 +305,6 @@ for step in range(epochs):
         img.save(os.path.join(save_dir, "real_forg" + str(step) + ".png)"))
 ```
 
+# 参考
+
+* [生成对抗网络(Generative Adversarial Nets，GAN)介绍](https://zhuanlan.zhihu.com/p/381073082)

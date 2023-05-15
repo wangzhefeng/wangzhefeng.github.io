@@ -214,3 +214,4 @@ h_{t}=o_{t} \odot \tanh \left(c_{t}\right) \tag{6}
 * [LONG SHORT-TERM MEMORY](http://www.bioinf.jku.at/publications/older/2604.pdf)
 * [狗熊会课程-写一篇人人都能看得懂的LSTM](https://mp.weixin.qq.com/s?__biz=MzA5MjEyMTYwMg==&mid=2650243045&idx=1&sn=e77f19bf316268813dcdd572a0b49213&*hksm=88722088bf05a99e6ce2759808781884aa69c8de831cd4c27fc8198698b42289923ee41eee33&scene=21#wechat_redirect)
 * [LSTM 与 GRU结构](https://blog.csdn.net/qq_28743951/article/details/78974058)
+* [PyTorch LSTM](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html)

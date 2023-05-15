@@ -476,3 +476,7 @@ beam_size 是 2(意味着任何时候，两个词 (未完成的翻译) 的假设
 * [《Transformer: A Novel Neural Network Architecture for Language Understanding》](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)
 * [Tensor2Tensor announcement](https://ai.googleblog.com/2017/06/accelerating-deep-learning-research.html)
 * [Łukasz Kaiser’s talk](https://www.youtube.com/watch?v=rBCqOTEfxvg)
+* [TransformerX](https://github.com/wangzhefeng/TransformerX)
+* [The Annotated Transformer](http://nlp.seas.harvard.edu/annotated-transformer/#training-data-and-batching)
+* [Transformer](https://mp.weixin.qq.com/s/biFNBi8Efs5uDYEocwmqbg)
+* [huggingface/transformers](https://github.com/huggingface/transformers)
