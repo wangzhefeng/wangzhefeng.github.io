@@ -31,119 +31,44 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [查看系统信息](#查看系统信息)
+- [Ubuntu](#ubuntu)
+  - [安装 Ubuntu 20.04](#安装-ubuntu-2004)
+  - [安装 Nvidia 显卡驱动](#安装-nvidia-显卡驱动)
+  - [安装 CUDA](#安装-cuda)
+    - [CUDA 介绍](#cuda-介绍)
+    - [CUDA 安装](#cuda-安装)
+  - [安装 cuDNN](#安装-cudnn)
+  - [安装 Conda 环境](#安装-conda-环境)
+  - [安装 Nvidia-Docker](#安装-nvidia-docker)
+  - [测试](#测试)
+    - [TensorFlow](#tensorflow)
+      - [TensorFlow GPU 支持](#tensorflow-gpu-支持)
+  - [Windows 设置](#windows-设置)
+    - [PyTorch](#pytorch)
+  - [NVIDIA Xavier](#nvidia-xavier)
+    - [简介](#简介)
+    - [研究](#研究)
+- [Windows](#windows)
+  - [查看系统信息](#查看系统信息)
+  - [安装 Anaconda](#安装-anaconda)
+  - [创建 Python 虚拟环境](#创建-python-虚拟环境)
+  - [确定硬件支持的 CUDA 版本](#确定硬件支持的-cuda-版本)
+  - [安装 PyTorch](#安装-pytorch)
+- [macOS](#macos)
   - [查看系统信息](#查看系统信息-1)
-  - [查看计算机处理器架构](#查看计算机处理器架构)
-  - [查看 Python 和 pip 版本](#查看-python-和-pip-版本)
-- [安装 Ubuntu 20.04](#安装-ubuntu-2004)
-- [安装 Nvidia 显卡驱动](#安装-nvidia-显卡驱动)
-- [安装 CUDA](#安装-cuda)
-  - [CUDA 介绍](#cuda-介绍)
-  - [CUDA 安装](#cuda-安装)
-- [安装 cuDNN](#安装-cudnn)
-- [安装 Conda 环境](#安装-conda-环境)
-- [安装 Nvidia-Docker](#安装-nvidia-docker)
-- [测试](#测试)
-  - [TensorFlow](#tensorflow)
-    - [TensorFlow GPU 支持](#tensorflow-gpu-支持)
-- [Windows 设置](#windows-设置)
-  - [PyTorch](#pytorch)
-- [NVIDIA Xavier](#nvidia-xavier)
-  - [简介](#简介)
-    - [参考文章](#参考文章)
-  - [研究](#研究)
+    - [查看系统信息](#查看系统信息-2)
+    - [查看计算机处理器架构](#查看计算机处理器架构)
+    - [查看 Python 和 pip 版本](#查看-python-和-pip-版本)
+- [参考](#参考)
 </p></details><p></p>
    
-# 查看系统信息
+# Ubuntu
 
-## 查看系统信息
+## 安装 Ubuntu 20.04
 
-```bash
-$ uname -a
-Darwin Wangzf 22.4.0 Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64 x86_64
+* TODO
 
-$ sysctl kern.version
-kern.version: Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64
-
-$ sysctl kern.ostype
-kern.ostype: Darwin
-
-$ sysctl kern.osrelease
-kern.osrelease: 22.4.0
-
-$ sysctl kern.osrevision
-kern.osrevision: 199506
-
-$ sw_vers
-ProductName:		macOS
-ProductVersion:		13.3.1
-ProductVersionExtra:	(a)
-BuildVersion:		22E772610a
-```
-
-## 查看计算机处理器架构
-
-* x86_64
-    - x64
-    - Inter64
-    - AMD64
-
-命令行：
-
-```bash
-$ uname -m
-```
-
-```
-x86_64
-```
-
-Python：
-
-```python
-import platform
-
-print(platform.architecture()[0])
-print(platform.machine())
-```
-
-```
-64bit
-x86_64
-```
-
-## 查看 Python 和 pip 版本
-
-Python：
-
-```bash
-$ which python3
-$ python3 --version
-```
-
-```
-/Users/zfwang/Applications/miniconda3/envs/paddle/bin/python3
-Python 3.10.9
-```
-
-pip：
-
-```bash
-$ python -m ensurepip
-$ pip --version
-```
-
-```
-Looking in links: /var/folders/mg/50rhj31j7m955hzvnjqw0w1m0000gn/T/tmpgbmm6lf3
-Requirement already satisfied: setuptools in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (66.0.0)
-Requirement already satisfied: pip in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (23.0.1)
-```
-
-# 安装 Ubuntu 20.04
-
-- test
-
-# 安装 Nvidia 显卡驱动
+## 安装 Nvidia 显卡驱动
 
 最简单的方式是通过系统的软件与更新来安装:
 
@@ -162,9 +87,9 @@ sudo apt upgrade
 这里会连带 Nvidia 的驱动一起神级一遍，更新到最新的驱动；
 更新完可能会出现 nvidia-smi 命令报错，再重启一遍就解决了
 
-# 安装 CUDA
+## 安装 CUDA
 
-## CUDA 介绍
+### CUDA 介绍
 
 NVIDIA® CUDA® 工具包提供了开发环境，可供创建经 GPU 加速的高性能应用。
 借助 CUDA 工具包，可以在经 GPU 加速的嵌入式系统、台式工作站、企业数据中心、
@@ -176,7 +101,7 @@ NVIDIA® CUDA® 工具包提供了开发环境，可供创建经 GPU 加速的�
 借助多 GPU 配置中用于分布式计算的多项内置功能，
 科学家和研究人员能够开发出可从单个 GPU 工作站扩展到配置数千个 GPU 的云端设施的应用。
 
-## CUDA 安装
+### CUDA 安装
 
 1. 如果之前安装了旧版本的 CUDA 和 cudnn 的话，需要先卸载后再安装, 卸载 CUDA:
 
@@ -228,15 +153,7 @@ make
 ./deviceQuery
 ```
 
-参考链接:
-
-   - https://mp.weixin.qq.com/s/TsETgLLNWRskYbmh2wdiLg
-   - https://developer.nvidia.com/zh-cn/CUDA-toolkit
-   - https://developer.nvidia.com/zh-cn/CUDA-downloads
-   - https://docs.nvidia.com/CUDA/CUDA-quick-start-guide/index.html
-   - https://docs.nvidia.com/CUDA/CUDA-installation-guide-linux/
-
-# 安装 cuDNN
+## 安装 cuDNN
 
 1. 下载 cuDNN 安装包--cuDNN Download|NVIDIA Developer
     - https://developer.nvidia.com/rdp/cudnn-download
@@ -255,7 +172,7 @@ make
     $ cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
     ```
 
-# 安装 Conda 环境
+## 安装 Conda 环境
 
 不同的训练框架和版本可能会需要不同的python版本相对应，而且有的包比如numpy也对版本有要求，
 所以比较优雅的方法是给每个配置建立一个虚拟的python环境，在需要的时候可以随时切换，
@@ -270,9 +187,9 @@ chmod +x Anaconda3-2020.11-Linux-x86_64.sh
 ./Anaconda3-2020.11-Linux-x86_64.sh
 ```
 
-# 安装 Nvidia-Docker
+## 安装 Nvidia-Docker
 
-# 测试
+## 测试
 
 1. 本地 Conda 环境
 
@@ -290,12 +207,11 @@ which pip
 pip install torch==1.7.0+cu110 torchvision==0.8.1+cu110 torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
-## TensorFlow
+### TensorFlow
 
    - https://tensorflow.google.cn/install/gpu
 
-### TensorFlow GPU 支持
-
+#### TensorFlow GPU 支持
 
 > 注意:对于 Ubuntu 和 Windows，需要安装支持 CUDA® 的显卡，才能实现 GPU 支持
 
@@ -408,7 +324,7 @@ libnvinfer-dev=6.0.1-1+cuda10.1 \
 libnvinfer-plugin6=6.0.1-1+cuda10.1
 ```
 
-# Windows 设置
+## Windows 设置
 
 - 根据硬件、软件要求，参考 [适用于Windows 的 CUDA 安装指南](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/) 进行安装
 - 确保安装的 NVIDIA 软件包版本一致，如果没有 `cuDNN64_7.dll` 文件，TensorFlow 将无法加载，如需使用其他版本，
@@ -424,7 +340,7 @@ C:\> SET PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include;%
 C:\> SET PATH=C:\tools\cuda\bin;%PATH%
 ```
 
-## PyTorch
+### PyTorch
 
 - PyTorch GPU 支持
 
@@ -433,21 +349,147 @@ import torch
 torch.CUDA.is_available()
 ```
 
+## NVIDIA Xavier
 
 
-# NVIDIA Xavier
+### 简介
 
+### 研究
 
-## 简介
+# Windows
 
+## 查看系统信息
 
-### 参考文章
+* 系统：win11 64 位操作系统
+* 安装组合：Anaconda + PyTorch(GPU version) + GTX1060
 
-- https://developer.ridgerun.com/wiki/index.php?title=Xavier/Processors/HDAV_Subsystem/Audio_Engine
-- https://developer.nvidia.com/zh-cn/blog/bringing-cloud-native-agility-to-edge-ai-with-jetson-xavier-nx/
-- https://jingyan.baidu.com/article/fdbd4277a447ebb89e3f48ca.html
+## 安装 Anaconda
 
+* TODO
 
-## 研究
+## 创建 Python 虚拟环境
 
+Anaconda Prompt：
 
+```bash
+$ conda create -n pytorh python=3.7.9
+$ conda activate pytorch
+```
+
+## 确定硬件支持的 CUDA 版本
+
+* NVIDIA 控制面板-帮助-系统信息-组件-`NVCUDA.DLL`
+
+## 安装 PyTorch
+
+* [PyTorch Org 安装](https://pytorch.org/get-started/locally/)
+
+```bash
+$ conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+$ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+```
+
+* [PyTorch 清华源镜像](https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/win-64/)
+
+```bash
+$ conda install --offline pytorch-
+```
+
+# macOS
+
+## 查看系统信息
+
+### 查看系统信息
+
+```bash
+$ uname -a
+Darwin Wangzf 22.4.0 Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64 x86_64
+
+$ sysctl kern.version
+kern.version: Darwin Kernel Version 22.4.0: Mon Mar  6 21:00:17 PST 2023; root:xnu-8796.101.5~3/RELEASE_X86_64
+
+$ sysctl kern.ostype
+kern.ostype: Darwin
+
+$ sysctl kern.osrelease
+kern.osrelease: 22.4.0
+
+$ sysctl kern.osrevision
+kern.osrevision: 199506
+
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		13.3.1
+ProductVersionExtra:	(a)
+BuildVersion:		22E772610a
+```
+
+### 查看计算机处理器架构
+
+* x86_64
+    - x64
+    - Inter64
+    - AMD64
+
+命令行：
+
+```bash
+$ uname -m
+```
+
+```
+x86_64
+```
+
+Python：
+
+```python
+import platform
+
+print(platform.architecture()[0])
+print(platform.machine())
+```
+
+```
+64bit
+x86_64
+```
+
+### 查看 Python 和 pip 版本
+
+Python：
+
+```bash
+$ which python3
+$ python3 --version
+```
+
+```
+/Users/zfwang/Applications/miniconda3/envs/paddle/bin/python3
+Python 3.10.9
+```
+
+pip：
+
+```bash
+$ python -m ensurepip
+$ pip --version
+```
+
+```
+Looking in links: /var/folders/mg/50rhj31j7m955hzvnjqw0w1m0000gn/T/tmpgbmm6lf3
+Requirement already satisfied: setuptools in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (66.0.0)
+Requirement already satisfied: pip in ./Applications/miniconda3/envs/paddle/lib/python3.10/site-packages (23.0.1)
+```
+
+# 参考
+
+* [深度学习环境配置指南(Windows、Mac、Ubuntu 全讲解)](https://mp.weixin.qq.com/s/ZTzfC7xp8PVMvOONVIiK6g)
+* https://developer.ridgerun.com/wiki/index.php?title=Xavier/Processors/HDAV_Subsystem/Audio_Engine
+* https://developer.nvidia.com/zh-cn/blog/bringing-cloud-native-agility-to-edge-ai-with-jetson-xavier-nx/
+* https://jingyan.baidu.com/article/fdbd4277a447ebb89e3f48ca.html
+* https://mp.weixin.qq.com/s/TsETgLLNWRskYbmh2wdiLg
+* https://developer.nvidia.com/zh-cn/CUDA-toolkit
+* https://developer.nvidia.com/zh-cn/CUDA-downloads
+* https://docs.nvidia.com/CUDA/CUDA-quick-start-guide/index.html
+* https://docs.nvidia.com/CUDA/CUDA-installation-guide-linux/

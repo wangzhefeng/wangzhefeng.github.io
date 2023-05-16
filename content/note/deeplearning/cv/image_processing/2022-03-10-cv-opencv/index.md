@@ -75,6 +75,7 @@ details[open] summary {
     - [投影变换矩阵](#投影变换矩阵)
     - [投影变换](#投影变换)
   - [示例](#示例-1)
+- [参考](#参考-1)
 </p></details><p></p>
 
 
@@ -705,3 +706,6 @@ cv2.waitKey()
 cv2.destoryAllWindows()
 ```
 
+# 参考
+
+* [图像上的 OpenCV 算术运算](https://mp.weixin.qq.com/s/6hCjjUi9H5RiP_ijdTuFIA)
