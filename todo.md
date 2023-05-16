@@ -1,10 +1,8 @@
 ---
 layout: page
-title: TODO
+# title: TODO
 permalink: /todo/
 ---
-
-## TODO
 
 ### NAS
 
@@ -48,7 +46,7 @@ permalink: /todo/
 * [Apache Spark: core concepts, architecture and internals](https://datastrophic.io/core-concepts-architecture-and-internals-of-apache-spark/)
 * [Distributed Systems Architecture](https://0x0fff.com/category/spark/)
 
-## Schedule
+### Schedule
 
 | 时间 | 事项                                             |
 |------|--------------------------------------------------|
