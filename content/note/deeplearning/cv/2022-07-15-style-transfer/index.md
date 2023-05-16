@@ -1,9 +1,9 @@
 ---
-title: CNN-迁移学习
+title: CNN-风格迁移
 subtitle: style-transfer
 author: 王哲峰
 date: '2022-07-15'
-slug: dl-cnn-style-transfer
+slug: style-transfer
 categories:
   - deeplearning
 tags:
@@ -40,9 +40,7 @@ details[open] summary {
 
 
 
-
 # 参考
 
 * [A Neural Algorithm of Artistic Style](https://www.jianshu.com/p/9f03b61fdeac)
 * [neural style GitHub](https://github.com/jcjohnson/neural-style)
-* []()

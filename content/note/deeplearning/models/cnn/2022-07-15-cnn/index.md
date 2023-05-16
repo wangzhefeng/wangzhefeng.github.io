@@ -1,5 +1,5 @@
 ---
-title: CNN 概览
+title: CNN 网络概览
 author: 王哲峰
 date: '2022-07-15'
 slug: cnn
@@ -33,7 +33,7 @@ details[open] summary {
 
 - [CNN 发展历史](#cnn-发展历史)
 - [CNN 整体结构](#cnn-整体结构)
-- [卷积层](#卷积层)
+- [CNN 卷积层](#cnn-卷积层)
   - [卷积的含义](#卷积的含义)
     - [卷积的数学解释](#卷积的数学解释)
     - [卷积的图形解释](#卷积的图形解释)
@@ -49,11 +49,11 @@ details[open] summary {
   - [卷积填充](#卷积填充)
   - [卷积输出维度](#卷积输出维度)
   - [卷积滤波器初始化和学习](#卷积滤波器初始化和学习)
-- [池化层](#池化层)
+- [CNN 池化层](#cnn-池化层)
   - [池化层介绍](#池化层介绍)
   - [池化层的作用](#池化层的作用)
   - [池化层操作](#池化层操作)
-- [全连接层 Full Connected layer](#全连接层-full-connected-layer)
+- [CNN 全连接层 Full Connected layer](#cnn-全连接层-full-connected-layer)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -61,10 +61,10 @@ details[open] summary {
 
 CNN 在计算机视觉的三大领域: **图像识别** 、**目标检测**、**语义分割(图像分割)** 有着广泛的应用
 
-1985年，Rumelhart 和 Hinton 等人提出了 [BP 神经网络](https://web.stanford.edu/class/psych209a/ReadingsByDate/02_06/PDPVolIChapter8.pdf)，
+1985年，Rumelhart 和 Hinton 等人提出了 [反向传播算法，Back-Propagaion](http://www.cs.utoronto.ca/~hinton/absps/naturebp.pdf)，
 即著名的反向传播算法训练神经网络模型，奠定了神经网络的理论基础
 
-深度学习三巨头(Yann LeCun, Geoffrey Hinton, Yoshua Bengio)之一 Yann LeCun 在 BP 神经网络提出之后三年，
+深度学习三巨头(Yann LeCun, Geoffrey Hinton, Yoshua Bengio)之一 Yann LeCun 在 BP 算法提出之后三年，
 发现可以用 BP 算法训练一种构造出来的多层卷积网络结构，并用其训练出来的卷积网络识别手写数字。
 LeCun 正式提出了[卷积神经网络(Convolutional Neural Network, CNN)](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf)的概念
 
@@ -77,8 +77,8 @@ CNN 才开始正式发展起来
 
 # CNN 整体结构
 
-全连接的神经网络或 DNN 中，Affine 层后面跟着激活函数 ReLU 层。最后是 Affine 层加 Softmax 层输出最终结果(概率)，
-但是全连接层存在一些问题：
+全连接的神经网络或 DNN 中，Affine 层(仿射层)后面跟着激活函数 ReLU 层。
+最后是 Affine 层加 Softmax 层输出最终结果(概率)，但是全连接层存在一些问题：
 
 * 因为图像是 3 维的，这个形状应该含有重要的空间信息。比如，空间上相邻的像素为相似的值、
   RGB 的各个通道之间分别有密切的关联性、相距较远的像素之间没有什么关联等
@@ -96,7 +96,7 @@ CNN 才开始正式发展起来
 - **全连接层(Full Connected layer)**
     - CNN 的最后是 DNN 中常见的全连接层
 
-# 卷积层 
+# CNN 卷积层 
 
 > Convolutional layer
 
@@ -362,7 +362,7 @@ ax[1].imshow(x_pad[0, :, :, 0])
 * 在训练 CNN 时, 需要初始化滤波器中的卷积参数, 在训练中不断迭代得到最好的滤波器参数; 
 * 卷积层的参数通常在于滤波器, 可以计算一个滤波器的参数数量为 `$f \times f \times nc$` , 其中 `$nc$` 是通道数量
 
-# 池化层
+# CNN 池化层
 
 > Pooling layer
 
@@ -399,7 +399,7 @@ ax[1].imshow(x_pad[0, :, :, 0])
     - 将输入矩阵拆分为不同的区域
     - 输出输入矩阵不同区域的元素值的平均值
 
-# 全连接层 Full Connected layer
+# CNN 全连接层 Full Connected layer
 
 池化完成之后就是标准 DNN 中的全连接层了。相邻层的所有神经元之间都有连接, 
 这称为全连接层(Full Connected layer), 可以使用 Affine 层实现全连接层
@@ -408,4 +408,3 @@ ax[1].imshow(x_pad[0, :, :, 0])
 
 * [CNN卷积方法一览](https://mp.weixin.qq.com/s/9RvkFMOxmUTdZGDqjZfELw)
 * [Kernel](https://en.wikipedia.org/wiki/Kernel_(image_processing)?ref=blog.paperspace.com)
-
