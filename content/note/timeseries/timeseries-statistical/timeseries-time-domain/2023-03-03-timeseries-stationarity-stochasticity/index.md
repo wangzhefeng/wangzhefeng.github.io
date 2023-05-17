@@ -69,6 +69,7 @@ details[open] summary {
       - [判断准则](#判断准则-1)
       - [白噪声检验示例](#白噪声检验示例)
       - [非白噪声检验示例](#非白噪声检验示例)
+- [参考](#参考)
 </p></details><p></p>
 
 # 时间序列平稳性
@@ -876,3 +877,7 @@ data.plot(figsize = (12, 4))
 plt.show()
 ```
 
+# 参考
+
+* [时间序列的平稳性检验方法汇总](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484151&idx=1&sn=32b42c2c03f168e0ffa53b1a10f9fe3f&chksm=c173fcfef60475e84cacd5303ce60ae652b029a2475bde6dbfbd89ff175acf6c788e710868ac&cur_album_id=2111235593522200577&scene=189#wechat_redirect)
+* [时间序列白噪声检验](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484287&idx=1&sn=be786628cc58bbbbd5a267497eac246d&chksm=c173fd76f6047460cf693916bc9ceda10ebb325378a496a4067ad0a1ba66f71e66f267639a46&cur_album_id=2111235593522200577&scene=189#wechat_redirect)

@@ -1,5 +1,5 @@
 ---
-title: 平稳时间序列分析
+title: 时间序列分析-平稳
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-stationarity
@@ -33,15 +33,8 @@ details[open] summary {
 
 - [平稳时间序列分析介绍](#平稳时间序列分析介绍)
 - [AR 模型](#ar-模型)
-  - [AR(`$p$`) 模型](#arp-模型)
-  - [AR(`$p$`) 模型应用](#arp-模型应用)
 - [MA 模型](#ma-模型)
-  - [MA(`$q$`) 模型](#maq-模型)
-  - [MA(`$q$`) 模型应用](#maq-模型应用)
 - [ARMA 模型](#arma-模型)
-  - [ARMA(`$p$`, `$q$`) 模型](#armap-q-模型)
-- [SARIMA](#sarima)
-  - [ARMA(`$p$`, `$q$`) 模型应用](#armap-q-模型应用)
 - [AM 和 AM 以及 ARMA 建模流程](#am-和-am-以及-arma-建模流程)
   - [计算 ACF 和 PACF](#计算-acf-和-pacf)
     - [ACF 和 PACF 计算示例](#acf-和-pacf-计算示例)
@@ -66,8 +59,10 @@ ARMA(Auto Regression Moving Average) 模型的全称是 **自回归移动平均�
 
 ![img](images/flow.png)
 
+建模步骤详解：
+
 1. 求出该观察序列的样本自相关系数(ACF)和样本偏自相关系数(PACF)的值
-2. 根据样本自相关系数和偏自相关系数的性质，选择阶数适当的 ARMA(`$p$`, `$q$`) 模型进行拟合
+2. 根据样本自相关系数(ACF)和偏自相关系数(PACF)的性质，选择阶数适当的 ARMA(`$p$`, `$q$`) 模型进行拟合
 3. 估计模型中的位置参数的值
 4. 检验模型的有效性
     - 如果拟合模型通不过检验，转向步骤 2，重新选择模型再拟合
@@ -78,9 +73,7 @@ ARMA(Auto Regression Moving Average) 模型的全称是 **自回归移动平均�
 
 # AR 模型
 
-## AR(`$p$`) 模型
-
-AR(`$p$`) 模型，称为 `$p$` 阶自回归模型。该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+AR(`$p$`) 模型，称为 `$p$` 阶自回归模型(Autoregression)。该模型适用于无趋势(trend)和无季节性(seasonal)因素的单变量时间序列。
 其数学表达式为：
 
 `$$x_{t}=c + \phi_{1}x_{t-1} + \phi_{2}x_{t-2} + \cdots + \phi_{p}x_{t-p} + \varepsilon_{t}$$`
@@ -106,27 +99,7 @@ AR(`$p$`) 有三个限制条件：
 由于 AR(`$p$`) 模型拟合的是平稳序列，所以拟合后的模型也应该为平稳的，因此在拟合完模型后，
 为了保险，会将模型拟合后的结果再做平稳性检验，看拟合模型是否平稳
 
-## AR(`$p$`) 模型应用
-
-```python
-from statsmodels.tsa.ar_model import AR
-from random import random
-
-# data
-data = [x + random() for x in range(1, 100)]
-
-# model
-model = AR(data)
-model_fit = model.fit()
-
-# model predict
-y_hat = model_fit.predict(len(data), len(data))
-print(y_hat)
-```
-
 # MA 模型
-
-## MA(`$q$`) 模型
 
 MA(`$p$`) 模型，称为 `$q$` 阶移动平均(Moving Average)模型。为残差误差(residual erros)的线性函数，
 与计算时间序列的移动平均不同，该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
@@ -154,31 +127,11 @@ MA(`$q$`) 有两个限制条件：
 误差项是不可观察的，其中的 `$\varepsilon_{t}$` 是由 `$\varepsilon_{0}$` 递推过来的，
 而 `$\varepsilon_{0}$` 有专门的获取方法
 
-## MA(`$q$`) 模型应用
-
-```python
-from statsmodesl.tsa.arima_model import ARMA
-from random import random
-
-# data
-data = [x + random() for x in range(1, 100)]
-
-# model
-model = ARMA(data, order = (0, 1))
-model_fit = model.fit(disp = False)
-
-# model predict
-y_hat = model_fit.predict(len(data), len(data))
-print(y_hat)
-```
-
 # ARMA 模型
-
-## ARMA(`$p$`, `$q$`) 模型
 
 ARMA(`$p$`, `$q$`) 模型，称为自回归移动平均(Auto-Regressive Moving Average)模型，
 是时间序列和残差误差的线性函数，是 AR(`$p$`) 和 MA(`$q$`) 模型的组合，
-该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+该模型适用于无趋势(trend)和无季节性(seasonal)因素的单变量时间序列。
 其数学表达式为：
 
 `$$\left\{
@@ -199,30 +152,6 @@ ARMA 模型的另一种形式：
 当 `$p = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 MA(`$q$`) 模型。
 所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例，它们统称为 ARMA 模型。
 而 ARMA(`$p$`, `$p$`) 模型的统计性质也正是 AR(`$p$`) 模型和 MA(`$p$`) 模型统计性质的有机结合
-
-# SARIMA
-
-
-
-
-
-## ARMA(`$p$`, `$q$`) 模型应用
-
-```python
-from statsmodels.tsa.arima_model import ARMA
-from random import random
-
-# data
-data = [random.() for x in range(1, 100)]
-
-# model
-model = ARMA(data, order = (2, 1))
-model_fit = model.fit(disp = False)
-
-# model predict
-y_hat = model_fit.predict(len(data), len(data))
-print(y_hat)
-```
 
 # AM 和 AM 以及 ARMA 建模流程
 
@@ -400,4 +329,5 @@ AIC 越小，模型越优秀。但 AIC 有不足，就是 AIC 的拟合误差会
 * [时间序列统计分析](https://mp.weixin.qq.com/s/INZgM6hLSEpboaNhS22CaA)
 * [平稳时序分析](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486537&idx=1&sn=03cc507873683e4ad030b1bec8305c39&chksm=fa041222cd739b34e18c209b91f5c4da9ea9aa4162e46ffdaa5a0e4e18f784ca26b2d3e34092&scene=178&cur_album_id=1577157748566310916#rd)
 * [Moving-average model error terms](https://stats.stackexchange.com/questions/26024/moving-average-model-error-terms)
-* [季节性自回归整合滑动平均模型（SARIMA）](https://mp.weixin.qq.com/s?__biz=MzkzMTMyMDQ0Mw==&mid=2247483973&idx=1&sn=f9f3f84c5db03e3c2235620435cd75f1&chksm=c26d8551f51a0c47b84185f379c69832041a677f6c3004ac018e3f8ffe67e960d0593f99a87c&scene=21#wechat_redirect)
+* [ACF 和 PACF](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484365&idx=1&sn=d4e22bd52ae58c78eb5424f3f4f139f3&chksm=c173fdc4f60474d287e3111f7cadef9fa9211aa3565f1852c6bbd8276f32f226922a3386ee24&scene=178&cur_album_id=2111235593522200577#rd)
+* [PACF](https://mp.weixin.qq.com/s?__biz=MzkxNDE1NjM5MA==&mid=2247484417&idx=1&sn=efd49713967931a93568f1a8557672cd&chksm=c173fa08f604731e96ff7ddfc07f622befb1351fdda49b602715dca91c0eddcfd4b2e83655db&cur_album_id=2111235593522200577&scene=189#wechat_redirect)

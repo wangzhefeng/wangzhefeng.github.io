@@ -49,6 +49,7 @@ details[open] summary {
 - [转折点](#转折点)
 - [波动性](#波动性)
 - [数据与参考线对比](#数据与参考线对比)
+- [参考](#参考)
 </p></details><p></p>
 
 # 趋势
@@ -242,3 +243,6 @@ details[open] summary {
 每种参考线都有分析意义，但需要注意顺序，建议先对比均值线，然后是移动平均线，
 之后才是各种自定义的参考线
 
+# 参考
+
+* [关于时间序列你应该知道的 12 件事](https://towardsdatascience.com/12-things-you-should-know-about-time-series-975a185f4eb2)

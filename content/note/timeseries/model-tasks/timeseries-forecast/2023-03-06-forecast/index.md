@@ -34,6 +34,10 @@ details[open] summary {
 - [为什么时间序列预测很难](#为什么时间序列预测很难)
   - [为什么时间序列预测很难](#为什么时间序列预测很难-1)
   - [样本量与模型精度](#样本量与模型精度)
+- [预测模型](#预测模型)
+  - [预测模型类型](#预测模型类型)
+  - [预测模型构建](#预测模型构建)
+  - [预测模型](#预测模型-1)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -92,8 +96,73 @@ M5、LASSO、随机森林和 MARS）。预测任务是来预测时间序列的�
 * 当只有少量观测值可用时，推荐首选 ARIMA 或指数平滑等经典方法
 * 可以将指数平滑等经典方法与机器学习相结合可以提高预测准确性
 
+# 预测模型
+
+时间序列预测技术是指基于历史数据和时间变化规律，通过数学模型和算法对未来发展趋势进行预测的一种技术。
+时间序列预测技术广泛应用于经济、金融、交通、气象等领域，以帮助人们做出更加准确的决策
+
+## 预测模型类型
+
+时间序列从不同角度看有不同分类：
+
+* 从**实现原理**角度，可以分为：
+    - 传统统计学
+    - 机器学习(非深度学习)
+    - 深度学习
+* 按**输入变量**区分，可以分为：
+    - 自回归预测
+    - 使用协变量预测
+* 按**预测步长**区分，可以分为：
+    - 单步预测
+    - 多步预测
+* 按**目标个数**区分，可以分为：
+    - 一元预测
+    - 多元预测
+    - 多重预测
+* 按**输出结果**区分，可以分为：
+    - 点预测
+    - 概率预测
+
+这些分类是不同角度下的分类，同一种算法往往只能是分类中的一种，
+例如例如传统的统计学模型只适合做自回归预测而不适合协变量预测
+
+## 预测模型构建
+
+![img](images/timeseries.png)
+
+## 预测模型
+
+| 模型(model)                       | 单变量(Univariate)/自回归 | 多变量(Multivariate)/协变量 | 一元预测            | 多元预测                   | 多重预测            | 点预测              | 概率预测            |
+|----------------------------------|-------------------------|---------------------------|--------------------|--------------------------|--------------------|--------------------|--------------------|
+| Naive Baselines                  | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| AR                               | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| MA                               | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| ARMA                             | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| ARIMA                            | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| AutoARIMA                        | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| VARIMA                           | :white_check_mark:      | :white_check_mark:        | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| VAR                              | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| ExponentialSmoothing             | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| Theta                            | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| FourTheta                        | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| Prophet                          | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| Fast Fourier Transform(FFT)      | :white_check_mark:      |                           | :white_check_mark: |                          |                    | :white_check_mark: | :white_check_mark: |
+| LinearRegressionModel            | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: |                    |
+| RandomForest                     | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: |                    |
+| XGBoost                          | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: |                    |
+| LightGBM                         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: |                    |
+| CatBoost                         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: |                    |
+| LSTM(rnn)                        | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| GRU(rnn)                         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| DeepAR(rnn)                      | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| BlockRNNModel(LSTM, GRU)         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| NBeats                           | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| TCNModel                         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Transformer                      | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Informer                         | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Autoformer                       | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| TFT(Temporal Fusion Transformer) | :white_check_mark:      | :white_check_mark:        | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 # 参考
 
 * [为什么时序预测很难](https://mp.weixin.qq.com/s/K0VVbZBcFJB5ctKWeMHUgQ)
-
