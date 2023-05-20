@@ -32,10 +32,11 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [平稳时间序列分析介绍](#平稳时间序列分析介绍)
+- [白噪声模型](#白噪声模型)
 - [AR 模型](#ar-模型)
 - [MA 模型](#ma-模型)
 - [ARMA 模型](#arma-模型)
-- [AM 和 AM 以及 ARMA 建模流程](#am-和-am-以及-arma-建模流程)
+- [ARMA 建模流程](#arma-建模流程)
   - [计算 ACF 和 PACF](#计算-acf-和-pacf)
     - [ACF 和 PACF 计算示例](#acf-和-pacf-计算示例)
     - [ACF 和 PACF 可视化](#acf-和-pacf-可视化)
@@ -71,12 +72,36 @@ ARMA(Auto Regression Moving Average) 模型的全称是 **自回归移动平均�
       建立多个拟合模型，从所有通过检验的拟合模型中选择最优模型
 6. 利用拟合模型，预测序列的将来走势
 
+# 白噪声模型
+
+白噪声序列 `$\varepsilon_{t}$` 是指期望为 0，方差有限，且不存在序列相依性的序列。性质数学表示如下：
+
+* `$E(\varepsilon_{t}) = 0$`
+* `$Var(\varepsilon_{t}) = \sigma_{\varepsilon}^{2}$`
+* `$E(\varepsilon_{t}\varepsilon_{s}) = 0, s \neq t$`
+
+在实际建模中，往往需要做出更强的白噪声假设，因此还有两种白噪声序列：
+
+* 独立的白噪声是指序列之间彼此独立
+* 独立的高斯白噪声是指每一个时刻都服从正态分布的独立的白噪声。高斯白噪声序列其方差为常数，并且围绕均值较快地振荡
+
+在后续的模型构建中，我们会看到这三种白噪声在时间序列分析中的作用
+
 # AR 模型
 
-AR(`$p$`) 模型，称为 `$p$` 阶自回归模型(Autoregression)。该模型适用于无趋势(trend)和无季节性(seasonal)因素的单变量时间序列。
+AR(`$p$`) 模型，称为 `$p$` 阶自回归模型(Autoregression)。
+该模型适用于无趋势(trend)和无季节性(seasonal)因素的单变量时间序列。
 其数学表达式为：
 
 `$$x_{t}=c + \phi_{1}x_{t-1} + \phi_{2}x_{t-2} + \cdots + \phi_{p}x_{t-p} + \varepsilon_{t}$$`
+
+自回归模型实际上是指由 `$x_{t}$` 的历史观测值和白噪声序列构造出的时间序列。
+与传统的回归相似，该模型的解释变量为 `$x_{t}$` 的历史观测值；与传统的回归模型不同的是，
+该模型的解释变量为被解释变量自身的滞后观测值，因此得名自回归模型。
+自回归模型中一类非常特殊且重要的模型是带漂移项的随机游走(random walk)。
+带漂移项的随机游走的模型为 `$x_{t}=\delta + x_{t-1} +\varepsilon$`，其中 `$\delta$` 称为漂移项。
+当 `$\delta =0$` 时，该模型简称为随机游走。当 `$x_{0} = 0$` 时，易得 `$x_{t} = \delta t + \sum_{j=1}^{t}\varepsilon_{j}$`。
+易知，随机游走序列是非平稳时间序列
 
 AR(`$p$`) 有三个限制条件：
 
@@ -85,7 +110,7 @@ AR(`$p$`) 有三个限制条件：
     - `$E(\varepsilon_{t}) = 0$`
     - `$Var(\varepsilon_{t}) = \sigma_{\varepsilon}^{2}$`
     - `$E(\varepsilon_{t}\varepsilon_{s}) = 0, s \neq t$`
-* 当期的随机干扰与过去的序列值无关
+* 当期的随机干扰 `$\varepsilon_{t}$` 与过去的序列值 `$\forall s < t$` 无关
     - `$E(x_{s}\varepsilon_{t}) = 0, \forall s < t$`
 
 另外，`$c$` 是常数，当 `$c=0$` 时，为中心化的 AR(`$p$`) 模型；当 `$c \neq 0$`时，为非中心化的 AR(`$p$`) 模型，
@@ -94,18 +119,25 @@ AR(`$p$`) 有三个限制条件：
 `$$y_{t} = x_{t} - \mu$$`
 `$$\mu = \frac{c}{1-\phi_{1} - \phi_{2} - \ldots - \phi_{p}}$$`
 
-`$y_{t}$` 为 `$x_{t}$` 的中心化序列，相当于将非中心化序列平移了 `$\mu$`
+`$y_{t}$` 为 `$x_{t}$` 的中心化序列，相当于将非中心化序列上下平移了 `$\mu$`
 
 由于 AR(`$p$`) 模型拟合的是平稳序列，所以拟合后的模型也应该为平稳的，因此在拟合完模型后，
 为了保险，会将模型拟合后的结果再做平稳性检验，看拟合模型是否平稳
 
 # MA 模型
 
-MA(`$p$`) 模型，称为 `$q$` 阶移动平均(Moving Average)模型。为残差误差(residual erros)的线性函数，
-与计算时间序列的移动平均不同，该模型适用于无趋势(trend)和季节性(seasonal)因素的单变量时间序列。
+MA(`$p$`) 模型，称为 `$q$` 阶移动(滑动)平均(Moving Average, MA)模型。
+为残差误差(residual erros)的线性函数，与计算原始时间序列的 **移动平均** 不同，
+该模型适用于无趋势(trend)和无季节性(seasonal)因素的单变量时间序列，因为 MA 模型其实是对白噪声序列建模。
 其数学表达式为：
 
 `$$x_{t}=\mu + \varepsilon_{t} + \theta_{1}\varepsilon_{t-1} + \theta_{2}\varepsilon_{t-2} + \cdots + \theta_{q}\varepsilon_{t-q}$$`
+
+移动平均模型实际上是指由白噪声序列进行滑动窗口计算平均得到的序列。
+例如，若以 `$\varepsilon_{t}$` 表示一个白噪声序列，
+则 `$y_{t} = (\varepsilon_{t-2} + \varepsilon_{t -1} + \varepsilon_{t}) / 3$` 即表示一个滑动窗口长度为 3 的简单(等权重)移动平均模型。
+不难发现，滑动平均的序列比原来的白噪声序列更加平滑，围绕均值 0 上下相对较慢地振荡。
+并且 `$y_{t} = (\varepsilon_{t-2} + \varepsilon_{t-1} + \varepsilon_{t}) / 3$` 和 `$y_{t-1} = (\varepsilon_{t-3} + \varepsilon_{t-2} + \varepsilon_{t-1}) / 3$` 中具有共同的元素 `$\varepsilon_{t-2}$` 和 `$\varepsilon_{t-1}$`，从而使得它们之间具有相依相。对时间序列进行线性组合也常常被称为 **滤波(filtering)**
 
 MA(`$q$`) 有两个限制条件：
 
@@ -125,7 +157,10 @@ MA(`$q$`) 有两个限制条件：
 比如 MA(3) 和 MA(4) 的 ACF 相同，你选哪个？
 
 误差项是不可观察的，其中的 `$\varepsilon_{t}$` 是由 `$\varepsilon_{0}$` 递推过来的，
-而 `$\varepsilon_{0}$` 有专门的获取方法
+而 `$\varepsilon_{0}$` 有专门的获取方法，可以参考[这里](https://stats.stackexchange.com/questions/26024/moving-average-model-error-terms)。
+具体介绍如下：
+
+![img](images/ma_epsilon.png)
 
 # ARMA 模型
 
@@ -153,7 +188,7 @@ ARMA 模型的另一种形式：
 所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例，它们统称为 ARMA 模型。
 而 ARMA(`$p$`, `$p$`) 模型的统计性质也正是 AR(`$p$`) 模型和 MA(`$p$`) 模型统计性质的有机结合
 
-# AM 和 AM 以及 ARMA 建模流程
+# ARMA 建模流程
 
 总结来说，AR/MA/ARMA 模型适用于平稳非纯随机序列。它的建模流程如下图所示，其实和上图一样，
 只不过下图把流程细化了，尤其是 ”计算ACF、PACF“ 和 ”ARMA模型识别” 这两块是重点
@@ -164,7 +199,7 @@ ARMA 模型的另一种形式：
 
 自相关系数(ACF)，考察当前 `$t$` 序列与其延迟 `$k$` 期序列之间的相关性
 
-`$$\hat{p}_{k} = \frac{\sum_{t=1}^{n-k}(x_{t} - \bar{x})(x_{t+k} - \bar{x})}{\sum_{t=1}^{n}(x_{t} - \bar{x})^{2}}, \quad 0<k<n$$`
+`$$\hat{p}_{k}=\frac{\sum_{t=1}^{n-k}(x_{t}-\bar{x})(x_{t+k}-\bar{x})}{\sum_{t=1}^{n}(x_{t}-\bar{x})^{2}}, \quad 0<k<n$$`
 
 其中：
 
@@ -174,12 +209,12 @@ ARMA 模型的另一种形式：
 * `$\bar{x}$` 为原始时间序列的均值
 
 根据 ACF 求出滞后 `$k$` 自相关系数时，实际上得到并不是 `$x(t)$` 与 `$x(t-k)$` 之间单纯的相关关系。
-因为 `$x(t)$` 同时还会受到中间 `$k-1$` 个随机变量 `$x(t-1), x(t-2), \ldots, x(t-k+1)$` 的影响，
+因为 `$x(t)$` 同时还会受到中间 `$k-1$` 个随机变量 `$x(t-1)$`，`$x(t-2)$`，`$\ldots$`，`$x(t-k+1)$` 的影响，
 而这 `$k-1$` 个随机变量又都和 `$x(t-k)$` 具有相关关系，
 所以自相关系数里面实际掺杂了其他变量对 `$x(t)$` 与 `$x(t-k)$` 的影响
 
 在剔除了中间 `$k-1$` 个随机变量 `$x(t-1), x(t-2), \ldots, x(t-k+1)$` 的干扰之后，
-`$x(t-k)$` 对 `$x(t)$` 影响的相关程度，叫偏自相关系数。不同滞后期得到的偏自相关系数，叫偏自相关图
+`$x(t-k)$` 对 `$x(t)$` 影响的相关程度，叫偏自相关系数(PACF)。不同滞后期得到的偏自相关系数，叫偏自相关图
 
 ### ACF 和 PACF 计算示例
 
@@ -187,17 +222,14 @@ ARMA 模型的另一种形式：
 
 `$$x = [2, 3, 4, 3, 8, 7]$$`
 
-滞后序列：
+滞后(lag=1)序列：
 
 `$$A = [2, 3, 4, 3, 8]$$`
 `$$B = [3, 4, 3, 8, 7]$$`
 
-均值:
+原序列均值、方差:
 
 `$$\bar{x} = \sum_{i=1}^{6}x_{i} = 4.5$$`
-
-方差:
-
 `$$\sigma^{2}(x) = \sum_{i=1}^{6}(x_{i} - \bar{x})(x_{i} - \bar{x}) = 4.916$$`
 
 `$A$` 与 `$B$` 的相关系数:
@@ -230,10 +262,10 @@ np.random.seed(123)
 
 # -------------- 准备数据 --------------
 # 白噪声
-white_noise = np.random.standard_normal(size=1000)
+white_noise = np.random.standard_normal(size = 1000)
 
 # 随机游走
-x = np.random.standard_normal(size=1000)
+x = np.random.standard_normal(size = 1000)
 random_walk = np.cumsum(x)
 
 # GDP

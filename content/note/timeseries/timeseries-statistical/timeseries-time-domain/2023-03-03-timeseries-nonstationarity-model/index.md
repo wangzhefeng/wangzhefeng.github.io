@@ -90,7 +90,7 @@ details[open] summary {
     - 对数变换后拟合 ARIMA
     - 自回归条件异方差模型 (Auto-Regressive Conditional Heteroscedastic, ARCH)
         - 广义自回归条件异方差模型 (Generalized Auto-Regressive Conditional Heteroscedastic, GARCH)
-        - AR-GARCH 模型
+        - AR-GARCH
 
 ## 非平稳时序分析-同方差
 
