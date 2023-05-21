@@ -1,6 +1,5 @@
 ---
-title: prophet 
-subtitle: 预测
+title: Prophet 
 author: 王哲峰
 date: '2022-04-30'
 slug: timeseries-lib-prophet

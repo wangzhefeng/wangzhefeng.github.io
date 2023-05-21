@@ -246,7 +246,13 @@ Python API：
 import statsmodels.api as sm
 
 X = [2, 3, 4, 3, 8, 7]
-print(sm.tsa.stattools.acf(X, nlags = 1, adjusted = True))
+
+acf_value = sm.tsa.stattools.acf(X, nlags = 1, adjusted = True)
+pacf_value = sm.tsa.stattools.pacf(x, nlags = 1)
+print(acf_value)
+print(pacf_value)
+
+[1, 0.3559322]
 [1, 0.3559322]
 ```
 
@@ -306,7 +312,7 @@ plt.show()
 ![img](images/acf_pacf.png)
 
 1. 白噪声的自相关系数很快就衰减到 0 附近，是明显的平稳序列
-    - 滞后期为 0 时自相关系数和偏自相关系数其实就是序列自己和自己的相关性，故为1；
+    - 滞后期为 0 时自相关系数(ACF)和偏自相关系数(PACF)其实就是序列自己和自己的相关性，故为 1；
       滞后期为 1 时，自相关系数为 0，表示白噪声无自相关性
 2. 随机游走，自相关系数下降非常缓慢，故为非平稳序列；另从偏自相关系数中可以看到随机游走只和前一项有关
 3. GDP 数据的自相关图中也可以看到存在一定的周期性，滞后 4、8、12 等自相关系数较大下降较慢，

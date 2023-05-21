@@ -1,6 +1,6 @@
 ---
 title: 深度学习
-subtitle: Deeplearning
+subtitle: Deep Learning
 list_pages: true
 order_by: title
 ---

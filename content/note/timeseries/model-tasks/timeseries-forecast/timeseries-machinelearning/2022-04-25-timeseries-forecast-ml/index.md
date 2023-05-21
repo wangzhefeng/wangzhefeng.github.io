@@ -1,5 +1,5 @@
 ---
-title: 时间序列预测-机器学习
+title: 时间序列预测方法
 author: 王哲峰
 date: '2022-04-25'
 slug: timeseries-forecast_ml
@@ -33,22 +33,39 @@ details[open] summary {
 
 - [传统时序预测方法的问题](#传统时序预测方法的问题)
 - [时间序列的机器学习预测](#时间序列的机器学习预测)
-  - [时间序列初始数据集](#时间序列初始数据集)
-  - [时间序列数据集处理](#时间序列数据集处理)
-    - [截面数据](#截面数据)
-    - [时间序列数据](#时间序列数据)
-  - [时间序列模型构建](#时间序列模型构建)
+- [时间序列初始数据集](#时间序列初始数据集)
+  - [单变量序列](#单变量序列)
+  - [多变量序列](#多变量序列)
+- [时间序列数据集处理](#时间序列数据集处理)
+  - [截面数据](#截面数据)
+  - [时间序列数据](#时间序列数据)
+- [时间序列特征工程](#时间序列特征工程)
+  - [滞后特征](#滞后特征)
+  - [时间特征](#时间特征)
+  - [滑动窗口统计特征](#滑动窗口统计特征)
+  - [扩展窗口统计特征](#扩展窗口统计特征)
+  - [静态特征](#静态特征)
+- [时间序列交叉验证](#时间序列交叉验证)
+  - [滑动窗口](#滑动窗口)
+  - [扩展窗口](#扩展窗口)
 - [时间序列预测方法](#时间序列预测方法)
-  - [单步预测](#单步预测)
-  - [多步预测](#多步预测)
-    - [递归预测](#递归预测)
-    - [多目标回归](#多目标回归)
-    - [递归多目标回归](#递归多目标回归)
-  - [多变量预测](#多变量预测)
-  - [递归预测](#递归预测-1)
-  - [直接预测](#直接预测)
+  - [模型参数](#模型参数)
+  - [按输入变量区](#按输入变量区)
+    - [自回归预测](#自回归预测)
+    - [多变量预测](#多变量预测)
+  - [按目标个数](#按目标个数)
+    - [一元预测](#一元预测)
+    - [多元预测](#多元预测)
+    - [递归多元预测](#递归多元预测)
+    - [多重预测](#多重预测)
+  - [按预测步长](#按预测步长)
+    - [单步预测](#单步预测)
+    - [多步预测](#多步预测)
+      - [直接预测](#直接预测)
+      - [递归预测](#递归预测)
   - [堆叠预测](#堆叠预测)
   - [修正预测](#修正预测)
+- [时间序列模型构建](#时间序列模型构建)
 - [参考文章](#参考文章)
 </p></details><p></p>
 
@@ -68,7 +85,8 @@ details[open] summary {
 但这些模型一次只能对一组时间序列做预测，比如预测某个品牌下某家店的未来销售额。
 而现实中需要面对的任务更多是：预测某个品牌下每家店的未来销售额。
 也就是说，如果这个品牌在某个地区一共有 100 家店，那我们就需要给出这100家店分别对应的销售额预测值。
-这个时候如果再用传统模型，显然不合适，毕竟有多少家店就要建多少个模型，太累。
+这个时候如果再用传统模型，显然不合适，毕竟有多少家店就要建多少个模型
+
 而且在大数据时代，我们面对的数据往往都是高维的，如果仅使用这些传统方法，很多额外的有用信息可能会错过
 
 所以，如果能用机器学习算法对这 “100家店” 一起建模，那么整个预测过程就会高效很多。
@@ -76,22 +94,11 @@ details[open] summary {
 对于普通的截面数据，在构建特征和分割数据（比如做 K-fold CV）的时候不需要考虑时间窗口。
 而对于时间序列，时间必须考虑在内，否则模型基本无效。因此在数据处理上，后者的复杂度比前者要大
 
+时间序列数据转换为监督学习数据：
+
 ![img](images/ts_ml.png)
 
-![img](images/lags.png)
-
-
-![img](images/cv.png)
-
-
-![img](images/cv_ts.png)
-
-
-
-
-
-
-## 时间序列初始数据集
+# 时间序列初始数据集
 
 ![img](images/data.png)
 
@@ -102,24 +109,33 @@ details[open] summary {
 基于给出的数据，预测任务是：根据已有数据，预测测试集的 Target（如，
 根据某品牌每家店 2018 年以前的历史销售情况，预测每家店 2018 年 1 月份头 15 天的销售额）
 
-## 时间序列数据集处理
+## 单变量序列
+
+> 自回归
+
+## 多变量序列
+
+> 协变量
+
+# 时间序列数据集处理
 
 在构建预测特征上，截面数据和时间序列数据遵循的逻辑截然不同
 
-### 截面数据
+## 截面数据
 
 首先来看针对截面数据的数据处理思路：
 
 ![img](images/cross_section.png)
 
 对于截面数据来说，训练集数据和测试集数据在时间维度上没有区别，
-二者唯一的区别是前者包含要预测的目标变量，而后者没有该目标变量。
-一般来说，在做完数据清洗之后，我们用 “N维数据” 来分别给训练集、测试集构建 M 维预测特征（维度相同），
+二者唯一的区别是前者包含要预测的目标变量，而后者没有该目标变量
+
+一般来说，在做完数据清洗之后，用 “N 维数据” 来分别给训练集、测试集构建预测特征，
 然后用机器学习算法在训练集的预测特征和 Target 上训练模型，
 最后通过训练出的模型和测试集的预测特征来计算预测结果（测试集的 Target）。
-此外，为了给模型调优，我们一般还需要从训练集里面随机分割一部分出来做验证集
+此外，为了给模型调优，一般还需要从训练集里面随机分割一部分出来做验证集
 
-### 时间序列数据
+## 时间序列数据
 
 时间序列的处理思路则有所不同，时间序列预测的核心思想是：用过去时间里的数据预测未来时间里的 Target：
 
@@ -134,7 +150,196 @@ details[open] summary {
 你可能会说，那就去找 Target 呗。对，没有错。但这里需要注意，我们要找的不是未来时间下的 Target（毕竟未来的事还没发生，根本无从找起），
 而是从过去时间里构造 “未来的” Target，从而完成模型的构建。这是在处理时间序列上，逻辑最绕的地方
 
-## 时间序列模型构建
+# 时间序列特征工程
+
+## 滞后特征
+
+> Lags Features
+
+![img](images/lags.png)
+
+## 时间特征
+
+## 滑动窗口统计特征
+
+## 扩展窗口统计特征
+
+## 静态特征
+
+# 时间序列交叉验证
+
+![img](images/cv.png)
+
+## 滑动窗口
+
+> Sliding Window
+
+## 扩展窗口
+
+> Forward Chaining
+
+![img](images/cv_ts.png)
+
+# 时间序列预测方法
+
+机器学习方法处理时间序列问题的基本思路就是吧时间序列切分成一段历史训练窗口和未来的预测窗口，
+对于预测窗口中的每一条样本，基于训练窗口的信息来构建特征，转化为一个表格类预测问题来求解
+
+也会看到一些额外加入时序预处理步骤的方法，比如先做 STL 分解再做建模预测。
+尝试下来这类方法总体来说效果并不明显，但对于整个 pipeline 的复杂度却有较大的增加，
+对于 AutoML、模型解释等工作都造成了一定的困扰，所以实际项目中应用的也比较少
+
+## 模型参数
+
+实际场景中，一般需要确定几个参数：
+
+1. 历史窗口的大小(history length)
+    - 即预测未来时，要参考过去多少时间的信息作为输入。太少可能信息量不充分，
+      太多则会引入早期不相关的信息(比如疫情前的信息可能目前就不太适用了)
+2. 预测点间隔的大小(predict gap)
+    - 即预测未来时，是从 T+1 开始预测，还是 T+2，T+3，这与现实的业务场景有关。
+      例如像补货场景，预测 T+1 的销量，可能已经来不及下单补货了，
+      所以需要扩大这个提前量，做 T+3 甚至更多提前时间的预测
+3. 预测窗口的大小(predict length)
+    - 即需要连续预测多长的未来值。比如从 T+1 开始一直到 T+14 都需要预测输出。
+      这一点也跟实际的业务应用场景有关
+
+## 按输入变量区
+
+### 自回归预测
+
+> 单变量预测
+
+### 多变量预测
+
+> 使用多个协变量预测
+
+多元时间序列，即每个时间有多个观测值：
+
+`$$\{X_{t} = (x_{t}^{a}, x_{t}^{b}, x_{t}^{c}, \ldots)\}_{t}^{T}$$`
+
+这意味着通过不同的测量手段得到了多种观测值，并且希望预测其中的一个或几个值。
+例如，可能有两组时间序列观测值 `$\{x_{t-1}^{a}, x_{t-2}^{a}, \ldots\}$`，
+`$\{x_{t-1}^{b}, x_{t-2}^{b}, \ldots\}$`，希望分析这组多元时间序列来预测 `$x_{t}^{a}$` 
+
+基于以上场景，许多监督学习的方法可以应用在时间序列的预测中，
+在运用机器学习模型时，可以把时间序列模型当成一个回归问题来解决，
+比如 svm/xgboost/逻辑回归/回归树/...
+
+## 按目标个数
+
+### 一元预测
+
+### 多元预测
+
+多目标回归为每一个预测结果构建一个模型，如下是一个使用案例：
+
+```python
+from sklearn.multioutput import MultiOutputRegressor
+
+direct = MultiOutputRegressor(LinearRegression())
+direct.fit(X_tr, Y_tr)
+direct.predict(X_test)
+```
+
+scikit-learn 的 `MultiOutputRegressor` 为每个目标变量复制了一个学习算法。
+在这种情况下，预测方法是 `LinearRegression`。此种方法避免了递归方式中错误传播，
+但多目标预测需要更多的计算资源。此外多目标预测假设每个点是独立的，这是违背了时序数据的特点
+
+### 递归多元预测
+
+递归多目标回归结合了多目标和递归的思想。为每个点建立一个模型。
+但是在每一步的输入数据都会随着前一个模型的预测而增加
+
+```python
+from sklearn.multioutput import RegressorChain
+
+dirrec = RegressorChain(LinearRegression())
+dirrec.fit(X_tr, Y_tr)
+dirrec.predict(X_test)
+```
+
+这种方法在机器学习文献中被称为 chaining。scikit-learn 通过 `RegressorChain` 类为其提供了一个实现
+
+### 多重预测
+
+## 按预测步长
+
+### 单步预测
+
+所谓单步预测，就是每一次预测的时候输入窗口只预测未来的一个值。
+在时间序列预测中的标准做法是使用滞后的观测值 `$x_{t}$` 作为输入变量来预测当前的时间的观测值 `$x_{t+1}$`
+
+单步预测的两个策略：
+
+* 滑动窗口(推荐)
+* 扩展窗口
+
+![img](images/timeseries_split.png)
+
+### 多步预测
+
+大多数预测问题都被定义为单步预测，根据最近发生的事件预测系列的下一个值。
+时间序列多步预测需要预测未来多个值， 提前预测许多步骤具有重要的实际优势，
+多步预测减少了长期的不确定性。但模型试图预测更远的未来时，模型的误差也会逐渐增加
+
+多步预测的策略一般有两种
+
+* 直接预测
+* 递归预测
+    - 扩展窗口
+    - 滑动窗口(推荐)
+
+![img](images/timeseries_split.png)
+
+
+#### 直接预测
+
+> Direct Forecasting
+
+一次性将所有步预测值预测出来
+
+#### 递归预测
+
+> Recursive Forecasting
+
+多步预测最简单的方法是递归形式，训练单个模型进行单步预测，
+然后将模型与其先前的预测结果作为输入得到后续的输出
+
+递归方法只需要一个模型即可完成整个预测范围，且无需事先确定预测范围。
+但此种方法用自己的预测作为输入，这导致误差逐渐累计，对长期预测的预测性能较差
+
+
+```python
+from sklearn.linear_model import LinearRegression
+
+recursive = LinearRegression()
+recursive.fit(X_train, Y_train['t+1'])
+
+predictions = pd.DataFrame(
+    np.zeros(Y_test.shape), 
+    columns = Y_test.columns
+)
+yh = recursive.predict(X_test)
+predictions['t+1'] = yh
+
+X_test_aux = X_test.copy()
+for i in range(2, Y_train.shape[1] + 1):
+    X_test_aux.iloc[:, :-1] = X_test_aux.iloc[:, 1:].values
+    X_test_aux['t-0'] = yh
+    yh = recursive.predict(X_test_aux)
+    predictions[f't+{i}'] = yh
+```
+
+## 堆叠预测
+
+> Stacking Forecasting
+
+## 修正预测
+
+> Rectified Forecasting
+
+# 时间序列模型构建
 
 用机器学习算法构造时间序列预测模型，关键的思路在于，通过时间滑窗，人为地构造 “未来” Target，来给算法进行学习
 
@@ -160,167 +365,18 @@ details[open] summary {
 这里需要注意，划多少个时间窗口因数据而异。此外，数据的历史窗口（图上深绿部分）和未来窗口（图上浅绿部分）可以是定长也可以是变长，
 看具体情况
 
-
-
-
-
-
-
-
-
-# 时间序列预测方法
-
-机器学习方法处理时间序列问题的基本思路就是吧时间序列切分成一段历史训练窗口和未来的预测窗口，
-对于预测窗口中的每一条样本，基于训练窗口的信息来构建特征，转化为一个表格类预测问题来求解
-
-实际场景中，一般需要确定几个参数：
-
-1. 历史窗口的大小
-    - 即预测未来时，要参考过去多少时间的信息作为输入。太少可能信息量不充分，
-      太多则会引入早期不相关的信息(比如疫情前的信息可能目前就不太适用了)
-2. 预测点 gap 的大小
-    - 即预测未来时，是从 T+1 开始预测，还是 T+2，T+3，这与现实的业务场景有关，
-      例如像补货场景，预测 T+1 的销量，可能已经来不及下单补货了，
-      所以需要扩大这个提前量，做 T+3 甚至更多提前时间的预测
-3. 预测窗口的大小
-    - 即需要连续预测多长的未来值。比如从 T+1 开始一直到 T+14 都需要预测输出。
-      这一点也跟实际的业务应用场景有关
-
-也会看到一些额外加入时序预处理步骤的方法，比如先做 STL 分解再做建模预测。
-尝试下来这类方法总体来说效果并不明显，但对于整个 pipeline 的复杂度却有较大的增加，
-对于 AutoML、模型解释等工作都造成了一定的困扰，所以实际项目中应用的也比较少
-
-## 单步预测
-
-在时间序列预测中的标准做法是使用滞后的观测值 `$x_{t-1}$` 作为输入变量来预测当前的时间的观测值 `$x_{t}$`
-
-## 多步预测
-
-使用过去的观测序列 `$\{\ldots, x_{t-2}, x_{t-1}\}$` 预测未来的观测序列 `$\{x_{t}, x_{t+1}, \ldots\}$`
-
-大多数预测问题都被定义为单步预测，根据最近发生的事件预测系列的下一个值。
-时间序列多步预测需要预测未来多个值， 提前预测许多步骤具有重要的实际优势，
-多步预测减少了长期的不确定性。但模型试图预测更远的未来时，模型的误差也会逐渐增加
-
-### 递归预测
-
-> Recursive Forecasting
-
-多步预测最简单的方法是递归形式，训练单个模型进行单步预测，
-然后将模型与其先前的预测结果作为输入得到后续的输出
-
-```python
-from sklearn.linear_model import LinearRegression
-
-# using a linear regression for simplicity. any regression will do.
-recursive = LinearRegression()
-# training it to predict the next value of the series (t+1)
-recursive.fit(X_tr, Y_tr['t+1'])
-# setting up the prediction data structure
-predictions = pd.DataFrame(np.zeros(Y_ts.shape), columns=Y_ts.columns)
-
-# making predictions for t+1
-yh = recursive.predict(X_ts)
-predictions['t+1'] = yh
-
-# iterating the model with its own predictions for multi-step forecasting
-X_ts_aux = X_ts.copy()
-for i in range(2, Y_tr.shape[1] + 1):
-    X_ts_aux.iloc[:, :-1] = X_ts_aux.iloc[:, 1:].values
-    X_ts_aux['t-0'] = yh
-
-    yh = recursive.predict(X_ts_aux)
-
-    predictions[f't+{i}'] = yh
-```
-
-上述代码逻辑在 sktime 中也可以找到相应的实现：[sktime.RecursiveTimeSeriesRegressionForecaster](https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.compose.RecursiveTimeSeriesRegressionForecaster.html)
-
-递归方法只需要一个模型即可完成整个预测范围，且无需事先确定预测范围
-
-但此种方法用自己的预测作为输入，这导致误差逐渐累计，对长期预测的预测性能较差
-
-### 多目标回归
-
-多目标回归为每一个预测结果构建一个模型，如下是一个使用案例：
-
-```python
-from sklearn.multioutput import MultiOutputRegressor
-
-direct = MultiOutputRegressor(LinearRegression())
-direct.fit(X_tr, Y_tr)
-direct.predict(X_ts)
-```
-
-scikit-learn 的 MultiOutputRegressor 为每个目标变量复制了一个学习算法。
-在这种情况下，预测方法是 LinearRegression
-
-此种方法避免了递归方式中错误传播，但多目标预测需要更多的计算资源。
-此外多目标预测假设每个点是独立的，这是违背了时序数据的特点
-
-### 递归多目标回归
-
-递归多目标回归结合了多目标和递归的思想。为每个点建立一个模型。
-但是在每一步的输入数据都会随着前一个模型的预测而增加
-
-```python
-from sklearn.multioutput import RegressorChain
-
-dirrec = RegressorChain(LinearRegression())
-dirrec.fit(X_tr, Y_tr)
-dirrec.predict(X_ts)
-```
-
-这种方法在机器学习文献中被称为 chaining。scikit-learn 通过 RegressorChain 类为其提供了一个实现
-
-## 多变量预测
-
-多元时间序列，即每个时间有多个观测值：
-
-`$$\{X_{t} = (x_{t}^{a}, x_{t}^{b}, x_{t}^{c}, \ldots)\}_{t}^{T}$$`
-
-这意味着通过不同的测量手段得到了多种观测值，并且希望预测其中的一个或几个值。
-例如，可能有两组时间序列观测值 `$\{x_{t-1}^{a}, x_{t-2}^{a}, \ldots\}$`，
-`$\{x_{t-1}^{b}, x_{t-2}^{b}, \ldots\}$`，希望分析这组多元时间序列来预测 `$x_{t}^{a}$` 
-
-基于以上场景，许多监督学习的方法可以应用在时间序列的预测中，
-在运用机器学习模型时，可以把时间序列模型当成一个回归问题来解决，
-比如 svm/xgboost/逻辑回归/回归树/...
-
-## 递归预测 
-
-## 直接预测
-
-> Direct Forecasting
-
-## 堆叠预测
-
-> Stacking Forecasting
-
-## 修正预测
-
-> Rectified Forecasting
-
-
-
-
-
-
-
-
-
-
-
-
 # 参考文章
 
 * [Time Series Forecasting as Supervised Learning](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/)
 * [How to Convert a Time Series to a Supervised Learning Problem in Python](https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/)
+* [How To Resample and Interpolate Your Time Series Data With Python](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
+* [Multistep Time Series Forecasting with LSTMs in Python](https://machinelearningmastery.com/multi-step-time-series-forecasting-long-short-term-memory-networks-python/)
 * [Machine Learning Strategies for Time Series Forecasting](https://link.springer.com/chapter/10.1007%2F978-3-642-36318-4_3)
-* [slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
+* [Machine Learning Strategies for Time Series Forecasting. Slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
 * [Machine Learning for Sequential Data: A Review](http://web.engr.oregonstate.edu/~tgd/publications/mlsd-ssspr.pdf)
 * [如何用Python将时间序列转换为监督学习问题](https://cloud.tencent.com/developer/article/1042809)
-* [How To Resample and Interpolate Your Time Series Data With Python](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
 * [时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
 * [机器学习与时间序列预测](https://www.jianshu.com/p/e81ab6846214)
-
+* [sktime.RecursiveTimeSeriesRegressionForecaster](https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.compose.RecursiveTimeSeriesRegressionForecaster.html)
+* [机器学习多步时间序列预测解决方案](https://aws.amazon.com/cn/blogs/china/machine-learning-multi-step-time-series-prediction-solution/)
+* [时间序列的多步预测方法总结](https://zhuanlan.zhihu.com/p/390093091)
