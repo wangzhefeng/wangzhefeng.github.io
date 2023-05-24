@@ -27,6 +27,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 <details><summary>目录</summary><p>
@@ -124,6 +127,9 @@ padding-bottom:20px;
 font-weight: 600;
 font-size: 3.2em
 }
+img {
+    pointer-events: none;
+}
 </style>
   <body>
     <div class="container"><center><h2>Face Detection</h2></center>
@@ -154,6 +160,9 @@ h2
 padding-bottom:20px;
 font-weight: 600;
 font-size: 3.2em
+}
+img {
+    pointer-events: none;
 }
 </style>
   <body>

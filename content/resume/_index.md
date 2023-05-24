@@ -9,15 +9,16 @@ type: widget_page
 ## 基本信息
 
 * 出生年月：1989.10
+* 籍贯：山西平遥
+* 现居：上海
 * 职位：算法工程师
 
 ## 联系方式
 
-* Email：wangzf7@163.com
+* Email：zfwang@gmail.com
 * GitHub：https://github.com/wangzhefeng
 * Web：https://wangzhefeng.com/
 * 知乎：https://www.zhihu.com/people/wangzf7
-* 现居上海
 
 ## 研究方向
 

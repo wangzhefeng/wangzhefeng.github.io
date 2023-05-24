@@ -51,6 +51,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 

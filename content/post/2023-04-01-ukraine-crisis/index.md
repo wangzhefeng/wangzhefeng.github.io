@@ -54,6 +54,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 > 新华社北京 2 月 24 日电 2 月 24 日，中国外交部发布《关于政治解决乌克兰危机的中国立场》文件。全文如下：

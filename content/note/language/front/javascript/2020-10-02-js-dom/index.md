@@ -49,6 +49,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 <details><summary>目录</summary><p>
@@ -1062,6 +1065,9 @@ loadStyles("style.css");
     body {
         background-color: red;
     }
+img {
+    pointer-events: none;
+}
 </style>
 ```
 

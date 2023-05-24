@@ -28,6 +28,9 @@ h2 {
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 # 简介
