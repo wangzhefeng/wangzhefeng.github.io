@@ -311,8 +311,8 @@ class Linear(nn.Module):
 PyTorch 和神经网络相关的功能组件大多都封装在 `torch.nn` 模块下，
 这些功能组件的绝大部分既有函数形式实现，也有类形式实现
 
-* 函数形式：torch.nn.functional
-* 类形式：torch.nn.Module
+* 函数形式：`torch.nn.functional`
+* 类形式：`torch.nn.Module`
 
 ## functional
 
