@@ -68,17 +68,18 @@ params:
     alt: "logo"
     tag: ""
   # comment
-  # utteranc: 
-  #   enable: false
-  #   repo: wangzhefeng/blog_comment
-  #   issueTerm: pathname
-  #   theme: github-light
-  gitment: 
-    owner: wangzhefeng
+  utteranc: 
+    enable: true
     repo: wangzhefeng/blog_comment
-    oauth:
-      clientId: 3df576922ac49beba8b8
-      clientSecret: 22d1cf6a6bc31fb1e2ed0bc7ae0e757859c22080
+    issueTerm: pathname
+    theme: github-light
+  gitment: 
+    # enable: true
+    # owner: wangzhefeng
+    # repo: wangzhefeng/blog_comment
+    # oauth:
+    #   clientId: 3df576922ac49beba8b8
+    #   clientSecret: 22d1cf6a6bc31fb1e2ed0bc7ae0e757859c22080
 
 
 blackfriday:
