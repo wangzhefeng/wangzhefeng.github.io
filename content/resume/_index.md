@@ -15,10 +15,9 @@ type: widget_page
 
 ## 联系方式
 
-* Email：zfwang@gmail.com
-* GitHub：https://github.com/wangzhefeng
-* Web：https://wangzhefeng.com/
-* 知乎：https://www.zhihu.com/people/wangzf7
+* Email：<zfwang@gmail.com>
+* GitHub：<https://github.com/wangzhefeng>
+* Web：<https://wangzhefeng.com/>
 
 ## 研究方向
 
