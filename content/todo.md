@@ -28,6 +28,7 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [数据结构与算法](#数据结构与算法)
 - [推荐系统](#推荐系统)
 - [机器学习](#机器学习)
 - [NAS](#nas)
@@ -38,6 +39,10 @@ img {
 - [Spark](#spark)
 - [Schedule](#schedule)
 </p></details><p></p>
+
+## 数据结构与算法
+
+* https://www.zhihu.com/column/liuzimu
 
 ## 推荐系统
 

@@ -4,5 +4,3 @@ subtitle: Algorithms
 list_pages: true
 # order_by: title
 ---
-
-* https://www.zhihu.com/column/liuzimu
