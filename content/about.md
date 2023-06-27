@@ -5,9 +5,8 @@ slug: "about"
 
 ## 我是谁
 
-- 出生于国际化大都市山西平遥，新上海人
-- 数学系毕业的统计学专业的数据分析师、算法工程师、程序员
-
+* 出生于国际化大都市平遥，新上海人
+* 数学系毕业的统计学专业的数据分析师、算法工程师
 
 <!-- ## 我的用户画像
 
@@ -39,27 +38,26 @@ slug: "about"
 
 ## 写作原则
 
-- 收集、记录、目前不分享
+* 收集、记录、目前不分享
 
 ## 喜欢的事
 
 ### 统计学
 
 * 概率论与数理统计
-* 贝叶斯统计
-* 统计数据可视化
+* 贝叶斯统计学
 * 统计学习
 * 机器学习
 * 深度学习
+* 强化学习
 
 ### 编程
 
-* VIM：装X必备
+* VIM：装 X 必备
 * R：职业的起点
 * Python：饭碗
 * SQL：混社会小技能
 * C++：想看看
-* Java：为了学习 Spark，学习了 Scala，为了学好 Scala，学习了 Java
 * JavaScript：觉得很好玩
 * Spark：了解大数据的窗口
 * Shell：可能某一天会有用
@@ -75,17 +73,15 @@ slug: "about"
     - VimR
 * 工作
     - 飞书
-    - Notion
 * 事件管理
     - 滴答清单
-* 日记
-    - 格致
 * 作图
     - ProcessOn
     - draw.io
 * PPT
     - slidev
     - RStudio
+    - PowerPoint
   
 ### 书籍
 
@@ -95,13 +91,14 @@ slug: "about"
 * 《贝叶斯博弈》
 * 《随机漫步的傻瓜》
 * 《哲学的故事》
+* ...
 
 ### 纪录片
 
 * [行星](https://v.qq.com/x/search/?q=%E8%A1%8C%E6%98%9F&stag=0&smartbox_ab=)
 * [河西走廊](https://www.bilibili.com/bangumi/media/md20790/?spm_id_from=666.25.b_6d656469615f6d6f64756c65.2)
 * [中国通史](https://www.bilibili.com/bangumi/media/md28229010/?spm_id_from=666.25.b_6d656469615f6d6f64756c65.2)
-* 西汉帝陵
+* [西汉帝陵]()
 
 ### 诗词
 
@@ -132,7 +129,6 @@ slug: "about"
 * 《实习生》
 * 《触不可及》[EN]
 * 《闻香识女人》
-* 《芬奇》
 
 ### 音乐
 
@@ -165,6 +161,5 @@ slug: "about"
 <img src="/images/tomster5.jpeg" width=32% height="260px" />
 <img src="/images/tomster6.jpeg" width=34% height="260px" />
 <img src="/images/tomster7.jpeg" width=32% height="260px" /> -->
-
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)

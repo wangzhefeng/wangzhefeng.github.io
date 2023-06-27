@@ -15,7 +15,7 @@ type: widget_page
 
 ## 联系方式
 
-* Email：<zfwang@gmail.com>
+* Email：<zfwang7@gmail.com>
 * GitHub：<https://github.com/wangzhefeng>
 * Web：<https://wangzhefeng.com/>
 
@@ -24,7 +24,6 @@ type: widget_page
 * 统计学
 * 机器学习
 * 深度学习
-* 数据可视化
 
 ## 教育背景
 
@@ -75,7 +74,6 @@ type: widget_page
 ## 发表论文
 
 * [Wang, Z.F. and Ye, W.Z. (2016) An Efficient Smooth Quantile Boost Algorithm for Binary Classification.](https://file.scirp.org/pdf/APM_2016082411292370.pdf)
-* 王哲峰 (2017) 基于光滑分位数的二分类梯度提升算法
 
 ## 自我评价
 
@@ -85,4 +83,3 @@ type: widget_page
 * 拥有较强的业务、技术学习能力
 * 拥有良好的团队沟通、协作能力
 * 拥有积极的生活、工作态度
-
