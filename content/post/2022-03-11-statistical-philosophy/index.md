@@ -50,4 +50,3 @@ img {
 * [统计使人豁达]()
 * [谢邦昌]()
 * [Philosophy of Statistics](https://plato.stanford.edu/entries/statistics/)
-* [因果推断——现代统计的思想飞跃](https://mp.weixin.qq.com/s/QxL0DWR-NF35NHZ6FkxHZA)
