@@ -46,9 +46,12 @@ img {
   - [正态性检验](#正态性检验)
     - [Shapiro-Wilk Test](#shapiro-wilk-test)
     - [D'Agostino's K2 Test](#dagostinos-k2-test)
-- [Anderson-Darling Test](#anderson-darling-test)
+    - [Anderson-Darling Test](#anderson-darling-test)
   - [相关性检验](#相关性检验)
     - [Pearson 相关系数](#pearson-相关系数)
+    - [Spearman 等级相关系数](#spearman-等级相关系数)
+    - [Kendall 等级相关](#kendall-等级相关)
+    - [Chi-square Test](#chi-square-test)
   - [参数检验](#参数检验)
   - [非参数检验](#非参数检验)
   - [时间序列平稳性检验](#时间序列平稳性检验)
@@ -275,7 +278,7 @@ else:
     print("拒绝原假设，样本数据不服从正态分布")
 ```
 
-# Anderson-Darling Test
+### Anderson-Darling Test
 
 Anderson-Darling Test，用于检验样本数据是否服从某一已知分布。
 该检验修改自一种更复杂的非参数的拟合良好的检验统计（Kolmogorov-Smirnov Test）。
@@ -338,9 +341,147 @@ Pearson 相关系数，用于检验两样本数据之间线性关系的强度。
     - 当 `$p$` 值小于某个显著性水平 `$\alpha$`，则拒绝原假设，认为两个变量是相关的。
       否则认为是不相关的。这里的相关仅为统计学意义上的相关性，并不能理解为实际因果关系
 * 方法库
-    - `from scipy.stats import anderson`
+    - `from scipy.stats import pearsonr`
+
+```python
+from scipy.stats import pearsonr
 
 
+# 显著性水平
+alpha = 0.05
+# 数据
+data1 = [
+    0.873, 2.817, 0.121, -0.945, -0.055, 
+    -1.436, 0.360, -1.478, -1.637, -1.869
+]
+data2 = [
+    0.353, 3.517, 0.125, -7.545, -0.555, 
+    -1.536, 3.350, -1.578, -3.537, -1.579
+]
+# 假设检验
+stat, p = pearsonr(data1, data2)
+print(f"stat={stat:.3f}, p={p:.3f}")
+
+if p > alpha:
+    print("两个变量相互独立")
+else:
+    print("两个变量可能存在线性相关关系")
+```
+
+### Spearman 等级相关系数
+
+Spearman 相关，用于检验两变量是否具有单调关系。当两变量因非线性关系相关，或者不服从正态分布时，
+Spearman 相关系数可以用来反映变量间的相关性强度。如果存在线性关系，也可以使用这种方法来检验，
+但是可能导致计算出的相关系数较低。Spearman 不是使用样本数据本身的协方差和标准差来计算相关系数的，
+而是根据样本值的相对秩次来计算统计量，这是非参数统计中常用的方法。
+
+* 使用前提
+    - 各样本观察值为独立同分布的(iid)，各样本数据是连续变量，或可排序定序的分类变量
+* 原假设
+    - 两变量相互独立
+* 结果解释
+    - 当 `$p$` 值小于某个显著性水平 `$\alpha$` 时，则拒绝原假设，认为两个变量是相关的。否则认为是不相关的
+* 方法库
+    - `from scipy.stats import spearmanr`
+
+```python
+from scipy.stats import spearmanr
+
+# 显著性水平
+alpha = 0.05
+# 数据
+data1 = [
+    0.873, 2.817, 0.121, -0.945, -0.055, 
+    -1.436, 0.360, -1.478, -1.637, -1.869
+]
+data2 = [
+    0.353, 3.517, 0.125, -7.545, -0.555, 
+    -1.536, 3.350, -1.578, -3.537, -1.579
+]
+# 假设检验
+stat, p = spearmanr(data1, data2)
+print(f"stat={stat:.3f}, p={p:.3f}")
+# 做出决定
+if p > 0.05:
+    print("两个变量相互独立")
+else:
+    print("两个变量可能存在相关关系")
+```
+
+### Kendall 等级相关
+
+用于检验两变量是否具有单调关系
+
+* 使用前提
+    - 各样本观察值为独立同分布的(iid)，各样本数据是可定序的
+* 原假设
+    - 两变量相互独立
+* 结果解释
+    - 当 `$p$` 值小于某个显著性水平 `$\alpha$` 时，则拒绝原假设，认为两个变量是相关的。否则认为是不相关的
+* 方法库
+    - `from scipy.stats import kendalltau`
+
+```python
+from scipy.stats import kendalltau
+
+# 显著性水平
+alpha = 0.05
+# 数据
+data1 = [
+    0.873, 2.817, 0.121, -0.945, -0.055, 
+    -1.436, 0.360, -1.478, -1.637, -1.869
+]
+data2 = [
+    0.353, 3.517, 0.125, -7.545, -0.555, 
+    -1.536, 3.350, -1.578, -3.537, -1.579
+]
+# 假设检验
+stat, p = kendalltau(data1, data2)
+print(f"stat={stat:.3f}, p={p:.3f}")
+# 做出决定
+if p > alpha:
+    print("两变量相互独立")
+else:
+    print("两变量可能存在相关关系")
+```
+
+### Chi-square Test
+
+Chi-Squared Test，用于检验两分类变量是否相关，属于非参数检验的范畴。
+卡方检验的零假设是一个分类变量的实际观测频数与该分类变量的理论期望频数相吻合。
+检验统计量服从卡方分布。实际观测值与理论推断值之间的偏离程度就决定卡方值的大小，
+如果卡方值越大，二者偏差程度越大；反之二者偏差越小；若两个值完全相等时，卡方值就为 0，
+表明理论值完全符合。
+
+* 使用前提：
+    - 仅仅针对分类变量
+    - 用于计算两变量的列联表的观测值是独立(iid)的
+    - 列联表的每个单元格的期望计数不小于 5
+* 原假设H0：两变量相互独立。
+* 结果解释：当p值小于某个显著性水平α(比如0.05)时，则拒绝原假设，认为两个样本有显著差异。
+* 方法包
+    - `from scipy.stats import chi2_contingency`
+
+```python
+from scipy.stats import chi2_contingency
+from scipy.stats import chi2
+
+# 列联表
+table = [
+    [10, 20, 30],
+    [6, 9, 17],
+]
+print(f"列联表:\n{table}")
+# 假设检验
+stat, p, dof, expected = chi2_contingency(table)
+print(f"自由度 dof: {dof}")
+print(f"期望分布:\n{expected}")
+
+# 采用统计量推断
+prob = 0.95
+critical = chi2.ppf(prob, dof)
+
+```
 
 ## 参数检验
 
@@ -365,9 +506,9 @@ Pearson 相关系数，用于检验两样本数据之间线性关系的强度。
 ## Q-Q 图
 
 
-
-
-
 # 参考
 
-* [scipy 正态性检验]https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html
+* [scipy 正态性检验](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html)
+* [基于Python的19种假设检验实现](https://zhuanlan.zhihu.com/p/351075744)
+* [用Python如何实现“假设检验”](https://zhuanlan.zhihu.com/p/50190968)
+* [假设检验的逻辑是是什么？](https://www.zhihu.com/question/20254932/answer/45583793)
