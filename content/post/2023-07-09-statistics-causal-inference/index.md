@@ -1,5 +1,5 @@
 ---
-title: 统计因果推断
+title: 读统计之都《因果推断简介》系列文章
 author: 王哲峰
 date: '2023-07-09'
 slug: statistics-causal-inference
@@ -8,7 +8,6 @@ categories:
 tags:
   - article
 ---
-
 
 <style>
 details {
@@ -35,26 +34,23 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [读统计之都《因果推断简介》系列文章](#读统计之都因果推断简介系列文章)
-  - [Yule-Simpson's Paradox](#yule-simpsons-paradox)
-    - [因果推断的教材](#因果推断的教材)
-    - [Yule-Simpson's Paradox](#yule-simpsons-paradox-1)
-    - [吸烟是否导致肺癌和健康工人效应](#吸烟是否导致肺癌和健康工人效应)
-    - [结语](#结语)
-  - [Rubin Causal Model(RCM) 和随机化试验](#rubin-causal-modelrcm-和随机化试验)
-  - [R.A.Fisher 和 J.Neyman 的分歧](#rafisher-和-jneyman-的分歧)
-  - [观察性研究，可忽略性和倾向得分](#观察性研究可忽略性和倾向得分)
-  - [因果图(Causal Diagram)](#因果图causal-diagram)
+- [Yule-Simpson's Paradox](#yule-simpsons-paradox)
+  - [因果推断的教材](#因果推断的教材)
+  - [Yule-Simpson's Paradox](#yule-simpsons-paradox-1)
+  - [吸烟是否导致肺癌和健康工人效应](#吸烟是否导致肺癌和健康工人效应)
+  - [结语](#结语)
+- [Rubin Causal Model 和随机化试验](#rubin-causal-model-和随机化试验)
+- [R.A.Fisher 和 J.Neyman 的分歧](#rafisher-和-jneyman-的分歧)
+- [观察性研究，可忽略性和倾向得分](#观察性研究可忽略性和倾向得分)
+- [因果图](#因果图)
 - [参考](#参考)
 </p></details><p></p>
 
-# 读统计之都《因果推断简介》系列文章
-
-## Yule-Simpson's Paradox
+# Yule-Simpson's Paradox
 
 > 统计还能研究因果？
 
-### 因果推断的教材
+## 因果推断的教材
 
 目前市面上能够买到的因果推断(causal inference)相关教科书：
 
@@ -68,7 +64,7 @@ img {
 * 统计之都系列文章的作者丁鹏的新书：[A First Course in Causal Inference](https://arxiv.org/abs/2305.18793)
     - 目前中文版还未翻译、出版，名字大概叫《因果推断基础教程》
 
-### Yule-Simpson's Paradox
+## Yule-Simpson's Paradox
 
 在高维列联表分析中， 有一个很有名的例子，叫做 Yule-Simpson’s Paradox。
 有文献称，Karl Pearson 很早就发现了这个悖论——也许这正是他反对统计因果推断的原因。
@@ -111,7 +107,7 @@ Table 1 中，第一个表是整个人群的数据：接受处理和对照的人
 * 在流行病学的教科书 (如 Rothman 等 2008) 中，都会讲到 “混杂偏倚”（confounding bias），
   其实就是 Yule-Simpson’s Paradox，书中列举了很多流行病学的实际例子
 
-### 吸烟是否导致肺癌和健康工人效应
+## 吸烟是否导致肺癌和健康工人效应
 
 由于有 Yule-Simpson’s Paradox 的存在，观察性研究中很难得到有关因果的结论，除非加上很强的假定。
 
@@ -126,11 +122,13 @@ Table 1 中，第一个表是整个人群的数据：接受处理和对照的人
 但是，事实上，铀矿的工人通常都是身强力壮的人，不在铀矿工作寿命会更长。此时，在铀矿工作与否与寿命不相关，
 但是放射性物质对人的健康是有因果作用的。
 
-### 结语
+## 结语
 
 这里举了一个悖论，但没有深入的阐释原因。阐释清楚这个问题的根本原因，其实就讲清楚了什么是因果推断。
 
-## Rubin Causal Model(RCM) 和随机化试验 
+# Rubin Causal Model 和随机化试验 
+
+> Rubin Causal Model，RCM
 
 因果推断用的最多的模型是 Rubin Causal Model (RCM; Rubin 1978) 和 Causal Diagram (Pearl 1995)。
 Pearl (2000) 中介绍了这两个模型的等价性，但是就应用来看，RCM 更加精确，而 Causal Diagram 更加直观，
@@ -155,7 +153,7 @@ ACE(Z \rightarrow Y) &= E[Y_{i}(1)] - E[Y_{i}(0)] \
 最后一个等式表明 ACE 可以由观测的数据估计出来。其中第一个等式用到了期望算子的线性性（非线性的算子导出的因果度量很难被识别）；
 第二个式子用到了随机化，即：
 
-## R.A.Fisher 和 J.Neyman 的分歧 
+# R.A.Fisher 和 J.Neyman 的分歧 
 
 完全随机化试验下的 Fisher randomization test 和 Neyman repeated sampling procedure。
 简单地说，前者是随机化检验，或者如很多教科书讲的 Fisher 精确检验（Fisher exact test）；
@@ -164,11 +162,13 @@ ACE(Z \rightarrow Y) &= E[Y_{i}(1)] - E[Y_{i}(0)] \
 
 
 
-## 观察性研究，可忽略性和倾向得分 
+# 观察性研究，可忽略性和倾向得分 
 
 
 
-## 因果图(Causal Diagram) 
+# 因果图
+
+> 因果图，Causal Diagram
 
 
 
