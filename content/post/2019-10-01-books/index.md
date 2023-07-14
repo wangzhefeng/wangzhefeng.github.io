@@ -1,7 +1,7 @@
 ---
 title: 书到用时方恨少，上厕所时不好找
 author: 王哲峰
-date: '2018-10-01'
+date: '2019-10-01'
 categories:
   - 整理
 tags:
