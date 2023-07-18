@@ -58,10 +58,10 @@ img {
 最简单的方式是通过系统的软件与更新来安装:
 
 1. 进入系统的图形桌面，打开 ``Software & Updates`` 软件，可以看到标签栏有一个 ``Additional Drivers``:
-      - NVIDIA Corporation: Unknown
-          - Using NVIDIA dirver metapackage from nvidia-driver-455(proprietary, tested)
-          - Using X.Org x server -- Nouveau display driver from xserver-xorg-video-nouveau(open source)
-      - 选择第一个安装 Nvidia 官方驱动(第二个是开源驱动)即可，根据网络情况稍等大概十分钟，安装完重启服务器。
+    - NVIDIA Corporation: Unknown
+        - Using NVIDIA dirver metapackage from nvidia-driver-455(proprietary, tested)
+        - Using X.Org x server -- Nouveau display driver from xserver-xorg-video-nouveau(open source)
+    - 选择第一个安装 Nvidia 官方驱动(第二个是开源驱动)即可，根据网络情况稍等大概十分钟，安装完重启服务器。
 2. 重启完之后更新一下软件
 
 ```bash
@@ -69,14 +69,14 @@ sudo apt update
 sudo apt upgrade
 ```
 
-这里会连带 Nvidia 的驱动一起神级一遍，更新到最新的驱动；
-更新完可能会出现 nvidia-smi 命令报错，再重启一遍就解决了
+这里会连带 Nvidia 的驱动一起升级一遍，更新到最新的驱动；
+更新完可能会出现 `nvidia-smi` 命令报错，再重启一遍就解决了
 
 ## 安装 CUDA
 
 ### CUDA 介绍
 
-NVIDIA® CUDA® 工具包提供了开发环境，可供创建经 GPU 加速的高性能应用。
+NVIDIA CUDA 工具包提供了开发环境，可供创建经 GPU 加速的高性能应用。
 借助 CUDA 工具包，可以在经 GPU 加速的嵌入式系统、台式工作站、企业数据中心、
 基于云的平台和 HPC 超级计算机中开发、优化和部署应用。
 此工具包中包含多个 GPU 加速库、多种调试和优化工具、
@@ -205,12 +205,5 @@ $ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c n
 
 # 参考
 
-* [深度学习环境配置指南(Windows、Mac、Ubuntu 全讲解)](https://mp.weixin.qq.com/s/ZTzfC7xp8PVMvOONVIiK6g)
-* https://developer.ridgerun.com/wiki/index.php?title=Xavier/Processors/HDAV_Subsystem/Audio_Engine
-* https://developer.nvidia.com/zh-cn/blog/bringing-cloud-native-agility-to-edge-ai-with-jetson-xavier-nx/
-* https://jingyan.baidu.com/article/fdbd4277a447ebb89e3f48ca.html
-* https://mp.weixin.qq.com/s/TsETgLLNWRskYbmh2wdiLg
-* https://developer.nvidia.com/zh-cn/CUDA-toolkit
-* https://developer.nvidia.com/zh-cn/CUDA-downloads
-* https://docs.nvidia.com/CUDA/CUDA-quick-start-guide/index.html
-* https://docs.nvidia.com/CUDA/CUDA-installation-guide-linux/
+* [深度学习环境配置指南](https://mp.weixin.qq.com/s/ZTzfC7xp8PVMvOONVIiK6g)
+* [个人深度学习工作站配置指南](https://mp.weixin.qq.com/s/TsETgLLNWRskYbmh2wdiLg)

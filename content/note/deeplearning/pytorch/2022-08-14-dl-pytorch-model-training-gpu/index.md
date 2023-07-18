@@ -68,10 +68,8 @@ img {
     - [内存管理](#内存管理)
     - [NVIDIA 工具扩展(NVTX)](#nvidia-工具扩展nvtx)
     - [Jiterator](#jiterator)
+- [参考](#参考)
 </p></details><p></p>
-
-* [当代研究生应当掌握的5种Pytorch并行训练方法（单机多卡）](https://mp.weixin.qq.com/s/mwGr69QlUBb2naqJXj__0g)
-* [Distribution is all you need](https://github.com/tczhangzhi/pytorch-distributed)
 
 深度学习模型训练过程的耗时主要来自于两个部分，一部分来自数据准备，另一部分来自参数迭代。
 当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。
@@ -247,7 +245,7 @@ True
 
 ```python
 tensor_cpu = tensor_gpu.to("cpu")  
-# or tensor_cpu = tensor_gpu.cup()
+# or tensor_cpu = tensor_gpu.cpu()
 
 print(tensor_cpu.device)
 print(tensor_cpu.is_cuda)
@@ -1030,27 +1028,26 @@ trainer.fit(model, dl_train, dl_val)
 
 ## torch.cuda
 
-* torch.cuda 支持 CUDA tensor 类型
-* 延迟初始化的，因此可以随时导入 torch.cuda
-* 可以使用 is_available() 查看系统是否支持 CUDA
+* `torch.cuda` 支持 CUDA tensor 类型
+* 延迟初始化的，因此可以随时导入 `torch.cuda`
+* 可以使用 `torch.cuda.is_available()` 查看系统是否支持 CUDA
 
 ### 随机数生成
 
-
 ### Communication collectives
-
 
 ### Streams 和 events
 
-
 ### Graphs
-
 
 ### 内存管理
 
-
 ### NVIDIA 工具扩展(NVTX)
-
 
 ### Jiterator
 
+
+# 参考
+
+* [当代研究生应当掌握的5种Pytorch并行训练方法（单机多卡）](https://mp.weixin.qq.com/s/mwGr69QlUBb2naqJXj__0g)
+* [Distribution is all you need](https://github.com/tczhangzhi/pytorch-distributed)

@@ -99,6 +99,7 @@ Tesla T4
 具体做法是，在程序开始的时候固定 `torch` 的随机种子，同时也把 `numpy` 的随机种子固定
 
 ```python
+import random
 import numpy as np
 import torch
 
@@ -106,7 +107,7 @@ fix_seed = 2021
 random.seed(fix_seed)
 np.random.seed(fix_seed)
 torch.manual_seed(fix_seed)
-if torch.device.is_available():
+if torch.cuda.is_available():
     torch.cuda.manual_seed_all(0)
 ``` 
 
