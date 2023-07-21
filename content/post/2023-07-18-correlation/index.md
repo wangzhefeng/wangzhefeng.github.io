@@ -9,6 +9,53 @@ tags:
   - article
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [相关性](#相关性)
+- [相关系数](#相关系数)
+  - [皮尔逊相关系数](#皮尔逊相关系数)
+  - [斯皮尔曼等级相关系数](#斯皮尔曼等级相关系数)
+  - [Kendall 等级相关系数](#kendall-等级相关系数)
+- [相关性检验](#相关性检验)
+- [参考](#参考)
+</p></details><p></p>
+
+# 相关性
+
+
+# 相关系数
+
+## 皮尔逊相关系数
+
+## 斯皮尔曼等级相关系数
+
+## Kendall 等级相关系数
+
+
+# 相关性检验
 
 
 
