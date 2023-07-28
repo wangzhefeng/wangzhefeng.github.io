@@ -4,10 +4,9 @@ title: "简历"
 type: widget_page
 ---
 
-# 王哲峰
-
 ## 基本信息
 
+* 姓名：王哲峰
 * 出生年月：1989.10
 * 籍贯：山西平遥
 * 现居：上海
@@ -17,7 +16,6 @@ type: widget_page
 
 * Email：<zfwang7@gmail.com>
 * GitHub：<https://github.com/wangzhefeng>
-* Web：<https://wangzhefeng.com/>
 
 ## 研究方向
 
@@ -36,7 +34,7 @@ type: widget_page
 * 2019.07 ~ 2023.05 上海优也信息科技有限公司，算法工程师
 * 2017.07 ~ 2019.06 上海四衡网络科技有限公司，数据分析师
 
-## 主要技能
+<!-- ## 主要技能
 
 * 数学及统计学背景
     - 良好的数学及统计学知识储备，拥有良好的数据思维
@@ -65,7 +63,7 @@ type: widget_page
     - 熟悉使用 Git、GitHub、码云等版本管理系统操作
     - 了解 Python 爬虫
     - 了解 Python 后端 API 开发框架 Flask、fastAPI
-    - 了解 Docker 的原理及使用
+    - 了解 Docker 的原理及使用 -->
 
 ## 获得奖励
 
