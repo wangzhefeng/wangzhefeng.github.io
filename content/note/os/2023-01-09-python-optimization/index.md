@@ -34,20 +34,159 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [数值优化](#数值优化)
-- [APIs 说明](#apis-说明)
-- [多元标量函数的无约束最小化(minimize)](#多元标量函数的无约束最小化minimize)
-  - [示例](#示例)
-- [多元标量函数的约束最小化(minimize)](#多元标量函数的约束最小化minimize)
-- [全局最优](#全局最优)
-- [最小二乘最小化](#最小二乘最小化)
-- [单变量函数最小化器](#单变量函数最小化器)
-- [自定义最小化器](#自定义最小化器)
-- [寻根](#寻根)
-- [线性规划](#线性规划)
+- [最优化算法求解器](#最优化算法求解器)
+- [Python Gurobi](#python-gurobi)
+    - [Gurobi 简介](#gurobi-简介)
+    - [Gurobi 数据结构](#gurobi-数据结构)
+        - [Multidict](#multidict)
+        - [Tuplelist](#tuplelist)
+        - [Tupledict](#tupledict)
+    - [Gurobi 参数和属性](#gurobi-参数和属性)
+    - [Gurobi 线性化技巧](#gurobi-线性化技巧)
+    - [Gurobi 多目标优化](#gurobi-多目标优化)
+    - [callback 函数](#callback-函数)
+- [Python Ortools](#python-ortools)
+- [Python Scipy](#python-scipy)
+    - [数值优化](#数值优化)
+    - [APIs 说明](#apis-说明)
+    - [多元标量函数的无约束最小化(minimize)](#多元标量函数的无约束最小化minimize)
+        - [示例](#示例)
+    - [多元标量函数的约束最小化(minimize)](#多元标量函数的约束最小化minimize)
+    - [全局最优](#全局最优)
+    - [最小二乘最小化](#最小二乘最小化)
+    - [单变量函数最小化器](#单变量函数最小化器)
+    - [自定义最小化器](#自定义最小化器)
+    - [寻根](#寻根)
+    - [线性规划](#线性规划)
+- [Python CPLEX](#python-cplex)
+- [Python Pyomo](#python-pyomo)
+    - [安装 pyomo 和 GLPK](#安装-pyomo-和-glpk)
+    - [参考](#参考)
+- [Python PuLP](#python-pulp)
+- [Python Geatpy](#python-geatpy)
+    - [Population 类是一个表示种群的类](#population-类是一个表示种群的类)
+    - [Algorithm 类是进化算法的核心类](#algorithm-类是进化算法的核心类)
 </p></details><p></p>
 
-# 数值优化
+# 最优化算法求解器
+
+无论是在生产制造领域，还是在金融、保险、交通等其他领域，当实际问题越来越复杂、
+问题规模越来越庞大，就需要借助计算机的快速计算能力，求解器的作用就是能够简化编程问题，
+求解器的作用就是能简化编程问题，使得工程师能专注于问题的分析和建模，而不是编程。
+
+算法优化的求解器有很多，其中商用的求解器包括 Gurobi、Cplex、Xpress 等；
+开源的求解器有 SCIP、GLPK、Ortools 等，这些求解器都有 Python 接口，
+因此，能够用比较简单的方式对运筹优化问题进行建模。
+
+* Gurobi 是由美国 Gurobi 公司开发的针对算法最优化领域的求解器，可以高效求解算法优化中的建模问题。
+* Ortools 是 Google 开源维护的算法优化求解器，针对 Google 的商业场景进行优化，如 VRP 问题，
+  对于中小规模的商业场景的使用是个不错的选择
+
+# Python Gurobi
+
+> gurobipy，Gurobi 的 Python API
+
+## Gurobi 简介
+
+运筹优化软件 Gurobi 虽然核心是使用 C/C++ 编写的，但也开发了 Python 接口，
+使 Python 使用者能够以其熟悉的方式用 Gurobi 求解算法最优化问题。
+
+安装 Gurobi：
+
+Gurobi 的安装根据参考文档进行安装即可，在安装了 Gurobi 软件之后，
+Gurobi 的 Python 扩展就可以直接到 Gurobi 的安装目录用 `python setup.py install` 命令进行安装
+
+## Gurobi 数据结构
+
+虽然用基础的 Python 数据结构也能实现 Gurobi 的建模，但在建模过程中，经常要对带不同下标的数据进行组合，
+如果使用 Python 内置的数据结构，则效率会比较低，为了提高建模效率，Gurobi 封装了更高级的 Python 数据结构，
+即 `Multidict`、`Tuplelist`、`Tupledict`。在对复杂或大规模问题建模时，它们可以大大提高模型求解的效率。
+
+### Multidict
+
+Multidict，即复合字典，就是多重字典的意思，`multidict` 函数允许在一个语句中初始化一个或多个字典
+
+```python
+import gurobipy as grb
+
+student, chinese, math, english = grb.multidict({
+    "student1": [1, 2, 3],
+    "student2": [2, 3, 4],
+    "student3": [3, 4, 5],
+    "student4": [4, 5, 6],
+})
+
+# 字典的键
+print(student)
+# 语文成绩的字典
+print(chinese)
+# 数学成绩的字典
+print(math)
+# 英语成绩的字典
+print(english)
+```
+
+```
+['student1', 'student2', 'student3', 'student4']
+{'student1': 1, 'student2': 2, 'student3': 3, 'student4': 4}
+{'student1': 2, 'student2': 3, 'student3': 4, 'student4': 5}
+{'student1': 3, 'student2': 4, 'student3': 5, 'student4': 6}
+```
+
+### Tuplelist
+
+Tuplelist，即元组列表，就是 `tuple` 和 `list` 的组合，也就是 `list` 元素的 `tuple` 类型，
+其设计的目的是为了高效地在元组列表中构建子列表
+
+```python
+import gurobipy as grb
+
+t1 = grb.tuplelist([
+    (1, 2),
+    (1, 3),
+    (2, 3),
+    (2, 5),
+])
+
+# 输出第一个值是 1 的元素
+print(tl.select(1, "*"))
+# 输出第二个值是 3 的元素
+print(tl.select("*", 3))
+```
+
+### Tupledict
+
+
+
+
+
+## Gurobi 参数和属性
+
+
+
+## Gurobi 线性化技巧
+
+
+
+## Gurobi 多目标优化
+
+
+## callback 函数
+
+
+
+# Python Ortools
+
+
+安装 Ortools:
+
+```bash
+$ pip install ortools
+```
+
+# Python Scipy
+
+## 数值优化
 
 scipy.optimize 提供了多种常用的优化算法. 
 
@@ -76,7 +215,47 @@ scipy.optimize 提供了多种常用的优化算法.
       - 混合鲍威尔
       - 莱文贝格-马夸特
 
-# APIs 说明
+## APIs 说明
+
+```python
+scipy.optimize.minimize(
+    fun, 
+    x0, 
+    args = (), 
+    method = 'SLSQP', 
+    jac = None, 
+    bounds = None, 
+    constraints = (), 
+    tol = None, 
+    callback = None, 
+    options = {
+        'func': None, 
+        'maxiter': 100, 
+        'ftol': 1e-06, 
+        'iprint': 1, 
+        'disp': False, 
+        'eps': 1.4901161193847656e-08
+    }
+)
+```
+
+```python
+scipy.optimize.basinhopping(
+    func, 
+    x0, 
+    niter = 100, 
+    T = 1.0, 
+    stepsize = 0.5, 
+    minimizer_kwargs = None, 
+    take_step = None, 
+    accept_test = None, 
+    callback = None, 
+    interval = 50, 
+    disp = False, 
+    niter_success = None, 
+    seed = None
+)
+```
 
 - scipy.optimize.minimize
    - Minimization of scalar function of one or more variables.
@@ -103,38 +282,7 @@ scipy.optimize 提供了多种常用的优化算法.
       - Custom minimizers
          - custom - a callable object
 
-```python
-scipy.optimize.minimize(fun, 
-                        x0, 
-                        args = (), 
-                        method = None, 
-                        jac = None, 
-                        hess = None, 
-                        hessp = None, 
-                        bounds = None, 
-                        constraints = (), 
-                        tol = None, 
-                        callback = None, 
-                        options = None)
-```
-
-```python
-scipy.optimize.basinhopping(func, 
-                            x0, 
-                            niter = 100, 
-                            T = 1.0, 
-                            stepsize = 0.5, 
-                            minimizer_kwargs = None, 
-                            take_step = None, 
-                            accept_test = None, 
-                            callback = None, 
-                            interval = 50, 
-                            disp = False, 
-                            niter_success = None, 
-                            seed = None)
-```
-
-# 多元标量函数的无约束最小化(minimize)
+## 多元标量函数的无约束最小化(minimize)
 
 - Nelder-Mead 单纯形算法
    - `method = 'Nelder-Mead'`
@@ -150,7 +298,7 @@ scipy.optimize.basinhopping(func,
    - `method = 'trust-exact'`
 
 
-## 示例
+### 示例
 
 官方示例: 
 
@@ -330,7 +478,7 @@ if __name__ == "__main__":
     main()
 ```
 
-# 多元标量函数的约束最小化(minimize)
+## 多元标量函数的约束最小化(minimize)
 
 - 信任区域约束算法
    - `method = "trust-constr"`
@@ -341,22 +489,22 @@ if __name__ == "__main__":
 - 顺序最小二乘法(SLSQP)算法
    - `method = "SLSQP"`
 
-# 全局最优
+## 全局最优
 
-# 最小二乘最小化
+## 最小二乘最小化
 
-# 单变量函数最小化器
+## 单变量函数最小化器
 
 - 无约束最小化
    - `method = "brent"`
 - 有界最小化
    - `method = "bounded"`
 
-# 自定义最小化器
+## 自定义最小化器
 
-# 寻根
+## 寻根
 
-# 线性规划
+## 线性规划
 
 ```python
 # -*- coding: utf-8 -*-
@@ -394,3 +542,92 @@ res = op.linprog(-c, A_ub, B_ub, A_eq, B_eq, bounds = (x1, x2, x3))
 
 print(res)
 ```
+
+# Python CPLEX 
+
+> docplex，用于 Python 的 IBM Decision Optimization CPLEX 建模包
+
+* [docplex Doc](http://ibmdecisionoptimization.github.io/docplex-doc/)
+* [docplex Examples](https://github.com/IBMDecisionOptimization/docplex-examples)
+
+# Python Pyomo
+
+Pyomo 是一个基于 Python 的开源软件包，它支持多种优化功能，用于制定和分析优化模型。
+Pyomo 可用于定义符号问题、创建具体的问题实例，并使用标准解决程序解决这些实例。Pyomo 支持多种问题类型，包括:
+
+* 线性规划
+* 二次规划
+* 非线性规划
+* 整数线性规划
+* 混合整数二次规划
+* 混合整数非线性规划
+* 整数随机规划
+* 广义分隔编程
+* 微分代数方程
+* 具有平衡约束的数学规划
+
+Pyomo 支持全功能编程语言中的分析和脚本编制。此外，Pyomo 还证明了开发高级优化和分析工具的有效框架。
+例如，PySP 包提供了随机规划的通用求解程序。PySP 利用了 Pyomo 的建模对象嵌入在功能全面的高级编程语言中的事实，
+这种语言允许使用 Python 并行通信库透明地并行化子问题
+
+## 安装 pyomo 和 GLPK
+
+pyomo：
+
+```bash
+$ pip install -q pyomo
+```
+
+GLPK 是一个开源的 GNU 线性编程工具包，可在 GNU 通用公共许可证 3 下使用。GLPK 是一个单线程单形解算器，
+通常适用于中小型线性整数规划问题。它是用 C 语言编写的，依赖性很小，因此在计算机和操作系统之间具有很高的可移植性。
+对于许多示例来说，GLPK 通常“足够好”。对于较大的问题，用户应该考虑高性能的解决方案，如 COIN-OR CBC，它们可以利用多线程处理器
+
+```bash
+$ apt-get install -y -qq glpk-utils
+```
+
+## 参考
+
+* [Pyomo Tutorial](https://www.osti.gov/servlets/purl/1376827)
+
+# Python PuLP
+
+> pulp，用 Python 编写的 LP/MILP 建模
+
+# Python Geatpy
+
+Geatpy2 整体上看由工具箱内核函数（内核层）和面向对象进化算法框架（框架层）两部分组成。
+其中面向对象进化算法框架主要有四个大类：
+
+* Problem 问题类
+* Algorithm 算法模板类
+* Population 种群类
+* PsyPopulation 多染色体种群类
+
+![img](images/geatpy.png)
+
+## Population 类是一个表示种群的类
+
+一个种群包含很多个个体，而每个个体都有一条染色体(若要用多染色体，则使用多个种群、并把每个种群对应个体关联起来即可)。
+除了染色体外，每个个体都有一个译码矩阵 Field(或俗称区域描述器)来标识染色体应该如何解码得到表现型，
+同时也有其对应的目标函数值以及适应度。种群类就是一个把所有个体的这些数据统一存储起来的一个类。比如：
+
+* Chrom 是一个存储种群所有个体染色体的矩阵，它的每一行对应一个个体的染色体
+* ObjV 是一个目标函数值矩阵，每一行对应一个个体的所有目标函数值，每一列对应一个目标
+
+PsyPopulation 类是继承了 Population 的支持多染色体混合编码的种群类。一个种群包含很多个个体，而每个个体都有多条染色体
+
+* Chroms 列表存储所有的染色体矩阵(Chrom)
+* Encodings 列表存储各染色体对应的编码方式(Encoding)
+* Fields 列表存储各染色体对应的译码矩阵(Field)
+
+## Algorithm 类是进化算法的核心类
+
+Algorithm 类既存储着跟进化算法相关的一些参数，同时也在其继承类中实现具体的进化算法。
+比如 Geatpy 中的 `moea_NSGA3_templet.py` 是实现了多目标优化 NSGA-III 算法的进化算法模板类，
+它是继承了 Algorithm 类的具体算法的模板类
+
+关于 Algorithm 类中各属性的含义可以查看 `Algorithm.py` 源码。这些算法模板通过调用 Geatpy 工具箱提供的进化算法库函数实现对种群的进化操作，
+同时记录进化过程中的相关信息，其基本层次结构如下图：
+
+![img](images/algo.png)

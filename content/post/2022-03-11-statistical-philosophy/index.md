@@ -37,9 +37,14 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [五种统计陷阱](#五种统计陷阱)
 - [参考](#参考)
 </p></details><p></p>
 
+
+# 五种统计陷阱
+
+* [数据科学家应该避免的5种统计陷阱](https://mp.weixin.qq.com/s/gbYskAo8fkoZ7LyRSLGJww)
 
 
 
