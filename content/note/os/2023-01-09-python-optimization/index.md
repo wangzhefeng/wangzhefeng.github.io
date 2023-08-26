@@ -1,5 +1,5 @@
 ---
-title: Python 数值优化
+title: 数值优化求解器
 author: 王哲峰
 date: '2023-01-09'
 slug: python-optimizaion
@@ -41,8 +41,19 @@ img {
         - [Multidict](#multidict)
         - [Tuplelist](#tuplelist)
         - [Tupledict](#tupledict)
+        - [示例](#示例)
     - [Gurobi 参数和属性](#gurobi-参数和属性)
+        - [参数类型](#参数类型)
+        - [属性类型](#属性类型)
     - [Gurobi 线性化技巧](#gurobi-线性化技巧)
+        - [最大值](#最大值)
+        - [最小值](#最小值)
+        - [绝对值](#绝对值)
+        - [逻辑与](#逻辑与)
+        - [逻辑或](#逻辑或)
+        - [指示函数](#指示函数)
+        - [带固定成本约束](#带固定成本约束)
+        - [分段线性函数](#分段线性函数)
     - [Gurobi 多目标优化](#gurobi-多目标优化)
     - [callback 函数](#callback-函数)
 - [Python Ortools](#python-ortools)
@@ -50,7 +61,7 @@ img {
     - [数值优化](#数值优化)
     - [APIs 说明](#apis-说明)
     - [多元标量函数的无约束最小化(minimize)](#多元标量函数的无约束最小化minimize)
-        - [示例](#示例)
+        - [示例](#示例-1)
     - [多元标量函数的约束最小化(minimize)](#多元标量函数的约束最小化minimize)
     - [全局最优](#全局最优)
     - [最小二乘最小化](#最小二乘最小化)
@@ -154,17 +165,198 @@ print(tl.select(1, "*"))
 print(tl.select("*", 3))
 ```
 
+Tuplelist 继承自 list，所以向 `tuplelist` 中添加新元素和普通 `list` 添加元素一样，有 `append`、`pop` 等方法，
+同样用迭代地方式遍历元素
+
+```python
+# 添加一个元素
+t1.append((3, 5))
+print(t1.select(3, "*"))
+
+# 使用迭代地方式实现 select 功能
+print(t1.select(1, "*"))
+```
+
 ### Tupledict
 
+Tupledict 是 Python 的 dict 的一个子类，通过 `tupledict` 可以更加高效地操作 Gurobi 中的变量子集，也就是说当定义了很多变量，
+需要对一部分变量进行操作时，可以使用 tupledict 的内置方法来高效轻松地构建线性表达式，如 `sum` 和 `prod`。
 
+`tupledict` 的键在内部存储格式是 `tuplelist`，因此可以使用 `tuplelist` 的 `select` 方法选择集合的子集。在实际使用中，
+通过将元组与每个 Gurobi 变量关联起来，可以有效地创建包含匹配变量子集的表达式。
 
+下面创建一个 `$3 \times 3$` 的矩阵，里面的每个元素表示线性表达式的变量，取其中一部分变量的操作就显得很方便了。
 
+`$$\begin{bmatrix}
+x_{11} & x_{12} & x_{13} \\
+x_{21} & x_{22} & x_{23} \\
+x_{31} & x_{32} & x_{33}
+\end{bmatrix}$$`
+
+```python
+import gurobipy as grb
+
+model = grb.Model()
+
+# 定义变量的下标
+t1 = [
+    (1, 1), (1, 2), (1, 3),
+    (2, 1), (2, 2), (2, 3),
+    (3, 1), (3, 2), (3, 3),
+]
+vars = model.addVars(t1, name = "d")
+```
+
+对变量求和：
+
+```python
+# 基于元素下标的操作，对第一行求和
+print(sum(vars.select(1, "*")))
+print(vars.sum(1, "*"))
+```
+
+如果变量系数不是 1，就不能用 `sum` 方法，而需要用 `prod` 方法来构建线性表达式，
+`prod` 方法用于变量和系数相乘后的累加。首先创建一个系数矩阵，用 `tupledict` 存储，键与 `vars` 是一样的，
+这样就可以快速匹配系数和对应的变量，然后采用 `prod` 方法来选定的变量和系数来构建线性表达式。
+
+```python
+import gurobipy as grb
+
+# 创建一个系数矩阵，用 tupledict 格式存储
+c1 = [
+    (1, 1),
+    (1, 2),
+    (1, 3),
+]
+coeff = grb.tupledict(c1)
+
+coeff[(1, 1)] = 1
+coeff[(1, 2)] = 0.3
+coeff[(1, 3)] = 0.4
+
+print(vars.prod(coeff, 1, "*"))
+```
+
+如果不是选择部分变量而是选择全部变量，`prod` 函数实现的功能就是具有相同下标的变量相乘后加和。
+
+```python
+obj = grb.quicksum(cost[i, j] * x[i, j] for i , j in arcs)
+obj = x.prod(cost)
+```
+
+由于 `tupledict` 是 `dict`a 的子类，因此可以使用标准的 `dict` 方法来修改 `tupledict`。
+Gurobi 变量一般都是 `tupledict` 类型，用 `tupledict` 定义变量的好处是可以快速选择部分变量，
+创建各种各样的约束，因为 `tupledict` 有 `sum` 函数和 `select` 函数。
+
+```python
+import gurobipy as grb
+
+# tupledict 类型的变量快速创建约束条件
+m = grb.Model()
+x = m.addVars(3, 4, vtype = grb.GRB.BINARY, name = "x")
+m.addConstrs((x.sum(i, "*") <= 1 for i in range(3)), name = "con")
+m.update()
+m.write("tupledict_vars.lp")
+```
+
+### 示例
 
 ## Gurobi 参数和属性
 
+Gurobi 的默认参数并不能高效求解模型，因此有必要了解 Gurobi 的重要参数和属性，以便在建模过程中能写出更高效的代码，
+能更快地进行试验和求解模型。
 
+这里将讲解 Gurobi 的参数（Parameterss）和属性（Attributes）。通过参数来控制优化器的行为，
+如求解时间限制、在命令行窗口中输出日志、MIP 可行解数量等，因此需要在优化求解启动前设置。
+通过属性来控制模型（变量、约束、目标等对象）的特征，如模型优化方向、变量的上界和下界等。
+
+### 参数类型
+
+参数控制 Gurobi 优化求解器的行为，需要在启动之前设置，一般来说 Gurobi 已经选择了最优的参数作为默认值，
+因此除非有必要，否则不用修改这些默认参数。
+
+前 8 种类型参数使用比较多，后 3 种类型参数在部署 Gurobi 服务器或部署服务计算时使用，
+这些参数的详细说明可以参考 Gurobi 接口文档的相关内容。
+
+1. Termination 停止参数，用于控制求解的停止条件。
+    - TimeLimit 设定整个求解过程耗时限制；
+    - SolutionLimit 设定 MIP 可行解数量；
+    - BarIterLimit 设定障碍法（Barrier）迭代次数限制；
+    - IterationLimit 设定单纯形法迭代次数限制；
+2. Tolerances 容差参数，用于控制结果的精度，在大多数情况下，这个限制是通过数值公差来管理的；
+   如果冲突小于相应的公差，求解器将结果视为满足约束。
+3. Simplex 单纯形参数，用于控制单纯形法的应用。如 InfUnbdInfo 控制是否生成不可行或无界模型附加信息。
+4. Barrier 障碍法参数，用于控制障碍法的操作，障碍法也称罚函数法。如 QCPDual 控制是否获取二次模型的对偶值。
+5. MIP 混合整数规划参数，用于控制混合整数规划算法。如 BranchDir 用于设定分支割平面搜索方向，默认值是自动选择的
+6. MIP Cuts 割平面参数，用于控制割平面的形式。如 Cuts 用于控制全局割平面法的强度。
+7. Tuning 调参参数，用于控制求解器的调参行为。如 `TuneCriterion` 可设定调参的准则，`TuneTimeLimit` 可设定调参的事件。
+8. Multiple Solutions 多解参数，用于修改 MIP 的搜索行为，用于尝试为 MIP 模型寻找多个解。如 `PoolSolutions` 决定存储可行解的数量。
+9. Distributed Algorithms 分布式计算参数，用于控制分布式并行计算（分布式 MIP、分布式并发和分布式调优）参数。
+10. Compute Server 计算服务器参数，用于配置和启动 Gurobi 计算服务器作业的参数。
+11. Cloud 云计算参数，用于启动 Gurobi 即时云实例的参数。
+12. Token Server 令牌服务参数，用于通信加密等功能。
+13. 其他参数，是上述 12 种参数之外的参数，部分参数和上述参数有关联但是又不完全符合该分类，故独立出来。
+    比如 `LogFile` 参数用于指定将模型求解信息保存到日志文件 `LogFile`
+
+### 属性类型
+
+通过属性（Attributes）能够控制模型（变量、约束、目标等对象）的特征，Gurobi 中的属性共分为 8 种类型，分别是：
+
+> * 模型属性
+> * 变量属性
+> * 线性约束属性
+> * SOS 约束属性
+> * 二次约束属性
+> * 广义约束属性
+> * 解的质量属性
+> * 多目标属性
+
+1. 模型属性（Model Attributes）包括 `ModelSense` 模型优化方向（最大化或最小化）、`ObjVal` 当前的目标值。
+2. 变量属性（Variable Attributes），如 `X` 获取当前变量的取值，`Start` 属性用于设置 MIP 模型的初始解。
+3. 线性约束属性（Linear Constraint Attributes），这些属性提供与特定线性约束相关的信息，
+   如 `Pi` 约束对应的对偶值，`Slack` 约束对应的松弛量，`RHS` 约束对应的右端项。
+4. SOS 约束属性（Special-Ordered Set Constraints Attributes），这些属性提供与特定的顺序集（SOS）约束相关的信息，
+   如 `IISSOS` 对不可行的模型，指示约束是否属于 IIS （Irreducible Inconsistent Subsystem）。
+5. 二次约束属性（Quadratic Constraint Attributes），这些属性提供与特定二次约束相关的信息，如 QCRHS 约束右端项。
+6. 广义约束属性（General Constraint Attributes），这些属性提供与特定常规约束关联的信息，如 GenConstrName 约束名称。
+7. 解质量属性（Solution Quality Attributes），用于评价解质量的相关属性，
+   如 BoundVio 最大的界违反，IntVio 整数变量离最近整数的最大距离。
+8. 多目标属性（Multi-objective Attributes），用于多目标优化问题的相关属性，
+   如 `ObjN` 对应多目标表达式中的变量系数，ObjNVal 对应目标函数值。
+
+查看和修改 Gurobi 参数属性的方法很简单，用于查看属性的函数是 `getAttr(attrname, objs)`，
+用于修改属性的函数是 `setAttr(attrname, newvalue)`。注意：并不是所有属性都能进行修改，对于只读属性就只能查看而不能修改。
+
+1. 查看属性
+    - 方法：`getAttr(attrname, objs)`，其中 `attrname` 是属性名称，`objs`（可选）是列表或字典对象用来存储查询的值。  
+    - 例如：`model.getAttr(GRB.Attr.ObjVal)` 或简写为 `model.ObjVal`。
+2. 修改属性
+    - 方法：`setAttr(attrname, newvalue)`，其中 `attrname` 是属性名称，`newvalue` 是属性的值。
+    - 例如：`var.setAtrr(GRB.Attr.VType, "C")` 或简写为 `var.Vtype = "C"`   
 
 ## Gurobi 线性化技巧
+
+### 最大值
+
+
+### 最小值
+
+
+### 绝对值
+
+
+### 逻辑与
+
+### 逻辑或
+
+### 指示函数
+
+### 带固定成本约束
+
+
+### 分段线性函数
+
+
 
 
 
