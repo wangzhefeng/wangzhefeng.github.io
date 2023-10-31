@@ -61,45 +61,45 @@ img {
   - [安装 Jupyter 相关库](#安装-jupyter-相关库)
   - [Jupyter kernel 设置](#jupyter-kernel-设置)
 - [JupyterLab 1.0](#jupyterlab-10)
-- [Jupyter 插件](#jupyter-插件)
 </p></details><p></p>
 
 # Install Jupyter
 
-- `jupyter`
-- `notebook`
-- `jupyterlab`
-- `ipykernel`
-- `jupyter-client`
-- `jupyter-console`
-- `jupyter-core`
-- `jupyter-server`
-- `jupyterlab-pygments`
-- `jupyterlab-server`
-- `voila`
+Jupyter 相关库：
+
+* `jupyter`
+* `notebook`
+* `jupyterlab`
+* `ipykernel`
+* `jupyter-client`
+* `jupyter-console`
+* `jupyter-core`
+* `jupyter-server`
+* `jupyterlab-pygments`
+* `jupyterlab-server`
+* `voila`
 
 ## 安装 Jupyter 相关库
 
-
-- Jupyter
+* Jupyter
 
 ```bash
 $ pip install jupyter
 ```
 
-- Jupyter Notebook
+* Jupyter Notebook
 
 ```bash
 $ pip install notebook
 ```
 
-- Jupyter Lab
+* Jupyter Lab
 
 ```bash
 $ pip install jupyterlab
 ```
 
-- Voila
+* Voila（可选）
 
 ```bash
 $ pip install voila
@@ -107,26 +107,27 @@ $ pip install voila
 
 ## Jupyter kernel 设置
 
-
-- 安装 `ipykernel` 在当前环境：
+* 安装 `ipykernel` 在当前环境：
 
 ```bash
 $ pip instll ipykernel
 ```
 
-- 查看 kernel
+* 查看 kernel
 
 ```bash
 $ jupyter kernelspec list
 ```
-- 将环境加入 Jupyter Lab
+
+* 将环境加入 Jupyter Lab
 
 ```bash
-$ workon pysci
-$ python -m ipykernel install --prefix=/Users/zfwang/.virtualenv/pysci/ --name pysci
+$ conda activate env_name
+$ python -m ipykernel install --prefix=/Users/zfwang/Applications/miniconda3/envs/env_name/ --name env_name
 $ ipykernel install --name env_name --user
 ```
-- 删除 kernel
+
+* 删除 kernel
 
 ```bash
 $ jupyter kernelspec remove python3
@@ -160,6 +161,3 @@ $ jupyter lab password
 
 > - 可以使用 `--port` 参数指定端口号
 >     - 部分云服务(如GCP)的实例默认不开放大多数网络端口，如果使用
-
-
-# Jupyter 插件
