@@ -28,9 +28,12 @@ menu:
     - name: "笔记"
       url: "/note/"
       weight: 4
-    - name: "诗词"
-      url: "/pomes/"
+    - name: "工具"
+      url: "/tool/"
       weight: 5
+    # - name: "诗词"
+    #   url: "/pomes/"
+    #   weight: 5
     - name: "分类"
       url: "/categories/"
       weight: 6
