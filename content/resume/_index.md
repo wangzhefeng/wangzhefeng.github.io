@@ -73,11 +73,11 @@ type: widget_page
 
 * [Wang, Z.F. and Ye, W.Z. (2016) An Efficient Smooth Quantile Boost Algorithm for Binary Classification.](https://file.scirp.org/pdf/APM_2016082411292370.pdf)
 
-## 自我评价
+<!-- ## 自我评价
 
 * 对工作有责任心
 * 热爱学习，喜欢钻研
 * 热爱数据分析，热爱技术
 * 拥有较强的业务、技术学习能力
 * 拥有良好的团队沟通、协作能力
-* 拥有积极的生活、工作态度
+* 拥有积极的生活、工作态度 -->

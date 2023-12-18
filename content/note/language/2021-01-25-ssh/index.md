@@ -1,5 +1,5 @@
 ---
-title: 玩转 SSH
+title: SSH
 author: 王哲峰
 date: '2021-01-25'
 slug: ssh

@@ -63,7 +63,7 @@ PyTorch 是一个基于 Python 的机器学习库。它主要提供了两种核�
 
 PyTorch 的主要优点：
 
-* 简洁易懂：PyTorch 的 API 设计的相当简洁一致。基本上就是 `tensor`、`autograd`、`nn` 三级封装
+* 简洁易懂：PyTorch 的 API 设计得相当简洁一致。基本上就是 `tensor`、`autograd`、`nn` 三级封装
 * 便于调试：PyTorch 采用动态图，可以像普通 Python 代码一样进行调试
 * 强大高效：PyTorch 提供了非常丰富的模型组件，可以快速实现想法。并且运行速度很快。
   目前大部分深度学习相关的论文都是用 PyTorch 实现的

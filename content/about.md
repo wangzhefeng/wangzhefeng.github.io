@@ -37,7 +37,6 @@ slug: "about"
 
 * 代码
     - VSCode
-    - PyCharm
     - Vim
 * 写作
     - VSCode
@@ -55,7 +54,7 @@ slug: "about"
     - slidev
     - RStudio
     - PowerPoint
-  
+
 ### 书籍
 
 * 《中国思想史》
