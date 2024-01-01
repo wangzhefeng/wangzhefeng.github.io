@@ -56,11 +56,22 @@ img {
     - [三维张量](#三维张量-1)
     - [四维张量](#四维张量-1)
 - [tensor 设备](#tensor-设备)
+    - [device 对象](#device-对象)
+    - [device 参数](#device-参数)
+    - [to 方法](#to-方法)
 - [tensor 创建](#tensor-创建)
     - [直接创建](#直接创建)
         - [tensor](#tensor-1)
         - [tensor 和 array](#tensor-和-array)
     - [依数值创建](#依数值创建)
+        - [empty](#empty)
+        - [ones](#ones)
+        - [zeros](#zeros)
+        - [eye](#eye)
+        - [diag](#diag)
+        - [fill\_](#fill_)
+        - [range 和 arange](#range-和-arange)
+        - [linspace](#linspace)
     - [依概率分布创建](#依概率分布创建)
         - [设置随机数种子](#设置随机数种子)
         - [生成随机数 tensor](#生成随机数-tensor)
@@ -361,17 +372,30 @@ print(tensor4.shape)  # torch.Size([2, 2, 2, 2])
 
 # tensor 设备
 
-如果 CUDA 可用，可以使用 `torch.device` 对象将 tensors 移出或放入 GPU
+如果 CUDA 可用，可以使用 `torch.device` 对象将 tensors 移出或放入 GPU。
+
+## device 对象
 
 ```python
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+```
 
+## device 参数
+
+```python
 # tensor
 x = torch.tensor([1])
+
 # directly create a tensor on gpu
 y = torch.ones_like(x, device = device)
+```
+
+## to 方法
+
+```python
 # or just use strings `.to("cuda")`
 x = x.to(device)
+
 # `.to` can also change dtype together
 z = x + y
 z.to("cpu", torch.double)
@@ -383,21 +407,29 @@ z.to("cpu", torch.double)
     - `torch.tensor()`
     - `torch.from_numpy()`
 * 依数值创建
-    - `torch.empty()`
-    - `torch.ones()`
-    - `torch.zeros()`
-    - `torch.eye()`：单位矩阵
-    - `torch.diag()`：对角矩阵
-    - `torch.fill_()`
-    - `torch.arange()`
-    - `torch.linspace()`
+    - `torch.empty()`：空张量
+    - `torch.ones()`：单位张量
+    - `torch.zeros()`：零张量
+    - `torch.eye()`：单位张量
+    - `torch.diag()`：对角张量
+    - `torch.fill_()`：用特定的数值填充张量
+    - `torch.arange()`：等差序列张量
+    - `torch.linspace()`：线性等分向量
 * 依概率分布创建
-    - `torch.manual_seed()`
-    - `torch.normal()`：标准正态
+    - `torch.seed()`: 设置生成随机数的种子为非确定性随机数
+    - `torch.manual_seed()`：设置生成随机数的种子
+    - `torch.initial_seed()`：返回用于生成随机数的初始种子
+    - `torch.bernoulli()`：从伯努利分布中提取二进制随机数(0 或 1)
     - `torch.randn()`：正态分布
-    - `torch.rand()`：均匀分布
-    - `torch.randint()`
+    - `torch.normal()`：标准正态
+    - `torch.randn_like()`：标准正态分布
+    - `torch.multinomial()`：多元正态分布
+    - `torch.rand()`：`$[0, 1)$` 区间的均匀分布
+    - `torch.rand_like()`：`$[0, 1)$` 区间的均匀分布
+    - `torch.randint()`：从给定区间的均匀分布中取整数
+    - `torch.randint_like()`：从给定区间的均匀分布中取整数
     - `torch.randperm()`：整数随机排列
+    - `torch.pisson()`：泊松分布
 
 ## 直接创建
 
@@ -516,14 +548,140 @@ print(type(t))  # <class 'list'>
 
 ## 依数值创建
 
-* `torch.empty()`：空矩阵
-* `torch.ones()`
-* `torch.zeros()`
-* `torch.eye()`：单位矩阵
-* `torch.diag()`：对角矩阵
-* `torch.fill_()`
-* `torch.arange()`
-* `torch.linspace()`
+* `torch.empty()`：空张量
+* `torch.ones()`：单位张量
+* `torch.zeros()`：零张量
+* `torch.eye()`：单位张量
+* `torch.diag()`：对角张量
+* `torch.fill_()`：用特定的数值填充张量
+* `torch.arange()`：等差序列向量
+* `torch.linspace()`：线性等分向量
+
+### empty
+
+```python
+>>> torch.empty(1, 5, 2)
+
+tensor([[[1.9713e-34, 2.0361e-42],
+         [0.0000e+00, 0.0000e+00],
+         [0.0000e+00, 0.0000e+00],
+         [0.0000e+00, 0.0000e+00],
+         [0.0000e+00, 0.0000e+00]]])
+```
+
+### ones
+
+```python
+>>> torch.ones(1, 5, 2)
+
+tensor([[[1., 1.],
+         [1., 1.],
+         [1., 1.],
+         [1., 1.],
+         [1., 1.]]])
+```
+
+### zeros
+
+```python
+>>> torch.zeros(1, 5, 2)
+
+tensor([[[0., 0.],
+         [0., 0.],
+         [0., 0.],
+         [0., 0.],
+         [0., 0.]]])
+```
+
+### eye
+
+```python
+>>> torch.eye(5, 5)
+
+tensor([[1., 0., 0., 0., 0.],
+        [0., 1., 0., 0., 0.],
+        [0., 0., 1., 0., 0.],
+        [0., 0., 0., 1., 0.],
+        [0., 0., 0., 0., 1.]])
+```
+
+### diag
+
+```python
+>>> a = torch.tensor(
+        [[1, 2, 3], 
+        [4, 5, 6], 
+        [7, 8, 9]]
+    )
+>>> torch.diag(a, 0)
+tensor([1, 5, 9])
+
+>>> torch.diag(a, 1)
+tensor([2, 6])
+
+>>> torch.diag(a, -1)
+tensor([4, 8])
+
+>>> torch.diag(a, 2)
+tensor([3])
+
+>>> torch.diag(a, -2)
+tensor([7])
+```
+
+### fill_
+
+```python
+>>> torch.manual_seed(seed = 42)
+>>> a = torch.randn(3, 4)
+>>> b = a
+>>> a
+tensor([[ 0.3367,  0.1288,  0.2345,  0.2303],
+        [-1.1229, -0.1863,  2.2082, -0.6380],
+        [ 0.4617,  0.2674,  0.5349,  0.8094]])
+>>> b
+tensor([[ 0.3367,  0.1288,  0.2345,  0.2303],
+        [-1.1229, -0.1863,  2.2082, -0.6380],
+        [ 0.4617,  0.2674,  0.5349,  0.8094]])
+>>> a.fill_(42)
+tensor([[42., 42., 42., 42.],
+        [42., 42., 42., 42.],
+        [42., 42., 42., 42.]])
+>>> a
+tensor([[42., 42., 42., 42.],
+        [42., 42., 42., 42.],
+        [42., 42., 42., 42.]])
+>>> b
+tensor([[42., 42., 42., 42.],
+        [42., 42., 42., 42.],
+        [42., 42., 42., 42.]])
+```
+
+### range 和 arange
+
+```python
+>>> torch.range(1, 6)
+tensor([1., 2., 3., 4., 5., 6.])
+
+>>> torch.range(1, 6, 2)
+tensor([1., 3., 5.])
+```
+
+```python
+>>> torch.arange(1, 6)
+tensor([1, 2, 3, 4, 5])
+
+>>> torch.arange(1, 6, 2)
+tensor([1, 3, 5])
+```
+
+### linspace
+
+```python
+>>> torch.linspace(-10, 10, steps = 6, dtype = torch.float)
+tensor([-10.,  -6.,  -2.,   2.,   6.,  10.])
+```
+
 
 ## 依概率分布创建
 
