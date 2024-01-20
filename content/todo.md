@@ -75,6 +75,13 @@ img {
 * [Logging in Python](https://realpython.com/python-logging/)
 * [Asynchronous HTTP Client/Server for asyncio and Python](https://docs.aiohttp.org/en/stable/client_quickstart.html)
 * [Python-100-Days](https://github.com/jackfrued/Python-100-Days)
+* [Python开发者的完美终端工具](https://mp.weixin.qq.com/s/QxfXQuaIhPng40Pexw3KlQ)
+* [监控Cron定时任务的神器 — Healthchecks](https://mp.weixin.qq.com/s?__biz=Mzg2OTg3MTU2OQ==&mid=2247506353&idx=2&sn=b7863837f4299ce711ddb44cb55fa3c2&source=41#wechat_redirect)
+* [ Python 中的链式调用](https://mp.weixin.qq.com/s?__biz=MzAxMjUyNDQ5OA==&mid=2653562756&idx=1&sn=d3bc943ee9ed462052363b923794cbcb&scene=21#wechat_redirect)
+* [有关单元测试的 5 个建议](https://mp.weixin.qq.com/s/kHqZrDJhsu4v8ZEQ7QJ3wQ)
+* [[Book] The Architecture Of Open Source Applications](http://linkhttp://www.amazon.com/gp/product/1257638017/ref=as_li_ss_tl?ie=UTF8&tag=bookforkind-20&linkCode=as2&camp=1789&creative=39095&creativeASIN=1257638017)
+* [Kenneth Reitz](https://kenreitz.org/)
+* [GitHub 仓库示例](https://github.com/navdeep-G/samplemod)
 
 ## Timeseries
 
