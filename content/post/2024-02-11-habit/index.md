@@ -78,7 +78,7 @@ img {
 * :white_check_mark: 早晚认真做好牙齿护理。
 * :white_check_mark: 每天最少饮水 1200ML，主动喝水，不要口渴了才想起来去喝。
 * :black_square_button: 不赖床，起床利落。
-* :black_square_button: 不过度刷短视频，，睡前半小时不碰手机，可以减少熬夜。
+* :black_square_button: 不过度刷短视频，睡前半小时不碰手机，可以减少熬夜。
 * :black_square_button: 每天保持 6～8 小时睡眠时间，午睡半小时左右，让自己保持活力。
 * :white_check_mark: 每天做一点家务，一天一整理，一周一清理。
 * :white_check_mark: 学会物归原位，能够为你节省很多时间，也避免因为找不到而花冤枉钱。
@@ -101,15 +101,16 @@ img {
 * :white_check_mark: 学习穿搭、化妆，让自己看上去更自信。
 * :black_square_button: 看优质的 TED 演讲、纪录片、名人演讲等等，给大脑输入知识。
 * :black_square_button: 掌握一门技能，可以是剪辑、自媒体写作，也可以是插花、陶艺手工类。
-* :black_square_button: 月末进行一次复盘，从错误中吸取经验，，加速成长。
+* :black_square_button: 月末进行一次复盘，从错误中吸取经验，加速成长。
 * :black_square_button: 计划一次长途旅行，开阔眼界，感受不一样的风土人情。
 * :black_square_button: 考证，选择喜欢的专业，报名学习，提升自己。
 * :black_square_button: 接触更多优秀的人，一个人想要进步，圈子很重要。
 * :white_check_mark: 锻炼自己的演讲能力，提升自己的沟通能力。
-* :black_square_button: 拒绝拖延症，，想到什么事情就马上去做。
+* :black_square_button: 拒绝拖延症，想到什么事情就马上去做。
 * :white_check_mark: 每天提前做好计划安排，可以让工作变得更加高效。
 
-<div class="warning" style='background-color:#F5F5F5; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em; font-size: 10%'>
+<!-- 
+<div class="warning" style='background-color:#F5F5F5; color: #69337A; border-left: solid #805AD5 4px; border-radius: 4px; padding:0.7em; font-size: 80%'>
 <span>
     <p style='margin-left:1em;'>
     <h3>缓解拖延症</h3>
@@ -140,7 +141,7 @@ img {
     </ul>
     </p>
 </span>
-</div>
+</div> -->
 
 # 人际交往
 
@@ -173,7 +174,7 @@ img {
 * :black_square_button: 无论冬夏，坚持防晒、护肤、补水。
 * :black_square_button: 三餐规律，每餐只吃七分饱，多吃绿色蔬菜、水果。
 * :white_check_mark: 剩饭剩菜容易滋生细菌，吃进去易导致肠胃炎，尽量别吃。
-* :black_square_button: 戒糖，，少喝奶茶等，控制体重，防止皮肤暗沉。
+* :black_square_button: 戒糖，少喝奶茶等，控制体重，防止皮肤暗沉。
 * :black_square_button: 少吃油腻，辛辣食物，饮食清淡。
 * :white_check_mark: 正常人不需要吃太多的补品，不仅不会补身体，反而会伤身体。
 * :black_square_button: 定期体检。
