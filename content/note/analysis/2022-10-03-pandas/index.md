@@ -34,23 +34,330 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [DataFrame 多层索引](#dataframe-多层索引)
+    - [多层索引取值](#多层索引取值)
+        - [根据行索引查询](#根据行索引查询)
+        - [根据 column 查询](#根据-column-查询)
+    - [索引与列转换](#索引与列转换)
+        - [列转化为索引](#列转化为索引)
+        - [索引转换为列](#索引转换为列)
 - [Pyjanitor](#pyjanitor)
-  - [coalesc](#coalesc)
-  - [concatenate\_columns 和 deconcatenate\_column](#concatenate_columns-和-deconcatenate_column)
-  - [take\_first](#take_first)
-  - [自定义 janitor](#自定义-janitor)
+    - [coalesc](#coalesc)
+    - [concatenate\_columns 和 deconcatenate\_column](#concatenate_columns-和-deconcatenate_column)
+    - [take\_first](#take_first)
+    - [自定义 janitor](#自定义-janitor)
 - [最佳实践](#最佳实践)
-  - [pipe](#pipe)
-  - [assign](#assign)
-  - [query](#query)
-  - [resample](#resample)
-  - [groupby 和 transform](#groupby-和-transform)
-  - [向量化计算](#向量化计算)
-  - [assign 和 numpy select](#assign-和-numpy-select)
-  - [timeseries](#timeseries)
+    - [pipe](#pipe)
+    - [assign](#assign)
+    - [query](#query)
+    - [resample](#resample)
+    - [groupby 和 transform](#groupby-和-transform)
+    - [向量化计算](#向量化计算)
+    - [assign 和 numpy select](#assign-和-numpy-select)
+    - [timeseries](#timeseries)
 - [参考](#参考)
 </p></details><p></p>
 
+
+# DataFrame 多层索引
+
+## 多层索引取值
+
+下面是一个多索引 DataFrame 数据：
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(
+    np.random.randint(50, 100, size = (4, 4)),
+    columns = pd.MultiIndex.from_product(
+        [["math", "physics"], 
+         ["term1", "term2"]]
+    ),
+    index = pd.MultiIndex.from_tuples(
+        [("class1", "LiLei"), 
+         ("class2", "HanMeiMei"), 
+         ("class2", "LiLei"), 
+         ("class2", "HanMeiMei")]
+    )
+)
+df.index.names = ["class", "name"]
+print(df)
+```
+
+```
+                  math       physics      
+                 term1 term2   term1 term2
+class  name                               
+class1 LiLei        88    78      64    92
+class2 HanMeiMei    57    70      88    68
+       LiLei        72    60      60    73
+       HanMeiMei    85    89      73    52
+```
+
+### 根据行索引查询
+
+1. 取外层索引为 `class1` 的数据：
+
+```python
+print(df.loc["class1"])
+```
+
+```
+       math       physics      
+      term1 term2   term1 term2
+name                           
+LiLei    88    78      64    92
+```
+
+2. 同时根据多个索引筛选取值：
+
+```python
+print(df.loc[("class2", "HanMeiMei")])
+```
+
+```
+                  math       physics      
+                 term1 term2   term1 term2
+class  name                               
+class2 HanMeiMei    57    70      88    68
+       HanMeiMei    85    89      73    52
+```
+
+3. 同时根据多个索引筛选取值，这个方法不会带上外层索引：
+
+```python
+print(df.loc["class2"].loc["HanMeiMei"])
+```
+
+```
+           math       physics      
+          term1 term2   term1 term2
+name                               
+HanMeiMei    57    70      88    68
+HanMeiMei    85    89      73    52
+```
+
+4. 根据内层索引取值，先交换内外层索引位置：
+
+```python
+print(df.swaplevel())
+```
+
+```
+                  math       physics      
+                 term1 term2   term1 term2
+name      class                           
+LiLei     class1    88    78      64    92
+HanMeiMei class2    57    70      88    68
+LiLei     class2    72    60      60    73
+HanMeiMei class2    85    89      73    52
+```
+
+5. 通过取外层索引取值
+
+```python
+print(df.swaplevel().loc["HanMeiMei"])
+```
+
+```
+        math       physics      
+       term1 term2   term1 term2
+class                           
+class2    57    70      88    68
+class2    85    89      73    52
+```
+
+### 根据 column 查询
+
+1. 根据外层 column 取值
+
+```python
+print(df["math"])
+```
+
+```
+                  term1  term2
+class  name                   
+class1 LiLei         88     78
+class2 HanMeiMei     57     70
+       LiLei         72     60
+       HanMeiMei     85     89
+```
+
+2. 根据多层 column 联合取值
+
+```python
+print(df["math", "term2"])
+print(df.loc[:, ("math", "term2")])
+print(df["math"]["term2"])
+print(df[("math", "term2")])
+```
+
+```
+class   name     
+class1  LiLei        78
+class2  HanMeiMei    70
+        LiLei        60
+        HanMeiMei    89
+Name: (math, term2), dtype: int32
+```
+
+3. 取内层索引先交换轴
+
+```python
+print(df.swaplevel(axis = 1))
+print(df.swaplevel(axis = 1)["term1"])
+```
+
+```
+                  math  physics
+class  name                    
+class1 LiLei        88       64
+class2 HanMeiMei    57       88
+       LiLei        72       60
+       HanMeiMei    85       73
+```
+
+## 索引与列转换
+
+下面是一个单索引 DataFrame 数据：
+
+```python
+df = pd.DataFrame({
+    "X": range(5),
+    "Y": range(5),
+    "S": list("aaabb"),
+    "Z": [1, 1, 2, 2, 2],
+})
+print(df)
+```
+
+```
+   X  Y  S  Z
+0  0  0  a  1
+1  1  1  a  1
+2  2  2  a  2
+3  3  3  b  2
+4  4  4  b  2
+```
+
+### 列转化为索引
+
+1. 指定某一列为索引
+
+```python
+print(df.set_index("S"))
+```
+
+```
+   X  Y  Z
+S         
+a  0  0  1
+a  1  1  1
+a  2  2  2
+b  3  3  2
+b  4  4  2
+```
+
+2. 指定某一列为索引，并保留索引列
+
+```python
+print(df.set_index("S", drop = False))
+```
+
+```
+   X  Y  S  Z
+S            
+a  0  0  a  1
+a  1  1  a  1
+a  2  2  a  2
+b  3  3  b  2
+b  4  4  b  2
+```
+
+3. 指定多行列作为索引，并保留索引列
+
+```python
+print(df.set_index(["S", "Z"], drop = False))
+```
+
+```
+     X  Y  S  Z
+S Z            
+a 1  0  0  a  1
+  1  1  1  a  1
+  2  2  2  a  2
+b 2  3  3  b  2
+  2  4  4  b  2
+```
+
+### 索引转换为列
+
+1. 指定多行列作为索引
+
+```python
+df_multiindex = df.set_index(["S", "Z"])
+print(df_multiindex)
+```
+
+```
+     X  Y
+S Z      
+a 1  0  0
+  1  1  1
+  2  2  2
+b 2  3  3
+  2  4  4
+```
+
+2. 将单个索引作为 DataFrame 对象的列
+
+```python
+print(df_multiindex.reset_index("Z"))
+```
+
+```
+   Z  X  Y
+S         
+a  1  0  0
+a  1  1  1
+a  2  2  2
+b  2  3  3
+b  2  4  4
+```
+
+3. 将多级索引作为列
+
+```python
+print(df_multiindex.reset_index())
+```
+
+```
+   S  Z  X  Y
+0  a  1  0  0
+1  a  1  1  1
+2  a  2  2  2
+3  b  2  3  3
+4  b  2  4  4
+```
+
+4. 删除对指定索引，以上操作都不会直接对原 DataFrame 进行修改，若要直接对原 DataFrame 进行修改， 加上参数 `inplace=True`
+
+```python
+df_multiindex.reset_index(inplace = True)
+print(df_multiindex)
+```
+
+```
+   S  Z  X  Y
+0  a  1  0  0
+1  a  1  1  1
+2  a  2  2  2
+3  b  2  3  3
+4  b  2  4  4
+```
 
 # Pyjanitor
 
@@ -249,9 +556,6 @@ data = pd.DataFrame({
 data
 dta.strip_names()
 ```
-
-
-
 
 # 最佳实践
 
