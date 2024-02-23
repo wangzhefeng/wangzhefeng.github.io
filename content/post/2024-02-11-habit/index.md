@@ -79,14 +79,14 @@ img {
 * :white_check_mark: 每天最少饮水 1200ML，主动喝水，不要口渴了才想起来去喝。
 * :white_check_mark: 不赖床，起床利落。
 * :white_check_mark: 不过度刷短视频，睡前半小时不碰手机，可以减少熬夜。
-* :black_square_button: 每天保持 6～8 小时睡眠时间，午睡半小时左右，让自己保持活力。
+* :white_check_mark: 每天保持 6～8 小时睡眠时间，午睡半小时左右，让自己保持活力。
 * :white_check_mark: 每天做一点家务，一天一整理，一周一清理。
 * :white_check_mark: 学会物归原位，能够为你节省很多时间，也避免因为找不到而花冤枉钱。
 * :white_check_mark: 单次静坐每 2 小时，起身活动一下筋骨，避免久坐带来的伤害。
 * :white_check_mark: 晚上八点以后不吃夜宵。
 * :black_square_button: 每天运动至少半小时，达到微微出汗的状态。
 * :white_check_mark: 每个月记得存钱，日积月累，会存下不小的财富。
-* :black_square_button: 天气好的时候，晒晒被子，床单枕套勤换洗。
+* :white_check_mark: 天气好的时候，晒晒被子，床单枕套勤换洗。
 * :black_square_button: 每周尝试学做一样新菜品，减少点外卖的频率。
 * :black_square_button: 培养兴趣爱好，比如阅读、画画、写字，可以帮助你缓解负面情绪。
 
@@ -150,7 +150,7 @@ img {
 > 世间没有完全契合的灵魂，所有好的关系都需要用心经营。
 > 无论是亲密的恋人关系，还是友谊，甚至是同事关系，只有好好维护，才能让你拥有一个好人缘。
 
-* :black_square_button: 与人交往慢一点，与人绝交快一点。
+* :white_check_mark: 与人交往慢一点，与人绝交快一点。
 * :white_check_mark: 保持点头、注视、微笑就足以应对 90% 以上的社交场合。
 * :white_check_mark: 学会表达自己的观点，但不要强加于人。
 * :white_check_mark: 不要吝啬，把帮助别人当成一种习惯。
@@ -158,9 +158,9 @@ img {
 * :white_check_mark: 不和别人抱怨自己过得不好。
 * :white_check_mark: 不要得罪闲人，他有的是时间找你麻烦。
 * :white_check_mark: 不靠近任何免费的东西，买东西尽量不去找熟人。
-* :black_square_button: 不要把话说绝、把事做绝，撕破脸永远不是最佳选择。
-* :black_square_button: 善于自嘲，这种人特别容易和别人拉进距离。别人自嘲时，不要当真，也别附和。
-* :black_square_button: 永远不要主动打听别人的八卦、隐私，不搬弄是非。
+* :white_check_mark: 不要把话说绝、把事做绝，撕破脸永远不是最佳选择。
+* :white_check_mark: 善于自嘲，这种人特别容易和别人拉进距离。别人自嘲时，不要当真，也别附和。
+* :white_check_mark: 永远不要主动打听别人的八卦、隐私，不搬弄是非。
 * :black_square_button: 记住在乎的人的生日，记得送点小礼物或者发个小红包。
 * :white_check_mark: 最重要的一点：真诚。真诚是最好的必杀技。
 
@@ -168,13 +168,13 @@ img {
 
 > 人这一生，谁都可能干几件傻事，但最傻的一件就是忽视健康。年轻的时候，总觉得金钱、地位是世界上最重要的东西。到了一定年纪，才发现健康的身体是最宝贵的财富，没有健康一切都是空谈。新的一年里，对人生要事重新排序，将健康放在第一位。我很认同张其成教授的观点：“养生，其实就是培养健康的生活习惯。”最好的养生之道，就是培养好习惯。
 
-* :black_square_button: 不生气、不叹气，保持心情愉悦。
+* :white_check_mark: 不生气、不叹气，保持心情愉悦。
 * :black_square_button: 不抽烟、不喝酒、不熬夜。
 * :black_square_button: 睡前用温热水泡脚 20 分钟。
 * :black_square_button: 无论冬夏，坚持防晒、护肤、补水。
-* :black_square_button: 三餐规律，每餐只吃七分饱，多吃绿色蔬菜、水果。
+* :white_check_mark: 三餐规律，每餐只吃七分饱，多吃绿色蔬菜、水果。
 * :white_check_mark: 剩饭剩菜容易滋生细菌，吃进去易导致肠胃炎，尽量别吃。
-* :black_square_button: 戒糖，少喝奶茶等，控制体重，防止皮肤暗沉。
+* :white_check_mark: 戒糖，少喝奶茶等，控制体重，防止皮肤暗沉。
 * :black_square_button: 少吃油腻，辛辣食物，饮食清淡。
 * :white_check_mark: 正常人不需要吃太多的补品，不仅不会补身体，反而会伤身体。
 * :black_square_button: 定期体检。
