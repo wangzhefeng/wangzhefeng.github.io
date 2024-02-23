@@ -73,19 +73,19 @@ img {
 > 反之，任由恶习消耗能量，人就会变得颓丧消极，止步不前，甚至滑落深渊。
 > 人生变好，一定是从养成好的习惯开始的。
 
-* :black_square_button: 每天都要好好吃早餐。
+* :white_check_mark: 每天都要好好吃早餐。
     - [ ] 周六日做早餐
 * :white_check_mark: 早晚认真做好牙齿护理。
 * :white_check_mark: 每天最少饮水 1200ML，主动喝水，不要口渴了才想起来去喝。
-* :black_square_button: 不赖床，起床利落。
-* :black_square_button: 不过度刷短视频，睡前半小时不碰手机，可以减少熬夜。
+* :white_check_mark: 不赖床，起床利落。
+* :white_check_mark: 不过度刷短视频，睡前半小时不碰手机，可以减少熬夜。
 * :black_square_button: 每天保持 6～8 小时睡眠时间，午睡半小时左右，让自己保持活力。
 * :white_check_mark: 每天做一点家务，一天一整理，一周一清理。
 * :white_check_mark: 学会物归原位，能够为你节省很多时间，也避免因为找不到而花冤枉钱。
 * :white_check_mark: 单次静坐每 2 小时，起身活动一下筋骨，避免久坐带来的伤害。
-* :black_square_button: 晚上八点以后不吃夜宵。
+* :white_check_mark: 晚上八点以后不吃夜宵。
 * :black_square_button: 每天运动至少半小时，达到微微出汗的状态。
-* :black_square_button: 每个月记得存钱，日积月累，会存下不小的财富。
+* :white_check_mark: 每个月记得存钱，日积月累，会存下不小的财富。
 * :black_square_button: 天气好的时候，晒晒被子，床单枕套勤换洗。
 * :black_square_button: 每周尝试学做一样新菜品，减少点外卖的频率。
 * :black_square_button: 培养兴趣爱好，比如阅读、画画、写字，可以帮助你缓解负面情绪。
