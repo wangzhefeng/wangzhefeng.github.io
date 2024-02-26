@@ -35,52 +35,52 @@ img {
 <details><summary>目录</summary><p>
 
 - [PyTorch 数据管道](#pytorch-数据管道)
-  - [Dataset 和 DataLoader 原理](#dataset-和-dataloader-原理)
-    - [获取 batch 数据](#获取-batch-数据)
-    - [Dataset 和 DataLoader 功能分工](#dataset-和-dataloader-功能分工)
-    - [DataLoader 内部调用方式](#dataloader-内部调用方式)
-    - [Dataset 和 DataLoader 核心源码](#dataset-和-dataloader-核心源码)
-  - [使用 Dataset 创建数据集](#使用-dataset-创建数据集)
-    - [根据 Tensor 创建 Dataset](#根据-tensor-创建-dataset)
-    - [使用图片目录创建 Dataset](#使用图片目录创建-dataset)
-    - [使用文件创建自定义 Dataset](#使用文件创建自定义-dataset)
-    - [创建自定义 Dataset](#创建自定义-dataset)
-  - [使用 DataLoader 加载数据集](#使用-dataloader-加载数据集)
-    - [数据加载顺序和 Sampler](#数据加载顺序和-sampler)
-    - [自动内存锁定](#自动内存锁定)
+    - [Dataset 和 DataLoader 原理](#dataset-和-dataloader-原理)
+        - [获取 batch 数据](#获取-batch-数据)
+        - [Dataset 和 DataLoader 功能分工](#dataset-和-dataloader-功能分工)
+        - [DataLoader 内部调用方式](#dataloader-内部调用方式)
+        - [Dataset 和 DataLoader 核心源码](#dataset-和-dataloader-核心源码)
+    - [使用 Dataset 创建数据集](#使用-dataset-创建数据集)
+        - [根据 Tensor 创建 Dataset](#根据-tensor-创建-dataset)
+        - [使用图片目录创建 Dataset](#使用图片目录创建-dataset)
+        - [使用文件创建自定义 Dataset](#使用文件创建自定义-dataset)
+        - [创建自定义 Dataset](#创建自定义-dataset)
+    - [使用 DataLoader 加载数据集](#使用-dataloader-加载数据集)
+        - [数据加载顺序和 Sampler](#数据加载顺序和-sampler)
+        - [自动内存锁定](#自动内存锁定)
 - [PyTorch 内置数据集](#pytorch-内置数据集)
-  - [内置数据集](#内置数据集)
-  - [TorchVision datasets](#torchvision-datasets)
-  - [TorchText datasets](#torchtext-datasets)
-  - [TorchAudio datasets](#torchaudio-datasets)
-  - [自定义数据集的基本类](#自定义数据集的基本类)
+    - [内置数据集](#内置数据集)
+    - [TorchVision datasets](#torchvision-datasets)
+    - [TorchText datasets](#torchtext-datasets)
+    - [TorchAudio datasets](#torchaudio-datasets)
+    - [自定义数据集的基本类](#自定义数据集的基本类)
 - [PyTorch 数据预处理](#pytorch-数据预处理)
-  - [torchvision transforms](#torchvision-transforms)
-    - [常用转换](#常用转换)
-  - [torchtext transforms](#torchtext-transforms)
-  - [torchaudio transforms](#torchaudio-transforms)
+    - [torchvision transforms](#torchvision-transforms)
+        - [常用转换](#常用转换)
+    - [torchtext transforms](#torchtext-transforms)
+    - [torchaudio transforms](#torchaudio-transforms)
 - [PyTorch 数据管道构建](#pytorch-数据管道构建)
-  - [结构化数据管道](#结构化数据管道)
-  - [图像数据管道](#图像数据管道)
-  - [语音数据管道](#语音数据管道)
-  - [视屏数据管道](#视屏数据管道)
-  - [文本数据管道](#文本数据管道)
+    - [结构化数据管道](#结构化数据管道)
+    - [图像数据管道](#图像数据管道)
+    - [语音数据管道](#语音数据管道)
+    - [视屏数据管道](#视屏数据管道)
+    - [文本数据管道](#文本数据管道)
 - [参考](#参考)
 </p></details><p></p>
 
 # PyTorch 数据管道
 
-PyTorch 通常使用 `torch.utils.data.Dataset` 和 `torch.utils.data.DataLoader` 这两个工具类来构建数据通道
+PyTorch 通常使用 `torch.utils.data.Dataset` 和 `torch.utils.data.DataLoader` 这两个工具类来构建数据通道：
 
 * `Dataset` 定义了数据集的内容，保存了数据的样本和标签，它相当于一个类似列表的数据结构
     - 具有确定的长度(`__len__`)
     - 能够用索引获取数据集中的元素(`__getitem__`)
 * `DataLoader` 定义了按 batch 加载数据集的方法，它是一个实现了 `__iter__` 方法的可迭代对象，
   每次迭代输出一个 batch 的数据。`DataLoader` 能够控制 batch 的大小，batch 中元素的采样方法，
-  以及将 batch 结果整理成模型所需输入形式的方法，并且能够使用多进程读取数据
+  以及将 batch 结果整理成模型所需输入形式的方法，并且能够使用多进程读取数据。
 
 另外，在绝大部分情况下，用户只需实现 `Dataset` 的 `__len__` 方法和 `__getitem__` 方法，
-就可以轻松构建自己的数据集，并用默认数据管道进行加载
+就可以轻松构建自己的数据集，并用默认数据管道进行加载。
 
 ## Dataset 和 DataLoader 原理
 
