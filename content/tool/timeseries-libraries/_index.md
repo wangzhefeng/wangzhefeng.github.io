@@ -1,6 +1,6 @@
 ---
-title: 模型类库
-subtitle: Model Libraries
+title: 时间序列库
+# subtitle: Model Libraries
 list_pages: true
 # order_by: title
 ---
@@ -22,6 +22,8 @@ list_pages: true
 | sktime        |                    |                    |                            |                    |
 | tsmoothie     |                    |                    |                            |                    |
 | pmdarima      |                    |                    |                            |                    |
+| NeuralForecast      |                    |                    |                            |                    |
 
+https://github.com/Nixtla/neuralforecast
 
 ## Docs
