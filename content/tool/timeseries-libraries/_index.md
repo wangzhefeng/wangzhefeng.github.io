@@ -24,6 +24,4 @@ list_pages: true
 | pmdarima      |                    |                    |                            |                    |
 | NeuralForecast      |                    |                    |                            |                    |
 
-https://github.com/Nixtla/neuralforecast
-
 ## Docs

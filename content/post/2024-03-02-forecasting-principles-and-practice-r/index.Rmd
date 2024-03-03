@@ -1,0 +1,76 @@
+---
+title: 预测：方法与实践--R语言
+author: 王哲峰
+date: '2024-03-02'
+slug: forecasting-principles-and-practice-r
+categories:
+  - R
+tags:
+  - tool
+---
+
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [R 语言知识](#r-语言知识)
+  - [tsibble 对象](#tsibble-对象)
+- [参考](#参考)
+</p></details><p></p>
+
+# R 语言知识
+
+```{r message=FALSE, warning=FALSE}
+library(tsibble)
+library(fpp3)
+```
+
+## tsibble 对象
+
+```{r}
+library(tsibble)
+y = tsibble(
+    Year = 2015:2019,
+    Observation = c(123, 39, 78, 52, 110),
+    index = Year
+)
+
+print(y)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 参考
+
+* [Forecasting: Principles and Practice](https://otexts.com/fpp3cn/index.html)
