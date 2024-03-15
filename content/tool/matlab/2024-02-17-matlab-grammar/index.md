@@ -225,7 +225,7 @@ x.^3;
 ## 运算输出格式
 
 * Matlab 以双精度执行所有的运算，运算结果可以在屏幕上输出，同时赋给指定变量；
-* 若无指定变量，则系统会自动将结果赋给变量 `ans`；
+* 如果未指定输出变量，MATLAB 将使用变量 `ans`（answer 的缩略形式）来存储计算结果；
 * Matlab 中数的输出格式可以通过 `format` 命令指定；`format` 只改变变量的输出格式，但不会影响变量的值。
 
 # Matlab 矩阵数值计算
@@ -596,3 +596,4 @@ function f = ffib(n)
 # 参考
 
 * [matlab入门图文教程](https://zhuanlan.zhihu.com/p/77669451)
+* [MathWorks R2023b 官方教程](https://ww2.mathworks.cn/help/matlab/index.html?s_tid=CRUX_lftnav)

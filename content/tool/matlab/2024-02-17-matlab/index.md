@@ -48,12 +48,12 @@ img {
 
 夸克网盘地址 1：
 
-* [地址：(https://pan.quark.cn/s/acfe48cd47af#/list/share)](https://pan.quark.cn/s/acfe48cd47af#/list/share)
+* [地址：https://pan.quark.cn/s/acfe48cd47af#/list/share](https://pan.quark.cn/s/acfe48cd47af#/list/share)
 * 提取码：rsrz
 
 夸克网盘地址 2：
 
-* [地址：(https://pan.quark.cn/s/c669fb805e88)](https://pan.quark.cn/s/c669fb805e88)
+* [地址：https://pan.quark.cn/s/c669fb805e88](https://pan.quark.cn/s/c669fb805e88)
 * 提取码：xtfl
 
 # MATLAB 安装
