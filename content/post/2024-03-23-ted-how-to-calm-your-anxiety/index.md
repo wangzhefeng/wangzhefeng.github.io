@@ -17,7 +17,7 @@ tags:
 You know when you get that <span style='border-bottom:1.5px dashed red;'>ambiguous</span> email from your boss and you start to feel sweaty palms and that empty, freaked out sensation in your stomach?
 Welcom back, anxiety. Most of us think of anxiety as a bad thing, something to be avoided at all costs. But what if it weren't? What if you could take all of that energy racing around your brain and your body and transform it into something helpful?
 
-Golbal anxiety levels,, both the clinical kind and what I call the everyday kind, 
+Global anxiety levels, both the clinical kind and what I call the everyday kind, 
 have increased tremendously in recent years.
 And many of us are noticing this at work. We might think of anxiety as something that we'd rather just leave on the side of the road if we could. 
 But anxiety is an important tool that arose during our evolution that we use to avoid danger. 
@@ -32,7 +32,7 @@ Lots of people, from ancient monks to modern meditators, have figured this tool 
 
 Tool number two: <span style='border-bottom:1.5px dashed red;'>moving your body</span>. This one also has immediate positive effects on your mood state, but for a different reason. Every time you move your body, 
 you're releasing a whole bunch of beneficial neurochemicals in your brain. 
-These neurochemicals include dopamine,, serotonin, noradrenaline and endorphins, 
+These neurochemicals include dopamine, serotonin, noradrenaline and endorphins, 
 mood and reward-boosting neurochemicals that work to both increase positive mood states and decrease negative ones. I like to say that every single time you move your body, it's like giving yourself a wonderful bubble bath of neurochemicals for your brain.
 
 So When your boss's email comes in and your heart starts to race, 
@@ -46,7 +46,7 @@ In fact, I tested this effect on my own NYU students.
 First, I had them take an anxiety assessment before leading them in a movement session that included movement from kickbox and dance and yoga and martial arts together with positive spoken affirmations. Then I had them retake that same anxiety assessment again. What happened? After our movement session, their anxiety scores had decrease to normal levels. Now that's powerful, real-world example that you can use in your life today. So make sure to incorporate these bursts of activity in your day, and try one out next time you're feeling stress. 
 It can really make your anxiety feel less all-consuming.
 
-You'll be able to communicate with others. You might seek out advice from a trusted colleague when that difficult issue arises. Or you might even have a conversation with your boss about how to prioritize projects. Because you're no longer in fight-or-fight mode,, asking for that support won't feel nearly as threatening. And one of the best gifts of aproaching your anxiety in this way is that you will be able to notice those telltale signs of anxiety in everyone else around you, especially those forms of anxiety you're most familiar with. 
+You'll be able to communicate with others. You might seek out advice from a trusted colleague when that difficult issue arises. Or you might even have a conversation with your boss about how to prioritize projects. Because you're no longer in fight-or-fight mode, asking for that support won't feel nearly as threatening. And one of the best gifts of aproaching your anxiety in this way is that you will be able to notice those telltale signs of anxiety in everyone else around you, especially those forms of anxiety you're most familiar with. 
 And what will that do? That will allow you to give that person a smile or a kind word to help them through that moment. In other words, your own form of anxiety can boost your personal super power of empathy. And I can't think of anything we need in this world today more than higher levels of empathy for one another.
 
 You take-home in all of this? If you breathe, move and take note of what your anxiety is signaling, you'll feel more fulfilled, more creative, more connected and less stressed overall. And that's my wish for every one of us.

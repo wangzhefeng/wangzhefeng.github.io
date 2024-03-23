@@ -99,7 +99,7 @@ img {
 * :black_square_button: 把本职工作做到极致，提升工作能力，这是你谋生的手段。
 * :black_square_button: 每个月至少读完一本书，并且长期坚持。
 * :white_check_mark: 学习穿搭、化妆，让自己看上去更自信。
-* :black_square_button: 看优质的 TED 演讲、纪录片、名人演讲等等，给大脑输入知识。
+* :white_check_mark: 看优质的 TED 演讲、纪录片、名人演讲等等，给大脑输入知识。
 * :black_square_button: 掌握一门技能，可以是剪辑、自媒体写作，也可以是插花、陶艺手工类。
 * :black_square_button: 月末进行一次复盘，从错误中吸取经验，加速成长。
 * :black_square_button: 计划一次长途旅行，开阔眼界，感受不一样的风土人情。
