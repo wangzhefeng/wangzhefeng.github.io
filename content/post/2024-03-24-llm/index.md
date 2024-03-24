@@ -38,6 +38,7 @@ img {
 - [LLM 模型介绍](#llm-模型介绍)
   - [LLM 模型对比](#llm-模型对比)
   - [Prompt 提示词格式](#prompt-提示词格式)
+- [LLM 模型 微调](#llm-模型-微调)
 </p></details><p></p>
 
 # LLM 模型介绍
@@ -59,3 +60,15 @@ img {
 ## Prompt 提示词格式
 
 
+# LLM 模型 微调
+
+> Fine-Tune LLMs
+
+
+
+
+
+
+
+
+[How to Fine-Tune LLMs in 2024 with Hugging Face](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
