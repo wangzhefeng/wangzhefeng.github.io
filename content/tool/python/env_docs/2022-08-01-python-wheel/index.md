@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-08-01'
 slug: python-wheel
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---

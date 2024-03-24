@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-25'
 slug: python-data-file
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---

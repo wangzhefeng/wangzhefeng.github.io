@@ -5,6 +5,7 @@ date: '2023-03-10'
 slug: paper-ts-deepar
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model

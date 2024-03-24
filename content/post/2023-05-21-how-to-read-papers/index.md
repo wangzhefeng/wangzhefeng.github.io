@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2023-05-21'
 slug: how-to-read-papers
 categories:
-  - papers
+  - 论文阅读
 tags:
   - paper
 ---

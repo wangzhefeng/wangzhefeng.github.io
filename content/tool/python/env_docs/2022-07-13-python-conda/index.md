@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-13'
 slug: python-conda
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---

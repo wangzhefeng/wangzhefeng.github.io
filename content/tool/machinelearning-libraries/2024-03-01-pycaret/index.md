@@ -5,7 +5,7 @@ date: '2024-03-01'
 slug: pycaret
 categories:
   - data analysis
-  - python
+  - Python
 tags:
   - tool
 ---

@@ -5,7 +5,7 @@ date: '2024-03-01'
 slug: timeseries-lib-neuralforecast
 categories:
   - timeseries
-  - python
+  - Python
 tags:
   - tool
   - model

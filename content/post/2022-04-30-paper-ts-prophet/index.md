@@ -5,6 +5,7 @@ date: '2022-04-30'
 slug: paper-ts-prophet
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model
@@ -64,38 +65,38 @@ details[open] summary {
 - [论文贡献](#论文贡献)
 - [问题定义](#问题定义)
 - [模型定义](#模型定义)
-  - [概率视角下的贝叶斯线性回归](#概率视角下的贝叶斯线性回归)
-  - [时间序列分解](#时间序列分解)
-  - [趋势项模型](#趋势项模型)
-    - [饱和趋势项](#饱和趋势项)
-    - [分段线性函数 Piecewise Linear Function](#分段线性函数-piecewise-linear-function)
-    - [变点的选择 Changepoint Selection](#变点的选择-changepoint-selection)
-    - [对未来的预估 Trend Forecast Uncertainty](#对未来的预估-trend-forecast-uncertainty)
-  - [季节性趋势](#季节性趋势)
-  - [节假日效应](#节假日效应)
-  - [时序模型拟合](#时序模型拟合)
+    - [概率视角下的贝叶斯线性回归](#概率视角下的贝叶斯线性回归)
+    - [时间序列分解](#时间序列分解)
+    - [趋势项模型](#趋势项模型)
+        - [饱和趋势项](#饱和趋势项)
+        - [分段线性函数 Piecewise Linear Function](#分段线性函数-piecewise-linear-function)
+        - [变点的选择 Changepoint Selection](#变点的选择-changepoint-selection)
+        - [对未来的预估 Trend Forecast Uncertainty](#对未来的预估-trend-forecast-uncertainty)
+    - [季节性趋势](#季节性趋势)
+    - [节假日效应](#节假日效应)
+    - [时序模型拟合](#时序模型拟合)
 - [实验结果](#实验结果)
 - [Prophet 使用](#prophet-使用)
-  - [Prophet 安装](#prophet-安装)
-  - [Prophet 简单使用](#prophet-简单使用)
-    - [Prophet 时间序列格式](#prophet-时间序列格式)
-    - [使用示例](#使用示例)
-    - [数据操作](#数据操作)
-    - [模型拟合](#模型拟合)
-    - [模型预测](#模型预测)
-  - [Prophet 的参数设置](#prophet-的参数设置)
-    - [增长函数](#增长函数)
-    - [变点](#变点)
-    - [周期性](#周期性)
-    - [节假日](#节假日)
-  - [饱和预测(Staturating Forecast)](#饱和预测staturating-forecast)
-    - [Forecasting Growth](#forecasting-growth)
-    - [Staturating Minimum](#staturating-minimum)
-  - [Seasonality, Holiday Effects, And Regressors](#seasonality-holiday-effects-and-regressors)
-    - [假期和特殊事件建模](#假期和特殊事件建模)
-    - [指定内置的国家/地区假期(Build-in Country Holiday)](#指定内置的国家地区假期build-in-country-holiday)
-    - [季节性的傅里叶变换(Fourier Order for Seasonalities)](#季节性的傅里叶变换fourier-order-for-seasonalities)
-    - [指定自定义季节性](#指定自定义季节性)
+    - [Prophet 安装](#prophet-安装)
+    - [Prophet 简单使用](#prophet-简单使用)
+        - [Prophet 时间序列格式](#prophet-时间序列格式)
+        - [使用示例](#使用示例)
+        - [数据操作](#数据操作)
+        - [模型拟合](#模型拟合)
+        - [模型预测](#模型预测)
+    - [Prophet 的参数设置](#prophet-的参数设置)
+        - [增长函数](#增长函数)
+        - [变点](#变点)
+        - [周期性](#周期性)
+        - [节假日](#节假日)
+    - [饱和预测(Staturating Forecast)](#饱和预测staturating-forecast)
+        - [Forecasting Growth](#forecasting-growth)
+        - [Staturating Minimum](#staturating-minimum)
+    - [Seasonality, Holiday Effects, And Regressors](#seasonality-holiday-effects-and-regressors)
+        - [假期和特殊事件建模](#假期和特殊事件建模)
+        - [指定内置的国家/地区假期(Build-in Country Holiday)](#指定内置的国家地区假期build-in-country-holiday)
+        - [季节性的傅里叶变换(Fourier Order for Seasonalities)](#季节性的傅里叶变换fourier-order-for-seasonalities)
+        - [指定自定义季节性](#指定自定义季节性)
 - [总结](#总结)
 - [资料](#资料)
 </p></details><p></p>
@@ -516,7 +517,7 @@ changepoint_ts = np.concatenate((
 
 - Windows
    - compiler
-      - python
+      - Python
       - C++ compiler
       - PyStan
 - Linux

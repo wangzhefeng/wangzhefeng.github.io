@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2023-04-20'
 slug: numpy
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---

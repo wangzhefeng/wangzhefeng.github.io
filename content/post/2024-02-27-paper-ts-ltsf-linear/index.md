@@ -5,6 +5,7 @@ date: '2024-02-27'
 slug: paper-ts-ltsf-linear
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model

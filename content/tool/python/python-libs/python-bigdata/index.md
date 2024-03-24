@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-24'
 slug: python-bigdata
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---

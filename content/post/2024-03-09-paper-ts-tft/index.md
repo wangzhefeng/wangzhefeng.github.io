@@ -5,6 +5,7 @@ date: '2024-03-09'
 slug: paper-ts-tft
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model

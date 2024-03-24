@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-10'
 slug: python-pip
 categories:
-  - python
+  - Python
 tags:
   - tool
 ---
