@@ -46,33 +46,48 @@ img {
     - [与 Google Cloud 集成](#与-google-cloud-集成)
     - [与推理端点集成](#与推理端点集成)
     - [使用 Hugging Face TRL 进行微调](#使用-hugging-face-trl-进行微调)
-        - [额外资源](#额外资源)
 - [Gemma 模型中文指令微调](#gemma-模型中文指令微调)
     - [Hugging Face TRL + Colab GPU](#hugging-face-trl--colab-gpu)
     - [Keras + Kaggle TPU -\> Hugging Face](#keras--kaggle-tpu---hugging-face)
     - [苹果 MLX 框架](#苹果-mlx-框架)
     - [总结](#总结)
+- [额外资源](#额外资源)
 - [参考](#参考)
 </p></details><p></p>
+
+> 关键词:
+> 
+> * 预训练模型
+> * 指令调优
+> * tokens 处理能力
+> * TRL
+> * Prompt 提示词格式
+> * 零样本任务
+> * 少样本任务
+> * 顺序微调技术（SFT）
+> * 基于人类反馈的强化学习（RLHF）
 
 # Gemma 模型介绍
 
 > Gemma: Google 最新推出开源大语言模型(Google's new open LLM)
 
-2024 年 2 月 22 日，Google 发布了一系列最新的开放式大型语言模型 —— Gemma！
-Gemma 提供两种规模的模型，每种规模的模型都包含基础版本和经过指令调优的版本：
+2024 年 2 月 22 日，Google 发布了一系列最新的开放式大型语言模型 -- Gemma！
+Gemma 是基于 Gemini 技术推出的新型大型语言模型（LLM），Gemma 提供两种规模的模型，
+每种规模的模型都包含 <span style='border-bottom:1.5px dashed red;'>基础版本</span> 和 <span style='border-bottom:1.5px dashed red;'>经过指令调优</span> 的版本：
 
 * 7B 参数模型，针对消费级 GPU 和 TPU 设计，确保高效部署和开发；
 * 2B 参数模型则适用于 CPU 和移动设备。
 
-Gemma 是 Google 基于 Gemini 技术推出的四款新型大型语言模型（LLM），提供了 2B 和 7B 两种不同规模的版本，每种都包含了预训练基础版本和经过指令优化的版本。所有版本均可在各类消费级硬件上运行，无需数据量化处理，拥有高达 8K tokens 的处理能力：
+所有版本均可在各类消费级硬件上运行，无需数据量化处理，
+拥有高达 <span style='border-bottom:1.5px dashed red;'>8K tokens</span> 的处理能力。
+在 Hagging Face Hub 上，可以找到这四个公开可访问的模型（包括两个基础模型和两个经过调优的模型）：
 
-* gemma-7b：7B 参数的基础模型。
-* gemma-7b-it：7B 参数的指令优化版本。
-* gemma-2b：2B 参数的基础模型。
-* gemma-2b-it：2B 参数的指令优化版本。
+* [gemma-7b](https://huggingface.co/google/gemma-7b)：7B 参数的基础模型。
+* [gemma-7b-it](https://huggingface.co/google/gemma-7b-it)：7B 参数的指令优化版本。
+* [gemma-2b](https://huggingface.co/google/gemma-2b)：2B 参数的基础模型。
+* [gemma-2b-it](https://huggingface.co/google/gemma-2b-it)：2B 参数的指令优化版本。
 
-在 Hagging Face Hub 上，你可以找到这四个公开可访问的模型（包括两个基础模型和两个经过调优的模型）。此次发布的亮点包括：
+此次发布的亮点包括：
 
 * Hugging Face Hub 上的模型，包括模型说明和授权信息
 * Hugging Face Transformers 的集成
@@ -83,7 +98,8 @@ Gemma 是 Google 基于 Gemini 技术推出的四款新型大型语言模型（L
 ## Prompt 提示词格式
 
 Gemma 的基础模型不限定特定的提示格式。如同其他基础模型，
-它们能够根据输入序列生成一个合理的续接内容，适用于零样本或少样本的推理任务。
+它们能够根据输入序列生成一个合理的续接内容，
+适用于 <span style='border-bottom:1.5px dashed red;'>零样本</span> 或 <span style='border-bottom:1.5px dashed red;'>少样本</span> 的推理任务。
 这些模型也为针对特定应用场景的微调提供了坚实的基础。
 指令优化版本则采用了一种极其简洁的对话结构：
 
@@ -108,7 +124,7 @@ LaMDA who?<end_of_turn>
 据悉，这些模型是基于来自互联网文档、编程代码和数学文本等多种数据源训练而成，
 经过严格筛选，以排除含有敏感信息和不适内容的数据。
 
-对于 <span style='border-bottom:1.5px dashed red;'>Gemma 的指令优化模型</span>，
+对于 Gemma 的指令优化模型，
 关于 <span style='border-bottom:1.5px dashed red;'>微调数据集</span> 以及与 <span style='border-bottom:1.5px dashed red;'>顺序微调技术（SFT）</span> 和 <span style='border-bottom:1.5px dashed red;'>基于人类反馈的强化学习（RLHF）</span> 相关的超参数设置，细节同样未公开。
 
 ## 演示
@@ -264,27 +280,29 @@ output_text = tokenizer.batch_decode(
 
 ## 与 Google Cloud 集成
 
-你可以通过 Vertex AI 或 Google Kubernetes Engine (GKE) 在 Google Cloud 上部署和训练 Gemma，利用 文本生成推理 和 Transformers 实现。
+可以通过 Vertex AI 或 Google Kubernetes Engine(GKE) 在 Google Cloud 上部署和训练 Gemma，
+利用 <span style='border-bottom:1.5px dashed red;'>文本生成推理</span> 和 <span style='border-bottom:1.5px dashed red;'>Transformers</span> 实现。
 
-要从 Hugging Face 部署 Gemma 模型，请访问模型页面并点击部署 -> Google Cloud。
-这将引导你进入 Google Cloud Console，在那里你可以通过 Vertex AI 或 GKE 一键部署 Gemma。
-文本生成推理为 Gemma 在 Google Cloud 上的部署提供支持，
-你也可以通过 Vertex AI Model Garden 直接访问 Gemma。
-
-要在 Hugging Face 上微调 Gemma 模型，请访问 模型页面 并点击 训练 -> Google Cloud。
-这将引导你进入 Google Cloud Console，在那里你可以在 Vertex AI 或 GKE 上访问笔记本，
-以在这些平台上微调 Gemma。
+* 要从 Hugging Face <span style='border-bottom:1.5px dashed red;'>部署 Gemma 模型</span>，
+  请访问 `模型页面` 并点击 `部署 -> Google Cloud`。
+  这将引导你进入 Google Cloud Console，在那里你可以通过 Vertex AI 或 GKE 一键部署 Gemma。
+  文本生成推理为 Gemma 在 Google Cloud 上的部署提供支持，
+  你也可以通过 Vertex AI Model Garden 直接访问 Gemma。
+* 要在 Hugging Face 上 <span style='border-bottom:1.5px dashed red;'>微调 Gemma 模型</span>，
+  请访问 `模型页面` 并点击 `训练 -> Google Cloud`。
+  这将引导你进入 Google Cloud Console，在那里你可以在 Vertex AI 或 GKE 上访问笔记本，
+  以在这些平台上微调 Gemma。
 
 ## 与推理端点集成
 
-可以在 Hugging Face 的 推理端点 上部署 Gemma，该端点使用文本生成推理作为后端。
-文本生成推理 是由 Hugging Face 开发的可用于生产环境的推理容器，旨在简化大型语言模型的部署。
+可以 <span style='border-bottom:1.5px dashed red;'>在 Hugging Face 的推理端点上部署 Gemma</span>，
+该端点使用文本生成推理作为后端。
+
+文本生成推理是由 Hugging Face 开发的可用于生产环境的推理容器，旨在简化大型语言模型的部署。
 它支持连续批处理、令牌流式传输、多 GPU 张量并行加速推理，并提供生产就绪的日志记录和跟踪功能。
 
-要部署 Gemma 模型，请访问 HF Hub 模型页面 并点击 部署 -> 推理端点。
-有关 使用 Hugging Face 推理端点部署 LLM的更多信息，请参阅我们之前的博客文章。
-推理端点通过文本生成推理支持 消息 API，
-使你可以通过简单地更换 URL 从其他封闭模型切换到开放模型。
+要部署 Gemma 模型，请访问 Hugging Face Hub `模型页面` 并点击 `部署 -> 推理端点`。
+推理端点通过文本生成推理支持 `消息 API`，使你可以通过简单地更换 URL 从其他封闭模型切换到开放模型。
 
 ```python
 from openai import OpenAI
@@ -321,7 +339,7 @@ for message in chat_completion:
 目标是所有注意力块的线性层。值得注意的是，与密集型 Transformer 不同，
 MLP 层（多层感知器层）因其稀疏性不适合与 PEFT（参数效率微调）技术结合使用。
 
-首先，安装 Hugging Face TRL 的最新版本并克隆仓库以获取 训练脚本：
+首先，安装 Hugging Face TRL 的最新版本并克隆仓库以获取训练脚本：
 
 ```bash
 $ pip install -U transformers
@@ -350,16 +368,6 @@ accelerate launch --config_file examples/accelerate_configs/multi_gpu.yaml --num
 在单个 A10G GPU 上，这个训练过程大约需要 9 小时。
 通过调整 `--num_processes` 参数为你可用的 GPU 数量，
 可以实现并行化训练，从而缩短训练时间。
-
-### 额外资源
-
-* Hub 上的模型
-* 开放 LLM 排行榜
-* Hugging Chat 上的聊天演示
-* Gemma 官方博客
-* Gemma 产品页面
-* Vertex AI 模型花园链接
-* Google Notebook 教程
 
 # Gemma 模型中文指令微调
 
@@ -412,10 +420,17 @@ accelerate launch --config_file examples/accelerate_configs/multi_gpu.yaml --num
 
 
 
+# 额外资源
 
-
+* Hub 上的模型
+* 开放 LLM 排行榜
+* Hugging Chat 上的聊天演示
+* Gemma 官方博客
+* Gemma 产品页面
+* Vertex AI 模型花园链接
+* Google Notebook 教程
 
 # 参考
 
 * [Gemma: Google 最新推出开源大语言模型](https://mp.weixin.qq.com/s?__biz=Mzk0MDQyNTY4Mw==&mid=2247490714&idx=1&sn=fd6f17929d52e11efe98b2e254ead7aa&chksm=c2e0b426f5973d3014a0f46c0f1d17aefb045031b2c244aa7081a6e41e38d654cb1023acf68d&scene=21#wechat_redirect)
-
+* [快速上手谷歌 Gemma 模型中文指令微调](https://mp.weixin.qq.com/s/jXymgChgWbfj4k9zr2vqmw)

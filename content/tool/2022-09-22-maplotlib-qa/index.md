@@ -4,6 +4,7 @@ author: 王哲峰
 date: '2022-09-22'
 slug: maplotlib-qa
 categories:
+  - data analysis
   - data visual
 tags:
   - tool
