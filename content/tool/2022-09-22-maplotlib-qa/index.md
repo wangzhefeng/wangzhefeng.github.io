@@ -36,25 +36,33 @@ img {
 <details><summary>目录</summary><p>
 
 - [颜色搭配](#颜色搭配)
-- [解决使用中文乱码问题](#解决使用中文乱码问题)
-  - [查看可以指定的中文字体](#查看可以指定的中文字体)
-    - [查找系统已安装的中文字体](#查找系统已安装的中文字体)
-    - [查找 Matplotlib 可以使用的中文字体](#查找-matplotlib-可以使用的中文字体)
-    - [在系统上安装中文字体](#在系统上安装中文字体)
-  - [指定中文字体名称](#指定中文字体名称)
-    - [Matplotlib rc 设置全局字体](#matplotlib-rc-设置全局字体)
-    - [在画图函数中使用字体名称](#在画图函数中使用字体名称)
-  - [指定中文字体的具体路径](#指定中文字体的具体路径)
-- [解决其他乱码问题](#解决其他乱码问题)
-  - [负号的乱码问题](#负号的乱码问题)
-  - [支持数学符号](#支持数学符号)
-- [双坐标轴](#双坐标轴)
 - [图像风格设置](#图像风格设置)
+- [解决使用中文乱码问题](#解决使用中文乱码问题)
+    - [查看可以指定的中文字体](#查看可以指定的中文字体)
+        - [查找系统已安装的中文字体](#查找系统已安装的中文字体)
+        - [查找 Matplotlib 可以使用的中文字体](#查找-matplotlib-可以使用的中文字体)
+        - [在系统上安装中文字体](#在系统上安装中文字体)
+    - [指定中文字体名称](#指定中文字体名称)
+        - [Matplotlib rc 设置全局字体](#matplotlib-rc-设置全局字体)
+        - [在画图函数中使用字体名称](#在画图函数中使用字体名称)
+    - [指定中文字体的具体路径](#指定中文字体的具体路径)
+- [解决其他乱码问题](#解决其他乱码问题)
+    - [负号的乱码问题](#负号的乱码问题)
+    - [支持数学符号](#支持数学符号)
+- [双坐标轴](#双坐标轴)
+- [控制坐标轴刻度间距和标签](#控制坐标轴刻度间距和标签)
+    - [添加主刻度和副刻度](#添加主刻度和副刻度)
+    - [为刻度添加辅助网络](#为刻度添加辅助网络)
+    - [控制刻度标签](#控制刻度标签)
+        - [ticker.Locator 和 ticker.Formatter](#tickerlocator-和-tickerformatter)
+        - [plt.xticks](#pltxticks)
+    - [高级刻度标签控制](#高级刻度标签控制)
+- [参考](#参考)
 </p></details><p></p>
 
 # 颜色搭配
 
-
+# 图像风格设置
 
 # 解决使用中文乱码问题
 
@@ -284,5 +292,206 @@ def timeseries_plot_two_yaxis(df,
         plt.savefig(os.path.join(os.path.dirname(__file__), imgpath))
 ```
 
-# 图像风格设置
+# 控制坐标轴刻度间距和标签
 
+Matplotlib 默认自动处理刻度在坐标轴上的位置，但有时我们需要覆盖默认的坐标轴刻度配置，
+以便更加快速估计图形中点的坐标。
+
+## 添加主刻度和副刻度
+
+举例说明：强制水平刻度每隔 5 个单位步长呈现一次。此外，还添加了副刻度，
+副刻度的间隔为 1 个单位步长。
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+x = np.linspace(-20, 20, 1024)
+y = np.sinc(x)
+
+ax = plt.axes()
+ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+plt.plot(x, y, c = "m")
+plt.show()
+```
+
+![img](images/ticker1.png)
+
+## 为刻度添加辅助网络
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+x = np.linspace(-20, 20, 1024)
+y = np.sinc(x)
+
+ax = plt.axes()
+ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+plt.grid(True, which = "both", ls = "dashed")
+plt.plot(x, y, c = "m")
+plt.show()
+```
+
+![img](images/ticker2.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+x = np.linspace(-20, 20, 1024)
+y = np.sinc(x)
+
+ax = plt.axes()
+ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+plt.grid(True, which = "major", ls = "dashed")
+plt.plot(x, y, c = "m")
+plt.show()
+```
+
+![img](images/ticker3.png)
+
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+x = np.linspace(-20, 20, 1024)
+y = np.sinc(x)
+
+ax = plt.axes()
+ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+ax.xaxis.set_minor_locator(ticker.MultipleLocator(1))
+plt.grid(True, which = "minor", ls = "dashed")
+plt.plot(x, y, c = "m")
+plt.show()
+```
+
+![img](images/ticker4.png)
+
+
+## 控制刻度标签
+
+刻度标签是图形空间中的坐标，虽然数字刻度标签对于大多说场景来说是足够的，但是却并不总是能够满足需求。
+例如，我们需要显示 100 个公司的营收情况，这时候我们就需要横坐标刻度标签为公司名，而非数字；
+同样对于时间序列，我们希望横坐标刻度标签为日期。考虑到此类需求，
+我们需要使用 Matplotlib 为此提供了的 API 控制刻度标签。
+
+### ticker.Locator 和 ticker.Formatter
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+
+name_list = ('Apple', 'Orange', 'Banana', 'Pear', 'Mango')
+value_list = np.random.randint(0, 99, size = len(name_list))
+pos_list = np.arange(len(name_list))
+
+ax = plt.axes()
+ax.xaxis.set_major_locator(
+    ticker.FixedLocator((pos_list))
+)
+ax.xaxis.set_major_formatter(
+    ticker.FixedFormatter((name_list))
+)
+
+plt.bar(pos_list, value_list, color = 'c', align = 'center')
+plt.show()
+```
+
+首先使用 `ticker.Locator` 实例生成刻度的位置，然后使用 `ticker.Formatter` 实例为刻度生成标签。
+
+* 用 `ticker.FixedFormatter` 从字符串列表中获取标签
+* 用 `set_major_formatter` 设置坐标轴标签
+* 用 `ticker.FixedLocator` 来确保每个标签中心都正好与刻度中间对齐
+* 用 `ticker.set_major_locator` 设置坐标轴标签位置
+
+### plt.xticks
+
+虽然使用上述方法可以控制刻度标签，但可以看出此方法过于复杂，
+如果刻度标签是固定的字符列表，那么可以用以下简单的设置方法。
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+name_list = ('Apple', 'Orange', 'Banana', 'Pear', 'Mango')
+value_list = np.random.randint(0, 99, size = len(name_list))
+pos_list = np.arange(len(name_list))
+
+plt.bar(pos_list, value_list, color = 'c', align = 'center')
+plt.xticks(pos_list, name_list)
+plt.show()
+```
+
+使用 plt.xticks() 函数为一组固定的刻度提供固定标签，此函数接受位置列表和名称列表作为参数值，
+可以看出，此方法比第一种方法实现起来更简单。
+
+## 高级刻度标签控制
+
+不仅可以使用固定标签，使用 ticker API 可以使用函数生成的标签：
+
+在此示例中，刻度标签是由自定义函数 `make_label` 生成的。此函数以刻度的坐标作为输入，
+并返回一个字符串作为坐标标签，这比给出固定的字符串列表更灵活。为了使用自定义函数，
+需要使用 `FuncFormatter` 实例——一个以函数为参数的格式化实例。
+
+这种将生成标签的实际任务指派给其他函数的方法称为委托(delegation)模式，
+这是一种漂亮的编程技术。比方说，我们要将每个刻度显示为日期，
+这可以使用标准的 Python 时间和日期函数完成。
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+def make_label(value, pos):
+    return '%0.1f%%' % (100. * value)
+
+ax = plt.axes()
+ax.xaxis.set_major_formatter(ticker.FuncFormatter(make_label))
+
+x = np.linspace(0, 1, 256)
+plt.plot(x, np.exp(-10 * x), c ='c')
+plt.plot(x, np.exp(-5 * x), c = 'c', ls = '--')
+plt.show()
+```
+
+
+```python
+import numpy as np
+import datetime
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+start_date = datetime.datetime(1998, 1, 1)
+def make_label(value, pos):
+    time = start_date + datetime.timedelta(days = 365 * value)
+    return time.strftime('%b %y')
+
+ax = plt.axes()
+ax.xaxis.set_major_formatter(ticker.FuncFormatter(make_label))
+
+x = np.linspace(0, 1, 256)
+plt.plot(x, np.exp(-10 * x), c ='c')
+plt.plot(x, np.exp(-5 * x), c= 'c', ls = '--')
+
+plt.setp(ax.get_xticklabels(), rotation = 30.0)
+plt.show()
+```
+
+可以利用 `ax.get_xticklabels()` 获取刻度标签实例，然后对标签进行旋转，
+以避免长标签之间重叠，旋转使用 `plt.setp()` 函数，其接受刻度标签实例和旋转角度作为参数值。
+
+
+# 参考
+
+* [Matplotlib控制坐标轴刻度间距和标签](https://developer.aliyun.com/article/840487)
