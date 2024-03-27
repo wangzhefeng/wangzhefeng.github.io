@@ -1,5 +1,5 @@
 ---
-title: 图像目标检测
+title: 图像目标检测概述
 author: 王哲峰
 date: '2022-07-15'
 slug: object-detection

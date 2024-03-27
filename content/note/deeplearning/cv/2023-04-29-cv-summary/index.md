@@ -35,7 +35,6 @@ img {
 <details><summary>目录</summary><p>
 
 - [计算机视觉的三大应用任务](#计算机视觉的三大应用任务)
-- [文章](#文章)
 </p></details><p></p>
 
 # 计算机视觉的三大应用任务
@@ -54,10 +53,3 @@ img {
     - 像素级的图像分割
         - 语义分割
         - 实例分割
-
-# 文章
-
-* [2023 最新计算机视觉学习路线(入门篇)](https://mp.weixin.qq.com/s/CSo8TzC7WjVkPJ2XCI2aCg)
-* [2022 最新计算机视觉学习路线(入门篇)](https://mp.weixin.qq.com/s/lU2wQhyYBceSgWtduVTjHg)
-* [建立重复图像查找系统](https://mp.weixin.qq.com/s/BE_07eA3nDBsEKyB4jcVoA)
-* [构建计算机视觉的知识体系](https://zhuanlan.zhihu.com/p/383787715)
