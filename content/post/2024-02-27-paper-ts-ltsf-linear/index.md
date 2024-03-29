@@ -73,7 +73,10 @@ details[open] summary {
 
 # 论文简介
 
-
+> * 论文：Are Transformers Effective for Time Series Forecasting? 
+> * 作者：
+> * 代码：https://github.com/cure-lab/LTSF-Linear
+> * 简介：
 
 # 历史研究和瓶颈
 

@@ -68,22 +68,13 @@ img {
 - [二元运算符](#二元运算符)
 - [大尺寸运算符](#大尺寸运算符)
 - [箭头](#箭头)
-- [定界符](#定界符)
-- [大尺寸定界符](#大尺寸定界符)
 - [其他符号](#其他符号)
-- [非数学符号](#非数学符号)
-- [AMS 定界符](#ams-定界符)
-- [AMS 希腊和希伯来字母](#ams-希腊和希伯来字母)
 - [AMS 二元关系符](#ams-二元关系符)
-- [AMS 箭头](#ams-箭头)
-- [AMS 二元否定关系符和箭头](#ams-二元否定关系符和箭头)
-- [AMS 二元运算符](#ams-二元运算符)
-- [AMS 其他符号](#ams-其他符号)
 - [数学字母](#数学字母)
 - [其他](#其他)
-  - [矩阵](#矩阵)
-  - [等号对齐](#等号对齐)
-  - [方程组](#方程组)
+    - [矩阵](#矩阵)
+    - [等号对齐](#等号对齐)
+    - [方程组](#方程组)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -187,46 +178,124 @@ img {
 | `$\asymp$` | `\asymp` |
 | `$:$` | `:` |
 
-
-
-
 # 二元运算符
 
+| 语法 | 效果 |
+|----|----|
+| + | `$+$` |
+| - | `$-$` |
+| \times | `$\times$` |
+| \cdot | `$\cdot$` |
+| \div | `$\div$` |
+| \setminus | `$\setminus$` |
+| \pm | `$\pm$` |
+| \mp | `$\mp$` |
+| \oplus | `$\oplus$` |
+| \ominus | `$\ominus$` |
+| \otimes | `$\otimes$` |
+| \odot | `$\odot$` |
+| \oslash | `$\oslash$` |
+| \star | `$\star$` |
+| \ast | `$\ast$` |
+| \circ | `$\circ$` |
+| \bullet | `$\bullet$` |
+| \diamond | `$\diamond$` |
+| \triangleleft | `$\triangleleft$` |
+| \triangleright | `$\triangleright$` |
+| \bigtriangleup | `$\bigtriangleup$` |
+| \bigtriangledown | `$\bigtriangledown$` |
+| \lhd | `$\lhd$` |
+| \rhd | `$\rhd$` |
+| \unlhd | `$\unlhd$` |
+| \unrhd | `$\unrhd$` |
 
 # 大尺寸运算符
+
+| 语法 | 效果 |
+|----|----|
+| \sum | `$\sum$` |
+| \prod | `$\prod$` |
+| \coprod | `$\coprod$` |
+| \int | `$\int$` |
+| \oint | `$\oint$` |
+| \bigcup | `$\bigcup$` |
+| \bigcap | `$\bigcap$` |
+| \bigsqcup | `$\bigsqcup$` |
+| \bigvee | `$\bigvee$` |
+| \bigwedge | `$\bigwedge$` |
+| \bigoplus | `$\bigoplus$` |
+| \bigotimes | `$\bigotimes$` |
+| \bigodot | `$\bigodot$` |
+| \biguplus | `$\biguplus$` |
 
 
 # 箭头
 
-# 定界符
-
-
-# 大尺寸定界符
+| 语法 | 效果 |
+|----|----|
+| \leftarrow | `$\leftarrow$` |
+| \rightarrow | `$\rightarrow$` |
+| \leftrightarrow | `$\leftrightarrow$` |
+| \Leftarrow | `$\Leftarrow$` |
+| \Rightarrow | `$\Rightarrow$` |
+| \Leftrightarrow | `$\Leftrightarrow$` |
+| \uparrow | `$\uparrow$` |
+| \downarrow | `$\downarrow$` |
 
 # 其他符号
 
-# 非数学符号
-
-# AMS 定界符
-
-# AMS 希腊和希伯来字母
+| 语法 | 效果 |
+|----|----|
+| \dots | `$\dots$` |
+| \cdots | `$\cdots$` |
+| \vdots | `$\vdots$` |
+| \ddots | `$\ddots$` |
+| \forall | `$\forall$` |
+| \exists | `$\exists$` |
+| \partial | `$\partial$` |
+| ' | `$'$` |
+| \prime | `$\prime$` |
+| \emptyset | `$\emptyset$` |
+| \infty | `$\infty$` |
+| \nabla | `$\nabla$` |
+| \triangle | `$\triangle$` |
+| \bot | `$\bot$` |
+| \top | `$\top$` |
+| \angle | `$\angle$` |
+| \neg or \lnot | `$\neg$` |
 
 # AMS 二元关系符
 
-
-# AMS 箭头
-
-
-# AMS 二元否定关系符和箭头
-
-
-# AMS 二元运算符
-
-
-# AMS 其他符号
+| 语法 | 效果 |
+|----|----|
+| \leqslant | `$\leqslant$` |
+| \geqslant | `$\geqslant$` |
+| \lll| `$\lll$` |
+| \ggg | `$\ggg$` |
+| \lesseqgtr| `$\lesseqgtr$` |
+| \gtreqless | `$\gtreqless$` |
+| \thicksim | `$\thicksim$` |
+| \thickapprox | `$\thickapprox$` |
+| \backsim | `$\backsim$` |
+| \therefore | `$\therefore$` |
+| \because | `$\because$` |
+| \varpropto | `$\varpropto$` |
 
 # 数学字母
 
+| 描述 | 语法 | 效果 | 备注 |
+|------|-----|------|------|
+| 正常字母 | ABCdef | `$ABCdef$` | |
+| 正体字母 | \mathrm{ABCdef} | `$\mathrm{ABCdef}$` | |
+| 粗体字母 | \mathbf{ABCdef} | `$\mathbf{ABCdef}$` | |
+| 斜体字母 | \mathit{ABCdef} | `$\mathit{ABCdef}$` | |
+| 花体字母-1 | \mathcal{ABC} | `$\mathcal{ABC}$` | 仅适用于大写字母 |
+| 花体字母-2 | \mathscr{ABC} | `$\mathscr{ABC}$` | 仅适用于大写字母 |
+| 花体字母-3 | \mathfrak{ABCdef} | `$\mathfrak{ABCdef}$` | |
+| 空心字母 | \mathbb{ABCdef} | `$\mathbb{ABC}$` | 仅适用于大写字母 |
+| 某种字体 | \mathsf{ABCdef} | `$\mathsf{ABCdef}$` | |
+| 某种字体 | \mathtt{ABCdef} | `$\mathtt{ABCdef}$` | |
+| 某种字体 | \mathnormal{ABCdef} | `$\mathnormal{12345}$` |  存在问题 |
 
 # 其他
 
