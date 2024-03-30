@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2020-05-07'
 slug: information-theory
 categories:
-  - 整理
+  - web
 tags:
   - note
 ---

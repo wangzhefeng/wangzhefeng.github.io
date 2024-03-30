@@ -5,6 +5,7 @@ date: '2019-03-26'
 slug: markdown
 categories:
   - blog
+  - markdown
 tags:
   - note
 ---

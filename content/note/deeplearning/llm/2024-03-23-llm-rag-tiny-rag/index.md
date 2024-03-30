@@ -6,7 +6,6 @@ slug: llm-rag-tiny-rag
 categories:
   - nlp
   - deeplearning
-  - model
 tags:
   - model
 ---

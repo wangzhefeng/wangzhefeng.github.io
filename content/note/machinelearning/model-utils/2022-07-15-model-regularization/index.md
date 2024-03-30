@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-15'
 slug: model-regularization
 categories:
-  - model
+  - machinelearning
 tags:
   - note
 ---

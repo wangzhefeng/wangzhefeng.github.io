@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2022-07-15'
 slug: model-deploy
 categories:
-  - model
+  - deeplearning
 tags:
   - note
 ---
@@ -36,11 +36,11 @@ img {
 
 - [模型部署简介](#模型部署简介)
 - [PyTorch](#pytorch)
-  - [创建 PyTorch 模型](#创建-pytorch-模型)
-  - [中间表示 -- ONNX](#中间表示----onnx)
-  - [推理引擎 -- ONNX Runtime](#推理引擎----onnx-runtime)
+    - [创建 PyTorch 模型](#创建-pytorch-模型)
+    - [中间表示 -- ONNX](#中间表示----onnx)
+    - [推理引擎 -- ONNX Runtime](#推理引擎----onnx-runtime)
 - [TensorFlow](#tensorflow)
-  - [TensorFlow Serving-Docker-Tornado](#tensorflow-serving-docker-tornado)
+    - [TensorFlow Serving-Docker-Tornado](#tensorflow-serving-docker-tornado)
 - [总结](#总结)
 </p></details><p></p>
 

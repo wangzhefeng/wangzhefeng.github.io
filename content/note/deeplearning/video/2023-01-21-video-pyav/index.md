@@ -4,7 +4,7 @@ author: 王哲峰
 date: '2023-01-21'
 slug: video-pyav
 categories:
-  - computer vision
+  - video
 tags:
   - tool
 ---
@@ -48,5 +48,4 @@ $ pip install av
 ```
 
 # 使用
-
 

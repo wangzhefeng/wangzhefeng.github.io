@@ -6,7 +6,6 @@ slug: llm-fine-tuning-gemma
 categories:
   - nlp
   - deeplearning
-  - model
 tags:
   - model
 ---
