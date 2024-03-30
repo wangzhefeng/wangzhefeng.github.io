@@ -5,6 +5,8 @@ date: '2023-03-03'
 slug: timeseries-visualization
 categories:
   - timeseries
+  - data analysis
+  - data visual
 tags:
   - article
 ---
@@ -43,8 +45,8 @@ img {
 - [时间序列滞后散点图](#时间序列滞后散点图)
 - [时间序列自相关图](#时间序列自相关图)
 - [可视化大型时间序列](#可视化大型时间序列)
-  - [Midimax 压缩算法](#midimax-压缩算法)
-  - [算法源码](#算法源码)
+    - [Midimax 压缩算法](#midimax-压缩算法)
+    - [算法源码](#算法源码)
 </p></details><p></p>
 
 # 时间序列图形
