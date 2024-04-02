@@ -54,58 +54,130 @@ img {
 - [继承父类初始化过程中的参数](#继承父类初始化过程中的参数)
 - [多继承与 super() 用法](#多继承与-super-用法)
 - [本地测试](#本地测试)
+- [类参数](#类参数)
+- [attr \& cattr](#attr--cattr)
 </p></details><p></p>
 
 # 定义一个类
 
 ```python
-class Example1:
+class Example:
 
-    def __init__(self, data1: int, data2: int) -> None:
-        self.__data1 = data1  # 类的私有属性
-        self.data2 = data2
+    def __init__(self, data1: int, data2: int, data3: int):
+        self.data = data1  # 类的公有属性
+        self._data = data2  # 类的受保护属性
+        self.__data = data3  # 类的私有属性
     
-    def __func1(self):
-        print("Example 类的私有方法可以被类和实例调用.")
+    def func(self):
+        """
+        类的公有方法
+        """
+        print("Example 类的公有方法可以被类和实例调用。")
+    
+    def _func(self):
+        """
+        类的受保护的方法
+        """
+        print("Example 类的受保护的方法可以被类和实例调用。")
+    
+    def __func(self):
+        """
+        类的私有方法
+        """
+        print("Example 类的私有方法可以被类和实例调用。")
 
     def show_data(self):
         """
-        调用类的私有方法
-        调用类的私有属性
-        调用类的普通属性
+        1.调用类的公有方法
+        2.调用类的受保护的方法
+        3.调用类的私有方法
+        4.调用类的公有属性
+        5.调用类的受保护属性
+        6.调用类的私有属性
         """
-        self.__func1()
-        print(self.__data1)
-        print(self.data2)
+        self.func()
+        self._func()
+        self.__func()
+        print(f"Example 类的公有属性： {self.data}")
+        print(f"Example 类的受保护属性： {self._data}")
+        print(f"Example 类的私有属性： {self.__data}")
 
 
-def test1():
-    exp = Example1(50, 100)
+# 测试代码 main 函数
+def main():
+    exp = Example(data1 = 50, data2 = 100, data3 = 200)
     exp.show_data()
+    print()
+    exp.func()
+    exp._func()
+    # exp.__func()
+    print(exp.data)
+    print(exp._data)
+    # print(exp.__data)
+
+if __name__ == "__main__":
+    main()
 ```
+
+```
+Example 类的公有方法可以被类和实例调用。
+Example 类的受保护的方法可以被类和实例调用。
+Example 类的私有方法可以被类和实例调用。
+Example 类的公有属性： 50
+Example 类的受保护属性： 100
+Example 类的私有属性： 200
+
+Example 类的公有方法可以被类和实例调用。
+Example 类的受保护的方法可以被类和实例调用。
+50
+100
+```
+
 
 # 类的实例化
 
+示例 1：
+
 ```python
 class Example2:
-    def __init__(self) -> None:
+    def __init__(self):
         print("Example 类的私有方法可以被类和实例调用.")
 
 
-def test2():
-    # 类 Example2 的实例    
+# 测试代码 main 函数
+def main():
+    # 类 Example2 的实例
     exp = Example2()
-        
 
+if __name__ == "__main__":
+    main()
+```
+
+```
+Example 类的私有方法可以被类和实例调用.
+```
+
+示例 2：
+
+```python
 class Example22:
-    def __init__(self, data1: int, data2: int) -> None:
+    def __init__(self, data1: int, data2: int):
         self.data1 = data1
         self.data2 = data2
 
-def test22():
+
+# 测试代码 main 函数
+def main():
     # 类 Example22 的实例
     exp22 = Example22(10, 20)
     print(exp22.data1)
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+10
 ```
 
 # 类的封装
@@ -115,20 +187,30 @@ class Example3:
     """
     类对数据的封装
     """
-    def __init__(self, data1: int, data2: int) -> None:
+    def __init__(self, data1: int, data2: int):
         self.data1 = data1
         self.data2 = data2
 
-def test3():
+
+# 测试代码 main 函数
+def main():
     exp = Example3(10, 20)
     print(exp.data1)
 
+if __name__ == "__main__":
+    main()
+```
 
+```
+10
+```
+
+```python
 class Example33:
     """
     类对逻辑的封装
     """
-    def __init__(self, data1: int, data2: int) -> None:
+    def __init__(self, data1: int, data2: int):
         self.data1 = data1
         self.data2 = data2
 
@@ -136,9 +218,17 @@ class Example33:
         print(self.data1 + self.data2)
 
 
-def test33():
+# 测试代码 main 函数
+def main():
     exp = Example33(10, 20)
     exp.add()
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+30
 ```
 
 
@@ -146,7 +236,8 @@ def test33():
 
 ```python
 class Father:
-    def __init__(self, age: int) -> None:
+
+    def __init__(self, age: int):
         self.age = age
         print(f"age: {self.age}")
 
@@ -155,29 +246,38 @@ class Father:
 
 
 class Son(Father):
-    def __init__(self, age: int) -> None:
+
+    def __init__(self, age: int):
         """
         重写父类 Father 的属性
-
-        Args:
-            age (int): [description]
         """
         self.age = age
 
 
-def test4():
-    # 子类的实例继承了父类的方法
+# 测试代码 main 函数
+def main():
     son = Son(18)
+    # 子类的实例继承了父类的方法
     print(son.getAge())
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+18
 ```
 
 # 类的私有属性、方法
 
 ## 父类
 
-1. 没有下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例也可以直接访问, 子类也可以访问, 能通过 `from module import *` 的方式导入
-2. 单下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例也可以直接访问, 子类也可以访问, 不能通过 `from module import *` 的方式导入
-3. 双下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例不可以直接访问, 子类不可以访问, 不能通过 `from module import *` 的方式导入
+1. 没有下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例也可以直接访问, 
+   子类也可以访问, 能通过 `from module import *` 的方式导入；
+2. 单下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例也可以直接访问, 
+   子类也可以访问, 不能通过 `from module import *` 的方式导入；
+3. 双下划线的方法或属性, 在类的定义中可以调用和访问, 类的实例不可以直接访问, 
+   子类不可以访问, 不能通过 `from module import *` 的方式导入。
 
 ```python
 class Father0:
@@ -189,7 +289,7 @@ class Father0:
     # TODO _class_protected_param = None  # 类的受保护的属性
     # TODO class_public_param = None  # 类的公有属性
 
-    def __init__(self, private_param, protected_param, public_param) -> None:
+    def __init__(self, private_param, protected_param, public_param):
         self.__private_param = private_param  # 实例的私有属性
         # TODO self._protected_param = protected_param  # 类、实例的受保护属性
         self.public_param = public_param  # 实例的公有属性
@@ -282,7 +382,7 @@ class A:
     """
     sentence = "this is a learning testing"
 
-    def __init__(self, instance_param) -> None:
+    def __init__(self, instance_param):
         """
         类的构造函数(初始化方法)
         """
@@ -386,7 +486,7 @@ def test7():
 
 ```python
 class Father2():
-    def __init__(self) -> None:
+    def __init__(self):
         self.a = "aaa"
     
     def action(self):
@@ -394,13 +494,13 @@ class Father2():
 
 
 class Son2(Father2):
-    def __init__(self) -> None:
+    def __init__(self):
         """
         子类重写父类的属性
         """
         self.a = "bbb"
 
-    def action(self) -> None:
+    def action(self):
         """
         子类重写父类的方法
         """
@@ -408,7 +508,7 @@ class Son2(Father2):
 
 
 class Son22(Father2):
-    def __init__(self) -> None:
+    def __init__(self):
         """
         子类重写父类的属性
         """
@@ -454,7 +554,7 @@ def test9():
 
 ```python
 class Father4:
-    def __init__(self, age: int) -> None:
+    def __init__(self, age: int):
         self.age = age
         print(f"age: {self.age}")
     
@@ -467,7 +567,7 @@ class Son4(Father4):
     """
     显式地调用父类的构造方法
     """
-    def __init__(self, age: int) -> None:
+    def __init__(self, age: int):
         # method 1: 调用父类的 __init__ 方法
         super().__init__(age)
         # method 2: 调用父类的 __init__ 方法
@@ -500,13 +600,13 @@ def test10():
 
 ```python
 class Father5:
-    def __init__(self) -> None:
+    def __init__(self):
         self.a = 1
         self.b = 2
     
 
 class Son5(Father5):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
     def add(self):
@@ -522,7 +622,7 @@ def test11():
 
 
 class Father6:
-    def __init__(self, a: int, b: int) -> None:
+    def __init__(self, a: int, b: int):
         self.a = a
         self.b = b
     
@@ -531,7 +631,7 @@ class Father6:
 
 
 class Son6(Father6):
-    def __init__(self, a: int, b: int, c: int = 10) -> None:
+    def __init__(self, a: int, b: int, c: int = 10):
         super().__init__(a, b)
         self.c = c
 
@@ -563,7 +663,7 @@ class A:
     """
     经典类, 支持多继承
     """
-    def __init__(self) -> None:
+    def __init__(self):
         print("A")
     
 
@@ -571,7 +671,7 @@ class B(A):
     """
     B 继承 A
     """
-    def __init__(self) -> None:
+    def __init__(self):
         """
         B 类调用 A 的构造函数方法
         """
@@ -593,18 +693,18 @@ class C(B, A):
 
 
 class NewA:
-    def __init__(self) -> None:
+    def __init__(self):
         print("NewA")
 
 
 class NewB(NewA):
-    def __init__(self) -> None:
+    def __init__(self):
         super(NewB, self).__init__()
         print("NewB")
 
 
 class NewC(NewB, NewA):
-    def __init__(self) -> None:
+    def __init__(self):
         super(NewC, self).__init__()
         print("NewC")
 ```
@@ -630,9 +730,319 @@ def main():
     test11()
     test111()
 
+if __name__ == "__main__":
+    main()
+```
+
+# 类参数
+
+```python
+class Person_v1:
+
+    def __init__(self, name, gender, **kw):
+        self.name = name
+        self.gender = gender
+        for key, value in kw.items():
+            setattr(self, key, value)
+
+
+class Person_v2:
+
+    def __init__(self, name, gender, **kw):
+        self.name = name
+        self.gender = gender
+        self.__dict__.update(kw)
+
+
+p1 = Person_v1(name = "wangzf", gender = "male", age = 18, course = "Python")
+p2 = Person_v2(name = "wangzf", gender = "male", age = 18, course = "Python")
+
+print(p1.age)
+print(p1.course)
+
+print(p2.age)
+print(p2.course)
+```
+
+# attr & cattr
+
+```python
+# -*- coding: utf-8 -*-
+
+import attr
+from attr import s, attributes, attrs
+from attr import ib, attr, attrib
+from attr import fields, validators, Factory
+import cattr
+from cattr import structure, unstructure
+import typing
+
+# ==========================================
+# 基本用法
+# ==========================================
+class Color_1(object):
+    """
+    Color Object of RGB
+    R: 0-255
+    G: 0-255
+    B: 0-255
+    RGB(r, g, b)
+    """
+    
+    def __init__(self, r, g, b):
+        self.r = r
+        self.g = g
+        self.b = b
+    
+    def __repr__(self):
+        """
+        在 Python 里面想要定义某个对象本身的打印输出结果的时候, 需要实现它 __repr__ 方法
+        """
+        return f"{self.__class__.__name__}(r={self.r}, g={self.g}, b={self.b})"
+    
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__): 
+            return NotImplemented
+        
+        return (self.r, self.g, self.b) == (other.r, other.g, other.b)
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        else:
+            return not result
+    
+    def __lt__(self, other):
+        if not isinstance(other, self.__class__): 
+            return NotImplemented
+        
+        return (self.r, self.g, self.b) < (other.r, other.g, other.b)
+
+    def __gt__(self, other):
+        if not isinstance(other, self.__class__): 
+            return NotImplemented
+        
+        return (self.r, self.g, self.b) > (other.r, other.g, other.b)
+    
+    def __le__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        
+        return (self.r, self.g, self.b) <= (other.r, other.g, other.b)
+    
+    def __ge__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        
+        return (self.r, self.g, self.b) >= (other.r, other.g, other.b)
+    
+    def __hash__(self):
+        return hash((self.__class__, self.r, self.g, self.b))
+
+
+@attrs
+class Color_2(object):
+    """
+    Color Object of RGB
+    R: 0-255
+    G: 0-255
+    B: 0-255
+    RGB(r, g, b)
+    """
+    r = attrib(type = int, default = 0)
+    g = attrib(type = int, default = 0)
+    b = attrib(type = int, default = 0)
+
+
+def test_color():
+    color_1 = Color_1(255, 255, 255)
+    print(color_1)
+
+    color = Color_2(255, 255, 255)
+    print(color)
+
+
+# ==========================================
+# 声明和比较
+# ==========================================
+@attrs
+class Point_1(object):
+    """
+    Point 数据结构, 包含 x, y 的坐标
+    """
+    x = attrib()
+    y = attrib()
+
+
+@attrs
+class Point_2(object):
+    """
+    默认值
+    """
+    x = attrib()
+    y = attrib(default = 100)
+
+
+@attrs
+class Point_3(object):
+    """
+    设置一个初始值, 一直固定不变
+    """
+    x = attrib(init = False, default = 10)
+    y = attrib(default = 100)
+
+
+@attrs
+class Point_4(object):
+    """
+    强制关键字
+    """
+    x = attrib(default = 0)
+    y = attrib(kw_only = True)
+
+
+def to_int(value):
+    """
+    整数类型转换器
+
+    Args:
+        value ([type]): 属性值
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        return int(value)
+    except:
+        return None
+
+
+@attrs
+class Point_5(object):
+    """
+    转换器
+    """
+    x = attrib(converter = to_int)
+    y = attrib()
+
+
+@attrs
+class Point_6(object):
+    """
+    类型-原生类型
+    """
+    x = attrib(type = int)
+    y = attrib()
+
+
+@attrs
+class Point_7(object):
+    """
+    类型-typing 类型、attr 类型
+    """
+    x = attrib(type = int)
+    y = attrib(type = typing.List[int])
+    z = attrib(type = attr.Factory(list))
+
+
+@attrs
+class Line(object):
+    """
+    类型-类型嵌套
+    """
+    name = attrib()
+    points = attrib(type = typing.List[Point_7])
+
+
+def is_valid_gender(instance, attribute, value):
+    """
+    性别验证器方法
+
+    Args:
+        instance ([type]): 类对象
+        attribute ([type]): 类属性
+        value ([type]): 属性名
+
+    Raises:
+        ValueError: [description]
+    """
+    if value not in ["male", "female"]:
+        raise ValueError(f"gender {value} is not vaild.")
+
+
+def is_less_than_100(instance, attribute, value):
+    """
+    年龄验证器
+
+    Args:
+        instance ([type]): 类对象
+        attribute ([type]): 类属性
+        value ([type]): 属性名
+
+    Raises:
+        ValueError: [description]
+    """
+    if value > 100:
+        raise ValueError(f"age {value} must less than 100")
+
+
+@attrs
+class Person(object):
+    """
+    验证器
+    """
+    name = attrib()
+    gender = attrib(validator = is_valid_gender)
+    age = attrib(validator = [validators.instance_of(int), is_less_than_100])
+
+
+def test_point():
+    print("# 声明和比较:")
+    p1 = Point_1(1, 2)
+    print(p1)
+    p2 = Point_1(x = 1, y = 2)
+    print(p2)
+    print('Equal:', Point_1(1, 2) == Point_1(1, 2))
+    print('Not Equal(ne):', Point_1(1, 2) != Point_1(3, 4))
+    print('Less Than(lt):', Point_1(1, 2) < Point_1(3, 4))
+    print('Less or Equal(le):', Point_1(1, 2) <= Point_1(1, 4), Point_1(1, 2) <= Point_1(1, 2))
+    print('Greater Than(gt):', Point_1(4, 2) > Point_1(3, 2), Point_1(4, 2) > Point_1(3, 1))
+    print('Greater or Equal(ge):', Point_1(4, 2) >= Point_1(4, 1))
+    print("# 属性定义:")
+    print(fields(Point_1()))
+    print(Point_2(x = 1))  # 默认值
+    print(Point_3(x = 10, y = 3))  # 初始化
+    print(Point_4(1, y = 3))  # 强制关键字
+
+
+def test_person():
+    print(Person(name = "Mike", gender = "male", age = 10))
+    print(Person(name = "Mike", gender = "mlae", age = 500))
+
+
+# ==========================================
+# 序列转换
+# ==========================================
+@attrs
+class Point(object):
+    x = attrib(type = int, default = 0)
+    y = attrib(type = int, default = 0)
+
+
+def test_convert():
+    point = Point(x = 1, y = 2)
+    json_data = cattr.unstructure(point)
+    print(f"json: {json_data}")
+    obj_data = cattr.structure(json_data, Point)
+    print(f"obj: {obj_data}")
+
+
+
+
+def main():
+    pass
 
 if __name__ == "__main__":
     main()
-
 ```
-

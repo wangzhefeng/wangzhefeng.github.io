@@ -9,12 +9,43 @@ tags:
   - tool
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
 
+<details><summary>目录</summary><p>
 
+- [为什么要使用描述符?](#为什么要使用描述符)
+    - [问题](#问题)
+    - [常规思路:](#常规思路)
+    - [加入判断逻辑](#加入判断逻辑)
+    - [Property 特性](#property-特性)
+    - [描述符](#描述符)
+- [参考](#参考)
+</p></details><p></p>
 
 # 为什么要使用描述符? 
 
-问题:
+## 问题
 
 假想你正在给学校写一个成绩管理系统, 并没有太多编码经验的你, 可能按照下面的常规思路来写. 
 看起来一切都很合理. 
@@ -50,12 +81,28 @@ tags:
 
 如前所述, Score 类是一个描述符, 当从 Student 的实例访问 math、chinese、english这三个属性的时候, 都会经过 Score 类里的三个特殊的方法. 这里的 Score 避免了 使用Property 出现大量的代码无法复用的尴尬. 
 
-
 以上, 我举了下具体的实例, 从最原始的编码风格到 Property , 最后引出描述符. 由浅入深, 一步一步带你感受到描述符的优雅之处. 
 
 到这里, 你需要记住的只有一点, 就是描述符给我们带来的编码上的便利, 它在实现 保护属性不受修改、属性类型检查 的基本功能, 同时有大大提高代码的复用率. 
 
-- 常规思路: 
+> Python 描述符(descriptor): 一个实现了描述符协议的类就是一个描述符
+> 
+> 描述符给我们带来的编码上的便利, 它在实现 保护属性不受修改、属性类型检查 的基本功能, 同时有大大提高代码的复用率。
+> 什么是描述符协议: 在类里实现了 __get__()、__set__()、__delete__() 其中至少一个方法: 
+> 
+> *  __get__: 用于访问属性. 它返回属性的值, 若属性不存在、不合法等都可以抛出对应的异常
+> *  __set__: 将在属性分配操作中调用. 不会返回任何内容
+> *  __delete__: 控制删除操作. 不会返回内容
+> 
+> 描述符分两种: 
+> * 数据描述符: 实现了__get__ 和 __set__ 两种方法的描述符
+> * 非数据描述符: 只实现了__get__ 一种方法的描述符
+> 
+> 数据描述器和非数据描述器的区别在于: 它们相对于实例的字典的优先级不同, 
+> 如果实例字典中有与描述符同名的属性, 如果描述符是数据描述符, 优先使用数据描述符, 
+> 如果是非数据描述符, 优先使用字典中的属性。
+
+## 常规思路: 
 
 ```python
 class Student:
@@ -67,16 +114,19 @@ class Student:
         self.english = english
 
     def __repr__(self):
-        return "<Student: {}, math:{}, chinese: {}, english:{}>".format(
-                self.name, self.math, self.chinese, self.english
-            )
+        return f"<Student: {self.name}, math:{self.math}, chinese: {self.chinese}, english:{self.english}>"
+
+
+# 测试代码 main 函数
+def main():
+    std1 = Student("xiaoming", 7, 8, 9)
+    print(std1)
 
 if __name__ == "__main__":
-    std1 = Student("小明", 76, 87, 68)
-    print(std1)
+    main()
 ```
 
-- 加入判断逻辑
+## 加入判断逻辑
 
 ```python
 class Student:
@@ -104,7 +154,7 @@ class Student:
             )
 ```
 
-- Property 特性
+## Property 特性
 
 ```python
 class Student:
@@ -153,7 +203,7 @@ class Student:
             )
 ```
 
-- 描述符
+## 描述符
 
 ```python
 class Score:
@@ -194,3 +244,6 @@ class Student:
             )
 ```
 
+# 参考
+
+* [描述符](https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496467&idx=1&sn=927f0093e62a78a1a04d1b0305c45c7a&source=41#wechat_redirect)
