@@ -490,7 +490,6 @@ img[50, 90] 修改值：255
 
 ![img](images/after.png)
 
-
 ### 彩色图像
 
 OpenCV 在处理 RGB 模式的彩色图像时，会按照行方向依次分别读取该 RGB 图像像素点的 B 通道、
@@ -509,7 +508,7 @@ G 通道、R 通道的像素值，并将像素值以行为单位存储在 `ndarr
 ```python
 import cv2
 
-img = cv2.imread("D:/projects/computer_vision/cvproj/data/images/lean.png")
+img = cv2.imread("D:/projects/computer_vision/cvproj/data/images/lena.png")
 cv2.imshow("before", img)
 
 print(f"访问 img[0, 0] = {img[0, 0]}")
@@ -573,12 +572,67 @@ RGB 图像是由 R 通道、G 通道、B 通道三个通道构成的。
 
 ### 通道拆分
 
+针对 RGB 图像，可以分别拆分出其 R 通道、G 通道、B 通道。
+在 OpenCV 中，通过索引可以直接将各个通道从图像内提出来。
+例如，针对 OpenCV 内的 BGR 图像 img，可用如下语句分别从中提取 B 通道、G 通道、R 通道：
+
+```python
+b = img[:, :, 0]
+g = img[:, :, 1]
+r = img[:, :, 2]
+```
+
+示例：演示图像通道拆分及通道改变对彩色图像的影响。
+
+```python
+import cv2
+
+lena = cv2.imread(
+    "D:/projects/computer_vision/cvproj/data/images/lena.png"
+)
+cv2.imshow("lena", lena)
+b = lena[:, :, 0]
+g = lena[:, :, 1]
+r = lena[:, :, 2]
+
+cv2.imshow("b", b)
+cv2.imshow("g", g)
+cv2.imshow("r", r)
+```
+
+![img](images/channel-color.png)
+![img](images/channel-b.png)
+![img](images/channel-g.png)
+![img](images/channel-r.png)
 
 ### 通道合并
 
+通道合并是通道拆分的逆过程，通过合并通道可以将三个通道的灰度图像合并成一副彩色图像。
+函数 `cv2.merge()` 可以实现通道合并。例如，使用函数 `cv2.merge()` 将 B 通道图像 `b`、
+G 通道图像 `b` 和 R 通道图像 `r` 这三幅通道图像合并为一幅 RGB 的三通道彩色图像。
+实现语句为：
 
+```python
+bgr = cv2.merge([b, g, r])
+```
 
+```python
+import cv2
 
+lena = cv2.imread(
+    "D:/projects/computer_vision/cvproj/data/images/lena.png"
+)
+b, g, r = cv2.split(lena)
+bgr = cv2.merge([b, g, r])
+rgb = cv2.merge([r, g, b])
+
+cv2.imshow("lena", lena)
+cv2.imshow("bgr", bgr)
+cv2.imshow("rgb", rgb)
+
+cv2.waitKey()
+cv2.destroyAllWindows()
+```
 
 ## 调整图像大小
 
