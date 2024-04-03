@@ -49,7 +49,7 @@ disable_highlight: true
   要尽可能地去读提升自己的书，不要只去读让自己舒服的书，让自己舒服的书，其实很大程度上是自我的简单重复，它不指向提升和成长。
   读得少一点、读得深一点、读得精一点，再好的注释，再好的解说，再好的课程最终都指向经典本身，最终还是要回到经典。” -->
 
-
+<!-- 
 ### TODO
 
 * :white_check_mark: 评论在一些页面不启用
@@ -67,6 +67,6 @@ disable_highlight: true
 * :white_check_mark: 微信屏蔽问题处理
     - [x] 申请恢复访问
     - [x] 部署相关文件
-* :white_check_mark: 添加 favicon.ico
+* :white_check_mark: 添加 favicon.ico -->
 
 [<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.png" width="7%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
