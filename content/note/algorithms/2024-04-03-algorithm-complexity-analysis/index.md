@@ -59,8 +59,8 @@ details[open] summary {
 <details><summary>目录</summary><p>
 
 - [算法效率评估](#算法效率评估)
-- [算法效率的实际测试](#算法效率的实际测试)
-- [算法效率的理论估算](#算法效率的理论估算)
+    - [算法效率的实际测试](#算法效率的实际测试)
+    - [算法效率的理论估算](#算法效率的理论估算)
     - [什么是复杂度分析](#什么是复杂度分析)
     - [为什么要进行复杂度分析](#为什么要进行复杂度分析)
     - [常用的复杂度分析方法](#常用的复杂度分析方法)
@@ -96,7 +96,7 @@ details[open] summary {
 1. 实际测试
 2. 理论估算
 
-# 算法效率的实际测试
+## 算法效率的实际测试
 
 假设现在有算法 A 和算法 B ，它们都能解决同一问题，现在需要对比这两个算法的效率。
 最直接的方法是找一台计算机，运行这两个算法，并监控记录它们的运行时间和内存占用情况。
@@ -107,7 +107,7 @@ details[open] summary {
 * 另一方面，展开完整测试非常耗费资源。随着输入数据量的变化，算法会表现出不同的效率。
   因此，为了得到有说服力的结论，我们需要测试各种规模的输入数据，而这需要耗费大量的计算资源。
 
-# 算法效率的理论估算
+## 算法效率的理论估算
 
 由于实际测试具有较大的局限性，因此我们可以考虑仅通过一些计算来评估算法的效率。
 这种估算方法被称为<span style='border-bottom:1.5px dashed red;'>渐近复杂度分析（asymptotic complexity analysis）</span>，简称<span style='border-bottom:1.5px dashed red;'>复杂度分析</span>。
@@ -191,13 +191,69 @@ details[open] summary {
 
 ### for 循环
 
+`for` 循环是最常见的迭代形式之一，适合在预先知道迭代次数时使用。
+
+```python
+def for_loop(n: int) -> int:
+    """
+    for 循环
+    """
+    res = 0
+    for i in range(1, n + 1):
+        res += i
+    
+    return res
+
+# or
+res = np.sum([i for i in range(1, n + 1)])
+```
+
+此求和函数的<span style='border-bottom:1.5px dashed red;'>操作数量</span>与<span style='border-bottom:1.5px dashed red;'>输入数据大小 `$n$`</span>成正比，或者说成“线性关系”。
+实际上，时间复杂度描述的就是这个“线性关系”。
 
 ### while 循环
 
+与 `for` 循环类似，`while` 循环也是一种实现迭代的方法。
+在 `while` 循环中，程序每轮都会先检查条件，如果条件为真，
+则继续执行，否则就结束循环。
+
+```python
+def while_loop(n: int) -> int:
+    """
+    while 循环
+    """ 
+    res = 0
+    i = 1
+    while i <= n: 
+        res += i
+        i += 1
+
+    return res
+```
+
+总的来说，`for` 循环的代码更加紧凑，`while` 循环更加灵活，两者都可以实现迭代结构。
+选择使用哪一个应该根据特定问题的需求来决定。
 
 ### 嵌套循环
 
+循环结构内嵌套另一个循环结构
 
+```python
+def nested_for_loop(n: int) -> int:
+    """
+    双层 for 循环
+    """
+    res = ""
+    for i in range(1, n + 1):
+        for j in range(1, n + 1):
+            res += f"({i}, {j})"
+
+    return res
+```
+
+在这种情况下，函数的操作数量与 `$n^{2}$` 成正比，或者说算法运行时间和输入数据大小成“平方关系”。
+我们可以继续添加嵌套循环，每一次嵌套都是一次“升维”，将会使时间复杂度提高至“立方关系”、“四次方关系”，
+以此类推。
 
 ## 递归
 

@@ -1,5 +1,5 @@
 ---
-title: 启发式算法--动态规划
+title: 动态规划
 author: 王哲峰
 date: '2024-03-30'
 slug: dynamic-programming
