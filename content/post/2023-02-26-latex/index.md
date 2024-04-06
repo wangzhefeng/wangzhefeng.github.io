@@ -62,23 +62,31 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [数学模式重音符](#数学模式重音符)
-- [大小写希腊字母](#大小写希腊字母)
-- [二元关系符](#二元关系符)
-- [二元运算符](#二元运算符)
-- [大尺寸运算符](#大尺寸运算符)
-- [箭头](#箭头)
-- [其他符号](#其他符号)
-- [AMS 二元关系符](#ams-二元关系符)
-- [数学字母](#数学字母)
-- [其他](#其他)
+- [数学符号](#数学符号)
+    - [数学模式重音符](#数学模式重音符)
+    - [大小写希腊字母](#大小写希腊字母)
+    - [数学字母](#数学字母)
     - [矩阵](#矩阵)
     - [等号对齐](#等号对齐)
     - [方程组](#方程组)
+    - [开根号](#开根号)
+    - [上下线、括号](#上下线括号)
+- [二元关系符](#二元关系符)
+    - [普通二元关系符](#普通二元关系符)
+    - [AMS 二元关系符](#ams-二元关系符)
+- [运算符](#运算符)
+    - [二元运算符](#二元运算符)
+    - [大尺寸运算符](#大尺寸运算符)
+    - [定界符](#定界符)
+    - [大尺寸定界符](#大尺寸定界符)
+    - [箭头](#箭头)
+    - [其他数学符号](#其他数学符号)
 - [参考](#参考)
 </p></details><p></p>
 
-# 数学模式重音符
+# 数学符号
+
+## 数学模式重音符
 
 | 符号 | code |
 |----|----|
@@ -95,7 +103,7 @@ img {
 | `$\widehat{A}$` | `\widehat{A}` |
 | `$\widetilde{A}$` | `\widetilde{A}` |
 
-# 大小写希腊字母
+## 大小写希腊字母
 
 | 符号 | code | 大写符号 | Code |
 |------------|-----------|----|-----|
@@ -130,160 +138,9 @@ img {
 | `$\psi$` | `\psi` | `$\Psi$` | `\Psi`|
 | `$\omega$` | `\omega` | `$\Omega$` | `\Omega` |
 
-# 二元关系符
+## 数学字母
 
-你可以在下述命令的前面加上 `\not` 来得到其否定形式
-
-| 符号 | code |
-|----|----|
-| `$<$` | `<` |
-| `$>$` | `>` |
-| `$=$` | `=` |
-| `$\neq$` | `\neq` |
-| `$\leq$` | `\leq` |
-| `$\geq$` | `\geq` |
-| `$\equiv$` | `\equiv` |
-| `$\ll$` | `\ll` |
-| `$\gg$` | `\gg` |
-| `$\doteq$` | `\doteq` |
-| `$\prec$` | `\prec` |
-| `$\preceq$` | `\preceq` |
-| `$\succ$` | `\succ` |
-| `$\succeq$` | `\succeq` |
-| `$\sim$` | `\sim` |
-| `$\simeq$` | `\simeq` |
-| `$\subset$` | `\subset` |
-| `$\subseteq$` | `\subseteq` |
-| `$\supset$` | `\supset` |
-| `$\supseteq$` | `\supseteq` |
-| `$\sqsubset$` | `\sqsubset` |
-| `$\sqsubseteq$` | `\sqsubseteq` |
-| `$\sqsupset$` | `\sqsupset` |
-| `$\sqsupseteq$` | `\sqsupseteq` |
-| `$\cong$` | `\cong` |
-| `$\Join$` | `\Join` |
-| `$\bowtie$` | `\bowtie` |
-| `$\in$` | `\in` |
-| `$\notin$` | `\notin` |
-| `$\ni$` | `\ni` |
-| `$\propto$` | `\propto` |
-| `$\vdash$` | `\vdash` |
-| `$\dashv$` | `\dashv` |
-| `$\models$` | `\models` |
-| `$\mid$` | `\mid` |
-| `$\parallel$` | `\parallel` |
-| `$\perp$` | `\perp` |
-| `$\smile$` | `\smile` |
-| `$\frown$` | `\frown` |
-| `$\asymp$` | `\asymp` |
-| `$:$` | `:` |
-
-# 二元运算符
-
-| 语法 | 效果 |
-|----|----|
-| + | `$+$` |
-| - | `$-$` |
-| \times | `$\times$` |
-| \cdot | `$\cdot$` |
-| \div | `$\div$` |
-| \setminus | `$\setminus$` |
-| \pm | `$\pm$` |
-| \mp | `$\mp$` |
-| \oplus | `$\oplus$` |
-| \ominus | `$\ominus$` |
-| \otimes | `$\otimes$` |
-| \odot | `$\odot$` |
-| \oslash | `$\oslash$` |
-| \star | `$\star$` |
-| \ast | `$\ast$` |
-| \circ | `$\circ$` |
-| \bullet | `$\bullet$` |
-| \diamond | `$\diamond$` |
-| \triangleleft | `$\triangleleft$` |
-| \triangleright | `$\triangleright$` |
-| \bigtriangleup | `$\bigtriangleup$` |
-| \bigtriangledown | `$\bigtriangledown$` |
-| \lhd | `$\lhd$` |
-| \rhd | `$\rhd$` |
-| \unlhd | `$\unlhd$` |
-| \unrhd | `$\unrhd$` |
-
-# 大尺寸运算符
-
-| 语法 | 效果 |
-|----|----|
-| \sum | `$\sum$` |
-| \prod | `$\prod$` |
-| \coprod | `$\coprod$` |
-| \int | `$\int$` |
-| \oint | `$\oint$` |
-| \bigcup | `$\bigcup$` |
-| \bigcap | `$\bigcap$` |
-| \bigsqcup | `$\bigsqcup$` |
-| \bigvee | `$\bigvee$` |
-| \bigwedge | `$\bigwedge$` |
-| \bigoplus | `$\bigoplus$` |
-| \bigotimes | `$\bigotimes$` |
-| \bigodot | `$\bigodot$` |
-| \biguplus | `$\biguplus$` |
-
-
-# 箭头
-
-| 语法 | 效果 |
-|----|----|
-| \leftarrow | `$\leftarrow$` |
-| \rightarrow | `$\rightarrow$` |
-| \leftrightarrow | `$\leftrightarrow$` |
-| \Leftarrow | `$\Leftarrow$` |
-| \Rightarrow | `$\Rightarrow$` |
-| \Leftrightarrow | `$\Leftrightarrow$` |
-| \uparrow | `$\uparrow$` |
-| \downarrow | `$\downarrow$` |
-
-# 其他符号
-
-| 语法 | 效果 |
-|----|----|
-| \dots | `$\dots$` |
-| \cdots | `$\cdots$` |
-| \vdots | `$\vdots$` |
-| \ddots | `$\ddots$` |
-| \forall | `$\forall$` |
-| \exists | `$\exists$` |
-| \partial | `$\partial$` |
-| ' | `$'$` |
-| \prime | `$\prime$` |
-| \emptyset | `$\emptyset$` |
-| \infty | `$\infty$` |
-| \nabla | `$\nabla$` |
-| \triangle | `$\triangle$` |
-| \bot | `$\bot$` |
-| \top | `$\top$` |
-| \angle | `$\angle$` |
-| \neg or \lnot | `$\neg$` |
-
-# AMS 二元关系符
-
-| 语法 | 效果 |
-|----|----|
-| \leqslant | `$\leqslant$` |
-| \geqslant | `$\geqslant$` |
-| \lll| `$\lll$` |
-| \ggg | `$\ggg$` |
-| \lesseqgtr| `$\lesseqgtr$` |
-| \gtreqless | `$\gtreqless$` |
-| \thicksim | `$\thicksim$` |
-| \thickapprox | `$\thickapprox$` |
-| \backsim | `$\backsim$` |
-| \therefore | `$\therefore$` |
-| \because | `$\because$` |
-| \varpropto | `$\varpropto$` |
-
-# 数学字母
-
-| 描述 | 语法 | 效果 | 备注 |
+| 描述 | code | 符号 | 备注 |
 |------|-----|------|------|
 | 正常字母 | ABCdef | `$ABCdef$` | |
 | 正体字母 | \mathrm{ABCdef} | `$\mathrm{ABCdef}$` | |
@@ -296,8 +153,6 @@ img {
 | 某种字体 | \mathsf{ABCdef} | `$\mathsf{ABCdef}$` | |
 | 某种字体 | \mathtt{ABCdef} | `$\mathtt{ABCdef}$` | |
 | 某种字体 | \mathnormal{ABCdef} | `$\mathnormal{12345}$` |  存在问题 |
-
-# 其他
 
 ## 矩阵
 
@@ -353,7 +208,6 @@ f(x)
 &= x^{2} + 2x + 1
 \end{align}$$`
 
-
 ## 方程组
 
 ```
@@ -379,6 +233,252 @@ x + 2 = 1
 x + 1 = 0 \\
 x + 2 = 1
 \end{cases}$$`
+
+## 开根号
+
+```
+`$$\sqrt{x}$$`
+```
+
+`$$\sqrt{x}$$`
+
+```
+`$$\sqrt[3]{2}$$`
+```
+
+`$$\sqrt[3]{2}$$`
+
+## 上下线、括号
+
+```
+`$$\overline{m+n}$$`
+```
+
+`$$\overline{m+n}$$`
+
+```
+`$$\underline{m+n}$$`
+```
+
+`$$\underline{m+n}$$`
+
+
+```
+`$$\underbrace{ a + b + \cdots + z }_{26}$$`
+```
+
+`$$\underbrace{ a + b + \cdots + z }_{26}$$`
+
+```
+`$$\vec a$$`
+```
+
+`$$\vec a$$`
+
+
+```
+`$$\overrightarrow{AB}$$`
+```
+
+`$$\overrightarrow{AB}$$`
+
+```
+`$1\frac{1}{2}$`
+```
+
+`$$1\frac{1}{2}$$`
+
+
+# 二元关系符
+
+## 普通二元关系符
+
+你可以在下述命令的前面加上 `\not` 来得到其否定形式
+
+| 符号 | code |
+|----|----|
+| `$<$` | `<` |
+| `$>$` | `>` |
+| `$=$` | `=` |
+| `$\neq$` | `\neq` |
+| `$\leq$` | `\leq` |
+| `$\geq$` | `\geq` |
+| `$\equiv$` | `\equiv` |
+| `$\ll$` | `\ll` |
+| `$\gg$` | `\gg` |
+| `$\doteq$` | `\doteq` |
+| `$\prec$` | `\prec` |
+| `$\preceq$` | `\preceq` |
+| `$\succ$` | `\succ` |
+| `$\succeq$` | `\succeq` |
+| `$\sim$` | `\sim` |
+| `$\simeq$` | `\simeq` |
+| `$\subset$` | `\subset` |
+| `$\subseteq$` | `\subseteq` |
+| `$\supset$` | `\supset` |
+| `$\supseteq$` | `\supseteq` |
+| `$\sqsubset$` | `\sqsubset` |
+| `$\sqsubseteq$` | `\sqsubseteq` |
+| `$\sqsupset$` | `\sqsupset` |
+| `$\sqsupseteq$` | `\sqsupseteq` |
+| `$\cong$` | `\cong` |
+| `$\Join$` | `\Join` |
+| `$\bowtie$` | `\bowtie` |
+| `$\in$` | `\in` |
+| `$\notin$` | `\notin` |
+| `$\ni$` | `\ni` |
+| `$\propto$` | `\propto` |
+| `$\vdash$` | `\vdash` |
+| `$\dashv$` | `\dashv` |
+| `$\models$` | `\models` |
+| `$\mid$` | `\mid` |
+| `$\parallel$` | `\parallel` |
+| `$\perp$` | `\perp` |
+| `$\smile$` | `\smile` |
+| `$\frown$` | `\frown` |
+| `$\asymp$` | `\asymp` |
+| `$:$` | `:` |
+
+## AMS 二元关系符
+
+| code | 符号 |
+|----|----|
+| \leqslant | `$\leqslant$` |
+| \geqslant | `$\geqslant$` |
+| \lll| `$\lll$` |
+| \ggg | `$\ggg$` |
+| \lesseqgtr| `$\lesseqgtr$` |
+| \gtreqless | `$\gtreqless$` |
+| \thicksim | `$\thicksim$` |
+| \thickapprox | `$\thickapprox$` |
+| \backsim | `$\backsim$` |
+| \therefore | `$\therefore$` |
+| \because | `$\because$` |
+| \varpropto | `$\varpropto$` |
+
+# 运算符
+
+## 二元运算符
+
+| 符号 | code |
+|----|----|
+| `$+$` | + |
+| `$-$` | - |
+| `$\times$` | \times |
+| `$\cdot$` | \cdot |
+| `$\div$` | \div |
+| `$\setminus$` | \setminus |
+| `$\pm$` | \pm |
+| `$\mp$` | \mp |
+| `$\oplus$` | \oplus |
+| `$\ominus$` | \ominus |
+| `$\otimes$` | \otimes |
+| `$\odot$` | \odot |
+| `$\oslash$` | \oslash |
+| `$\star$` | \star |
+| `$\ast$` | \ast |
+| `$\circ$` | \circ |
+| `$\bullet$` | \bullet |
+| `$\diamond$` | \diamond |
+| `$\triangleleft$` | \triangleleft |
+| `$\triangleright$` | \triangleright |
+| `$\bigtriangleup$` | \bigtriangleup |
+| `$\bigtriangledown$` | \bigtriangledown |
+| `$\lhd$` | \lhd |
+| `$\rhd$` | \rhd |
+| `$\unlhd$` | \unlhd |
+| `$\unrhd$` | \unrhd |
+
+## 大尺寸运算符
+
+| 符号     | code |
+|----------|----|
+| `$\sum$` | \sum |
+| `$\prod$` | \prod |
+| `$\coprod$` | \coprod |
+| `$\int$` | \int |
+| `$\oint$` | \oint |
+| `$\bigcup$` | \bigcup |
+| `$\bigcap$` | \bigcap |
+| `$\bigsqcup$` | \bigsqcup |
+| `$\bigvee$` | \bigvee |
+| `$\bigwedge$` | \bigwedge |
+| `$\bigoplus$` | \bigoplus |
+| `$\bigotimes$` | \bigotimes |
+| `$\bigodot$` | \bigodot |
+| `$\biguplus$` | \biguplus |
+
+## 定界符
+
+| 符号   | code |
+|-------|----|
+| `$($` | ( |
+| `$)$` | ) |
+| `$[$` | [ |
+| `$]$` | ] |
+| `$\{$` | \{ |
+| `$\}$` | \} |
+| `$\uparrow$` | \uparrow |
+| `$\downarrow$` | \downarrow |
+| `$\updownarrow$` | \updownarrow |
+| `$\Uparrow$` | \Uparrow |
+| `$\Downarrow$` | \Downarrow |
+| `$\Updownarrow$` | \Updownarrow |
+| `$\langle$` | \langle |
+| `$\rangle$` | \rangle |
+| `$\|$` | `\|` or \vert |
+| `$\\|$` | `\\|` or \Vert |
+| `$\lfloor$` | \lfloor |
+| `$\rfloor$` | \rfloor |
+| `$\lceil$` | \lceil |
+| `$\rceil$` | \rceil |
+
+## 大尺寸定界符
+
+| 符号 | code |
+|----|----|
+| `$\lgroup$` | \lgroup |
+| `$\rgroup$` | \rgroup |
+| `$\lmoustache$` | \lmoustache |
+| `$\rmoustache$` | \rmoustache |
+| `$\arrowvert$` | \arrowvert |
+| `$\Arrowvert$` | \Arrowvert |
+| `$\bracevert$` | \bracevert |
+
+## 箭头
+
+| 符号                | code            |
+|---------------------|-----------------|
+| `$\leftarrow$`      | \leftarrow      |
+| `$\rightarrow$`     | \rightarrow     |
+| `$\leftrightarrow$` | \leftrightarrow |
+| `$\Leftarrow$`      | \Leftarrow      |
+| `$\Rightarrow$`     | \Rightarrow     |
+| `$\Leftrightarrow$` | \Leftrightarrow |
+| `$\uparrow$`        | \uparrow        |
+| `$\downarrow$`      | \downarrow      |
+
+## 其他数学符号
+
+| 符号 | code |
+|----|----|
+| `$\dots$` | \dots |
+| `$\cdots$` | \cdots |
+| `$\vdots$` | \vdots |
+| `$\ddots$` | \ddots |
+| `$\forall$` | \forall |
+| `$\exists$` | \exists |
+| `$\partial$` | \partial |
+| `$'$` | ' |
+| `$\prime$` | \prime |
+| `$\emptyset$` | \emptyset |
+| `$\infty$` | \infty |
+| `$\nabla$` | \nabla |
+| `$\triangle$` | \triangle |
+| `$\bot$` | \bot |
+| `$\top$` | \top |
+| `$\angle$` | \angle |
+| `$\neg$` | \neg or \lnot |
 
 # 参考
 

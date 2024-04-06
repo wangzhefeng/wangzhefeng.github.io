@@ -1226,10 +1226,9 @@ class LinkedListQueue:
 #### 基于数组的实现
 
 在数组中删除首元素的时间复杂度为 `$O(n)$`，这会导致出队操作效率较低。
-然而，我们可以采用以下巧妙方法来避免这个问题。
-
-我们可以使用一个变量 `front` 指向队首元素的索引，并维护一个变量 `size` 用于记录队列长度。
-定义 `rear = front + size` ，这个公式计算出的 `rear` 指向队尾元素之后的下一个位置。
+然而，我们可以采用以下巧妙方法来避免这个问题。我们可以使用一个变量 `front` 指向队首元素的索引，
+并维护一个变量 `size` 用于记录队列长度。定义 `rear = front + size`，
+这个公式计算出的 `rear` 指向队尾元素之后的下一个位置。
 基于此设计，数组中包含元素的有效区间为 [front, rear - 1]，各种操作的实现方法如下图所示。
 
 * 入队操作：将输入元素赋值给 rear 索引处，并将 size 增加 1 。
@@ -1244,8 +1243,71 @@ class LinkedListQueue:
 ![img](images/array_queue_step3_pop.png)
 
 ```python
+class ArrayQueue:
+    """基于环形数组实现的队列"""
 
+    def __init__(self, size: int):
+        """构造方法"""
+        self._nums: list[int] = [0] * size  # 用于存储队列元素的数组
+        self._front: int = 0  # 队首指针，指向队首元素
+        self._size: int = 0  # 队列长度
+
+    def capacity(self) -> int:
+        """获取队列的容量"""
+        return len(self._nums)
+
+    def size(self) -> int:
+        """获取队列的长度"""
+        return self._size
+
+    def is_empty(self) -> bool:
+        """判断队列是否为空"""
+        return self._size == 0
+
+    def push(self, num: int):
+        """入队"""
+        if self._size == self.capacity():
+            raise IndexError("队列已满")
+        # 计算队尾指针，指向队尾索引 + 1
+        # 通过取余操作实现 rear 越过数组尾部后回到头部
+        rear: int = (self._front + self._size) % self.capacity()
+        # 将 num 添加至队尾
+        self._nums[rear] = num
+        self._size += 1
+
+    def pop(self) -> int:
+        """出队"""
+        num: int = self.peek()
+        # 队首指针向后移动一位，若越过尾部，则返回到数组头部
+        self._front = (self._front + 1) % self.capacity()
+        self._size -= 1
+        return num
+
+    def peek(self) -> int:
+        """访问队首元素"""
+        if self.is_empty():
+            raise IndexError("队列为空")
+        return self._nums[self._front]
+
+    def to_list(self) -> list[int]:
+        """返回列表用于打印"""
+        res = [0] * self.size()
+        j: int = self._front
+        for i in range(self.size()):
+            res[i] = self._nums[(j % self.capacity())]
+            j += 1
+        return res
 ```
+
+在不断进行入队和出队的过程中，`front` 和 `rear` 都在向右移动，
+当它们到达数组尾部时就无法继续移动了。
+为了解决此问题，我们可以将数组视为首尾相接的“环形数组”。
+
+对于环形数组，我们需要让 `front` 或 `rear` 在越过数组尾部时，
+直接回到数组头部继续遍历。这种周期性规律可以通过“取余操作”来实现。
+
+以上实现的队列仍然具有局限性：其长度不可变。然而，这个问题不难解决，
+我们可以将数组替换为动态数组，从而引入扩容机制。
 
 ### 队列典型应用
 
@@ -1368,7 +1430,6 @@ for value in hmap.values():
 ## 二叉树
 
 ## 二叉树遍历
-
 
 ## 二叉树数组表示
 
