@@ -1,0 +1,281 @@
+---
+title: "预测：方法与实践--时间序列图形(2)"
+author: "王哲峰"
+date: "2024-03-02"
+slug: "forecasting-r"
+categories: R
+tags: tool
+---
+
+
+
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+<details>
+<summary>
+目录
+</summary>
+<p>
+<ul>
+<li><a href="#r-语言知识">R 语言知识</a>
+<ul>
+<li><a href="#tsibble-对象">tsibble 对象</a>
+<ul>
+<li><a href="#索引变量">索引变量</a></li>
+<li><a href="#关键变量">关键变量</a></li>
+</ul></li>
+<li><a href="#tsibble-对象的处理">tsibble 对象的处理</a></li>
+<li><a href="#读取-csv-文件并将其转化为-tsibble-对象">读取 CSV 文件并将其转化为 tsibble 对象</a></li>
+<li><a href="#季节性周期">季节性周期</a></li>
+</ul></li>
+<li><a href="#时间序列图形">时间序列图形</a>
+<ul>
+<li><a href="#时间图">时间图</a></li>
+<li><a href="#时间序列模式">时间序列模式</a></li>
+<li><a href="#"></a></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+</p>
+</details>
+<p>
+</p>
+<div id="r-语言知识" class="section level1">
+<h1>R 语言知识</h1>
+<pre class="r"><code>library(tsibble)
+library(fpp3)</code></pre>
+<div id="tsibble-对象" class="section level2">
+<h2>tsibble 对象</h2>
+<div id="索引变量" class="section level3">
+<h3>索引变量</h3>
+<p>时间序列是一组按照时间发生的先后顺序排列，且包含某些特征信息的数据点序列。
+在 R 中，这些信息可以被储存在 <code>tsibble</code> 对象中。</p>
+<ol style="list-style-type: decimal">
+<li>将数据转化为 <code>tsibble</code> 类型</li>
+</ol>
+<pre class="r"><code>library(tsibble)
+
+y = tsibble(
+    Year = 2015:2019,
+    Observation = c(123, 39, 78, 52, 110),
+    index = Year
+)
+
+print(y)</code></pre>
+<pre><code>## # A tsibble: 5 x 2 [1Y]
+##    Year Observation
+##   &lt;int&gt;       &lt;dbl&gt;
+## 1  2015         123
+## 2  2016          39
+## 3  2017          78
+## 4  2018          52
+## 5  2019         110</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>如果将一个月度数据转换为 <code>tsibble</code> 类型</li>
+</ol>
+<pre class="r"><code>z |&gt; 
+    mutate(月份 = yearmonth(月份)) |&gt; 
+    as_tsibble(index = 月份)</code></pre>
+<blockquote>
+<p>依据数据的观测频率，可以选用具体的时间类函数将文本数据转换为时间对象:</p>
+<ul>
+<li><code>start:end</code>：年度</li>
+<li><code>yearquarter()</code>：季度</li>
+<li><code>yearmonth()</code>：月度</li>
+<li><code>yearweek()</code>：周度</li>
+<li><code>as_date()</code>, <code>ymd()</code>：日度</li>
+<li><code>as_datetime()</code>, <code>ymd_hms()</code>：小于每日</li>
+</ul>
+</blockquote>
+</div>
+<div id="关键变量" class="section level3">
+<h3>关键变量</h3>
+<p><code>tsibble</code> 允许在一个对象中存储多个时间序列。</p>
+<pre class="r"><code>library(fpp3)
+
+olympic_running</code></pre>
+<pre><code>## # A tsibble: 312 x 4 [4Y]
+## # Key:       Length, Sex [14]
+##     Year Length Sex    Time
+##    &lt;int&gt;  &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;
+##  1  1896    100 men    12  
+##  2  1900    100 men    11  
+##  3  1904    100 men    11  
+##  4  1908    100 men    10.8
+##  5  1912    100 men    10.8
+##  6  1916    100 men    NA  
+##  7  1920    100 men    10.8
+##  8  1924    100 men    10.6
+##  9  1928    100 men    10.8
+## 10  1932    100 men    10.3
+## # ℹ 302 more rows</code></pre>
+<p>这个对象中的 14 个时间序列由键来唯一识别，即 <code>Length</code> 和 <code>Sex</code> 变量</p>
+<pre class="r"><code>olympic_running |&gt; distinct(Sex)</code></pre>
+<pre><code>## # A tibble: 2 × 1
+##   Sex  
+##   &lt;chr&gt;
+## 1 men  
+## 2 women</code></pre>
+</div>
+</div>
+<div id="tsibble-对象的处理" class="section level2">
+<h2>tsibble 对象的处理</h2>
+<p>可以使用 <code>dplyr</code> 中的函数 例如 <code>mutate()</code>、<code>filter()</code>、<code>select()</code> 以及 <code>summarise()</code> 来处理 <code>tsibble</code> 对象。</p>
+<pre class="r"><code>library(fpp3)
+
+PBS</code></pre>
+<pre><code>## # A tsibble: 67,596 x 9 [1M]
+## # Key:       Concession, Type, ATC1, ATC2 [336]
+##        Month Concession   Type     ATC1  ATC1_desc ATC2  ATC2_desc Scripts  Cost
+##        &lt;mth&gt; &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
+##  1  1991 7月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18228 67877
+##  2  1991 8月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15327 57011
+##  3  1991 9月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14775 55020
+##  4 1991 10月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15380 57222
+##  5 1991 11月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14371 52120
+##  6 1991 12月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15028 54299
+##  7  1992 1月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   11040 39753
+##  8  1992 2月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15165 54405
+##  9  1992 3月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   16898 61108
+## 10  1992 4月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18141 65356
+## # ℹ 67,586 more rows</code></pre>
+<pre class="r"><code>PBS |&gt; 
+    filter(ATC2 == &quot;A10&quot;) |&gt;
+    select(Month, Concession, Type, Cost) |&gt;
+    summarise(TotalC = sum(Cost)) |&gt;
+    mutate(Cost = TotalC / 1e6) -&gt; a10</code></pre>
+</div>
+<div id="读取-csv-文件并将其转化为-tsibble-对象" class="section level2">
+<h2>读取 CSV 文件并将其转化为 tsibble 对象</h2>
+<pre class="r"><code>library(readr)
+
+prison &lt;- readr::read_csv(&quot;https://OTexts.com/fpp3/extrafiles/prison_population.csv&quot;)</code></pre>
+<pre><code>## `curl` package not installed, falling back to using `url()`
+## Rows: 3072 Columns: 6
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (4): State, Gender, Legal, Indigenous
+## dbl  (1): Count
+## date (1): Date
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>prison &lt;- prison |&gt;
+    mutate(Quarter = yearquarter(Date)) |&gt;
+    select(-Date) |&gt; 
+    as_tsibble(
+        key = c(State, Gender, Legal, Indigenous),
+        index = Quarter,
+    )
+prison</code></pre>
+<pre><code>## # A tsibble: 3,072 x 6 [1Q]
+## # Key:       State, Gender, Legal, Indigenous [64]
+##    State Gender Legal    Indigenous Count Quarter
+##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt;   &lt;qtr&gt;
+##  1 ACT   Female Remanded ATSI           0 2005 Q1
+##  2 ACT   Female Remanded ATSI           1 2005 Q2
+##  3 ACT   Female Remanded ATSI           0 2005 Q3
+##  4 ACT   Female Remanded ATSI           0 2005 Q4
+##  5 ACT   Female Remanded ATSI           1 2006 Q1
+##  6 ACT   Female Remanded ATSI           1 2006 Q2
+##  7 ACT   Female Remanded ATSI           1 2006 Q3
+##  8 ACT   Female Remanded ATSI           0 2006 Q4
+##  9 ACT   Female Remanded ATSI           0 2007 Q1
+## 10 ACT   Female Remanded ATSI           1 2007 Q2
+## # ℹ 3,062 more rows</code></pre>
+</div>
+<div id="季节性周期" class="section level2">
+<h2>季节性周期</h2>
+<p>季节性周期是一个季节性周期中包含的观测值数量。在多数情况下，我们使用时间指数变量自动检测数据的季节周期。</p>
+<p>下表展示了常见的不同时间间隔所对应的周期：</p>
+<div class="float">
+<img src="images/datetime_circle.png" alt="img" />
+<div class="figcaption">img</div>
+</div>
+<ul>
+<li>对于季度、月度和周度数据，只有一个季节性周期——即每年内的观察数。
+实际上，一年中并不是 52 周，而是平均意义上的 365.25/7=52.18 周，
+因为每四年会有一个闰年。不过由于许多模型只支持输入取值为整数的季节性周期数值，
+因而可以考虑将季节性周期近似为整数。</li>
+<li>如果每周的观测频率高于一次，那么数据中往往会存在一个以上的季节性模式。
+<ul>
+<li>按日观测的数据可能有每周（周期 = 7）以及每年（周期 = 365.25）的两种季节性模式；</li>
+<li>按分钟观测的数据则可能有每小时（周期 = 60）、每天（周期 = 24×60=1440）、
+每周（周期 = 24×60×7=10080）和每年（周期 = 24×60×365.25=525960）四种季节性模式。</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="时间序列图形" class="section level1">
+<h1>时间序列图形</h1>
+<div id="时间图" class="section level2">
+<h2>时间图</h2>
+<p>时间图以观测值为纵坐标、观测时间为横坐标绘制观测数据散点，散点之间用直线连接。</p>
+<p>示例 1：Ansett航空公司在澳大利亚两个最大城市之间每周的经济舱客运量</p>
+<pre class="r"><code>melsyd_economy &lt;- ansett |&gt;
+    filter(Airports == &quot;MEL-SYD&quot;, Class == &quot;Economy&quot;) |&gt;
+    mutate(Passengers = Passengers / 1000)
+
+autoplot(melsyd_economy, Passengers) + 
+    labs(
+        title = &quot;Ansett 航空公司经济舱客运量&quot;,
+        subtitle = &quot;墨尔本-悉尼&quot;,
+        x = &quot;周&quot;,
+        y = &quot;客运量（单位：千）&quot;
+    )</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>该时间图直观地呈现出了数据的如下特征：</p>
+<ul>
+<li>由于一些工业纠纷导致 1989 年一段时期内的客运量为 0。</li>
+<li>由于彼时推行的商务舱取代部分经济舱的试行规则，导致 1992 年一段时期内的客运量大幅减少。</li>
+<li>1991年下半年客运量大幅上升。</li>
+<li>由于节日效应，每年年初的客运量都会有一定幅度的下降。</li>
+<li>序列存在长期波动，在1987年向上波动，在1988年向下波动，于1990年和1991年又再次向上波动。</li>
+</ul>
+<p>对此数据进行建模预测时，需要综合考虑上述特征，以便实现对未来客运量的有效预测。</p>
+<p>示例 2：</p>
+<pre class="r"><code>autoplot(a10, Cost) + 
+    labs(
+        y = &quot;美元（单位：百万）&quot;,
+        x = &quot;月份&quot;,
+        title = &quot;澳大利亚降糖药物销量&quot;,
+    )</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>图示的时间序列具有明显的增长趋势，并伴随有明显的波动幅度逐渐增大的季节性模式。
+每年年底政府推行的补贴计划使得降糖药品售价更低，致使人们倾向于在年底囤积药物，
+从而导致年初的销售额大幅下降。因此，当我们对降糖药物的销量进行预测时，
+需同时考虑其趋势和季节性因素。</p>
+</div>
+<div id="时间序列模式" class="section level2">
+<h2>时间序列模式</h2>
+</div>
+<div id="section" class="section level2">
+<h2></h2>
+</div>
+</div>
+<div id="参考" class="section level1">
+<h1>参考</h1>
+<ul>
+<li><a href="https://otexts.com/fpp3cn/index.html">Forecasting: Principles and Practice</a></li>
+</ul>
+</div>

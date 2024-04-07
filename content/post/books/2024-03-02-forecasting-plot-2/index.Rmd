@@ -1,0 +1,217 @@
+---
+title: "预测：方法与实践--时间序列图形(2)"
+author: "王哲峰"
+date: "2024-03-02"
+slug: "forecasting-plot-2"
+categories: R
+tags: tool
+---
+
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [R 语言知识](#r-语言知识)
+    - [tsibble 对象](#tsibble-对象)
+        - [索引变量](#索引变量)
+        - [关键变量](#关键变量)
+    - [tsibble 对象的处理](#tsibble-对象的处理)
+    - [读取 CSV 文件并将其转化为 tsibble 对象](#读取-csv-文件并将其转化为-tsibble-对象)
+    - [季节性周期](#季节性周期)
+- [时间序列图形](#时间序列图形)
+    - [时间图](#时间图)
+    - [时间序列模式](#时间序列模式)
+    - [](#)
+- [参考](#参考)
+</p></details><p></p>
+
+# R 语言知识
+
+```{r message=FALSE, warning=FALSE}
+library(tsibble)
+library(fpp3)
+```
+
+## tsibble 对象
+
+### 索引变量
+
+时间序列是一组按照时间发生的先后顺序排列，且包含某些特征信息的数据点序列。
+在 R 中，这些信息可以被储存在 `tsibble` 对象中。
+
+1. 将数据转化为 `tsibble` 类型
+
+```{r}
+library(tsibble)
+
+y = tsibble(
+    Year = 2015:2019,
+    Observation = c(123, 39, 78, 52, 110),
+    index = Year
+)
+
+print(y)
+```
+
+2. 如果将一个月度数据转换为 `tsibble` 类型
+
+```{r, eval=FALSE}
+z |> 
+    mutate(月份 = yearmonth(月份)) |> 
+    as_tsibble(index = 月份)
+```
+
+> 依据数据的观测频率，可以选用具体的时间类函数将文本数据转换为时间对象:
+> 
+> * `start:end`：年度
+> * `yearquarter()`：季度
+> * `yearmonth()`：月度
+> * `yearweek()`：周度
+> * `as_date()`, `ymd()`：日度 
+> * `as_datetime()`, `ymd_hms()`：小于每日
+
+### 关键变量
+
+`tsibble` 允许在一个对象中存储多个时间序列。
+
+```{r}
+library(fpp3)
+
+olympic_running
+```
+
+这个对象中的 14 个时间序列由键来唯一识别，即 `Length` 和 `Sex` 变量
+
+```{r}
+olympic_running |> distinct(Sex)
+```
+
+## tsibble 对象的处理
+
+可以使用 `dplyr` 中的函数 例如 `mutate()`、`filter()`、`select()` 以及 `summarise()` 来处理 `tsibble` 对象。
+
+```{r}
+library(fpp3)
+
+PBS
+```
+
+```{r}
+PBS |> 
+    filter(ATC2 == "A10") |>
+    select(Month, Concession, Type, Cost) |>
+    summarise(TotalC = sum(Cost)) |>
+    mutate(Cost = TotalC / 1e6) -> a10
+```
+
+## 读取 CSV 文件并将其转化为 tsibble 对象
+
+```{r}
+library(readr)
+
+prison <- readr::read_csv("https://OTexts.com/fpp3/extrafiles/prison_population.csv")
+
+prison <- prison |>
+    mutate(Quarter = yearquarter(Date)) |>
+    select(-Date) |> 
+    as_tsibble(
+        key = c(State, Gender, Legal, Indigenous),
+        index = Quarter,
+    )
+prison
+```
+
+## 季节性周期
+
+季节性周期是一个季节性周期中包含的观测值数量。在多数情况下，我们使用时间指数变量自动检测数据的季节周期。
+
+下表展示了常见的不同时间间隔所对应的周期：
+
+![img](images/datetime_circle.png)
+
+
+* 对于季度、月度和周度数据，只有一个季节性周期——即每年内的观察数。
+  实际上，一年中并不是 52 周，而是平均意义上的 365.25/7=52.18 周，
+  因为每四年会有一个闰年。不过由于许多模型只支持输入取值为整数的季节性周期数值，
+  因而可以考虑将季节性周期近似为整数。
+* 如果每周的观测频率高于一次，那么数据中往往会存在一个以上的季节性模式。
+    * 按日观测的数据可能有每周（周期 = 7）以及每年（周期 = 365.25）的两种季节性模式；
+    * 按分钟观测的数据则可能有每小时（周期 = 60）、每天（周期 = 24×60=1440）、
+      每周（周期 = 24×60×7=10080）和每年（周期 = 24×60×365.25=525960）四种季节性模式。
+
+# 时间序列图形
+
+## 时间图
+
+时间图以观测值为纵坐标、观测时间为横坐标绘制观测数据散点，散点之间用直线连接。
+
+示例 1：Ansett航空公司在澳大利亚两个最大城市之间每周的经济舱客运量
+
+```{r}
+melsyd_economy <- ansett |>
+    filter(Airports == "MEL-SYD", Class == "Economy") |>
+    mutate(Passengers = Passengers / 1000)
+
+autoplot(melsyd_economy, Passengers) + 
+    labs(
+        title = "Ansett 航空公司经济舱客运量",
+        subtitle = "墨尔本-悉尼",
+        x = "周",
+        y = "客运量（单位：千）"
+    )
+```
+
+该时间图直观地呈现出了数据的如下特征：
+
+* 由于一些工业纠纷导致 1989 年一段时期内的客运量为 0。
+* 由于彼时推行的商务舱取代部分经济舱的试行规则，导致 1992 年一段时期内的客运量大幅减少。
+* 1991年下半年客运量大幅上升。
+* 由于节日效应，每年年初的客运量都会有一定幅度的下降。
+* 序列存在长期波动，在1987年向上波动，在1988年向下波动，于1990年和1991年又再次向上波动。
+
+对此数据进行建模预测时，需要综合考虑上述特征，以便实现对未来客运量的有效预测。
+
+示例 2：
+
+```{r}
+autoplot(a10, Cost) + 
+    labs(
+        y = "美元（单位：百万）",
+        x = "月份",
+        title = "澳大利亚降糖药物销量",
+    )
+```
+
+图示的时间序列具有明显的增长趋势，并伴随有明显的波动幅度逐渐增大的季节性模式。
+每年年底政府推行的补贴计划使得降糖药品售价更低，致使人们倾向于在年底囤积药物，
+从而导致年初的销售额大幅下降。因此，当我们对降糖药物的销量进行预测时，
+需同时考虑其趋势和季节性因素。
+
+## 时间序列模式
+
+## 
+
+# 参考
+
+* [Forecasting: Principles and Practice](https://otexts.com/fpp3cn/index.html)
