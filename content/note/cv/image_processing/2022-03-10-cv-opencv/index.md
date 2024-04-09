@@ -480,7 +480,7 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
-![img](images/before.png)
+<img src="images/before.png" width="50%" />
 
 ```
 img 尺寸：(512, 512)
@@ -488,7 +488,7 @@ img[50, 90] 原始值：105
 img[50, 90] 修改值：255
 ```
 
-![img](images/after.png)
+<img src="images/after.png" width="50%" />
 
 ### 彩色图像
 
@@ -574,7 +574,8 @@ RGB 图像是由 R 通道、G 通道、B 通道三个通道构成的。
 
 针对 RGB 图像，可以分别拆分出其 R 通道、G 通道、B 通道。
 在 OpenCV 中，通过索引可以直接将各个通道从图像内提出来。
-例如，针对 OpenCV 内的 BGR 图像 img，可用如下语句分别从中提取 B 通道、G 通道、R 通道：
+例如，针对 OpenCV 内的 BGR 图像 `img`，
+可用如下语句分别从中提取 B 通道、G 通道、R 通道：
 
 ```python
 b = img[:, :, 0]
@@ -582,15 +583,15 @@ g = img[:, :, 1]
 r = img[:, :, 2]
 ```
 
-示例：演示图像通道拆分及通道改变对彩色图像的影响。
+示例 1：演示图像通道拆分及通道改变对彩色图像的影响。
 
 ```python
 import cv2
 
-lena = cv2.imread(
-    "D:/projects/computer_vision/cvproj/data/images/lena.png"
-)
+lena = cv2.imread("D:/projects/computer_vision/cvproj/data/images/lena.png")
 cv2.imshow("lena", lena)
+
+# 通道拆分
 b = lena[:, :, 0]
 g = lena[:, :, 1]
 r = lena[:, :, 2]
@@ -601,9 +602,27 @@ cv2.imshow("r", r)
 ```
 
 ![img](images/channel-color.png)
-![img](images/channel-b.png)
-![img](images/channel-g.png)
-![img](images/channel-r.png)
+
+<img src="images/channel-b.png" width="30%" />
+<img src="images/channel-g.png" width="30%" />
+<img src="images/channel-r.png" width="30%" />
+
+```python
+# 通道值改变
+lena[:, :, 0] = 0
+cv2.imshow("lenab0", lena)
+lena[:, :, 1] = 0
+cv2.imshow("lenab0g0", lena)
+```
+
+<img src="images/channel-b0.png" width="30%" />
+<img src="images/channel-b0g0.png" width="30%" />
+
+示例 2：除了使用索引，还可以使用函数 `cv2.split()` 来拆分图像的通道：
+
+```python
+b, g, r = cv2.split(img)
+```
 
 ### 通道合并
 
@@ -616,13 +635,17 @@ G 通道图像 `b` 和 R 通道图像 `r` 这三幅通道图像合并为一幅 R
 bgr = cv2.merge([b, g, r])
 ```
 
+示例：
+
 ```python
 import cv2
 
-lena = cv2.imread(
-    "D:/projects/computer_vision/cvproj/data/images/lena.png"
-)
+lena = cv2.imread("D:/projects/computer_vision/cvproj/data/images/lena.png")
+
+# 通道拆分
 b, g, r = cv2.split(lena)
+
+# 通道合并
 bgr = cv2.merge([b, g, r])
 rgb = cv2.merge([r, g, b])
 
@@ -634,7 +657,28 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
+<img src="images/channel-color.png" width="30%" />
+<img src="images/channel-bgr.png" width="30%" />
+<img src="images/channel-rgb.png" width="30%" />
+
 ## 调整图像大小
+
+OpenCV 使用函数 `cv2.resize()` 实现对图像的缩放，该函数的具体语法为：
+
+```python
+dst = cv2.resize(src, dsize[, fx[, fy[, interpolation]]])
+```
+
+其中：
+
+* `dst`：输出的目标图像
+* `src`：需要缩放的原始图像
+* `dsize`：输出图像的大小
+* `fx`：水平方向的缩放比例
+* `fy`：垂直方向的缩放比例
+* `interpolation`：插值方式
+
+
 
 
 ## 掩模
