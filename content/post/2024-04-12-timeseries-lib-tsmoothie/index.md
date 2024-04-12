@@ -1,6 +1,6 @@
 ---
-title: tsmoothie
-subtitle: 光滑和异常检测
+title: 时间序列平滑和异常检测-tsmoothie
+subtitle: 时间序列平滑和异常检测
 author: 王哲峰
 date: '2024-04-12'
 slug: timeseries-lib-tsmoothie
@@ -36,19 +36,19 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [光滑技术](#光滑技术)
-    - [指数光滑](#指数光滑)
+- [平滑技术](#平滑技术)
+    - [指数平滑](#指数平滑)
     - [LOWESS](#lowess)
         - [参考](#参考)
 - [tsmoothie 安装](#tsmoothie-安装)
-- [tsmoothie 光滑 demo](#tsmoothie-光滑-demo)
-    - [随机游走数据光滑](#随机游走数据光滑)
-    - [季节性数据光滑](#季节性数据光滑)
+- [tsmoothie 平滑 demo](#tsmoothie-平滑-demo)
+    - [随机游走数据平滑](#随机游走数据平滑)
+    - [季节性数据平滑](#季节性数据平滑)
 - [tsmoothie Bootstrap demo](#tsmoothie-bootstrap-demo)
-- [时间序列光滑以更好地聚类](#时间序列光滑以更好地聚类)
-- [时间序列光滑以更好地预测](#时间序列光滑以更好地预测)
+- [时间序列平滑以更好地聚类](#时间序列平滑以更好地聚类)
+- [时间序列平滑以更好地预测](#时间序列平滑以更好地预测)
     - [时间序列数据](#时间序列数据)
-    - [时间序列数据光滑](#时间序列数据光滑)
+    - [时间序列数据平滑](#时间序列数据平滑)
     - [参考](#参考-1)
 - [时间序列异常检测](#时间序列异常检测)
 - [极端事件的时间序列预处理](#极端事件的时间序列预处理)
@@ -62,26 +62,26 @@ img {
 * 异常值剔除
 * 保留原始数据中存在的时间模式
 
-# 光滑技术
+# 平滑技术
 
-tsmoothie 使用的光滑技术：
+tsmoothie 使用的平滑技术：
 
-* Exponential Smoothing(指数光滑)
-* Convolutional Smoothing(卷积光滑)
+* Exponential Smoothing(指数平滑)
+* Convolutional Smoothing(卷积平滑)
     - constant: window types
     - hanning: window types
     - hamming: window types
     - bartlett: window types
     - blackman: window types
 * Spectral Smoothing with Fourier Transform(傅里叶变换的频谱平滑)
-* Polynomial Smoothing(多项式光滑)
-* Spline Smoothing(样条光滑)
+* Polynomial Smoothing(多项式平滑)
+* Spline Smoothing(样条平滑)
     - linear
     - cubic
     - natural
     - cubic
-* Gaussian Smoothing(高斯光滑)
-* Binner Smoothing(分箱光滑)
+* Gaussian Smoothing(高斯平滑)
+* Binner Smoothing(分箱平滑)
 * LOWESS(局部加权回归散点平滑法)
 * Seasonal Decompose Smoothing(季节性分解)
     - convolution 
@@ -89,7 +89,7 @@ tsmoothie 使用的光滑技术：
     - natural 
     - cubic 
     - spline
-* Kalman Smoothing(卡尔曼光滑) with customizable components
+* Kalman Smoothing(卡尔曼平滑) with customizable components
     - level
     - trend
     - seasonality
@@ -114,7 +114,7 @@ tsmoothie 可以通过 `BootstrappingWrapper` 类操作时序引导，用到的 
 * circular block bootstrap
 * stationary bootstrap
 
-## 指数光滑
+## 指数平滑
 
 
 
@@ -128,8 +128,8 @@ LOWESS 主要思想是取一定比例的局部数据，在这部分子集中拟�
 而通常的回归分析往往是根据全体数据建模，这样可以描述整体趋势，
 但现实生活中规律不总是（或者很少是）教科书上告诉的一条直线。
 将局部范围从左往右依次推进，最终一条连续的曲线就被计算出来了。
-显然，曲线的光滑程度与选取数据比例有关：比例越少，
-拟合越不光滑（因为过于看重局部性质），反之越光滑
+显然，曲线的平滑程度与选取数据比例有关：比例越少，
+拟合越不平滑（因为过于看重局部性质），反之越平滑
 
 
 ### 参考
@@ -143,9 +143,9 @@ LOWESS 主要思想是取一定比例的局部数据，在这部分子集中拟�
 $ pip install tsmoothie
 ```
 
-# tsmoothie 光滑 demo
+# tsmoothie 平滑 demo
 
-## 随机游走数据光滑
+## 随机游走数据平滑
 
 ```python
 import numpy as np
@@ -193,7 +193,7 @@ for i in range(3):
 
 ![img](images/randomwalk_smoothing.png)
 
-## 季节性数据光滑
+## 季节性数据平滑
 
 ```python
 # import libraries
@@ -291,11 +291,11 @@ plt.plot(data[0], c = 'blue', linewidth = 2)
 
 ![img](images/sinusoidal_bootstrap.png)
 
-# 时间序列光滑以更好地聚类
+# 时间序列平滑以更好地聚类
 
 
 
-# 时间序列光滑以更好地预测
+# 时间序列平滑以更好地预测
 
 降低传感器中的噪声以更好地预测太阳能电池板的发电量
 
@@ -308,7 +308,7 @@ plt.plot(data[0], c = 'blue', linewidth = 2)
   不需要累积值，而是需要绝对的每日值，因此，进行简单的微分操作。
   这是预测的目标
 
-## 时间序列数据光滑
+## 时间序列数据平滑
 
 Kalman Filter
 
