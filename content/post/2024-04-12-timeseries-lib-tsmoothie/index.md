@@ -2,10 +2,11 @@
 title: tsmoothie
 subtitle: 光滑和异常检测
 author: 王哲峰
-date: '2022-05-05'
+date: '2024-04-12'
 slug: timeseries-lib-tsmoothie
 categories:
   - timeseries
+  - tool
 tags:
   - machinelearning
 ---
@@ -36,19 +37,19 @@ img {
 <details><summary>目录</summary><p>
 
 - [光滑技术](#光滑技术)
-  - [指数光滑](#指数光滑)
-  - [LOWESS](#lowess)
-    - [参考](#参考)
+    - [指数光滑](#指数光滑)
+    - [LOWESS](#lowess)
+        - [参考](#参考)
 - [tsmoothie 安装](#tsmoothie-安装)
 - [tsmoothie 光滑 demo](#tsmoothie-光滑-demo)
-  - [随机游走数据光滑](#随机游走数据光滑)
-  - [季节性数据光滑](#季节性数据光滑)
+    - [随机游走数据光滑](#随机游走数据光滑)
+    - [季节性数据光滑](#季节性数据光滑)
 - [tsmoothie Bootstrap demo](#tsmoothie-bootstrap-demo)
 - [时间序列光滑以更好地聚类](#时间序列光滑以更好地聚类)
 - [时间序列光滑以更好地预测](#时间序列光滑以更好地预测)
-  - [时间序列数据](#时间序列数据)
-  - [时间序列数据光滑](#时间序列数据光滑)
-  - [参考](#参考-1)
+    - [时间序列数据](#时间序列数据)
+    - [时间序列数据光滑](#时间序列数据光滑)
+    - [参考](#参考-1)
 - [时间序列异常检测](#时间序列异常检测)
 - [极端事件的时间序列预处理](#极端事件的时间序列预处理)
 - [深度学习中的时间序列 Bootstrap](#深度学习中的时间序列-bootstrap)
