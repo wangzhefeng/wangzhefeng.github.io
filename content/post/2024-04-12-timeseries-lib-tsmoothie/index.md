@@ -36,33 +36,37 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [平滑技术](#平滑技术)
-    - [指数平滑](#指数平滑)
-    - [LOWESS](#lowess)
-        - [参考](#参考)
+- [tsmoothie 平滑](#tsmoothie-平滑)
+    - [平滑技术](#平滑技术)
+        - [指数平滑](#指数平滑)
+        - [LOWESS](#lowess)
+    - [区间计算](#区间计算)
+    - [Bootstrap 算法](#bootstrap-算法)
 - [tsmoothie 安装](#tsmoothie-安装)
-- [tsmoothie 平滑 demo](#tsmoothie-平滑-demo)
-    - [随机游走数据平滑](#随机游走数据平滑)
-    - [季节性数据平滑](#季节性数据平滑)
-- [tsmoothie Bootstrap demo](#tsmoothie-bootstrap-demo)
-- [时间序列平滑以更好地聚类](#时间序列平滑以更好地聚类)
-- [时间序列平滑以更好地预测](#时间序列平滑以更好地预测)
-    - [时间序列数据](#时间序列数据)
-    - [时间序列数据平滑](#时间序列数据平滑)
-    - [参考](#参考-1)
-- [时间序列异常检测](#时间序列异常检测)
-- [极端事件的时间序列预处理](#极端事件的时间序列预处理)
-- [深度学习中的时间序列 Bootstrap](#深度学习中的时间序列-bootstrap)
-- [参考](#参考-2)
+- [tsmoothie 使用](#tsmoothie-使用)
+    - [tsmoothie 平滑 demo](#tsmoothie-平滑-demo)
+        - [随机游走数据平滑](#随机游走数据平滑)
+        - [季节性数据平滑](#季节性数据平滑)
+    - [tsmoothie Bootstrap demo](#tsmoothie-bootstrap-demo)
+    - [时间序列平滑以更好地聚类](#时间序列平滑以更好地聚类)
+    - [时间序列平滑以更好地预测](#时间序列平滑以更好地预测)
+        - [时间序列数据](#时间序列数据)
+        - [时间序列数据平滑](#时间序列数据平滑)
+    - [时间序列异常检测](#时间序列异常检测)
+    - [极端事件的时间序列预处理](#极端事件的时间序列预处理)
+    - [深度学习中的时间序列 Bootstrap](#深度学习中的时间序列-bootstrap)
+- [参考](#参考)
 </p></details><p></p>
 
 > A python library for time-series smoothing and outlier detection in a vectorized way.
+> 
+> * 去噪
+> * 异常值剔除
+> * 保留原始数据中存在的时间模式
 
-* 去噪
-* 异常值剔除
-* 保留原始数据中存在的时间模式
+# tsmoothie 平滑
 
-# 平滑技术
+## 平滑技术
 
 tsmoothie 使用的平滑技术：
 
@@ -95,30 +99,10 @@ tsmoothie 使用的平滑技术：
     - seasonality
     - long seasonality
 
-tsmoothie 提供了作为平滑过程结果的区间计算，这对于识别时间序列中的异常值非常有用。
-区间类型有：
-
-* sigma interval
-* confidence interval
-* predictions interval
-* kalman interval
-
-tsmoothie 可以进行滑动平滑的方法来模拟在线使用。
-这可以将时间序列分成大小相等的部分并独立平滑它们。
-与往常一样，此功能通过 `WindowWrapper` 类以矢量化方式实现
-
-tsmoothie 可以通过 `BootstrappingWrapper` 类操作时序引导，用到的 Bootstrap 算法有：
-
-* none overlapping block bootstrap
-* moving block bootstrap
-* circular block bootstrap
-* stationary bootstrap
-
-## 指数平滑
+### 指数平滑
 
 
-
-## LOWESS
+### LOWESS
 
 二维变量之间的关系研究是很多统计方法的基础，例如回归分析通常会从一元回归讲起，然后再扩展到多元情况。
 局部加权回归散点平滑法（locally weighted scatterplot smoothing，LOWESS 或 LOESS）是查看二维变量之间关系的一种有力工具。
@@ -132,10 +116,29 @@ LOWESS 主要思想是取一定比例的局部数据，在这部分子集中拟�
 拟合越不平滑（因为过于看重局部性质），反之越平滑
 
 
-### 参考
 
-- [用局部加权回归散点平滑法观察二维变量之间的关系](https://cosx.org/2008/11/lowess-to-explore-bivariate-correlation-by-yihui/)
+## 区间计算
 
+tsmoothie 提供了作为平滑过程结果的区间计算，这对于识别时间序列中的异常值非常有用。
+区间类型有：
+
+* sigma interval
+* confidence interval
+* predictions interval
+* kalman interval
+
+tsmoothie 可以进行滑动平滑的方法来模拟在线使用。
+这可以将时间序列分成大小相等的部分并独立平滑它们。
+与往常一样，此功能通过 `WindowWrapper` 类以矢量化方式实现
+
+## Bootstrap 算法
+
+tsmoothie 可以通过 `BootstrappingWrapper` 类操作时序引导，用到的 Bootstrap 算法有：
+
+* none overlapping block bootstrap
+* moving block bootstrap
+* circular block bootstrap
+* stationary bootstrap
 
 # tsmoothie 安装
 
@@ -143,9 +146,11 @@ LOWESS 主要思想是取一定比例的局部数据，在这部分子集中拟�
 $ pip install tsmoothie
 ```
 
-# tsmoothie 平滑 demo
+# tsmoothie 使用
 
-## 随机游走数据平滑
+## tsmoothie 平滑 demo
+
+### 随机游走数据平滑
 
 ```python
 import numpy as np
@@ -193,7 +198,7 @@ for i in range(3):
 
 ![img](images/randomwalk_smoothing.png)
 
-## 季节性数据平滑
+### 季节性数据平滑
 
 ```python
 # import libraries
@@ -246,8 +251,7 @@ for i in range(3):
 
 ![img](images/sinusoidal_smoothing.png)
 
-
-# tsmoothie Bootstrap demo
+## tsmoothie Bootstrap demo
 
 ```python
 # import libraries
@@ -291,15 +295,14 @@ plt.plot(data[0], c = 'blue', linewidth = 2)
 
 ![img](images/sinusoidal_bootstrap.png)
 
-# 时间序列平滑以更好地聚类
+## 时间序列平滑以更好地聚类
 
 
-
-# 时间序列平滑以更好地预测
+## 时间序列平滑以更好地预测
 
 降低传感器中的噪声以更好地预测太阳能电池板的发电量
 
-## 时间序列数据
+### 时间序列数据
 
 * 房子每天的煤气消耗量，`$m^{3}$`
 * 房子每天的用电量，`$kWh$`
@@ -308,25 +311,21 @@ plt.plot(data[0], c = 'blue', linewidth = 2)
   不需要累积值，而是需要绝对的每日值，因此，进行简单的微分操作。
   这是预测的目标
 
-## 时间序列数据平滑
+### 时间序列数据平滑
 
 Kalman Filter
 
-
-## 参考
-
-- [Time Series Smoothing for better Forecasting](https://towardsdatascience.com/time-series-smoothing-for-better-forecasting-7fbf10428b2)
-
-# 时间序列异常检测
+## 时间序列异常检测
 
 
-# 极端事件的时间序列预处理
+## 极端事件的时间序列预处理
 
 
-# 深度学习中的时间序列 Bootstrap
+## 深度学习中的时间序列 Bootstrap
 
 
 # 参考
 
-* [GitHub](https://github.com/cerlymarco/tsmoothie)
-
+* [GitHub tsmoothie](https://github.com/cerlymarco/tsmoothie)
+* [用局部加权回归散点平滑法观察二维变量之间的关系](https://cosx.org/2008/11/lowess-to-explore-bivariate-correlation-by-yihui/)
+* [Time Series Smoothing for better Forecasting](https://towardsdatascience.com/time-series-smoothing-for-better-forecasting-7fbf10428b2)
