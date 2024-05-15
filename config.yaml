@@ -1,6 +1,6 @@
 baseurl: https://wangzhefeng.com/
 languageCode: zh-cn
-title: wangzf|王哲峰
+title: wangzf
 theme: hugo-ivy
 disqusShortname: wangzf
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
@@ -53,9 +53,10 @@ menu:
       # url: "/index.xml"
       # weight: 5
 
+# https://simpleicons.org/icons/github.svg
 params:
   description: ""
-  footer: "&copy; [wangzf](https://wangzhefeng.com) 2024 | [<img src='https://simpleicons.org/icons/github.svg' width='3%'>](https://github.com/wangzhefeng)"
+  footer: "&copy; [wangzf](https://wangzhefeng.com) 2024 | [<img src='https://raw.githubusercontent.com/wangzhefeng/wangzhefeng.github.io/de205cb4d3a98fc0d251ebbc1e4830b494052820/content/images/github.svg' width='3%'>](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
   githubContentURL: "https://github.com/wangzhefeng"
   twitterImage: "/images/logo.jpeg"

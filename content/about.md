@@ -132,12 +132,4 @@ slug: "about"
 <img src="/images/tomster1.jpeg" width=50% height="250px" />
 <p><center>Tomster</center></p>
 
-<!-- 
-<img src="/images/tomster2.jpeg" width=49% height="270px" />
-<img src="/images/tomster3.jpeg" width=49% />
-<img src="/images/tomster4.jpeg" width=49% />
-<img src="/images/tomster5.jpeg" width=32% height="260px" />
-<img src="/images/tomster6.jpeg" width=34% height="260px" />
-<img src="/images/tomster7.jpeg" width=32% height="260px" /> -->
-
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)
