@@ -58,16 +58,23 @@ details[open] summary {
 
 <details><summary>目录</summary><p>
 
-- [ChatGPT 使用简介](#chatgpt-使用简介)
+- [ChatGPT 原理](#chatgpt-原理)
+- [ChatGPT 应用开发](#chatgpt-应用开发)
 - [Jupyter 中使用 ChatGPT](#jupyter-中使用-chatgpt)
     - [安装](#安装)
     - [使用](#使用)
 - [参考](#参考)
 </p></details><p></p>
 
-# ChatGPT 使用简介
+# ChatGPT 原理
 
-* TODO
+
+
+# ChatGPT 应用开发
+
+
+
+
 
 # Jupyter 中使用 ChatGPT
 
@@ -171,4 +178,4 @@ def load_ipython_extension(ipython):
 # 参考
 
 * [算法工程师如何优雅地使用 ChatGPT](https://mp.weixin.qq.com/s?__biz=MzU3OTQzNTU2OA==&mid=2247491771&idx=1&sn=f6a4780106f72c47c28f51cf3a303a46&chksm=fd648de4ca1304f29d2ad7e5282e71215c039dcd717fa350453dcfafaca53e6735b32ebbfd99&cur_album_id=2917869728717750275&scene=190#rd)
-* []()
+* 《ChatGPT 原理及应用开发》
