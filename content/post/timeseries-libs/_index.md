@@ -1,5 +1,5 @@
 ---
-title: 时间序列库
+title: 时间序列分析库
 # subtitle: Model Libraries
 list_pages: true
 # order_by: title

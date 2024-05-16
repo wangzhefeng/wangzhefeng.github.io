@@ -53,6 +53,10 @@ img {
 - [模型输入与输出](#模型输入与输出)
     - [大模型输入与输出](#大模型输入与输出)
     - [提示模板组件](#提示模板组件)
+        - [基础提示模板](#基础提示模板)
+        - [自定义提示模板](#自定义提示模板)
+        - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
+    - [大模型接口](#大模型接口)
 - [链的构建](#链的构建)
 - [RAG](#rag)
 - [智能代理设计](#智能代理设计)
@@ -205,6 +209,14 @@ CRISPE 框架由开源社区的 Matt Nigh 提出，它可以帮助我们为模�
 
 ## 提示模板组件
 
+LangChain 的提示模板组件是一个强大的工具，用于简化和高效地构建提示词。
+其优势在于能够让我们 **复用大部分静态内容，同时只需动态修改部分变量**。
+
+### 基础提示模板
+
+在程序中引入 `PromptTemplate` 类，构建一个基础的提示模板。
+这个类允许我们定义一个包含变量的模板字符串，从而在需要时替换这些变量。
+
 
 ```python
 from langchain.prompts import PromptTemplate
@@ -216,6 +228,13 @@ template = PromptTemplate.from_template("翻译这段文字：{text}，风格：
 formatted_prompt = template.format(text = "我爱编程", style = "诙谐有趣")
 print(formatted_prompt)
 ```
+
+### 自定义提示模板
+
+### 使用 FewShotPromptTemplate
+
+## 大模型接口
+
 
 
 

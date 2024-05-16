@@ -632,3 +632,4 @@ zsh的特性包括：
     - Gemma 产品页面
     - Vertex AI 模型花园链接
     - Google Notebook 教程
+* [Google Gemma 2B 微调实战（IT 科技新闻标题生成）](https://mp.weixin.qq.com/s/MX_7kiwhWzPd3REOc_KJaQ)
