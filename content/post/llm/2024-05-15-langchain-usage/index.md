@@ -36,7 +36,15 @@ img {
 
 - [LangChain 框架及类似框架](#langchain-框架及类似框架)
 - [LangChain 简介](#langchain-简介)
-    - [LangChain 模块](#langchain-模块)
+    - [简介](#简介)
+    - [核心概念](#核心概念)
+    - [模块](#模块)
+        - [模型 I/O 模块](#模型-io-模块)
+        - [检索模块](#检索模块)
+        - [链模块](#链模块)
+        - [记忆模块](#记忆模块)
+        - [代理模块](#代理模块)
+        - [回调模块](#回调模块)
 - [LangChain 快速使用](#langchain-快速使用)
     - [开发环境](#开发环境)
     - [LangChain 及管理工具安装](#langchain-及管理工具安装)
@@ -69,7 +77,15 @@ img {
 
 # LangChain 框架及类似框架
 
+* crewAI
+* LangChain
+* LlamaIndex
+
 # LangChain 简介
+
+## 简介
+
+![img](images/langchain-frame.png)
 
 LangChain 框架与大模型时代的开发范式紧密相关，它简化了大模型的集成过程，提供了一种新的 AI 应用构建方式，
 允许开发者快速集成 GPT-3.5 等模型，增强了应用程序功能。
@@ -82,15 +98,70 @@ LangChain 作为一种大模型应用开发框架，针对当前 AI 应用开发
 * 网络连接限制
 * 数据源整合限制
 
+## 核心概念
 
-## LangChain 模块
+LangChain 是一个专为开发大模型驱动的应用而设计的框架，它赋予应用程序以下特性：
 
-* 模型 I/O 模块
-* 检索模块
-* 链模块
-* 记忆模块
-* 代理模块
-* 回调模块
+* 能够理解和适应上下文
+* 具备推理能力
+
+LangChain 的核心优势包括两个方面：
+
+* 组件化
+* 现成的链
+
+## 模块
+
+LangChain 使用以下 6 种核心模块提供标准化、可扩展的接口和外部集成，
+分别是：模型 I/O(Model I/O)模块、检索(Retrieval)模块、链(Chain)模块、
+记忆(Memory)模块、代理(Agent)模块和回调(Callback)模块。
+
+### 模型 I/O 模块
+
+模型 I/O 模块主要与大模型交互相关，由三个部分组成：
+
+1. **提示词管理部分**用于模块化，动态选择和管理模型输入；
+2. **语言模型部分**通过调用接口调用大模型；
+3. **输出解析器**负责从模型输出中提取信息；
+
+### 检索模块
+
+LangChain 提供了一个 **检索增强生成**(retrieval-augmented generation, RAG)模块，
+它从外部检索 **用户特定数据**并将其整合到大模型中，包括超过 100 种 **文档加载器**，
+可以从各种 **数据源**（如私有数据库/公共网站以及企业知识库等）加载 **不同格式(HTML、PDF、Word、Excel、图像等)的文档**。
+此外，为了提取文档的相关部分，**文档转换器引擎**可以将大文档分割成小块。
+检索模块提供了多种算法和针对特定文档类型的优化逻辑。
+
+此外，**文本嵌入模型**也是检索过程的关键组成部分，
+它们可以捕捉文本的语义从而快速找到相似的文本。
+检索模块集成了多种类型的嵌入模型，并提供标准接口以简化模型间的切换。
+
+为了高效存储和搜索嵌入向量，检索模块与超过 50 种 **向量存储引擎**集成，
+既支持开源的本地向量数据库，也可以接入云厂商托管的私有数据库。
+开发者可以根据需要，通过标准接口灵活地在不同的向量存储之间切换。
+
+检索模块扩展了 LangChain 的功能，允许从外部数据源种提取并整合信息，
+增强了语言模型的回答能力。这种增强生成的能力为链模块种的复杂应用场景提供了支持。
+
+### 链模块
+
+
+
+### 记忆模块
+
+
+
+### 代理模块
+
+* Agent
+* Tool
+* Tookit
+* AgentExecutor
+
+
+### 回调模块
+
+
 
 # LangChain 快速使用
 
@@ -141,7 +212,7 @@ $ pip install langsmith
 OpenAI 的 GPT-3.5 模型需要安装 OpenAI SDK：
 
 ```bash
-$ pip intall openai
+$ pip install openai
 ```
 
 python-dotenv：为了支持与多种外部资源的集成，安装 `python-dotenv` 来管理访问密钥：
@@ -158,10 +229,79 @@ $ pip install fastapi
 
 ## 构建一个简单的 LLM 应用
 
+LangChain 为构建 LLM 应用提供了多种模块，这些模块既可以在简单应用中独立使用，
+也可以通过 LCEL 进行复杂的组合。LCEL 定义了统一的可执行接口，让许多模块能够在组件之间无缝衔接。
+
+一条简单而常见的处理链通常包含以下三个要素：
+
+* 语言模型(LLM/ChatModel)
+    - 作为核心推理引擎，语言模型负责理解输入并生成输出。
+      要有效地使用 LangChain，需要了解不同类型的语言模型及其操作方式
+* 提示模板(prompt template)
+    - 提示模板为语言模型提供具体的指令，指导其生成期望的输出。
+      正确配置指示模板可以显著提升模型的响应质量
+* 输出解析器(output parser)
+    - 输出解析器将语言模型的原始响应转换成更易于理解和处理的格式，
+      以便后续步骤可以更有效地利用这些信息
+
 ### 语言模型
 
+LangChain 集成的模型主要分为两种：
+
+* LLM：文本生成型模型，接收一个字符串作为输入，并返回一个字符串作为输出，
+  用于根据用户提供的提示词自动生成高质量文本的场景
+* ChatModel：对话型模型，接收一个消息列表作为输入，
+  并返回一个条消息作为输出，用于一问一答模式与用户持续对话的场景
+
+基本消息接口由 `BaseMessage` 定义，它有两个必需的属性：
+
+* 内容(content)：消息的内容，通常是一个字符串
+    - 在 LangChain 中调用 LLM 或 ChatModel 最简单的方法是使用 `invoke` 接口，
+      这是所有 LCEL 对象都默认实现的同步调用方法
+        - `LLMs.invoke`：输入一个字符串，返回一个字符串
+        - `ChatModel.invoke`：输入一个 `BaseMessage` 列表，返回一个 `BaseMessage`
+* 角色(role)：消息的发送方。LangChain 提供了几个对象来轻松区分不同的角色：
+    - `HumanMessage`：人类（用户）输入的 `BaseMessage`
+    - `AIMessage`：AI 助手（大模型）输出的 `BaseMessage`
+    - `SystemMessage`：系统预设的 `BaseMessage`
+    - `FunctionMessage`：调用自定义函数或工具输出的 `BaseMessage`
+    - `ToolMessage`：调用第三方工具输出的 `BaseMessage`
+    - `ChatMessage`：如果上述内置角色不能满足你的需求，可以用它自定义需要的角色，
+      LangChain 在这方面提供了足够的灵活性
+
+导入一个 LLM 和一个 ChatModel：
+
+```python
+# 导入通用补全模型 OpenAI
+from langchain.llms import OpenAI
+# 导入聊天模型 ChatOpenAI
+from langchain.chat_models import ChatOpenAI
+
+llm = OpenAI()
+chat_model = ChatOpenAI()
+```
+
+LLM 和 ChatModel 对象均提供了丰富的初始化配置，这里只传入字符串作演示：
+
+```python
+# 导入表示用户输入的 HumanMessage
+from langchain.schema import HumanMessage
+
+text = "给生产杯子的公司取一个名字。"
+message = [HumanMessage(content = text)]
+
+def main():
+    print(llm.invoke(text))
+    # >> 茶杯屋
+    print(chat_model.invoke(message))
+    # >> content="杯享"
+
+if __name__ = "__main__":
+    main()
+```
 
 ### 提示模版
+
 
 
 ### 输出解析器
@@ -263,3 +403,4 @@ print(formatted_prompt)
 # 参考
 
 * 《LangChain 编程-从入门到实践》
+* [LangChain 官方文档](https://python.langchain.com/v0.1/docs/get_started/introduction)
