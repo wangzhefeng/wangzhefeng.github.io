@@ -10,33 +10,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -54,24 +27,108 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 <details><summary>目录</summary><p>
 
-- [ChatGPT 原理](#chatgpt-原理)
+- [ChatGPT 基础](#chatgpt-基础)
+    - [最强表示架构 Transformer 设计与演变](#最强表示架构-transformer-设计与演变)
+    - [生成语言模型 GPT 进化与逆袭](#生成语言模型-gpt-进化与逆袭)
+    - [利器强化学习 RLHF 流程与思想](#利器强化学习-rlhf-流程与思想)
 - [ChatGPT 应用开发](#chatgpt-应用开发)
+    - [ChatGPT Embedding 接口](#chatgpt-embedding-接口)
+    - [ChatGPT 接口 + 提示词](#chatgpt-接口--提示词)
 - [Jupyter 中使用 ChatGPT](#jupyter-中使用-chatgpt)
     - [安装](#安装)
     - [使用](#使用)
 - [参考](#参考)
 </p></details><p></p>
 
-# ChatGPT 原理
+# ChatGPT 基础
+
+## 最强表示架构 Transformer 设计与演变
+
+
+## 生成语言模型 GPT 进化与逆袭
+
+
+
+## 利器强化学习 RLHF 流程与思想
 
 
 
 # ChatGPT 应用开发
 
+## ChatGPT Embedding 接口
+
+> 获取给定文本的向量表示
+
+1. 设置 `OPENAI_API_KEY`
+
+首先要做一些准备工作，主要是设置 `OPENAI_API_KEY`，这里建议读者用环境变量来获取，
+而不要将自己的密钥明文写在任何代码文件里。当然，更不要上传到开源代码仓库。
+
+```python
+import os
+import openai
+
+# 用环境变量来获取
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+# 或直接填入自己专属的 API key(接口密钥)，不建议在正式场景下使用
+OPENAI_API_KEY = "填入专属的 API key"
+
+openai.api_key = OPENAI_API_KEY
+```
+
+2. 输入文本，指定相应模型，获取文本对应的 Embedding
+
+```python
+import openai
+
+# 文本
+text = "我喜欢你"
+
+# 模型
+model = "text-embedding-ada-002"
+
+# 获取文本对应的 Embedding
+emb_req = openai.Embedding.create(input = [text] model = model)
+
+# 接口会返回所输入文本的向量表示
+emb = emb_req.data[0].embedding
+len(emb) == 1536
+type(emb) == list
+```
+
+OpenAI 官方还提供了一个集成接口，既包括获取 Embedding，也包括计算相似度，
+使用起来更加简单：
+
+```python
+from openai.embedding_utils import get_embedding,, cosine_similarity
+
+text1 = "我喜欢你"
+text2 = "我中意你"
+text3 = "我不喜欢你"
+
+# 注意默认的模型是 text-similarity-davinci-001，我们也可以换成 text-embedding-ada-002
+emb1 = get_embedding(text1)
+emb2 = get_embedding(text2)
+emb3 = get_embedding(text3)
+
+# 接口直接返回向量表示
+len(emb1) == 12288
+type(emb1) == list
+```
+
+
+
+
+## ChatGPT 接口 + 提示词
+
+> 完成语义匹配任务
 
 
 
