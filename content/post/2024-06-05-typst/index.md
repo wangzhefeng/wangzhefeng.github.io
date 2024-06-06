@@ -34,7 +34,18 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [TODO](#TODO)
+- [TODO](#todo)
 </p></details><p></p>
 
+舍弃 LaTex，使用 Typst！ 
 
+
+
+
+# TODO
+
+* [如何看待 typst？](https://www.zhihu.com/question/591143170/answer/2953618467)
+* [Chinese Resume in Typst](https://github.com/OrangeX4/Chinese-Resume-in-Typst)
+* [My Resume and LaTeX Template](https://github.com/liweitianux/resume)
+* [typst.app](https://typst.app/)
+* [Typst GitHub](https://github.com/typst/typst)

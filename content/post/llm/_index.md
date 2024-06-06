@@ -13,4 +13,11 @@ list_pages: true
 4. 创建一个简单的 RAG 系统
 5. 微调一个 LLM
 
+## TODO
+
+* [大语言模型-LLM](https://mp.weixin.qq.com/s/GUxebYPjEaC7hyI5JpJrNQ)
+* [datawhalechina/hugging-llm](https://github.com/datawhalechina/hugging-llm)
+
+
+
 ## 文档

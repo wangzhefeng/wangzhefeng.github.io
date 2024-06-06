@@ -1,6 +1,6 @@
 ---
-title: 自然语言处理
-subtitle: NLP
+title: NLP 任务
+subtitle: NLP Task
 list_pages: true
 # order_by: title
 ---

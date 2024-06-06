@@ -122,6 +122,7 @@ img {
     - [色标参考](#色标参考)
     - [检查特定数据范围](#检查特定数据范围)
     - [数组插值](#数组插值)
+- [资料](#资料)
 </p></details><p></p>
 
 # 一个 Plot 的生命周期
@@ -1460,3 +1461,6 @@ imgplot = plt.imshow(img, interpolation = "bicubic")
 
 ![image-20211204011514588](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011514588.png)
 
+# 资料
+
+* [Matplotlib颜色对照表](https://zhuanlan.zhihu.com/p/65220518)
