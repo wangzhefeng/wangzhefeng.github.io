@@ -1,5 +1,5 @@
 ---
-title: 提示工程
+title: LLM 架构 -- 提示工程
 subtitle: Prompt Engineering
 author: 王哲峰
 date: '2024-04-09'
@@ -36,8 +36,8 @@ img {
 <details><summary>目录</summary><p>
 
 - [提示工程概览](#提示工程概览)
-    - [提示工程简介](#提示工程简介)
-    - [模型设置](#模型设置)
+  - [提示工程简介](#提示工程简介)
+  - [模型设置](#模型设置)
 - [提示技术](#提示技术)
 - [提示应用](#提示应用)
 - [Prompt Hub](#prompt-hub)

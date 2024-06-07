@@ -1,5 +1,5 @@
 ---
-title: ChatGPT 使用
+title: LLM 应用 -- ChatGPT
 author: 王哲峰
 date: '2024-05-02'
 slug: chatgpt-usage

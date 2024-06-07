@@ -1,5 +1,5 @@
 ---
-title: NLP
+title: NLP：Nature Language Processing
 author: 王哲峰
 date: '2022-04-05'
 slug: nlp

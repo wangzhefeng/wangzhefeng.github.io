@@ -1,5 +1,5 @@
 ---
-title: LangChain 使用
+title: LLM 框架--LangChain
 author: 王哲峰
 date: '2024-05-15'
 slug: langchain-usage

@@ -1,6 +1,6 @@
 ---
-title: NLP 任务
-subtitle: NLP Task
+title: NLP 模型
+subtitle: NLP Models
 list_pages: true
 # order_by: title
 ---
