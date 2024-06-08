@@ -1,5 +1,5 @@
 ---
-title: LLM 架构 -- RAG
+title: LLM 架构--RAG
 author: 王哲峰
 date: '2024-03-23'
 slug: llm-rag
