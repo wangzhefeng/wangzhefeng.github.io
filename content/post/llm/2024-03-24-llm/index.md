@@ -41,13 +41,11 @@ img {
 - [LLM 获取方式](#llm-获取方式)
     - [LLM 名单](#llm-名单)
     - [LLM 本体](#llm-本体)
-- [Prompt 提示词格式](#prompt-提示词格式)
 - [LLM 调用示例](#llm-调用示例)
     - [查看模型性能](#查看模型性能)
     - [下载模型](#下载模型)
     - [模型调用](#模型调用)
 - [LLM 微调](#llm-微调)
-- [参考](#参考)
 </p></details><p></p>
 
 # LLM 介绍
@@ -195,8 +193,6 @@ img {
 
 而对于不开源的模型，则通常需要在其官网付费购买调用次数，之后根据官网使用说明调用即可。
 
-# Prompt 提示词格式
-
 # LLM 调用示例
 
 下载模型本体后即可根据使用手册调用，与模型进行对话。
@@ -305,9 +301,3 @@ print(response)
 # LLM 微调
 
 > Fine-Tune LLMs
-
-
-# 参考
-
-* [How to Fine-Tune LLMs in 2024 with Hugging Face](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
-* [大模型简介与调用方法](https://mp.weixin.qq.com/s/P6ke-B9Q40Hy0S2M5V6w3Q)

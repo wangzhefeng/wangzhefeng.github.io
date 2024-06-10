@@ -15,9 +15,12 @@ list_pages: true
 
 ## TODO
 
-* [大语言模型-LLM](https://mp.weixin.qq.com/s/GUxebYPjEaC7hyI5JpJrNQ)
-* [datawhalechina/hugging-llm](https://github.com/datawhalechina/hugging-llm)
-
-
+* [总结从T5、GPT-3、Chinchilla、PaLM、LLaMA、Alpaca等近30个最新模型大语言模型-LLM](https://mp.weixin.qq.com/s/GUxebYPjEaC7hyI5JpJrNQ)
+* [ChatGPT 原理与应用开发](https://github.com/datawhalechina/hugging-llm)
+* [开源大模型食用指南](https://github.com/datawhalechina/self-llm/tree/master)
+* [动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
+* [GLM-4 代码](https://github.com/datawhalechina/self-llm/tree/master/GLM-4)
+* [How to Fine-Tune LLMs in 2024 with Hugging Face](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
+* [大模型简介与调用方法](https://mp.weixin.qq.com/s/P6ke-B9Q40Hy0S2M5V6w3Q)
 
 ## 文档
