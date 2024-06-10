@@ -8,5 +8,6 @@ list_pages: true
 ## TODO 
 
 * [DataWhale Pytorch 实用教程第二版](https://tingsongyu.github.io/PyTorch-Tutorial-2nd/chapter-2/)
+* [Pytorch 学习笔记](https://pytorch.zhangxiann.com/)
 
 ## 文档
