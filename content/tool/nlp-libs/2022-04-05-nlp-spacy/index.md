@@ -37,6 +37,7 @@ img {
 - [spaCy 安装](#spacy-安装)
   - [官网安装](#官网安装)
   - [pip 安装](#pip-安装)
+- [参考资料](#参考资料)
 </p></details><p></p>
 
 # spaCy 安装
@@ -114,3 +115,8 @@ $ python3 setup.py install /your_path/zh_core_web_md-x.x.x.tar.gz
 $ python3 setup.py install /your_path/zh_core_web_sm-x.x.x.tar.gz
 ```
 
+# 参考资料
+
+* [NeuralCoref](https://github.com/huggingface/neuralcoref) 
+* [spaCy](https://spacy.io/) 
+* [textacy](https://textacy.readthedocs.io/en/stable/)

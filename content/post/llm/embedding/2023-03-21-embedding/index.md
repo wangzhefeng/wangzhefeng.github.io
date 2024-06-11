@@ -36,85 +36,85 @@ img {
 <details><summary>目录</summary><p>
 
 - [语言模型基础](#语言模型基础)
-    - [最小语义单位 Token 与 Embedding](#最小语义单位-token-与-embedding)
-        - [Token](#token)
-        - [Bag Of Words](#bag-of-words)
-        - [Embedding](#embedding)
-    - [语言模型](#语言模型)
-        - [贪心搜索和集束搜索](#贪心搜索和集束搜索)
-        - [简单语言模型-N-Gram](#简单语言模型-n-gram)
-        - [复杂语言模型-RNN](#复杂语言模型-rnn)
-        - [最强表示架构-Transformer](#最强表示架构-transformer)
-        - [NLP 任务](#nlp-任务)
-        - [生成语言模型-GPT](#生成语言模型-gpt)
-        - [利器强化学习-RLHF](#利器强化学习-rlhf)
-            - [衡量好坏](#衡量好坏)
+  - [最小语义单位 Token 与 Embedding](#最小语义单位-token-与-embedding)
+    - [Token](#token)
+    - [Bag Of Words](#bag-of-words)
+    - [Embedding](#embedding)
+  - [语言模型](#语言模型)
+    - [贪心搜索和集束搜索](#贪心搜索和集束搜索)
+    - [简单语言模型-N-Gram](#简单语言模型-n-gram)
+    - [复杂语言模型-RNN](#复杂语言模型-rnn)
+    - [最强表示架构-Transformer](#最强表示架构-transformer)
+    - [NLP 任务](#nlp-任务)
+    - [生成语言模型-GPT](#生成语言模型-gpt)
+    - [利器强化学习-RLHF](#利器强化学习-rlhf)
+      - [衡量好坏](#衡量好坏)
 - [词汇表征](#词汇表征)
-    - [文本向量化简介](#文本向量化简介)
-    - [文本向量化方法](#文本向量化方法)
-        - [离散表示](#离散表示)
-        - [分布式表示](#分布式表示)
-    - [文本向量化流程](#文本向量化流程)
-- [词集和词袋模型](#词集和词袋模型)
-    - [词集模型: One-Hot 表征](#词集模型-one-hot-表征)
-        - [One-Hot 算法简介](#one-hot-算法简介)
-        - [One-Hot 的优缺点](#one-hot-的优缺点)
-        - [One-Hot 算法示例](#one-hot-算法示例)
-        - [One-Hot 算法实现](#one-hot-算法实现)
-    - [词袋模型](#词袋模型)
-        - [词袋模型算法](#词袋模型算法)
-        - [词袋模型示例](#词袋模型示例)
-        - [词袋模型优缺点](#词袋模型优缺点)
-        - [词袋模型实现](#词袋模型实现)
-    - [Bi-gram 和 N-gram](#bi-gram-和-n-gram)
-        - [Bi-gram 和 N-gram 算法简介](#bi-gram-和-n-gram-算法简介)
-        - [Bi-gram 和 N-gram 算法示例](#bi-gram-和-n-gram-算法示例)
-        - [Bi-gram 和 N-gram 优缺点](#bi-gram-和-n-gram-优缺点)
-        - [Bi-gram 和 N-gram 算法实现](#bi-gram-和-n-gram-算法实现)
-    - [TF-IDF](#tf-idf)
-        - [TF-IDF 算法简介](#tf-idf-算法简介)
-        - [TF-IDF 算法示例](#tf-idf-算法示例)
-        - [TF-IDF 算法优缺点](#tf-idf-算法优缺点)
-        - [TF-IDF 算法实现](#tf-idf-算法实现)
-    - [共现矩阵](#共现矩阵)
-        - [共现矩阵算法简介](#共现矩阵算法简介)
-        - [共现矩阵算法示例](#共现矩阵算法示例)
-        - [共现矩阵算法实现](#共现矩阵算法实现)
-    - [Count Vector](#count-vector)
-        - [Count Vector 算法简介](#count-vector-算法简介)
-        - [Count Vector 算法示例](#count-vector-算法示例)
-        - [Count Vector 算法实现](#count-vector-算法实现)
-- [Word Embedding](#word-embedding)
-    - [神经网络语言模型](#神经网络语言模型)
-        - [NNLM 模型简介](#nnlm-模型简介)
-        - [NNLM 模型解释](#nnlm-模型解释)
-    - [word2vec](#word2vec)
-        - [word2vec 简介](#word2vec-简介)
-        - [word2vec 核心思想](#word2vec-核心思想)
-        - [word2vec 优点](#word2vec-优点)
-        - [word2vec 语言模型](#word2vec-语言模型)
-        - [word2vec 工具](#word2vec-工具)
-            - [word2vec 版本](#word2vec-版本)
-            - [Gensim word2vec 示例](#gensim-word2vec-示例)
-            - [训练一个 word2vec 词向量模型](#训练一个-word2vec-词向量模型)
-    - [CBOW](#cbow)
-        - [CBOW 模型概述](#cbow-模型概述)
-        - [CBOW 模型简介](#cbow-模型简介)
-        - [CBOW 模型解释](#cbow-模型解释)
-    - [Word Embedding 模型](#word-embedding-模型)
-        - [霍夫曼树](#霍夫曼树)
-        - [层级 Softmax](#层级-softmax)
-        - [负例采样](#负例采样)
-    - [Skip-gram](#skip-gram)
-        - [Skip-gram 模型概述](#skip-gram-模型概述)
-        - [Skip-gram 简介](#skip-gram-简介)
-        - [Skip-gram 模型解释](#skip-gram-模型解释)
-    - [GloVe](#glove)
-        - [GloVe 词向量简介](#glove-词向量简介)
-        - [GloVe vs word2vec](#glove-vs-word2vec)
-    - [fasttext](#fasttext)
-        - [fasttext 算法简介](#fasttext-算法简介)
-        - [fasttext 算法实现](#fasttext-算法实现)
+  - [文本向量化简介](#文本向量化简介)
+  - [文本向量化方法](#文本向量化方法)
+    - [离散表示](#离散表示)
+    - [分布式表示](#分布式表示)
+  - [文本向量化流程](#文本向量化流程)
+- [词袋模型-Bag of Words](#词袋模型-bag-of-words)
+  - [词集模型: One-Hot 表征](#词集模型-one-hot-表征)
+    - [One-Hot 算法简介](#one-hot-算法简介)
+    - [One-Hot 的优缺点](#one-hot-的优缺点)
+    - [One-Hot 算法示例](#one-hot-算法示例)
+    - [One-Hot 算法实现](#one-hot-算法实现)
+  - [词袋模型](#词袋模型)
+    - [词袋模型算法](#词袋模型算法)
+    - [词袋模型示例](#词袋模型示例)
+    - [词袋模型优缺点](#词袋模型优缺点)
+    - [词袋模型实现](#词袋模型实现)
+  - [Bi-gram 和 N-gram](#bi-gram-和-n-gram)
+    - [Bi-gram 和 N-gram 算法简介](#bi-gram-和-n-gram-算法简介)
+    - [Bi-gram 和 N-gram 算法示例](#bi-gram-和-n-gram-算法示例)
+    - [Bi-gram 和 N-gram 优缺点](#bi-gram-和-n-gram-优缺点)
+    - [Bi-gram 和 N-gram 算法实现](#bi-gram-和-n-gram-算法实现)
+  - [TF-IDF](#tf-idf)
+    - [TF-IDF 算法简介](#tf-idf-算法简介)
+    - [TF-IDF 算法示例](#tf-idf-算法示例)
+    - [TF-IDF 算法优缺点](#tf-idf-算法优缺点)
+    - [TF-IDF 算法实现](#tf-idf-算法实现)
+  - [共现矩阵](#共现矩阵)
+    - [共现矩阵算法简介](#共现矩阵算法简介)
+    - [共现矩阵算法示例](#共现矩阵算法示例)
+    - [共现矩阵算法实现](#共现矩阵算法实现)
+  - [Count Vector](#count-vector)
+    - [Count Vector 算法简介](#count-vector-算法简介)
+    - [Count Vector 算法示例](#count-vector-算法示例)
+    - [Count Vector 算法实现](#count-vector-算法实现)
+- [词嵌入-Word Embedding](#词嵌入-word-embedding)
+  - [神经网络语言模型](#神经网络语言模型)
+    - [NNLM 模型简介](#nnlm-模型简介)
+    - [NNLM 模型解释](#nnlm-模型解释)
+  - [Word2Vec](#word2vec)
+    - [Word2Vec 简介](#word2vec-简介)
+    - [Word2Vec 核心思想](#word2vec-核心思想)
+    - [Word2Vec 优点](#word2vec-优点)
+    - [Word2Vec 语言模型](#word2vec-语言模型)
+    - [Word2Vec 工具](#word2vec-工具)
+      - [Word2Vec 版本](#word2vec-版本)
+      - [Gensim Word2Vec 示例](#gensim-word2vec-示例)
+      - [训练一个 Word2Vec 词向量模型](#训练一个-word2vec-词向量模型)
+  - [CBOW](#cbow)
+    - [CBOW 模型概述](#cbow-模型概述)
+    - [CBOW 模型简介](#cbow-模型简介)
+    - [CBOW 模型解释](#cbow-模型解释)
+  - [Word Embedding 模型](#word-embedding-模型)
+    - [霍夫曼树](#霍夫曼树)
+    - [层级 Softmax](#层级-softmax)
+    - [负例采样](#负例采样)
+  - [Skip-gram](#skip-gram)
+    - [Skip-gram 模型概述](#skip-gram-模型概述)
+    - [Skip-gram 简介](#skip-gram-简介)
+    - [Skip-gram 模型解释](#skip-gram-模型解释)
+  - [GloVe](#glove)
+    - [GloVe 词向量简介](#glove-词向量简介)
+    - [GloVe vs Word2Vec](#glove-vs-word2vec)
+  - [fasttext](#fasttext)
+    - [fasttext 算法简介](#fasttext-算法简介)
+    - [fasttext 算法实现](#fasttext-算法实现)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -853,7 +853,7 @@ Tomas Mikolov 2013 年在 ICLR 提出用于获取 Word Vector 的论文《Effici
     - NLP 相关任务中最常见的第一步是创建一个 **词表库**，并把每个词顺序编号
 2. 文本向量化
 
-# 词集和词袋模型
+# 词袋模型-Bag of Words
 
 * 词集模型
     - One-Hot 编码
@@ -1287,14 +1287,14 @@ John likes to play basketball.
 
 ### Count Vector 算法实现
 
-# Word Embedding
+# 词嵌入-Word Embedding
 
-词嵌入(Word Embedding)的基本想法就是将词汇表中的每个单词表示为一个普通的向量，这个向量不像 One-Hot 向量那样都是 0 或者 1，
-也没有 One-Hot 向量那样长，大概就是很普通的向量，比如长这样：`$[-0.91, 2, 1.8, -0.82, 0.65, \ldots]$`。
+词嵌入(Word Embedding)的基本想法就是将词汇表中的每个单词表示为一个普通的向量，
+这个向量不像 One-Hot 向量那样都是 0 或者 1，也没有 One-Hot 向量那样长，
+大概就是很普通的向量，比如长这样：`$[-0.91, 2, 1.8, -0.82, 0.65, \ldots]$`。
 这样的一种词汇表示方式就像是将词嵌入到了一种数学空间里面，所以叫做词嵌入。那么如何进行词嵌入呢？
 或者说如何才能将词汇表征成很普通的向量形式？这需要通过神经网络进行训练，
-训练得到的网络权重形成的向量就是最终需要的东西，这种向量也叫词向量，Word2Vec 就是其中的典型技术。
-
+训练得到的网络权重形成的向量就是最终需要的东西，这种向量也叫词向量（Word Vector），Word2Vec 就是其中的典型技术。
 
 ## 神经网络语言模型
 
@@ -1319,19 +1319,23 @@ L(\theta)
 &= \sum_{t} log P(\omega_{t} = i|\omega_{t-1}, \omega_{t-2}, \cdots, \omega_{t- n + 1}) 
 \end{align}$$`
 
-NNLM 模型使用非对称的前向窗口，长度为 `$n-1$` ，滑动窗口遍历整个语料库求和，使得目标概率最大化，其计算量正比于语料库的大小。
-同时，预测所有词的概率综合应为 1：
+NNLM 模型使用非对称的前向窗口，长度为 `$n-1$` ，滑动窗口遍历整个语料库求和，
+使得目标概率最大化，其计算量正比于语料库的大小。同时，预测所有词的概率综合应为 1：
 
 `$$\sum_{\omega \in \{vocabulary\}} P(\omega|\omega_{t-n+1}, \cdots, \omega_{t-1}) = 1$$`
 
 ### NNLM 模型解释
 
 样本的一组输入是第 `$n$` 个词的前 `$n-1$` 个词的 One-Hot 表示，目标是预测第 `$n$` 个词，
-输出层的大小是语料库中所有词的数量，然后 sotfmax 回归，使用反向传播不断修正神经网络的权重来最大化第 `$n$`  个词的概率。
-当神经网络学得到权重能够很好地预测第 `$n$` 个词的时候，输入层到映射层，即这层，其中的权重 Matrix C 被称为投影矩阵，
-输入层各个词的 Ont-Hot 表示法只在其对应的索引位置为 1，其他全为 0，在与 Matrix C 矩阵相乘时相当于在对应列取出列向量投影到映射层
+输出层的大小是语料库中所有词的数量，然后 Sotfmax 回归，
+使用反向传播不断修正神经网络的权重来最大化第 `$n$` 个词的概率。
+当神经网络学得到的权重能够很好地预测第 `$n$` 个词的时候，输入层到映射层，
+其中的权重 `$Matrix C$` 被称为投影矩阵，
+输入层各个词的 Ont-Hot 表示法只在其对应的索引位置为 1，其他全为 0，
+在与 `$Matrix C$` 矩阵相乘时相当于在对应列取出列向量投影到映射层。
+此时的向量​就是原词​的分布式表示，其是稠密向量而非原来 One-Hot 的稀疏向量了。
 
-`$$Matrix C = (w_{1}, w_{2}, \cdots, w_{v}) = 
+`$$Matrix \quad C = (w_{1}, w_{2}, \cdots, w_{v}) = 
 \begin{bmatrix}
 (\omega_{1})_{1} & (\omega_{2})_{1} & \cdots & (\omega_{v})_{1} \\
 (\omega_{1})_{2} & (\omega_{2})_{2} & \cdots & (\omega_{v})_{2} \\
@@ -1339,44 +1343,43 @@ NNLM 模型使用非对称的前向窗口，长度为 `$n-1$` ，滑动窗口遍
 (\omega_{1})_{D} & (\omega_{2})_{D} & \cdots & (\omega_{v})_{D} \\
 \end{bmatrix}$$`
 
-此时的向量​就是原词​的分布式表示，其是稠密向量而非原来 One-Hot 的稀疏向量了
+在后面的隐藏层将这 `$n-1$` 个稠密的词向量进行拼接，如果每个词向量的维度为 `$D$`，
+则隐藏层的神经元个数为 `$(n-1)\times D$`，然后接一个所有待预测词数量的全连接层，
+最后用 Softmax 进行预测。
 
-在后面的隐藏层将这 `$n-1$` 个稠密的词向量进行拼接，如果每个词向量的维度为 `$D$`，则隐藏层的神经元个数为 `$(n-1)\times D$`，
-然后接一个所有待预测词数量的全连接层，最后用 Softmax 进行预测
+可以看到，在隐藏层和分类层中间的计算量应该是很大的，Word2Vec 算法从这个角度出发对模型进行了简化。
+Word2Vec 不是单一的算法，而是两种算法的结合：连续词袋模型(CBOW)和跳字模型(Skip-gram) 。
 
-可以看到，在隐藏层和分类层中间的计算量应该是很大的，word2vec 算法从这个角度出发对模型进行了简化。
-word2vec 不是单一的算法，而是两种算法的结合：连续词袋模型(CBOW)和跳字模型(Skip-gram) 
+## Word2Vec
 
-## word2vec
+### Word2Vec 简介
 
-### word2vec 简介
-
-word2vec 是谷歌于 2013 年提出的一种 NLP 工具，其特点就是将词汇进行向量化，这样就可以定量的分析和挖掘词汇之间的联系。
-因而 word2vec 也是词嵌入表征的一种，只不过这种向量化表征需要经过神经网络训练得到，word2vec 作为现代 NLP 的核心思想和技术之一，
+Word2Vec 是谷歌于 2013 年提出的一种 NLP 工具，其特点就是将词汇进行向量化，这样就可以定量的分析和挖掘词汇之间的联系。
+因而 Word2Vec 也是词嵌入表征的一种，只不过这种向量化表征需要经过神经网络训练得到，word2vec 作为现代 NLP 的核心思想和技术之一，
 有着非常广泛的影响
 
 从深度学习的角度看，假设将 NLP 的语言模型看作是一个监督学习问题：即给定上下文词 `$X$`，输出中间词 `$Y$`，
 或者给定中间词 `$X$`，输出上下文词 `$Y$`。基于输入 `$X$` 和输出 `$Y$` 之间的映射便是语言模型。
 这样的一个语言模型的目的便是检查 `$X$` 和 `$Y$` 放在一起是否符合自然语言法则，更通俗一点说就是 `$X$` 和 `$Y$` 搁一起是不是人话
 
-word2vec 训练神经网络得到一个关于输入 `$X$` 和 输出 `$Y$` 之间的语言模型，关注重点并不是说要把这个模型训练的有多好，
+Word2Vec 训练神经网络得到一个关于输入 `$X$` 和 输出 `$Y$` 之间的语言模型，关注重点并不是说要把这个模型训练的有多好，
 而是要获取训练好的神经网络权重，这个权重就是要拿来对输入词汇 `$X$` 的向量化表示。一旦拿到了训练语料所有词汇的词向量，
 接下来开展 NLP 研究工作就相对容易一些了。所以，基于监督学习的思想，word2vec 便是一种基于神经网络训练的自然语言模型
 
-### word2vec 核心思想
+### Word2Vec 核心思想
 
-`word2vec` 以及其他词向量模型，都基于同样的假设：
+`Word2Vec` 以及其他词向量模型，都基于同样的假设：
 
 1. 衡量词语之间的相似性，在于相邻词汇是否相识，这是基于语言学的“距离象似性”原理
 2. 词汇和它的上下文构成了一个象，当从语料库当中学习得到相识或者相近的象时，它们在语义上总是相识的
 
-### word2vec 优点
+### Word2Vec 优点
 
 高效，Mikolov 在论文中指出一个优化的单机版本一天可以训练上千亿个词
 
-### word2vec 语言模型
+### Word2Vec 语言模型
 
-word2vec 通常有两个版本的语言模型：
+Word2Vec 通常有两个版本的语言模型：
 
 * 一种是给定上下文词，需要我们来预测中间目标词，这种模型叫做：连续词袋模型(Continuous Bag-of-Wods，CBOW)
 * 另一种是给定一个词语，根据这个词预测它的上下文，这种模型叫做：跳元模型(Skip-gram)
@@ -1388,24 +1391,24 @@ CBOW 和 Skip-gram 模型的原理示意图：
 关于 CBOW 和 skip-gram 模型的更多数学细节，比如 Huffman 树、损失函数的推导等问题，
 从监督学习的角度来说，word2vec 本质上是一个基于神经网络的多分类问题，当输出词语非常多时，
 我们则需要一些像分级 Softmax 和负采样之类的技巧来加速训练。但从自然语言处理的角度来说，
-word2vec 关注的并不是神经网络模型本身，而是训练之后得到的词汇的向量化表征。
-这种表征使得最后的词向量维度要远远小于词汇表大小，所以 word2vec 从本质上来说是一种降维操作。
+Word2Vec 关注的并不是神经网络模型本身，而是训练之后得到的词汇的向量化表征。
+这种表征使得最后的词向量维度要远远小于词汇表大小，所以 Word2Vec 从本质上来说是一种降维操作。
 我们把数以万计的词汇从高维空间中降维到低维空间中，大大方便了后续的 NLP 分析任务
 
-### word2vec 工具
+### Word2Vec 工具
 
-#### word2vec 版本
+#### Word2Vec 版本
 
-* Google `word2vec`
+* Google `Word2Vec`
     - https://github.com/dav/word2vec
-* Gensim `word2vec`
+* Gensim `Word2Vec`
     - https://pypi.python.org/pypi/gensim
 * C++ 11
     - https://github.com/jdeng/word2vec
 * Java 
     - https://github.com/NLPchina/Word2VEC_java
 
-#### Gensim word2vec 示例
+#### Gensim Word2Vec 示例
 
 任务：使用中文维基百科语料库作为训练库
 
@@ -1443,15 +1446,15 @@ print("Finished Saved.")
     - jieba
     - ICTCLAS(中科院)
     - FudanNLP(复旦)
-* `word2vec` 一般需要大规模语料库(GB 级别)，这些语料库需要进行一定的预处理，
+* `Word2Vec` 一般需要大规模语料库(GB 级别)，这些语料库需要进行一定的预处理，
   变为精准的分词，才能提升训练效果。常用大规模中文语料库:
     - [维基百科中文语料(5.7G xml)](https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles.xml.bz2)
     - [搜狗实验室的搜狗 SouGouT(5TB 网页原版)](https://www.sogou.com/labs/resource/t.php)
 
-#### 训练一个 word2vec 词向量模型
+#### 训练一个 Word2Vec 词向量模型
 
 通常而言，训练一个词向量是一件非常昂贵的事情，我们一般会使用一些别人训练好的词向量模型来直接使用，
-很少情况下需要自己训练词向量，但这并不妨碍我们尝试来训练一个 word2vec 词向量模型进行试验
+很少情况下需要自己训练词向量，但这并不妨碍我们尝试来训练一个 Word2Vec 词向量模型进行试验
 
 如何训练一个 Skip-gram 模型，总体流程是
 
@@ -1488,7 +1491,7 @@ CBOW 目标函数为：
 
 可以看到，上面提到的取消隐藏层，投影层求和平均都可以一定程度上减少计算量，但输出层的数量在那里，
 比如语料库有 500W 个词，那么隐藏层就要对 500W 个神经元进行全连接计算，这依然需要庞大的计算量。
-word2vec 算法又在这里进行了训练优化
+Word2Vec 算法又在这里进行了训练优化
 
 ### CBOW 模型解释
 
@@ -1541,7 +1544,7 @@ CBOW 模型基本结构：
 
 ### 层级 Softmax
 
-word2vec 算法利用霍夫曼树，将平铺型 Softmax 压缩成层级 Softmax，不再使用全连接。
+Word2Vec 算法利用霍夫曼树，将平铺型 Softmax 压缩成层级 Softmax，不再使用全连接。
 具体做法是根据文本的词频统计，将词频赋给结点的权
 
 在霍夫曼树中，叶子结点是待预测的所有词，在每个子结点处，用 Sigmoid 激活后得到往左走的概率 `$p$`，
@@ -1605,12 +1608,12 @@ Skip-gram 模型的训练方法也是基于损失函数的梯度计算，目标�
 
 > 全局词向量表示，Global Vectors for Word Representation, GloVe
 
-除了 word2vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
+除了 Word2Vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
 GloVe 词向量、fasttext 词向量等等
 
 ### GloVe 词向量简介
    
-GloVe 词向量直译为全局的词向量表示，跟 word2vec 词向量一样本质上是基于词共现矩阵来进行处理的。
+GloVe 词向量直译为全局的词向量表示，跟 Word2Vec 词向量一样本质上是基于词共现矩阵来进行处理的。
 GloVe 词向量模型基本步骤如下:
 
 1. 基于词共现矩阵收集词共现信息
@@ -1654,7 +1657,7 @@ GloVe 词向量模型基本步骤如下:
       比如要解决 `a is to b as c is to _` 这样的语义填空题，
       可以利用词汇之间的余弦相似性计算空格处到底填什么单词.
 
-### GloVe vs word2vec
+### GloVe vs Word2Vec
 
 ![img](images/GloVe_vs_word2vec.png)
 
@@ -1663,7 +1666,7 @@ GloVe 词向量模型基本步骤如下:
 ### fasttext 算法简介
 
 fasttext 的模型与 CBOW 类似，实际上，fasttext 的确是由 CBOW 演变而来的。
-CBOW 预测上下文的中间词，fasttext 预测文本标签。与 word2vec 算法的衍生物相同，
+CBOW 预测上下文的中间词，fasttext 预测文本标签。与 Word2Vec 算法的衍生物相同，
 稠密词向量也是训练神经网路的过程中得到的
 
 ![img](images/fasttext.png)
@@ -1723,6 +1726,6 @@ print(result.precision, result.recall)
 * [秒懂词向量Word2vec的本质](https://zhuanlan.zhihu.com/p/26306795)
 * [sklearn.feature_extraction](https://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction)
 * [自然语言处理之word2vec](https://mp.weixin.qq.com/s?__biz=MzI4ODY2NjYzMQ==&mid=2247484776&idx=1&sn=484bfa9299696f6e233227e05d0fb78c&chksm=ec3ba000db4c2916b2f79d98ea8fd5ea3326e638458af2c8d65a182bdebeda11e311649d954d&scene=21#wechat_redirect) 
-* [word2vec 中的数学原理详解](https://www.cnblogs.com/peghoty/p/3857839.html)
+* [Word2Vec 中的数学原理详解](https://www.cnblogs.com/peghoty/p/3857839.html)
 * [深度学习word2vec学习笔记](http://www.docin.com/p-2066429827.html)
 * [Word Embedding, RNN/LSTM介绍](https://zhuanlan.zhihu.com/p/361802292)

@@ -43,6 +43,7 @@ img {
     - [准备文本数据](#准备文本数据)
     - [构建分类器](#构建分类器)
 - [使用 fastText 进行词表示](#使用-fasttext-进行词表示)
+- [参考](#参考)
 </p></details><p></p>
 
 # fastText 简介
@@ -306,3 +307,7 @@ model.test("cooking.valid", k = -1)
 
 # 使用 fastText 进行词表示
 
+
+# 参考
+
+* [fastText]https://fasttext.cc/docs/en/supervised-tutorial.html
