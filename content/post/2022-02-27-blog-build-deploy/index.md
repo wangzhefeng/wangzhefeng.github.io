@@ -180,10 +180,9 @@ Thumbs.db
 
 ### 8.1.1 部署
 
-1. 注册、登录 [Netlify](https://vercel.com/login)
+1. 注册、登录 [Netlify](https://app.netlify.com/sites/wangzf/overview)
 2. 导入 GitHub 仓库 [wangzhefeng.github.io](https://github.com/wangzhefeng/wangzhefeng.github.io)
 3. 点击部署
-4. 查看网站 [wangzhefeng.com](https://wangzhefeng.com/)
 
 ### 8.1.2 设置私有域名
 
@@ -203,7 +202,7 @@ Thumbs.db
 
 # 9.最终效果
 
-- [wangzhefeng.com](https://wangzhefeng.vercel.app/)
+- [wangzhefeng.com](https://wangzhefeng.com/)
 
 # 参考资料
 
