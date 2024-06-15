@@ -2,7 +2,7 @@
 title: LLM 模型--Llama
 author: 王哲峰
 date: '2024-05-02'
-slug: llm-fine-tuning-llama
+slug: llm-llama
 categories:
   - nlp
   - deeplearning
