@@ -1,5 +1,5 @@
 ---
-title: LLM 模型--Gemma 模型及 Fine-tuning
+title: LLM 模型--Gemma
 author: 王哲峰
 date: '2024-03-23'
 slug: llm-gemma
