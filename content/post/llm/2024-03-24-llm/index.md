@@ -36,48 +36,48 @@ img {
 <details><summary>目录</summary><p>
 
 - [LLM 介绍](#llm-介绍)
-    - [LLM 简介](#llm-简介)
-    - [LLM 发展](#llm-发展)
+  - [LLM 简介](#llm-简介)
+  - [LLM 发展](#llm-发展)
 - [LLM 的能力、特点、应用和影响](#llm-的能力特点应用和影响)
-    - [LLM 能力](#llm-能力)
-        - [涌现能力](#涌现能力)
-        - [作为基座模型支持多元应用的能力](#作为基座模型支持多元应用的能力)
-        - [支持对话作为统一入口的能力](#支持对话作为统一入口的能力)
-    - [LLM 特点](#llm-特点)
-    - [LLM 应用与影响](#llm-应用与影响)
+  - [LLM 能力](#llm-能力)
+    - [涌现能力](#涌现能力)
+    - [作为基座模型支持多元应用的能力](#作为基座模型支持多元应用的能力)
+    - [支持对话作为统一入口的能力](#支持对话作为统一入口的能力)
+  - [LLM 特点](#llm-特点)
+  - [LLM 应用与影响](#llm-应用与影响)
 - [LLM 模型](#llm-模型)
-    - [未开源 LLM](#未开源-llm)
-        - [GPT 系列](#gpt-系列)
-        - [Claude 系列](#claude-系列)
-        - [PaLM 和 Gemini 系列](#palm-和-gemini-系列)
-        - [文心一言](#文心一言)
-        - [星火大模型](#星火大模型)
-    - [开源 LLM](#开源-llm)
-        - [LLaMa 系列](#llama-系列)
-        - [通义千问](#通义千问)
-        - [GLM 系列](#glm-系列)
-        - [Baichuan 系列](#baichuan-系列)
+  - [未开源 LLM](#未开源-llm)
+    - [GPT 系列](#gpt-系列)
+    - [Claude 系列](#claude-系列)
+    - [PaLM 和 Gemini 系列](#palm-和-gemini-系列)
+    - [文心一言](#文心一言)
+    - [星火大模型](#星火大模型)
+  - [开源 LLM](#开源-llm)
+    - [LLaMa 系列](#llama-系列)
+    - [通义千问](#通义千问)
+    - [GLM 系列](#glm-系列)
+    - [Baichuan 系列](#baichuan-系列)
 - [LLM 应用流程](#llm-应用流程)
-    - [LLM 开发简介](#llm-开发简介)
-    - [LLM 开发流程](#llm-开发流程)
-    - [LLM 项目流程](#llm-项目流程)
-        - [1.项目规划与需求分析](#1项目规划与需求分析)
-        - [2.数据准备与向量知识库构建](#2数据准备与向量知识库构建)
-        - [3.大模型集成与 API 连接](#3大模型集成与-api-连接)
-        - [4.核心功能实现](#4核心功能实现)
-        - [5.核心功能迭代优化](#5核心功能迭代优化)
-        - [6.前端与用户交互界面开发](#6前端与用户交互界面开发)
-        - [7.部署测试与上线](#7部署测试与上线)
-        - [8.维护与持续改进](#8维护与持续改进)
+  - [LLM 开发简介](#llm-开发简介)
+  - [LLM 开发流程](#llm-开发流程)
+  - [LLM 项目流程](#llm-项目流程)
+    - [项目规划与需求分析](#项目规划与需求分析)
+    - [数据准备与向量知识库构建](#数据准备与向量知识库构建)
+    - [大模型集成与 API 连接](#大模型集成与-api-连接)
+    - [核心功能实现](#核心功能实现)
+    - [核心功能迭代优化](#核心功能迭代优化)
+    - [前端与用户交互界面开发](#前端与用户交互界面开发)
+    - [部署测试与上线](#部署测试与上线)
+    - [维护与持续改进](#维护与持续改进)
 - [LLM 获取方式](#llm-获取方式)
-    - [LLM 名单](#llm-名单)
-    - [LLM 本体](#llm-本体)
+  - [LLM 名单](#llm-名单)
+  - [LLM 本体](#llm-本体)
 - [LLM 调用示例](#llm-调用示例)
-    - [查看模型性能](#查看模型性能)
-    - [下载模型](#下载模型)
-    - [模型调用](#模型调用)
+  - [查看模型性能](#查看模型性能)
+  - [下载模型](#下载模型)
+  - [模型调用](#模型调用)
 - [LLM 微调](#llm-微调)
-- [参考、资料](#参考资料)
+- [参考和资料](#参考和资料)
 </p></details><p></p>
 
 # LLM 介绍
@@ -550,7 +550,7 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
 
 > 以知识库助手为例，搭建 LLM 项目的流程解析
 
-### 1.项目规划与需求分析
+### 项目规划与需求分析
 
 1. 项目目标：基于个人知识库的问答助手
 2. 核心功能
@@ -566,7 +566,7 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
     - 大模型：GPT、星火大模型、文心一言、GLM 等
     - 前后端：Gradio 和 Streamlit
 
-### 2.数据准备与向量知识库构建
+### 数据准备与向量知识库构建
 
 1. 收集和整理用户提供的文档
     - 用户常用文档格式有 PDF、TXT、MD 等。
@@ -588,40 +588,39 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
       利用向量相关性算法（例如余弦算法）找到最匹配的几个知识库片段，
       将这些知识库片段作为上下文，与用户问题一起作为 Prompt 提交给 LLM 回答。
 
-### 3.大模型集成与 API 连接
+### 大模型集成与 API 连接
 
 * 集成 GPT、星火、文心、GLM 等大模型，配置 API 连接。
 * 编写代码，实现与大模型 API 的交互，以便获取问题回答。
 
-### 4.核心功能实现
+### 核心功能实现
 
 1. 构建 Prompt Engineering，实现大模型回答功能，根据用户提问和知识库内容生成回答。
 2. 实现流式回复，允许用户进行多轮对话。
 3. 添加历史对话记录功能，保存用户与助手的交互历史。
 
-### 5.核心功能迭代优化
+### 核心功能迭代优化
 
 1. 进行验证评估，收集 Bad Case。
 2. 根据 Bad Case 迭代优化核心功能实现。
 
-### 6.前端与用户交互界面开发
+### 前端与用户交互界面开发
 
 1. 使用 Gradio 和 Streamlit 搭建前端界面。
 2. 实现用户上传文档、创建知识库的功能。
 3. 设计用户界面，包括问题输入、知识库选择、历史记录展示等。
 
-### 7.部署测试与上线
+### 部署测试与上线
 
 1. 部署问答助手到服务器或云平台，确保可在互联网上访问。
 2. 进行生产环境测试，确保系统稳定。
 3. 上线并向用户发布。
 
-### 8.维护与持续改进
+### 维护与持续改进
 
 1. 监测系统性能和用户反馈，及时处理问题。
 2. 定期更新知识库，添加新的文档和信息。
 3. 收集用户需求，进行系统改进和功能扩展。
-
 
 # LLM 获取方式
 
@@ -772,26 +771,30 @@ print(response)
 
 > Fine-Tune LLMs
 
-# 参考、资料
+* [How to Fine-Tune LLMs in 2024 with Hugging Face](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
 
-* [MMLU 数据集](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
-* [C-Eval 数据集](https://cevalbenchmark.com/)
-* [魔塔社区：https://modelscope.cn/home](https://modelscope.cn/home)
-* [Hugging Face：https://huggingface.com](https://huggingface.com)
-* [Github：https://github.com](https://github.com) 
+# 参考和资料
+
 * [A Survey of Large Language Models](https://arxiv.org/pdf/2303.18223)
-* [ChatGPT](https://chatgpt.com/?model=text-davinci-002-render-sha&oai-dm=1)
-* [Claude](https://claude.ai/)
-* [PaLM](https://ai.google/discover/palm2/)
-* [Gemini](https://gemini.google.com/app)
-* [文心一言](https://yiyan.baidu.com/)
-    - [https://huggingface.co/Qwen/Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)
-* [星火大模型](https://xinghuo.xfyun.cn/)
-* [LLaMA 官方地址](https://llama.meta.com/)
-* [LLaMA 开源地址](https://github.com/facebookresearch/llama)
-* [通义千问使用地址](https://tongyi.aliyun.com/)
-* [通义千问开源地址](https://github.com/QwenLM/Qwen2)
-* [ChatGLM 使用地址](https://chatglm.cn/)
-* [ChatGLM 开源地址](https://github.com/THUDM/GLM-4)
-* [百川使用地址](https://www.baichuan-ai.com/chat)
-* [百川开源地址](https://github.com/baichuan-inc)
+* 数据集
+    - [MMLU 数据集](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
+    - [C-Eval 数据集](https://cevalbenchmark.com/)
+* 模型仓库
+    - [魔塔社区：https://modelscope.cn/home](https://modelscope.cn/home)
+    - [Hugging Face：https://huggingface.com](https://huggingface.com)
+* 各厂模型
+    - [ChatGPT](https://chatgpt.com/?model=text-davinci-002-render-sha&oai-dm=1)
+    - [Claude](https://claude.ai/)
+    - [PaLM](https://ai.google/discover/palm2/)
+    - [Gemini](https://gemini.google.com/app)
+    - [文心一言](https://yiyan.baidu.com/)
+        - [https://huggingface.co/Qwen/Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)
+    - [星火大模型](https://xinghuo.xfyun.cn/)
+    - [LLaMA 官方地址](https://llama.meta.com/)
+    - [LLaMA 开源地址](https://github.com/facebookresearch/llama)
+    - [通义千问使用地址](https://tongyi.aliyun.com/)
+    - [通义千问开源地址](https://github.com/QwenLM/Qwen2)
+    - [ChatGLM 使用地址](https://chatglm.cn/)
+    - [ChatGLM 开源地址](https://github.com/THUDM/GLM-4)
+    - [百川使用地址](https://www.baichuan-ai.com/chat)
+    - [百川开源地址](https://github.com/baichuan-inc)
