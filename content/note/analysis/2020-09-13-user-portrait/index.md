@@ -34,6 +34,7 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [TODO](#todo)
 - [用户画像介绍](#用户画像介绍)
   - [用户画像的作用](#用户画像的作用)
   - [用户流量的问题](#用户流量的问题)
@@ -97,6 +98,12 @@ img {
     - [案例背景](#案例背景-3)
     - [实现逻辑](#实现逻辑-1)
 </p></details><p></p>
+
+# TODO
+
+* https://github.com/PanJianning/DCIC-2019-Credit-2th-Place
+* https://github.com/C-rawler/DCIC-2019-Credit-intelligence-score-2th-Place
+* https://www.datafountain.cn/competitions/337
 
 # 用户画像介绍
 
@@ -782,4 +789,3 @@ OpenAPI 能够保障画像系统数据与各系统之间打通，如 push 推送
 那么用户就会在今日头条看到之前浏览过的商品信息了，点击后就可以跳转到电商 App 内的商品详情页了
 
 ![img](images/ab7.png)
-

@@ -339,8 +339,8 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 # 参考 & TODO
 
-* [Natural Language Processing is Fun](https://medium.com/@ageitgey/natural-language-processing-is-fun-9a0bff37854e) 
-* [Part2Text Classification is Your New Secret Weapon](https://medium.com/@ageitgey/text-classification-is-your-new-secret-weapon-7ca4fad15788) 
-* [Explaining Model Predictions](https://medium.com/@ageitgey/natural-language-processing-is-fun-part-3-explaining-model-predictions-486d8616813c) 
-* [Faking the News with Natural Language Processing and GPT-2](https://medium.com/@ageitgey/deepfaking-the-news-with-nlp-and-transformer-models-5e057ebd697d) 
-* [Build Your Own ‘Google Translate’-Quality Machine Translation System](https://medium.com/@ageitgey/build-your-own-google-translate-quality-machine-translation-system-d7dc274bd476)
+* [Part 1: Natural Language Processing is Fun](https://medium.com/@ageitgey/natural-language-processing-is-fun-9a0bff37854e) 
+* [Part 2: Text Classification is Your New Secret Weapon](https://medium.com/@ageitgey/text-classification-is-your-new-secret-weapon-7ca4fad15788) 
+* [Part 3: Explaining Model Predictions](https://medium.com/@ageitgey/natural-language-processing-is-fun-part-3-explaining-model-predictions-486d8616813c) 
+* [Part 4: Faking the News with Natural Language Processing and GPT-2](https://medium.com/@ageitgey/deepfaking-the-news-with-nlp-and-transformer-models-5e057ebd697d) 
+* [Part 5: Build Your Own ‘Google Translate’-Quality Machine Translation System](https://medium.com/@ageitgey/build-your-own-google-translate-quality-machine-translation-system-d7dc274bd476)
