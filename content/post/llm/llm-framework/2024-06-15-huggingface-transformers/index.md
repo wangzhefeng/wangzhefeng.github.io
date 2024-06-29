@@ -218,10 +218,11 @@ outputs = model(**inputs)
 # Hugging Face Hub
 
 
-https://huggingface.co/models
+* https://huggingface.co/models
 
 # 参考
 
 * [Hugging Face Transformers Github](https://github.com/huggingface/transformers/blob/main/README_zh-hans.md)
 * [DeepLearning.AI’s Natural Language Processing Specialization](https://www.coursera.org/specializations/natural-language-processing?utm_source=deeplearning-ai&utm_medium=institutions&utm_campaign=20211011-nlp-2-hugging_face-page-nlp-refresh)
 * [fast.ai’s Practical Deep Learning for Coders](https://course.fast.ai/)
+* [transformers 教程](https://www.zhihu.com/column/c_1400131016443506688)
