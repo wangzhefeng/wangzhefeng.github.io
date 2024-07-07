@@ -45,6 +45,8 @@ img {
         - [Answer-label mapping-\[Mapping\]](#answer-label-mapping-mapping)
         - [总结](#总结)
     - [Prompt-based 方法的工程选择问题](#prompt-based-方法的工程选择问题)
+        - [Prompt Template Engineering](#prompt-template-engineering)
+        - [Answer Engineering](#answer-engineering)
 - [提示工程](#提示工程)
     - [提示工程简介](#提示工程简介)
     - [模型设置](#模型设置)
@@ -180,6 +182,60 @@ Prompt 的工作流包含以下四部分：
 
 ## Prompt-based 方法的工程选择问题
 
+在知乎中有个提问：“现代的 deep learning 就是为了规避 feature engineering”，
+可是 prompt 这边选择了 `template` 和 `answer` 不还是 feature engineering 吗？
+从这个问题中可以发现，确实如果使用 BERT 的 fine-tuning 范式（下图左），
+我们是不需要使用任何的人工特征构造，而使用 prompt-based 的方法的话，
+需要人工参与的部分包含了以下部分：
+
+* `template` 构造
+* `answer` 构造
+* 预训练模型选择
+* prompt 的组合问题选择
+* 以及训练策略的选择等
+
+![img](images/prompt-based1.png)
+
+下面会先进行每个需要人工 engineering 的部分进行详细讲解，然后再分析为什么我们还需要 prompt 这种范式。
+
+### Prompt Template Engineering
+
+> Prompt 模板工程
+
+如何构造合适的 Prompt 模板？对于同一个任务，不同的人可能构造不同的 Template。
+且每个模板都具有合理性。
+
+![img](images/prompt-based3.png)
+
+Template 的选择，对于 Prompt 任务起到了很重大的作用，就算一个 word 的区别，也可能导致十几个点的效果差别，
+论文 [GPT Understands, Too](https://arxiv.org/abs/2103.10385) 给出了如下的结果：
+
+![img](images/prompt-based2.png)
+
+对于不同的 template，可以从以下两种角度进行区分：
+
+1. 根据 slot 的 `形状/位置` 区分
+    - 完形填空(Cloze)的模式，即未知的 slot 在 template 的中间等不定的位置
+    - 前缀模式(Prefix)，未知的 slot 在 template 的开头
+2. 根据 `是否是由人指定的` 来区分
+    - 人工指定 template
+    - 自动搜索 template
+        - 离散(discrete) template，即搜索的空间是离散的，为预训练语言模型的字典里的字符
+        - 连续(continuous) template，即搜索的空间是连续的，
+        因为所有新增的这些 prompt 的参数主要是为了让机器更好地服务于任务，
+        所以其参数地取值空间不需要限定在特定地取值范围内，可以是连续地空间
+
+具体地思维导图如下：
+
+![img](images/prompt-based4.png)
+
+### Answer Engineering
+
+> 答案工程
+
+在给定一个任务或者 prompt 时，如何对 label 空间和 answer 空间进行映射？
+
+![img](images/answer1.png)
 
 
 

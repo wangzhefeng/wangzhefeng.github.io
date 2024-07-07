@@ -1,5 +1,5 @@
 ---
-title: 预测：方法与实践--时间序列回归模型
+title: 时间序列回归模型
 author: 王哲峰
 date: '2024-03-22'
 slug: forecasting-regression-model

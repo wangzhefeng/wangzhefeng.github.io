@@ -3,7 +3,7 @@ title: 道德经
 author: 王哲峰
 date: '2024-01-20'
 show_toc: true
-slug: tao-te-ching
+slug: dao-de-jing
 categories:
   - 文学
 tags:

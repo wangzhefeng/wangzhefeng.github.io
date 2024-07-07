@@ -1,5 +1,5 @@
 ---
-title: 预测：时间序列特征
+title: 时间序列特征
 author: 王哲峰
 date: '2024-04-24'
 slug: forecasting-features
