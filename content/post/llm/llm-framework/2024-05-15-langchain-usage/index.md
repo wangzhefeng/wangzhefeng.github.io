@@ -35,45 +35,45 @@ img {
 <details><summary>目录</summary><p>
 
 - [LangChain 简介](#langchain-简介)
-  - [类似框架](#类似框架)
-  - [简介](#简介)
-  - [核心概念](#核心概念)
-  - [核心模块](#核心模块)
-    - [模型 I/O 模块](#模型-io-模块)
-    - [检索模块](#检索模块)
-    - [链模块](#链模块)
-    - [记忆模块](#记忆模块)
-    - [代理模块](#代理模块)
-    - [回调模块](#回调模块)
-  - [LangChain 生态](#langchain-生态)
+    - [类似框架](#类似框架)
+    - [简介](#简介)
+    - [核心概念](#核心概念)
+    - [核心模块](#核心模块)
+        - [模型 I/O 模块](#模型-io-模块)
+        - [检索模块](#检索模块)
+        - [链模块](#链模块)
+        - [记忆模块](#记忆模块)
+        - [代理模块](#代理模块)
+        - [回调模块](#回调模块)
+    - [LangChain 生态](#langchain-生态)
 - [LangChain 快速使用](#langchain-快速使用)
-  - [LangChain 环境安装](#langchain-环境安装)
-    - [开发环境](#开发环境)
-    - [langchain 库安装](#langchain-库安装)
-    - [其他库安装](#其他库安装)
-  - [构建一个简单的 LLM 应用](#构建一个简单的-llm-应用)
-    - [语言模型](#语言模型)
-      - [简介](#简介-1)
-      - [示例](#示例)
-    - [提示模版](#提示模版)
-      - [简介](#简介-2)
-      - [示例](#示例-1)
-    - [输出解析器](#输出解析器)
-      - [简介](#简介-3)
-      - [示例](#示例-2)
-    - [使用 LCEL 进行组合](#使用-lcel-进行组合)
-      - [简介](#简介-4)
-      - [示例](#示例-3)
-    - [使用 LangSmith 进行观测](#使用-langsmith-进行观测)
-    - [使用 LangServe 提供服务](#使用-langserve-提供服务)
-  - [最佳安全实践](#最佳安全实践)
+    - [LangChain 环境安装](#langchain-环境安装)
+        - [开发环境](#开发环境)
+        - [langchain 库安装](#langchain-库安装)
+        - [其他库安装](#其他库安装)
+    - [构建一个简单的 LLM 应用](#构建一个简单的-llm-应用)
+        - [语言模型](#语言模型)
+            - [简介](#简介-1)
+            - [示例](#示例)
+        - [提示模版](#提示模版)
+            - [简介](#简介-2)
+            - [示例](#示例-1)
+        - [输出解析器](#输出解析器)
+            - [简介](#简介-3)
+            - [示例](#示例-2)
+        - [使用 LCEL 进行组合](#使用-lcel-进行组合)
+            - [简介](#简介-4)
+            - [示例](#示例-3)
+        - [使用 LangSmith 进行观测](#使用-langsmith-进行观测)
+        - [使用 LangServe 提供服务](#使用-langserve-提供服务)
+    - [最佳安全实践](#最佳安全实践)
 - [模型输入与输出](#模型输入与输出)
-  - [大模型输入与输出](#大模型输入与输出)
-  - [提示模板组件](#提示模板组件)
-    - [基础提示模板](#基础提示模板)
-    - [自定义提示模板](#自定义提示模板)
-    - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
-  - [大模型接口](#大模型接口)
+    - [大模型输入与输出](#大模型输入与输出)
+    - [提示模板组件](#提示模板组件)
+        - [基础提示模板](#基础提示模板)
+        - [自定义提示模板](#自定义提示模板)
+        - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
+    - [大模型接口](#大模型接口)
 - [链的构建](#链的构建)
 - [RAG](#rag)
 - [智能代理设计](#智能代理设计)
@@ -91,6 +91,8 @@ img {
 * crewAI
 * LangChain
 * LlamaIndex
+* SK
+* AutoGPT
 
 ## 简介
 
@@ -114,10 +116,18 @@ LangChain 作为一种大模型应用开发框架，针对当前 AI 应用开发
 概述如下：
 
 * 数据时效性
-    - GPT-3.5 等模型
+    - LangChain 可以通过集成外部知识库和向量数据库，允许开发者将最新的数据和信息注入模型中，
+      从而提高应用的时效性。 
 * token 数量限制
+    - LangChain 通过优化提示词和链的管理，帮助开发者突破模型 token 数量限制，例如通过分块处理长文档，
+      或者使用特定的提示模版来引导模型生成更有效的输出。
 * 网络连接限制
+    - 大语言模型本身无法联网查询，但 LangChain 可以作为中间件，
+      帮助开发者将模型与实时数据源连接起来，
+      例如通过 API 调用获取最新的信息，然后将这些信息作为输入传递给模型。
 * 数据源整合限制
+    - LangChain 支持与多种数据源的整合，包括私有数据库、API 和其他第三方工具，
+      这使得开发者能够构建更加灵活和多样化的应用，充分利用不同数据源的优化。
 
 LangChain 是一个专为开发大模型驱动的应用而设计的框架，它赋予应用程序以下特性：
 
@@ -157,7 +167,7 @@ LangChain 使用以下 6 种核心模块提供标准化、可扩展的接口和�
 在 LangChain 的组件系统中，各个模块相互协作，共同构建复杂的大模型应用。模型 I/O 模块确保与语言模型高效变互，
 包括输入提示管理和输出解析。检索模块补充了这一流程，为生成过程提供必要的外部知识，提高了模型的响应质量。
 紧随其后的链模块，通过定义一系列组件调用，将模型 I/O 模块和检索模块的功能事联起来，实现特定的业务逻辑。
-记忆模块为链提供了记忆功能，以维持应用的状态，并且在整个应用运行期问管理信息流。
+记忆模块为链提供了记忆功能，以维持应用的状态，并且在整个应用运行期间管理信息流。
 代理模块进一步增强了 LangChain 的灵活性，通过智能代理动态地决定行动的序列，这些代理利用了前述所有模块的能力。
 最后，回调模块以其全局和请求级别的自定义处理逻辑，为开发者构建应用提供了细粒度的控制和响应能力。
 正是这些能力的结合，Langehain 的真正潜力得以释放，使开发者能够构建出响应迅速、高度定制的 AI 应用。
@@ -367,18 +377,18 @@ LangChain 集成的模型主要分为两种：
 
 * LLM：文本生成型模型，接收一个字符串作为输入，并返回一个字符串作为输出，
   用于根据用户提供的提示词自动生成高质量文本的场景
-    - API：`LLMs`
+    - API：`langchain.llms`
 * ChatModel：对话型模型，接收一个消息列表作为输入，
   并返回一个条消息作为输出，用于一问一答模式与用户持续对话的场景
-    - API：`ChatModel`
+    - API：`langchain.chat_models`
 
 基本消息接口由 `BaseMessage` 定义，它有两个必需的属性：
 
 * 内容(content)：消息的内容，通常是一个字符串。
-  在 LangChain 中调用 LLM(`LLMs`) 或 ChatModel(`ChatModel`) 最简单的方法是使用 `invoke` 接口，
+  在 LangChain 中调用 LLM(`langchain.llms`) 或 ChatModel(`langchain.chat_models`) 最简单的方法是使用 `invoke` 接口，
   这是所有 LCEL 对象都默认实现的同步调用方法
-    - `LLMs.invoke`：输入一个字符串，返回一个字符串
-    - `ChatModel.invoke`：输入一个 `BaseMessage` 列表，返回一个 `BaseMessage`
+    - `langchain.llms.invoke`：输入一个字符串，返回一个字符串
+    - `langchain.chat_models.invoke`：输入一个 `BaseMessage` 列表，返回一个 `BaseMessage`
 * 角色(role)：消息的发送方。LangChain 提供了几个对象来轻松区分不同的角色：
     - `HumanMessage`：人类（用户）输入的 `BaseMessage`
     - `AIMessage`：AI 助手（大模型）输出的 `BaseMessage`
@@ -394,9 +404,9 @@ LangChain 集成的模型主要分为两种：
 
 ```python
 # 导入通用补全模型 OpenAI
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 # 导入聊天模型 ChatOpenAI
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 
 llm = OpenAI()
 chat_model = ChatOpenAI()
@@ -435,20 +445,28 @@ API：
 
 * `PromptTemplate` 就是用来解决这个问题的，它将所有逻辑封装起来，自动将用户输入转换为完整的格式化的提示词。
   使用提示模板替代原始字符串格式化的好处在于支持变量的 “部分” 处理，这意味着可以分步骤地格式化变量，
-  并且可以轻松地将不同地模板组合成一个完整地提示词，以实现更灵活地字符串处理。
+  并且可以轻松地将不同地模板组合成一个完整的提示词，以实现更灵活地字符串处理。
 * `PromotTemplate` 不仅能生成包含字符串内容的消息列表，而且能细化每条消息的具体信息，如角色和在列表中的位置，
   比如 `ChatPromptTemplate` 作为 `ChatMessageTemplate` 的一个集合，
   每个 `ChatMessageTemplate` 都定义了格式化聊天消息的规则，包括角色和内容的指定。
 
 #### 示例
 
+示例 1：
+
 ```python
 from langchain.prompts import PromptTemplate
 
 prompt = PromptTemplate.from_template("给生产{product}的公司取一个名字。")
-prompt.format(product = "杯子")
+res = prompt.format(product = "杯子")
+print(res)
 ```
 
+```
+给生产杯子的公司取一个名字。
+```
+
+示例 2：
 
 ```python
 from langchain.prompts.chat import ChatPromptTemplate
@@ -460,11 +478,12 @@ chat_prompt = ChatPromptTemplate.from_messages([
     ("system", template),
     ("human", human_template),
 ])
-chat_prompt.format_message(
+res = chat_prompt.format_message(
     input_language = "中文", 
     output_language = "英文", 
     text = "我爱编程"
 )
+print(res)
 ```
 
 ```
@@ -489,9 +508,9 @@ chat_prompt.format_message(
 编写一个将 **以逗号分隔的字符串** 转换为 **列表** 的解析器
 
 ```python
-from langchain.schema import BaseOutputParser
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.schema import HumanMessage
+from langchain.schema import BaseOutputParser
 
 llm = OpenAI()
 
@@ -518,6 +537,10 @@ if __name__ == "__main__":
     main()
 ```
 
+```
+["杯子之家", "瓷杯工坊", "品质杯子"]
+```
+
 ### 使用 LCEL 进行组合
 
 #### 简介
@@ -530,7 +553,20 @@ LCEL 介绍：
 LCEL 提供了一种声明式的方法，用于简化不同组件的组合过程。随着越来越多 LCEL 组件的推出，
 LCEL 的功能也在不断扩展。它巧妙地融合了专业编程和低代码编程两种方式的优势。
 
-* 在专业编程方面，LCEL 实现了一种标准化的流程。它允许创建 LangChain 称之为可运行的或者规模
+* 在专业编程方面，LCEL 实现了一种标准化的流程。它允许创建 LangChain 称之为可运行的或者是规模较小的应用，
+  这些应用可以结合起来，打造出更大型、功能更强大的应用。采用这种组件化的方法，不仅能够提高效率，还能使组件得到重复利用。
+* 在低代码方面，类似 Flowise 这样的工具有时可能会变得复杂且难以管理，而使用 LCEL 则方便简单，易于理解。
+  LCEL 的这些特定使得它成为构建和扩展 LangChain 应用的强大工具，无论是都对于专业开发者还是希望简化开发流程的用户。
+
+使用 LCEL 有以下好处：
+
+* LCEL 采取了专业编码和低代码结合的方式，开发者可以使用基本组件，并按照从左到右的顺序将它们串联起来。
+* LCEL 不只实现了提示链的功能，还包含了对应用进行管理的特性，如流式处理，批量调用链、日志记录等。
+* LCEL 的这种表达式语言作为一层抽象层，简化了 LangChain 应用的开发，并为功能及其顺序提供更直观的视觉呈现。
+  因为 LangChain 已经不仅仅是将一系列提示词简单串联起来，而是对大模型应用相关功能进行有序组织。
+* LCEL 底层实现了 “runnable” 协议，所有实现该协议的组件都可以描述为一个可被调用、批处理、流式处理、转化和组合的工作单元。
+
+
 
 #### 示例
 
