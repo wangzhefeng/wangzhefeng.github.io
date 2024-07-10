@@ -553,27 +553,65 @@ LCEL 介绍：
 LCEL 提供了一种声明式的方法，用于简化不同组件的组合过程。随着越来越多 LCEL 组件的推出，
 LCEL 的功能也在不断扩展。它巧妙地融合了专业编程和低代码编程两种方式的优势。
 
-* 在专业编程方面，LCEL 实现了一种标准化的流程。它允许创建 LangChain 称之为可运行的或者是规模较小的应用，
-  这些应用可以结合起来，打造出更大型、功能更强大的应用。采用这种组件化的方法，不仅能够提高效率，还能使组件得到重复利用。
-* 在低代码方面，类似 Flowise 这样的工具有时可能会变得复杂且难以管理，而使用 LCEL 则方便简单，易于理解。
-  LCEL 的这些特定使得它成为构建和扩展 LangChain 应用的强大工具，无论是都对于专业开发者还是希望简化开发流程的用户。
+* 在专业编程方面，LCEL 实现了一种标准化的流程。
+  它允许创建 LangChain 称之为可运行的或者是规模较小的应用，
+  这些应用可以结合起来，打造出更大型、功能更强大的应用。
+  采用这种组件化的方法，不仅能够提高效率，还能使组件得到重复利用。
+* 在低代码方面，类似 Flowise 这样的工具有时可能会变得复杂且难以管理，
+  而使用 LCEL 则方便简单，易于理解。
+  LCEL 的这些特性使得它成为构建和扩展 LangChain 应用的强大工具，
+  无论是都对于专业开发者还是希望简化开发流程的用户。
 
 使用 LCEL 有以下好处：
 
-* LCEL 采取了专业编码和低代码结合的方式，开发者可以使用基本组件，并按照从左到右的顺序将它们串联起来。
-* LCEL 不只实现了提示链的功能，还包含了对应用进行管理的特性，如流式处理，批量调用链、日志记录等。
-* LCEL 的这种表达式语言作为一层抽象层，简化了 LangChain 应用的开发，并为功能及其顺序提供更直观的视觉呈现。
-  因为 LangChain 已经不仅仅是将一系列提示词简单串联起来，而是对大模型应用相关功能进行有序组织。
-* LCEL 底层实现了 “runnable” 协议，所有实现该协议的组件都可以描述为一个可被调用、批处理、流式处理、转化和组合的工作单元。
+* LCEL 采取了专业编码和低代码结合的方式，开发者可以使用基本组件，
+  并按照从左到右的顺序将它们串联起来。
+* LCEL 不只实现了提示链的功能，还包含了对应用进行管理的特性，
+  如流式处理，批量调用链、日志记录等。
+* LCEL 的这种表达式语言作为一层抽象层，简化了 LangChain 应用的开发，
+  并为功能及其顺序提供更直观的视觉呈现。
+  因为 LangChain 已经不仅仅是将一系列提示词简单串联起来，
+  而是对大模型应用相关功能进行有序组织。
+* LCEL 底层实现了 “runnable” 协议，
+  所有实现该协议的组件都可以描述为一个可被调用、
+  批处理、流式处理、转化和组合的工作单元。
 
+为了简化用户创建自定义 LCEL 组件的过程，LangChain 引入了 `Runnable` 对象。
+这个对象可以将多个操作序列组合成一个组件，既可以通过编程方式直接调用，
+也可以作为 API 对外暴露，这已被大多数组件所采用。`Runnable` 对象的引入不仅简化了自定义组件的过程，
+也使得以标准方式调用这些组件称为可能。Runnable 对象生命的标准接口包括以下几个部分：
 
+* `stream`：以流式方式返回响应数据
+* `invoke`：对单个输入调用链
+* `batch`：对一组输入调用链
+
+此外，还包括对标准接口的异步调用方式定义：
+
+* `astream`：以流式方式异步返回响应数据
+* `ainvoke`：对单个输入异步调用链
+* `abatch`：对一组输入异步调用链
+* `astream_log`：在流式返回最终响应的同时，实时返回链执行过程中的每个步骤
+
+不同组件的输入和输出类型：
+
+| 组件         | 输入类型                             | 输出类型      |
+|--------------|-------------------------------------|--------------|
+| Prompt       | 字典                                 | PromptValue |
+| ChatModel    | 单个字符串、聊天消息列表或 PromptValue | ChatMessage |
+| LLM          | 单个字符串、聊天消息列表或 PromptValue | 字符串       |
+| OutputParser | LLM 或 ChatModel 的输出              | 取决于解析器  |
+| Retriever    | 单个字符串                            | 文档列表     |
+| Tool         | 单个字符串或字典，取决于具体工具        | 取决于工具   |
+
+所有继承自 `Runnable` 对象的组件都必须包括输入和输出模式说明，
+即 `input_schema` 和 `output_schema`，用于校验输入和输出数据。
 
 #### 示例
 
 ```python
 from typing import List
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import BaseOutputParser
 
@@ -587,7 +625,8 @@ class CommaSeparatedListOutputParser(BaseOutputParser[List[str]]):
         """
         return text.strip().split(",")
 
-template = """你是一个能生成以逗号分隔的列表的助手，用户会传入一个类别，你应该生成该类别下的 5 个对象，并以逗号分隔的形式返回。
+template = """你是一个能生成以逗号分隔的列表的助手，用户会传入一个类别，
+你应该生成该类别下的 5 个对象，并以逗号分隔的形式返回。
 只返回以逗号分隔的内容，不要包含其他内容。"""
 human_template = "{text}"
 
@@ -602,15 +641,104 @@ if __name__ == "__main__":
     print(chain.invoke({"text": "动物"}))
 ```
 
+```
+["狗, 猫, 鸟, 鱼, 兔子"]
+```
+
 ### 使用 LangSmith 进行观测
 
+在 `env` 文件中设置好下面的环境变量，接着执行一次之前的应用示例，
+会发现所有组件的调用过程都自动记录到 LangSmith 中。
+可运行序列 `RunnableSequence` 由 `ChatPromptTemplate`、
+`ChatOpenAI` 和 `CommaSeparatedListOutputParser` 三种基本组件组成，
+每个组件的输入、输出、延迟时间、token 消耗情况、执行顺序等会被记录下来。
 
-
-
+有了这些指标，对应用运行时的状态进行观测就方便了很多，也可以将这些监控记录用于评估 AI 应用的稳定性。
 
 ### 使用 LangServe 提供服务
 
+构建了一个 LangChain 程序，接下来需要对其进行部署，通过接口的方式供下游应用调用，
+而 LangServe 的作用就在于此：帮助开发者将 LCEL 链作为 RESTful API 进行部署。
+为了创建应用服务器，在 `serve.py` 文件中定义三样东西：
 
+* 链的定义
+* FastAPI 应用声明
+* 用于服务链的路由定义，可以使用 `langserve.add_routes` 完成
+
+```python
+from typing import List
+
+from langchain.prompts import ChatPromptTemplate
+from langchain_community.chat_models import ChatOpenAI
+from langchain.schema import BaseOutputParser
+from langserve import add_routes
+from fastapi import FastAPI
+
+# global variable
+LOGGING_LABEL = __file__.split('/')[-1][:-3]
+
+
+# ------------------------------
+# 链定义
+# ------------------------------
+# output parser
+class CommaSeparatedListOutputParser(BaseOutputParser[List[str]]):
+    """
+    将 LLM 中逗号分隔格式的输出内容解析为列表
+    """
+
+    def parse(self, text: str) -> List[str]:
+        """
+        解析 LLM 调用的输出
+        """
+        return text.strip().split(", ")
+    
+# prompt template
+template = """你是一个能生成都好分隔的列表的助手，用户会传入一个类别，你应该生成改类别下的 5 个对象，
+并以都好分隔的形式返回。
+只返回一都好分隔的内容，不要包含其他内容。"""
+human_template = "{text}"
+chat_prompt = ChatPromptTemplate.from_messages([
+    ("system", template),
+    ("human", human_template),
+])
+
+# chain
+first_chain = chat_prompt | ChatOpenAI() | CommaSeparatedListOutputParser()
+
+# ------------------------------
+# 应用定义
+# ------------------------------
+app = FastAPI(
+    title = "第一个 LangChain 应用",
+    version = "0.0.1", 
+    description = "LangChain 应用接口",
+)
+
+# ------------------------------
+# 添加链路由
+# ------------------------------
+add_routes(app, first_chain, path = "/first_app")
+
+
+
+
+# 测试代码 main 函数
+def main():
+    import uvicorn
+    uvicorn.run(app, host = "localhost", port = 8000)
+
+if __name__ == "__main__":
+    main()
+```
+
+接着执行这个文件：
+
+```bash
+$ python serve.py
+```
+
+链会在 `localhost:8000` 上提供服务，可以在终端执行下面的命令：
 
 
 
@@ -628,9 +756,6 @@ if __name__ == "__main__":
 * 层层防护
     - 实施多重安全措施，不要仅依赖单一防护手段。结合使用不同的安全策略，
       如只读权限和沙箱技术，可以更有效地保护数据安全。
-
-
-
 
 # 模型输入与输出
 
