@@ -62,10 +62,12 @@ img {
             - [简介](#简介-3)
             - [示例](#示例-2)
         - [使用 LCEL 进行组合](#使用-lcel-进行组合)
-            - [简介](#简介-4)
+            - [LCEL](#lcel)
             - [示例](#示例-3)
         - [使用 LangSmith 进行观测](#使用-langsmith-进行观测)
         - [使用 LangServe 提供服务](#使用-langserve-提供服务)
+            - [简介](#简介-4)
+            - [示例](#示例-4)
     - [最佳安全实践](#最佳安全实践)
 - [模型输入与输出](#模型输入与输出)
     - [大模型输入与输出](#大模型输入与输出)
@@ -73,15 +75,19 @@ img {
         - [基础提示模板](#基础提示模板)
         - [自定义提示模板](#自定义提示模板)
         - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
-    - [大模型接口](#大模型接口)
+    - [输出解析器](#输出解析器-1)
+- [大模型接口](#大模型接口)
+    - [聊天模型](#聊天模型)
+    - [聊天模型提示词的构建](#聊天模型提示词的构建)
+    - [定制大模型接口](#定制大模型接口)
+    - [扩展模型接口](#扩展模型接口)
 - [链的构建](#链的构建)
 - [RAG](#rag)
 - [智能代理设计](#智能代理设计)
 - [记忆组件](#记忆组件)
 - [回调机制](#回调机制)
 - [构建多模态机器人](#构建多模态机器人)
-- [资源](#资源)
-- [参考](#参考)
+- [参考和资源](#参考和资源)
 </p></details><p></p>
 
 # LangChain 简介
@@ -469,7 +475,7 @@ print(res)
 示例 2：
 
 ```python
-from langchain.prompts.chat import ChatPromptTemplate
+from langchain.prompts import ChatPromptTemplate
 
 template = "你是一个能将{input_language}翻译成{output_language}的助手。"
 human_template = "{text}"
@@ -543,12 +549,10 @@ if __name__ == "__main__":
 
 ### 使用 LCEL 进行组合
 
-#### 简介
-
 将上述环节组合成一个 **应用**，这个应用会将 **输入变量** 传递给 **提示模板** 以创建 **提示词**，
 将 **提示词** 传递给 **大模型**，然后通过一个**输出解析器**（可选步骤）处理输出。
 
-LCEL 介绍：
+#### LCEL
 
 LCEL 提供了一种声明式的方法，用于简化不同组件的组合过程。随着越来越多 LCEL 组件的推出，
 LCEL 的功能也在不断扩展。它巧妙地融合了专业编程和低代码编程两种方式的优势。
@@ -657,6 +661,8 @@ if __name__ == "__main__":
 
 ### 使用 LangServe 提供服务
 
+#### 简介
+
 构建了一个 LangChain 程序，接下来需要对其进行部署，通过接口的方式供下游应用调用，
 而 LangServe 的作用就在于此：帮助开发者将 LCEL 链作为 RESTful API 进行部署。
 为了创建应用服务器，在 `serve.py` 文件中定义三样东西：
@@ -664,6 +670,8 @@ if __name__ == "__main__":
 * 链的定义
 * FastAPI 应用声明
 * 用于服务链的路由定义，可以使用 `langserve.add_routes` 完成
+
+#### 示例
 
 ```python
 from typing import List
@@ -740,7 +748,46 @@ $ python serve.py
 
 链会在 `localhost:8000` 上提供服务，可以在终端执行下面的命令：
 
+```bash
+$ curl -X POST http://localhost:8000/first_app/stream_log \
+$ -H "Content-Type: application/json" \
+$ -d '{
+$     "input": {
+$          "text": "动物"
+$     },
+$     "config": {}
+$ }'
+```
 
+输出结果如下：
+
+```
+event: data
+data: {"ops":[{"op":"add","path":"/stream_output/-","value":["猫","狗","鸟","鱼","蛇"]}]}
+
+event: data
+data: {"ops":[{"op": "replace","path":"/final_output","value":{"output":["猫","狗","鸟","鱼","蛇"]}}]}
+
+event: end
+```
+
+由于每个 LangServe 服务都内置有一个简单的 UI，用于配置和调用应用，
+因此可以直接在浏览器中打开地址 [http://localhost:8000/first_app/playground](http://localhost:8000/first_app/playground) 体验，效果是一样的。
+
+上面两种方式可以用于自己测试接口，如果其他人想调用，LangServe 也封装好了，
+可以通过 `langserve.RemoteRunnable` 轻松使用编程方式与服务进行交互：
+
+```python
+from langserve import RemoteRunnable
+
+if __name__ == "__main__":
+    remote_chain = RemoteRunnable("http://localhost:8000/first_app/")
+    print(remote_chain.invoke({"text": "动物"}))
+```
+
+```
+["狗, 猫, 鸟, 鱼, 兔子"]
+```
 
 ## 最佳安全实践
 
@@ -762,13 +809,13 @@ $ python serve.py
 ## 大模型输入与输出
 
 在传统的软件开发实践中，API 的调用者和提供者通常遵循详细的文档规定，
-已确保输出的一致性和可预测性。然而，大模型的运作方式有所不同。
+以确保输出的一致性和可预测性。然而，大模型的运作方式有所不同。
 它们更像是带有不确定性的“黑盒”，其输出不仅难以精确控制，而且很大程度上依赖输入的质量。
 
-输入的质量直接影响模型的输出效果。模糊、错误或不相关的输入可能导致输出偏离预期；
+**输入**的质量直接影响模型的**输出**效果。模糊、错误或不相关的输入可能导致输出偏离预期；
 相反，清晰、准确的输入有助于模型更好地理解请求，提供更相关的输出。
 
-CRISPE 框架由开源社区的 Matt Nigh 提出，它可以帮助我们为模型提供详细的背景，
+**CRISPE 框架** 由开源社区的 Matt Nigh 提出，它可以帮助我们为模型提供详细的背景、
 任务目标和输出格式要求，这样的输入使得模型输出更加符合预期，内容更加清晰和详细。
 
 | 概念 | 含义 | 示例 |  |  |
@@ -805,13 +852,103 @@ formatted_prompt = template.format(text = "我爱编程", style = "诙谐有趣"
 print(formatted_prompt)
 ```
 
+在这个示例中，`{text}` 和 `{style}` 时模板中的变量，它们可以被动态替换。
+这种方式极大地简化了提示词的构建过程，特别是在处理复杂或重复的提示词时。
+
+`PromptTemplate` 实际上时 `BasePromptTemplate` 的一个扩展，它特别实现了一个自己的 `format` 方法，
+这个方法内部使用了 Python 的 f-string 语法。
+
+LangChain 通过其设计，显著提升了提示词创建的灵活性和效率，这对于需要快速迭代和测试多种提示词的场景尤为重要。
+
 ### 自定义提示模板
+
+目标是创建一个模板，它可以生成关于任务信息的 JSON 格式输出。
+首先，从 `langchain.prompts` 引入 `StringPromptTemplate` 类，
+并定义一个继承自此类的自定义模板类 `PersonInfoPromptTemplate`。
+
+```python
+import json
+
+from langchain.prompts import StringPromptTemplate
+from langchain.pydantic_v1 import BaseModel, validator
+
+
+delimiter = "####"
+PROMPT = f"""将每个用户的信息用{delimiter}字符分割，并按照 JSON 格式提取姓名、职业和爱好信息。
+示例如下：\n"""
+
+
+class PersonInfoPromptTemplate(StringPromptTemplate, BaseModel):
+    """
+    自定义提示模板，用于生成关于人物信息的 JSON 格式输出
+    """
+
+    @validator("input_variables")
+    def validate_input_variables(cls, v):
+        """
+        验证输入变量
+        """
+        if "name" not in v:
+            raise ValueError("name 字段必须包含在 input_variable 中。")
+        if "occupation" not in v:
+            raise ValueError("occupation 字段必须包含在 input_variable 中。")
+        if "fun_fact" not in v:
+            raise ValueError("fun_fact 字段必须包含在 input_variable 中。")
+        
+        return v
+    
+    def format(self, **kwargs) -> str:
+        """
+        格式化输入，生成 JSON 格式输出
+        """
+        person_info = {
+            "name": kwargs.get("name"),
+            "occupation": kwargs.get("occupation"),
+            "fun_fact": kwargs.get("fun_fact"),
+        }
+
+        return PROMPT + json.dumps(person_info, ensure_ascii = False)
+
+    def _prompt_type(self):
+        """
+        指定模板类型
+        """
+        return "person-info"
+    
+
+# 使用模板
+person_info_template = PersonInfoPromptTemplate(input_variables = ["name", "occupation", "fun_fact"])
+prompt_output = person_info_template.format(
+    name = "张三 ",
+    occupation = "软件工程师 ",
+    fun_fact = "喜欢攀岩"
+)
+print(prompt_output)
+```
+
+```
+将每个用户的信息用####字符分割，并按照 JSON 格式提取姓名、职业和爱好信息。示例如下：{"name": "张三 ", "occupation": "软件工程师 ", "fun_fact": "喜欢攀岩"}
+```
 
 ### 使用 FewShotPromptTemplate
 
-## 大模型接口
+LangChain 还提供了 `FewShotPromptTemplate` 组件，用于创建包含少量示例的提示词，
+这对于大模型执行新任务或不熟悉的任务特别有帮助。它通过在提示词中提供一些示例来“教”模型如何执行特定任务。
 
 
+## 输出解析器
+
+# 大模型接口
+
+## 聊天模型
+
+
+## 聊天模型提示词的构建
+
+
+## 定制大模型接口
+
+## 扩展模型接口
 
 
 # 链的构建
@@ -830,13 +967,8 @@ print(formatted_prompt)
 # 构建多模态机器人
 
 
-# 资源
 
-
-
-
-
-# 参考
+# 参考和资源
 
 * 《LangChain 编程-从入门到实践》
 * [LangChain 官方文档](https://python.langchain.com/v0.1/docs/get_started/introduction)
