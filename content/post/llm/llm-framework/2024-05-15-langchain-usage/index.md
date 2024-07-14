@@ -75,15 +75,48 @@ img {
         - [基础提示模板](#基础提示模板)
         - [自定义提示模板](#自定义提示模板)
         - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
+        - [示例选择器](#示例选择器)
     - [输出解析器](#输出解析器-1)
+    - [示例](#示例-5)
 - [大模型接口](#大模型接口)
     - [聊天模型](#聊天模型)
     - [聊天模型提示词的构建](#聊天模型提示词的构建)
+        - [示例](#示例-6)
     - [定制大模型接口](#定制大模型接口)
+        - [示例](#示例-7)
     - [扩展模型接口](#扩展模型接口)
 - [链的构建](#链的构建)
+    - [链简介](#链简介)
+    - [Runnable 对象接口](#runnable-对象接口)
+        - [schema](#schema)
+        - [invoke](#invoke)
+        - [stream](#stream)
+        - [batch](#batch)
+        - [astream\_log](#astream_log)
+    - [LCEL 高级特性](#lcel-高级特性)
+        - [ConfigurableField](#configurablefield)
+        - [RunnableLambda](#runnablelambda)
+        - [RunnableBranch](#runnablebranch)
+        - [RunnablePassthrough](#runnablepassthrough)
+        - [RunnableParallel](#runnableparallel)
+        - [容错机制](#容错机制)
+    - [Chain 接口](#chain-接口)
+        - [Chain 接口调用](#chain-接口调用)
+        - [自定义 Chain 实现](#自定义-chain-实现)
+        - [工具 Chain](#工具-chain)
+    - [专用 Chain](#专用-chain)
+        - [对话场景](#对话场景)
+        - [基于文档问答场景](#基于文档问答场景)
+        - [数据库问答场景](#数据库问答场景)
+        - [API 查询场景](#api-查询场景)
+        - [文本总结场景](#文本总结场景)
 - [RAG](#rag)
+    - [RAG 简介](#rag-简介)
+    - [LangChain 中的 RAG 组件](#langchain-中的-rag-组件)
+    - [RAG 实践](#rag-实践)
 - [智能代理设计](#智能代理设计)
+    - [LangChain 中的代理](#langchain-中的代理)
+    - [](#)
 - [记忆组件](#记忆组件)
 - [回调机制](#回调机制)
 - [构建多模态机器人](#构建多模态机器人)
@@ -176,7 +209,7 @@ LangChain 使用以下 6 种核心模块提供标准化、可扩展的接口和�
 记忆模块为链提供了记忆功能，以维持应用的状态，并且在整个应用运行期间管理信息流。
 代理模块进一步增强了 LangChain 的灵活性，通过智能代理动态地决定行动的序列，这些代理利用了前述所有模块的能力。
 最后，回调模块以其全局和请求级别的自定义处理逻辑，为开发者构建应用提供了细粒度的控制和响应能力。
-正是这些能力的结合，Langehain 的真正潜力得以释放，使开发者能够构建出响应迅速、高度定制的 AI 应用。
+正是这些能力的结合，LangChain 的真正潜力得以释放，使开发者能够构建出响应迅速、高度定制的 AI 应用。
 
 ### 模型 I/O 模块
 
@@ -935,40 +968,298 @@ print(prompt_output)
 LangChain 还提供了 `FewShotPromptTemplate` 组件，用于创建包含少量示例的提示词，
 这对于大模型执行新任务或不熟悉的任务特别有帮助。它通过在提示词中提供一些示例来“教”模型如何执行特定任务。
 
+```python
+from langchain.prompts import PromptTemplate
+from langchain.prompts import FewShotPromptTemplate
+
+# prompt template
+example_prompt = PromptTemplate(
+    input_variables = ["input", "output"], 
+    template = "问题：{input}\n{output}",
+)
+
+# 创建 FewShotPromptTemplate 实例，示例中包含了一些教模型如何回答问题的样本
+template = FewShowPromptTemplate(
+    examples = [
+        {"input": "1+1等于多少？", "output": "2"},
+        {"input": "3+1等于多少？", "output": "5"},
+    ],
+    example_prompt = example_prompt,
+    input_variables = ["input"],
+    suffix = "问题：{input}",
+)
+prompt = template.format(input = "5-3等于多少？")
+```
+
+利用已有的少量示例来指导大模型处理类似的任务，这在模型未经特定训练或对某些任务不熟悉的情况下非常有用。
+这种方法提高了模型处理新任务的能力，尤其是在数据有限的情况下。
+
+### 示例选择器
+
+上面提到的小样本学习需要提供少量示例，而示例选择器就是用来决定使用哪些示例的。
+自定义示例选择器允许用户基于自定义逻辑从一组给定的示例中选择，这种选择器需要实现两个主要方法。
+
+* `add_example` 方法：接收一个示例并将其添加到 `ExampleSelector` 中
+* `select_examples` 方法：接收输入变量（通常是用户输入）并返回用于小样本学习提示的一系列示例
+
+LangChain 内置了 4 种选择器，它们都继承自 `BaseExampleSelector`：
+
+* `LengthBasedExampleSelector`
+* `MaxMarginalRelevanceExampleSelector`
+* `SemanticSimilarityExampleSelector`
+* `NGramOverlapExampleSelector`
+
 
 ## 输出解析器
 
+LangChain 中的输出解析器负责将语言模型生成的文本转换为更为结构化和实用的格式。
+比如，你可能不只需要一段文本，而是需要将其转换为 XML 格式、日期时间对象或者列表等具体的数据结构。
 
+输出解析器的种类繁多，包括单不限于以下几类：
+
+* `XMLOutputParser`：将文本输出转换为 XML 格式
+* `DatetimeOutputParser`：将文本输出转换为日期时间对象
+* `CommaSeparatedListOutputParser`：将文本输出转换为列表
+
+还可以根据需求自定义输出解析器，将文本转换为 JSON 格式、Python 数据类或数据库行等。
+自定义输出解析器通常需要实现以下方法：
+
+* `get_format_instructions`：返回一个指令，用于指示语言模型如何格式化输出内容
+* `parse`：解析语言模型的响应，转换成指定结构
+
+可选方法：
+
+* `parse_with_prompt`：在处理语言模型的输出时，参考最初用于生成该输出的提示词（问题或指令），
+  可以更有效地理解和调整输出地结果，这在尝试改进或修正模型输出格式时非常有用，
+  比如明确要求模型输出 JSON 格式的情况。
+
+## 示例
+
+下面实现一个自定义输出解析器，从自然语言描述中提取花费记录信息用于记账：
+
+```python
+
+```
 
 # 大模型接口
 
 ## 聊天模型
 
+LangChain 提供了一系列基础组件，用于与大模型进行交互。
+在这些组件中，特别值得一提的是 `BaseChatModel`，它专为实现 **对话交互** 而设计。
+这个组件能够理解用户的查询或指令，并生成相应的回复。
+与通用语言模型组件相比，`BaseChatModel` 采用了不同的接口设计。
+通用语言模型组件通常采用的是 “输入文本，输出文本” 的模式，
+而 `BaseChatModel` 则以 **“聊天消息”** 的形式进行输入和输出，这使得它更适合模拟真实的对话场景。
+
+LangChain 支持多种聊天模型，包括但不限于：
+
+* ChatTongyi（阿里通义千问模型）
+* QianfanChatEndpoint（百度千帆平台上的模型）
+* AzureChatOpenAI（微软云上的 OpenAI 模型）
+* ChatGooglePalm（谷歌 PaLM 模型）
+* ChatOpenAI（OpenAI 模型）
+
+![img](images/chatmodel.png)
+
+聊天模型还支持 **批量模式** 和 **流模式**。批量模式允许同时处理多组消息，适用于需要一次性处理大量对话的场景；
+流模式更适合实时处理消息，提供连续的对话交互体验。这些功能使得聊天模型在对话交互方面更加灵活和强大。
 
 ## 聊天模型提示词的构建
 
+在 LangChain 中，聊天模型的提示词构建基于多种类型的信息，而不是单纯的文本。这些消息类型包括下面这些：
+
+* `AIMessage`：大模型生成的消息
+* `HumanMessage`：用户输入的消息
+* `SystemMessage`：对话系统预设的消息
+* `ChatMessage`：可以自定义类型的消息
+
+为了创建这些类型的提示词，LangChain 提供了 `MessagePromptTemplate`，
+它可以结合多个 `BaseStringMessagePromptTemplate` 来构建一个完整的 `ChatPromptTemplate`，
+
+![img](images/message_template.png)
+
+### 示例
+
+假设我们要构建一个 **设定翻译助手** 的提示词，可以按照以下步骤操作：
+
+```python
+from langchain.prompts import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+
+# 定义对话系统预设消息模版
+template = "你是一个翻译助手，可以将{input_language}翻译为{output_language}。"
+system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+
+# 定义用户消息模版
+human_template = "{talk}"
+human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+# 构建聊天提示模版
+chat_prompt = ChatPromptTemplate.from_messages([
+    system_message_prompt,
+    human_message_prompt,
+])
+
+# 生成聊天消息
+messages = chat_prompt.format_prompt(
+    input_language = "中文",
+    output_language = "英文",
+    talk = "我爱编程",
+)
+
+# 打印生成的聊天消息
+for message in messages:
+    print(message)
+```
+
+```
+('messages', [SystemMessage(content='你是一个翻译助手，可以将中文翻译为英文。'), HumanMessage(content='我爱编程')])
+```
+
+这段代码：
+
+* 首先定义了**对话系统预设消息**和**用户消息**的模板，并通过 `ChatPromptTemplate` 将它们组合起来。
+* 然后，通过 `format_prompt` 方法生成了两个消息：**一个对话系统预设消息**和**一个用户消息**
+
+这样我们就成功地构建了一个适用于聊天模型的提示词。通过这种方式，
+LangChain 使得聊天模型提示词的创建更加灵活和高效，特别适合需要模拟对话交互的场景。
 
 ## 定制大模型接口
 
+LangChain 的核心组成部分之一是 LLM 组件。当前市场上有多家大模型提供商，如 OpenAI、ChatGLM 和 Hugging Face 等，
+为了简化与这些不同提供商的 LLM 进行交互的过程，LangChain 特别设计了 `BaseLLM` 类。`BaseLLM` 类提供了一个标准化的接口，
+使得开发者能够通过统一的方式与各种 LLM 进行通信。无论它来自哪个提供商。这种设计极大地提高了灵活性和便捷性，
+允许开发者轻松集成和切换不同的 LLM，而无须担心底层实现的差异。
+
+![img](images/LLM_API.png)
+
+通过统一的方式与各种 LLM 进行通信，无论它来自哪个提供商。这种设计极大地提高了灵活性和便捷性，
+允许开发者轻松集成和切换不同的 LLM，而无须担心底层实现的差异。
+
+在实际的应用中，我们可能会使用私有部署的大模型，例如公司内部开发的模型。
+为此，需要实现一个自定义的 LLM 组件，以便这些模型与 LangChain 的其他组件协同工作。
+自定义 LLM 封装器需要实现以下行为和特性：
+
+* `_call()` 方法，是与模型交互的核心接口，接收一个字符串和可选的停用词列表，返回一个字符串
+* `_identifying_params` 属性，提供关于该类的信息，有助于打印和调试，返回一个包含关键信息的字典
+
+### 示例
+
+下面以 GPT4All 模型为例，展示如何实现一个自定义的 LLM 组件。
+GPT4All 是一个生态系统，支持在消费级 CPU 和 GPU 上训练和部署大模型。
+
+```python
+
+```
+
 ## 扩展模型接口
 
+LangChain 为 LLM 组件提供了一系列有用的扩展功能，以增强其交互能力和应用性能。
+
+* 缓存功能：在处理频繁重复的请求时，缓存功能能够显著节省 API 调用成本，并提高应用程序的响应速度。
+  例如，如果你的应用需要多次询问相同的问题，缓存可以避免重复调用大模型提供商的 API，从而降低成本并加速处理速度。
+* 流式支持：LangChain 为所有 LLM 组件实现了 `Runnable` 对象接口，该接口提供了 `stream` 和 `astream` 方法，
+  为大模型提供了基本的流式处理能力。这允许你获取一个迭代器，它将返回大模型的最终响应。
+  虽然这种方法不支持逐 token 的流式传输，但它确保了代码的通用性，无论使用哪个大模型。
+  这对于需要异步处理或连续接收数据的应用场景尤为重要。
+
+以上功能强化了 LangChain 与不同 LLM 的交互能力，无论是在成本控制、
+性能优化还是满足特定应用需求方面，都提供了强有力的支持。
 
 # 链的构建
 
+## 链简介
+
+
+## Runnable 对象接口
+
+### schema
+
+
+### invoke
+
+
+### stream
+
+
+### batch
+
+
+### astream_log
+
+
+## LCEL 高级特性
+
+### ConfigurableField
+
+### RunnableLambda
+
+
+### RunnableBranch
+
+
+### RunnablePassthrough
+
+
+### RunnableParallel
+
+
+### 容错机制
+
+## Chain 接口
+
+
+### Chain 接口调用
+
+
+### 自定义 Chain 实现
+
+
+### 工具 Chain
+
+
+## 专用 Chain
+
+### 对话场景
+
+### 基于文档问答场景
+
+
+### 数据库问答场景
+
+
+### API 查询场景
+
+### 文本总结场景
+
+
 # RAG
+
+## RAG 简介
+
+## LangChain 中的 RAG 组件
+
+
+## RAG 实践
+
 
 
 # 智能代理设计
 
-# 记忆组件
+## LangChain 中的代理
 
+
+## 
+
+# 记忆组件
 
 # 回调机制
 
-
 # 构建多模态机器人
-
-
 
 # 参考和资源
 
