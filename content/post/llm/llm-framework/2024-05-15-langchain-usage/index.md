@@ -77,7 +77,7 @@ img {
         - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
         - [示例选择器](#示例选择器)
     - [输出解析器](#输出解析器-1)
-    - [示例](#示例-5)
+        - [示例](#示例-5)
 - [大模型接口](#大模型接口)
     - [聊天模型](#聊天模型)
     - [聊天模型提示词的构建](#聊天模型提示词的构建)
@@ -116,7 +116,7 @@ img {
     - [RAG 实践](#rag-实践)
 - [智能代理设计](#智能代理设计)
     - [LangChain 中的代理](#langchain-中的代理)
-    - [](#)
+    - [设计并实现一个多模态代理](#设计并实现一个多模态代理)
 - [记忆组件](#记忆组件)
 - [回调机制](#回调机制)
 - [构建多模态机器人](#构建多模态机器人)
@@ -1021,6 +1021,8 @@ LangChain 中的输出解析器负责将语言模型生成的文本转换为更�
 * `DatetimeOutputParser`：将文本输出转换为日期时间对象
 * `CommaSeparatedListOutputParser`：将文本输出转换为列表
 
+![img](images/output_parser.png)
+
 还可以根据需求自定义输出解析器，将文本转换为 JSON 格式、Python 数据类或数据库行等。
 自定义输出解析器通常需要实现以下方法：
 
@@ -1033,12 +1035,118 @@ LangChain 中的输出解析器负责将语言模型生成的文本转换为更�
   可以更有效地理解和调整输出地结果，这在尝试改进或修正模型输出格式时非常有用，
   比如明确要求模型输出 JSON 格式的情况。
 
-## 示例
+### 示例
 
 下面实现一个自定义输出解析器，从自然语言描述中提取花费记录信息用于记账：
 
 ```python
+import re
+import json
+from typing import Type
 
+from langchain.schema import BaseOutputParser
+from langchain.pydantic_v1 import BaseModel, ValidationError, Field
+
+
+class CustomOutputParser(BaseOutputParser[BaseModel]):
+    
+    pydantic_object: Type[T]
+
+    def parse(self, text: str) -> BaseModel:
+        """
+        解析文本到 Pydantic 模型
+
+        Args:
+            text (str): 要解析的文本
+
+        Returns:
+            BaseModel: Pydantic 模型的一个实例
+        """
+        try:
+            # 贪婪搜索第一个 JSON 候选
+            match = re.search(r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL)
+            json_str = match.group() if match else ""
+            json_object = json.loads(json_str, strict = False)
+            return self.pydantic_object.parse_obj(json_object)
+        except (json.JSONDecodeError, ValidationError) as e:
+            name = self.pydantic_object.__name__
+    
+    def get_format_instructions(self) -> str:
+        """
+        获取格式说明
+
+        Returns:
+            格式说明的字符串
+        """
+        schema = self.pydantic_object.schema()
+        # 移除不必要的字段
+        reduced_schema = schema
+        if "title" in reduced_schema:
+            del reduced_schema["title"]
+        if "type" in reduced_schema:
+            del reduced_schema["type"]
+        # 确保 json 在上下文中格式正确（使用双引号）
+        schema_str = json.dumps(reduced_schema)
+
+        return CUSTOM_FORMAT_INSTRUCTIONS.format(schema = schema_str)
+
+    def parse_with_prompt(self):
+        """
+        在处理语言模型的输出时，参考最初用于生成该输出的提示词（问题或指令），
+        可以更有效地理解和调整输出地结果
+        """
+        pass
+
+    @property
+    def _type(self) -> str:
+        """
+        获取解析器类型
+        Returns:
+            str: 解析器的类型字符串
+        """
+        return "custom output parser"
+
+
+class ExpenseRecord(BaseModel):
+    
+    amount: float = Field(description = "花费金额")
+    category: str = Field(description = "花费类别")
+    date: str = Field(description = "花费日期")
+    description: str = Field(description = "花费描述")
+
+    # 创建 Pydantic 输出解析器实例
+    parser = CustomOutputParser(pydantic_object = ExpenseRecord)
+    # 定义获取花费记录的提示模板
+    expense_template = """
+    请将这些花费记录在我的账单中。
+    我的花费记录是：{query}
+    格式说明：
+    {format_instructions}
+    """
+    # 使用提示模板创建实例
+    prompt = PromptTemplate(
+        template = expense_template,
+        input_variables = ["query"],
+        partial_variables = {
+            "format_instructions": parser.get_format_instructions()
+        },
+    )
+    # 格式化提示词
+    _input = prompt.format_prompt(query = "昨天白天我去超市花了 45 元买日用品，晚上我又花了 20 元打车。")
+    # 创建 OpenAI 模型实例
+    model = OpenAI(model_name = "text_davinci-003", temperature = 0)
+    # 使用模型处理格式化后的提示词
+    output = model(_input.to_string())
+    # 解析输出结果
+    expense_record = parser.parse(output)
+    # 遍历并打印花费记录的各个参数
+    for parameter in expense_record.__field__:
+        print(f"{parameter}: {expense_record.__dict__[parameter]},
+                             {type(expense_record.__dict__[parameter])}")
+```
+
+```
+TODO
 ```
 
 # 大模型接口
@@ -1137,9 +1245,6 @@ LangChain 的核心组成部分之一是 LLM 组件。当前市场上有多家�
 
 ![img](images/LLM_API.png)
 
-通过统一的方式与各种 LLM 进行通信，无论它来自哪个提供商。这种设计极大地提高了灵活性和便捷性，
-允许开发者轻松集成和切换不同的 LLM，而无须担心底层实现的差异。
-
 在实际的应用中，我们可能会使用私有部署的大模型，例如公司内部开发的模型。
 为此，需要实现一个自定义的 LLM 组件，以便这些模型与 LangChain 的其他组件协同工作。
 自定义 LLM 封装器需要实现以下行为和特性：
@@ -1149,11 +1254,125 @@ LangChain 的核心组成部分之一是 LLM 组件。当前市场上有多家�
 
 ### 示例
 
-下面以 GPT4All 模型为例，展示如何实现一个自定义的 LLM 组件。
-GPT4All 是一个生态系统，支持在消费级 CPU 和 GPU 上训练和部署大模型。
+下面以 `GPT4All` 模型为例，展示如何实现一个自定义的 LLM 组件。
+`GPT4All` 是一个生态系统，支持在消费级 CPU 和 GPU 上训练和部署大模型。
 
 ```python
+import os
+import sys
+import io
+import requests
+from tqdm import tqdm
+from pydantic import Field
+from typing import List, Mapping, Optional, Any
 
+from langchain.llms.base import LLM
+from gpt4all import GPT4All
+
+
+class CustomLLM(LLM):
+    """
+    一个自定义的 LLM 类，用于集成 GPT4All 模型
+
+    参数：
+        model_folder_path: (str) 存放模型的文件夹路径
+        model_name: (str) 要使用的模型名称(<模型名称>.bin)
+        allow_download: (bool) 是否允许下载模型
+
+        backend: (str) 模型的后端(支持的后端: llama/gptj)
+        n_batch: (int) 
+        n_threads: (int) 要使用的线程数
+        n_predict: (int) 要生成的最大 token 数
+        temp: (float) 用于采样的温度
+        top_p: (float) 用于采样的 top_p 值
+        top_k: (int) 用于采样的 top_k 值
+    """
+    # 以下是类属性的定义
+    model_folder_path: str = Field(None, alias = "model_folder_path")
+    model_name: str = Field(None, alias = "model_name")
+    allow_download: bool = Field(None, alias = "allow_download")
+
+    # 所有可选参数
+    backend: Optional[str] = "llama" 
+    n_batch: Optional[int] = 8
+    n_threads: Optional[int] = 4
+    n_predict: Optional[int] = 256
+    temp: Optional[float] = 0.7
+    top_p: Optional[float] = 0.1
+    top_k: Optional[int] = 40
+
+    # 初始化模型实例
+    gpt4_model_instance: Any = None
+
+    def __init__(self, model_folder_path, model_name, allow_download, **kwargs):
+        super(CustomLLM, self).__init__()
+        # 类构造函数的实现
+        self.model_folder_path: str = model_folder_path
+        self.model_name: str = model_name
+        self.allow_download: bool = allow_download
+        # 触发自动下载
+        self.auto_download()
+        # 创建 GPT4All 模型实例
+        self.gpt4_model_instance = GPT4All(
+            model_name = self.model_name,
+            model_path = self.model_folder_path,
+        )
+    
+    def auto_download(self) -> None:
+        """
+        此方法将会下载模型到指定路径
+        """
+        ...
+
+    @property
+    def _identifying_params(self) -> Mapping[str, Any]:
+        """
+        返回一个字典类型，包含 LLM 的唯一标识
+        """
+        return {
+            "model_name": self.model_name,
+            "model_path": self.model_folder_path,
+            **self._get_model_default_parameters
+        }
+    
+    @property
+    def _llm_type(self) -> str:
+        """
+        它告诉我们正在使用什么类型的 LLM
+        例如：这里将使用 GPT4All 模型
+        """
+        return "gpt4all"
+
+    def _call(self, prompt: str, stop: Optional[List[str]] = None, **kwargs) -> str:
+        """
+        这是主要的方法，将在我们使用 LLM 时调用
+        重写基类方法，根据用户输入的 prompt 来响应用户，返回字符串。
+
+        Args:
+            prompt (str): _description_
+            stop (Optional[List[str]], optional): _description_. Defaults to None.
+        """
+        params = {
+            **self._get_model_default_parameters,
+            **kwargs,
+        }
+        # 使用 GPT-4 模型实例开始一个聊天会话
+        with self.gpt4_model_instance.chat_session():
+            # 生成响应：根据输入的提示词(prompt)和参数(params)生成响应
+            response_generator = self.gpt4_model_instance.generate(prompt, **params)
+            # 判断是否是流式响应模式
+            if params["streaming"]:
+                # 创建一个字符串 IO 流来暂存响应数据
+                response = io.StringIO()
+                for token in response_generator:
+                    # 遍历生成器生成的每个令牌(token)
+                    print(token, end = "", flush = True)
+                    response.write(token)
+                response_message = response.getvalue()
+                response.close()
+                return response_message
+            # 如果不是流式响应模式，直接返回响应生成器
+            return response_generator
 ```
 
 ## 扩展模型接口
@@ -1253,7 +1472,7 @@ LangChain 为 LLM 组件提供了一系列有用的扩展功能，以增强其�
 ## LangChain 中的代理
 
 
-## 
+## 设计并实现一个多模态代理
 
 # 记忆组件
 
