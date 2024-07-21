@@ -111,9 +111,6 @@ img {
         - [API 查询场景](#api-查询场景)
         - [文本总结场景](#文本总结场景)
 - [RAG](#rag)
-    - [RAG 简介](#rag-简介)
-    - [LangChain 中的 RAG 组件](#langchain-中的-rag-组件)
-    - [RAG 实践](#rag-实践)
 - [智能代理设计](#智能代理设计)
     - [LangChain 中的代理](#langchain-中的代理)
     - [设计并实现一个多模态代理](#设计并实现一个多模态代理)
@@ -1009,7 +1006,6 @@ LangChain 内置了 4 种选择器，它们都继承自 `BaseExampleSelector`：
 * `SemanticSimilarityExampleSelector`
 * `NGramOverlapExampleSelector`
 
-
 ## 输出解析器
 
 LangChain 中的输出解析器负责将语言模型生成的文本转换为更为结构化和实用的格式。
@@ -1393,23 +1389,305 @@ LangChain 为 LLM 组件提供了一系列有用的扩展功能，以增强其�
 
 ## 链简介
 
+在 LangChain 中，链是一系列组件的有序组合，用于执行特定任务。无论是处理简单的文本还是复杂的数据，
+链都能发挥重要作用。例如，你可以构建一条链来处理用户输入，将其转换为所需格式，然后保存或进一步处理。
+
+LangChain 提供了两种实现链的方式：**传统的 Chain 编程接口**和最新的 **LCEL**。
+虽然两者可以共存，但官方推荐使用 LCEL，因为它提供了更直观的语法，
+并支持流式传输、异步调用、批处理、并行化和重试等高级功能。LCEL 的主要优势在于其直观性和灵活性。
+开发者可以轻松地将输入提示模板、模型接口和输出解析器等模块组合起来，构建出高度定制化地处理链。
+下面降通过具体的示例来展示如何利用 LCEL 构建有效且实用的链。
 
 ## Runnable 对象接口
 
+前面提到的 **提示模版组件对象 `BasePromptTemplate`**、**大模型接口对象 `BaseLanguageModel`** 和 **输出解析器对象 `BaseOutputParser`** 都实现了关键接口：**`Runnable` 对象接口**。
+这些接口的设计旨在让不同的组件能够灵活地串联起来，形成一条功能强大的处理链。
+通过实现 `Runnable` 对象接口，组件之间能够确保兼容性，并以模块化的方式进行组合使用。
+
+`Runnable` 对象接口是一个可以被调用、批量处理、流式处理、转换和组合的工作单元，
+它通过 `input_schema` 属性、`output_schema` 属性和 `config_schema` 方法来提供关于组件输入、
+输出和配置的结构化信息。这些属性和方法使得组件能够清晰地定义它们所需的输入格式、
+期望的输出格式以及配置选项，从而简化组件间的集成和交互。下面将介绍这些主要方法和属性，
+以及如何利用它们来构建高效的处理链。
+
+* `invoke/ainvoke`：它接收输入并返回输出
+* `batch/abatch`：这个方法允许对输入列表进行**批量处理**，返回一个输出列表
+* `stream/astream`：这个方法提供了**流式处理**的能力，允许逐块返回响应，而不是一次性返回所有结果
+* `astream_log`：这个方法用于逐块返回响应过程的**中间结果和日志记录输出**
+
+带有 `a` 前缀的方法是异步的，默认情况下通过 `asyncio` 的线程池执行对应同步方法，
+可以重写以实现原生异步。所有方法都接收一个可选的 `config` 参数，用于配置执行、
+添加用于跟踪和调试的标签和元数据等。
+
+`Runnable` 对象接口的声明：
+
+```python
+class Runnable(Generic[Input, Output], ABC):
+    ...
+    @property
+    def intput_schema(self) -> Type[BaseModel]:
+        ...
+    
+    @property
+    def output_schema(self) -> Type[BaseModel]:
+        ...
+
+    def config_schema(
+        self, *, 
+        include: Optional[Sequence[str]] = None
+    ) -> Type[BaseModel]:
+        ...
+
+    @abstractmethod
+    def invoke(
+        self, 
+        input: Input, 
+        config: Optional[RunnableConfig] = None, 
+        **kwargs: Any
+    ) -> Output:
+        ...
+
+    async def ainvoke(
+        self, 
+        input: Input, 
+        config: Optional[RunnableConfig] = None, 
+        **kwargs: Any
+    ) -> Output:
+        ...
+    
+    def batch(self, ...) -> List[Output]:
+        ...
+    
+    async def abatch(self, ...) -> List[Output]:
+        ...
+    
+    def stream(self, ...) -> Iterator[Output]:
+        ...
+    
+    async def astream(self, ...) -> AsyncIterator[Output]:
+        ...
+    
+    async def astream_log(
+        self, 
+        input: Any, 
+        ...
+    ) -> Union[AsyncIterator[RunLogPatch], AsyncIterator[RunLog]]:
+        ...
+```
+
+在 LangChain 中，为了有效地组合 `Runnable` 对象，有两个主要的工具：
+
+* `RunnableSequence`
+    - `RunnableSequence` 用于顺序调用一系列 `Runnable` 对象。
+      它将前一个 `Runnable` 对象的输出作为下一个的输入，从而形成一条处理链。
+      可以实用管道运算符 `|` 或者将 `Runnable` 对象的列表传递给 `RunnableSequence` 来构造这样的序列。
+* `RunnableParallel`
+    - `RunnableParallel` 则用于并行调用多个 `Runnable` 对象。它会为每个 `Runnable` 对象提供相同的输入，
+      从而实现任务的并行处理。可以在序列中实用字典字面值或者直接传递字典给 `RunnableParallel` 来构造并行处理链。
+
+```python
+from langchain.schema.runnable import RunnableLambda
+
+def test():
+    # 使用 | 运算符构造的 RunnableSequence
+    sequence = RunnableLambda(lambda x: x - 1) | RunnableLambda(lambda x: x * 2)
+    print(sequence.invoke(3))  # 4
+    print(sequence.batch([1, 2, 3]))  # [0, 2, 4]
+
+    # 包含使用字典字面值构造的 RunnableParallel 的序列
+    sequence = RunnableLambda(lambda x: x * 2) | {
+        'sub_1': RunnableLambda(lambda x: x - 1),
+        'sub_2': RunnableLambda(lambda x: x - 2),
+    }
+    print(sequence.invoke(3))  # {'sub_1': 5, 'sub_2':4}
+```
+
+在 LangChain 中，有六种基础组件实现了 `Runnable` 对象接口，下表中列出了这些组件及其输入和输出格式：
+
+| 组件         | 输入类型                             | 输出类型      |
+|--------------|-------------------------------------|--------------|
+| Prompt       | 字典                                 | PromptValue |
+| ChatModel    | 单个字符串、聊天消息列表或 PromptValue | ChatMessage |
+| LLM          | 单个字符串、聊天消息列表或 PromptValue | 字符串       |
+| OutputParser | LLM 或 ChatModel 的输出              | 取决于解析器  |
+| Retriever    | 单个字符串                            | 文档列表     |
+| Tool         | 单个字符串或字典，取决于具体工具        | 取决于工具   |
+
 ### schema
 
+所有继承 `Runnable` 对象的组件都需要接收特定格式的输入，这被称为输入模式(`input_schema`)。
+
+> 另外，为了帮助开发者了解每个组件所需的具体输入模式，LangChain 提供了一个基于 Pydantic 的动态生成模型，
+这个模型详细描述了输入数据的结构，包括必需的字段及其数据类型。
+开发者可以通过调用 Pydantic 模型的 `.schema` 方法来获取输入模式的 JSON Schema 表示。这种表示形式为开发者提供了一个结构化的视图，使得理解和实现正确的输入格式变得简单直观。
+
+这里以 `Prompt` 为例：
+
+```python
+from langchain_community.chat_models import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from langchain.schema import StrOutputParser
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+
+def test():
+    # 创建一个 PromptTemplate 实例，用于生成提示词
+    prompt = PromptTemplate("给生产{product}的公司取一个名字。")
+
+    # 创建 Runnable 序列，包括上述提示模板、聊天模型和字符串输出解析器
+    runnable = prompt | ChatOpenAI() | StrOutputParser()
+
+    # 打印输入模式的 JSON Schema
+    print(runnable.input_schema.schema())
+
+    # 打印输出模式的 JSON Schema。这说明了 Runnable 执行后的输出数据结构
+    print(runnable.output_schema.schema())
+```
+
+输入内容为一个 `PromptInput` 对象，属性为 `product`，类型为字符串：
+
+```
+{
+    'title': 'PromptInput',
+    'type': 'object',
+    'properties': {
+        'product': {
+            'title': 'Product',
+            'type': 'string',
+        }
+    }
+}
+```
+
+输出内容格式化过程和输入同理，下面为一个 `StrOutputParserOutput` 对象，输出结果类型是字符串：
+
+```
+{
+    'title': 'StrOutputParserOutput',
+    'type': 'string'
+}
+```
 
 ### invoke
 
+LangChain 的 `invoke` 接口是一个核心功能，它是一个标准化的方法，用于与不同的语言模型进行交互。
+这个接口的主要作用是向语言模型发送输入（问题或命令），并获取模型的响应（回答或输出）。
+
+在具体的使用场景中，可以通过 `invoke` 方法向模型提出具体的问题或请求，该方法将返回模型生成的回答。
+这个接口的统一性使得 LangChain 能够以一致的方式访问不同的语言模型，无论它们背后的具体实现如何。
+
+`ainvoke` 方法是异步版本的 `invoke`，
+它利用 `asyncio` 库中的 `run_in_executor` 方法在一个单独的线程中运行 `invoke` 方法，
+以实现非阻塞调用。这种方法常用于将传统的同步代码（阻塞调用）转换为异步调用，
+从而提高程序的响应性和并发性能。这种实现方式适用于 LangChain 中的多个组件，比如，在 `Tool` 类中，
+`ainvoke` 作为默认实现，支持异步代码的使用，它通过在一个线程中调用 `invoke` 方法，
+使得函数可以在工具被调用时运行。
+
+以下是 `ainvoke` 方法声明：
+
+```python
+async def ainvoke(self, input: Input, config: Optional[Runnable] = None, **kwargs: Any) -> Output:
+    """
+    * 使用 asyncio.get_running_loop 获取当前运行的事件循环
+    * asyncio 是 Python 的内置库，用于编写单线程的并发代码
+    * run_in_executor 方法允许在一个单独的线程中运行一个阻塞的函数调用
+    """
+    return await asyncio.get_running_loop().run_in_executor(
+        # 第一个参数 None 表示使用默认的 executor，即默认的线程池
+        None,
+        # 第二个参数是一个使用 functools.partial 创建的函数，partial 允许你预先设置函数的一些参数
+        partial(self.invoke, **kwargs),
+        # 后续的参数 input 和 config 将被传递给 partial 函数
+        input,
+        config
+    )
+```
 
 ### stream
 
+LangChain 的 `stream` 接口提供了一种流式处理机制，它允许在处理过程中实时返回数据，
+无须等待整个数据处理流程完成。这种特性在处理大量数据或需要即时反馈的应用场景中尤为关键。
+
+```python
+from langchain_community.chat_models import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+
+def test():
+    # 初始化 ChatOpenAI 模型实例
+    model = ChatOpenAI()
+
+    # 创建一个 PromptTemplate 实例
+    prompt = PromptTemplate.from_template("讲一个{story_type}的故事。")
+
+    # 创建一条处理链(Runnable)，包含上述提示模板和 ChatOpenAI 聊天模型
+    runnable = prompt | model
+
+    # 使用流式处理生成故事
+    for s in runnable.stream({"story_type": "悲伤"}):
+        print(s.content, end = "", flush = True)  # end="" 确保输出连续，无额外换行
+```
+
+像上面这种场景，用户期望的输出内容是篇幅较长的故事，为了不让用户等待太久，就可以利用 `stream` 接口实时输出。
+
+`astream` 方法是异步版本的 `stream`，`astream` 的默认实现调用了 `ainvoke`。
+`astream` 函数是一个异步生成器(AsyncGenerator)，它使用 `yield` 语句产生从 `ainvoke` 方法返回的结果。
+这种设计模式使得函数能够以流的形式逐步产生输出，而不是一次性返回所有结果。
+这对于处理需要逐步获取结果的长时间运行的任务特别有用，例如，在处理大模型生成的文本时，
+可以逐段获取输出，而不必等待整个文本生成完毕。
+
+
+以下是 `astream` 方法声明：
+
+```python
+async def astream(self, 
+                  input: Input, 
+                  config: Optional[RunnableConfig] = None, 
+                  **kwargs: Optionalp[Any]) -> AsyncIterator[Output]:
+    # 使用 await 关键字调用 ainvoke 方法
+    yield await self.ainvoke(input, config, **kwargs)
+```
 
 ### batch
 
+LangChain 的 `batch` 方法是一种高效的批处理功能，它允许同时处理多个输入。
+当调用 `batch` 方法时：
+
+* 首先会检查输入是否存在。如果输入为空，batch 方法会直接返回一个空列表。
+* 接着，根据输入的数量，`batch` 方法会创建一个配置列表，并定义一个局部函数 `invoke` 来处理单个输入。
+* 最后，利用执行器(executor)并行处理这些输入，从而显著提高处理效率。
+
+对于单个输入的情况，`batch` 方法会直接调用 `invoke` 函数进行处理。
+
+这种批处理方式在处理大量请求时特别高效，因为它能够充分利用并行处理的优势，大幅提高整体性能。
+
+`abatch` 方法是 `batch` 方法的异步版本，它同样处理多个输入，但所有的调用都是异步的，
+使用 `gather_with_concurrency` 函数并发执行所有的异步调用，并等待它们全部完成。
+
+```python
+# TODO
+def batch():
+    pass
+```
 
 ### astream_log
 
+`astream_log` 是 LangChain 中的一个异步方法，它支持流式处理并记录执行过程中的每一步变化。
+该方法利用 `LogStreamCallbackHandler` 创建一个日志流，允许开发者根据特定条件包含或排除某些类型的日志。 
+通过异步迭代流式输出，`astream_log` 生成日志对象(`RunLogPatch`)或状态对象(`RunLog`)，
+这些对象对于跟踪和分析 `Runnable` 组件的行为非常有有帮助。
+这种方法使得开发者能够实时监控和理解 `Runnable` 组件的执行情况，从而更好地调试和优化 AI 应用。
+
+```python
+# TODO
+async def astream_log():
+    pass
+```
 
 ## LCEL 高级特性
 
@@ -1458,14 +1736,7 @@ LangChain 为 LLM 组件提供了一系列有用的扩展功能，以增强其�
 
 # RAG
 
-## RAG 简介
-
-## LangChain 中的 RAG 组件
-
-
-## RAG 实践
-
-
+RAG 介绍及实用在[这里](https://wangzhefeng.com/post/2024/03/23/llm-rag/)
 
 # 智能代理设计
 

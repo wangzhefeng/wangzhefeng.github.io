@@ -36,20 +36,21 @@ img {
 <details><summary>目录</summary><p>
 
 - [RAG 介绍](#rag-介绍)
-    - [LLM 问题](#llm-问题)
-    - [RAG 原理](#rag-原理)
-    - [RAG 和 Fine-tune 对比](#rag-和-fine-tune-对比)
+  - [LLM 问题](#llm-问题)
+  - [RAG 原理](#rag-原理)
+  - [RAG 和 Fine-tune 对比](#rag-和-fine-tune-对比)
 - [RAG 流程](#rag-流程)
 - [RAG 模块](#rag-模块)
-    - [向量化](#向量化)
-    - [文档加载和切分](#文档加载和切分)
-    - [数据库和向量检索](#数据库和向量检索)
-    - [大模型模块](#大模型模块)
+  - [向量化](#向量化)
+  - [文档加载和切分](#文档加载和切分)
+  - [数据库和向量检索](#数据库和向量检索)
+  - [大模型模块](#大模型模块)
 - [RAG Demo](#rag-demo)
-- [RAG 组件](#rag-组件)
-    - [LangChian](#langchian)
-    - [LlamaIndex](#llamaindex)
-    - [dify](#dify)
+- [RAG 组件-LangChian](#rag-组件-langchian)
+  - [示例: 知识问答](#示例-知识问答)
+  - [LangChain 中的 RAG 组件](#langchain-中的-rag-组件)
+- [RAG 组件-LlamaIndex](#rag-组件-llamaindex)
+- [RAG 组件-dify](#rag-组件-dify)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -223,16 +224,24 @@ query 方法具体实现：
 
 # RAG Demo
 
-# RAG 组件
-
-## LangChian
+# RAG 组件-LangChian
 
 在实际的生产环境中，通常会面对来自多种渠道的数据，其中很大一部分是复杂的非机构化数据，
 处理这些数据，特别是提取和预处理，往往是耗费精力的任务之一。
+因此 LangChain 提供了专门的文档加载和分割模块。RAG 技术的每个阶段都在 LangChain 中得到完整的实现。
 
-## LlamaIndex
+## 示例: 知识问答
 
-## dify
+## LangChain 中的 RAG 组件
+
+
+
+
+
+
+# RAG 组件-LlamaIndex
+
+# RAG 组件-dify
 
 
 
