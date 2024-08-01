@@ -68,6 +68,17 @@ img {
         - [前端与用户交互界面开发](#前端与用户交互界面开发)
         - [部署测试与上线](#部署测试与上线)
         - [维护与持续改进](#维护与持续改进)
+- [LLM 开发应用](#llm-开发应用)
+    - [基本概念](#基本概念)
+        - [Prompt](#prompt)
+        - [Temperature](#temperature)
+        - [System Prompt](#system-prompt)
+    - [LLM API](#llm-api)
+        - [OpenAI ChatGPT](#openai-chatgpt)
+            - [文心一言](#文心一言-1)
+            - [讯飞星火](#讯飞星火)
+            - [智谱 GLM](#智谱-glm)
+        - [Prompt Engineering](#prompt-engineering)
 - [LLM 获取方式](#llm-获取方式)
     - [LLM 名单](#llm-名单)
     - [LLM 本体](#llm-本体)
@@ -619,6 +630,280 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
 1. 监测系统性能和用户反馈，及时处理问题。
 2. 定期更新知识库，添加新的文档和信息。
 3. 收集用户需求，进行系统改进和功能扩展。
+
+# LLM 开发应用
+
+## 基本概念
+
+### Prompt
+
+Prompt 最初是 NLP（自然语言处理）研究者为下游任务设计出来的一种任务专属的输入模板，
+类似于一种任务（例如：分类，聚类等）会对应一种 Prompt。
+在 ChatGPT 推出并获得大量应用之后，Prompt 开始被推广为给大模型的所有输入。
+即，每一次访问大模型的输入为一个 Prompt，而大模型给我们的返回结果则被称为 Completion。
+
+### Temperature
+
+LLM 生成是具有随机性的，在模型的顶层通过选取不同预测概率的预测结果来生成最后的结果。
+一般可以通过控制 `temperature` 参数来控制 LLM 生成结果的随机性与创造性。
+
+`temperature` 一般取值在 0~1 之间，当取值较低接近 0 时，预测的随机性会较低，
+产生更保守、可预测的文本，不太可能生成意想不到或不寻常的词。
+当取值较高接近 1 时，预测的随机性会较高，所有词被选择的可能性更大，
+会产生更有创意、多样化的文本，更有可能生成不寻常或意想不到的词。
+
+对于不同的问题与应用场景，可能需要设置不同的 `temperature`。例如，
+
+* 在搭建的个人知识库助手项目中，一般将 `temperature` 设置为 0，
+  从而保证助手对知识库内容的稳定使用，规避错误内容、模型幻觉；
+* 在产品智能客服、科研论文写作等场景中，同样更需要稳定性而不是创造性；
+* 但在个性化 AI、创意营销文案生成等场景中，就更需要创意性，
+  从而更倾向于将 `temperature` 设置为较高的值。
+
+### System Prompt
+
+System Prompt 是随着 ChatGPT API 开放并逐步得到大量使用的一个新兴概念，
+事实上，它并不在大模型本身训练中得到体现，而是大模型服务方为提升用户体验所设置的一种策略。
+
+具体来说，在使用 ChatGPT API 时，你可以设置两种 Prompt：
+
+* 一种是 System Prompt，该种 Prompt 内容会在整个会话过程中持久地影响模型的回复，
+  且相比于普通 Prompt 具有更高的重要性；
+* 另一种是 User Prompt，这更偏向于我们平时提到的 Prompt，即需要模型做出回复的输入。
+
+一般设置 System Prompt 来对模型进行一些**初始化设定**，例如，
+可以在 System Prompt 中给模型设定希望它具备的人设如一个个人知识库助手等。
+System Prompt 一般在一个会话中仅有一个。在通过 System Prompt 设定好模型的**人设**或是**初始设置**后，
+可以通过 User Prompt 给出模型需要遵循的指令。例如，当我们需要一个幽默风趣的个人知识库助手，
+并向这个助手提问我今天有什么事时，可以构造如下的 Prompt：
+
+```
+{
+    "system prompt": "你是一个幽默风趣的个人知识库助手，可以根据给定的知识库内容回答用户的提问，注意，你的回答风格应是幽默风趣的",
+    "user prompt": "我今天有什么事务？"
+}
+```
+
+通过如上 Prompt 的构造，我们可以让模型以幽默风趣的风格回答用户提出的问题。
+
+## LLM API
+
+主要介绍四种大语言模型：ChatGPT、文心一言、讯飞星火、智谱 GLM 的 API 申请指引和 Python 版本的原生 API 调用方法，
+可以按照实际情况选择一种自己可以申请的 API 进行使用即可。
+
+* ChatGPT：推荐可科学上网的读者使用；
+* 文心一言：当前无赠送新用户 tokens 的活动，推荐已有文心 tokens 额度用户和付费用户使用；
+* 讯飞星火：新用户赠送 tokens，推荐免费用户使用；
+* 智谱 GLM：新用户赠送 tokens，推荐免费用户使用。
+
+如果你需要在 LangChain 中使用 LLM，可以参照 LangChain 中的调用方式。
+
+### OpenAI ChatGPT
+
+1. API key 申请
+2. API key 配置
+    - 将创建好的 API key 以 `OPENAI-API-KEY="..."` 的形式保存到 `.env` 文件中，
+      并将 `.env` 文件保存在项目根目录下。
+3. 读取 `.env` 文件
+
+    ```python
+    import os
+    from dotenv import load_dotenv, find_dotenv
+
+    # 读取本地/项目的环境变量
+    # find_dotenv(): 寻找并定位 `.env` 文件的路基那个
+    # load_dotenv(): 读取 `.env` 文件，并将其中的环境变量加载到当前的运行环境中，如果设置的是环境变量，代码没有任何作用
+    _ = load_dotenv(find_dotenv())
+
+    # 如果需要通过代理端口访问，还需要做如下配置
+    os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7890"
+    os.environ["HTTP_PROXY"] = "http://127.0.0.1:7890"
+    ```
+
+4. 调用 OpenAI API
+    - 调用 ChatGPT 需要使用 `ChatCompletion` API，该 API 提供了 ChatGPT 系列模型的调用，
+      包括 ChatGPT-3.5、GPT-4 等。`ChatCompletion` API 的调用方法如下：
+
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI(api_key = os.environ.get("OPENAI_API_KEY"))
+
+    completion = client.chat.completions.create(
+        # 调用模型
+        model = "gpt-3.5-turbo",
+        # 对话列表
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": "Hello!"
+            },
+        ]
+    )
+    ```
+
+    - 调用该 API 会返回一个 `ChatCompletion` 对象，其中包括了回答文本、创建时间、id 等属性。
+      我们一般需要的是回答文本，也就是回答对象中的 `content` 信息。
+    
+    ```python
+    completion
+    ```
+
+    ```
+    ChatCompletion(id='chatcmpl-9FAKG4M6HXML257axa12PUuCXbJJz', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='Hello! How can I assist you today?', role='assistant', function_call=None, tool_calls=None))], created=1713401640, model='gpt-3.5-turbo-0125', object='chat.completion', system_fingerprint='fp_c2295e73ad', usage=CompletionUsage(completion_tokens=9, prompt_tokens=19, total_tokens=28))
+    ```
+
+    ```python
+    print(completion.choices[0].message.content)
+    ```
+
+    ```
+    Hello! How can I assist you today?
+    ```
+
+    - `ChatCompletion` 常用的几个参数：
+        - `model`：即调用的模型，一般取值包括 `"gpt-3.5-turbo"`（ChatGPT-3.5）、
+          `"gpt-3.5-turbo-16k-0613"`（ChatGPT-3.5 16K 版本）、`"gpt-4"`（ChatGPT-4）。
+          注意，不同模型的成本是不一样的。
+        - `messages`：即 prompt。`ChatCompletion` 的 `messages` 需要传入一个列表，
+          列表中包括多个不同角色的 prompt。可以选择的角色一般包括：
+            - `system`：即前文中提到的 system prompt；
+            - `user`：用户输入的 prompt；
+            - `assistant`：助手，一般是模型历史回复，作为提供给模型的参考内容。
+        - `temperature`：温度。即前文中提到的 Temperature 系数。
+        - `max_tokens`：最大 token 数，即模型输出的最大 token 数。
+           OpenAI 计算 token 数是合并计算 Prompt 和 Completion 的总 token 数，
+           要求总 token 数不能超过模型上限（如默认模型 token 上限为 4096）。
+           因此，如果输入的 prompt 较长，需要设置较大的 max_token 值，否则会报错超出限制长度。
+    - 另外，OpenAI 提供了充分的自定义空间，支持通过自定义 prompt 来提升模型回答效果，
+      下面是一个简答的封装 OpenAI 接口的函数，支持直接传入 prompt 并获得模型的输出。
+
+        ```python
+        from openai import OpenAI
+
+        client = OpenAI(api_key = os.environ.get("OPENAI_API_KEY"))
+
+        def gen_gpt_messages(prompt):
+            """
+            构造 GPT 模型请求参数 messages
+
+            Params:
+                prompt: 对应的用户提示词
+            """
+            messages = [
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ]
+
+            return messages
+
+        def get_completion(prompt, model = "gpt-3.5-turbo", temperature = 0):
+            """
+            获取 GPT 模型调用结果
+
+            Params:
+                prompt: 对应的提示词
+                model: 调用的模型，默认为 gpt-3.5-turbo，也可以按需选择 gpt-4 等其他模型
+                temperature: 模型输出的温度系数，控制输出的随机程度，取值范围是 0~2。温度系数越低，输出内容越一致。
+            """
+            response = client.chat.completion.create(
+                model = model,
+                messages = gen_gpt_messages(prompt),
+                temperature = temperature,
+            )
+            if len(response.choices) > 0:
+                return response.choices[0].message.content
+            
+            return "generate answer error"
+        
+        get_completion("你好")
+        ```
+
+        ```
+        '你好！有什么可以帮助你的吗？'
+        ```
+
+#### 文心一言
+
+百度同样提供了文心一言的 API 接口，其在推出大模型的同时，
+也推出了文心千帆企业级大语言模型服务平台，包括了百度整套大语言模型开发工作链。
+对于不具备大模型实际落地能力的中小企业或传统企业，考虑文心千帆是一个可行的选择。
+
+1. 
+
+
+#### 讯飞星火
+
+
+#### 智谱 GLM
+
+1. API key 申请
+    - 首先进入到 智谱 AI 开放平台，点击开始使用或者开发工作台进行注册。
+      新注册的用户可以免费领取有效期 1 个月的 100w token 的体验包，
+      进行个人实名认证后，还可以额外领取 400w token 体验包。
+      智谱 AI 提供了 GLM-4 和 GLM-3-Turbo 这两种不同模型的体验入口，
+      可以点击立即体验按钮直接体验。
+    - 对于需要使用 API key 来搭建应用的话，需要点击右侧的查看 API key按钮，
+      就会进入到个人的 API 管理列表中。在该界面，
+      就可以看到获取到的 API 所对应的应用名字和 API key 了。
+    - 可以点击 添加新的 API key 并输入对应的名字即可生成新的 API key。
+2. API key 配置
+    - 智谱 AI 提供了 SDK 和原生 HTTP 来实现模型 API 的调用，建议使用 SDK 进行调用以获得更好的编程体验。
+    - 首先需要配置密钥信息，将前面获取到的 API key 设置到 `.env`  文件中的 `ZHIPUAI_API_KEY`  参数；
+    - 然后，运行以下代码的加载配置信息：
+
+    ```python
+    import os
+    from dotenv import load_dotenv, find_dotenv
+
+    _ = load_dotenv(find_dotenv())
+    ``` 
+
+2. 调用智谱 GLM API
+    - 智谱的调用传参和其他类似，也需要传入一个 `message` 列表，列表中包括 `role` 和 `prompt`。
+      我们封装如下的 `get_completion` 函数，供后续使用
+
+    ```python
+    from zhipuai import ZhipuAI
+
+    client = ZhipuAI(api_key = os.environ["ZHIPUAI_API_KEY"])
+
+    def get_glm_params(prompt):
+        """
+        构造 GLM 模型请求参数 message
+
+        Params:
+            prompt: 对应的用户提示词
+        """
+        message = [
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ]
+
+        return message
+
+    def get_completion(prompt, model = "glm-4", temperature = 0.95):
+        """
+        
+        """
+    ```
+
+
+
+### Prompt Engineering
+
+
+
+
+
 
 # LLM 获取方式
 
