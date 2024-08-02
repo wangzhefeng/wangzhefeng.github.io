@@ -1,5 +1,5 @@
 ---
-title: lora
+title: LoRA
 author: 王哲峰
 date: '2024-08-01'
 slug: lora
@@ -34,10 +34,9 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [TODO](#TODO)
+- [参考](#参考)
 </p></details><p></p>
 
-# 
 
 
 
