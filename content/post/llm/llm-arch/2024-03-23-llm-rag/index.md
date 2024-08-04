@@ -36,25 +36,40 @@ img {
 <details><summary>目录</summary><p>
 
 - [RAG 介绍](#rag-介绍)
-  - [LLM 问题](#llm-问题)
-  - [RAG 原理](#rag-原理)
-  - [RAG 和 Fine-tune 对比](#rag-和-fine-tune-对比)
+     - [LLM 问题](#llm-问题)
+     - [RAG 原理](#rag-原理)
+     - [RAG 和 Fine-tune 对比](#rag-和-fine-tune-对比)
 - [RAG 流程](#rag-流程)
 - [RAG 模块](#rag-模块)
-  - [向量化](#向量化)
-  - [文档加载和切分](#文档加载和切分)
-  - [数据库和向量检索](#数据库和向量检索)
-  - [大模型模块](#大模型模块)
+     - [向量化](#向量化)
+     - [文档加载和切分](#文档加载和切分)
+     - [数据库和向量检索](#数据库和向量检索)
+     - [大模型模块](#大模型模块)
 - [RAG 组件-LangChian](#rag-组件-langchian)
-  - [LangChain 中的 RAG 组件](#langchain-中的-rag-组件)
-  - [LLM 接入 LangChain](#llm-接入-langchain)
-  - [构建检索问答链](#构建检索问答链)
-    - [加载数据库向量](#加载数据库向量)
-    - [创建一个 LLM](#创建一个-llm)
-    - [构建检索问答链](#构建检索问答链-1)
-    - [检索问答链效果测试](#检索问答链效果测试)
-    - [添加历史对话的记忆功能](#添加历史对话的记忆功能)
-  - [部署知识库助手](#部署知识库助手)
+     - [LangChain 中的 RAG 组件](#langchain-中的-rag-组件)
+     - [LLM 接入 LangChain](#llm-接入-langchain)
+          - [基于 LangChain 调用 ChatGPT](#基于-langchain-调用-chatgpt)
+               - [Model](#model)
+               - [Prompt](#prompt)
+               - [Output parser](#output-parser)
+               - [完整的流程](#完整的流程)
+          - [使用 LangChain 调用文心一言](#使用-langchain-调用文心一言)
+               - [自定义 LLM 接入 langchain](#自定义-llm-接入-langchain)
+               - [在 langchain 直接调用文心一言](#在-langchain-直接调用文心一言)
+          - [使用 LangChain 调用讯飞星火](#使用-langchain-调用讯飞星火)
+          - [使用 LangChain 调用智谱 GLM](#使用-langchain-调用智谱-glm)
+               - [自定义 chatglm](#自定义-chatglm)
+               - [自定义 chatglm 接入 LangChain](#自定义-chatglm-接入-langchain)
+     - [基于 LangChain 构建检索问答链](#基于-langchain-构建检索问答链)
+          - [加载数据库向量](#加载数据库向量)
+          - [创建一个 LLM](#创建一个-llm)
+          - [构建检索问答链](#构建检索问答链)
+          - [检索问答链效果测试](#检索问答链效果测试)
+          - [添加历史对话的记忆功能](#添加历史对话的记忆功能)
+     - [基于 Streamlit 部署知识库助手](#基于-streamlit-部署知识库助手)
+          - [构建应用程序](#构建应用程序)
+          - [添加检索回答](#添加检索回答)
+          - [部署应用程序](#部署应用程序)
 - [RAG 组件-LlamaIndex](#rag-组件-llamaindex)
 - [RAG 组件-dify](#rag-组件-dify)
 - [参考](#参考)
@@ -236,10 +251,246 @@ query 方法具体实现：
 
 ## LangChain 中的 RAG 组件
 
+TODO
+
 ## LLM 接入 LangChain
 
+LangChain 为基于 LLM 开发自定义应用提供了高效的开发框架，便于开发者迅速地激发 LLM 的强大能力，
+搭建 LLM 应用。LangChain 也同样支持多种大模型，内置了 OpenAI、LLAMA 等大模型的调用接口。
+但是，LangChain 并没有内置所有大模型，它通过允许用户自定义 LLM 类型，来提供强大的可扩展性。
 
-## 构建检索问答链
+### 基于 LangChain 调用 ChatGPT
+
+LangChain 提供了对于多数大模型的封装，
+基于 LangChain 的接口可以便捷地调用 ChatGPT 并将其集合在以 LangChain 为基础框架搭建的个人应用中。
+
+注：基于 LangChain 接口调用 ChatGPT 同样需要配置个人密钥。
+
+#### Model
+
+从 `langchain.chat_models` 导入 OpenAI 的对话模型 `ChatOpenAI`。除了 OpenAI 以外，
+`langchain.chat_models` 还集成了其他对话模型。
+
+```python
+import os
+import openai
+from dotenv import load_dotenv, find_dotenv
+from langchain.openai import ChatOpenAI
+
+# 读取本地的环境变量
+_ = load_dotenv(find_dotenv())
+
+# 获取环境变量 OPENAI_API_KEY
+openai_api_key = os.environ("OPENAI_API_KEY")
+
+# OpenAI API 密钥在环境变量中设置
+llm = ChatOpenAI(temperature = 0.0)
+# 手动指定 API 密钥
+llm = ChatOpenAI(temperature = 0.0, openai_api_key = "YOUR_API_KEY")
+
+output = llm.invoke("请你自我介绍以下自己！")
+output
+```
+
+可以看到，默认调用的是 ChatGPT-3.5 模型。另外，几种常用的超参数设置包括：
+
+* `model_name`：所要使用的模型，默认为 `'gpt-3.5-turbo'`，参数设置与 OpenAI 原生接口参数设置一致。
+* `temperature`：温度系数，取值同原生接口。
+* `openai_api_key`：OpenAI API key，如果不使用环境变量设置 API Key，也可以在实例化时设置。
+* `openai_proxy`：设置代理，如果不使用环境变量设置代理，也可以在实例化时设置。
+* `streaming`：是否使用流式传输，即逐字输出模型回答，默认为 `False`，此处不赘述。
+* `max_tokens`：模型输出的最大 token 数，意义及取值同上。
+
+#### Prompt
+
+在开发大模型应用时，大多数情况下不会直接将用户的输入直接传递给 LLM。
+通常，他们会将用户输入添加到一个较大的文本中，称为提示模板(Prompt Template)，
+该文本提供有关当前特定任务的附加上下文。
+
+`PromptTemplates` 正是帮助解决这个问题，它们捆绑了从用户输入到完全格式化的提示的所有逻辑。
+这可以非常简单地开始。例如，生成上述字符串的提示就是。
+
+聊天模型的接口是基于消息（message），而不是原始的文本。
+`PromptTemplates` 也可以用于产生消息列表，在这种样例中，
+prompt 不仅包含了输入内容信息，也包含了每条 message 的信息(角色、在列表中的位置等)。
+通常情况下，一个 `ChatPromptTemplate` 是一个 `ChatMessageTemplate` 的列表。
+每个 `ChatMessageTemplate` 包含格式化该聊天消息的说明（其角色以及内容）。
+
+```python
+from langchain.prompts.chat import ChatPromptTemplate
+
+template = "你是一个翻译助手，可以帮助我将 {input_language} 翻译成 {output_language}"
+human_template = "{text}"
+text = "我带着比身体重的行李，\
+游入尼罗河底，\
+经过几道闪电 看到一堆光圈，\
+不确定是不是这里。\"
+
+chat_prompt = ChatPromptTemplate([
+     ("system", template),
+     ("human", human_template),
+])
+
+message = chat_prompt.format_messages(
+     input_language = "中文", 
+     output_language = "英文", 
+     text = text
+)
+print(message)
+
+output = llm.invoke(message)
+print(output)
+```
+
+#### Output parser
+
+`OutputParsers` 将语言模型的原始输出转换为可以在下游使用的格式。
+`OutputParser` 有几种主要类型，包括：
+
+* 将 LLM 文本转换为结构化信息(例如 JSON)
+* 将 `ChatMessage` 转换为字符串
+* 将除消息之外的调用返回的额外信息（如 OpenAI 函数调用）转换为字符串
+
+最后，我们将模型输出传递给 `output_parser`，它是一个 `BaseOutputParser`，
+这意味着它接受字符串或 `BaseMessage` 作为输入。
+`StrOutputParser` 特别简单地将任何输入转换为字符串。
+
+```python
+from langchain_core.output_parsers import StrOutputParser
+
+output_parser = StrOutputParser()
+output_parser.invoke(output)
+```
+
+从上面结果可以看到，我们通过输出解析器成功将 ChatMessage 类型的输出解析为了字符串。
+
+#### 完整的流程
+
+现在可以将所有这些组合成一条链，该链将获取输入变量，将这些变量传递给提示模板以创建提示，
+将提示传递给语言模型，然后通过（可选）输出解析器传递输出。下面使用 LCEL 这种语法去快速实现一条链（chain）。
+
+```python
+chain = chat_prompt | llm | output_parser
+chain.invoke({
+     "input_language": "中文",
+     "output_language": "英文",
+     "text": text,
+})
+
+text = "I carried luggage heavier than my body and dived into the bottom of the Nile River. After passing through several flashes of lightning, I saw a pile of halos, not sure if this is the place."
+chain.invoke({
+     "input_language": "英文", 
+     "output_language": "中文",
+     "text": text
+})
+```
+
+### 使用 LangChain 调用文心一言
+
+通过 LangChain 框架来调用百度文心大模型，以将文心模型接入到应用框架中。
+
+#### 自定义 LLM 接入 langchain
+
+
+#### 在 langchain 直接调用文心一言
+
+### 使用 LangChain 调用讯飞星火
+
+
+
+### 使用 LangChain 调用智谱 GLM
+
+#### 自定义 chatglm
+
+由于 LangChain 中提供的 ChatGLM 已不可用，因此需要自定义一个 LLM。
+
+```python
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+import os
+from typing import Any, List, Mapping, Optional, Dict
+from langchain_core.callbacks.manager import CallbackManagerForLLMRun
+from langchain_core.language_models.llms import LLM
+from zhipuai import ZhipuAI
+
+# 继承自 langchain.llms.base.LLM
+class ZhipuAILLM(LLM):
+    # 默认选用 glm-4
+    model: str = "glm-4"
+    # 温度系数
+    temperature: float = 0.1
+    # API_Key
+    api_key: str = None
+    
+    def _call(self, prompt : str, stop: Optional[List[str]] = None,
+                run_manager: Optional[CallbackManagerForLLMRun] = None,
+                **kwargs: Any):
+        client = ZhipuAI(
+            api_key = self.api_key
+        )
+
+        def gen_glm_params(prompt):
+            '''
+            构造 GLM 模型请求参数 messages
+
+            请求参数：
+                prompt: 对应的用户提示词
+            '''
+            messages = [{"role": "user", "content": prompt}]
+            return messages
+        
+        messages = gen_glm_params(prompt)
+        response = client.chat.completions.create(
+            model = self.model,
+            messages = messages,
+            temperature = self.temperature
+        )
+
+        if len(response.choices) > 0:
+            return response.choices[0].message.content
+        return "generate answer error"
+
+
+    # 首先定义一个返回默认参数的方法
+    @property
+    def _default_params(self) -> Dict[str, Any]:
+        """获取调用API的默认参数。"""
+        normal_params = {
+            "temperature": self.temperature,
+            }
+        # print(type(self.model_kwargs))
+        return {**normal_params}
+
+    @property
+    def _llm_type(self) -> str:
+        return "Zhipu"
+
+    @property
+    def _identifying_params(self) -> Mapping[str, Any]:
+        """Get the identifying parameters."""
+        return {**{"model": self.model}, **self._default_params}
+```
+
+#### 自定义 chatglm 接入 LangChain
+
+```python
+import os
+from zhipuai_llm import ZhipuAILLM
+from dotenv import find_dotenv, load_dotenv
+
+# 读取本地/项目的环境变量
+_ = load_dotenv(find_dotenv())
+
+# 获取环境变量 API_KEY
+api_key = os.environ["ZHIPUAI_API_KEY"]
+
+zhipuai_model = ZhipuAILLM(model = "glm-4", temperature = 0.1, api_key = api_key)  # model="glm-4-0520"
+zhipuai_model("你好，请自我介绍以下！")
+```
+
+
+## 基于 LangChain 构建检索问答链
 
 在[这里]()介绍了如何根据自己的本地知识文档，搭建一个向量知识库。
 使用搭建好的向量数据库，对 query 查询问题进行召回，
@@ -262,11 +513,160 @@ query 方法具体实现：
 ### 添加历史对话的记忆功能
 
 
-## 部署知识库助手
+## 基于 Streamlit 部署知识库助手
+
+当对知识库和 LLM 已经有了基本的理解，现在是将它们巧妙地融合并打造成一个富有视觉效果的界面的时候了。
+这样的界面不仅对操作更加便捷，还能便于与他人分享。
+
+> Streamlit 是一种快速便捷的方法，可以直接在 Python 中通过友好的 Web 界面演示机器学习模型。
+> 在构建了机器学习模型后，如果想构建一个 demo 给其他人看，也许是为了获得反馈并推动系统的改进，
+> 或者只是因为觉得这个系统很酷，所以想演示一下：Streamlit 可以通过 Python 接口程序快速实现这一目标，
+> 而无需编写任何前端、网页或 JavaScript 代码。
+
+### 构建应用程序
+
+```python
+# streamlit_app.py
+import streamlit as st
+from langchain_openai import ChatOpenAI
 
 
+def generate_response(input_text, openai_api_key):
+     """
+     定义一个函数，使用用户密钥对 OpenAI API 进行身份验证、发送提示并获取 AI 生成的响应。
+     该函数接受用户的提示作为参数，并使用 st.info 来在蓝色框中显示 AI 生成的响应。
+     """
+     llm = ChatOpenAI(temperature = 0.7, openai_api_key = openai_api_key)
+     st.info(llm(input_text))
 
 
+# Streamlit 应用程序界面
+def main():
+     # 创建应用程序的标题
+     st.title("🦜🔗 动手学大模型应用开发")
+
+     # 添加一个文本输入框，供用户输入其 OpenAI API 密钥
+     openai_api_key = st.sidebar.text_input("OpenAI API Key", type = "password")
+
+     # 使用 st.form() 创建一个文本框 st.text_area() 供用户输入。
+     # 当用户点击 Submit 时，generate_response 将使用用户的输入作为参数来调用该函数
+     with st.form("my_form"):
+          text = st.text_area(
+               "Enter text:", 
+               "What are the three key pieces of advice for learning how to code?"
+          )
+          
+          submitted = st.form_submit_button("Submit")
+
+          if not openai_api_key.startswith("sk-"):
+               st.warning("Please enter your OpenAI API key!", icon = "")
+          if submitted and openai_api_key.startswith("sk-"):
+               generate_response(text, openai_api_key)
+  
+     # 通过使用 st.session_state 来存储对话历史，
+     # 可以在用户与应用程序交互时保留整个对话的上下文，
+     # 用于跟踪对话历史
+     if "messages" not in st.session_state:
+          st.session_state.messages = []
+     
+     messages = st.container(height = 300)
+     if prompt := st.chat_input("Say something"):
+          # 将用户输入添加到对话历史中
+          st.session_state.messages.appen({
+               "role": "user",
+               "text": prompt,
+          })
+          
+          # 调用 respond 函数获取回答
+          answer = generate_response(prompt, openai_api_key)
+          # 检查回答是否为 None
+          if answer is not None:
+               # 将 LLM 的回答添加到对话历史中
+               st.session_state.messages.append({
+                    "role": "assistant",
+                    "text": answer,
+               })
+          
+          # 显示整个对话历史
+          for message in st.session_state.messages:
+               if message["role"] == "user":
+                    messages.chat_message("user").write(message["text"])
+               else:
+                    messages.chat_message("assistant").write(message["text"])
+```
+
+```bash
+$ streamlit run streamlit_app.py
+```
+
+### 添加检索回答
+
+构建检索问答链代码：
+
+* `get_vectordb` 函数返回持久化后的向量知识库
+* `get_chat_qa_chain` 函数返回调用带有历史记录的检索问答链后的结果
+* `get_qa_chain` 函数返回调用不带有历史记录的检索问答链后的结果
+
+```python
+def get_vectordb():
+     pass
+
+def get_chat_qa_chain(question: str, openai_api_key: str):
+     pass
+
+
+def get_qa_chain(question: str, openai_api_key: str):
+     pass
+```
+
+然后，添加一个单选按钮部件 `st.radio`，选择进行回答模式：
+
+* `None` 不使用检索问答的普通模式
+* `qa_chain` 不带历史记录的检索问答模式
+* `chat_qa_chain` 带历史记录的检索问答模式
+
+```python
+selected_method = st.radio(
+     "你想选择哪种模式进行对话？",
+     [
+          "None", 
+          "qa_chain", 
+          "chat_qa_chain"
+     ],
+     caption = [
+          "不使用检索回答的普通模式", 
+          "不带历史记录的检索问答模式", 
+          "带历史记录的检索问答模式"
+     ]
+)
+```
+
+最后，进入页面，首先先输入 `OPEN_API_KEY`（默认），
+然后点击单选按钮选择进行问答的模式，最后在输入框输入你的问题，按下回车即可。
+
+### 部署应用程序
+
+要将应用程序部署到 Streamlit Cloud，请执行以下步骤：
+
+1. 为应用程序创建 GitHub 存储库，存储库应包含两个文件：
+
+```
+your-repository/
+     |_ streamlit_app.py
+     |_ requirements.txt
+```
+
+2. 转到 [Streamlit Community Cloud](https://share.streamlit.io/)，单击工作区中的 `New app` 按钮，
+   然后指定存储库、分支和主文件路径。或者，您可以通过选择自定义子域来自定义应用程序的 URL。
+3. 点击 `Deploy!` 按钮。
+4. 应用程序现在将部署到 Streamlit Community Cloud，并且可以访问应用。
+
+优化方向：
+
+* 界面中添加上传本地文档，建立向量数据库的功能
+* 添加多种LLM 与 embedding方法选择的按钮
+* 添加修改参数的按钮
+* 更多...
 
 # RAG 组件-LlamaIndex
 
