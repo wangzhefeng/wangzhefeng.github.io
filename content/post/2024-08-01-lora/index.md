@@ -46,3 +46,4 @@ img {
 
 * [深入浅出 LoRA](https://zhuanlan.zhihu.com/p/650197598)
 * [LoRA: Low-rank Adaptation of Large Language Models](https://arxiv.org/pdf/2106.09685)
+* [LoRA GitHub](https://github.com/microsoft/LoRA)
