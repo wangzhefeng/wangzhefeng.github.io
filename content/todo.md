@@ -28,10 +28,8 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [强化学习](#强化学习)
 - [时间序列异常检测](#时间序列异常检测)
 - [数据结构与算法](#数据结构与算法)
-- [推荐系统](#推荐系统)
 - [机器学习](#机器学习)
 - [NAS](#nas)
 - [Python](#python)
@@ -42,10 +40,6 @@ img {
 - [Schedule](#schedule)
 </p></details><p></p>
 
-## 强化学习
-
-* [蘑菇书](https://datawhalechina.github.io/easy-rl/#/)
-
 ## 时间序列异常检测
 
 * [datastream.io](https://github.com/MentatInnovations/datastream.io)
@@ -53,10 +47,6 @@ img {
 ## 数据结构与算法
 
 * https://www.zhihu.com/column/liuzimu
-
-## 推荐系统
-
-* [再谈排序算法的pairwise，pointwise，listwise](https://mp.weixin.qq.com/s/PFrndBfO9aV6IiCCWSpHwg)
 
 ## 机器学习
 
