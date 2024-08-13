@@ -47,6 +47,7 @@ img {
     - [通俗解释](#通俗解释-1)
 - [大模型 fine-tune 示例](#大模型-fine-tune-示例)
     - [语言大模型-BERT 微调](#语言大模型-bert-微调)
+    - [LLM 微调](#llm-微调)
     - [图片大模型-ResNet50 微调](#图片大模型-resnet50-微调)
         - [微调](#微调)
         - [固定层的向量导出](#固定层的向量导出)
@@ -304,6 +305,12 @@ linear 的输出作为最后的输出和 label 计算 loss，反向更新整个 
 BERT 往往 fine tune 最后几层：
 
 ![img](images/bert-layer.jpg)
+
+## LLM 微调
+
+> Fine-Tune LLMs
+
+* [How to Fine-Tune LLMs in 2024 with Hugging Face](https://www.philschmid.de/fine-tune-llms-in-2024-with-trl)
 
 
 
