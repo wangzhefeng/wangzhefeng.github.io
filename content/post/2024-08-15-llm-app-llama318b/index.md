@@ -49,7 +49,7 @@ img {
     - [定义 LoraConfig](#定义-loraconfig)
     - [自定义 TrainingArguments 参数](#自定义-trainingarguments-参数)
     - [使用 Trainer 训练](#使用-trainer-训练)
-    - [加载 LoRA 权重](#加载-lora-权重)
+    - [加载 LoRA 权重权重推理](#加载-lora-权重权重推理)
 - [FastAPI 部署和调用](#fastapi-部署和调用)
 - [Instruct WebDemo 部署](#instruct-webdemo-部署)
 - [资料](#资料)
@@ -67,7 +67,7 @@ img {
 
     ```bash
     # 升级 pip
-    $ pip install --upgrade pip 
+    $ pip install --upgrade pip
     # 更换 pypi 源加速库的安装
     $ pip config set global.index.url https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -173,7 +173,6 @@ class LLaMA3_1_LLM(LLM):
             [input_ids],
             return_tensors = "pt",
         ).to(self.model.device)
-        print(self.model.device)
         generated_ids = self.model.generate(
             model_inputs.input_ids, 
             max_new_tokens = 512
@@ -239,30 +238,206 @@ LLM 微调一般指 **指令微调** 的过程。所谓指令微调，是说使�
 
 ## 数据格式化
 
+LoRA 训练的数据是需要经过格式化、编码之后再输入给模型进行训练的。就像 PyTorch 模型训练过程中，
+一般需要将输入文本编码为 `input_ids`，将输出文本编码为 `labels`，编码之后的结果都是多维的向量。
+下面定义一个预处理函数，这个函数用于对每一个样本，编码其输入、输出文本并返回一个编码后的字典。
 
+```python
+def process_func(example):
+    """
+    数据格式化
+    """
+    # LlaMA 分词器会将一个中文字切分为多个 token，
+    # 因此需要放开一些最大长度，保证数据的完整性
+    MAX_LENGTH = 384
+    input_ids, attention_mask, labels = [], [], []
 
+    instruction = tokenizer(
+        f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n现在你要扮演皇帝身边的女人--甄嬛<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{example['instruction'] + example['input']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n", 
+        add_special_tokens = False
+    )  # add_special_tokens 不在开头加 special_tokens
+    response = tokenizer(
+        f"{example["output"]}<|eot_id|>", 
+        add_special_tokens = False
+    )
+
+    input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.pad_token_id]
+    attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]  # 因为 eos token 咱们也是要关注的，所以补充为 1
+    labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.pad_token_id]
+
+    if len(input_ids) > MAX_LENGTH:
+        input_ids = input_ids[:MAX_LENGTH]
+        attention_mask = attention_mask[:MAX_LENGTH]
+        labels = labels[:MAX_LENGTH] 
+    return {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+        "label": labels,
+    }
+```
+
+LlaMA 3.1 采用的 Prompt Tempalte 格式如下：
+
+```
+<|begin_of_text|>
+<|start_header_id|>system<|end_header_id|>现在你要扮演皇帝身边的女人--甄嬛<|eot_id|>
+<|start_header_id|>user<|end_header_id|>你好呀<|eot_id|>
+<|start_header_id|>assistant<|end_header_id|>你好，我是甄嬛，你有什么事情要问我吗？<|eot_id|>
+<|start_header_id|>assistant<|end_header_id|>
+```
 
 ## 加载 tokenizer 和半精度模型
 
+模型以 **半精度** 形式加载，如果显卡比较新的话，可以用 `torch.bfloat` 形式加载。
+对于自定义的模型一定要指定 `trust_remote_code = True`。
+
+```python
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "/root/autodl-tmp/LLM-Research/Meta-Llama-3.1-8B-Instruct",
+    use_fast = False,
+    trust_remote_code = True,
+)
+model = AutoModelForCausalLM.from_pretrained(
+    "/root/autodl-tmp/LLM-Research/Meta-Llama-3.1-8B-Instruct",
+    device_map = "auto",
+    torch_dtype = torch.bfloat16,
+)
+```
 
 ## 定义 LoraConfig
 
+`LoarConfig` 这个类中可以设置很多参数，但主要的参数没多少：
+
+* `task_type`: 模型类型
+* `target_modules`: 需要训练的模型层的名字，主要就是 `attention` 部分的层，
+  不同的模型对应的层的名字不同，可以传入数组，也可以是字符串，也可以是正则表达式
+* `r`: LoRA 的秩
+* `lora_alpha`: LoRA alpha
+
+LoRA 的缩放是 `lora_alpha/r`，在这个 `LoraConfig` 中缩放就是 4 倍。
+
+```python
+config = LoraConfig(
+    task_type = TaskType.CAUSAL_LM,
+    target_modules = [
+        "q_proj", "k_proj", "v_proj", 
+        "o_proj", "gate_proj", 
+        "up_proj", "down_proj"
+    ],
+    inference_mode = False,  # 训练模式
+    r = 8,  # LoRA 秩
+    lora_alpha = 32,  # LoRA alpha
+    lora_dropout = 0.1,  # dropout 比例
+)
+```
 
 ## 自定义 TrainingArguments 参数
 
+介绍一下 `TrainingArguments` 这个类的源码每个参数的具体作用：
+
+* `output_dir`: 模型的输出路径
+* `per_device_train_batch_size`: 顾名思义 `batch_size`
+* `gradient_accumulation_steps`: 梯度累加，如果显存比较小，
+  可以把 `batch_size` 设置小一点，梯度累加增大一些
+* `logging_steps`: 多少步，输出一次 `log`
+* `num_train_epochs`: 顾名思义 `epoch`
+* `gradient_checkpointing`: 梯度检查，这个一旦开启，
+  模型就必须执行 `model.enable_input_require_grads()`
+
+```python
+args = TrainingArguments(
+    output_dir = "./output/llama3_1_instruct_lora",
+    per_device_train_batch_size = 4,
+    gradient_accumulation_steps = 4,
+    logging_steps = 10,
+    num_train_epochs = 3,
+    save_steps = 100,
+    learning_rate = 1e-4,
+    save_on_each_node = True,
+    gradient_checkpointing = True,
+)
+```
 
 ## 使用 Trainer 训练
 
+```python
+trainer = Trainer(
+    model = model,
+    args = args,
+    train_dataset = tokenized_id,
+    data_collator = DataCollatorForSeq2Seq(tokenizer = tokenizer, padding = True),
+)
+trainer.train()
+```
 
-## 加载 LoRA 权重
+## 加载 LoRA 权重权重推理
 
+训练好之后可以使用如下方式加载 LoRA 权重进行推理。
 
+```python
+from torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
 
+# 模型地址
+mode_path = '/root/autodl-tmp/LLM-Research/Meta-Llama-3.1-8B-Instruct'
+# lora 输出对应 checkpoint 地址
+lora_path = '/root/autodl-tmp/output/llama3_1_instruct_lora/checkpoint-100'
 
-
-
-
-
+# 加载 tokenizer
+tokenizer = AutoTokenizer.from_pretrained(
+    mode_path, 
+    trust_remote_code = True
+)
+# 加载模型
+model = AutoModelForCausalLM.from_pretrained(
+    mode_path, 
+    device_map = "auto",
+    torch_dtype = torch.bfloat16, 
+    trust_remote_code = True
+).eval()
+# 加载 loRA 权重
+model = PeftModel.from_pretrained(
+    model, 
+    model_id = lora_path
+)
+# 输入
+prompt = "你是谁？"
+messages = [
+    {
+        "role": "system",
+        "content": "假设你是皇帝身边的女人--甄嬛。",
+    },
+    {
+        "role": "user",
+        "content": prompt,
+    }
+]
+input_ids = tokenizer.apply_chat_template(
+    messages, 
+    tokenize = False
+)
+model_inputs = tokenizer(
+    [input_ids], 
+    return_tensors = "pt"
+).to('cuda')
+generated_ids = model.generate(
+    model_inputs.input_ids, 
+    max_new_tokens = 512
+)
+generated_ids = [
+    output_ids[len(input_ids):]
+    for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+]
+response = tokenizer.batch_decode(
+    generated_ids, 
+    skip_special_tokens = True
+)[0]
+print(response)
+```
 
 # FastAPI 部署和调用
 
