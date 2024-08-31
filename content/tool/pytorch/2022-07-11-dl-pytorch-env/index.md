@@ -39,7 +39,7 @@ img {
         - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch)
         - [使用 conda 安装 PyTorch](#使用-conda-安装-pytorch)
         - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch)
-    - [GPU/CUDA version](#gpucuda-version)
+    - [GPU-CUDA version](#gpu-cuda-version)
         - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-1)
         - [使用 conda 安装 PyTorch](#使用-conda-安装-pytorch-1)
         - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-1)
@@ -52,7 +52,7 @@ img {
         - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-3)
         - [使用 conda 安装 PyTorch](#使用-conda-安装-pytorch-3)
         - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-3)
-    - [GPU/CUDA version](#gpucuda-version-1)
+    - [GPU-CUDA version](#gpu-cuda-version-1)
         - [使用 pip 安装 PyTorch](#使用-pip-安装-pytorch-4)
         - [使用 conda 安装 PyTorch](#使用-conda-安装-pytorch-4)
         - [使用 Docker 安装 PyTorch](#使用-docker-安装-pytorch-4)
@@ -83,7 +83,7 @@ $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 $ TODO
 ```
 
-## GPU/CUDA version
+## GPU-CUDA version
 
 ### 使用 pip 安装 PyTorch
 
@@ -159,7 +159,7 @@ $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 $ TODO
 ```
 
-## GPU/CUDA version
+## GPU-CUDA version
 
 ### 使用 pip 安装 PyTorch
 
@@ -227,4 +227,5 @@ tensor([[0.3380, 0.3845, 0.3217],
 
 # 官网安装介绍
 
-* [INSTALL PYTORCH](https://pytorch.org/get-started/locally/)
+* [Install PyTorch](https://pytorch.org/get-started/locally/)
+* [Download Pytorch](https://download.pytorch.org/whl/torch)

@@ -35,13 +35,14 @@ img {
 <details><summary>目录</summary><p>
 
 - [tensor 介绍](#tensor-介绍)
+    - [tensor 与 Tensor](#tensor-与-tensor)
+    - [Tensor 与 Variable](#tensor-与-variable)
     - [tensor](#tensor)
-    - [tensor 与 variable](#tensor-与-variable)
 - [tensor 数据类型](#tensor-数据类型)
     - [基本数据类型](#基本数据类型)
     - [自动推断数据类型](#自动推断数据类型)
     - [指定数据类型](#指定数据类型)
-    - [使用特定类型构造函数](#使用特定类型构造函数)
+    - [特定类型构造函数](#特定类型构造函数)
     - [不同类型转换](#不同类型转换)
 - [tensor 维度](#tensor-维度)
     - [标量](#标量)
@@ -76,18 +77,36 @@ img {
         - [设置随机数种子](#设置随机数种子)
         - [生成随机数 tensor](#生成随机数-tensor)
 - [tensor 结构操作](#tensor-结构操作)
-    - [拼接和分割](#拼接和分割)
+    - [拼接](#拼接)
         - [cat](#cat)
         - [stack](#stack)
+        - [vstack](#vstack)
+        - [hstack](#hstack)
+        - [dstack](#dstack)
+    - [分割](#分割)
         - [split](#split)
+        - [hsplit](#hsplit)
+        - [vsplit](#vsplit)
+        - [dsplit](#dsplit)
+        - [tensor\_split](#tensor_split)
+        - [chunk](#chunk)
     - [索引和切片](#索引和切片)
-        - [选取行、列](#选取行列)
+        - [选取行列](#选取行列)
         - [不规则切片](#不规则切片)
+        - [index\_select](#index_select)
+        - [take](#take)
+        - [take\_along\_dim](#take_along_dim)
+        - [masked\_select](#masked_select)
+        - [gather](#gather)
+        - [where](#where)
+        - [index\_fill](#index_fill)
+        - [masked\_fill](#masked_fill)
     - [维度变换](#维度变换)
         - [view 和 reshape](#view-和-reshape)
         - [squeeze 和 unsqueeze](#squeeze-和-unsqueeze)
         - [transpose 和 permute](#transpose-和-permute)
         - [t](#t)
+    - [其他操作](#其他操作)
 - [tensor 数学运算](#tensor-数学运算)
     - [In-place 操作](#in-place-操作)
     - [标量运算](#标量运算)
@@ -116,50 +135,78 @@ img {
 # tensor 介绍
 
 tensor 是 PyTorch 中最基本的概念，其参与了整个运算过程，
-这里主要介绍 tensor 的概念和属性，如 data，variable，device 等，
-并且介绍 tensor 的基本创建方法，如直接创建、依数值创建、依概率分布创建等
+这里主要介绍 tensor 的概念和属性，如 data、variable、device 等，
+并且介绍 tensor 的基本创建方法，如直接创建、依数值创建、依概率分布创建等。
+
+## tensor 与 Tensor
+
+在 PyTorch 中，有两个张量的相关概念极其容易混淆，分别是 `torch.Tensor` 和 `torch.tensor`。
+其实，通过命名规范，可知道 `torch.Tensor` 是 Python 的一个类, `torch.tensor` 是 Python 的一个函数。
+通常调用 `torch.tensor` 进行创建张量，而不直接调用 `torch.Tensor` 类进行创建。
+
+后续将不再区分 `torch.Tensor` 和 `torch.tensor`，主要用 `torch.tensor` 表示张量这个数据类型（数据结构）。
+
+## Tensor 与 Variable
+
+在 PyTorch 0.4.0 版本之前，Tensor(`torch.Tensor`) 需要经过 Variable(`torch.autograd.Variable`) 的包装才能实现自动求导。
+
+从 0.4.0 版本开始，Tensor 与 Variable 合并，Tensor 拥有了跟踪历史操作的功能。
+虽然 Variable 仍可用，但 Variable 返回值已经是一个 Tensor（原来返回值是 Variable），
+所以今后无需再用 Variable 包装 Tensor。
+
+虽然 Variable 的概念已经被摒弃，但是了解其数据结构对理解 Tensor 还是有帮助的。
+Variable 不仅能对 Tensor 包装，而且能记录生成 Tensor 的运算（这是自动求导的关键）。
+
+Variable 有 5 个属性，这些属性都是为了 Tensor 的自动求导而设置的：
+
+* `data`：保存的是具体数据，即被包装的 Tensor
+* `grad`：对应于 `data` 的梯度，形状与 `data` 一致
+* `grad_fn`：记录创建该 Tensor 时用到的 Function，
+  该 Function 在反向传播计算中使用，因此是自动求导的关键
+* `requires_grad`：指示是否计算梯度
+* `is_leaf`：指示节点是否为叶子节点，为叶子结点时，反向传播结束，其梯度仍会保存，
+  非叶子结点的梯度被释放，以节省内存
+
+从 Variable 的主要属性中可以发现，除了 `data` 外，`grad`、`grad_fn`、
+`is_leaf` 和 `requires_grad` 都是为计算梯度服务，
+所以 Variable 在 `torch.autogard` 包中自然不难理解。
+
+但是我们的数据载体是 tensor，每次需要自动求导，都要用 Variable 包装，这明显太过繁琐，
+于是 PyTorch 从 0.4.0 版将 `torch.Tensor` 与 `torch.autograd.Variable` 合并。
 
 ## tensor
 
-tensor 其实是多维数组，它是标量、向量、矩阵的高维拓展
+tensor 其实是多维数组，它是标量、向量、矩阵的高维拓展。
 
-## tensor 与 variable
-
-```
-variable(已经没用了) 是 `torch.autograd` 中的数据类型，
-在 PyTorch 0.4.0 版本之后 variable 已经并入 tensor，但是 variable 这个数据类型对于理解 tensor 来说很有帮助
-
-variable(`torch.autograd.variable`) 有 5 个属性，这些属性都是为了 tensor 的自动求导而设置的：
-
-* `data`
-* `grad`
-* `grad_fn`
-* `requires_grad`
-* `is_leaf`
+tensor 之于 PyTorch 等同于 ndarray 之于 Numpy，它是 PyTorch 中最核心的数据结构，
+用于表达各类数据，如输入数据、模型的参数、模型的特征图、模型的输出等。
+这里边有一个很重要的数据，就是模型的参数。对于模型的参数，需要更新它们，
+而更新操作需要记录梯度，梯度的记录功能正是被张量所实现的（求梯度是 `torch.autograd` 实现的）。
 
 tensor(`torch.tensor`) 有 8 个属性:
 
 * 与数据本身相关
     - `data`
-        - 被包装的 tensor
+        - 多维数组，最核心的属性，保存的是具体数据
     - `dtype`
         - tensor 的数据类型
     - `dim()`
-        - tensofr 的维度
+        - tensor 的维度
     - `shape`、`size()`
         - tensor 的形状
     - `device`
         - tensor 所在的设备，gpu(`cuda`)/cpu(`cpu`)，tensor 放在 gpu 上才能使用加速
 * 与梯度求导相关
     - `grad`
-        - `data` 的梯度
+        - 对应于 `data` 的梯度，形状与 `data` 一致
     - `grad_fn`
-        - `fn` 表示 function 的意思，记录创建 tensor 时用到的方法
+        - `fn` 表示 function 的意思，记录创建该 tensor 时用到的方法（Function），
+          该方法在反向传播计算中使用，因此是自动求导的关键
     - `requires_grad`
-        - 是否需要梯度 
+        - 指示是否需要梯度 
     - `is_leaf`
-        - 是否是叶子节点(tensor)
-```
+        - 指示节点是否为叶子节点，为叶子结点时，反向传播结束，其梯度仍会保存，
+          非叶子结点的梯度被释放，以节省内存
 
 # tensor 数据类型
 
@@ -172,17 +219,15 @@ tensor 的数据类型和 numpy `array` 基本一一对应，但是不支持 `st
     - `torch.int8`
     - `torch.int16`
     - `torch.int32`(`torch.int`)
-    - `torch.int64`(`torch.long`)
-        - 默认使用类型
+    - `torch.int64`(`torch.long`)：默认使用类型
 * 浮点类型：
     - `torch.float16`
-    - `torch.float32`(`torch.float`)
-        - 默认使用类型
+    - `torch.float32`(`torch.float`)：默认使用类型
     - `torch.float64`(`torch.double`)
 * 布尔类型：
     - `torch.bool`
 
-一般神经网络建模使用的都是 `torch.float32`
+一般神经网络建模使用的都是 `torch.float32`。
 
 ## 自动推断数据类型
 
@@ -209,7 +254,7 @@ x = torch.tensor(2.0, dtype = torch.double)
 print(x, x.dtype)  # tensor(2., dtype=torch.float64) torch.float64
 ```
 
-## 使用特定类型构造函数
+## 特定类型构造函数
 
 * `torch.IntTensor()`
 * `torch.Tensor(sequence)`
@@ -248,7 +293,7 @@ print(z, z.dtype)  # tensor(1.) torch.float32
 
 # tensor 维度
 
-不同类型的数据可以用不同维度(dimension)的张量来表示，有几层中括号，就是多少维的张量
+不同类型的数据可以用不同维度(dimension)的张量来表示，有几层中括号，就是多少维的张量。
 
 * 标量为 0 维张量
 * 向量为 1 维张量
@@ -408,46 +453,58 @@ z.to("cpu", torch.double)
     - `torch.from_numpy()`
 * 依数值创建
     - `torch.empty()`：空张量
-    - `torch.ones()`：单位张量
-    - `torch.zeros()`：零张量
-    - `torch.eye()`：单位张量
+    - `torch.empty_like()`
+    - `torch.empty_strided()`
+    - `torch.ones()`：元素全为 1 的张量
+    - `torch.ones_like()`
+    - `torch.zeros()`：元素全为 0 的张量
+    - `torch.zeros_like()`
+    - `torch.eye()`：单位张量（对角线全为 1）
     - `torch.diag()`：对角张量
     - `torch.fill_()`：用特定的数值填充张量
-    - `torch.arange()`：等差序列张量
+    - `torch.full(size, fill_value)`
+    - `torch.full_like()`
+    - `torch.arange()`、`torch.range()`：等差序列张量
     - `torch.linspace()`：线性等分向量
+    - `torch.logspace(start, end, steps, base)`：创建对数均分的 1 维张量，长度为 steps, 底为 base
 * 依概率分布创建
-    - `torch.seed()`: 设置生成随机数的种子为非确定性随机数
-    - `torch.manual_seed()`：设置生成随机数的种子
-    - `torch.initial_seed()`：返回用于生成随机数的初始种子
-    - `torch.bernoulli()`：从伯努利分布中提取二进制随机数(0 或 1)
-    - `torch.randn()`：正态分布
-    - `torch.normal()`：标准正态
-    - `torch.randn_like()`：标准正态分布
+    - 随机数
+        - `torch.seed()`: 设置生成随机数的种子为非确定性随机数
+        - `torch.manual_seed()`：设置生成随机数的种子
+        - `torch.initial_seed()`：返回用于生成随机数的初始种子
+    - `torch.bernoulli(input)`：从伯努利分布中提取二进制随机数(0 或 1)
+    - `torch.normal(mean, std)`：正态分布
+    - `torch.randn(size)`：标准正态分布 
+    - `torch.randn_like()`：标准正态分布 
     - `torch.multinomial()`：多元正态分布
-    - `torch.rand()`：`$[0, 1)$` 区间的均匀分布
+    - `torch.rand(size)`：`$[0, 1)$` 区间的均匀分布
     - `torch.rand_like()`：`$[0, 1)$` 区间的均匀分布
-    - `torch.randint()`：从给定区间的均匀分布中取整数
+    - `torch.randint(low=0, high, size)`：从给定区间的均匀分布中取整数
     - `torch.randint_like()`：从给定区间的均匀分布中取整数
-    - `torch.randperm()`：整数随机排列
+    - `torch.randperm(n)`：生成从 0 到 n-1 的整数随机排列
     - `torch.pisson()`：泊松分布
 
 ## 直接创建
 
 ### tensor
 
-* API
+API 及其解释：
 
 ```python
 torch.tensor(
-    data,  # scale, list, numpy
-    dtype = none,
-    device = none,
+    data,  # scale, list, tuple, numpy array
+    dtype = none,  # tensor 的数据类型，如 torch.float
+    device = none, 
     requires_grad = false,
-    pin_memory = false,  # 是否存于锁页内存
+    pin_memory = false, 
 )
 ```
 
-* 示例
+* `device`：决定 tensor 位于 `cpu` 还是 `gpu`。如果为 `None`，将会采用默认值，
+  默认值在 `torch.set_default_tensor_type()` 中设置，默认为 `cpu`
+* `pin_memory`：是否将 tensor 存于锁页内存。这与内存的存储方式有关，通常为 `False`
+
+tensor 示例：
 
 ```python
 arr = np.ones((3, 3))
@@ -456,10 +513,19 @@ t = torch.tensor(arr, device = "cuda")
 print(t)
 ```
 
+```
+tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]], device='cuda:0', dtype=torch.float64)
+```
+
 ### tensor 和 array
 
-可以用 `tensor.numpy()` 方法从 tensor 得到 numpy array，也可以用 `torch.from_numpy(array)` 从 numpy array 得到 tensor。
-这两种方法关联的 tensor 与 numpy array 是共享内存的，当修改其中一个数据的时候，另一个的值也会被改动
+可以用 `tensor.numpy()` 方法从 tensor 得到 numpy array，
+也可以用 `torch.from_numpy(array)` 从 numpy array 得到 tensor。
+
+这两种方法关联的 tensor 与 numpy array 是共享内存的，
+当修改其中一个数据的时候，另一个的值也会被改动。
 
 1. numpy array To torch tensor
 
@@ -549,12 +615,12 @@ print(type(t))  # <class 'list'>
 ## 依数值创建
 
 * `torch.empty()`：空张量
-* `torch.ones()`：单位张量
-* `torch.zeros()`：零张量
-* `torch.eye()`：单位张量
+* `torch.ones()`：元素全为 1 的张量
+* `torch.zeros()`：元素全为 0 的张量
+* `torch.eye()`：单位张量（对角线全为 1）
 * `torch.diag()`：对角张量
 * `torch.fill_()`：用特定的数值填充张量
-* `torch.arange()`：等差序列向量
+* `torch.range()`、`torch.arange()`：等差序列张量
 * `torch.linspace()`：线性等分向量
 
 ### empty
@@ -613,17 +679,17 @@ tensor([[1., 0., 0., 0., 0.],
         [4, 5, 6], 
         [7, 8, 9]]
     )
->>> torch.diag(a, 0)
-tensor([1, 5, 9])
+>>> torch.diag(a, 2)
+tensor([3])
 
 >>> torch.diag(a, 1)
 tensor([2, 6])
 
+>>> torch.diag(a, 0)
+tensor([1, 5, 9])
+
 >>> torch.diag(a, -1)
 tensor([4, 8])
-
->>> torch.diag(a, 2)
-tensor([3])
 
 >>> torch.diag(a, -2)
 tensor([7])
@@ -635,22 +701,27 @@ tensor([7])
 >>> torch.manual_seed(seed = 42)
 >>> a = torch.randn(3, 4)
 >>> b = a
+
 >>> a
 tensor([[ 0.3367,  0.1288,  0.2345,  0.2303],
         [-1.1229, -0.1863,  2.2082, -0.6380],
         [ 0.4617,  0.2674,  0.5349,  0.8094]])
+
 >>> b
 tensor([[ 0.3367,  0.1288,  0.2345,  0.2303],
         [-1.1229, -0.1863,  2.2082, -0.6380],
         [ 0.4617,  0.2674,  0.5349,  0.8094]])
+
 >>> a.fill_(42)
 tensor([[42., 42., 42., 42.],
         [42., 42., 42., 42.],
         [42., 42., 42., 42.]])
+
 >>> a
 tensor([[42., 42., 42., 42.],
         [42., 42., 42., 42.],
         [42., 42., 42., 42.]])
+
 >>> b
 tensor([[42., 42., 42., 42.],
         [42., 42., 42., 42.],
@@ -682,17 +753,34 @@ tensor([1, 3, 5])
 tensor([-10.,  -6.,  -2.,   2.,   6.,  10.])
 ```
 
-
 ## 依概率分布创建
 
 ### 设置随机数种子
 
+以下均是设置 cpu 上的张量随机种子，在 cuda 上是另外一套随机种子，
+如 `torch.cuda.manual_seed_all(seed)`，这些到 cuda 模块再进行介绍，
+这里只需要知道 cpu 和 cuda 上需要分别设置随机种子。
+
 * `torch.seed()`
-    - 设置生成随机数的种子为非确定性随机数
+    - 设置生成随机数的种子为非确定性随机数，即获取一个随机的种子数
 * `torch.manual_seed()`
-    - 设置生成随机数的种子
+    - 手动设置随机数种子，建议设置 42
 * `torch.initial_seed()`
     - 返回用于生成随机数的初始种子
+* `get_rng_state()`：获取随机数生成器状态
+* `set_rng_state()`：设定随机数生成器状态
+
+```python
+>>> torch.seed()
+47698356633000
+
+>>> torch.manual_seed(42)
+<torch._C.Generator object at 0x000001BFFFC547D0>
+
+>>> torch.initial_seed()
+42
+```
+
 
 ### 生成随机数 tensor
 
@@ -716,41 +804,64 @@ tensor([-10.,  -6.,  -2.,   2.,   6.,  10.])
 # tensor 结构操作
 
 * tensor 的拼接
-    - `torch.cat()`
-    - `torch.stack()`
-    - `torch.hstack()`
-    - `torch.vstack()`
+    - `torch.cat([], dim/axis)`、`torch.concat([], dim/axis)`：将多个张量拼接在一起
+    - `torch.stack([], dim/axis)`：在新的轴上拼接张量，与 `hstack\vstack` 不同，
+      它是新增一个轴。默认从第 0(`dim=0`) 个轴插入新轴
+    - `torch.vstack()`、`torch.row_stack()`：垂直堆叠 tensor，按行堆叠张量。
+      即第一个维度(`dim=0`)上增加，同 `torch.cat(dim = 0)`
+    - `torch.hstack()`、`torch.column_stack()`：水平堆叠 tensor，按列堆叠张量。
+      即第二个维度(`dim=1`)上增加，同 `torch.cat(dim = 1)`
+    - `torch.dstack()`：沿第三个轴进行逐像素(depthwise)拼接
 * tensor 的分割
-    - `torch.split()` 
-    - `torch.chunk()`
+    - `torch.split(split_size_or_sections)`：按给定的大小切分出多个张量
+    - `torch.hsplit()`：水平切分
+    - `torch.vsplit()`：垂直切分
+    - `torch.dsplit()`：类似 `numpy.dsplit()`，将张量按索引或指定的份数进行切分
+    - `torch.chunk()`：将 tensor 在某个维度上分成 n 份
+    - `torch.tensor_split()`：切分张量，核心看 `indices_or_sections` 变量如何设置
 * tensor 的索引和切片
     - `[]`、`[:]`、`[...]`...
     - 不规则切片
-        - `torch.index_select()`：不规则切片
-        - `torch.masked_select()`：不规则切片
-        - `torch.take()`：不规则切片
-    - `torch.gather()`
+        - `torch.index_select()`：不规则切片，在指定的维度上，按索引进行选择数据，
+          然后拼接成新张量。新张量的指定维度上长度是 index 的长度
+        - `torch.masked_select()`：不规则切片，根据 mask(0/1, False/True 形式的 mask)索引数据，返回 1-D 张量
+        - `torch.take()`：不规则切片，取张量中的某些元素，返回的是 1D 张量
+        - `toch.take_along_dim()`：取张量中的某些元素，返回的张量与 index 维度保持一致。
+          可搭配 `torch.argmax(t)` 和 `torch.argsort()` 使用，用于对最大概率所在位置取值，
+          或进行排序 
     - 如果要通过修改张量的部分元素值得到新的张量
-        - `torch.where()`：可以理解为 if 的张量版本
+        - `torch.where()`：可以理解为 if 的张量版本，根据一个是非条件，选择 x 的元素还是 y 的元素，拼接成新张量
         - `torch.index_fill()`：选取元素逻辑和 `torch.index_select` 相同 
         - `torch.masked_fill()`：选取元素逻辑和 `torch.masked_select` 相同
+    - `torch.gather()`：高级索引方法，目标检测中常用于索引 bbox。在指定的轴上，根据给定的index进行索引
 * tensor 的变换
     - `torch.view()`：改变张量的形状
     - `torch.reshape()`：改变张量的形状
     - `torch.squeeze()`：减少维度
-    - `torch.unsqueeze()`：增加维度
-    - `torch.transpose()`：交换维度
-    - `torch.permute()`：交换维度
-    - `torch.t`
+    - `torch.unsqueeze()`：增加维度，增加一个轴，常用于匹配数据维度
+    - `torch.transpose()`、`torch.swapaxes()`、`torch.swapdims()`：交换维度
+    - `torch.permute()`：交换维度、轴
+    - `torch.t`：转置
+* tensor 其他操作
+    - `torch.conj()`：返回共轭复数
+    - `torch.movedim()`：移动轴。如 0，1 轴交换
+    - `torch.moveaxis()`：同 `torch.movedim()`
+    - `torch.narrow()`：在指定轴上，设置起始和长度进行索引
+    - `torch.nonzero()`：返回非零元素的 index
+    - `torch.scatter(dim, index, src, reduce=None)`：将 `src` 中数据根据 `index` 中的索引，
+      按照 `dim` 的方向填进 `input` 中，其中 `index` 是告诉你哪些位置需要变，`src` 是告诉你要变的值是什么
+    - `torch.scatter_add()`：同 `scatter` 一样，对 `input` 进行元素修改，这里是 `+=`，而 `scatter` 是直接替换
+    - `torch.tile()`：将张量重复X遍，X遍表示可按多个维度进行重复
+    - `torch.unbind()`：移除张量的某个轴，并返回一串张量
 
-## 拼接和分割
+## 拼接
 
-可以用 `torch.cat` 方法和 `torch.stack` 方法将多个张量合并，
-可以用 `torch.split` 方法把一个张量分割成多个张量
+可以用 `torch.cat()` 方法和 `torch.stack()` 方法将多个张量合并，
+可以用 `torch.split()` 方法把一个张量分割成多个张量。
 
-* `torch.cat` 和 `torch.stack` 有略微的区别，`torch.cat` 是连接，
-  不会增加维度，而 `torch.stack` 是堆叠，会增加维度
-* `torch.split` 是 `torch.cat` 的逆运算，可以指定分割份数平均分割，
+* `torch.cat()` 和 `torch.stack()` 有略微的区别，`torch.cat()` 是连接，
+  不会增加维度，而 `torch.stack()` 是堆叠，会增加维度
+* `torch.split()` 是 `torch.cat()` 的逆运算，可以指定分割份数平均分割，
   也可以通过指定每份的记录数量进行分割
 
 ### cat
@@ -791,7 +902,12 @@ tensor([[ 1.,  2.,  5.,  6.,  9., 10.],
 ### stack
 
 ```python
-abc_stack = torch.stack([a, b, c], axis = 0)  # torch 中的 dim 和 axis 参数名可以混用
+a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+b = torch.tensor([[5.0, 6.0], [7.0, 8.0]])
+c = torch.tensor([[9.0, 10.0], [11.0, 12.0]])
+
+# torch 中的 dim 和 axis 参数名可以混用
+abc_stack = torch.stack([a, b, c], axis = 0)  
 print(abc_stack.shape)
 print(abc_stack)
 ```
@@ -809,7 +925,7 @@ tensor([[[ 1.,  2.],
 ```
 
 ```python
-abc_stack = torch.stack([a, b, c], axis = 1)  # torch 中的 dim 和 axis 参数名可以混用
+abc_stack = torch.stack([a, b, c], axis = 1)
 print(abc_stack.shape)
 print(abc_stack)
 ```
@@ -824,6 +940,69 @@ tensor([[[ 1.,  2.],
          [ 7.,  8.],
          [11., 12.]]])
 ```
+
+### vstack
+
+```python
+a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+b = torch.tensor([[5.0, 6.0], [7.0, 8.0]])
+c = torch.tensor([[9.0, 10.0], [11.0, 12.0]])
+
+abc_stack = torch.vstack([a, b, c])  
+print(abc_stack.shape)
+print(abc_stack)
+```
+
+```
+torch.Size([6, 2])
+tensor([[ 1.,  2.],
+        [ 3.,  4.],
+        [ 5.,  6.],
+        [ 7.,  8.],
+        [ 9., 10.],
+        [11., 12.]])
+```
+
+### hstack
+
+```python
+a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+b = torch.tensor([[5.0, 6.0], [7.0, 8.0]])
+c = torch.tensor([[9.0, 10.0], [11.0, 12.0]])
+
+abc_stack = torch.hstack([a, b, c])  
+print(abc_stack.shape)
+print(abc_stack)
+```
+
+```
+torch.Size([2, 6])
+tensor([[ 1.,  2.,  5.,  6.,  9., 10.],
+        [ 3.,  4.,  7.,  8., 11., 12.]])
+```
+
+### dstack
+
+```python
+a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+b = torch.tensor([[5.0, 6.0], [7.0, 8.0]])
+c = torch.tensor([[9.0, 10.0], [11.0, 12.0]])
+
+abc_stack = torch.dstack([a, b, c])  
+print(abc_stack.shape)
+print(abc_stack)
+```
+
+```
+torch.Size([2, 2, 3])
+tensor([[[ 1.,  5.,  9.],
+         [ 2.,  6., 10.]],
+
+        [[ 3.,  7., 11.],
+         [ 4.,  8., 12.]]])
+```
+
+## 分割
 
 ### split
 
@@ -887,14 +1066,175 @@ tensor([[ 9., 10.]])
 tensor([[11., 12.]])
 ```
 
+### hsplit
+
+```python
+t = torch.arange(16.0).reshpe(4, 4)
+print(t)
+
+torch.hsplit(t, indices_or_sections = 2)
+torch.hsplit(t, indices_or_sections = [3, 6])
+```
+
+```
+tensor([[ 0.,  1.,  2.,  3.],
+        [ 4.,  5.,  6.,  7.],
+        [ 8.,  9., 10., 11.],
+        [12., 13., 14., 15.]])
+
+(tensor([[ 0.,  1.],
+         [ 4.,  5.],
+         [ 8.,  9.],
+         [12., 13.]]),
+ tensor([[ 2.,  3.],
+         [ 6.,  7.],
+         [10., 11.],
+         [14., 15.]]))
+
+(tensor([[ 0.,  1.,  2.],
+         [ 4.,  5.,  6.],
+         [ 8.,  9., 10.],
+         [12., 13., 14.]]),
+ tensor([[ 3.],
+         [ 7.],
+         [11.],
+         [15.]]),
+ tensor([], size=(4, 0)))
+```
+
+### vsplit
+
+```python
+t = torch.arange(16.0).reshpe(4, 4)
+print(t)
+
+torch.vsplit(t, indices_or_sections = 2)
+torch.vsplit(t, indices_or_sections = [3, 6])
+```
+
+```
+tensor([[ 0.,  1.,  2.,  3.],
+        [ 4.,  5.,  6.,  7.],
+        [ 8.,  9., 10., 11.],
+        [12., 13., 14., 15.]])
+
+(tensor([[0., 1., 2., 3.],
+         [4., 5., 6., 7.]]),
+ tensor([[ 8.,  9., 10., 11.],
+         [12., 13., 14., 15.]]))
+
+(tensor([[ 0.,  1.,  2.,  3.],
+         [ 4.,  5.,  6.,  7.],
+         [ 8.,  9., 10., 11.]]),
+ tensor([[12., 13., 14., 15.]]),
+ tensor([], size=(0, 4)))
+```
+
+### dsplit
+
+```python
+t = torch.arange(16.0).reshpe(4, 4)
+print(t)
+
+torch.dsplit(t, indices_or_sections = 2)
+torch.dsplit(t, indices_or_sections = [3, 6])
+```
+
+```
+tensor([[ 0.,  1.,  2.,  3.],
+        [ 4.,  5.,  6.,  7.],
+        [ 8.,  9., 10., 11.],
+        [12., 13., 14., 15.]])
+
+(tensor([[ 0.,  1.],
+         [ 4.,  5.],
+         [ 8.,  9.],
+         [12., 13.]]),
+ tensor([[ 2.,  3.],
+         [ 6.,  7.],
+         [10., 11.],
+         [14., 15.]]))
+
+(tensor([[ 0.,  1.,  2.],
+         [ 4.,  5.,  6.],
+         [ 8.,  9., 10.],
+         [12., 13., 14.]]),
+ tensor([[ 3.],
+         [ 7.],
+         [11.],
+         [15.]]),
+ tensor([], size=(4, 0)))
+```
+
+### tensor_split
+
+```python
+>>> x = torch.arange(8)
+>>> x
+tensor([0, 1, 2, 3, 4, 5, 6, 7])
+>>> torch.tensor_split(x, 3)  # (0:3, 3:6, 6:8)
+(tensor([0, 1, 2]), tensor([3, 4, 5]), tensor([6, 7]))
+
+>>> x = torch.arange(7)
+>>> x
+tensor([0, 1, 2, 3, 4, 5, 6])
+>>> torch.tensor_split(x, 3)  # (0:3, 3:5, 5:7)
+(tensor([0, 1, 2]), tensor([3, 4]), tensor([5, 6]))
+>>> torch.tensor_split(x, (1, 6))  # (0:1, 1:6, 6:7)
+(tensor([0]), tensor([1, 2, 3, 4, 5]), tensor([6]))
+
+>>> x = torch.arange(14).reshape(2, 7)
+>>> x
+tensor([[ 0,  1,  2,  3,  4,  5,  6],
+        [ 7,  8,  9, 10, 11, 12, 13]])
+>>> torch.tensor_split(x, 3, dim = 1)
+(tensor([[0, 1, 2],
+        [7, 8, 9]]),
+ tensor([[ 3,  4],
+        [10, 11]]),
+ tensor([[ 5,  6],
+        [12, 13]]))
+>>> torch.tensor_split(x, (1, 6), dim = 1)
+(tensor([[0],
+        [7]]),
+ tensor([[ 1,  2,  3,  4,  5],
+        [ 8,  9, 10, 11, 12]]),
+ tensor([[ 6],
+        [13]]))
+```
+
+### chunk
+
+```python
+>>> torch.arange(11).chunk(6)
+(tensor([0, 1]),
+ tensor([2, 3]),
+ tensor([4, 5]),
+ tensor([6, 7]),
+ tensor([8, 9]),
+ tensor([10]))
+>>> torch.arange(12).chunk(6)
+(tensor([0, 1]),
+ tensor([2, 3]),
+ tensor([4, 5]),
+ tensor([6, 7]),
+ tensor([8, 9]),
+ tensor([10, 11]))
+>>> torch.arange(13).chunk(6)
+(tensor([0, 1, 2]),
+ tensor([3, 4, 5]),
+ tensor([6, 7, 8]),
+ tensor([ 9, 10, 11]),
+ tensor([12]))
+```
+
 ## 索引和切片
 
-### 选取行、列
+### 选取行列
 
 ```python
 torch.manual_seed(0)
-minval, maxval = 0, 10
-t = torch.floor(minval + (maxval - minval) * torch.rand([5, 5])).int()
+t = torch.floor(0 + (10 - 0) * torch.rand([5, 5])).int()
 print(t)
 
 a = torch.arange(27).view(3, 3, 3)
@@ -922,13 +1262,47 @@ tensor([[[ 0,  1,  2],
 ```
 
 ```python
-t[0]  # 第 0 行
-t[-1]  # 倒数第一行
-t[1, 3]  # 第 1 行第 3 列
-t[1][3]  # 第 1 行第 3 列
-t[1:4, :]  # 第 1 行至第 3 行
-t[1:4, 4:2]  # 第 1 行至最后一行，第 0 列到最后一列每隔两列取一列
-a[..., 1]  # 省略号可以表示多个冒号
+# 取行
+>>>t[0]  # 第 0 行
+tensor([4, 7, 0, 1, 3], dtype=torch.int32)
+>>>t[-1]  # 倒数第一行
+tensor([6, 9, 3, 8, 4], dtype=torch.int32)
+
+# 取行列
+>>>t[1, 3]  # 第 1 行第 3 列
+tensor(4, dtype=torch.int32)
+>>>t[1][3]  # 第 1 行第 3 列
+tensor(4, dtype=torch.int32)
+
+# 取行
+>>>t[1:4, :]  # 第 1 行至第 3 行
+tensor([[6, 4, 8, 4, 6],
+        [3, 4, 0, 1, 2],
+        [5, 6, 8, 1, 2]], dtype=torch.int32)
+
+# 取列
+>>>t[:, 1:4]
+tensor([[7, 0, 1],
+        [4, 8, 4],
+        [4, 0, 1],
+        [6, 8, 1],
+        [9, 3, 8]], dtype=torch.int32)
+
+# 取行列
+>>>t[1:4, 0:2]
+tensor([[6, 4],
+        [3, 4],
+        [5, 6]], dtype=torch.int32)
+
+# 第 0 行至最后一行，第 0 列到最后一列，每隔两行取一行
+>>>
+# 第 0 行至最后一行，第 0 列到最后一列，每隔两列取一列
+>>>
+
+>>>a[..., 1]  # 省略号可以表示多个冒号
+tensor([[ 1,  4,  7],
+        [10, 13, 16],
+        [19, 22, 25]])
 ```
 
 ### 不规则切片
@@ -968,6 +1342,8 @@ tensor([[[55, 95,  3, 18, 37, 30, 93],
          [39, 29, 40, 40,  5,  6, 42]]], dtype=torch.int32)
 ```
 
+### index_select
+
 ```python
 # 抽取每个班级第0个学生，第2个学生，第4个学生的全部成绩
 torch.index_select(socres, dim = 1, index = torch.tensor([0, 2, 4]))
@@ -978,7 +1354,11 @@ q = torch.index_select(
     dim = 2, 
     index = torch.tensor([1, 3, 6])
 )
+```
 
+### take
+
+```python
 # 抽取第0个班级第0个学生的第0门课程，第2个班级的第3个学生的第1门课程，第3个班级的第4个学生第6门课程成绩
 # take将输入看成一维数组，输出和index同形状
 s = torch.take(
@@ -989,22 +1369,40 @@ s = torch.take(
         3 * 5 * 7 + 4 * 7 + 6
     ])
 )
+```
 
+### take_along_dim
+
+### masked_select
+
+```python
 # 抽取分数大于等于 80 分的分数(布尔索引)，结果是 1 维张量
 g = torch.masked_select(scores, scores >= 80)
 print(g)
 ```
+
+### gather
+
+### where
 
 * 如果要通过修改张量的部分元素值得到新的张量
 
 ```python
 # 如果分数大于 60 分，赋值成 1，否则赋值成 0
 ifpass = torch.where(scores > 60, torch.tensor(1), torch.tensor(0))
+```
 
+### index_fill
+
+```python
 # 将每个班级第0个学生，第2个学生，第4个学生的全部成绩赋值成满分
 torch.index_fill(scores, dim = 1, index = torch.tensor(0, 2, 4), value = 100)
 scores.index_fill(dim = 1, index = torch.tensor([0, 2, 4]), value = 100)
+```
 
+### masked_fill
+
+```python
 # 将分数小于60分的分数赋值成60分
 b = torch.masked_fill(scores, scores < 60, 60)
 b = scores.masked_fill(scores < 60, 60)
@@ -1164,6 +1562,19 @@ print(matrix.t())
 print(torch.transpose(matrix, 0, 1))
 ```
 
+## 其他操作
+
+* `torch.conj()`：返回共轭复数
+* `torch.movedim()`：移动轴。如 0，1 轴交换
+* `torch.moveaxis()`：同 `torch.movedim()`
+* `torch.narrow()`：在指定轴上，设置起始和长度进行索引
+* `torch.nonzero()`：返回非零元素的 index
+* `torch.scatter(dim, index, src, reduce=None)`：将 `src` 中数据根据 `index` 中的索引，
+    按照 `dim` 的方向填进 `input` 中，其中 `index` 是告诉你哪些位置需要变，`src` 是告诉你要变的值是什么
+* `torch.scatter_add()`：同 `scatter` 一样，对 `input` 进行元素修改，这里是 `+=`，而 `scatter` 是直接替换
+* `torch.tile()`：将张量重复X遍，X遍表示可按多个维度进行重复
+* `torch.unbind()`：移除张量的某个轴，并返回一串张量
+
 # tensor 数学运算
 
 tensor 数学运算主要有:
@@ -1174,6 +1585,16 @@ tensor 数学运算主要有:
 * 任意阶张量运算
     - 爱因斯坦求和函数 `torch.einsum()` 
 * 广播机制
+
+tensor 数学运算分类：
+
+* [Pointwise Ops](https://pytorch.org/docs/stable/torch.html#pointwise-ops)：逐元素的操作，如 abs, cos, sin, floor, floor_divide, pow 等
+* [Reduction Ops](https://pytorch.org/docs/stable/torch.html#reduction-ops): 减少元素的操作，如 argmax, argmin, all, any, mean, norm, var 等
+* [Comparison Ops](https://pytorch.org/docs/stable/torch.html#comparison-ops)：对比操作， 如 ge, gt, le, lt, eq, argsort, isnan, topk 等
+* [Spectral Ops](https://pytorch.org/docs/stable/torch.html#spectral-ops): 谱操作，如短时傅里叶变换等各类信号处理的函数
+* Other Operations(https://pytorch.org/docs/stable/torch.html#other-operations)：其它，如 clone， diag，flip 等
+* [BLAS and LAPACK Operations](https://pytorch.org/docs/stable/torch.html#blas-and-lapack-operations)：BLAS（Basic Linear Algebra Subprograms）基础线性代数）操作。
+  如, addmm, dot, inner, svd等。
 
 ## In-place 操作
 
@@ -1648,3 +2069,4 @@ a_broad + b_broad
 
 * [爱因斯坦求和约定](https://www.zhihu.com/question/439496333)
 * [PyTorch Doc](https://pytorch.org/docs/stable/tensors.html#)
+* [张量的相关函数](https://tingsongyu.github.io/PyTorch-Tutorial-2nd/chapter-2/2.4-method-tensor.html)

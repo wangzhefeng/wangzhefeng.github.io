@@ -1,7 +1,7 @@
 ---
-title: TODO-模型部署
+title: PyTorch-模型部署
 author: 王哲峰
-date: '2022-07-15'
+date: '2022-09-15'
 slug: model-deploy
 categories:
   - deeplearning
@@ -39,8 +39,6 @@ img {
     - [创建 PyTorch 模型](#创建-pytorch-模型)
     - [中间表示 -- ONNX](#中间表示----onnx)
     - [推理引擎 -- ONNX Runtime](#推理引擎----onnx-runtime)
-- [TensorFlow](#tensorflow)
-    - [TensorFlow Serving-Docker-Tornado](#tensorflow-serving-docker-tornado)
 - [总结](#总结)
 </p></details><p></p>
 
@@ -53,6 +51,12 @@ img {
 * 推理引擎 ONNX Runtime、TensorRT 的使用方法
 * 部署流水线 PyTorch => ONNX => ONNX Runtime/TensorRT 的示例及常见部署问题的解决方法
 * MMDeploy C/C++ 推理 SDK
+
+
+
+
+
+
 
 # PyTorch
 
@@ -185,25 +189,6 @@ cv2.imwrite("face_torch.png", torch_output)
 ONNX (Open Neural Network Exchange) 是 Facebook 和微软在 2017 年共同发布的，用于标准描述计算图的一种格式。目前，在数家机构的共同维护下，ONNX 已经对接了多种深度学习框架和多种推理引擎。因此，ONNX 被当成了深度学习框架到推理引擎的桥梁，就像编译器的中间语言一样。由于各框架兼容性不一，通常只用 ONNX 表示更容易部署的静态图。
 
 ## 推理引擎 -- ONNX Runtime
-
-# TensorFlow
-
-## TensorFlow Serving-Docker-Tornado
-
-![](https://pic1.zhimg.com/v2-0cd02fbfa359bfe77397981d1a0e938d_1440w.jpg?source%3D172ae18b)
-
-当我们训练完一个tensorflow(或keras)模型后，需要把它做成一个服务，
-让使用者通过某种方式来调用你的模型，而不是直接运行你的代码（因为你的使用者不一定懂怎样安装），
-这个过程需要把模型部署到服务器上。常用的做法如使用flask、Django、tornado 等 web 框架创建一个服务器 app，
-这个 app 在启动后就会一直挂在后台，然后等待用户使用客户端 POST 一个请求上来（例如上传了一张图片的 url），
-app 检测到有请求，就会下载这个 url 的图片，接着调用你的模型，得到推理结果后以 json 的格式把结果返回给用户
-
-这个做法对于简单部署来说代码量不多，对于不熟悉 web 框架的朋友来说随便套用一个模板就能写出来，
-但是也会有一些明显的缺点：
-
-1. 需要在服务器上重新安装项目所需的所有依赖
-2. 当接收到并发请求的时候，服务器可能要后台启动多个进程进行推理，造成资源紧缺
-3. 不同的模型需要启动不同的服务
 
 # 总结
 
