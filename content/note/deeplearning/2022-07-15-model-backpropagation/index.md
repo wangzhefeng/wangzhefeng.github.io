@@ -1,8 +1,8 @@
 ---
-title: 反向传播算法
+title: 反向传播
 author: 王哲峰
 date: '2022-07-15'
-slug: model-backforward
+slug: model-backpropagation
 categories:
   - deeplearning
 tags:

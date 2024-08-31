@@ -1,5 +1,5 @@
 ---
-title: 模型部署
+title: TODO-模型部署
 author: 王哲峰
 date: '2022-07-15'
 slug: model-deploy
@@ -46,13 +46,13 @@ img {
 
 # 模型部署简介
 
-模型部署内容
+模型部署内容：
 
-- 中间表示 ONNX 的定义标准
-- PyTorch 模型转换到 ONNX 模型的方法
-- 推理引擎 ONNX Runtime、TensorRT 的使用方法
-- 部署流水线 PyTorch => ONNX => ONNX Runtime/TensorRT 的示例及常见部署问题的解决方法
-- MMDeploy C/C++ 推理 SDK
+* 中间表示 ONNX 的定义标准
+* PyTorch 模型转换到 ONNX 模型的方法
+* 推理引擎 ONNX Runtime、TensorRT 的使用方法
+* 部署流水线 PyTorch => ONNX => ONNX Runtime/TensorRT 的示例及常见部署问题的解决方法
+* MMDeploy C/C++ 推理 SDK
 
 # PyTorch
 
@@ -62,22 +62,22 @@ img {
 
 1. 首先，需要创建一个有 PyTorch 库的 Python 编程环境。
 
-- conda [CPU only]
+    - conda [CPU only]
 
-```bash
-# 创建预安装 Python3.7 的名叫 deploy 的虚拟环境
-$ conda create -n deploy python=3.7 -y
-# 进入虚拟环境
-$ conda activate deploy
-$ conda install pytorch torchvision cpuonly -c pytorch
-```
+    ```bash
+    # 创建预安装 Python3.7 的名叫 deploy 的虚拟环境
+    $ conda create -n deploy python=3.7 -y
+    # 进入虚拟环境
+    $ conda activate deploy
+    $ conda install pytorch torchvision cpuonly -c pytorch
+    ```
 
-- conda [GPU]
+    - conda [GPU]
 
-```bash
-# 安装 cuda 11.3 的 PyTorch
-$ conda install pytorch torchvision cudatoolkit=11.3 -c pytorch
-```
+    ```bash
+    # 安装 cuda 11.3 的 PyTorch
+    $ conda install pytorch torchvision cudatoolkit=11.3 -c pytorch
+    ```
 
 2. 安装其他第三方库
 
@@ -175,7 +175,8 @@ torch_output = np.transpose(torch_output, [1, 2, 0]).astype(np.unit8)
 cv2.imwrite("face_torch.png", torch_output)
 ```
 
-4. 在 PyTorch 模型测试正确后，接下来就是正式部署这个模型，所以下一步的任务就是把 PyTorch 模型转换成中间表示 ONNX 描述的模型
+4. 在 PyTorch 模型测试正确后，接下来就是正式部署这个模型，
+   所以下一步的任务就是把 PyTorch 模型转换成中间表示 ONNX 描述的模型。
 
 ## 中间表示 -- ONNX
 
@@ -209,6 +210,6 @@ app 检测到有请求，就会下载这个 url 的图片，接着调用你的�
 - 模型部署，指把训练好的模型在特定额环境中运行的过程。模型部署要解决模型框架兼容性差和模型运行速度慢这两个大问题
 - 模型部署的常见流水线是：**深度学习框架 => 中间表示 => 推理引擎**。其中比较常用的一个中间表示是 ONNX
 - 深度学习模型实际上就是一个计算图。模型部署时通常把模型转换成静态的计算图，即没有控制流（分支语句、循环语句）的计算图
-- PyTorch 框架自带对 ONNX 的支持，只需要构造一组随机的输入，并对模型调用 `torch.onnx.export` 即可完成 PyTorch 到 ONNX 的转换
+- PyTorch 框架自带对 ONNX 的支持，只需要构造一组随机的输入，
+  并对模型调用 `torch.onnx.export` 即可完成 PyTorch 到 ONNX 的转换
 - 推理引擎 ONNX Runtime 对 ONNX 模型有原生的支持。给定一个 `.onnx` 文件，只需要简单使用 ONNX Runtime 的 Python API 就可以完成模型推理
-

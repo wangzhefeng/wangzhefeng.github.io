@@ -2,7 +2,7 @@
 title: 优化算法
 author: 王哲峰
 date: '2022-07-15'
-slug: optimizer
+slug: model-optimizer
 categories:
   - deeplearning
 tags:

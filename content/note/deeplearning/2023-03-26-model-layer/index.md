@@ -2,7 +2,7 @@
 title: 模型层
 author: 王哲峰
 date: '2023-03-26'
-slug: layer
+slug: model-layer
 categories:
     - deeplearning
 tags:
@@ -35,21 +35,21 @@ img {
 <details><summary>目录</summary><p>
 
 - [归一化层 Normalization](#归一化层-normalization)
-  - [结构化数据的 BatchNorm1d](#结构化数据的-batchnorm1d)
-  - [图片数据的 BatchNorm2d](#图片数据的-batchnorm2d)
-  - [文本数据的 LayerNorm](#文本数据的-layernorm)
-  - [自适应学习 SwitchableNorm](#自适应学习-switchablenorm)
-  - [对 BatchNorm 需要注意的几点](#对-batchnorm-需要注意的几点)
-  - [归一化层 PyTorch 示例](#归一化层-pytorch-示例)
+    - [结构化数据的 BatchNorm1d](#结构化数据的-batchnorm1d)
+    - [图片数据的 BatchNorm2d](#图片数据的-batchnorm2d)
+    - [文本数据的 LayerNorm](#文本数据的-layernorm)
+    - [自适应学习 SwitchableNorm](#自适应学习-switchablenorm)
+    - [对 BatchNorm 需要注意的几点](#对-batchnorm-需要注意的几点)
+    - [归一化层 PyTorch 示例](#归一化层-pytorch-示例)
 - [卷积层](#卷积层)
-  - [普通卷积](#普通卷积)
-  - [空洞卷积](#空洞卷积)
-  - [分组卷积](#分组卷积)
-  - [深度可分离卷积](#深度可分离卷积)
-  - [转置卷积](#转置卷积)
-  - [卷积层 PyTorch 示例](#卷积层-pytorch-示例)
+    - [普通卷积](#普通卷积)
+    - [空洞卷积](#空洞卷积)
+    - [分组卷积](#分组卷积)
+    - [深度可分离卷积](#深度可分离卷积)
+    - [转置卷积](#转置卷积)
+    - [卷积层 PyTorch 示例](#卷积层-pytorch-示例)
 - [上采样层](#上采样层)
-  - [上采样层 PyTorch 示例](#上采样层-pytorch-示例)
+    - [上采样层 PyTorch 示例](#上采样层-pytorch-示例)
 </p></details><p></p>
 
 
