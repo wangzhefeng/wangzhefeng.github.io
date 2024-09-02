@@ -158,4 +158,3 @@ PyTorch 没有官方的高阶 API，一般通过 `torch.nn.Module` 来构建模�
 * [pytorch_lightning](https://www.pytorchlightning.ai/)
 * [Optuna 调参工具](https://github.com/optuna/optuna)
 * [wandb](https://wandb.ai/home)
-* [AIbumentations](https://albumentations.ai/)

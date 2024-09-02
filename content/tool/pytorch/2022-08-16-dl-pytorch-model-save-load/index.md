@@ -35,22 +35,21 @@ img {
 <details><summary>目录</summary><p>
 
 - [保存和加载模型权重参数](#保存和加载模型权重参数)
-  - [模型保存](#模型保存)
-  - [模型加载](#模型加载)
+    - [模型保存](#模型保存)
+    - [模型加载](#模型加载)
 - [保存和加载整个模型](#保存和加载整个模型)
-  - [模型保存](#模型保存-1)
-  - [模型加载](#模型加载-1)
-- [导出模型为 ONNX](#导出模型为-onnx)
-- [保存和加载 checkpoint](#保存和加载-checkpoint)
-  - [定义和初始化模型](#定义和初始化模型)
-  - [初始化优化器](#初始化优化器)
-  - [保存 checkpoint](#保存-checkpoint)
-  - [加载 checkpoint](#加载-checkpoint)
+    - [模型保存](#模型保存-1)
+    - [模型加载](#模型加载-1)
+- [保存和加载模型 checkpoint](#保存和加载模型-checkpoint)
+    - [定义和初始化模型](#定义和初始化模型)
+    - [初始化优化器](#初始化优化器)
+    - [保存 checkpoint](#保存-checkpoint)
+    - [加载 checkpoint](#加载-checkpoint)
 </p></details><p></p>
 
 # 保存和加载模型权重参数
 
-PyTorch 将模型训练学习到的权重参数保存在一个状态字典 `state_dict` 中，
+PyTorch 将模型训练学习到的权重参数保存在一个状态字典 `state_dict` 中。
 
 ## 模型保存
 
@@ -86,7 +85,8 @@ import torchvision.models as models
 MODEL_PATH = "models/model_weights.pth"
 
 # 模型加载
-model = models.vgg16()  # do not specify pretrained=True, i.e. do not load default weights
+# do not specify pretrained=True, i.e. do not load default weights
+model = models.vgg16()  
 model.load_state_dict(
     torch.load(MODEL_PATH)
 )
@@ -130,21 +130,7 @@ MODEL_PATH = "models/model.pth"
 model = torch.load(MODEL_PATH)  # require pickle module
 ```
 
-# 导出模型为 ONNX
-
-* PyTorch 还具有原生 ONNX 导出支持。然而，鉴于 PyTorch 执行图的动态特性，
-  导出过程必须遍历执行图以生成持久的 ONNX 模型。出于这个原因，
-  应该将适当大小的测试变量传递给导出例程
-* [ONNX 教程](https://github.com/onnx/tutorials)
-
-```python
-import torch
-import torch.onnx as onnx
-
-input_image = torch.zeros((1, 3, 224, 224))
-```
-
-# 保存和加载 checkpoint
+# 保存和加载模型 checkpoint
 
 ```python
 import torch
@@ -191,7 +177,7 @@ optimizer = optim.SGD(
 
 ## 保存 checkpoint
 
-* `torch.save({})`
+* `torch.save({}, model_path)`
 
 ```python
 EPOCH = 5
@@ -236,3 +222,4 @@ model.eval()
 # - or - 
 model.train()
 ```
+

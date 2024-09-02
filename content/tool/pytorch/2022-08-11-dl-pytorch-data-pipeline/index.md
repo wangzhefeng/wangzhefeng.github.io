@@ -54,11 +54,6 @@ img {
     - [TorchText datasets](#torchtext-datasets)
     - [TorchAudio datasets](#torchaudio-datasets)
     - [自定义数据集的基本类](#自定义数据集的基本类)
-- [PyTorch 数据预处理](#pytorch-数据预处理)
-    - [torchvision transforms](#torchvision-transforms)
-        - [常用转换](#常用转换)
-    - [torchtext transforms](#torchtext-transforms)
-    - [torchaudio transforms](#torchaudio-transforms)
 - [PyTorch 数据管道构建](#pytorch-数据管道构建)
     - [结构化数据管道](#结构化数据管道)
     - [图像数据管道](#图像数据管道)
@@ -141,7 +136,7 @@ PyTorch 通常使用 `torch.utils.data.Dataset` 和 `torch.utils.data.DataLoader
 
 1. 第一个步骤确定数据集的长度是由 `Dataset` 的 `__len__` 方法实现的
 2. 第二个步骤从 `$[0, n-1]$` 的范围中抽取出 `$m$` 个数的方法是由 `DataLoader` 的 `sampler` 和 `batch_sampler` 参数指定的
-    - `sampler` 参数制定单个元素的抽样方法，一般无需用户设置，
+    - `sampler` 参数指定单个元素的抽样方法，一般无需用户设置，
       程序默认在 `DataLoader` 的参数 `shuffle = True` 时采用随机抽样，
       `shuffle = False` 时采用顺序抽样
     - `batch_sampler` 参数将多个抽样的元素整理成一个列表，一般无需用户设置，
@@ -377,7 +372,6 @@ from torch.utils.data import (
     random_split
 )
 
-
 # data
 iris = datasets.load_iris()
 
@@ -390,7 +384,10 @@ dataset_iris = TensorDataset(
 # train and test dataset split
 num_train = int(len(dataset_iris) * 0.8)
 num_valid = len(dataset_iris) - num_train
-train_dataset, valid_dataset = random_split(dataset_iris, [num_train, num_valid])
+train_dataset, valid_dataset = random_split(
+    dataset_iris,
+    [num_train, num_valid]
+)
 
 # dataloader
 train_dataloader = DataLoader(
@@ -540,11 +537,6 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from torchvision.io import read_image
-
-
-# global variable
-LOGGING_LABEL = __file__.split('/')[-1][:-3]
-
 
 class CustomImageDataset(Dataset):
 
@@ -794,7 +786,7 @@ for batch_ndx, sample in enumerate(loader):
 PyTorch 内置的数据集都是 `torch.utils.data.Dataset` 的子类，
 所以它们都具有 `__getitem__` 和 `__len__` 实现方法，
 因此，它们都可以被传递给可以使用 `torch.multiprocessing` 
-多进程的 `torch.utils.data.DataLoader` 并行加载多个样本
+多进程的 `torch.utils.data.DataLoader` 并行加载多个样本。
 
 这些数据集都有类似的 API，它们都有两个共同的转换参数:
 
@@ -863,83 +855,6 @@ data_loader = DataLoader(
 * `DatasetFolder(root, loader, Any],...)`
 * `ImageFolder(root, transform,...)`
 * `VisionDataset(root, transforms, transform,...)`
-
-# PyTorch 数据预处理
-
-可以使用 `transforms` 对数据集进行转换操作，使得数据集可以作为机器学习算法可以使用的形式
-
-* `torchvision.transforms`
-* `torchtext.transforms`
-* `torchaudio.transforms`
-
-## torchvision transforms
-
-> torchvision.transforms
-
-所有的 torchvision datasets 都有两个接受包含转换逻辑的可调用对象的参数:
-
-* transform
-    - 修改特征
-* target_transform
-    - 修改标签
-
-大部分 transform 同时接受 PIL 图像和 tensor 图像，但是也有一些 tansform 只接受 PIL 图像，或只接受 tensor 图像
-
-* PIL
-* tensor
-
-transform 接受 tensor 图像或批量 tensor 图像
-
-* tensor 图像的 shape 格式是 `(C, H, W)`
-* 批量 tensor 图像的 shape 格式是 `(B, C, H, W)`
-
-`torchvision.transform` 模块提供了多个常用转换
-
-* ToTensor()
-    - 将 PIL 格式图像或 Numpy `ndarra` 转换为 `FloatTensor`
-    - 将图像的像素强度值(pixel intensity values)缩放在 `[0, 1]` 范围内
-* Lambda 换换
-    - 可以应用任何用户自定义的 lambda 函数
-    - `scatter_`: 在标签给定的索引上设置 `value`
-
-### 常用转换
-
-* Scriptable transforms
-    - `torch.nn.Sequential`
-    - `torch.jit.script`
-* Compositions of transforms
-    - `Compose`: 将多个 transform 串联起来
-* Transforms on PIL Image and `torch.*Tensor`
-* Transforms on PIL Image only
-    - `RandomChoice`
-    - `RandomOrder`
-* Transforms on `torch.*Tensor` only
-    - `LinearTransformation`
-    - `Normalize`
-    - `RandomErasing`
-    - `ConvertImageDtype`
-* Conversion transforms
-    - `ToPILImage`: tensor/ndarray -> PIL Image
-    - `ToTensor`: PIL Image/numpy.ndarray -> tensor
-    - `PILToTensor`: PIL Image -> tensor
-* Generic transforms
-    - `Lambda`
-* Automatic Augmentation transforms
-    - `AutoAugmentPolicy`
-    - `AutoAgument`
-    - `RandAugment`
-    - `TrivialAugmentWide`
-    - `AugMix`
-* Functional transforms
-    - 函数式转换提供了对转换管道的细粒度控制。与上述转换相反，
-      函数式转换不包含用于其参数的随机数生成器。
-      这意味着必须指定/生成所有参数，但函数转换将提供跨调用的可重现结果
-    - `torchvision.transform.functional`
-
-## torchtext transforms
-
-## torchaudio transforms
-
 
 # PyTorch 数据管道构建
 

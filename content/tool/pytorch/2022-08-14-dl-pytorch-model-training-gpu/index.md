@@ -35,51 +35,52 @@ img {
 <details><summary>目录</summary><p>
 
 - [PyTorch GPU 模型训练方式](#pytorch-gpu-模型训练方式)
-  - [GPU 训练模型](#gpu-训练模型)
-  - [多 GPU 训练模型](#多-gpu-训练模型)
+    - [GPU 训练模型](#gpu-训练模型)
+    - [多 GPU 训练模型](#多-gpu-训练模型)
 - [GPU 相关操作](#gpu-相关操作)
-  - [查看 GPU 设备是否可用](#查看-gpu-设备是否可用)
-  - [查看 GPU 设备数量](#查看-gpu-设备数量)
-  - [将张量在 GPU 和 CPU 之间移动](#将张量在-gpu-和-cpu-之间移动)
-    - [tensor](#tensor)
-    - [tensor on gpu](#tensor-on-gpu)
-    - [tensor on cpu](#tensor-on-cpu)
-    - [将模型中的全部张量移动到 GPU 上](#将模型中的全部张量移动到-gpu-上)
-    - [创建支持多个 GPU 数据并行的模型](#创建支持多个-gpu-数据并行的模型)
+    - [查看 GPU 设备是否可用](#查看-gpu-设备是否可用)
+    - [查看 GPU 设备数量](#查看-gpu-设备数量)
+    - [将张量在 GPU 和 CPU 之间移动](#将张量在-gpu-和-cpu-之间移动)
+        - [tensor](#tensor)
+        - [tensor on gpu](#tensor-on-gpu)
+        - [tensor on cpu](#tensor-on-cpu)
+        - [将模型中的全部张量移动到 GPU 上](#将模型中的全部张量移动到-gpu-上)
+        - [创建支持多个 GPU 数据并行的模型](#创建支持多个-gpu-数据并行的模型)
 - [矩阵乘法示例](#矩阵乘法示例)
-  - [使用 CPU](#使用-cpu)
-  - [使用 GPU](#使用-gpu)
+    - [使用 CPU](#使用-cpu)
+    - [使用 GPU](#使用-gpu)
 - [线性回归示例](#线性回归示例)
-  - [使用 CPU](#使用-cpu-1)
-  - [使用 GPU](#使用-gpu-1)
+    - [使用 CPU](#使用-cpu-1)
+    - [使用 GPU](#使用-gpu-1)
 - [图片分类示例](#图片分类示例)
-  - [使用 CPU 训练](#使用-cpu-训练)
-  - [使用 GPU 训练](#使用-gpu-训练)
+    - [使用 CPU 训练](#使用-cpu-训练)
+    - [使用 GPU 训练](#使用-gpu-训练)
 - [训练循环中使用 GPU](#训练循环中使用-gpu)
-  - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
-  - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
+    - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
+    - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
 - [PyTorch CUDA](#pytorch-cuda)
-  - [CUDA 语义](#cuda-语义)
-  - [torch.cuda](#torchcuda)
-    - [随机数生成](#随机数生成)
-    - [Communication collectives](#communication-collectives)
-    - [Streams 和 events](#streams-和-events)
-    - [Graphs](#graphs)
-    - [内存管理](#内存管理)
-    - [NVIDIA 工具扩展(NVTX)](#nvidia-工具扩展nvtx)
-    - [Jiterator](#jiterator)
+    - [CUDA 语义](#cuda-语义)
+    - [torch.cuda](#torchcuda)
+        - [随机数生成](#随机数生成)
+        - [Communication collectives](#communication-collectives)
+        - [Streams 和 events](#streams-和-events)
+        - [Graphs](#graphs)
+        - [内存管理](#内存管理)
+        - [NVIDIA 工具扩展(NVTX)](#nvidia-工具扩展nvtx)
+        - [Jiterator](#jiterator)
 - [参考](#参考)
 </p></details><p></p>
 
 深度学习模型训练过程的耗时主要来自于两个部分，一部分来自数据准备，另一部分来自参数迭代。
 当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。
-当参数迭代过程成为训练时间的主要瓶颈时，通常的方法是应用 GPU 来进行加速
+当参数迭代过程成为训练时间的主要瓶颈时，通常的方法是应用 GPU 来进行加速。
 
 # PyTorch GPU 模型训练方式
 
 ## GPU 训练模型
 
-PyTorch 中使用 GPU 加速模型非常简单，只要将模型和数据移动到 GPU 上，核心代码只有几行
+PyTorch 中使用 GPU 加速模型非常简单，只要将**模型**和**数据**移动到 GPU 上，
+核心代码只有几行：
 
 ```python
 import torch
@@ -133,11 +134,10 @@ labels = labels.to(device)
 
 ## 多 GPU 训练模型
 
-> * PyTorch 默认使用单个 GPU 执行运算
+> PyTorch 默认使用单个 GPU 执行运算
 
 如果要使用多个 GPU 训练模型，只需要将模型设置为数据并行风格模型。
-模型移动到 GPU 上之后，会在每一个 GPU 上拷贝一个副本，
-并把数据平分到各个 GPU 上进行训练
+模型移动到 GPU 上之后，会在每一个 GPU 上拷贝一个副本，并把数据平分到各个 GPU 上进行训练。
 
 ```python
 import torch

@@ -36,45 +36,44 @@ img {
 
 - [模型层简介](#模型层简介)
 - [基础层](#基础层)
-  - [全连接层](#全连接层)
-  - [Embedding 层](#embedding-层)
-  - [Normalization 层](#normalization-层)
-    - [BatchNormalization 层](#batchnormalization-层)
-    - [其他 Normalization 层](#其他-normalization-层)
-  - [Dropout 层](#dropout-层)
-  - [Padding 层](#padding-层)
-  - [限幅层](#限幅层)
+    - [全连接层](#全连接层)
+    - [Embedding 层](#embedding-层)
+    - [Normalization 层](#normalization-层)
+        - [BatchNormalization 层](#batchnormalization-层)
+        - [其他 Normalization 层](#其他-normalization-层)
+    - [Dropout 层](#dropout-层)
+    - [Padding 层](#padding-层)
+    - [限幅层](#限幅层)
 - [卷积网络相关层](#卷积网络相关层)
-  - [卷积层](#卷积层)
-    - [一维卷积](#一维卷积)
-    - [二维卷积](#二维卷积)
-    - [三维卷积](#三维卷积)
-  - [池化层](#池化层)
-    - [最大池化层](#最大池化层)
-    - [平均池化层](#平均池化层)
-  - [其他](#其他)
+    - [卷积层](#卷积层)
+        - [一维卷积](#一维卷积)
+        - [二维卷积](#二维卷积)
+        - [三维卷积](#三维卷积)
+    - [池化层](#池化层)
+        - [最大池化层](#最大池化层)
+        - [平均池化层](#平均池化层)
+    - [其他](#其他)
 - [循环网络相关层](#循环网络相关层)
-  - [RNN 层](#rnn-层)
-  - [LSTM 层](#lstm-层)
-  - [GRU 层](#gru-层)
+    - [RNN 层](#rnn-层)
+    - [LSTM 层](#lstm-层)
+    - [GRU 层](#gru-层)
 - [Transformer 相关层](#transformer-相关层)
 - [自定义模型层](#自定义模型层)
 - [functional 和 Module](#functional-和-module)
-  - [functional](#functional)
-  - [Module](#module)
-    - [使用 Module 管理参数](#使用-module-管理参数)
-    - [使用 Module 管理子模块](#使用-module-管理子模块)
-- [参考](#参考)
+    - [functional](#functional)
+    - [Module](#module)
+        - [使用 Module 管理参数](#使用-module-管理参数)
+        - [使用 Module 管理子模块](#使用-module-管理子模块)
 </p></details><p></p>
 
 # 模型层简介
 
 深度学习模型一般由各种模型层组合而称。`torch.nn` 中内置了非常丰富的各种模型层，
-它们都属于 `torch.nn.Module` 的子类，具备参数管理功能
+它们都属于 `torch.nn.Module` 的子类，具备参数管理功能。
 
 如果这些内置的模型层不能满足需求，也可以通过继承 `torch.nn.Module` 基类构建自定义的模型层。
 实际上 PyTorch 不区分模型和模型层，都是通过继承 `torch.nn.Module` 进行构建，
-因此，只要继承 `torch.nn.Module` 基类并实现 `forward` 方法即可自定义模型层
+因此，只要继承 `torch.nn.Module` 基类并实现 `forward` 方法即可自定义模型层。
 
 # 基础层
 
@@ -139,7 +138,7 @@ Dropout 层是一种正则化手段
 ## 限幅层
 
 * `nn.Threshold`：限幅层
-    - 当输入大于或小于阈值范围时，截断之
+    - 当输入大于或小于阈值范围时，截断
 
 # 卷积网络相关层
 
@@ -260,7 +259,7 @@ Transformer 网络结构是替代循环网络的一种结构，解决了循环�
 # 自定义模型层
 
 如果这些内置的模型层不能满足需求，也可以构建自定义的模型层。实际上 PyTorch 不区分模型和模型层，
-因此，只要继承 `torch.nn.Module` 基类并实现 `forward` 方法即可自定义模型层
+因此，只要继承 `torch.nn.Module` 基类并实现 `forward` 方法即可自定义模型层。
 
 可以仿照下面的 `torch.nn.Linear` 层源码自定义模型层：
 
@@ -309,7 +308,7 @@ class Linear(nn.Module):
 # functional 和 Module
 
 PyTorch 和神经网络相关的功能组件大多都封装在 `torch.nn` 模块下，
-这些功能组件的绝大部分既有函数形式实现，也有类形式实现
+这些功能组件的绝大部分既有函数形式实现，也有类形式实现：
 
 * 函数形式：`torch.nn.functional`
 * 类形式：`torch.nn.Module`
@@ -322,21 +321,117 @@ PyTorch 和神经网络相关的功能组件大多都封装在 `torch.nn` 模块
 import torch.nn.functional as F
 ```
 
-* 激活函数
-    - `F.relu`
-    - `F.sigmoid`
-    - `F.tanh`
-    - `F.softmax`
 * 模型层
-    - `F.linear`
-    - `F.conv2d`
-    - `F.max_pool2d`
-    - `F.dropout2d`
-    - `F.embedding`
+    - 线性函数
+        - `F.linear`
+        - `F.bilinear`
+    - 卷积层函数
+        - `F.conv1d`、`F.conv2d`、`F.conv3d`
+        - `F.conv_transpose1d`、`F.conv_transpose2d`、`F.conv_transpose3d`
+        - `F.unfold`、`F.fold`
+    - 池化层函数
+        - `F.max_pool1d`、`F.max_pool2d`、`F.max_pool3d`
+        - `F.avg_pool1d`、`F.avg_pool2d`、`F.avg_pool3d`
+        - `F.max_unpool1d`、`F.max_unpool2d`、`F.max_unpool3d`
+        - `F.lp_pool1d`、`F.lp_pool2d`、`F.lp_pool3d`
+        - `F.adaptive_max_pool1d`、`F.adaptive_max_pool2d`、`F.adaptive_max_pool3d` 
+        - `F.adaptive_avg_pool1d`、`F.adaptive_avg_pool2d`、`F.adaptive_avg_pool3d` 
+        - `F.fractional_max_pool2d`、`F.fractional_max_pool3d`
+    * Sparse functions
+        - `F.embedding`
+        - `F.embedding_bag`
+        - `F.one_hot`
+    * Dropout 函数
+        - `F.dropout` 
+        - `F.dropout1d`、`F.dropout2d`、`F.dropout3d`
+        - `F.alpha_dropout`
+        - `F.feature_alpha_dropout` 
+* （非线性）激活函数
+    - ReLU
+        - `F.relu`
+        - `F.relu_`
+        - `F.relu6`
+        - `F.elu`
+        - `F.elu_`
+        - `F.selu`
+        - `F.celu`
+        - `F.leaky_relu`
+        - `F.leaky_relu_`
+        - `F.prelu`
+        - `F.rrelu`
+        - `F.rrelu_`
+        - `F.glu`
+        - `F.gelu`
+    - Sigmoid
+        - `F.sigmoid`
+        - `F.logsigmoid`
+        - `F.hardsigmoid`
+        - `F.silu` 
+    - tanh
+        - `F.tanh`
+        - `F.hardtanh`
+        - `F.tanhshrink`
+    - Soft
+        - `F.softmax` 
+        - `F.softsign`
+        - `F.softplus`
+        - `F.softmin`
+        - `F.softshrink`
+        - `F.gumbel_softmax`
+        - `F.log_softmax`
+    - Norm
+        - `F.batch_norm`
+        - `F.group_norm`
+        - `F.instance_norm`
+        - `F.layer_norm`
+        - `F.local_response_norm`
+        - `F.rms_norm`
+        - `F.normalize`
+    - `F.mish`
+    - `F.hardshrink`
+    - `F.hardwish`
+    - `F.threshold`
+    - `F.threshold_`
 * 损失函数
-    - `F.binary_cross_entropy`
     - `F.mse_loss`
+    - `F.binary_cross_entropy`、`F.binary_cross_entropy_with_logits`
     - `F.cross_entropy`
+    - `F.kl_div`
+    - `F.l1_loss`
+    - `F.smooth_l1_loss`
+    - `F.ctc_loss`
+    - `F.nll_loss`
+    - `F.poisson_nll_loss`
+    - `F.guassian_nll_loss`
+    - `F.cosine_embedding_loss`
+    - `F.hinge_embedding_loss`
+    - `F.margin_ranking_loss`
+    - `F.multilabel_margin_loss`
+    - `F.multilabel_soft_margin_loss`
+    - `F.multi_margin_loss`
+    - `F.soft_margin_loss`
+    - `F.triplet_margin_loss`
+    - `F.triplet_margin_with_distance_loss`
+    - `F.huber_loss` 
+* Attention Mechanisms
+    - `torch.nn.attention.bias`
+    - `F.scaled_dot_product_attention`
+* Vision functions
+    - `F.pixel_shuffle`
+    - `F.pixel_unshuffle`
+    - `F.pad`
+    - `F.interpolate`
+    - `F.unsample`
+    - `F.upsample_nearest`
+    - `F.upsample_bilinear`
+    - `F.grid_sample`
+    - `F.affine_grid`
+* Distance functions
+    - `F.pairwise_distance`
+    - `F.cosine_similarity`
+    - `F.pdist`
+* DataParallel functions(multi-GPU, distributed)
+    - `torch.nn.parallel.data_parallel`
 
 示例：
 
@@ -356,39 +451,184 @@ tensor(0.)
 ## Module
 
 为了便于对参数进行管理，一般通过继承 `torch.nn.Module` 转换称为类的实现形式，
-并直接封装在 `torch.nn` 模块下
+并直接封装在 `torch.nn` 模块下。
 
 ```python
 from torch import nn
 ```
 
-* 激活函数
-    - `nn.ReLU`
-    - `nn.Sigmoid`
-    - `nn.Tanh`
-    - `nn.Softmax`
+* 参数
+    - `nn.Parameter`：模块参数
+    - `nn.UninitializedParameter`：没有初始化的参数
+    - `nn.UninitializedBuffer`： 没有初始化的缓冲器
+* 容器
+    - `nn.Module`
+    - `nn.Sequential`
+    - `nn.ModuleList`
+    - `nn.ModuleDict`    
+    - `nn.ParameterList`
+    - `nn.ParameterDict`
+    - Module 的全局钩子
+        - `nn.register_module_forward_pre_hook`
+        - `nn.register.module_forward_hook`
+        - `nn.register_module_backward_hook`
+        - `nn.register_module_full_backward_pre_hook`
+        - `nn.register_module_full_backward_hook`
+        - `nn.register_module_buffer_registration_hook`
+        - `nn.register_module_module_registration_hook`
+        - `nn.register_module_parameter_registration_hook`
 * 模型层
-    - `nn.Linear`
-    - `nn.Conv2d`
-    - `nn.MaxPool2d`
-    - `nn.Dropout2d`
-    - `nn.Embedding`
+    - Linear
+        - `nn.Identity`
+        - `nn.Linear`
+    - 卷积层
+        - `nn.Conv1d`、`nn.Conv2d`、`nn.Conv3d`
+        - `nn.ConvTranspose1d`、`nn.ConvTranspose2d`、`nn.ConvTransposed3d`
+        - `nn.LazyConv1d`、`nn.LazyConv2d`、`nn.LazyConv3d`
+        - `nn.LayConvTranspose1d`、`nn.LayConvTranspose2d`、`nn.LayConvTranspose3d`
+        - `nn.Unfold`、`nn.Fold`
+    - 池化层
+        - `nn.MaxPool1d`、`nn.MaxPool2d`、`nn.MaxPool3d`
+        - `nn.MaxUnpool1d`、`nn.MaxUnpool2d`、`nn.MaxUnpool3d`
+        - `nn.AvgPool1d`、`nn.AvgPool2d`、`nn.AvgPool3d`
+        - `nn.FractionalMaxPool2d`、`nn.FractionalMaxPool3d`
+        - `nn.LPPool1d`、`nn.LPPool2d`、`nn.LPPool3d`
+        - `nn.AdaptiveMaxPool1d`、`nn.AdaptiveMaxPool2d`、`nn.AdaptiveMaxPool3d`
+        - `nn.AdaptiveAvgPool1d`、`nn.AdaptiveAvgPool2d`、`nn.AdaptiveAvgPool3d`
+    - Padding
+        - `nn.ReflectionPad1d`、`nn.ReflectionPad2d`、`nn.ReflectionPad3d`
+        - `nn.ReplicationPad1d`、`nn.ReplicationPad2d`、`nn.ReplicationPad3d`
+        - `nn.ZeroPad1d`、`nn.ZeroPad2d`、`nn.ZeroPad3d`
+        - `nn.ConstantPad1d`、`nn.ConstantPad2d`、`nn.ConstantPad3d`
+        - `nn.CircularPad1d`、`nn.CircularPad2d`、`nn.CircularPad3d`
+    - RNN 层
+        - `nn.RNNBase`
+        - `nn.RNN`
+        - `nn.LSTM`
+        - `nn.GRU`
+        - `nn.RNNCell`
+        - `nn.LSTMCell`
+        - `nn.GRUCell`
+    - Dropout
+        - `nn.Dropout`
+        - `nn.Dropout1d`、`nn.Dropout2d`、`nn.Dropout3d`
+        - `nn.AlphaDropout`
+        - `nn.FeatureAlphaDropout`
+    - Transformer
+        - `nn.Transformer`
+        - `nn.TransformerEncoder`
+        - `nn.TransformerDecoder`
+        - `nn.TransformerEncoderLayer`
+        - `nn.TransformerDecoderLayer`
+    - Normalization
+        - `nn.BatchNorm1d`、`nn.BatchNorm2d`、`nn.BatchNorm3d`
+        - `nn.LazyBatchNorm1d`、`nn.LazyBatchNorm2d`、`nn.LazyBatchNorm3d`
+        - `nn.LayerNorm`
+        - `nn.LocalResponseNorm`
+        - `nn.RMSNorm`
+        - `nn.GroupNorm`
+        - `nn.SyncBatchNorm`
+        - `nn.InstanceNorm1d`、`nn.InstanceNorm2d`、`nn.InstanceNorm3d`
+        - `nn.LazyInstanceNorm1d`、`nn.LazyInstanceNorm2d`、`nn.LazyInstanceNorm3d`
+    - Sparse Layers
+        - `nn.Embedding`
+        - `nn.EmbeddingBag`
+* 激活函数
+    - ReLU
+        - `nn.ReLU`
+        - `nn.LeakyReLU`
+        - `nn.PReLU`
+        - `nn.ReLU6`
+        - `nn.RReLU`
+        - `nn.SELU`
+        - `nn.CELU`
+        - `nn.GELU`
+        - `nn.SiLU`
+        - `nn.GLU`
+    - Sigmoid
+        - `nn.Sigmoid`
+        - `nn.LogSigmoid`
+        - `nn.Hardsigmoid`
+    - Tanh
+        - `nn.Tanh`
+        - `nn.Hardtanh`
+        - `nn.Tanhshrink`
+    - Soft
+        - `nn.Softmax`
+        - `nn.Softplus`
+        - `nn.Softshrink`
+        - `nn.Softsign`
+        - `nn.Softmin`
+        - `nn.Softmax2d`
+        - `nn.LogSoftmax`
+        - `nn.AdaptiveLogSoftmaxWithLoss`
+    - `nn.Mish`
+    - `nn.Hardshrink`
+    - `nn.Hardswish`
+    - `nn.MultiheadAttention`
+    - `nn.Threshold`
 * 损失函数
-    - `nn.BCELoss`
     - `nn.MSELoss`
+    - `nn.L1Loss`
+    - `nn.SmoothL1Loss`
+    - `nn.BCELoss`
+    - `nn.BCEWithLogitsLoss`
     - `nn.CrossEntropyLoss`
+    - `nn.KLDivLoss` 
+    - `nn.HingeEmbeddingLoss`
+    - `nn.CosineEmbeddingLoss` 
+    - `nn.HuberLoss` 
+    - `nn.SoftMarginLoss`
+    - `nn.MultiLabelSoftMarginLoss`
+    - `nn.MultiLabelMarginLoss`
+    - `nn.MarginRankingLoss`
+    - `nn.MultiMarginLoss`
+    - `nn.TripletMarginLoss`
+    - `nn.TripletMarginWithDistanceLoss`
+    - `nn.CTCLoss`
+    - `nn.NLLLoss`
+    - `nn.PoissonNLLLoss`
+    - `nn.GaussianNLLLoss`
+* Distance Functions
+    - `nn.CosineSimilarity`    
+    - `nn.PairwiseDistnce`
+* Vision Layers
+    - `nn.PixelShuffle`
+    - `nn.PixelUnshuffle`
+    - `nn.Upsample`
+    - `nn.UpsamplingNearest2d`
+    - `nn.UpsamplingBilinear2d`
+* Shuffle Layers
+    - `nn.ChannelShuffle`
+* DataParallel Laysers(multi-GPU, distributed)
+    - `nn.DataParallel`
+* Utilities
+    - `nn.utils.clip_grad_norm`
+    - `nn.utils.clip_grad_norm_`
+    - `nn.utils.clip_grad_value_`
+    - `nn.utils.parameters_to_vector`
+    - `nn.utils.vector_to_parameters`
+    - `nn.utils.fuse_conv_bn_eval`
+    - `nn.utils.fuse_conv_bn_weights`
+    - `nn.utils.fuse_linear_bn_eval`
+    - `nn.utils.fuse_linear_bn_weights`
+    - `nn.utils.convert_conv2d_weight_memory_format`
+    - `nn.utils.convert_conv3d_wieght_memory_format`
+    - `nn.utils.weight_norm`
+    - `nn.utils.remove_weight_norm`
+    - `nn.utils.spectral_norm`
+    - `nn.utils.remove_spectral_norm`
+    - `nn.utils.skip_init`
+    - `nn.prune....`
 
-实际上，`torch.nn.Module` 除了可以管理其引用的各种参数，
-还可以管理其引用的子模块，功能十分强大
+
+实际上，`torch.nn.Module` 除了可以管理其引用的各种参数，还可以管理其引用的子模块，功能十分强大。
 
 ### 使用 Module 管理参数
 
-在 PyTorch 中，模型的参数是需要被优化器训练的，
-因此，通常要设置参数为 `requires_grad = True` 的张量。
-同时，在一个模型中，往往有许多的参数，要手动管理这些参数并不是一件容易的事情
-
-PyTorch 一般将参数用 `nn.Parameter` 来表示，
-并且用 `nn.Module` 来管理其结构下的所有参数
+在 PyTorch 中，模型的参数是需要被优化器训练的，因此，通常要设置参数为 `requires_grad = True` 的张量。
+同时，在一个模型中，往往有许多的参数，要手动管理这些参数并不是一件容易的事情。
+PyTorch 一般将参数用 `nn.Parameter` 来表示，并且用 `nn.Module` 来管理其结构下的所有参数。
 
 * 载入 Python 依赖
 
@@ -399,7 +639,7 @@ import torch.nn.functional as F
 ```
 
 * 设置参数为 `requires_grad = True` 的张量
-
+v
 ```python
 torch.randn(2, 2, requires_grad = True)
 ```
@@ -457,7 +697,7 @@ for param in module.named_parameters():
 print(f"Number of Parameters = {num_param}")
 ```
 
-* 实践当中，一般通过继承 `nn.Module` 来构建模块类，并将所有含有需要学习的部分放在构造函数中
+* 实践当中，一般通过继承 `nn.Module` 来构建模块类，并将所有含有需要学习的部分放在构造函数中。
 
 ```python
 class Linear(nn.Module):
@@ -483,7 +723,7 @@ class Linear(nn.Module):
 ### 使用 Module 管理子模块
 
 一般情况下，很少直接使用 `nn.Parameter` 来定义参数构建模型，而是通过一些拼装一些常用的模型层来构造模型。
-这些模型层也是继承自 `nn.Module` 的对象，本身也包括参数，属于要定义的模块的子模块
+这些模型层也是继承自 `nn.Module` 的对象，本身也包括参数，属于要定义的模块的子模块。
 
 `nn.Module` 提供了一些方法可以管理这些子模块:
 
@@ -690,6 +930,3 @@ for param in embedding.parameters():
 False
 30000
 ```
-
-# 参考
-

@@ -36,14 +36,14 @@ img {
 
 - [模型创建简介](#模型创建简介)
 - [使用 Sequential 按层顺序构建模型](#使用-sequential-按层顺序构建模型)
-  - [add\_module 方法](#add_module-方法)
-  - [变长参数](#变长参数)
-  - [OrderedDict](#ordereddict)
+    - [add\_module 方法](#add_module-方法)
+    - [变长参数](#变长参数)
+    - [OrderedDict](#ordereddict)
 - [继承 nn.Module](#继承-nnmodule)
 - [继承 nn.Module 基类并应用模型容器](#继承-nnmodule-基类并应用模型容器)
-  - [nn.Sequential](#nnsequential)
-  - [nn.ModuleList](#nnmodulelist)
-  - [nn.ModuleDict](#nnmoduledict)
+    - [nn.Sequential](#nnsequential)
+    - [nn.ModuleList](#nnmodulelist)
+    - [nn.ModuleDict](#nnmoduledict)
 </p></details><p></p>
 
 # 模型创建简介
@@ -53,6 +53,7 @@ img {
 * 使用 `torch.nn.Sequential` 按层顺序构建模型
     - `add_module` 方法
 * 继承 `torch.nn.Module` 基类构建自定义模型
+    - 实现 `forward` 方法
 * 继承 `torch.nn.Module` 基类构建模型并辅助应用模型容器进行封装
     - `torch.nn.Sequential`
     - `torch.nn.ModuleList`

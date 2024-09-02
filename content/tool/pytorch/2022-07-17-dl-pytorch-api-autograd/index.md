@@ -35,39 +35,40 @@ img {
 <details><summary>目录</summary><p>
 
 - [autograd 包](#autograd-包)
-  - [requires\_grad 参数](#requires_grad-参数)
-    - [requires\_grad 参数](#requires_grad-参数-1)
+    - [requires\_grad 参数和属性](#requires_grad-参数和属性)
     - [requires\_grad\_ 方法](#requires_grad_-方法)
     - [grad\_fn 属性](#grad_fn-属性)
-  - [detech 方法](#detech-方法)
-  - [no\_grad 方法](#no_grad-方法)
-  - [zero\_grad 方法](#zero_grad-方法)
+    - [no\_grad 方法](#no_grad-方法)
+    - [detech 方法](#detech-方法)
+    - [zero\_grad 方法](#zero_grad-方法)
 - [使用 backward 方法求导数](#使用-backward-方法求导数)
-  - [标量的反向传播](#标量的反向传播)
-  - [非标量的反向传播](#非标量的反向传播)
-  - [非标量的反向传播可以用标量的反向传播实现](#非标量的反向传播可以用标量的反向传播实现)
+    - [标量的反向传播](#标量的反向传播)
+    - [非标量的反向传播](#非标量的反向传播)
+    - [非标量的反向传播可以用标量的反向传播实现](#非标量的反向传播可以用标量的反向传播实现)
 - [使用 grad 方法求导数](#使用-grad-方法求导数)
-  - [标量的反向传播](#标量的反向传播-1)
-  - [多个自变量求导](#多个自变量求导)
+    - [标量的反向传播](#标量的反向传播-1)
+    - [多个自变量求导](#多个自变量求导)
 - [使用自动微分和优化器求最小值](#使用自动微分和优化器求最小值)
 - [参考](#参考)
 </p></details><p></p>
 
-神经网络通常依赖反向传播算法求梯度来更新网络参数，而求梯度过程通常是一件非常复杂繁琐而且容易出错的事情。
-深度学习框架可以帮助自动地完成这种求梯度的运算
+神经网络通常依赖反向传播算法求梯度来更新网络参数，
+而求梯度过程通常是一件非常复杂繁琐而且容易出错的事情。
+深度学习框架可以帮助自动地完成这种求梯度的运算。
 
 PyTorch 一般通过反向传播 `torch.autograd.backward()` 方法实现求梯度计算，
 该方法求得的梯度将保存在对应自变量张量的 `grad` 属性下。除此之外，
-也能够调用 `torch.autograd.grad()` 函数实现求梯度计算。这就是 PyTorch 的自动微分机制
+也能够调用 `torch.autograd.grad()` 函数实现求梯度计算。这就是 PyTorch 的自动微分机制。
 
 # autograd 包
 
 `torch.autograd` 包提供了对所有 Tensor 的自动微分操作：
 
-* `torch.Tensor(requires_grad = True)`：跟踪 `torch.Tensor` 上所有的操作
+* `torch.Tensor(requires_grad = True)`
+    - `requires_grad` 参数：跟踪 `torch.Tensor` 上所有的操作
     - `.requires_grad` 属性：`torch.Tensor` 是否被跟踪
-    - `.requires_grad_()` 方法：能够改变一个已经存在的 Tensor 的 `.requires_grad` 属性
-    - `.grad_fn` 属性：内存中的梯度函数
+* `.requires_grad_()` 方法：能够改变一个已经存在的 Tensor 的 `.requires_grad` 属性
+* `.grad_fn` 属性：内存中的梯度函数
 * `torch.autograd.backward()`：自动计算所有的梯度
     - `.grad` 属性：`torch.Tensor` 上的梯度
 * `torch.autograd.grad()`：自动计算所有的梯度
@@ -77,9 +78,35 @@ PyTorch 一般通过反向传播 `torch.autograd.backward()` 方法实现求梯�
 * `.zero_grad()` 方法
     - `optimizer.zero_grad()`
 
-## requires_grad 参数
+## requires_grad 参数和属性
 
-### requires_grad 参数
+> `requires_grad` 参数：跟踪 `torch.Tensor` 上所有的操作
+
+```python
+import torch
+
+x = torch.ones(2, 2, requires_grad = True)
+print("x:", x)
+```
+
+```
+tensor([[1., 1.],
+        [1., 1.]], requires_grad=True)
+```
+
+> `.requires_grad` 属性：`torch.Tensor` 是否被跟踪
+
+```python
+print(f"x.requires_grad: {x.requires_grad}")
+```
+
+```python
+True
+```
+
+## requires_grad_ 方法
+
+> `.requires_grad_()` 方法：能够改变一个已经存在的 Tensor 的 `.requires_grad` 属性
 
 ```python
 import torch
@@ -92,19 +119,10 @@ print(f"x.requires_grad: {x.requires_grad}")
 ```
 tensor([[1., 1.],
         [1., 1.]], requires_grad=True)
-
 True
 ```
 
-### requires_grad_ 方法
-
 ```python
-import torch
-
-x = torch.ones(2, 2, requires_grad = True)
-print("x:", x)
-print(f"x.requires_grad: {x.requires_grad}")
-
 x = x.requires_grad_(False)
 print(f"x.requires_grad: {x.requires_grad}")
 
@@ -113,19 +131,20 @@ print(f"x.requires_grad: {x.requires_grad}")
 ```
 
 ```
-tensor([[1., 1.],
-        [1., 1.]], requires_grad=True)
-
-True
 False
 True
 ```
 
-### grad_fn 属性
+## grad_fn 属性
+
+> `.grad_fn` 属性：内存中的梯度函数
 
 前向传播：
 
 ```python
+import torch
+
+x = torch.ones(2, 2, requires_grad = True)
 y = x + 2
 print("y:", y)
 print("y.grad_fn:", y.grad_fn)
@@ -179,53 +198,81 @@ tensor([[4.5000, 4.5000],
         [4.5000, 4.5000]])
 ```
 
-## detech 方法
-
-
-
-
-
 ## no_grad 方法
 
+> 用在测试数据集模型推断过程中，不需要求梯度
+> 
+> ```python
+> with torch.no_grad(): 
+>     pass
+> ```
+
 ```python
+import torch
+
 x = torch.randn(3, requires_grad = True)
 y = x * 2
 while y.data.norm() < 1000:
-      y = y * 2
+    y = y * 2
 v = torch.tensor([0.1, 1.0, 0.0001], dtype = torch.float)
 y.backward(v)
-print(x.grad)
 
 # .requires_grad
+print(x)
 print(x.requires_grad)
 print((x ** 2).requires_grad)
 
+# .grad
+print(x.grad)
+
+# torch.no_grad()
 with torch.no_grad():
-      print((x ** 2).requires_grad)
+    print((x ** 2).requires_grad)
 ```
 
-* tensor 的 detach 方法
+```
+tensor([-1.3832,  1.2448, -0.7524], requires_grad=True)
+True
+True
+tensor([5.1200e+01, 5.1200e+02, 5.1200e-02])
+False
+```
+
+## detech 方法
+
+> `.detach()` 方法：停止跟踪 `torch.Tensor` 上的跟踪历史、未来的跟踪
 
 ```python
 print(x.requires_grad)
 y = x.detach()
+
 print(y.requires_grad)
 print(x.eq(y).all())
 ```
 
+```
+True
+False
+tensor(True)
+```
+
 ## zero_grad 方法
 
+> `.zero_grad()` 方法
+>
+> * `optimizer.zero_grad()`
 
+* TODO
 
 # 使用 backward 方法求导数
 
 PyTorch 自动微分机制使用的是 `torch.autograd.backward()` 方法，
-功能就是自动求取梯度
+功能就是自动求取梯度。
 
 * `torch.autograd.backward()` 方法通常在一个标量张量上调用，
   该方法求得的梯度将保存在对应自变量张量的 `grad` 属性下
 * 如果调用的张量非标量，则要传入一个和它形状相同的 `gradient` 参数张量，
-  相当于用该 `gradient` 参数张量与调用张量作向量点乘，得到的标量结果再反向传播
+  相当于用该 `gradient` 参数张量与调用张量作**向量点乘**，得到的标量结果再反向传播
 
 下面是 `torch.autograd.backward()` API:
 
