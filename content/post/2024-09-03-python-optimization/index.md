@@ -1,7 +1,7 @@
 ---
 title: Python 数值优化求解器
 author: 王哲峰
-date: '2023-01-09'
+date: '2024-09-03'
 slug: python-optimizaion
 categories:
   - Python
@@ -60,8 +60,40 @@ img {
         - [带固定成本约束](#带固定成本约束)
         - [分段线性函数](#分段线性函数)
     - [Gurobi 多目标优化](#gurobi-多目标优化)
+        - [Gurobi 多目标优化 API](#gurobi-多目标优化-api)
+        - [合成型](#合成型)
+        - [分层型](#分层型)
+        - [混合型](#混合型)
+        - [Gurobi 多目标优化示例](#gurobi-多目标优化示例)
     - [callback 函数](#callback-函数)
+        - [callback 定义](#callback-定义)
+        - [状态 where 与值 what](#状态-where-与值-what)
+    - [callback 函数的功能](#callback-函数的功能)
 - [Python SCIP](#python-scip)
+    - [SCIP 简介](#scip-简介)
+    - [SCIP 安装](#scip-安装)
+        - [Conda](#conda)
+        - [pip](#pip)
+    - [SCIP 解决的问题](#scip-解决的问题)
+        - [Linear Program](#linear-program)
+        - [Mixed-Integer Linear Program](#mixed-integer-linear-program)
+        - [Mixed-Integer NonLinear Program](#mixed-integer-nonlinear-program)
+        - [Constraint Integer Program](#constraint-integer-program)
+        - [Convex MINLP](#convex-minlp)
+        - [Pseudoboolean optimization](#pseudoboolean-optimization)
+        - [Satisfiability (SAT) and variants](#satisfiability-sat-and-variants)
+        - [Multicriteria optimization](#multicriteria-optimization)
+        - [Mixed-Integer SemiDefinite Program](#mixed-integer-semidefinite-program)
+    - [SCIP 快速使用](#scip-快速使用)
+- [Python CPLEX](#python-cplex)
+    - [CPLEX 简介](#cplex-简介)
+    - [CPLEX 安装](#cplex-安装)
+        - [pip](#pip-1)
+        - [conda](#conda-1)
+        - [CPLEX Studio](#cplex-studio)
+    - [CPLEX 使用](#cplex-使用)
+        - [Mathematical Programming](#mathematical-programming)
+        - [Constraint Programming](#constraint-programming)
 - [Python Ortools](#python-ortools)
     - [Ortools 简介](#ortools-简介)
     - [安装](#安装)
@@ -91,7 +123,6 @@ img {
     - [自定义最小化器](#自定义最小化器)
     - [寻根](#寻根)
     - [线性规划](#线性规划)
-- [Python CPLEX](#python-cplex)
 - [Python Pyomo](#python-pyomo)
     - [Pyomo 简介](#pyomo-简介)
     - [安装 pyomo 和 GLPK](#安装-pyomo-和-glpk)
@@ -113,12 +144,13 @@ img {
 因此，能够用比较简单的方式对运筹优化问题进行建模。
 
 * **Gurobi** 是由美国 Gurobi 公司开发的针对算法最优化领域的求解器，可以高效求解算法优化中的建模问题。
-* **CPLEX**
-* Xpress
-* **SCIP**
-* GLPK
+* **SCIP**：
+* **CPLEX** 用于 Python 的 IBM Decision Optimization CPLEX 建模包
 * Ortools 是 Google 开源维护的算法优化求解器，针对 Google 的商业场景进行优化，如 VRP 问题，
   对于中小规模的商业场景的使用是个不错的选择。
+* Scipy
+* Xpress
+* GLPK
 
 # Python Gurobi
 
@@ -679,9 +711,9 @@ for v in m.getVars():
 `$max$` 函数用来获取集合中的最大值，如 `$z=max(x,y,3)$`，
 这类问题可以通过大 M 法转换成线性约束：
 
-`$$max z$$`
+`$$\text{max}\space z$$`
 
-`$$z = max(x,y,3) \rightarrow s.t.\begin{cases}
+`$$z = max(x,y,3) \Rightarrow s.t.\begin{cases}
 x \leq z, y \leq z, 3 \leq z \\ 
 x \leq z - M(1-u_{1}) \\
 y \leq z - M(1-u_{2}) \\
@@ -725,7 +757,7 @@ m.addConstr(3 < z, name = "c9")
 # 定义目标函数并求解
 m.setObjective(z)
 m.optimize()
-print(f"z={z.X}")
+print(f"最大值是：z={z.X}")
 
 # 输出：z=5
 ```
@@ -755,15 +787,14 @@ print(f"z={z.X}")
 # 输出：z=5.0
 ```
 
-
 ### 最小值
 
 与 max 函数相对应的是 min 函数，获取集合中的最小值，以 `$z=min(x,y,3)$`，
 使用大 M 法得到对应的线性约束表达式，即：
 
-`$$min z$$`
+`$$\text{min} \space z$$`
 
-`$$z = min(x,y,3) \rightarrow s.t.\begin{cases}
+`$$z = min(x,y,3) \Rightarrow s.t.\begin{cases}
 x \geq z, y \geq z, 3 \geq z \\ 
 x \geq z - M(1-u_{1}) \\
 y \geq z - M(1-u_{2}) \\
@@ -776,11 +807,11 @@ u_{1}, u_{2}, u_{3} \in \{0, 1\}
 
 abs 约束表示获取变量的绝对值，例如有如下规划问题：
 
-`$$\text{min} c|x|$$`
+`$$\text{min}\space c|x|$$`
 
 令 `$y = |x|$`，即 `$y \geq x, y \geq -x$`，将原问题转换成如下新问题：
 
-`$$\text{min} cy$$`
+`$$\text{min} \space cy$$`
 `$$s.t. \begin{cases}
 y \geq x \\ 
 y \geq -x
@@ -797,43 +828,663 @@ y = m.addVar(name = "y")
 m.addConstr(y == grb.abs_(x), name = "C_abs")
 m.addConstr(x >= -5, name = "C_2")
 m.addConstr(x <= 3, name = "C_3")
+c = 2
+m.setObjective(c * y)
+m.optimize()
+print(f"y = y.X")
+print(f"x = x.X")
 
-
+# 输出
+# y = 0.0
+# x = 0.0
 ```
-
 
 ### 逻辑与
 
+如果集合中全部变量都是 1，则结果为 1，否则为 0。判断集合中的变量是否全为 1 的实现功能，
+类似 Pandas 中的 `any` 功能。
 
+例如，如果 `$x=1$` 且 `$y=1$`，则 `$z=1$`，否则 `$z=0$`，
+可以用大 M 法结合 0-1 变量(0-1 变量指的是取值只能是 0 或 1 的变量，
+又称二值变量)实现线性化，具体如下：
+
+令 `$j=x+y-m+B$`，若 `$j>0$` 则 `$z=1$`，否则 `$z=0$`。其中变量的个数，此处 `$m=2$`，
+`$B$` 是一个很小的正数。因此，将问题转换成指示函数 `indicator` 的线性化问题。
 
 ### 逻辑或
 
+集合中全部变量只要有一个使 1 则结果位 1，否则为 0，即实现“不全为 0”的判断，
+如有下面的问题：
 
+`$$\text{max} \space z = x+y$$`
+`$$\text{s.t.} \space 2x+3y\leq 100\space \text{or} \space x+y\leq 50$$`
+
+可使用大 M 法转换成线性规划问题，具体如下：
+
+`$$\text{max} \space z = x+y$$`
+`$$\text{s.t.}\begin{cases}
+2x+3y \leq 100 + uM \\
+2x+3y \leq 100+(1-u)M \\
+u \in \{0, 1\}
+\end{cases}$$`
 
 ### 指示函数
 
+如果指示变量的值为 1，则约束成立，否则约束可以被违反。
 
+例如，如果 `$x>0$`，则 `$y=1$`，否则 `$y=0$`，
+`indicator` 的线性方法可以使用大 M 法实现，原理如下：
+
+`$$x>0 \rightarrow y=1 \Rightarrow 
+\begin{cases}
+x \leq uM \\
+uM \leq M + x + B 
+\end{cases}$$`
+
+其中，`$M$` 是一个很大的数，`$B$` 是一个很小的正数。
+
+在 Gurobi 中实现该功能的是函数 `addGenConstrIndicator`：
+
+```python
+import gurobipy as grb
+
+model = grb.Model()
+
+x = model.addVar(name = "x")
+y = model.addVar(name = "y")
+model.addConstr((y == 1) >> (x > 0), name = "indicator")
+```
 
 ### 带固定成本约束
 
+在库存问题中，通常会考虑订货的固定成本和可变成本。就是说，
+只要订货 `$x>0$` 就有一个固定成本 `$k$` 和可变成本 `$cx$`，它的成本函数是：
 
+`$$z(x) = \begin{cases}
+0, x = 0 \\
+cx + k, x > 0 
+\end{cases}$$`
+
+这实际上是一个二选一约束，使用大 M 法即可转换成线性约束，即：
+
+`$$z(x)=cx+ky$$`
+
+`$$z(x)=\begin{cases}
+0 \\
+cx + k
+\end{cases}
+\Rightarrow\text{s.t.}\begin{cases}
+x \leq yM \\
+y = \{0, 1\}   
+\end{cases}$$`
 
 ### 分段线性函数
 
+在现实生活中，购买商品的数量越多就会有折扣，其单价就越低。在数学中，
+它的成本或利润函数可以表示为如下的分段线性函数：
 
+`$$z=\begin{cases}
+2+3x, 0 \leq x \leq 2 \\ 
+20-x, 2 \leq x \leq 3 \\
+6+2x, 3 \leq x \leq 7
+\end{cases}$$`
+
+对于分段线性函数，可以通过引入 **SOS2 约束(a Special Order Set Constraint of Type 2)**，
+将其转换为线性规划。然而，还有一个更通用的方法，
+设有一个 `$n$` 段线性函数 `$f(x)$` 的分界点 `$b_{1} \leq \cdots \leq b_{n} \leq b_{n+1}$`，
+引入 `$w_{k}$` 将 `$x$` 和 `$f(x)$` 表示为：
+
+`$$x=\sum_{k=1}^{n+1}w_{k}b_{k}$$`
+`$$f(x_{k})=\sum_{k=1}^{n+1}w_{k}f(b_{k})$$`
+
+`$w_{k}$` 和 `$z_{k}$` 满足以下约束：
+
+`$$z_{1}+\cdots+z_{n} = 1, z_{k}=\{0, 1\}$$`
+`$$w_{1}+\cdots+w_{n+1}=1, w_{k}\geq 0$$`
+
+前面已经讲了许多非线性模型线性化的方法，需要注意的是，在使用 Gurobi 的广义线性化函数时，
+不能对表达式做线性化，而需要先将表达式赋予变量，然后再对变量做线性化，例如：
+
+```python
+m.addConstr(z == grb.max_(x, y))
+```
+
+`$$\text{s.t.} \space x = g + k$$`
+
+是正确的，而：
+
+```python
+m.addConstr(z == grb.max_(g + k, y))
+```
+
+则是错误的。
 
 ## Gurobi 多目标优化
 
+在多目标优化中，可以直接把多个目标通过分配权重的方式组合成单目标优化问题，
+但是如果多个目标函数之间的数量级差异很大，则应该使用分层优化的方法。
 
+### Gurobi 多目标优化 API
+
+在 Gurobi 中，可以通过 `Model.setObjectiveN` 函数来建立多目标优化模型，
+多目标的 `setObjectiveN` 函数和单目标的 `setObjective` 函数用法基本一致，
+不同的是多了目标优先级、目标劣化接受程度、多目标的权重等参数。
+
+```python
+setObjectiveN(expr, index, priority, weight, abstol, reltol, name)
+```
+
+参数说明如下：
+
+1. `expr`: 目标函数表达式，如 `$x+2y+3z$`；
+2. `index`: 目标函数对应的需要 `$(0, 1, 2, \cdots)$`，即第几个目标，注意目标函数序号从 `$0$` 开始；
+3. `priority`: 优先级，为整数，值越大表示目标优先级越高；
+4. `weight`: 权重（浮点数），在合成型多目标解法中使用该参数，表示不同目标之间的组合权重；
+5. `abstol`: 允许的目标函数值最大的降低量 `abstol`（浮点数），即当前迭代的值相比最优值的可接受劣化程度；
+6. `reltol`: `abstol` 的百分数表示，如 `reltol = 0.05` 表示可接受劣化程度是 5%； 
+7. `name`: 目标函数名称；
+
+需要注意的是，在 Gurobi 的多目标优化中，要求所有的目标函数都是线性的，并且目标函数的优化方向应一致，
+即全部最大化或全部最小化，因此可以通过乘以 -1 实现不同的优化方向。
+
+当前 Gurobi 支持 3 种多目标模式，分别是 Blend(合成型)、Hierarchical(分层型)、两者的混合型。
+
+### 合成型
+
+合成型(Blend)通过对多个目标赋予不同的权重实现将多目标转化成单目标函数，
+权重扮演优先级的角色。例如，有如下两个优化目标：
+
+`$$obj_{1}=x+2y, weight_{1} = 3$$`
+`$$obj_{2}=x-3y, weight_{2} = 0.5$$`
+
+经过合成后的单目标函数为：
+
+`$$\begin{align}
+obj
+&=weight_{1} \times obj_{1} + weight_{2}\times obj_{2} \\
+&=3\times (x+2y)-0.5\times(x-3y)\\
+&=2.5x + 7.5
+\end{align}$$`
+
+Gurobi 使用方法如下：
+
+```python
+import gurobipy as grb
+
+model = grb.Model()
+
+x = model.addVar(name = "x")
+y = model.addVar(name = "y")
+
+# 添加第一个目标
+model.setObjectiveN(x + 2 * y, index = 0, weight = 3, name = "obj1")
+# 添加第二个目标
+model.setObjectiveN(x - 3 * y, index = 1, weight = 0.5, name = "obj2")
+```
+
+```python
+for i in range(model.NumObj):
+    model.setParam(grb.GRB.Param.ObjNumber, i)
+    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
+```
+
+### 分层型
+
+分层型(Hierarchical)有优先级，一般理解是在保证第一个目标值最优的情况下优化第二个目标，
+或者在优化第二个目标时要保证第一个目标的最优值只能允许少量劣化。
+
+例如，有如下两个优化目标：
+
+`$$obj_{1}=x+2y, priority_{1}=2$$`
+`$$obj_{2}=x-3y, priority_{2}=1$$`
+
+此时 Gurobi 按照优先级大小进行优化（先优化 `$obj_{1}$`，再优化 `$obj_{2}$`）。
+若没有设定 `abstol` 或 `reltol`，则在优化低优先级目标(`$obj_{2}$`)时，
+不会改变高优先级的目标(`$obj_{1}$`)值。
+
+```python
+import gurobipy as grb
+
+model = grb.Model()
+
+x = model.addVar(name = "x")
+y = model.addVar(name = "y")
+
+# 添加第一个目标
+model.setObjectiveN(x + 2 * y, index = 0, priority = 20, name = "obj1")
+# 添加第二个目标
+model.setObjectiveN(x - 3 * y, index = 1, priority = 1, name = "obj2")
+```
+
+```python
+for i in range(model.NumObj):
+    model.setParam(grb.GRB.Param.ObjNumber, i)
+    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
+```
+
+### 混合型
+
+混合型的写法也很简单，将权重和优先级同时设定即可：
+
+```python
+import gurobipy as grb
+
+model = grb.Model()
+
+x = model.addVar(name = "x")
+y = model.addVar(name = "y")
+
+# 添加第一个目标
+model.setObjectiveN(x + 2 * y, index = 0, weight = 3, priority = 20, name = "obj1")
+# 添加第二个目标
+model.setObjectiveN(x - 3 * y, index = 1, weight = 0.5, priority = 1, name = "obj2")
+```
+
+```python
+for i in range(model.NumObj):
+    model.setParam(grb.GRB.Param.ObjNumber, i)
+    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
+```
+
+### Gurobi 多目标优化示例
+
+假设工厂需要把 `$N$` 份工作分配给 `$N$` 个工人，每份工作只能由一个工人做，
+且每个工人也只能做一份工作。假设工人 `$i$` 处理工作 `$j$` 需要的时间是 `$T_{ij}$`，
+获得的利润是 `$C_{ij}$`，那么需要怎么安排才能使得总利润最大且总耗时最小呢？
+
+这里有两个目标，最主要的目标是利润最大化，次要目标是耗时最小化。
+
+为了编程方便，这里假设 `$N=10$`，`$T_{ij}$` 和 `$C_{ij}$` 通过随机数生成。
+
+```python
+import numpy as np
+import gurobipy as grb
+
+# 设置工人数和工作数量
+N = 10
+np.random.seed(1234)
+
+# 用随机数初始化时间矩阵 T_{ij} 和成本矩阵 C_{ij}
+Tij = {
+    (i, j): np.random.randint(0, 100) 
+    for i in rang(1, N + 1) 
+    for j in rang(1, N + 1)
+}
+Cij = {
+    (i, j): np.random.randint(0, 100) 
+    for i in rang(1, N + 1) 
+    for j in rang(1, N + 1)
+}
+
+# 定义模型
+m = grb.Model("MultiObj")
+
+# 添加变量
+# x 是 0-1 变量，xij=1 表示第 i 个工人被分配到第 j 个工作中
+x = m.addVars(Tij.keys(), vtype = grb.GRB.BINARY, name = "x")
+
+# 添加约束
+# 第 1 个约束表示一份工作只能分配给一个工人
+m.addConstrs((x.sum("*", j) == 1 for j in range(1, N + 1)), name = "C1")
+# 第 2 个约束表示一个工人制作一份工作
+m.addConstrs((x.sum(i, "*") == 1 for i in range(1, N + 1)), name = "C2")
+```
+
+多目标方式 1: 合成型
+
+```python
+# 设置多重目标权重
+m.setObjectiveN(x.prod(Tij), index = 0, weight = 0.1, name = "obj1")
+m.setObjectiveN(-x.prod(Cij), index = 1, weight = 0.5, name = "obj2")
+
+# 启动求解
+m.optimize()
+
+# 获取求解结果
+for i in Tij.keys():
+    if x[i].x > 0.9:
+        print(f"工人 {i[0]} 分配工作 {i[1]}")
+
+# 获取目标函数值
+for i in rang(1, 3):
+    m.setParam(grb.GRB.Param.ObjNumber, i)
+    print(f"Obj{i} = {m.ObjNVal}")
+```
+
+多目标方式 2：分层型
+
+```python
+# 设置目标函数
+m.setObjectiveN(
+    x.prod(Tij), index = 0, priority = 1, 
+    abstol = 0, reltol = 0, name = "obj1"
+)
+m.setObjectiveN(
+    -x.prod(Cij), index = 1, priority = 2, 
+    abstol = 100, reltol = 0, name = "obj2"
+)
+
+# 启动求解
+m.optimize()
+
+# 获取求解结果
+for i in Tij.keys():
+    if x[i].x > 0.9:
+        print(f"工人 {i[0]} 分配工作 {i[1]}")
+
+# 获取目标函数值
+for i in rang(1, 3):
+    m.setParam(grb.GRB.Param.ObjNumber, i)
+    print(f"Obj{i} = {m.ObjNVal}")
+```
+
+```
+
+```
+
+多目标方式 3：混合型
+
+```python
+# 设置目标函数
+
+# 启动求解
+m.optimize()
+```
 
 ## callback 函数
 
+`callback` 函数的主要作用是为了获取程序运行过程中的一些中间信息，
+或者在程序运行过程中动态修改程序运行状态，如用户有时在求解过程中需要实现一些功能，
+包括终止优化、添加约束条件（割平面）、嵌入自己的算法等。
+
+### callback 定义
+
+回调函数 `callback` 的定义的方法如下：
+
+```python
+def function_name(model, where):
+    print("do something where gurobi run")
+```
+
+其中 `callback` 函数有两个固定的参数：
+
+* `model` 是指定义的 `gurobi.Model` 类
+* `where` 是指回调函数的出发点
+
+在 `callback` 函数使用过程中，需要注意的是 `where` 和 `what`，
+即在什么地方(`where`)获取哪些信息(`what`)，如下面的代码，`cbGet` 查询获取优化器的指定信息，
+即 `grb.GRB.Callback.MULTIOBJ_OBJCNT` 当前解的数量。
+
+```python
+if where == grb.GRB.Callback.MULTIOBJ:  # where
+    print(model.cbGet(grb.GRB.Callback.MULTIOBJ_OBJCNT))  # what
+```
+
+### 状态 where 与值 what
+
+`callback` 函数的 `where` 取值如下：
+
+| `where`             | 取值 | 优化器状态 |
+|---------------------|------|-----------|
+| `grb.GRB.Callback.POLLING` | `0`  | 轮询回调 |
+| `grb.GRB.Callback.PRESOLVE` | `1`  | 预处理 |
+| `grb.GRB.Callback.SIMPLEX` | `2`  | 单纯形 |
+| `grb.GRB.Callback.MIP` | `3`  | 当前 MIP |
+| `grb.GRB.Callback.MIPSOL` | `4`  | 发现新的 MIP 解 |
+| `grb.GRB.Callback.MIPNODE` | `5`  | 当前探索节点 |
+| `grb.GRB.Callback.MESSAGE` | `6`  | 打印出 Log 信息 |
+| `grb.GRB.Callback.BARRIER` | `7`  | 当前内点法 |
+| `grb.GRB.Callback.MULTIOBJ` | `8`  | 当前多目标 |
+
+当 `where = grb.GRB.Callback.MIP` 时（MIP 建模），`what` 可以取以下值：
+
+| what                          | 类型     | 描述               | 
+|-------------------------------|----------|--------------------|
+| `grb.GRB.Callback.MIP_OBJBST` | `double` | 当前最优目标值      |
+| `grb.GRB.Callback.MIP_OBJBND` | `double` | 当前最优界          |
+| `grb.GRB.Callback.MIP_NODCNT` | `double` | 当前已探索的节点数   |
+| `grb.GRB.Callback.MIP_SOLCNT` | `int`    | 当前发现可行解的数量 |
+| `grb.GRB.Callback.MIP_CUTCNT` | `int`    | 当前割平面使用次数   |
+| `grb.GRB.Callback.MIP_NODLFT` | `double` | 当前未搜索的节点数   |
+| `grb.GRB.Callback.MIP_ITRCNT` | `double` | 当前单纯形法迭代步数 |
+
+当 `where = grb.GRB.Callback.MIPSOL` 时，`what` 可以取以下值：
+
+| what                             | 类型     | 描述               | 
+|----------------------------------|----------|--------------------|
+| `grb.GRB.Callback.MIPSOL_SOL`    | `double` | 当前解的具体取值      |
+| `grb.GRB.Callback.MIPSOL_OBJ`    | `double` | 新解的目标值 |
+| `grb.GRB.Callback.MIPSOL_OBJBST` | `double` | 当前最优目标值 |
+| `grb.GRB.Callback.MIPSOL_OBJBND` | `double` | 当前最优界 |
+| `grb.GRB.Callback.MIPSOL_NODCNT` | `double` | 当前已搜索的节点数   |
+| `grb.GRB.Callback.MIPSOL_SOLCNT` | `int`    | 当前发现可行解的数量 |
+
+## callback 函数的功能
+
+在 Gurobi 中除了 `cbGet` 函数外还有一些常用函数用于获取运行过程中信息或修改运行状态。
+
+1. `cbGet(what)`
+2. `cbGetNodeRel(vars)`
+3. `cbGetSolution(vars)`
+4. `cbCut(Ihs, sense, rhs)`
+5. `cbLazy(Ihs, sense, rhs)`
+6. `cbSetSolution(vars, solution)`
+7. `cbStopOneMultiObj(objcnt)`
+
+TODO
 
 # Python SCIP
 
+## SCIP 简介
+
+SCIP 是目前混合整数规划 (MIP) 和混合整数非线性规划 (MINLP) 最快的非商业求解器之一。
+它也是约束整数规划和分支切割与定界的框架。它允许完全控制求解过程并访问求解器内部的详细信息。
+默认情况下，SCIP 附带了一系列不同的插件来求解 MIP 和 MINLP。
+
+## SCIP 安装
+
+### Conda
+
+```bash
+$ conda install --channel conda-forge pyscipopt
+```
+
+### pip
+
+```bash
+$ pip install pyscipopt
+```
+
+Windows 上需要手动设置环境变量，其中 
+
+```bash
+$ set PATH=%PATH%;%SCIPOPTDIR%\bin
+```
 
 
+## SCIP 解决的问题
 
+### Linear Program 
+
+> Linear Program, LP，线性规划
+
+`$$\begin{align*} 
+\text{min} \quad& c^T x \\ 
+\text{s.t.} \quad& Ax \geq b \\ 
+& x_{j} \geq 0 && \forall j \in \mathcal{N} 
+\end{align*}$$`
+
+### Mixed-Integer Linear Program
+
+> Mixed-Integer Linear Program, MIP, 混合整数线性规划
+
+`$$$$`
+`$$\begin{align*}
+\text{min} \quad& c^T x \\ 
+\text{s.t.} \quad& Ax \geq b \\ 
+&l_{j} \leq x_{j} \leq u_{j} && \forall j \in \mathcal{N} \\ 
+&x_{j} \in \mathbb{Z} && \forall j \in \mathcal{I} 
+\end{align*}$$`
+
+### Mixed-Integer NonLinear Program
+
+> Mixed-Integer NonLinear Program, MINLP, 混合整数非线性规划
+
+`$$\begin{align*} 
+\text{min} \quad& f(x) \\ 
+\text{s.t.} \quad& g_{i}(x) \leq 0 && \forall i \in \mathcal{M} \\ 
+&l_{j} \leq x_{j} \leq u_{j} && \forall j \in \mathcal{N} \\ 
+&x_{j} \in \mathbb{Z} && \forall j \in \mathcal{I} 
+\end{align*}$$`
+
+### Constraint Integer Program
+
+> Constraint Integer Program, CIP, 约束整数规划
+
+`$$\begin{align*} 
+\text{min} \quad& c^T x + d^T y \\ 
+\text{s.t.} \quad& C_i(x,y) = \text{true} && \forall i \in \mathcal{M} \\ 
+& x \in \mathbb{Z}^{p}, y \in \mathbb{R}^{n - p} 
+\end{align*}$$`
+`$$\text{where} \space \forall i \in\mathcal{M}, \forall x^* \in \mathbb{Z}^{p},$$`
+`$$\{ y : C_i(x^*, y) = \text{true} \} \space \text{is a polyhedron.}$$` 
+
+### Convex MINLP 
+
+> Convex MINLP Like MINLP
+
+`$$f \space \text{and all} \space g_{i} \space\text{are convex.}$$`
+
+### Pseudoboolean optimization
+
+`$$\begin{align*} 
+\text{min} \quad& c^T x \\ 
+\text{s.t.} \quad& \sum_{k=0}^p a_{ik} \cdot \prod_{j \in \mathcal{N}_{ik}} x_j \leq b_i && \forall i \in \mathcal{M} \\ 
+&x_{j} \in \{0,1\} && \forall j \in \mathcal{N} 
+\end{align*}$$`
+
+### Satisfiability (SAT) and variants
+
+`$$\begin{align*} 
+\text{min} \quad& 0 \\ 
+\text{s.t.} \quad&\bigvee\limits_{j \in B_i} x_j \vee \bigvee\limits_{j \in \bar{B}_i} \neg x_j = \text{true} && \forall i \in \mathcal{M}\\ 
+&x_{j} \in \{\text{false},\text{true}\} && \forall j \in \mathcal{N} 
+\end{align*}$$`
+
+### Multicriteria optimization
+
+`$$\begin{align*} 
+\text{min} \quad &(c_1^T x,\ldots,c_k^T x) \\ 
+\text{s.t. } \quad& Ax \geq b \\ 
+&x \in \mathbb{K}^n 
+\end{align*}$$`
+
+`$$\text{where} \space \mathbb{K}\space \text{is either}\space \mathbb{Z}\space \text{or} \space \mathbb{R}.$$`.
+
+
+### Mixed-Integer SemiDefinite Program
+
+> Mixed-Integer SemiDefinite Program, MISDP, 混合整数半正定规划
+
+`$$\begin{align*} 
+\text{inf} \quad \thinspace & b^T y \\ 
+\text{s.t.} \quad & \sum_{j=1}^m A_j\, y_j - A_0 \succeq 0 \\ 
+& y_j \in \mathbb{Z} && \forall\, j \in \mathcal{I} 
+\end{align*}$$`
+
+## SCIP 快速使用
+
+```python
+from pyscipopt import Model
+
+# create a solver instance
+model = Model("Example")
+
+x = model.addVar("x")
+y = model.addVar("y", vtype = "INTEGER")
+model.setObjective(x + y)
+model.addCons(2 * x - y*y >= 0)
+model.optimize()
+
+sol = model.getBestSol()
+print(f"x: {sol[x]}")
+print(f"y: {sol[y]}")
+```
+
+# Python CPLEX 
+
+## CPLEX 简介
+
+> `docplex`，用于 Python 的 IBM Decision Optimization CPLEX 建模包
+
+`docplex` 可以快速轻松地为应用程序添加优化功能。可以使用 Python API 对问题进行建模，
+并使用 IBM Decision Optimization on Cloud 服务在云上解决这些问题，
+或者使用 IBM ILOG CPLEX Optimization Studio 在计算机上解决这些问题。
+
+`docplex` 由两个模块组成：
+
+* `docplex.mp`(DOcplex.MP)：数学规划建模
+* `docplex.cp`(DOcplex.CP)：约束规划建模
+
+## CPLEX 安装
+
+### pip
+
+```bash
+$ pip install docplex
+```
+
+* https://ibmdecisionoptimization.github.io/docplex-doc/getting_started_python.html
+
+### conda
+
+```bash
+$ 
+```
+
+### CPLEX Studio
+
+> optimization engine
+
+* https://ibmdecisionoptimization.github.io/docplex-doc/getting_started.html
+
+## CPLEX 使用
+
+
+### Mathematical Programming
+
+构建模型需要：
+
+1. 定义**决策变量**及其范围
+
+决策变量是使用 `Model` 类上的工厂方法创建的。该模型可以创建单个变量、
+变量列表以及按业务对象索引的变量字典。下面是创建变量的标准工厂方法表：
+
+| Function               | Creates       |
+|------------------------|---------------|
+| `binary_var()` | 单个二元变量 |
+| `binary_var_list()` | 二元变量列表 |
+| `binary_var_dict()` | 二元变量字典 |
+| `binary_var_matrix()` | 二元变量矩阵 |
+| `integer_var()` | 单个整型变量 |
+| `integer_var_list()` | 整型变量列表 |
+| `integer_var_dict()` | 整型变量字典 |
+| `integer_var_matrix()` | 整型变量矩阵 |
+| `continuous_var()` | 单一连续变量 |
+| `continuous_var_list()` | 连续变量列表 |
+| `continuous_var_dict()` | 连续变量列表 |
+| `continuous_var_matrix()` | 连续变量列表 |
+
+2. 从变量创建约束以表达变量和业务限制之间的相互作用，只有满足约束条件的变量值才是可能的
+3. 在模型中添加约束
+4. 定义优化的目标是什么。目标是用于对可能的解决方案进行排序的数值标准。
+   数学编程算法旨在返回最佳解决方案。此步骤是可选的：如果未定义目标，算法将返回一个可行解。
+
+* https://ibmdecisionoptimization.github.io/docplex-doc/mp/creating_model.html
+
+### Constraint Programming
+
+* https://ibmdecisionoptimization.github.io/docplex-doc/cp/creating_model.html
 
 # Python Ortools
 
@@ -1516,13 +2167,6 @@ res = op.linprog(-c, A_ub, B_ub, A_eq, B_eq, bounds = (x1, x2, x3))
 print(res)
 ```
 
-# Python CPLEX 
-
-> docplex，用于 Python 的 IBM Decision Optimization CPLEX 建模包
-
-* [docplex Doc](http://ibmdecisionoptimization.github.io/docplex-doc/)
-* [docplex Examples](https://github.com/IBMDecisionOptimization/docplex-examples)
-
 # Python Pyomo
 
 ## Pyomo 简介
@@ -1607,7 +2251,10 @@ Algorithm 类既存储着跟进化算法相关的一些参数，同时也在其�
 # 参考
 
 * [Gurobi 官方文档](https://docs.gurobi.com/current/)
-* [Pyomo Tutorial](https://www.osti.gov/servlets/purl/1376827)
+* [SCIP 官方文档](https://www.scipopt.org/)
+* [PySCIPOpt](https://github.com/scipopt/PySCIPOpt?tab=readme-ov-file)
+* [docplex Doc](http://ibmdecisionoptimization.github.io/docplex-doc/)
+* [docplex Examples](https://github.com/IBMDecisionOptimization/docplex-examples)
 * [OR-Tools 官方文档](https://developers.google.com/optimization?hl=zh-cn)
 * [OR-Tools GitHub](https://github.com/google/or-tools?tab=readme-ov-file)
-* [SCIP 官方文档](https://www.scipopt.org/)
+* [Pyomo Tutorial](https://www.osti.gov/servlets/purl/1376827)

@@ -10,12 +10,9 @@ slug: "about"
 
 ## 喜欢的事
 
-### 数学
+### 数学、统计学
 
 * 运筹学
-
-### 统计学
-
 * 概率论与数理统计
 * 贝叶斯统计学
 * 统计学习
@@ -34,7 +31,7 @@ slug: "about"
 * JavaScript：觉得很好玩
 * Spark：了解大数据的窗口
 * Shell：可能某一天会有用
-* Markdown[^markdown]: 写文档专用
+* Markdown[^markdown]、typst: 写文档专用
 * slidev: PPT
 
 ### 软件
