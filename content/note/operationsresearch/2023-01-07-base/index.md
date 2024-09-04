@@ -1,5 +1,5 @@
 ---
-title: TODO-数学优化模型
+title: 数学优化模型
 author: 王哲峰
 date: '2023-01-07'
 slug: base
