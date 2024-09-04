@@ -59,16 +59,10 @@ img {
         - [指示函数](#指示函数)
         - [带固定成本约束](#带固定成本约束)
         - [分段线性函数](#分段线性函数)
-    - [Gurobi 多目标优化](#gurobi-多目标优化)
-        - [Gurobi 多目标优化 API](#gurobi-多目标优化-api)
-        - [合成型](#合成型)
-        - [分层型](#分层型)
-        - [混合型](#混合型)
-        - [Gurobi 多目标优化示例](#gurobi-多目标优化示例)
     - [callback 函数](#callback-函数)
         - [callback 定义](#callback-定义)
         - [状态 where 与值 what](#状态-where-与值-what)
-    - [callback 函数的功能](#callback-函数的功能)
+        - [callback 函数的功能](#callback-函数的功能)
 - [Python SCIP](#python-scip)
     - [SCIP 简介](#scip-简介)
     - [SCIP 安装](#scip-安装)
@@ -702,7 +696,7 @@ for v in m.getVars():
 添加广义约束有两种方法：
 
 1. `model` 类的方法 `add_XXX`
-2. `model.addConstr` 方法
+2. `model.addConstrs` 方法
 
 约束条件用 Gurobi 内置函数表示，即用 `gurobipy.XXX` 函数来表达广义约束。
 
@@ -735,24 +729,24 @@ import gurobipy as grb
 m = grb.Model()
 
 # 定义变量
-x = m.addVar(name = "x")
-y = m.addVar(name = "y")
-z = m.addVar(name = "z")
-u1 = m.addVar(vtype = "B", name = "u1")
-u2 = m.addVar(vtype = "B", name = "u2")
-u3 = m.addVar(vtype = "B", name = "u3")
+x = m.addVars(name = "x")
+y = m.addVars(name = "y")
+z = m.addVars(name = "z")
+u1 = m.addVars(vtype = "B", name = "u1")
+u2 = m.addVars(vtype = "B", name = "u2")
+u3 = m.addVars(vtype = "B", name = "u3")
 M = 10000
 
 # 添加约束
-m.addConstr(x < z - M * (1 - u1), name = "c1")
-m.addConstr(y < z - M * (1 - u2), name = "c2")
-m.addConstr(3 < z - M * (1 - u3), name = "c3")
-m.addConstr(x == 4, name = "c4")
-m.addConstr(y == 5, name = "c5")
-m.addConstr(u1 + u2 + u3 >= 1, name = "c6")
-m.addConstr(x < z, name = "c7")
-m.addConstr(y < z, name = "c8")
-m.addConstr(3 < z, name = "c9")
+m.addConstrs(x < z - M * (1 - u1), name = "c1")
+m.addConstrs(y < z - M * (1 - u2), name = "c2")
+m.addConstrs(3 < z - M * (1 - u3), name = "c3")
+m.addConstrs(x == 4, name = "c4")
+m.addConstrs(y == 5, name = "c5")
+m.addConstrs(u1 + u2 + u3 >= 1, name = "c6")
+m.addConstrs(x < z, name = "c7")
+m.addConstrs(y < z, name = "c8")
+m.addConstrs(3 < z, name = "c9")
 
 # 定义目标函数并求解
 m.setObjective(z)
@@ -770,14 +764,14 @@ import gurobipy as grb
 m = grb.Model()
 
 # 定义变量
-x = m.addVar(name = "x")
-y = m.addVar(name = "y")
-z = m.addVar(name = "z")
+x = m.addVars(name = "x")
+y = m.addVars(name = "y")
+z = m.addVars(name = "z")
 
 # 添加约束
-m.addConstr(x == 4, name = "c4")
-m.addConstr(y == 5, name = "c5")
-m.addConstr(z == grb.max_(x, y, 3))
+m.addConstrs(x == 4, name = "c4")
+m.addConstrs(y == 5, name = "c5")
+m.addConstrs(z == grb.max_(x, y, 3))
 
 # 定义目标函数并求解
 m.setObjective(z)
@@ -822,12 +816,12 @@ import gurobipy as grb
 
 m = grb.Model()
 
-x = m.addVar(lb = -10, name = "x")
-y = m.addVar(name = "y")
+x = m.addVars(lb = -10, name = "x")
+y = m.addVars(name = "y")
 
-m.addConstr(y == grb.abs_(x), name = "C_abs")
-m.addConstr(x >= -5, name = "C_2")
-m.addConstr(x <= 3, name = "C_3")
+m.addConstrs(y == grb.abs_(x), name = "C_abs")
+m.addConstrs(x >= -5, name = "C_2")
+m.addConstrs(x <= 3, name = "C_3")
 c = 2
 m.setObjective(c * y)
 m.optimize()
@@ -890,9 +884,9 @@ import gurobipy as grb
 
 model = grb.Model()
 
-x = model.addVar(name = "x")
-y = model.addVar(name = "y")
-model.addConstr((y == 1) >> (x > 0), name = "indicator")
+x = model.addVars(name = "x")
+y = model.addVars(name = "y")
+model.addConstrs((y == 1) >> (x > 0), name = "indicator")
 ```
 
 ### 带固定成本约束
@@ -946,7 +940,7 @@ y = \{0, 1\}
 不能对表达式做线性化，而需要先将表达式赋予变量，然后再对变量做线性化，例如：
 
 ```python
-m.addConstr(z == grb.max_(x, y))
+m.addConstrs(z == grb.max_(x, y))
 ```
 
 `$$\text{s.t.} \space x = g + k$$`
@@ -954,242 +948,10 @@ m.addConstr(z == grb.max_(x, y))
 是正确的，而：
 
 ```python
-m.addConstr(z == grb.max_(g + k, y))
+m.addConstrs(z == grb.max_(g + k, y))
 ```
 
 则是错误的。
-
-## Gurobi 多目标优化
-
-在多目标优化中，可以直接把多个目标通过分配权重的方式组合成单目标优化问题，
-但是如果多个目标函数之间的数量级差异很大，则应该使用分层优化的方法。
-
-### Gurobi 多目标优化 API
-
-在 Gurobi 中，可以通过 `Model.setObjectiveN` 函数来建立多目标优化模型，
-多目标的 `setObjectiveN` 函数和单目标的 `setObjective` 函数用法基本一致，
-不同的是多了目标优先级、目标劣化接受程度、多目标的权重等参数。
-
-```python
-setObjectiveN(expr, index, priority, weight, abstol, reltol, name)
-```
-
-参数说明如下：
-
-1. `expr`: 目标函数表达式，如 `$x+2y+3z$`；
-2. `index`: 目标函数对应的需要 `$(0, 1, 2, \cdots)$`，即第几个目标，注意目标函数序号从 `$0$` 开始；
-3. `priority`: 优先级，为整数，值越大表示目标优先级越高；
-4. `weight`: 权重（浮点数），在合成型多目标解法中使用该参数，表示不同目标之间的组合权重；
-5. `abstol`: 允许的目标函数值最大的降低量 `abstol`（浮点数），即当前迭代的值相比最优值的可接受劣化程度；
-6. `reltol`: `abstol` 的百分数表示，如 `reltol = 0.05` 表示可接受劣化程度是 5%； 
-7. `name`: 目标函数名称；
-
-需要注意的是，在 Gurobi 的多目标优化中，要求所有的目标函数都是线性的，并且目标函数的优化方向应一致，
-即全部最大化或全部最小化，因此可以通过乘以 -1 实现不同的优化方向。
-
-当前 Gurobi 支持 3 种多目标模式，分别是 Blend(合成型)、Hierarchical(分层型)、两者的混合型。
-
-### 合成型
-
-合成型(Blend)通过对多个目标赋予不同的权重实现将多目标转化成单目标函数，
-权重扮演优先级的角色。例如，有如下两个优化目标：
-
-`$$obj_{1}=x+2y, weight_{1} = 3$$`
-`$$obj_{2}=x-3y, weight_{2} = 0.5$$`
-
-经过合成后的单目标函数为：
-
-`$$\begin{align}
-obj
-&=weight_{1} \times obj_{1} + weight_{2}\times obj_{2} \\
-&=3\times (x+2y)-0.5\times(x-3y)\\
-&=2.5x + 7.5
-\end{align}$$`
-
-Gurobi 使用方法如下：
-
-```python
-import gurobipy as grb
-
-model = grb.Model()
-
-x = model.addVar(name = "x")
-y = model.addVar(name = "y")
-
-# 添加第一个目标
-model.setObjectiveN(x + 2 * y, index = 0, weight = 3, name = "obj1")
-# 添加第二个目标
-model.setObjectiveN(x - 3 * y, index = 1, weight = 0.5, name = "obj2")
-```
-
-```python
-for i in range(model.NumObj):
-    model.setParam(grb.GRB.Param.ObjNumber, i)
-    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
-```
-
-### 分层型
-
-分层型(Hierarchical)有优先级，一般理解是在保证第一个目标值最优的情况下优化第二个目标，
-或者在优化第二个目标时要保证第一个目标的最优值只能允许少量劣化。
-
-例如，有如下两个优化目标：
-
-`$$obj_{1}=x+2y, priority_{1}=2$$`
-`$$obj_{2}=x-3y, priority_{2}=1$$`
-
-此时 Gurobi 按照优先级大小进行优化（先优化 `$obj_{1}$`，再优化 `$obj_{2}$`）。
-若没有设定 `abstol` 或 `reltol`，则在优化低优先级目标(`$obj_{2}$`)时，
-不会改变高优先级的目标(`$obj_{1}$`)值。
-
-```python
-import gurobipy as grb
-
-model = grb.Model()
-
-x = model.addVar(name = "x")
-y = model.addVar(name = "y")
-
-# 添加第一个目标
-model.setObjectiveN(x + 2 * y, index = 0, priority = 20, name = "obj1")
-# 添加第二个目标
-model.setObjectiveN(x - 3 * y, index = 1, priority = 1, name = "obj2")
-```
-
-```python
-for i in range(model.NumObj):
-    model.setParam(grb.GRB.Param.ObjNumber, i)
-    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
-```
-
-### 混合型
-
-混合型的写法也很简单，将权重和优先级同时设定即可：
-
-```python
-import gurobipy as grb
-
-model = grb.Model()
-
-x = model.addVar(name = "x")
-y = model.addVar(name = "y")
-
-# 添加第一个目标
-model.setObjectiveN(x + 2 * y, index = 0, weight = 3, priority = 20, name = "obj1")
-# 添加第二个目标
-model.setObjectiveN(x - 3 * y, index = 1, weight = 0.5, priority = 1, name = "obj2")
-```
-
-```python
-for i in range(model.NumObj):
-    model.setParam(grb.GRB.Param.ObjNumber, i)
-    print(f"第 {i} 个目标的优化值是 {model.objNVal}")
-```
-
-### Gurobi 多目标优化示例
-
-假设工厂需要把 `$N$` 份工作分配给 `$N$` 个工人，每份工作只能由一个工人做，
-且每个工人也只能做一份工作。假设工人 `$i$` 处理工作 `$j$` 需要的时间是 `$T_{ij}$`，
-获得的利润是 `$C_{ij}$`，那么需要怎么安排才能使得总利润最大且总耗时最小呢？
-
-这里有两个目标，最主要的目标是利润最大化，次要目标是耗时最小化。
-
-为了编程方便，这里假设 `$N=10$`，`$T_{ij}$` 和 `$C_{ij}$` 通过随机数生成。
-
-```python
-import numpy as np
-import gurobipy as grb
-
-# 设置工人数和工作数量
-N = 10
-np.random.seed(1234)
-
-# 用随机数初始化时间矩阵 T_{ij} 和成本矩阵 C_{ij}
-Tij = {
-    (i, j): np.random.randint(0, 100) 
-    for i in rang(1, N + 1) 
-    for j in rang(1, N + 1)
-}
-Cij = {
-    (i, j): np.random.randint(0, 100) 
-    for i in rang(1, N + 1) 
-    for j in rang(1, N + 1)
-}
-
-# 定义模型
-m = grb.Model("MultiObj")
-
-# 添加变量
-# x 是 0-1 变量，xij=1 表示第 i 个工人被分配到第 j 个工作中
-x = m.addVars(Tij.keys(), vtype = grb.GRB.BINARY, name = "x")
-
-# 添加约束
-# 第 1 个约束表示一份工作只能分配给一个工人
-m.addConstrs((x.sum("*", j) == 1 for j in range(1, N + 1)), name = "C1")
-# 第 2 个约束表示一个工人制作一份工作
-m.addConstrs((x.sum(i, "*") == 1 for i in range(1, N + 1)), name = "C2")
-```
-
-多目标方式 1: 合成型
-
-```python
-# 设置多重目标权重
-m.setObjectiveN(x.prod(Tij), index = 0, weight = 0.1, name = "obj1")
-m.setObjectiveN(-x.prod(Cij), index = 1, weight = 0.5, name = "obj2")
-
-# 启动求解
-m.optimize()
-
-# 获取求解结果
-for i in Tij.keys():
-    if x[i].x > 0.9:
-        print(f"工人 {i[0]} 分配工作 {i[1]}")
-
-# 获取目标函数值
-for i in rang(1, 3):
-    m.setParam(grb.GRB.Param.ObjNumber, i)
-    print(f"Obj{i} = {m.ObjNVal}")
-```
-
-多目标方式 2：分层型
-
-```python
-# 设置目标函数
-m.setObjectiveN(
-    x.prod(Tij), index = 0, priority = 1, 
-    abstol = 0, reltol = 0, name = "obj1"
-)
-m.setObjectiveN(
-    -x.prod(Cij), index = 1, priority = 2, 
-    abstol = 100, reltol = 0, name = "obj2"
-)
-
-# 启动求解
-m.optimize()
-
-# 获取求解结果
-for i in Tij.keys():
-    if x[i].x > 0.9:
-        print(f"工人 {i[0]} 分配工作 {i[1]}")
-
-# 获取目标函数值
-for i in rang(1, 3):
-    m.setParam(grb.GRB.Param.ObjNumber, i)
-    print(f"Obj{i} = {m.ObjNVal}")
-```
-
-```
-
-```
-
-多目标方式 3：混合型
-
-```python
-# 设置目标函数
-
-# 启动求解
-m.optimize()
-```
 
 ## callback 函数
 
@@ -1259,7 +1021,7 @@ if where == grb.GRB.Callback.MULTIOBJ:  # where
 | `grb.GRB.Callback.MIPSOL_NODCNT` | `double` | 当前已搜索的节点数   |
 | `grb.GRB.Callback.MIPSOL_SOLCNT` | `int`    | 当前发现可行解的数量 |
 
-## callback 函数的功能
+### callback 函数的功能
 
 在 Gurobi 中除了 `cbGet` 函数外还有一些常用函数用于获取运行过程中信息或修改运行状态。
 
@@ -1400,8 +1162,8 @@ from pyscipopt import Model
 # create a solver instance
 model = Model("Example")
 
-x = model.addVar("x")
-y = model.addVar("y", vtype = "INTEGER")
+x = model.addVars("x")
+y = model.addVars("y", vtype = "INTEGER")
 model.setObjective(x + y)
 model.addCons(2 * x - y*y >= 0)
 model.optimize()

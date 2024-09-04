@@ -400,14 +400,14 @@ import gurobipy as grb
 model = grb.Model()
 
 # 定义整数变量
-x1 = model.addVar(vtype = grb.GRB.INTEGER, name = "x1")
-x2 = model.addVar(vtype = grb.GRB.INTEGER, name = "x2")
+x1 = model.addVars(vtype = grb.GRB.INTEGER, name = "x1")
+x2 = model.addVars(vtype = grb.GRB.INTEGER, name = "x2")
 
 # 添加约束
-model.addConstr(2 * x1 + 3 * x2 <= 14)
-model.addConstr(4 * x1 + 2 * x2 <= 18)
-model.addConstr(x1 >= 0)
-model.addConstr(x2 >= 0)
+model.addConstrs(2 * x1 + 3 * x2 <= 14)
+model.addConstrs(4 * x1 + 2 * x2 <= 18)
+model.addConstrs(x1 >= 0)
+model.addConstrs(x2 >= 0)
 
 # 定义目标函数
 model.setObjective(3 * x1 + 2 * x2, sense = grb.GRB.MAXIMIZE)

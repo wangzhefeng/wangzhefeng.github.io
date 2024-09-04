@@ -670,11 +670,11 @@ for i in ["A", "B1", "B2", "C1", "C2", "D"]:
         delta = 0
     
     name = f"C_{i}"
-    m.addConstr(
+    m.addConstrs(
         sum(x[i, j] for i, j in links.select(i, "*")) - sum(x[j, i] for j, i in links.select("*", i)) == delta, 
         name = name
     )
-    # m.addConstr(
+    # m.addConstrs(
     #     x.sum(i, "*") - x.sum("*", i) == delta, 
     #     name = name
     # )
