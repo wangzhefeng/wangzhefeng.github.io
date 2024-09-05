@@ -78,4 +78,8 @@ tensor([   1.,    4.,   27.,  256.])
 tensor([  2.,   4.,   8.,  16.])
 ```
 
+* `torch.repeat()`
+* `torch.permute()`
+
+
 ## 文档

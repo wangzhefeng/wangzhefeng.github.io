@@ -40,16 +40,15 @@ img {
 - [历史研究和瓶颈](#历史研究和瓶颈)
 - [论文贡献](#论文贡献)
 - [模型定义](#模型定义)
-    - [深度分解架构](#深度分解架构)
-        - [序列分解单元](#序列分解单元)
-        - [编码器](#编码器)
-        - [解码器](#解码器)
-    - [自相关机制](#自相关机制)
-        - [基于周期的依赖发现](#基于周期的依赖发现)
-        - [时延信息聚合](#时延信息聚合)
-        - [高效计算](#高效计算)
+  - [深度分解架构](#深度分解架构)
+    - [序列分解单元](#序列分解单元)
+    - [编码器](#编码器)
+    - [解码器](#解码器)
+  - [自相关机制](#自相关机制)
+    - [基于周期的依赖发现](#基于周期的依赖发现)
+    - [时延信息聚合](#时延信息聚合)
+    - [高效计算](#高效计算)
     - [对比分析](#对比分析)
-- [实验结果](#实验结果)
 - [总结](#总结)
 - [参考](#参考)
 </p></details><p></p>
@@ -114,13 +113,13 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 
 序列分解单元(series decomposition block)基于**滑动平均**思想，平滑周期项、突出趋势项：
 
-`$$\mathbf{X} = \text{AvgPool}(\text{Padding}(\mathbf{X}))$$`
-`$$\mathbf{X}_{seasonal} = \mathbf{X} - \mathbf{X}_{trend}$$`
+`$$\mathbf{X}_{T} = \text{AvgPool}(\text{Padding}(\mathbf{X}))$$`
+`$$\mathbf{X}_{S} = \mathbf{X} - \mathbf{X}_{T}$$`
 
-其中，`$\mathbf{X}$` 为待分解的隐变量，`$\mathbf{X}_{t}$`、`$\mathbf{X}_{s}$` 分别为趋势项和周期项，
+其中，`$\mathbf{X}$` 为待分解的隐变量，`$\mathbf{X}_{T}$`、`$\mathbf{X}_{S}$` 分别为趋势项和周期项，
 将上述公式记为：
 
-`$$\mathbf{X}_{t}, \mathbf{X}_{s} = SeriesDecomp(\mathbf{X})$$`
+`$$\mathbf{X}_{S}, \mathbf{X}_{T} = SeriesDecomp(\mathbf{X})$$`
 
 将上述序列分解单元嵌入 Autoformer 层间（上图中蓝色模块）。
 
@@ -140,7 +139,11 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 * 对于周期项，自相关机制利用序列的周期性质，聚合不同周期中具有相似过程的子序列；
 * 对于趋势项，使用累积的方式，逐步从预测的隐变量中提取出趋势信息（最后一行）。
 
-`$$$$`
+`$$\mathbf{S}_{decoder}^{l,1}, \mathbf{T}_{decoder}^{l,1} = \text{SeriesDecomp}\Big(\text{AutoCorrelation}(\mathbf{X}_{decoder}^{l-1})+\mathbf{X}_{decoder}^{l-1}\Big)$$`
+`$$\mathbf{S}_{decoder}^{l,2}, \mathbf{T}_{decoder}^{l,2} = \text{SeriesDecomp}\Big(\text{AutoCorrelation}(\mathbf{S}_{decoder}^{l,1}, \mathbf{X}_{decoder}^{N})+\mathbf{S}_{decoder}^{l,1}\Big)$$`
+`$$\mathbf{S}_{decoder}^{l,3}, \mathbf{T}_{decoder}^{l,3} = \text{SeriesDecomp}\Big(\text{FeedForward}(\mathbf{S}_{decoder}^{l,2})+\mathbf{S}_{decoder}^{l,2}\Big)$$`
+
+`$$\mathbf{T}_{decoder}^{l} = \mathbf{T}_{decoder}^{l-1} + \mathbf{W}_{l,1} \mathbf{T}_{decoder}^{l, 1} +\mathbf{W}_{l,2}\mathbf{T}_{decoder}^{l,2}+\mathbf{W}_{l,3}\mathbf{T}_{decoder}^{l,3}$$`
 
 基于上述渐进式分解架构，模型可以在预测过程中逐步分解隐变量，
 并通过自相关机制、累积的方式分别得到周期、趋势组分的预测结果，
@@ -155,15 +158,47 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 
 ### 基于周期的依赖发现
 
+基于随机过程理论，对于实离散时间过程 `$\{\mathbf{X}_{t}\}$`，可以如下计算其自相关系数：
+
+`$$\mathbf{R}_{\mathbf{X}\mathbf{X}}(\tau) = \underset{L \rightarrow \infty}{\text{lim}}\frac{1}{L}\sum_{t=0}^{L-1}\mathbf{X}_{t}\mathbf{X}_{t-\tau}$$`
+
+其中，自相关系数 `$\mathbf{R}_{\mathbf{X}\mathbf{X}}(\tau)$` 表示序列 `$\mathbf{X}_{t}$` 与它的 `$\tau$` 延迟 `$\mathbf{X}_{t-\tau}$` 之间的相似性。
+
+将这种时延相似性看作未归一化的周期估计的置信度，即周期长度为 `$\tau$` 的置信度为 `$\mathbf{R}(\tau)$`。
+
+![img](images/correlation.png)
+
 ### 时延信息聚合
 
+为了实现序列级连接，需要将相似的子序列信息进行聚合。
+这里依据估计出的周期长度，首先使用 `$Roll()$` 操作进行信息对齐，
+再进行信息聚合，我们这里依然使用 query、key、value 的形式，从而可以无缝替代自注意力机制。
+
+`$$\tau_{1}, \cdots, \tau_{k} = \underset{\tau \in \{1, \cdots, L\}}{\text{arg}}\text{Topk}(\mathbf{R}_{\mathbf{Q}, \mathbf{K}}(\tau))$$`
+
+`$$\hat{\mathbf{R}}_{\mathbf{Q}, \mathbf{K}}(\tau_{1}), \cdots, \hat{\mathbf{R}}_{\mathbf{Q}, \mathbf{K}}(\tau_{k}) = \text{SoftMax}(\mathbf{R}_{\mathbf{Q}, \mathbf{K}}(\tau_{1}), \cdots, \mathbf{R}_{\mathbf{Q}, \mathbf{K}}(\tau_{k}))$$`
+
+`$$\text{AutoCorrelation}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \sum_{i=1}^{k}\text{Roll}(\mathbf{V}, \tau_{k})\hat{\mathbf{R}}_{\mathbf{Q},\mathbf{K}}(\tau_{k})$$`
+
+这里挑选最有可能的 `$k=[c \times \text{log}L]$` 个周期长度，用于避免挑选到无关、甚至相反的相位。
+在 Autoformer 中，使用多头(multi-head) 版本。
+
+![img](images/qkv.png)
 
 ### 高效计算
 
-## 对比分析
+基于 Wiener-Khinchin 理论，自相关系数 `$\mathbf{R}_{\mathbf{X}, \mathbf{X}}(\tau)$` 可以使用快速傅立叶变换（FFT）得到，计算过程如下：
 
-# 实验结果
+`$$\mathbf{S}_{\mathbf{X}, \mathbf{X}}(f)=\mathbf{F}(\mathbf{X}_{t})\mathbf{F}^{*}(\mathbf{X}_{t})=\int_{-\infty}^{\infty}\text{X}_{t}e^{-i2\pi t f}\text{d}t \overline{\int_{-\infty}^{\infty}\text{X}_{t}e^{-i2\pi t f}dt}$$`
+`$$\mathbf{R}_{\mathbf{X}, \mathbf{X}}(\tau)=\mathbf{F}^{-1}(\mathbf{S}_{\mathbf{X}, \mathbf{X}}(f))=\int_{-\infty}^{\infty}\mathbf{S}_{\mathbf{X}, \mathbf{X}}(f)e^{i2\pi f \tau}\text{d}f$$`
 
+### 对比分析
+
+相比于之前的注意力机制或者稀疏注意力机制，
+自注意力机制（Auto-Correlation Mechanism）实现了序列级的高效连接，
+从而可以更好的进行信息聚合，打破了信息利用瓶颈。
+
+![img](images/auto-correlation.png)
 
 # 总结
 

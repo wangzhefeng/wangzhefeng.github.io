@@ -12,33 +12,6 @@ tags:
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -56,6 +29,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 <details><summary>目录</summary><p>
@@ -68,13 +44,15 @@ details[open] summary {
 - [实验结果](#实验结果)
 - [总结](#总结)
 - [资料](#资料)
-- [时间序列 Transformer](#时间序列-transformer)
 </p></details><p></p>
-
 
 # 论文简介
 
-
+* 论文名称：Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting.
+* 论文地址：[https://arxiv.org/abs/2012.07436](https://arxiv.org/abs/2012.07436)
+* 论文代码：
+    - [https://github.com/thuml/Time-Series-Library](https://github.com/thuml/Time-Series-Library)
+    - [https://github.com/zhouhaoyi/Informer2020](https://github.com/zhouhaoyi/Informer2020)
 
 # 历史研究和瓶颈
 
@@ -98,11 +76,4 @@ details[open] summary {
 
 # 资料
 
-
-
-
-
-
-# 时间序列 Transformer
-
-* https://mp.weixin.qq.com/s/OjK7Q7DSoTM_p1MLye9RWw
+* [HuggingFace Blog](https://huggingface.co/blog/zh/informer)
