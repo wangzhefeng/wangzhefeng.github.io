@@ -1,9 +1,9 @@
 ---
 title: 时间序列异常值检测
-subtitle: Time Series Anomaly Detection
+subtitle: Anomaly Detection
 author: 王哲峰
 date: '2022-04-24'
-slug: outlier-detection
+slug: anomaly-detection
 categories:
   - timeseries
 tags:
