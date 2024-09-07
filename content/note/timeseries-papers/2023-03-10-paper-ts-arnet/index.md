@@ -5,39 +5,13 @@ date: '2023-03-10'
 slug: paper-ts-arnet
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model
 ---
 
 <style>
-h1 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h2 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-h3 {
-    background-color: #2B90B6;
-    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -55,6 +29,9 @@ details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
 }
+img {
+    pointer-events: none;
+}
 </style>
 
 <details><summary>目录</summary><p>
@@ -63,30 +40,119 @@ details[open] summary {
 - [历史研究和瓶颈](#历史研究和瓶颈)
 - [论文贡献](#论文贡献)
 - [问题定义](#问题定义)
+    - [自回归](#自回归)
+    - [神经网络](#神经网络)
 - [模型定义](#模型定义)
 - [实验结果](#实验结果)
 - [总结](#总结)
-- [资料](#资料)
 - [参考](#参考)
 </p></details><p></p>
 
 
 # 论文简介
 
-
+* 论文名称：AR-Net: A simple Auto-Regressive Neural Network for time-series.
+* 论文地址：[https://arxiv.org/pdf/1911.12436.pdf](https://arxiv.org/pdf/1911.12436.pdf)
+* 论文代码：[https://github.com/ourownstory/AR-Net](https://github.com/ourownstory/AR-Net)
 
 # 历史研究和瓶颈
 
+传统模型，例如采用最小二乘法的自回归(Classic-AR)，可以使用简洁且可解释的模型对时间序列进行建模。
+在处理远程依赖性时， Classic-AR 模型在适应大数据时可能会变得极其缓慢。
+最近，序列到序列模型（例如最初用于自然语言处理的循环神经网络）在时间序列中变得流行。
+然而，对于典型的时间序列数据来说，它们可能过于复杂并且缺乏可解释性。
+
+(S)ARIMA(X) 和 Prophet 等模型利用时间序列的固有特征，产生更简洁的模型。
+这是可能的，因为模型对数据做出了强有力的假设，例如 AR 过程的真实顺序、趋势或季节性。
+然而，这些模型对于大量训练数据来说不能很好地扩展，并且难以扩展，
+特别是在存在远程依赖性或复杂交互的情况下。
+
+为了克服可扩展性挑战，基于递归或卷积的“序列到序列”深度学习方法已在自然语言处理中成功开发。
+最突出的例子是循环神经网络(RNN)，例如长期短期记忆单元(LSTM)、注意力或基于卷积的方法，
+例如 Wavenet。最近，它们在时间序列社区中也变得流行，因为它们允许更具表现力的模型，而无需设计复杂的特征。
+虽然这些模型可以很好地扩展到具有丰富数据的应用程序，但对于典型的时间序列数据来说它们可能过于复杂。
+RNN 尚未广泛应用于时间序列应用的另一个原因是它们普遍被从业者视为“黑匣子”。
+尽管它们复杂的参数交互在某种程度上是可以解释的（例如，LIME、SHAP），
+但与基于 AR 的模型相比，它们很难解释，限制了它们在模型可解释性是关键的实践中的采用。
+
+作者得出的结论是，统计模型更适合时间序列建模。其他类似的工作指出时间序列建模需要充分且易于理解的深度学习方法。
 
 # 论文贡献
 
+提出了一种新的时间序列建模框架，它结合了传统统计模型和神经网络的优点。
 
+为了实现一个可扩展且可解释的模型来连接统计和基于深度学习的方法。
+建议使用前馈神经网络方法（称为 AR-Net）对 AR 过程动态进行建模。
+证明 AR-Net 与 Classic-AR 一样可解释，而且还可以扩展到远程依赖关系。
+
+结果得出三个主要结论：
+
+* 首先，AR-Net 学习与 Classic-AR 相同的 AR 系数，因此具有同等的可解释性。
+* 其次，与 AR 过程的顺序相关的计算复杂度对于 AR-Net 来说是线性的，而 Classic-AR 的计算复杂度是二次的。
+  这使得在细粒度数据中对远程依赖关系进行建模成为可能。
+* 第三，通过引入正则化，AR-Net 自动选择和学习稀疏 AR 系数。这消除了了解 AR 过程的确切顺序的需要，
+  并允许学习具有远程依赖性的模型的稀疏权重。
+
+我们制定了一个模仿 Classic-AR 模型的简单神经网络，唯一的区别在于它们如何适应数据。
+我们的模型称为 AR-Net，其最简单的形式与线性回归相同，并配有随机梯度下降(SGD)。
+我们证明 AR-Net 与 Classic-AR 模型具有相同的解释性，并且可以扩展到更大的 `$p\text{-order}$`。
 
 # 问题定义
 
+## 自回归
 
+> Auto-Regression, AR, 自回归
+
+虽然之前已经开发了许多先进的预测方法，但我们重点关注更基本和最常用的基于自回归(AR)的时间序列模型。
+自回归模型在处理各种不同的时间序列模式方面非常灵活，并在实践中得到了广泛的应用。
+
+统计模型利用时间序列的固有特征，形成简洁的模型。因为模型对数据做出了强有力的假设，例如 AR 过程的真实顺序。
+`$\text{AR(p)}$` 过程的 `$p\text{-order}$` 被定义为下一个值所依赖的时间序列（滞后）的先前值的数量。 
+具有高 `$p$` 值的 AR 过程对于监控细粒度数据（例如，分钟、秒、毫秒）以及长期依赖性非常重要，
+其中过去很久的值仍然影响未来的结果。
+
+AR 模型的参数传统上使用最小二乘法(Classic-AR) 进行拟合。不幸的是，当对长程依赖关系进行建模时，
+具有较大 `$p\text{-order}$` 的 Classic-AR 模型的拟合过程可能会变得非常慢。
+
+自回归(Auto-Regression, AR)中的 "auto" 表示变量对其自身进行回归，
+这类似于多元回归，但 AR 将时间序列的滞后值 `$y_{t}$` 作为预测变量，
+将这种模型称为 `$\text{AR}(p)$` 模型，即阶数 `$p$` 的自回归模型。
+`$\text{AR}(p)$` 模型可以表示为：
+
+`$$y_{t} = c + \sum_{i=1}^{i=p}w_{i}y_{t-i} + \epsilon_{t}$$`
+
+其中：
+
+* `$y_{t-1}, \cdots, y_{t-p}$` 是 `$p$` 个滞后项，用于预测 `$y_{t}$`
+* `$\epsilon_{t}$` 是噪音
+* `$w_{i}$` 是滞后项的权重，也称为 AR 系数
+
+作为基线，使用使用最小二乘法拟合的自回归模型的传统实现。将该模型称为 Classic-AR。
+
+## 神经网络
+
+> Neural Networks, 神经网络
+
+为了克服可扩展性挑战，时间序列社区已开始采用深度学习方法，
+例如循环神经网络（RNN）和卷积神经网络（CNN）。
+然而，就目前的形式而言，RNN 和 CNN 是为丰富的自然语言处理或图像数据而设计的，
+这使得它们对于大多数时间序列应用来说过于复杂。
+由于模型难以向决策利益相关者解释，它们的采用进一步受到限制。
+
+然而，有两个属性使通用神经网络对时间序列建模有吸引力。
+
+* 首先，神经网络具有一般的非线性函数映射能力，可以逼近任何连续函数。
+  因此，只要有足够的数据，它就能够解决许多复杂的问题。
+* 其次，神经网络是一种非参数数据驱动模型，不需要对生成数据的底层过程进行限制性假设。
+  由于这一特性，与大多数参数非线性方法相比，它更不容易受到模型错误指定问题的影响。
+  这是一个重要的优势，因为时间序列建模不显示特定的非线性模式。
+  不同的时间序列可能具有参数模型未捕获的独特行为。
 
 # 模型定义
+
+AR-Net 通过神经网络模仿传统的 AR 过程，它的设计使第一层的参数等于 AR 系数。
+
+![img](images/ar-net.png)
 
 
 # 实验结果
@@ -95,15 +161,8 @@ details[open] summary {
 # 总结
 
 
-# 资料
-
-
-
-
-
 # 参考
 
 * [AR-Net GitHub](https://github.com/ourownstory/AR-Net)
 * [examples](https://github.com/ourownstory/AR-Net/tree/master/example_notebooks)
 * [Paper](https://arxiv.org/pdf/1911.12436.pdf)
-

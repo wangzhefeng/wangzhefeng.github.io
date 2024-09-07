@@ -5,6 +5,7 @@ date: '2024-05-08'
 slug: paper-ts-timesnet
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model
@@ -39,8 +40,8 @@ img {
 - [背景介绍](#背景介绍)
 - [设计思路](#设计思路)
 - [TimeNet](#timenet)
-    - [时序变化: 从一维至二维](#时序变化-从一维至二维)
-    - [TimesBlock](#timesblock)
+  - [时序变化: 从一维至二维](#时序变化-从一维至二维)
+  - [TimesBlock](#timesblock)
 - [总结](#总结)
 - [参考](#参考)
 </p></details><p></p>

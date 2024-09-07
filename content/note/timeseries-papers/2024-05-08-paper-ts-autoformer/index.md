@@ -5,6 +5,7 @@ date: '2024-05-08'
 slug: paper-ts-autoformer
 categories:
   - timeseries
+  - 论文阅读
 tags:
   - paper
   - model

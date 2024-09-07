@@ -1,6 +1,6 @@
 ---
-title: AICG & AIGC
-subtitle: Artificial Intelligence Computer Graphics & Generated Content
+title: AIGC
+# subtitle: Artificial Intelligence Computer Graphics & Generated Content
 list_pages: true
 # order_by: title
 ---
