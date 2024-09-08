@@ -34,7 +34,7 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [时间序列预处理简介](#时间序列预处理简介)
+- [时间序列示例数据](#时间序列示例数据)
 - [标准化和中心化](#标准化和中心化)
     - [标准化](#标准化)
     - [中心化](#中心化)
@@ -42,7 +42,6 @@ img {
     - [归一化](#归一化-1)
     - [平均归一化](#平均归一化)
     - [什么时候用归一化？什么时候用标准化？](#什么时候用归一化什么时候用标准化)
-- [定量特征二值化](#定量特征二值化)
 - [时间序列聚合](#时间序列聚合)
     - [Pandas 重采样](#pandas-重采样)
         - [API](#api)
@@ -50,7 +49,7 @@ img {
         - [降采样](#降采样)
         - [Function application](#function-application)
         - [Indexing 和 iteration](#indexing-和-iteration)
-        - [稀疏采用](#稀疏采用)
+        - [稀疏采样](#稀疏采样)
     - [SciPy 重采样](#scipy-重采样)
         - [API](#api-1)
         - [升采样](#升采样-1)
@@ -58,43 +57,35 @@ img {
         - [等间隔采样](#等间隔采样)
         - [不等间隔采样](#不等间隔采样)
 - [时间序列缺失处理](#时间序列缺失处理)
-    - [时间序列插值](#时间序列插值)
+    - [forward 和 backward fill](#forward-和-backward-fill)
+    - [Moving Average](#moving-average)
     - [Pandas 插值算法](#pandas-插值算法)
         - [Pandas 中缺失值的处理](#pandas-中缺失值的处理)
         - [缺失值插值算法 API](#缺失值插值算法-api)
-            - [pandas.DataFrame.interpolate](#pandasdataframeinterpolate)
+        - [pandas.DataFrame.interpolate](#pandasdataframeinterpolate)
     - [Scipy 插值算法](#scipy-插值算法)
         - [1-D interpolation](#1-d-interpolation)
         - [Multivariate data interpolation](#multivariate-data-interpolation)
         - [Spline interpolation](#spline-interpolation)
         - [Using radial basis functions for smoothing/interpolate](#using-radial-basis-functions-for-smoothinginterpolate)
+- [时间序列异常值处理](#时间序列异常值处理)
 - [时间序列降噪](#时间序列降噪)
     - [移动平均](#移动平均)
     - [傅里叶变换](#傅里叶变换)
     - [小波分析](#小波分析)
-- [时间序列处理技巧](#时间序列处理技巧)
-    - [时区](#时区)
-        - [API](#api-2)
-        - [原理](#原理)
-        - [示例](#示例)
-    - [重采样](#重采样)
-    - [缺失值填充](#缺失值填充)
+- [时间序列时区处理](#时间序列时区处理)
+    - [API](#api-2)
+    - [原理](#原理)
+    - [示例](#示例)
 - [参考](#参考)
 </p></details><p></p>
 
-# 时间序列预处理简介
+# 时间序列示例数据
 
-一般来说，真实世界的时间序列常常取值范围多样，长短不一，形态各异。
-如果要做统一的分析，需要我们进行初步的处理，将时间序列整合到统一的范畴下，进行分析。
-这里基本的方法有：标准化、归一化、定量特征二值化
-
-时间序列示例数据：
-
-[澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
+> [澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
 
 ```python
-import pandas as pd 
-from pandas import Grouper
+import pandas as pd
 import matplotlib.pyplot as plt 
 
 series = pd.read_csv(
@@ -193,10 +184,20 @@ inversed.plot()
 
 `$$\hat{x}_{t} = x_{t} - mean(\{x_{t}\}_{t}^{T})$$`
 
+```python
+
+```
+
 # 归一化
 
 归一化是将样本的特征值转换到同一范围（量纲）下，把数据映射到 `$[0, 1]$` 或 `$[-1, 1]$` 区间内，
-它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的
+它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的。
+
+## 归一化
+
+把数据映射到 `$[0, 1]$` 范围之内进行处理，可以更加便捷快速。具体公式如下：
+
+`$$\hat{x}_{t} = \frac{x_{t} - min(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
 
 ```python
 import pandas as pd 
@@ -228,28 +229,6 @@ for i in range(5):
     print(inversed[i])
 ```
 
-``` 
-            Temp
-Date            
-1981-01-02  17.9
-1981-01-03  18.8
-1981-01-04  14.6
-1981-01-05  15.8
-1981-01-06  15.8
-Min: 0.000000, Max: 26.300000
-
-[0.68060837]
-[0.7148289]
-[0.55513308]
-[0.60076046]
-[0.60076046]
-[17.9]
-[18.8]
-[14.6]
-[15.8]
-[15.8]
-```
-
 ```python
 normalized.plot()
 ```
@@ -262,52 +241,28 @@ inversed.plot()
 
 ![img](images/line_inversed_normalized.png)
 
-## 归一化
-
-把数据映射到 `$[0, 1]$` 范围之内进行处理，可以更加便捷快速。具体公式如下：
-
-`$$\hat{x}_{t} = \frac{x_{t} - min(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
-
 ## 平均归一化
 
 `$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
 
 ## 什么时候用归一化？什么时候用标准化？
 
-* 如果对输出结果范围有要求，用归一化
-* 如果数据较为稳定，不存在极端的最大最小值，用归一化
-* 如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响
-
-# 定量特征二值化
-
-如果不需要数据的连续信息，只需要对定量的特征进行“好与坏”的划分，
-可以使用定量特征二值化来剔除冗余信息
-
-举个例子，银行对 5 名客户的征信进行打分，分别为 50，60，70，80，90。
-现在，不在乎一个人的征信多少分，只在乎他的征信好与坏（如大于 90 为好，低于 90 就不好）；
-再比如学生成绩，大于 60 及格，小于 60 就不及格。这种“好与坏”、
-“及格与不及格”的关系可以转化为 0-1 变量，这就是二值化。变化方式如下所示：
-
-`$$\begin{cases}
-\hat{x}_{t} = 1, x_{t} > threshold \\
-\hat{x}_{t} = 0, x_{t} \leq threshold
-\end{cases}$$`
-
-也可以设计更多的规则，进行多值化的处理
+* 如果对输出结果范围有要求，用归一化；
+* 如果数据较为稳定，不存在极端的最大最小值，用归一化；
+* 如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响。
 
 # 时间序列聚合
 
 通常来自不同数据源的时间轴常常无法一一对应, 此时就要用到改变时间频率的方法进行数据处理. 
-由于无法改变实际测量数据的频率, 我们能做的是改变数据收集的频率
-
-- 上采样(up sampling): 在某种程度上是凭空获得更高频率数据的方式, 不增加额外的信息
-- 下采样(down sampling): 减少数据收集的频率, 也就是从原始数据中抽取子集的方式
+由于无法改变实际测量数据的频率, 我们能做的是改变数据收集的频率。
 
 重采样(resampling)指的是将时间序列从一个频率转换到另一个频率的处理过程。
-是对原样本重新处理的一个方法，是一个对常规时间序列数据重采样和频率转换的便捷的方法
+是对原样本重新处理的一个方法，是一个对常规时间序列数据重采样和频率转换的便捷的方法。
+将高频率的数据聚合到低频率称为降采样(down sampling)，
+而将低频率数据转换到高频率则称为升采样(up sampling)。
 
-将高频率的数据聚合到低频率称为降采样(downsampling)，
-而将低频率数据转换到高频率则称为升采样(upsampling)
+* 升采样(up sampling): 在某种程度上是凭空获得更高频率数据的方式, 不增加额外的信息；
+* 降采样(down sampling): 减少数据收集的频率, 也就是从原始数据中抽取子集的方式。
 
 ## Pandas 重采样
 
@@ -329,131 +284,114 @@ pd.DataFrame.resample(
     on = None, 
     level = None
 )
+
+pd.Series.resample(
+    rule, 
+    how = None, 
+    axis = 0, 
+    fill_method = None, 
+    closed = None, 
+    label = None, 
+    convention = 'start', 
+    kind = None, 
+    loffset = None, 
+    limit = None, 
+    base = 0, 
+    on = None, 
+    level = None
+)
 ```
 
 主要参数说明:
 
-* `rule`: DateOffset, Timedelta or str
-    - 表示重采样频率，例如 ‘M’、‘5min’，Second(15)
-* `how`: str
-    - 用于产生聚合值的函数名或数组函数，例如'mean'、'ohlc'、'np.max'等，默认是'mean'，
-      其他常用的值有：'first'、'last'、'median'、'max'、'min'
-* `axis`: {0 or 'index', 1 or 'columns'}, default 0
-    - 默认是纵轴，横轴设置 axis=1
-* `fill_method`: str, default None
-    - 升采样时如何插值，比如 ffill、bfill 等
-* `closed`: {'right', 'left'}, default None
-    - 在降采样时，各时间段的哪一段是闭合的，'right' 或 'left'，默认 'right'
-* `label`: {'right', 'left'}, default None
+* `rule`: 
+    - `DateOffset`, `Timedelta` or `str`
+    - 表示重采样频率，例如 `"M"`、`"5min"`，`"Second(15)"`
+* `how`:
+    - 用于产生聚合值的函数名或数组函数
+    - 例如 `'mean'`、`'ohlc'`、`'np.max'` 等，默认是`'mean'`。
+      其他常用的值有：`'first'`、`'last'`、`'median'`、`'max'`、`'min'`
+* `axis`: 
+    - `0` or `'index'`
+    - `1` or `'columns'`
+    - default `0`
+* `fill_method`: 
+    - str, default None
+    - 升采样时如何插值，比如 `ffill`、`bfill` 等
+* `closed`: 
+    - 在降采样时，各时间段的哪一段是闭合的
+    - `'right'` 或 `'left'`，默认 `'right'`
+* `label`: 
+    - {`'right'`, `'left'`}, default `None`
     - 在降采样时，如何设置聚合值的标签，例如，9:30-9:35 会被标记成 9:30 还是 9:35, 默认9:35
-* `convention`: {'start', 'end', 's', 'e'}, default 'start'
-    - 当重采样时期时，将低频率转换到高频率所采用的约定（'start'或'end'）。默认'end'
-* `kind`: {'timestamp', 'period'}, optional, default None
+* `convention`: 
+    - 当重采样时期时，将低频率转换到高频率所采用的约定
+    - {`'start'`, `'end'`, `'s'`, `'e'`}, default `'start'` 
+* `kind`: 
     - 聚合到时期（'period'）或时间戳（'timestamp'），默认聚合到时间序列的索引类型
-* `loffset`: timedelta, default None
+    - `'timestamp'`, `'period'`, default `None`
+* `loffset`: 
     - 面元标签的时间校正值，比如'-1s'或Second(-1)用于将聚合标签调早1秒
-* `limit`: int, default None
+    - timedelta, default None
+* `limit`: 
     - 在向前或向后填充时，允许填充的最大时期数
-
-
-* `pd.DataFrame.resample()` 和 `pd.Series.resample()`
-    - 上采样
-        - `.resample().ffill()`
-        - `.resample().bfill()`
-        - `.resample().pad()`
-        - `.resample().nearest()`
-        - `.resample().fillna()`
-        - `.resample().asfreq()`
-        - `.resample().interpolate()`
-    - 下采样(计算聚合、统计函数)
-        - `.resample().<func>()`
-        - `.resample.count()`
-        - `.resample.nunique()`
-        - `.resample.first()`
-        - `.resample.last()`
-        - `.resample.ohlc()`
-        - `.resample.prod()`
-        - `.resample.size()`
-        - `.resample.sem()`
-        - `.resample.std()`
-        - `.resample.var()`
-        - `.resample.quantile()`
-        - `.resample.mean()`
-        - `.resample.median()`
-        - `.resample.min()`
-        - `.resample.max()`
-        - `.resample.sum()`
-    - Function application
-        - `.resample().apply(custom_resampler)`: 自定义函数
-        - `.resample().aggregate()`
-        - `.resample().transfrom()`
-        - `.resample().pipe()`
-    - Indexing, iteration
-        - `.__iter__`
-        - `.groups`
-        - `.indices`
-        - `get_group()`
-    - 稀疏采样
-
-```python
-import pandas as pd
-
-rng = pd.data_range("2000-01-01", periods = 100, freq = "D")
-ts = pd.Series(np.random.randn(len(rng)), index = rng)
-ts
-```
-
-```
-2000-01-01   -0.184415
-2000-01-02   -0.078049
-2000-01-03    1.550158
-2000-01-04    0.206498
-2000-01-05    0.184059
-                ...   
-2000-04-05   -0.574207
-2000-04-06   -1.719587
-2000-04-07    0.140673
-2000-04-08   -1.234146
-2000-04-09   -0.835341
-Freq: D, Length: 100, dtype: float64
-```
+    - int, default None
 
 ### 升采样
 
+API：
+
+* `.resample().ffill()`
+* `.resample().bfill()`
+* `.resample().pad()`
+* `.resample().nearest()`
+* `.resample().fillna()`
+* `.resample().asfreq()`
+* `.resample().interpolate()`
+
 ### 降采样
 
-在用 `resample` 对数据进行降采样时，需要考虑两个参数:
+API：
 
-* 各区间哪边是闭合的
-* 如何标记各个聚合面元，用区间的开头还是末尾
-
-
-```python
-df = pd.DataFrame({
-    'A': [1, 1, 2, 1, 2],
-    'B': [np.nan, 2, 3, 4, 5],
-    'C': [1, 2, 1, 1, 2]
-}, columns = ['A', 'B', 'C'])
-
-df.groupby("A").mean()
-df.groupby(["A", "B"]).mean()
-df.groupby("A")["B"].mean()
-```
+* `.resample().<func>()`
+* `.resample.count()`
+* `.resample.nunique()`
+* `.resample.first()`
+* `.resample.last()`
+* `.resample.ohlc()`
+* `.resample.prod()`
+* `.resample.size()`
+* `.resample.sem()`
+* `.resample.std()`
+* `.resample.var()`
+* `.resample.quantile()`
+* `.resample.mean()`
+* `.resample.median()`
+* `.resample.min()`
+* `.resample.max()`
+* `.resample.sum()`
 
 ### Function application
 
+API：
+
+* `.resample().apply(custom_resampler)`: 自定义函数
+* `.resample().aggregate()`
+* `.resample().transfrom()`
+* `.resample().pipe()`
 
 ### Indexing 和 iteration
 
+API：
 
-### 稀疏采用
+* `.__iter__`
+* `.groups`
+* `.indices`
+* `get_group()`
 
+### 稀疏采样
 
-
-
-
-
-
+API：
 
 ## SciPy 重采样
 
@@ -475,8 +413,8 @@ scipy.signal.resample(
 参数解释:
 
 * `x`: 待重采样的数据
-* `num`: 重采样的点数，int 型
-* `t`: 如果给定 t，则假定它是与 x 中的信号数据相关联的等距采样位置
+* `num`: 重采样的点数，`int` 型
+* `t`: 如果给定 `t`，则假定它是与 `x` 中的信号数据相关联的等距采样位置
 * `axis`: 对哪个轴重采样，默认是 0
 
 ### 升采样
@@ -485,7 +423,6 @@ scipy.signal.resample(
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
-
 
 # 原始数据
 t = np.linspace(0, 3, 20, endpoint = False)
@@ -581,7 +518,6 @@ plt.show()
 
 ![img](images/scipy_resample1.png)
 
-
 ```python
 import numpy as np
 import matplotlib.pyplot
@@ -615,12 +551,15 @@ plt.show()
 
 * forward fill 和 backward fill
     - 根据缺失值前/后的最近时间点数据填补当前缺失值
-* moving average
-* interpolation
+* Moving Average
+* Interpolation
     - 插值方法要求数据和邻近点之间满足某种拟合关系, 
       因此插值法是一种先验方法且需要代入一些业务经验
 
-## 时间序列插值
+## forward 和 backward fill
+
+
+## Moving Average
 
 ## Pandas 插值算法
 
@@ -653,7 +592,7 @@ plt.show()
 
 ### 缺失值插值算法 API
 
-#### pandas.DataFrame.interpolate
+### pandas.DataFrame.interpolate
 
 ```python
 
@@ -794,30 +733,33 @@ ynew5 = f5(xnew)
 
 ### Using radial basis functions for smoothing/interpolate
 
+# 时间序列异常值处理
+
+* TOOD
+
 # 时间序列降噪
 
 ## 移动平均
 
 滚动平均值是先前观察窗口的平均值，其中窗口是来自时间序列数据的一系列值。
-为每个有序窗口计算平均值。这可以极大地帮助最小化时间序列数据中的噪声
+为每个有序窗口计算平均值。这可以极大地帮助最小化时间序列数据中的噪声。
 
 ## 傅里叶变换
 
 傅里叶变换可以通过将时间序列数据转换到频域去除噪声，可以过滤掉噪声频率，
-然后应用傅里叶变换得到滤波后的时间序列
+然后应用傅里叶变换得到滤波后的时间序列。
 
 ## 小波分析
 
+* TODO
 
-# 时间序列处理技巧
+# 时间序列时区处理
 
-## 时区
+## API
 
-### API
+* `pandas.to_datetime(df.index)`
 
-* pandas.to_datetime(df.index)
-
-### 原理
+## 原理
 
 本地化是什么意思？
 
@@ -833,7 +775,7 @@ ynew5 = f5(xnew)
 
 * 只需要更改数据集的索引部分
 
-### 示例
+## 示例
 
 ```python
 import numpy as np
@@ -857,18 +799,6 @@ df.index = df.index.tz_localize("UTC")
 df.index = df.index.tz_convert("Asia/Qatar")
 ```
 
-## 重采样
-
-```python
-resampled_df = df["value"].resample("1D")  # object
-resampled_df.mean()  # agg
-resampled_df = resampled_df.mean().to_frame()  # 转换成 DateFrame
-```
-
-## 缺失值填充
-
-
 # 参考
 
 * [用于时间序列数据整理的Pandas函数](https://mp.weixin.qq.com/s/uy8jduqnA0tQM7qC476XSQ)
-

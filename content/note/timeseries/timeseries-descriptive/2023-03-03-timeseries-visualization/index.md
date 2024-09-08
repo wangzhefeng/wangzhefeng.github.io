@@ -44,10 +44,10 @@ img {
 - [时间序列热图](#时间序列热图)
 - [时间序列滞后散点图](#时间序列滞后散点图)
 - [时间序列自相关图](#时间序列自相关图)
-- [可视化大型时间序列](#可视化大型时间序列)
+- [时间序列可视化模版](#时间序列可视化模版)
+- [大型时间序列可视化压缩算法](#大型时间序列可视化压缩算法)
     - [Midimax 压缩算法](#midimax-压缩算法)
     - [算法源码](#算法源码)
-    - [时间序列可视化模版](#时间序列可视化模版)
 </p></details><p></p>
 
 # 时间序列图形
@@ -280,54 +280,10 @@ plt.show()
 
 ![img](images/autocorrelation.png)
 
-
-# 可视化大型时间序列
-
-压缩算法“Midimax”，该算法会通过数据大小压缩来提升时间序列图的效果。该算法的设计有如下几点目标：
-
-* 不引入非实际数据。只返回原始数据的子集，所以没有平均、中值插值、回归和统计聚合等
-* 快速且计算量小
-* 最大化信息增益。这意味着它应该尽可能多地捕捉原始数据中的变化
-* 由于取最小和最大点可能会给出夸大方差的错误观点，因此取中值点以保留有关信号稳定性的信息
-
-## Midimax 压缩算法
-
-1. 向算法输入时间序列数据和压缩系数(浮点数)
-2. 将时间序列数据拆分为大小相等的非重叠窗口，其中大小计算为：`$window\_size = floor(3 \times zip\_factory)$`。
-   3 表示从每个窗口获取的最小、中值和最大点。因此，要实现 2 的压缩因子，窗口大小必须为6。更大的压缩比需要更宽的窗口
-3. 按升序对每个窗口中的值进行排序
-4. 选取最小点和最大点的第一个和最后一个值。这将确保我们最大限度地利用差异并保留信息
-5. 为中间值选取一个中间值，其中中间位置定义为 `$med\_index=floor(window\_size / 2)$`。
-   因此，即使窗口大小是均匀的，也不会进行插值
-6. 根据原始索引(即时间戳)对选取的点重新排序
-
-Midimax 是一种简单轻量级的算法，可以减少数据的大小，并进行快速的图形绘制：
-
-* Midimax 在绘制大型时序图时可以保留原始时序的趋势；
-  可以使用较少的点捕获原始数据中的变化，并在几秒钟内处理大量数据
-* Midimax 会丢失部分细节；压缩过大的话可能会有较多信息丢失
-
-## 算法源码
-
-* https://github.com/edwinsutrisno/midimax_compression
-
-
-## 时间序列可视化模版
+# 时间序列可视化模版
 
 ```python
 # -*- coding: utf-8 -*-
-
-# ***************************************************
-# * File        : utils.py
-# * Author      : Zhefeng Wang
-# * Email       : zfwang7@gmail.com
-# * Date        : 2023-06-28
-# * Version     : 0.1.062810
-# * Description : description
-# * Link        : link
-# * Requirement : 相关模块版本需求(例如: numpy >= 2.1.0)
-# ***************************************************
-
 # python libraries
 import os
 import sys
@@ -749,5 +705,270 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
 
+
+# 大型时间序列可视化压缩算法
+
+压缩算法 “Midimax”，该算法会通过数据大小压缩来提升时间序列图的效果。该算法的设计有如下几点目标：
+
+* 不引入非实际数据
+    - 只返回原始数据的子集，所以没有平均、中值插值、回归和统计聚合等
+* 快速且计算量小
+* 最大化信息增益
+    - 意味着它应该尽可能多地捕捉原始数据中的变化
+* 由于取最小和最大点可能会给出夸大方差的错误观点，因此取中值点以保留有关信号稳定性的信息
+
+## Midimax 压缩算法
+
+1. 向算法输入时间序列数据、压缩系数(浮点数)
+2. 将时间序列数据拆分为大小相等的非重叠窗口
+    - 窗口长度为：`$window\_size = floor(3 \times zip\_factory)$`。
+    - 3 表示从每个窗口获取的最小、中值和最大点
+    - 因此，要实现 2 的压缩因子，窗口大小必须为 6。更大的压缩比需要更宽的窗口
+3. 按升序对每个窗口中的值进行排序
+4. 选取最小点和最大点的第一个和最后一个值。这将确保我们最大限度地利用差异并保留信息
+5. 为中间值选取一个中间值，其中中间位置定义为 `$med\_index = floor(window\_size / 2)$`。
+   因此，即使窗口大小是均匀的，也不会进行插值
+6. 根据原始索引(即时间戳)对选取的点重新排序
+
+Midimax 是一种简单轻量级的算法，可以减少数据的大小，并进行快速的图形绘制：
+
+* Midimax 在绘制大型时序图时可以保留原始时序的趋势；
+  可以使用较少的点捕获原始数据中的变化，并在几秒钟内处理大量数据
+* Midimax 会丢失部分细节；压缩过大的话可能会有较多信息丢失
+
+## 算法源码
+
+```python
+# midimax.py
+"""
+Midimax Data Compression for Time-Series
+
+Author: Edwin Sutrisno
+Link: https://github.com/edwinsutrisno/midimax_compression
+"""
+
+import pandas as pd
+
+
+def compress_series(inputser: pd.Series, compfactor = 2):
+    """
+    Split into segments and pick 3 points from each segment, the minimum, median, and maximum. 
+    Segment length = int(compfactor x 3). 
+    So, to achieve a compression factor of 2, a segment length of 6 is needed.
+
+    Parameters
+    ----------
+    inputser : pd.Series
+        Input data to be compressed.
+    compfactor : float
+        Compression factor. The default is 2.
+
+    Returns
+    -------
+    pd.Series
+        Compressed output series.
+    """
+    # If comp factor is too low, return original data
+    if (compfactor < 1.4):
+        return inputser
+    # window size
+    win_size = int(3 * compfactor)
+    # Create a column of segment numbers
+    ser = inputser.rename('value')
+    ser = ser.round(3)
+    wdf = ser.to_frame()
+    del ser
+    start_idxs = wdf.index[range(0, len(wdf), win_size)]
+    wdf['win_start'] = 0
+    wdf.loc[start_idxs, 'win_start'] = 1
+    wdf['win_num'] = wdf['win_start'].cumsum()
+    wdf.drop(columns = 'win_start', inplace = True)
+    del win_size, start_idxs
+
+    def get_midimax_idxs(gdf):
+        """
+        For each window, get the indices of min, median, and max
+        """
+        if len(gdf) == 1:
+            return [gdf.index[0]]
+        elif gdf['value'].iloc[0] == gdf['value'].iloc[-1]:
+            return [gdf.index[0]]
+        elif len(gdf) == 2:
+            return [gdf.index[0], gdf.index[1]]
+        else:
+            return [gdf.index[0], gdf.index[len(gdf) // 2], gdf.index[-1]]
+
+    wdf = wdf.dropna()
+    wdf_sorted = wdf.sort_values(['win_num', 'value'])
+    midimax_idxs = wdf_sorted.groupby('win_num').apply(get_midimax_idxs)
+
+    # Convert into a list
+    midimax_idxs = [idx for sublist in midimax_idxs for idx in sublist]
+    midimax_idxs.sort()
+
+    return inputser.loc[midimax_idxs]
+def compress_series(inputser: pd.Series, compfactor=2):
+    """
+    Split into segments and pick 3 points from each segment, the minimum,
+    median, and maximum. Segment length = int(compfactor x 3). So, to achieve a
+    compression factor of 2, a segment length of 6 is needed.
+
+    Parameters
+    ----------
+    inputser : pd.Series
+        Input data to be compressed.
+    compfactor : float
+        Compression factor. The default is 2.
+
+    Returns
+    -------
+    pd.Series
+        Compressed output series.
+
+    """
+    # If comp factor is too low, return original data
+    if (compfactor < 1.4):
+        return inputser
+
+    win_size = int(3 * compfactor)  # window size
+
+    # Create a column ofsegment numbers
+    ser = inputser.rename('value')
+    ser = ser.round(3)
+    wdf = ser.to_frame()
+    del ser
+    start_idxs = wdf.index[range(0, len(wdf), win_size)]
+    wdf['win_start'] = 0
+    wdf.loc[start_idxs, 'win_start'] = 1
+    wdf['win_num'] = wdf['win_start'].cumsum()
+    wdf.drop(columns='win_start', inplace=True)
+    del win_size, start_idxs
+
+    # For each window, get the indices of min, median, and max
+    def get_midimax_idxs(gdf):
+        if len(gdf) == 1:
+            return [gdf.index[0]]
+        elif gdf['value'].iloc[0] == gdf['value'].iloc[-1]:
+            return [gdf.index[0]]
+        elif len(gdf) == 2:
+            return [gdf.index[0], gdf.index[1]]
+        else:
+            return [gdf.index[0], gdf.index[len(gdf) // 2], gdf.index[-1]]
+
+    wdf = wdf.dropna()
+    wdf_sorted = wdf.sort_values(['win_num', 'value'])
+    midimax_idxs = wdf_sorted.groupby('win_num').apply(get_midimax_idxs)
+
+    # Convert into a list
+    midimax_idxs = [idx for sublist in midimax_idxs for idx in sublist]
+    midimax_idxs.sort()
+    return inputser.loc[midimax_idxs]
+```
+
+Demo：
+
+```python
+# midimax_demo.py
+# -*- coding: utf-8 -*-
+"""
+Demo for Midimax time-series data compression.
+
+Author: Edwin Sutrisno
+Link: https://github.com/edwinsutrisno/midimax_compression
+"""
+
+import time
+
+import numpy as np
+import pandas as pd
+from bokeh.models import ColumnDataSource, DatetimeTickFormatter
+from bokeh.plotting import figure, output_file, save
+
+from midimax import compress_series
+
+
+# Create a time-series of sine wave
+n = 1000  # points
+timesteps = pd.to_timedelta(np.arange(n), unit = 's')
+timestamps = pd.to_datetime("2022-04-18 08:00:00") + timesteps
+
+sine_waves = np.sin(2 * np.pi * 0.02 * np.arange(n))
+noise = np.random.normal(0, 0.1, n)
+signal = sine_waves + noise
+ts_data = pd.Series(signal, index = timestamps).astype('float32')
+print(f"ts_data:\n{ts_data}")
+
+# Run compression
+timer_start = time.time()
+ts_data_compressed = compress_series(ts_data, 2)
+timer_sec = round(time.time() - timer_start, 2)
+print(f"\nts_data_compressed:\n{ts_data_compressed}")
+print(f"Compression took {timer_sec} seconds.")
+
+
+def format_fig_axis(fig):
+    """
+    Formatting the date stamps on the plot axis
+    """
+    fig.xaxis.formatter = DatetimeTickFormatter(
+        days = ["%m/%d %H:%M:%S"],
+        months = ["%m/%d %H:%M:%S"],
+        hours = ["%m/%d %H:%M:%S"],
+        minutes = ["%m/%d %H:%M:%S"]
+    )
+    fig.xaxis.axis_label = 'Timestamp'
+    fig.yaxis.axis_label = 'Series Value'
+
+    return fig
+
+
+# Plot before
+fig1 = figure(sizing_mode = 'stretch_both', tools = 'box_zoom,pan,reset')
+line_before = fig1.line(
+    x = ts_data.index, 
+    y = ts_data.values, 
+    line_width = 2
+)
+fig1 = format_fig_axis(fig1)
+output_file(r'ts_visual/demo_output_before_compression.html')
+save(fig1)
+
+
+# Plot after
+fig2 = figure(sizing_mode = 'stretch_both', tools = 'box_zoom,pan,reset')
+line_after = fig2.line(
+    x = ts_data_compressed.index, 
+    y = ts_data_compressed.values, 
+    line_color = 'green'
+)
+fig2 = format_fig_axis(fig2)
+output_file(r'ts_visual/demo_output_after_compression.html')
+save(fig2)
+
+
+# Plot before and after together
+fig3 = figure(sizing_mode = 'stretch_both', tools = 'box_zoom,pan,reset')
+fig3.line(
+    x = ts_data.index, 
+    y = ts_data.values, 
+    line_width = 2
+)
+fig3.line(
+    x = ts_data_compressed.index, 
+    y = ts_data_compressed.values, 
+    line_color = 'green', 
+    line_dash = 'dashed'
+)
+fig3.scatter(
+    x = ts_data_compressed.index, 
+    y = ts_data_compressed.values, 
+    marker = 'circle', 
+    size = 8, 
+    color = 'green'
+)
+fig3 = format_fig_axis(fig3)
+output_file('ts_visual/demo_output_before_and_after_compression.html')
+save(fig3)
 ```
