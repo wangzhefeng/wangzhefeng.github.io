@@ -1,5 +1,5 @@
 ---
-title: 时间序列分析-非平稳
+title: 时间序列分析-非平稳时序模型
 author: 王哲峰
 date: '2023-03-03'
 slug: timeseries-nonstationarity-model
@@ -35,78 +35,80 @@ img {
 <details><summary>目录</summary><p>
 
 - [非平稳时间序列分析介绍](#非平稳时间序列分析介绍)
-  - [非平稳时序分析-同方差](#非平稳时序分析-同方差)
-  - [非平稳时序分析-异方差](#非平稳时序分析-异方差)
-  - [方差齐性检验](#方差齐性检验)
-    - [残差图](#残差图)
-    - [残差平方图](#残差平方图)
-    - [假设检验](#假设检验)
-- [ARIMA 模型](#arima-模型)
-  - [ARIMA(`$p$`, `$d$`, `$q$`) 模型](#arimap-d-q-模型)
-  - [差分运算](#差分运算)
-    - [p 阶差分](#p-阶差分)
-    - [k 步差分](#k-步差分)
-    - [滞后算子](#滞后算子)
-    - [差分运算 API](#差分运算-api)
-  - [百分比变化率](#百分比变化率)
-  - [ARIMA(`$p$`, `$d$`, `$q$`) 模型结构](#arimap-d-q-模型结构)
-  - [ARIMA(`$p$`, `$d$`, `$q$`) 模型应用](#arimap-d-q-模型应用)
-- [残差自回归模型](#残差自回归模型)
-  - [确定性因素分解](#确定性因素分解)
-    - [趋势](#趋势)
-    - [季节](#季节)
-    - [随机](#随机)
-  - [时间序列分解模型](#时间序列分解模型)
-    - [加法模型](#加法模型)
-    - [乘法模型](#乘法模型)
-    - [加法乘法混合模型](#加法乘法混合模型)
-  - [时间序列分解实现示例](#时间序列分解实现示例)
-    - [时序数据](#时序数据)
-    - [时序乘法模型分解](#时序乘法模型分解)
-    - [时序加法模型分解](#时序加法模型分解)
-  - [时间序列的分解方法](#时间序列的分解方法)
-    - [使用移动平均法分离出显性的周期性波动](#使用移动平均法分离出显性的周期性波动)
-    - [将业务周期性波动效应和随机波动进行分解](#将业务周期性波动效应和随机波动进行分解)
-    - [观察数据波动的拐点将时间序列分段](#观察数据波动的拐点将时间序列分段)
-    - [利用线性回归基于移动平均数计算长期趋势](#利用线性回归基于移动平均数计算长期趋势)
-    - [分离出循环效应和随机波动](#分离出循环效应和随机波动)
-    - [检验时间序列分解的效果](#检验时间序列分解的效果)
-  - [时间序列分解方法的应用局限性](#时间序列分解方法的应用局限性)
-  - [残差自回归模型](#残差自回归模型-1)
-- [对数变换加 ARIMA](#对数变换加-arima)
-- [自回归条件异方差模型 ARCH](#自回归条件异方差模型-arch)
-  - [广义自回归条件异方差模型 GARCH](#广义自回归条件异方差模型-garch)
-  - [AR-GARCH 模型](#ar-garch-模型)
-- [SARIMA](#sarima)
+    - [非平稳时序分析-同方差](#非平稳时序分析-同方差)
+    - [非平稳时序分析-异方差](#非平稳时序分析-异方差)
+    - [方差齐性检验](#方差齐性检验)
+        - [残差图](#残差图)
+        - [残差平方图](#残差平方图)
+        - [假设检验](#假设检验)
+- [非平稳时序分析-同方差](#非平稳时序分析-同方差-1)
+    - [ARIMA 模型](#arima-模型)
+        - [ARIMA 模型介绍](#arima-模型介绍)
+        - [ARMA 模型结构](#arma-模型结构)
+        - [ARIMA 模型结构](#arima-模型结构)
+        - [ARIMA 建模流程图](#arima-建模流程图)
+        - [差分运算](#差分运算)
+    - [残差自回归模型](#残差自回归模型)
+        - [确定性因素分解](#确定性因素分解)
+            - [趋势](#趋势)
+            - [季节](#季节)
+            - [随机](#随机)
+        - [时间序列分解模型](#时间序列分解模型)
+            - [加法模型](#加法模型)
+            - [乘法模型](#乘法模型)
+            - [加法乘法混合模型](#加法乘法混合模型)
+        - [时间序列分解实现示例](#时间序列分解实现示例)
+            - [时序数据](#时序数据)
+            - [时序乘法模型分解](#时序乘法模型分解)
+            - [时序加法模型分解](#时序加法模型分解)
+        - [时间序列的分解方法](#时间序列的分解方法)
+            - [使用移动平均法分离出显性的周期性波动](#使用移动平均法分离出显性的周期性波动)
+            - [将业务周期性波动效应和随机波动进行分解](#将业务周期性波动效应和随机波动进行分解)
+            - [观察数据波动的拐点将时间序列分段](#观察数据波动的拐点将时间序列分段)
+            - [利用线性回归基于移动平均数计算长期趋势](#利用线性回归基于移动平均数计算长期趋势)
+            - [分离出循环效应和随机波动](#分离出循环效应和随机波动)
+            - [检验时间序列分解的效果](#检验时间序列分解的效果)
+        - [时间序列分解方法的应用局限性](#时间序列分解方法的应用局限性)
+        - [残差自回归模型](#残差自回归模型-1)
+- [非平稳时序分析-异方差](#非平稳时序分析-异方差-1)
+    - [对数变换加 ARIMA](#对数变换加-arima)
+        - [对数变换](#对数变换)
+        - [ARIMA 建模](#arima-建模)
+    - [ARCH 模型](#arch-模型)
+    - [GARCH 模型](#garch-模型)
+    - [AR-GARCH 模型](#ar-garch-模型)
+    - [SARIMA](#sarima)
 - [参考](#参考)
 </p></details><p></p>
 
 # 非平稳时间序列分析介绍
 
 在自然界中绝大部分序列都是非平稳的，因而对非平稳序列的分析更普遍、更重要。
-对于非平稳时间序列分析，根据残差序列的方差是否相同，时序分析可以分为两种：
+对于非平稳时间序列分析，根据**残差序列的方差是否相同**，时序分析可以分为两种：
 
 * 残差序列具有同方差性
-    - 差分(整合)自回归移动平均模型 (Autoregressive Integrated Moving Average, ARIMA)
+    - 差分自回归移动平均模型(Autoregressive Integrated Moving Average, ARIMA)
     - 残差自回归模型(Residual Auto-Regressive, RAR)
 * 残差序列具有异方差性
     - 对数变换后拟合 ARIMA
-    - 自回归条件异方差模型 (Auto-Regressive Conditional Heteroscedastic, ARCH)
-        - 广义自回归条件异方差模型 (Generalized Auto-Regressive Conditional Heteroscedastic, GARCH)
+    - 自回归条件异方差模型(Auto-Regressive Conditional Heteroscedastic, ARCH)
+        - 广义自回归条件异方差模型(Generalized Auto-Regressive Conditional Heteroscedastic, GARCH)
         - AR-GARCH
 
 ## 非平稳时序分析-同方差
 
 如果时序是非平稳的，即没有通过平稳性检验，并且残差序列具有同方差性。
-传统时序分析中一般有两种手段进行处理：差分运算、确定性因素分解。
-针对这两种确定信息提取方式，可以分别构建两种传统模型：ARIMA 和残差自回归模型
+传统时序分析中一般有两种手段进行处理：**差分运算**、**确定性因素分解**。
+针对这两种确定信息提取方式，可以分别构建两种传统模型：**ARIMA** 和**残差自回归模型**。
 
-* 差分运算具有强大的确定性信息提取能力，许多非平稳序列差分后会显示出平稳序列的性质，称这个非平稳序列为差分平稳序列。
-  对差分平稳序列可以使用 ARIMA(autoregression integrated moving average，差分(整合)自回归移动平均模型)进行拟合
-    - ARIMA 模型的实质就是差分运算和 ARMA 模型的组合，说明任何非平稳序列如果能通过适当阶数的差分实现差分后平稳，
-      就可以对差分后序列进行 ARMA 模型拟合，而 ARMA 模型的分析方法非常成熟
-* 残差自回归模型
-    - 确定性因素分解
+* **差分运算**
+    - 差分运算具有强大的确定性信息提取能力，许多非平稳序列差分后会显示出平稳序列的性质，
+      称这个非平稳序列为**差分平稳序列**。
+    - 对差分平稳序列可以使用 ARIMA 进行拟合。ARIMA 模型的实质就是差分运算和 ARMA 模型的组合，
+      说明任何非平稳序列如果能通过适当阶数的差分实现差分后平稳，
+      就可以对差分后序列进行 ARMA 模型拟合，而 ARMA 模型的分析方法非常成熟。
+* **确定性因素分解**
+    - **残差自回归模型**
 
 非平稳时序（同方差）建模流程如下：
 
@@ -115,15 +117,15 @@ img {
 ## 非平稳时序分析-异方差
 
 有时候，发现即使在非平稳时序上，使用了 ARIMA 或残差自回归模型也难达到理想效果，
-此时，问题可能发生在残差序列具有异方差性上，因为当使用 ARIMA 拟合非平稳序列时，
+此时，问题可能发生在**残差序列具有异方差性**上，因为当使用 ARIMA 拟合非平稳序列时，
 对残差序列有一个重要的假定：残差序列为零均值白噪声序列。但现实是，方差可能会随着时间变化而变化，
 比如说股市里，今年市场不稳定性比去年大，那么今年的方差就会比去年大，这就不满足 ARIMA 的方差齐性假定。
 这里介绍如何识别异方差？如何对异方差非平稳时序建模？
 
 异方差序列应对方法有从两种角度去做：
 
-* 对序列做对数变换，再走 ARIMA
-* 直接构建自回归条件异方差模型(ARCH)，拟合异方差函数
+* 对序列做对数变换，再拟合 ARIMA 模型
+* 直接构建 ARCH 模型，拟合异方差函数
 
 非平稳时序（异方差）建模流程：
 
@@ -131,19 +133,27 @@ img {
 
 ## 方差齐性检验
 
-方差齐性检验有两种方法：残差图和残差平方图
+方差齐性检验有两种方法：残差图和残差平方图。
 
 ### 残差图
 
-残差图是直接可视化残差序列，观察波动状况
+残差图是直接可视化残差序列，观察波动状况。
 
 ![img](images/res.png)
 
+```python
+
+```
+
 ### 残差平方图
 
-残差平方图是对一阶差分后的时序求平均后的图。差分是抽取波动性，平方是把差分变正数
+残差平方图是对一阶差分后的时序求平方后的图。差分是抽取波动性，平方是把差分变正数。
 
 ![img](images/res_2.png)
+
+```python
+
+```
 
 ### 假设检验
 
@@ -154,9 +164,31 @@ img {
 * Goldfeld-Quandt Test
 
 这些检验的主要输入是回归模型的残差(如普通最小二乘法)。零假设是残差的分布方差相等。
-如果 `$p$` 值小于显著性水平，则拒绝该假设。这就说明时间序列是异方差的，检验显著性水平通常设置为 0.05
+如果 `$p$` 值小于显著性水平，则拒绝该假设。这就说明时间序列是异方差的，
+检验显著性水平通常设置为 0.05。
 
 ```python
+# -*- coding: utf-8 -*-
+
+# ***************************************************
+# * File        : heteroskedasticity.py
+# * Author      : Zhefeng Wang
+# * Email       : wangzhefengr@163.com
+# * Date        : 2024-09-08
+# * Version     : 0.1.090822
+# * Description : 使用统计检验来检查时间序列是否为异方差序列主要有三种方法：
+# *               - White Test
+# *               - Breusch-Pagan Test
+# *               - Goldfeld-Quandt Test
+# *               这些检验的主要输入是回归模型的残差(如普通最小二乘法)。
+# *               零假设是残差的分布方差相等。如果 p 值小于显著性水平，则拒绝该假设。
+# *               这就说明时间序列是异方差的， 检验显著性水平通常设置为 0.05。
+# * Link        : https://github.com/vcerqueira/blog/blob/main/src/heteroskedasticity.py
+# * Requirement : 相关模块版本需求(例如: numpy >= 2.1.0)
+# ***************************************************
+
+# python libraries
+from typing import Dict
 import pandas as pd
 import statsmodels.stats.api as sms
 from statsmodels.formula.api import ols
@@ -171,157 +203,130 @@ class Heteroskedasticity:
     def het_tests(series: pd.Series, test: str) -> float:
         """
         Testing for heteroskedasticity
+        异方差检验
 
         Parameters:
             series: Univariate time series as pd.Series
-            test: String denoting the test. One of 'White','Goldfeld-Quandt', or 'Breusch-Pagan'
+            test: String denoting the test. 
+                  One of 'White','Goldfeld-Quandt', or 'Breusch-Pagan'
         Return:
             p-value as a float.
  
         If the p-value is high, we accept the null hypothesis that the data is homoskedastic
         """
+        # 测试方法验证
         assert test in TEST_NAMES, 'Unknown test'
- 
+        # 时间序列预处理
         series = series.reset_index(drop = True).reset_index()
         series.columns = ['time', 'value']
         series['time'] += 1
- 
+        # 最小二乘回归
         olsr = ols(FORMULA, series).fit()
- 
+        # 假设检验
         if test == 'White':
-            _, p_value, _, _ = sms.het_white(olsr.resid, olsr.model.exog)
+            _, p_value, _, _ = sms.het_white(
+                olsr.resid, 
+                olsr.model.exog
+            )
         elif test == 'Goldfeld-Quandt':
-            _, p_value, _ = sms.het_goldfeldquandt(olsr.resid, olsr.model.exog, alternative='two-sided')
+            _, p_value, _ = sms.het_goldfeldquandt(
+                olsr.resid, 
+                olsr.model.exog, 
+                alternative = 'two-sided'
+            )
         else:
-            _, p_value, _, _ = sms.het_breuschpagan(olsr.resid, olsr.model.exog)
+            _, p_value, _, _ = sms.het_breuschpagan(
+                olsr.resid, 
+                olsr.model.exog
+            )
  
         return p_value
- 
+
     @classmethod
-    def run_all_tests(cls, series: pd.Series):
-        test_results = {k: cls.het_tests(series, k) for k in TEST_NAMES}
+    def run_all_tests(cls, series: pd.Series) -> Dict[str, float]:
+        """
+        运行建设检验
+
+        Args:
+            series (pd.Series): _description_
+
+        Returns:
+            Dict: 检验结果, p-value
+        """
+        test_results = {
+            k: cls.het_tests(series, k) 
+            for k in TEST_NAMES
+        }
  
         return test_results
+
+
+# 测试代码 main 函数
+def main():
+    from pmdarima.datasets import load_airpassengers
+    # from heteroskedasticity import Heteroskedasticity
+
+    series = load_airpassengers(True)
+    test_results = Heteroskedasticity.run_all_tests(series)
+    print(test_results)
+
+if __name__ == "__main__":
+    main()
 ```
 
-使用实例：
-
-```python
-from pmdarima.datasets import load_airpassengers
- 
-# https://github.com/vcerqueira/blog/blob/main/src/heteroskedasticity.py
-from src.heteroskedasticity import Heteroskedasticity
-
-series = load_airpassengers(True)
-
-test_results = Heteroskedasticity.run_all_tests(series)
-
-# {'Breusch-Pagan': 4.55e-07,
-# 'Goldfeld-Quandt': 8.81e-13,
-# 'White': 4.34e-07}
+```
+{
+    'White': 4.3457544661287e-07, 
+    'Breusch-Pagan': 4.559001856883369e-07, 
+    'Goldfeld-Quandt': 8.812950329262268e-13
+}
 ```
 
+# 非平稳时序分析-同方差
 
+## ARIMA 模型
 
-# ARIMA 模型
-
-## ARIMA(`$p$`, `$d$`, `$q$`) 模型
+### ARIMA 模型介绍
 
 ARIMA(Autoregressive Integrated Moving Average)，差分自回归移动平均模型，
-是差分后的时间序列和残差误差的线性函数
+是**差分后的时间序列**和**残差误差**的线性函数。
 
-差分可以将许多非平稳序列转为平稳序列，通常称之为差分平稳序列，对此，
-可以使用 ARIMA 模型（Autoregressive Integrated Moving Average model）进行拟合，
-该模型将差分运算与 ARMA 模型结合在一起，本质上就是差分后做 ARMA 模型。
+差分可以将许多非平稳序列转为平稳序列，通常称之为**差分平稳序列**，可以使用 ARIMA 模型进行拟合，
+该模型将**差分运算**与 **ARMA 模型**结合在一起，本质上就是差分后做 ARMA 模型。
 ARIMA 有三个参数 `$p$`、`$q$` 和 `$d$`，其中 `$d$` 为 `$d$` 阶差分。
-下图的 ARIMA 建模流程跟图是一样的：
 
-![img](images/arima_flow.png)
+### ARMA 模型结构
 
-## 差分运算
+> ARMA(`$p$`, `$q$`) 模型，称为 **自回归移动平均(Auto-Regressive Moving Average)模型**，
+> 是 **时间序列**和**残差误差** 的线性函数，是 AR(`$p$`) 和 MA(`$q$`) 模型的组合，
+> 该模型适用于 **无趋势(trend)** 和 **无季节性(seasonal)** 因素的单变量时间序列。
+> 
+> ARMA 模型的数学表达式为：
+> 
+> `$$\left\{
+> \begin{array}{**lr**}
+> x_{t}=\phi_{0} + \phi_{1}x_{t-1} + \cdots + \phi_{p}x_{t-p} + \varepsilon_{t} + \theta_{1}\varepsilon_{t-1} + \cdots + \theta_{q}\varepsilon_{t-q} & \\
+> \phi_{p} \neq 0, \theta_{q} \neq 0& \\
+> E(\varepsilon_{t}) = 0, Var(\varepsilon_{t}) = \sigma_{\varepsilon}^{2}, E(\varepsilon_{t}\varepsilon_{s}) = 0, s > \neq t & \\
+> E(x_{s}\varepsilon_{t}) = 0, \forall s < t & 
+> \end{array}
+> \right.$$`
+> 
+> ARMA 模型的另一种形式：
+> 
+> `$$(1-\sum_{i=1}^{p}\phi_{i}B^{i})x_{t} = (1 - \sum_{i=1}^{q}\theta_{i}B^{i})\varepsilon_{t}$$`
+> `$$\Phi(B)x_{t} = \Theta(B)\varepsilon_{t}$$`
+> 
+> * 当 `$\phi_{0} = 0$` 时，为中心化模型；
+> * 当 `$q = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 AR(`$p$`) 模型；
+> * 当 `$p = 0$` 时，ARMA(`$p$`, `$q$`) 模型就退化成了 MA(`$q$`) 模型；
+> 
+> 所以 AR(`$p$`) 和 MA(`$q$`) 实际上是 ARMA(`$p$`, `$p$`) 模型的特例，它们统称为 ARMA 模型。
+> 而 ARMA(`$p$`, `$p$`) 模型的统计性质也正是 AR(`$p$`) 模型和 MA(`$p$`) 模型统计性质的有机结合。
 
-差分运算是一种十分简单有效的确定性信息提取方法，很多时候适当阶数的差分便可以充分提取出确定性信息
+### ARIMA 模型结构
 
-![img](images/diff.png)
-
-针对不同时序，我们可以选择不同差分方式，请见下图所示：
-
-![img](images/diff2.png)
-
-### p 阶差分
-
-相距一期的两个序列值至之间的减法运算称为 `$1$` 阶差分运算；对 `$1$` 阶差分后序列在进行一次 `$1$` 阶差分运算称为 `$2$` 阶差分；
-以此类推，对 `$p-1$` 阶差分后序列在进行一次 `$1$` 阶差分运算称为 `$p$` 阶差分
-
-`$$\Delta x_{t} = x_{t-1} - x_{t-1}$$`
-
-`$$\Delta^{2} x_{t} = \Delta x_{t} - \Delta x_{t-1}$$`
-
-`$$\Delta^{p} x_{t} = \Delta^{p-1} x_{t} - \Delta^{p-1} x_{t-1}$$`
-
-### k 步差分
-
-相距 `$k$` 期的两个序列值之间的减法运算称为 `$k$` 步差分运算
-
-`$$\Delta_{k}x_{t} = x_{t} - x_{t-k}$$`
-
-### 滞后算子
-
-滞后算子类似于一个时间指针，当前序列值乘以一个滞后算子，就相当于把当前序列值的时间向过去拨了一个时刻
-
-假设 `$B$` 为滞后算子：
-
-`$$x_{t-1} = Bx_{t}$$`
-`$$x_{t-2} = B^{2}x_{t}$$`
-`$$\vdots$$`
-`$$x_{t-p} = B^{p}x_{t}$$`
-
-也可以用滞后算子表示差分运算：
-
-`$p$` 阶差分：
-
-`$$\Delta^{p}x_{t} = (1-B)^{p}x_{t} = \sum_{i=0}^{p}(-1)C_{p}^{i}x_{t-i}$$`
-
-`$k$` 步差分：
-
-`$$\Delta_{k}x_{t} = x_{t} - x_{t-k} = (1-B^{k})x_{t}$$`
-
-### 差分运算 API
-
-* pandas.Series.diff
-* pandas.DataFrame.diff
-* pandas.DataFrame.percent
-* pandas.DataFrame.shift
-
-```python
-# 1 阶差分、1步差分
-pandas.DataFrame.diff(periods = 1, axis = 0)
-
-# 2 步差分
-pandas.DataFrame.diff(periods = 2, axis = 0)
-
-# k 步差分
-pandas.DataFrame.diff(periods = k, axis = 0)
-
-# -1 步差分
-pandas.DataFrame.diff(periods = -1, axis = 0)
-```
-
-## 百分比变化率
-
-当前值与前一个值之间的百分比变化
-
-```python
-DataFrame/Series.pct_change(
-    periods = 1, 
-    fill_method = 'pad', 
-    limit = None, 
-    freq = None, 
-    **kwargs
-)
-```
-
-## ARIMA(`$p$`, `$d$`, `$q$`) 模型结构
+ARIMA 模型的
 
 `$$\left\{
 \begin{array}{**lr**}
@@ -335,17 +340,16 @@ E(x_{s}\epsilon_{t}) = 0, \forall s < t&
 
 * `${\epsilon_{t}}$` 为零均值白噪声序列
 * `$\Delta^{d} = (1-B)^{d}$`
-* `$\Phi(B) = 1-\sum_{i=1}^{p}\phi_{i}B^{i}$` 为平稳可逆 ARMA(`$p$`, `$q$`) 模型的自回归系数多项式
-* `$\Theta(B) = 1 + \sum_{i=1}^{q}\theta_{i}B^{i}$` 为平稳可逆 ARMA(`$p$`, `$q$`) 模型的移动平滑系数多项式
+* `$x_{t}$` 为原始时间序列
+* `$\Phi(B) = 1-\sum_{i=1}^{p}\phi_{i}B^{i}$` 为平稳可逆 ARMA(`$p$`, `$q$`) 模型的自回归(AR)系数多项式
+* `$\Theta(B) = 1 + \sum_{i=1}^{q}\theta_{i}B^{i}$` 为平稳可逆 ARMA(`$p$`, `$q$`) 模型的移动平滑(MA)系数多项式
 
 ARIMA 之所以叫差分自回归移动平均是因为：`$d$` 阶差分后的序列可以表示为下面的表示形式，
 即差分后序列等于原序列的若干序列值的加权和，而对它又可以拟合 ARMA 模型：
 
 `$$\Delta^{d}x_{t} = \sum_{i=0}^{d}(-1)C_{d}^{i}x_{t-i}$$`
 
-其中：
-
-* `$C_{d}^{i} = \frac{d!}{i!(d-i)!}$`
+其中，`$C_{d}^{i} = \frac{d!}{i!(d-i)!}$`。
 
 ARIMA(`$p$`, `$d$`, `$q$`) 模型的另一种形式：
 
@@ -366,118 +370,145 @@ E(x_{s}\epsilon_{t}) = 0, \forall s < t&
 \end{array}
 \right.$$`
 
-## ARIMA(`$p$`, `$d$`, `$q$`) 模型应用
+### ARIMA 建模流程图
+
+![img](images/arima_flow.png)
+
+### 差分运算
+
+差分运算是一种十分简单有效的确定性信息提取方法，
+很多时候适当阶数的差分便可以充分提取出确定性信息。
+
+![img](images/diff.png)
+
+针对不同时序，我们可以选择不同差分方式，请见下图所示：
+
+![img](images/diff2.png)
+
+> p 阶差分
+
+相距一期的两个序列值之间的减法运算称为 `$1$` 阶差分运算；
+对 `$1$` 阶差分后序列在进行一次 `$1$` 阶差分运算称为 `$2$` 阶差分；
+以此类推，对 `$p-1$` 阶差分后序列在进行一次 `$1$` 阶差分运算称为 `$p$` 阶差分。
+
+`$$\Delta x_{t} = x_{t} - x_{t-1}$$`
+`$$\Delta^{2} x_{t} = \Delta x_{t} - \Delta x_{t-1}$$`
+`$$\cdots$$`
+`$$\Delta^{p} x_{t} = \Delta^{p-1} x_{t} - \Delta^{p-1} x_{t-1}$$`
+
+> k 步差分
+
+相距 `$k$` 期的两个序列值之间的减法运算称为 `$k$` 步差分运算：
+
+`$$\Delta_{k}x_{t} = x_{t} - x_{t-k}$$`
+
+> 滞后算子
+
+滞后算子类似于一个时间指针，当前序列值乘以一个滞后算子，
+就相当于把当前序列值的时间向过去拨了一个时刻。
+
+假设 `$B$` 为滞后算子：
+
+`$$x_{t-1} = Bx_{t}$$`
+`$$x_{t-2} = B^{2}x_{t}$$`
+`$$\vdots$$`
+`$$x_{t-p} = B^{p}x_{t}$$`
+
+也可以用滞后算子表示差分运算：
+
+`$p$` 阶差分：
+
+`$$\Delta^{p}x_{t} = (1-B)^{p}x_{t} = \sum_{i=0}^{p}(-1)C_{p}^{i}x_{t-i}$$`
+
+`$k$` 步差分：
+
+`$$\Delta_{k}x_{t} = x_{t} - x_{t-k} = (1-B^{k})x_{t}$$`
+
+> 差分运算 API
+
+* `pandas.Series.diff`
+* `pandas.DataFrame.diff`
+* `pandas.DataFrame.percent`
+* `pandas.DataFrame.shift`
 
 ```python
-from statsmodels.tsa.arima_model import ARIMA
-from random import random
+# 1 阶差分、1步差分
+pandas.DataFrame.diff(periods = 1, axis = 0)
 
-data = [x + random() for x in range(1, 100)]
+# 2 步差分
+pandas.DataFrame.diff(periods = 2, axis = 0)
 
-model = ARIMA(data, order = (1, 1, 1))
-model_fit = model.fit(disp = True)
+# k 步差分
+pandas.DataFrame.diff(periods = k, axis = 0)
 
-y_hat = model_fit.predict(len(data), len(data), typ = "levels")
-print(y_hat)
+# -1 步差分
+pandas.DataFrame.diff(periods = -1, axis = 0)
+```
+
+> 百分比变化率
+
+当前值与前一个值之间的百分比变化。
+
+```python
+pandas.DataFrame/Series.pct_change(
+    periods = 1, 
+    fill_method = 'pad', 
+    limit = None, 
+    freq = None, 
+    **kwargs
+)
+```
+
+示例：
+
+```python
+data = pdr.get_data_fred("HOUSTNSA", "1959-01-01", "2019-06-01")
+data
+```
+
+![img](images/pct_change_data.png)
+
+```python
+fig, ax = plt.subplots()
+ax = housing.plot(ax = ax)
+```
+
+![img](images/pct_change_data_plot.png)
+
+```python
+housing = data.HOUSTNSA.pct_change().dropna()
+housing = 100 * housing.asfreq("MS")
+housing
+```
+
+```
+DATE
+1959-02-01     2.910603
+1959-03-01    28.989899
+1959-04-01    18.089272
+1959-05-01     1.127321
+1959-06-01    -3.081967
+                ...    
+2019-02-01    -8.045977
+2019-03-01    22.750000
+2019-04-01    18.737271
+2019-05-01     1.286449
+2019-06-01    -2.540220
+Freq: MS, Name: HOUSTNSA, Length: 725, dtype: float64
 ```
 
 ```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import os
-import warnings
-warnings.filterwarnings("ignore")
-from datetime import datetime
-from datetime import timedelta
-from matplotlib.pyplot import rcParams
-rcParams["figure.figsize"] = 15, 6
-# 平稳性检验(AD检验)
-from statsmodels.tsa.stattools import adfuller
-# 模型分解
-from statsmodels.tsa.seasonal import seasonal_decompose
-# ARIMA 模型
-from statsmodels.tsa.arima_model import ARIMA
-from statsmodels.tsa.stattools import acf, pacf
+fig, ax = plt.subplots()
+ax = housing.plot(ax = ax)
 ```
 
-ADFuller 平稳性检验
+![img](images/pct_change_housing_plot.png)
 
-```python
-def stationarity_test(ts):
-    # rolling statistics
-    rollmean = pd.Series.rolling(ts, window = 12).mean()
-    rollstd = pd.Series.rolling(ts, window = 12).std()
+## 残差自回归模型
 
-    orig = plt.plot(ts, color = "blue", label = "Original")
-    mean = plt.plot(rollmean, color = "red", label = "Rolling mean")
-    std = plt.plot(rollstd, color = "black", label = "Rolling std")
-    plt.legend(loc = "best")
-    plt.title("Rolling mean & Standard Deviation")
-    plt.show()
+> 残差自回归模型, Residual Auto-Regressive, RAR
 
-    # Dickey Fuller test
-    print("Results of Dickey-Fuller Test:")
-    dftest = adfuller(ts, autolag = "AIC")
-    dfountput = pd.Series(dftest[0:4], 
-                        index = ["Test Statistic", 
-                                "p-value", 
-                                "#lag used", 
-                                "Number of observation used"])
-    for key, value in dftest[4].items():
-        dfountput["Critical Value(%s)" % key] = value
-```
-
-ACF 自相关函数，PACF 偏自相关函数
-
-```python
-def acf_pacf(data):
-    lag_acf = acf(data, nlags = 20)
-    lag_pacf = pacf(data, nlags = 20, method = "ols")
-
-    plt.subplot(121)
-    plt.plot(lag_acf)
-    plt.axhline(y = 0, linestyle = "--", color = "gray")
-    plt.axhline(y = - 1.96 / np.sqrt(len(data)), linestyle = "", color = "gray")
-    plt.axhline(y = 1.96 / np.sqrt(len(data)), linestyle = "", color = "gray")
-    plt.title("Autocorrelation Function")
-
-    plt.subplot(122)
-    plt.plot(lag_pacf)
-    plt.axhline(y = 0, linestyle = "--", color = "gray")
-    plt.axhline(y = - 1.96 / np.sqrt(len(data)), linestyle = "", color = "gray")
-    plt.axhline(y = 1.96 / np.sqrt(len(data)), linestyle = "", color = "gray")
-    plt.title("Partial Autocorrelation Function")
-
-    plt.tight_layout()
-```
-
-```python
-def arima_performance(data, order1):
-    model = ARIMA(data, order = order1)
-    results_arima = model.fit(disp = -1)
-    results_arima_value = results_arima.fittedvalues
-    results_future = result_airma.forecast(7)
-    return results_arima_value, results_future
-```
-
-```python
-def arima_plot(data, results_arima_value):
-    plt.plot(data)
-    plt.plot(results_arima_value, color = "red")
-    plt.title("RSS: %.4f" % sum((results_arima_value) ** 2))
-```
-
-```python
-def add_season(ts_recover_trend, startdate):
-    ts2_season = ts2_season
-    values = []
-    low_conf_values = []
-```
-
-# 残差自回归模型
-
-## 确定性因素分解
+### 确定性因素分解
 
 除了差分运算，非平稳序列常会显示出非常明显的规律性：
 
@@ -492,7 +523,7 @@ def add_season(ts_recover_trend, startdate):
 * 乘法模型
     - `$x = T \times C \times I$`
 
-### 趋势
+#### 趋势
 
 获取趋势有两种方法：
 
@@ -500,7 +531,7 @@ def add_season(ts_recover_trend, startdate):
 * 平滑法：移动平均或指数平滑法
     - Python 中 statsmodel 的序列趋势分解便是用的平滑法
 
-### 季节
+#### 季节
 
 看季节/周期性，也有两种方法：
 
@@ -521,11 +552,11 @@ def add_season(ts_recover_trend, startdate):
 
 * 去趋势求周期平均：Python 中 statsmodel 的序列周期提取是先对原序列去除趋势项后，计算给定周期内的均值，用均值作为反映周期性。
 
-### 随机
+#### 随机
 
 若认为是加法模型形式，随机项=序列-趋势项-季节项。乘法模型，则通过除法获取随机项（有时也称残差项）
 
-## 时间序列分解模型
+### 时间序列分解模型
 
 时间序列数据，即数据指标按时间维度统计形成的序列。这种数据在我们的日常报表中非常常见。
 观察这类数据的出发点有两个：
@@ -568,7 +599,7 @@ def add_season(ts_recover_trend, startdate):
 循环变动因素(C). 显然, 并非每一个预测对象中都存在着 T、S、C 这三种趋势, 可能是其中的一种或两种. 
 一个具体的时间序列究竟由哪几类变动组合, 采取哪种组合形式, 应根据所掌握的资料、时间序列及研究目的来确定
 
-### 加法模型
+#### 加法模型
    
 `$$Y_{t} = T_{t} + S_{t} + C_{t} + I_{t}$$`
 
@@ -581,7 +612,7 @@ def add_season(ts_recover_trend, startdate):
 加法模型中的四种成分之间是相互独立的, 某种成分的变动不影响其他成分的变动. 
 各个成分都用绝对量表示, 并且具有相同的量纲
 
-### 乘法模型
+#### 乘法模型
 
 `$$Y_{t} = T_{t} \times S_{t} \times C_{t} \times I_{t}$$`
 
@@ -602,7 +633,7 @@ def add_season(ts_recover_trend, startdate):
 由于上面的等价关系, 所以, 有的时候在预测模型的时候会先取对数, 
 然后再进行时间序列的分解, 就能得到乘法的形式
 
-### 加法乘法混合模型
+#### 加法乘法混合模型
 
 `$$Y_{t} = T_{t} \times S_{t} \times C_{t} + I_{t}$$`
 
@@ -613,7 +644,7 @@ def add_season(ts_recover_trend, startdate):
 * `$\sum_{t=1}^{k}S_{t} = k$`，`$k$` 为季节性周期长度
 * `$I_{t}$` 是独立随机变量序列，服从正态分布
 
-## 时间序列分解实现示例
+### 时间序列分解实现示例
 
 有多种算法和方法可以将时间序列分解为三个分量。以下的经典方法，经常会使用并且非常直观。
 
@@ -625,7 +656,7 @@ def add_season(ts_recover_trend, startdate):
 还有其他几种可用于分解的方法，例如 STL、X11 和 SEATS。这些是先进的方法，
 是对经典方法的基本方法的补充，并改进了它的缺点
 
-### 时序数据
+#### 时序数据
 
 ```python
 # 使用1948年至1961年的美国航空客运量数据集
@@ -661,7 +692,7 @@ fig.show()
 
 从图中我们观察到趋势是增加的，每年也有季节性。波动的大小随着时间的推移而增加，因此我们可以说这是一个乘法模型
 
-### 时序乘法模型分解
+#### 时序乘法模型分解
 
 ```python
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -684,7 +715,7 @@ plt.show()
 
 从上图中可以看到，该函数确实成功地捕获了这三个组成部分
 
-### 时序加法模型分解
+#### 时序加法模型分解
 
 通过应用 Scipy 的函数 boxcox ，可以使用 Box-Cox 变换稳定方差，这样可以将序列转换为一个加法模型
 
@@ -709,7 +740,7 @@ plt.show()
 这个函数也很好地捕获了这三个组件。但是我们看到残差在早期和后期具有更高的波动性。
 所以在为这个时间序列构建预测模型时，需要考虑到这一点
 
-## 时间序列的分解方法
+### 时间序列的分解方法
 
 时间序列数据的预测值就是:
 
@@ -717,7 +748,7 @@ plt.show()
 
 就意味着，能通过时间长度和所在周期的位置给出一个未知时间点的预测值
 
-### 使用移动平均法分离出显性的周期性波动
+#### 使用移动平均法分离出显性的周期性波动
 
 * 首先，清洗数据，将异常值剔除
 * 其次，根据现实业务周期(显性周期)，按周期的长度求移动平均数，
@@ -725,21 +756,21 @@ plt.show()
   即移动平均数为长期趋势、循环波动和一部分随机波动(`$TCI_{2}$`)
 * 最后，用原始数据减去移动平均数(`$TCI_{2}$`)，就得到了周期性波动效应和一部分随机波动(`$SI_{1}$`)
 
-### 将业务周期性波动效应和随机波动进行分解
+#### 将业务周期性波动效应和随机波动进行分解
 
 这部分的处理取决于周效应和不规则变动的量级。在实际场景中，若量比较大，建议计算每周中对应某一天的均值，
 即得到周一的均值、周二的均值等，这便是加法模型中的周效应
 
 `$S = SI_{1} / I_{1}$`
 
-### 观察数据波动的拐点将时间序列分段
+#### 观察数据波动的拐点将时间序列分段
 
 移动平均数包含了数据的长期趋势(`$T$`)、循环变动(`$C$`)
 
 * 首先，长期趋势是会改变的，这种改变往往是运营策略的变化带来的，所以不能教条地假设长期趋势稳定不变
 * 其次，在数据的不同阶段，循环的周期也会有所不同
 
-### 利用线性回归基于移动平均数计算长期趋势
+#### 利用线性回归基于移动平均数计算长期趋势
 
 原始数据在剔除了业务周期波动和随机波动后(`$SI_{1}$`)，剩下了长期趋势和循环变动(`$TC$`)
 
@@ -752,7 +783,7 @@ plt.show()
 这取决于数据点的分布，有时要用指数回归，有时要用多项式回归。
 而且，在数据的不同阶段，使用的长期趋势估计方式也可以是不同的
 
-### 分离出循环效应和随机波动
+#### 分离出循环效应和随机波动
 
 因为循环效应不是那么容易观察出来的。一个简单的观察办法是：看数据是否有规律地分布在 0 值之上和 0 值之下。
 若数据不规则地在 0 值上下跳动，则可以认定这是随机波动，不需要分离循环效应。
@@ -765,14 +796,14 @@ plt.show()
 减去循环效应(`$C$`)后(除了阶段2，其他阶段的循环效应认为是0)，
 剩下的就是随机波动(`$I_{2}$`)
 
-### 检验时间序列分解的效果
+#### 检验时间序列分解的效果
 
 * 第一种手段就是图形法，观察预测值与实际值的契合程度
 * 第二种方法是回归分析法
     - 以预测值为自变量，实际值为因变量，建立一个线性回归模型，
       观察模型的拟合优度，通过拟合优度判断预测是否靠谱
 
-## 时间序列分解方法的应用局限性
+### 时间序列分解方法的应用局限性
 
 每种分析方法都有它的局限性，时间序列分解方法也一样，“分解”这种思维，事实上是可以应用在更广泛的业务分析中的，
 而不仅是时间序列数据。通过以上案例，需要注意时间序列分解法中的以下几点局限性：
@@ -795,7 +826,7 @@ plt.show()
     - 历史往往会重演，前面几个阶段的数据特征，一定会出现在未来的某个时间点。
       所以，当数据进入有“历史参考”的某个阶段时，可以用历史经验预测未来的走势
 
-## 残差自回归模型
+### 残差自回归模型
 
 残差自回归模型的中心思想很简单，就是先提取趋势项和周期项，再针对残差做 AR 模型。
 所以说它利用了确定性因素分解的方法，不同于差分提取非平稳序列中的确定性信息，
@@ -836,21 +867,33 @@ plt.show()
 为了检验残差序列的自相关性，有两种方法可以参考：DW 检验 (Durbin-Watson) 和 Durbin h 检验，
 前者存在有偏，现在常用是后者。若通过检验，则可以去残差做自回归模型
 
-# 对数变换加 ARIMA
+# 非平稳时序分析-异方差
+
+## 对数变换加 ARIMA
 
 当标准差与水平成正比的异方差序列（即序列均值变高的同时，标准差也变大），
-log 对数转换可以有效实现方差齐性，然后就可以正常走方差齐性平稳序列的建模方法(ARIMA)了
+log 对数转换可以有效实现方差齐性，然后就可以正常走方差齐性平稳序列的建模方法(ARIMA)了。
 
-# 自回归条件异方差模型 ARCH
+### 对数变换
 
-对数变换只适用于部分异方差波动序列，而条件异方差模型是一种在宏观经济领域和金融领域广泛采用的异方差处理方法。
-条件异方差（ARCH）模型如下：
+* TODO
 
-`$$\begin{align}
-x_{t}=f(t, x_{t-1}, x_{t-2}, \ldots) + \varepsilon_{t} \\
-\varepsilon = \sqrt{h_{t}}e_{t} \\
-h_{t} = \omega + \sum_{j=1}^{q}\lambda_{j}\varepsilon_{t-j}^{2}
-\end{align}$$`
+### ARIMA 建模
+
+* TODO
+
+## ARCH 模型
+
+> 自回归条件异方差模型, Auto-Regressive Conditional Heteroscedastic, ARCH
+
+对数变换只适用于部分异方差波动序列，
+而 ARCH 是一种在宏观经济领域和金融领域广泛采用的异方差处理方法。
+
+ARCH 模型如下：
+
+`$$x_{t}=f(t, x_{t-1}, x_{t-2}, \ldots) + \varepsilon_{t}$$`
+`$$\varepsilon_{t} = \sqrt{h_{t}}e_{t}$$`
+`$$h_{t} = \omega + \sum_{j=1}^{q}\lambda_{j}\varepsilon_{t-j}^{2}$$`
 
 其中：
 
@@ -858,29 +901,30 @@ h_{t} = \omega + \sum_{j=1}^{q}\lambda_{j}\varepsilon_{t-j}^{2}
 * `$\varepsilon_{t}$` 为时间点 `$t$` 的残差
 * `$h_{t}$` 为 `$\varepsilon_{t}$` 的方差函数（ 即基于历史残差信息条件下的条件方差）
 
-其实，ARCH 模型的本质就是使用残差平方（`$diff^{2}$`）序列的 `$q$` 阶移动平均（MA(`$q$`)）拟合当期异方差函数值
+其实，ARCH 模型的本质就是使用残差平方（`$diff^{2}$`）序列的 `$q$` 阶移动平均（MA(`$q$`)）拟合当期异方差函数值。
 
-## 广义自回归条件异方差模型 GARCH
+## GARCH 模型
 
-ARCH 是基于 MA 的，所以具有自相关系数 `$q$` 阶截尾性，因此它只适用于异方差函数短期自相关过程。
-但实际上有些残差序列的异方差函数具有长期自相关性，所以 GARCH 模型被提出来了： 
+> 广义自回归条件异方差模型, Generalized Auto-Regressive Conditional Heteroscedastic, GARCH
 
-`$$\begin{align}
-x_{t}=f(t, x_{t-1}, x_{t-2}, \ldots) + \varepsilon_{t} \\
-\varepsilon = \sqrt{h_{t}}e_{t} \\
-h_{t} = \omega + \sum_{i=1}^{p}\eta_{t}h_{t-i} + \sum_{j=1}^{q}\lambda_{j}\varepsilon_{t-j}^{2}
-\end{align}$$`
+ARCH 是基于 `$\text{MA}(q)$` 的，所以 ARMA 具有自相关系数 `$q$` 阶截尾性，
+因此它只适用于异方差函数短期自相关过程。但实际上有些残差序列的异方差函数具有长期自相关性，
+所以 GARCH 模型被提出来了： 
 
-GARCH 模型本质上就是在 ARCH 上加入了 `$p$` 阶自相关性（我理解是 AR(`$p$`)），
-这样就能有效拟合具有长期记忆性的异方差函数
+`$$x_{t}=f(t, x_{t-1}, x_{t-2}, \ldots) + \varepsilon_{t}$$`
+`$$\varepsilon_{t} = \sqrt{h_{t}}e_{t}$$`
+`$$h_{t} = \omega + \sum_{i=1}^{p}\eta_{t}h_{t-i} + \sum_{j=1}^{q}\lambda_{j}\varepsilon_{t-j}^{2}$$`
+
+GARCH 模型本质上就是在 ARCH 上加入了 `$p$` 阶自相关性（我理解是 `$\text{AR}(p)$`），
+这样就能有效拟合具有长期记忆性的异方差函数。
 
 ## AR-GARCH 模型
 
 有时回归函数 `$f(t, x_{t-1}, x_{t-2}, \ldots)$` 不能充分提取原序列中相关信息，
 导致 `$\varepsilon_{t}$` 存在自相关性，所以需要先对 `$\varepsilon_{t}$` 拟合自回归模型 AR，
-再考察残差序列 `$\upsilon_{t}$` 的方差齐性
+再考察残差序列 `$\upsilon_{t}$` 的方差齐性。
 
-# SARIMA
+## SARIMA
 
 * TODO
 
