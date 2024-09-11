@@ -1,5 +1,5 @@
 ---
-title: 【Paper】Prophet 
+title: Prophet
 author: 王哲峰
 date: '2022-04-30'
 slug: paper-ts-prophet
@@ -45,13 +45,12 @@ img {
     - [时间序列分解](#时间序列分解)
     - [趋势项模型](#趋势项模型)
         - [饱和趋势项](#饱和趋势项)
-        - [分段线性函数 Piecewise Linear Function](#分段线性函数-piecewise-linear-function)
-        - [变点的选择 Changepoint Selection](#变点的选择-changepoint-selection)
-        - [对未来的预估 Trend Forecast Uncertainty](#对未来的预估-trend-forecast-uncertainty)
+        - [分段线性函数](#分段线性函数)
+        - [变点的选择](#变点的选择)
+        - [对未来的预估](#对未来的预估)
     - [季节性趋势](#季节性趋势)
     - [节假日效应](#节假日效应)
     - [时序模型拟合](#时序模型拟合)
-- [实验结果](#实验结果)
 - [Prophet 使用](#prophet-使用)
     - [Prophet 安装](#prophet-安装)
     - [Prophet 简单使用](#prophet-简单使用)
@@ -65,16 +64,15 @@ img {
         - [变点](#变点)
         - [周期性](#周期性)
         - [节假日](#节假日)
-    - [饱和预测(Staturating Forecast)](#饱和预测staturating-forecast)
+    - [饱和预测](#饱和预测)
         - [Forecasting Growth](#forecasting-growth)
         - [Staturating Minimum](#staturating-minimum)
-    - [Seasonality, Holiday Effects, And Regressors](#seasonality-holiday-effects-and-regressors)
+    - [季节性和节假日效应和建模](#季节性和节假日效应和建模)
         - [假期和特殊事件建模](#假期和特殊事件建模)
-        - [指定内置的国家/地区假期(Build-in Country Holiday)](#指定内置的国家地区假期build-in-country-holiday)
-        - [季节性的傅里叶变换(Fourier Order for Seasonalities)](#季节性的傅里叶变换fourier-order-for-seasonalities)
+        - [指定内置的国家/地区假期](#指定内置的国家地区假期)
+        - [季节性的傅里叶变换](#季节性的傅里叶变换)
         - [指定自定义季节性](#指定自定义季节性)
-- [总结](#总结)
-- [资料](#资料)
+- [参考](#参考)
 </p></details><p></p>
 
 # 论文简介
@@ -294,7 +292,9 @@ g(t) &= \frac{C(t)}{1+e^{-k(t)(t-m(t))}} \\
 在逻辑回归函数里面，有一个参数是需要提前设置的，那就是 Capacity，也就是所谓的  `$C(t)$`，
 在使用 Prophet 的 `growth = 'logistic'` 的时候，需要提前设置好 `$C(t)$` 的取值才行
 
-### 分段线性函数 Piecewise Linear Function
+### 分段线性函数
+
+> Piecewise Linear Function
 
 下面介绍一下基于分段线性函数的趋势项。
 众所周知，线性函数指的是 `$y=kx+b$`，而分段线性函数指的是在每一个子区间上，
@@ -330,7 +330,9 @@ future = m.make_future_dataframe(periods = prediction_length, freq = "min")
 future["cap"] = 6
 ```
 
-### 变点的选择 Changepoint Selection
+### 变点的选择
+
+> Changepoint Selection
 
 在介绍变点之前，先要介绍一下 Laplace 分布
 
@@ -361,7 +363,9 @@ future["cap"] = 6
 因此，当 `$\tau$` 趋近于零的时候，`$\delta_{j}$` 也是趋向于零的，
 此时的增长函数将变成全段的逻辑回归函数或者线性函数。这一点从 `$g(t)$` 的定义可以轻易地看出
 
-### 对未来的预估 Trend Forecast Uncertainty
+### 对未来的预估 
+
+> Trend Forecast Uncertainty
 
 从历史上长度为 `$T$` 的数据中，可以选择出 `$S$` 个变点，
 它们所对应的增长率的变化量是 `$\sigma_{j} \sim Laplace(0, \tau)$`。
@@ -477,13 +481,6 @@ changepoint_ts = np.concatenate((
 下一步只需要拟合函数就可以了，在 Prophet 里面，
 作者使用了 `pyStan` 这个开源工具中的 `L-BFGS` 方法来进行函数的拟合。 
 具体可以参考 `forecast.py` 里面的 `stan_init` 函数 
-
-# 实验结果
-
-
-
-
-
 
 # Prophet 使用
 
@@ -834,7 +831,9 @@ model = Prophet(holidays = holidays, holidays_prior_scale = 10.0)
 用 Prophet 可能就不合适了。 但是，Prophet 提供了一种时序预测的方法，在用户不是很懂时间序列的前提下都可以使用这
 个工具得到一个能接受的结果。 具体是否用 Prophet 则需要根据具体的时间序列来确定。 
 
-## 饱和预测(Staturating Forecast)
+## 饱和预测
+
+> Staturating Forecast
 
 ### Forecasting Growth
 
@@ -895,7 +894,9 @@ forecast = m.predict(future_df)
 fig = m.plot(forecast)
 ```
 
-## Seasonality, Holiday Effects, And Regressors
+## 季节性和节假日效应和建模
+
+> Seasonality, Holiday Effects, And Regressors
 
 ### 假期和特殊事件建模
 
@@ -971,7 +972,9 @@ plot_forecast_components(m, forecast, "superbowl")
 ```
 
 
-### 指定内置的国家/地区假期(Build-in Country Holiday)
+### 指定内置的国家/地区假期
+
+> Build-in Country Holiday
 
 - 通过在 `fbprophet.Prophet()` 中的 `holidays` 参数指定任何假期
 
@@ -991,7 +994,9 @@ forecast = m.predict(future)
 fig = m.plot_components(forecast)
 ```
 
-### 季节性的傅里叶变换(Fourier Order for Seasonalities)
+### 季节性的傅里叶变换
+
+> Fourier Order for Seasonalities
 
 使用 **偏傅里叶和(Partial Fourier Sum)** 估计季节性，逼近非定期信号
 
@@ -1033,14 +1038,8 @@ forecast = m.fit(df).predict(future)
 fig = m.plot_components(forecast)
 ```
 
-# 总结
+# 参考
 
-# 资料
-
-* [R-tutorial](https://otexts.com/fpp2/ts-objects.html)
 * [Blog](https://zr9558.com/2018/11/30/timeseriespredictionfbprophet/)
 * [Facebook 时间序列预测算法 Prophet 的研究](https://zhuanlan.zhihu.com/p/52330017)
-* [时间序列原理篇之Facebook Prophet算法](https://zhuanlan.zhihu.com/p/463183142)
-* [GitHub](https://github.com/facebook/prophet)
-* [1] Taylor, S. J., & Letham, B. (2018). Forecasting at scale. *The American Statistician*, *72*(1), 37-45.
-* [2] Facebook 时间序列预测算法 Prophet 的研究：https://zhuanlan.zhihu.com/p/52330017
+* [时间序列原理篇之 Facebook Prophet算法](https://zhuanlan.zhihu.com/p/463183142)
