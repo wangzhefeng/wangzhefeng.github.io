@@ -1,5 +1,5 @@
 ---
-title: Prophet
+title: VAR
 author: 王哲峰
 date: '2023-05-21'
 slug: var
@@ -10,5 +10,4 @@ tags:
 ---
 
 
-# VAR
 
