@@ -1,6 +1,6 @@
 ---
 title: pmdarima
-subtitle: From R's auto.arima
+subtitle: Auto ARIMA
 author: 王哲峰
 date: '2022-11-12'
 slug: timeseries-lib-pmdarima

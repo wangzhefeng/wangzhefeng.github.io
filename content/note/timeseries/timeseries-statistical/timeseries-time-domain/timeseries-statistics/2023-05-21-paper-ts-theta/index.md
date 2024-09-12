@@ -1,5 +1,5 @@
 ---
-title: 【Paper】Theta
+title: Theta
 author: 王哲峰
 date: '2023-05-21'
 slug: paper-ts-theta
@@ -43,7 +43,7 @@ img {
 - [模型定义](#模型定义)
 - [实验结果](#实验结果)
 - [总结](#总结)
-- [资料](#资料)
+- [参考](#参考)
 </p></details><p></p>
 
 
@@ -70,5 +70,4 @@ img {
 # 总结
 
 
-# 资料
-
+# 参考

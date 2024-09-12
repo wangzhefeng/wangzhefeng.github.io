@@ -1,5 +1,6 @@
 ---
-title: 时间序列分析深度学习库-NeuralForecast
+title: NeuralForecast
+subtitle: 深度学习库
 author: 王哲峰
 date: '2024-03-01'
 slug: timeseries-lib-neuralforecast

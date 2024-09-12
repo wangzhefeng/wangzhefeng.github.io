@@ -1,5 +1,5 @@
 ---
-title: 时间序列平滑和异常检测-tsmoothie
+title: tsmoothie
 subtitle: 时间序列平滑和异常检测
 author: 王哲峰
 date: '2024-04-12'

@@ -1,8 +1,8 @@
 ---
-title: 时间序列分析-非平稳时序模型
+title: 时间序列非平稳时序模型
 author: 王哲峰
 date: '2023-03-03'
-slug: timeseries-nonstationarity-model
+slug: nonstationarity-model
 categories:
   - timeseries
 tags:

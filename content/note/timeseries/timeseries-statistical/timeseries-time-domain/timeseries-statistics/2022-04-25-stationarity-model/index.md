@@ -1,8 +1,8 @@
 ---
-title: 时间序列分析-平稳时序模型
+title: 时间序列平稳时序模型
 author: 王哲峰
 date: '2022-04-25'
-slug: timeseries-stationarity
+slug: stationarity-model
 categories:
   - timeseries
 tags:

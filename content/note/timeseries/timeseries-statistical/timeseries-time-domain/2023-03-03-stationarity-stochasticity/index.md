@@ -2,7 +2,7 @@
 title: 时间序列平稳性和纯随机性
 author: 王哲峰
 date: '2023-03-03'
-slug: timeseries-stationarity-stochasticity
+slug: stationarity-stochasticity
 categories:
   - timeseries
 tags:

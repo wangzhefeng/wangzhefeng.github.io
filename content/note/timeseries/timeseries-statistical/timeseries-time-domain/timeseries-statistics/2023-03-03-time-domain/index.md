@@ -1,8 +1,8 @@
 ---
-title: 时间序列分析-统计性时域分析
+title: 时间序列统计性时域分析
 author: 王哲峰
 date: '2023-03-03'
-slug: timeseries-time-domain
+slug: time-domain
 categories:
   - timeseries
 tags:
