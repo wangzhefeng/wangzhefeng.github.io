@@ -22,5 +22,10 @@ order_by: title
     - [目标检测 YOLO 系列算法的进化史](https://mp.weixin.qq.com/s/nEk1jlmgcuz-PY2GlgbQkA)
 * 项目
     - [建立重复图像查找系统](https://mp.weixin.qq.com/s/BE_07eA3nDBsEKyB4jcVoA)
+* Artificial Intelligence Computer Graphics & Generated Content：
+    - OpenAI: DALL-E2，文生图
+    - Stable Diffusion，文生图
+    - OpenAI: ChatGPT，文生文
+    - OpenAI: SOAR，文生视频
 
 # 文档
