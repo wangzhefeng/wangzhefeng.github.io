@@ -440,7 +440,6 @@ AIC 越小，模型越优秀。但 AIC 有不足，就是 AIC 的拟合误差会
 
 # 参考
 
-* [时间序列预测](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484974&idx=1&sn=d841c644fd9289ad5ec8c52a443463a5&chksm=cecef3dbf9b97acd8a9ededc069851afc00db422cb9be4d155cb2c2a9614b2ee2050dc7ab4d7&scene=21#wechat_redirect)
 * [时间序列统计分析](https://mp.weixin.qq.com/s/INZgM6hLSEpboaNhS22CaA)
 * [平稳时序分析](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486537&idx=1&sn=03cc507873683e4ad030b1bec8305c39&chksm=fa041222cd739b34e18c209b91f5c4da9ea9aa4162e46ffdaa5a0e4e18f784ca26b2d3e34092&scene=178&cur_album_id=1577157748566310916#rd)
 * [Moving-average model error terms](https://stats.stackexchange.com/questions/26024/moving-average-model-error-terms)

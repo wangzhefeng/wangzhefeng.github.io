@@ -197,4 +197,4 @@ pred = scaler.inver_transform(prediction_copy_array)
 
 * [使用 LSTM 进行多变量时间序列预测的保姆级教程](https://mp.weixin.qq.com/s?__biz=MzU1MjYzNjQwOQ==&mid=2247499754&idx=1&sn=183c8aa1156023a19b061c27a0be8407&chksm=fbfda57ccc8a2c6a60f630b2cd9b2d587d345ea002c8af81b5059154c97398589a6c86e15bfd&scene=132#wechat_redirect)
 * [GitHub](https://github.com/sksujan58/Multivariate-time-series-forecasting-using-LSTM)
-
+* [blog](https://cloud.tencent.com/developer/article/1041442)

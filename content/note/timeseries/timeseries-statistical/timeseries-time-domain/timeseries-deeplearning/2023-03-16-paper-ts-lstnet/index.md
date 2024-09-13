@@ -80,3 +80,5 @@ img {
 # 参考
 
 * [LSTNet详解](https://zhuanlan.zhihu.com/p/61795416)
+* [paper](https://arxiv.org/pdf/1703.07015.pdf)
+* [code](https://github.com/Lorne0/LSTNet_keras)
