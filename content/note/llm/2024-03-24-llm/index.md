@@ -50,7 +50,7 @@ img {
         - [Claude 系列](#claude-系列)
         - [PaLM 和 Gemini 系列](#palm-和-gemini-系列)
         - [百度文心一言](#百度文心一言)
-        - [讯飞星火](#讯飞星火)
+        - [科大讯飞星火](#科大讯飞星火)
     - [开源 LLM](#开源-llm)
         - [LLaMa 系列](#llama-系列)
         - [通义千问](#通义千问)
@@ -60,7 +60,7 @@ img {
         - [LLM 名单](#llm-名单)
         - [LLM 本体](#llm-本体)
     - [LLM 调用示例](#llm-调用示例)
-        - [查看模型性能](#查看模型性能)
+        - [查看模型](#查看模型)
         - [下载模型](#下载模型)
         - [模型调用](#模型调用)
 - [LLM 应用开发流程](#llm-应用开发流程)
@@ -111,21 +111,21 @@ LLM 的一个杰出应用就是 ChatGPT ，它是 GPT 系列 LLM 用于与人类
 而在自然语言处理领域，过去几十年里，**统计语言建模**一直是主要的研究方法，随着深度学习的进步，
 逐渐从统计语言建模发展为 **神经网络建模**。
 
-语言建模的研究可以追溯到20 世纪 90 年代，当时的研究主要集中在采用统计学习方法来预测词汇，
+语言建模的研究可以追溯到 20 世纪 90 年代，当时的研究主要集中在采用统计学习方法来预测词汇，
 通过分析前面的词汇来预测下一个词汇。但在理解复杂语言规则方面存在一定局限性。
 
 随后，研究人员不断尝试改进，
-2003 年深度学习先驱 Bengio 在他的经典论文 《A Neural Probabilistic Language Model》中，
+2003 年深度学习先驱 Bengio 在他的经典论文 **《A Neural Probabilistic Language Model》** 中，
 首次将深度学习的思想融入到语言模型中。强大的神经网络模型，
-相当于为计算机提供了强大的"大脑"来理解语言，让模型可以更好地捕捉和理解语言中的复杂关系。
+相当于为计算机提供了强大的 “大脑” 来理解语言，让模型可以更好地捕捉和理解语言中的复杂关系。
 
-2018 年左右，Transformer 架构的神经网络模型开始崭露头角。通过大量文本数据训练这些模型，
+2018 年左右，**Transformer 架构的神经网络模型** 开始崭露头角。通过大量文本数据训练这些模型，
 使它们能够通过阅读大量文本来深入理解语言规则和模式，就像让计算机阅读整个互联网一样，
 对语言有了更深刻的理解，极大地提升了模型在各种自然语言处理任务上的表现。
 
 近几年，随着 **BERT** 等模型在 NLP 的各种任务上表现出优异的性能，
 **预训练模型（Pre-trained Language Models, PLM）** 被广泛认为是提高机器文本处理能力的有效方法。
-预训练 + 微调这一 “组合技”，即：首先在大规模通用数据集上进行预训练，
+**预训练 + 微调** 这一 “组合技”，即：首先在大规模通用数据集上进行预训练，
 再用具体任务的少量数据进行微调的方法，在各种应用场景中广泛应用并达到了很好的效果。
 
 在预训练模型被证明有效之后，有研究发现 **将模型“扩大”有助于提高性能**，
@@ -204,15 +204,14 @@ LLM 的一个杰出应用就是 ChatGPT ，它是 GPT 系列 LLM 用于与人类
 涌现能力可以与某些复杂任务有关，但我们更关注的是其通用能力。
 接下来，我们简要介绍三个 LLM 典型的涌现能力：
 
-* 上下文学习
-    - 上下文学习能力是由 GPT-3 首次引入的。
-      这种能力允许语言模型在提供自然语言指令或多个任务示例的情况下，
-      通过理解上下文并生成相应输出的方式来执行任务，而无需额外的训练或参数更新。
-* 指令遵循
-    - 通过使用自然语言描述的多任务数据进行微调，也就是所谓的 **指令微调**。
+* **上下文学习**
+    - 上下文学习能力是由 GPT-3 首次引入的。这种能力允许 **语言模型在提供自然语言指令或多个任务示例的情况下，
+      通过理解上下文并生成相应输出的方式来执行任务，而无需额外的训练或参数更新**。
+* **指令遵循**
+    - 通过使用 **自然语言描述的多任务数据** 进行微调，也就是所谓的 **指令微调**。
       LLM 被证明在使用指令形式化描述的未见过的任务上表现良好。这意味着 LLM 能够根据任务指令执行任务，
       而无需事先见过具体示例，展示了其强大的泛化能力。
-* 逐步推理
+* **逐步推理**
     - 小型语言模型通常难以解决涉及多个推理步骤的复杂任务，例如数学问题。
       然而，LLM 通过采用 **思维链(CoT, Chain of Thought)** 推理策略，
       利用包含中间推理步骤的提示机制来解决这些任务，从而得出最终答案。
@@ -235,8 +234,8 @@ LLM 的一个杰出应用就是 ChatGPT ，它是 GPT 系列 LLM 用于与人类
 ### 支持对话作为统一入口的能力
 
 让大语言模型真正火爆的契机，是基于对话聊天的 ChatGPT。
-业界很早就发现了用户对于对话交互的特殊偏好，陆奇在微软期间，
-就于 2016 年推进过“对话即平台（conversation as a platform）” 的战略。
+业界很早就发现了用户对于对话交互的特殊偏好，
+陆奇在微软期间就于 2016 年推进过 “对话即平台(conversation as a platform)” 的战略。
 此外，苹果 Siri 、亚马逊 Echo 等基于语音对话的产品也非常受欢迎，
 反映出互联网用户对于聊天和对话这种交互模式的偏好。虽然之前的聊天机器人存在各种问题，
 但大型语言模型的出现再次让聊天机器人这种交互模式可以重新涌现。
@@ -252,8 +251,8 @@ LLM 的一个杰出应用就是 ChatGPT ，它是 GPT 系列 LLM 用于与人类
 * **巨大的规模**：LLM 通常具有巨大的参数规模，可以达到数十亿甚至数千亿个参数。
   这使得它们能够捕捉更多的语言知识和复杂的语法结构。
 * **预训练和微调**：LLM 采用了预训练和微调的学习方法。
-  首先在大规模文本数据上进行**预训练（无标签数据）**，
-  学习通用的语言表示和知识。然后通过**微调（有标签数据）**适应特定任务，
+  首先在大规模文本数据上进行 **预训练（无标签数据）**，
+  学习通用的语言表示和知识。然后通过 **微调（有标签数据）** 适应特定任务，
   从而在各种 NLP 任务中表现出色。
 * **上下文感知**：LLM 在处理文本时具有强大的上下文感知能力，
   能够理解和生成依赖于前文的文本内容。这使得它们在对话、文章生成和情境理解方面表现出色。
@@ -268,7 +267,7 @@ LLM 的一个杰出应用就是 ChatGPT ，它是 GPT 系列 LLM 用于与人类
 
 大语言模型是一种具有强大语言处理能力的技术，已经在多个领域展示了潜力。
 它们为自然语言理解和生成任务提供了强大的工具，同时也引发了对其伦理和风险问题的关注。
-这些特点使 LLM 成为了当今计算机科学和人工智能领域的重要研究和应用方向
+这些特点使 LLM 成为了当今计算机科学和人工智能领域的重要研究和应用方向。
 
 ## LLM 应用与影响
 
@@ -285,8 +284,6 @@ LLM 已经在许多领域产生了深远的影响：
 总之，LLM 是一种令人兴奋的技术，它让计算机更好地理解和使用语言，
 正在改变着我们与技术互动的方式，同时也引发了对未来人工智能的无限探索。
 
-
-
 # LLM 模型
 
 ## 未开源 LLM
@@ -294,7 +291,6 @@ LLM 已经在许多领域产生了深远的影响：
 ### GPT 系列
 
 OpenAI 在 2018 年提出的 GPT(Generative Pre-Training) 模型是典型的生成式预训练语言模型之一。
-
 GPT 模型的基本原则是通过语言建模将世界知识压缩到仅解码器(decoder-only) 的 Transformer 模型中，
 这样它就可以恢复(或记忆)世界知识的语义，并充当通用任务求解器。它能够成功的两个关键点：
 
@@ -308,10 +304,8 @@ OpenAI 在 LLM 上的研究大致可以分为以下几个阶段：
 2022 年 11 月，OpenAI 发布了基于 GPT 模型(GPT-3.5 和 GPT-4) 的会话应用 ChatGPT。
 由于与人类交流的出色能力，ChatGPT 自发布以来就引发了人工智能社区的兴奋。
 ChatGPT 是基于强大的 GPT 模型开发的，具有特别优化的会话能力。
-
 ChatGPT 从本质上来说是一个 LLM 应用，是基于基座模型开发出来的，与基座模型有本质的区别。
 其支持 GPT-3.5 和 GPT-4 两个版本。
-
 现在的 ChatGPT 支持最长达 32,000 个字符，知识截止日期是 2021 年 9 月，它可以执行各种任务，
 包括代码编写、数学问题求解、写作建议等。ChatGPT 在与人类交流方面表现出了卓越的能力：
 拥有丰富的知识储备，对数学问题进行推理的技能，在多回合对话中准确追踪上下文，
@@ -324,50 +318,49 @@ ChatGPT 从本质上来说是一个 LLM 应用，是基于基座模型开发出�
 而 GPT4 的参数量官方并没有公布，但有相关人员猜测，GPT-4 在 120 层中总共包含了 1.8 万亿参数，
 也就是说，GPT-4 的规模是 GPT-3 的 10 倍以上。因此，GPT-4 比 GPT-3.5 解决复杂任务的能力更强，
 在许多评估任务上表现出较大的性能提升。
-
 最近的一项研究通过对人为生成的问题进行定性测试来研究 GPT-4 的能力，
 这些问题包含了各种各样的困难任务，并表明 GPT-4 可以比之前的 GPT 模型(如 GPT-3.5 )实现更优越的性能。
 此外，由于六个月的迭代校准(在 RLHF 训练中有额外的安全奖励信号)，GPT-4 对恶意或挑衅性查询的响应更安全，
 并应用了一些干预策略来缓解 LLM 可能出现的问题，如幻觉、隐私和过度依赖。
 
-> 注意：2023 年 11 月 7 日， OpenAI 召开了首个开发者大会，会上推出了最新的大语言模型 GPT-4 Turbo，
-> Turbo 相当于进阶版。它将上下文长度扩展到 128k，相当于 300 页文本，并且训练知识更新到 2023 年 4 月。
-
-GPT3.5 是免费的，而 GPT-4 是收费的。需要开通 plus 会员 20 美元/月。
-通常我们可以调用模型 API 来开发自己的应用，[主流模型 API](https://openai.com/api/pricing/) 对比如下：
+GPT-3.5 是免费的，而 GPT-4 是收费的。需要开通 plus 会员 20 美元/月。
+通常我们可以调用模型 API 来开发自己的应用，[主流模型 API](https://openai.com/api/pricing/) 如下，具体价格见官网介绍：
 
 * 语言模型 API
-
-| 语言模型名称 | 上下文长度 | 特点 | input 费用($/million tokens) | output 费用($/ 1M tokens) | 知识截止日期 |
-| :--------------------: | :--------: | :--------------: | :--------------------------: | :-----------------------: | :-----------: |
-| GPT-3.5-turbo-0125 | 16k | 经济，专门对话 | 0.5 | 1.5 | 2021 年 9 月 |
-| GPT-3.5-turbo-instruct | 4k | 指令模型 | 1.5 | 2 | 2021 年 9 月 |
-| GPT-4 | 8k | 性能更强 | 30 | 60 | 2021 年 9 月 |
-| GPT-4-32k | 32k | 性能强，长上下文 | 60 | 120 | 2021 年 9 月 |
-| GPT-4-turbo | 128k | 性能最强 | 10 | 30 | 2023 年 12 月 |
-
+    - OpenAI-o1
+    - OpenAI-o1 mini
+    - GPT-4o
+    - GPT-4o mini
+* Fine-tuning models
+    - GPT-4o
+    - GPT-4o mini
+    - GPT-3.5-turbo 
+    - davinci-002
+    - babbage-002
 * Embedding 模型 API
+    - text-embedding-3-small
+    - text-embedding-3-large
+    - ada v2
+* Assistants API
+    - Code Interpreter
+    - File Search   
+* Image models
+    - DALL·E 3 Standard
+    - DALL·E 3 HD
+    - DALL·E 2
+* Audio models
+    - Whisper
+    - TTS
+    - TTS HD
 
-|   Embedding 模型名称   |     维度      | 特点 | 费用($/ 1M tokens) |
-| :--------------------: | :-----------: | :--: | :----------------: |
-| text-embedding-3-small |   512/1536    | 较小 |        0.02        |
-| text-embedding-3-large | 256/1024/3072 | 较大 |        0.13        |
-|         ada v2         |     1536      | 传统 |        0.1         |
 
 ### Claude 系列
 
 Claude 系列模型是由 OpenAI 离职人员创建的 Anthropic 公司开发的闭源语言大模型。
 最早的 Claude 于 2023 年 3 月 15 日发布，在 2023 年 7 月 11 日，更新至 Claude-2， 
 并在 2024 年 3 月 4 日更新至 Claude-3。
-
 Claude 3 系列包括三个不同的模型，分别是 Claude 3 Haiku、Claude 3 Sonnet 和 Claude 3 Opus，
 它们的能力依次递增，旨在满足不同用户和应用场景的需求。
-
-|    模型名称     | 上下文长度 |   特点   | input 费用($/1M tokens) | output 费用($/1M tokens) |
-| :-------------: | :--------: | :------: | :---------------------: | :----------------------: |
-| Claude 3 Haiku  |    200k    | 速度最快 |          0.25           |           1.25           |
-| Claude 3 Sonnet |    200k    |   平衡   |            3            |            15            |
-|  Claude 3 Opus  |    200k    | 性能最强 |           15            |            75            |
 
 ### PaLM 和 Gemini 系列
 
@@ -375,24 +368,19 @@ PaLM 系列语言大模型由 Google 开发。其初始版本于 2022 年 4 月�
 2023 年 5 月，Google 发布了 PaLM 2，2024 年 2 月 1 日，
 Google 将 Bard(之前发布的对话应用)的底层大模型驱动由 PaLM2 更改为 Gemini，
 同时也将原先的 Bard 更名为 Gemini。
-
 目前的 Gemini 是第一个版本，即 Gemini 1.0，根据参数量不同分为 Ultra, Pro 和 Nano 三个版本。
 
 ### 百度文心一言
 
 文心一言是基于百度文心大模型的知识增强语言大模型，于 2023 年 3 月在国内率先开启邀测。
-文心一言的基础模型文心大模型于 2019 年发布 1.0 版，现已更新到 4.0 版本。
+文心一言的基础模型文心大模型于 2019 年发布 1.0 版。
 更进一步划分，文心大模型包括 NLP 大模型、CV 大模型、跨模态大模型、生物计算大模型、行业大模型。
-中文能力相对来说非常不错的闭源模型。
-
-文心一言网页版分为免费版和专业版：
+中文能力相对来说非常不错的闭源模型。文心一言网页版分为免费版和专业版，同时也可以使用 API 进行调用。
 
 * 免费版使用文心 3.5 版本，已经能够满足个人用户或小型企业的大部分需求
 * 专业版使用文心 4.0 版本。定价为 59.9 元/月，连续包月优惠价为 49.9 元/月
 
-同时也可以使用 API 进行调用。
-
-### 讯飞星火
+### 科大讯飞星火
 
 讯飞星火认知大模型是科大讯飞发布的语言大模型，支持多种自然语言处理任务。
 该模型于 2023 年 5 月首次发布，后续经过多次升级。2023 年 10 月，
@@ -404,7 +392,7 @@ Google 将 Bard(之前发布的对话应用)的底层大模型驱动由 PaLM2 �
 ### LLaMa 系列
 
 LLaMA 系列模型是 Meta 开源的一组参数规模 从 7B 到 70B 的基础语言模型。
-LLaMA 于2023 年 2 月发布，2023 年 7 月发布了 LLaMA2 模型，
+LLaMA 于 2023 年 2 月发布，2023 年 7 月发布了 LLaMA2 模型，
 并于 2024 年 4 月 18 日发布了 LLaMA3 模型。它们都是在数万亿个字符上训练的，
 展示了如何仅使用公开可用的数据集来训练最先进的模型，而不需要依赖专有或不可访问的数据集。
 这些数据集包括 Common Crawl、Wikipedia、OpenWebText2、RealNews、Books 等。
@@ -484,8 +472,8 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
 1. 权威数据集的排行榜
     - 国内国外有许多大模型测评数据集，大模型发布的论文中一般都会在最权威的几个数据集上测评，
       因此在论文中就可以了解到这些数据集。此处推荐两个：
-        - 在 ICLR 上发布的 [MMLU 数据集](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)，主要评测英文文本的各项能力
-        - 由上交、清华和爱丁堡大学共同完成的 [C-Eval 数据集](https://cevalbenchmark.com/)，主要评测中文能力
+        - 在 ICLR 上发布的 [MMLU 数据集](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)，主要评测英文文本的各项能力；
+        - 由上交、清华和爱丁堡大学共同完成的 [C-Eval 数据集](https://cevalbenchmark.com/)，主要评测中文能力；
     - 在这些数据集的排行榜上，不仅可以看到许多模型的排名，还可以查看其参数量、
       每个子任务的表现和项目链接，有助于根据需要选择合适的模型。
 2. 论文
@@ -504,21 +492,22 @@ Baichuan2 于 2023年 9 月 6 日推出。发布了 7B、13B 的 Base 和 Chat �
 在开源的模型中，一小部分模型在专门的官网上，通过其官网即可下载。
 但是绝大部分模型可以在以下三个开源社区搜索名称即可找到：
 
-* [魔塔社区：https://modelscope.cn/home](https://modelscope.cn/home)
-* [Hugging Face：https://huggingface.com](https://huggingface.com)
-* [Github：https://github.com](https://github.com) 
+* [魔塔社区：https](https://modelscope.cn/home)
+* [Hugging Face](https://huggingface.com)
+* [Github](https://github.com) 
 
 而对于不开源的模型，则通常需要在其官网付费购买调用次数，之后根据官网使用说明调用即可。
 
 ## LLM 调用示例
 
-下载模型本体后即可根据使用手册调用，与模型进行对话。
-这里以阿里巴巴发布的参数量 14B 的千问模型 `Qwen-14B-Chat` 为例（模型名最后为 `Chat` 结尾表示从），
+下载模型本体后即可根据使用手册调用、与模型进行对话。
+以阿里巴巴发布的参数量 14B 的通义千问模型 `Qwen-14B-Chat` 为例，
 展示从模型下载、环境配置到正式调用的过程。
 
-### 查看模型性能
+### 查看模型
 
-从 `C-Eval` 公开访问的模型榜单查询到 `Qwen-14B`，排名 14，从表中即可看到模型在各方面的得分。
+从 [C-Eval 公开访问的模型榜单](https://cevalbenchmark.com/static/leaderboard.html)查询到 `Qwen-14B` 排名 14，
+从表中即可看到模型在各方面的得分：
 
 ![img](images/c-evalmodels.png)
 
@@ -552,7 +541,10 @@ tokenizer = AutoTokenizer.from_pretrained(
 # 加载模型(若本地没有则自动下载)
 model = AutoModelForCausalLM.from_pretrained(
     "Qwen/Qwen-14B-Chat",
-    device_map = "auto",  # device_map 参数代表模型部署的位置，auto 代表自动推断 cpu 和 gpu 个数并均匀分布，此外还可手动指定，例如"cuda:0"表示只部署在第一块显卡上
+    # device_map 参数代表模型部署的位置，\
+    # auto 代表自动推断 cpu 和 gpu 个数并均匀分布，\
+    # 此外还可手动指定，例如"cuda:0"表示只部署在第一块显卡上.
+    device_map = "auto", 
     trust_remote_code = True,
 ).eval()
 ```
@@ -563,8 +555,7 @@ model = AutoModelForCausalLM.from_pretrained(
 ### 模型调用
 
 加载模型结束后，即可通过模型的函数进行交互，以 `Qwen-14B-Chat` 为例，
-我们向其打招呼 `“你好”`，代码如下。与模型对话，第一个参数传入分词器，第二个参数传入对话文本，
-`history` 参数传入之前的对话历史，若没有则传入 `None`，函数返回模型回应和对话历史。
+我们向其打招呼 `“你好”`，与模型对话：
 
 ```python
 response, history = model.chat(
@@ -575,8 +566,11 @@ response, history = model.chat(
 print(response)
 ```
 
-代码运行后可以得到模型输出为：
+* 第一个参数传入分词器；
+* 第二个参数传入对话文本；
+* `history` 参数传入之前的对话历史，若没有则传入 `None`，函数返回模型回应和对话历史。
 
+代码运行后可以得到模型输出为：
 
 ```
 “你好！很高兴为你提供帮助。”
@@ -584,7 +578,7 @@ print(response)
 
 我们成功得到了模型的回答。在此基础上我们继续与其对话，
 传入指令`“给我讲一个年轻人奋斗创业最终取得成功的故事”`，
-并且传入上次的对话历史。
+并且传入上次的对话历史：
 
 ```python
 response, history = model.chat(
@@ -614,8 +608,7 @@ print(response)
 他的成功也证明了，只要努力奋斗，任何人都有可能取得成功。”
 ```
 
-可以看到，模型给出了相当完整且合理的回答。
-后续即可根据自己的需要进行对话，或者从头开始重新对话。
+可以看到，模型给出了相当完整且合理的回答。后续即可根据自己的需要进行对话，或者从头开始重新对话。
 
 # LLM 应用开发流程
 
@@ -1044,31 +1037,42 @@ TODO
 # 参考和资料
 
 * [A Survey of Large Language Models](https://arxiv.org/pdf/2303.18223)
+* [狗熊会：大模型简介与调用方法](https://mp.weixin.qq.com/s/P6ke-B9Q40Hy0S2M5V6w3Q)
 * 数据集
     - [MMLU 数据集](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
     - [C-Eval 数据集](https://cevalbenchmark.com/)
 * 模型仓库
-    - [魔塔社区：https://modelscope.cn/home](https://modelscope.cn/home)
-    - [Hugging Face：https://huggingface.com](https://huggingface.com)
+    - [魔塔社区](https://modelscope.cn/home)
+    - [HuggingFace](https://huggingface.com)
+    - [GitHub](https://github.com)
 * 各厂模型
-    - [ChatGPT](https://chatgpt.com/?model=text-davinci-002-render-sha&oai-dm=1)
-    - [Claude](https://claude.ai/)
-    - [PaLM](https://ai.google/discover/palm2/)
-    - [Gemini](https://gemini.google.com/app)
-    - [文心一言](https://yiyan.baidu.com/)
-        - [https://huggingface.co/Qwen/Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)
+    - ChatGPT 
+        - [使用地址](https://chatgpt.com/?model=text-davinci-002-render-sha&oai-dm=1)
+        - [API]()
+    - Claude
+        - [使用地址](https://claude.ai/)
+        - [API]()
+    - PaLM & Gemini
+        - [PaLM 官网](https://ai.google/discover/palm2/)
+        - [Gemini 使用地址](https://gemini.google.com/app)
+    - 文心一言
+        - [使用地址](https://yiyan.baidu.com/)
+        - [API](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/wlmhm7vuo)
+        - [HuggingFace Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)
         - [文心千帆模型列表](https://console.bce.baidu.com/qianfan/ais/console/onlineService)
-    - [讯飞星火大模型](https://xinghuo.xfyun.cn/)
-    - [LLaMA 官方地址](https://llama.meta.com/)
-    - [LLaMA 开源地址](https://github.com/facebookresearch/llama)
-    - [通义千问使用地址](https://tongyi.aliyun.com/)
-    - [通义千问开源地址](https://github.com/QwenLM/Qwen2)
-    - [ChatGLM 使用地址](https://chatglm.cn/)
-    - [ChatGLM 开源地址](https://github.com/THUDM/GLM-4)
-    - [百川使用地址](https://www.baichuan-ai.com/chat)
-    - [百川开源地址](https://github.com/baichuan-inc)
-* 模型 API
-    - [OpenAI ChatGPT API]()
-    - [百度文心一言 API](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/wlmhm7vuo)
-    - [讯飞星火 API]()
-    - [智谱 GLM API]()
+    - 讯飞星火
+        - [使用地址](https://xinghuo.xfyun.cn/)
+        - [API]()
+    - LLaMA
+        - [使用地址](https://llama.meta.com/)
+        - [API]()
+        - [开源地址](https://github.com/facebookresearch/llama)
+    - 通义千问
+        - [使用地址](https://tongyi.aliyun.com/)
+        - [开源地址](https://github.com/QwenLM/Qwen2)
+    - ChatGLM
+        - [使用地址](https://chatglm.cn/)
+        - [开源地址](https://github.com/THUDM/GLM-4)
+    - 百川
+        - [使用地址](https://www.baichuan-ai.com/chat)
+        - [开源地址](https://github.com/baichuan-inc)

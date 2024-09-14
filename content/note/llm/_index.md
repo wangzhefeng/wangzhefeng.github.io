@@ -29,7 +29,6 @@ list_pages: true
     - [动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
     - [大模型基础](https://github.com/datawhalechina/so-large-lm)
     - [RAG：GLM-4 代码](https://github.com/datawhalechina/self-llm/tree/master/GLM-4)
-* [狗熊会：大模型简介与调用方法](https://mp.weixin.qq.com/s/P6ke-B9Q40Hy0S2M5V6w3Q)
 * [funNLP GitHub](https://github.com/fighting41love/funNLP)
 * [自然语言处理入门练习任务](https://github.com/FudanNLP/nlp-beginner)
 
