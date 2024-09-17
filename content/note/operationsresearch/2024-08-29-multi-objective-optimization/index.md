@@ -1,5 +1,6 @@
 ---
 title: 多目标规划
+subtitle: Multi-Objective Optimization
 author: 王哲峰
 date: '2024-08-29'
 slug: multi-objective-optimization
