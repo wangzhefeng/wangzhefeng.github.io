@@ -1,5 +1,6 @@
 ---
 title: 动态规划
+subtitle: Dynamic Programming
 author: 王哲峰
 date: '2024-08-30'
 slug: dynamic-programming
@@ -80,7 +81,7 @@ img {
 
 计算机算法定义：
 
-> 动态规划（dynamic programming）是一个重要的算法范式，它将一个问题分解为一系列更小的子问题，
+> 动态规划（Dynamic Programming）是一个重要的算法范式，它将一个问题分解为一系列更小的子问题，
 > 并通过存储子问题的解来避免重复计算，从而大幅提升时间效率。
 
 运筹学定义：
