@@ -39,6 +39,8 @@ img {
     - [等式约束优化](#等式约束优化)
     - [不等式约束优化](#不等式约束优化)
     - [拉格朗日对偶](#拉格朗日对偶)
+        - [原问题](#原问题)
+        - [对偶问题](#对偶问题)
 - [KKT 条件](#kkt-条件)
 - [等式约束优化问题](#等式约束优化问题)
     - [等式约束优化问题](#等式约束优化问题-1)
@@ -58,7 +60,7 @@ img {
 
 # 拉格朗日乘子法
 
-对于**约束优化问题**，可以通过**内点法**转化成**无约束优化问题**，
+对于**约束优化问题**，可以通过[**内点法**](https://wangzhefeng.com/note/2024/08/26/linear-programming/#%E5%86%85%E7%82%B9%E6%B3%95)转化成**无约束优化问题**，
 除了内点法，还有一种方法应用最广，就是**拉格朗日乘子法**。
 
 拉格朗日乘子法通过引入**拉格朗日乘子**将**等式约束**转成**无约束优化问题**。
@@ -104,7 +106,7 @@ img {
 
 ## 不等式约束优化
 
-在单纯形法中，对于不等式约束是通过引入松弛变量的方式将不等式约束转化为等式约束，
+在[**单纯形法**](https://wangzhefeng.com/note/2024/08/26/linear-programming/#%E5%8D%95%E7%BA%AF%E5%BD%A2%E6%B3%95)中，对于不等式约束是通过引入松弛变量的方式将不等式约束转化为等式约束，
 在这里是通过 **KKT 条件** 转化成拉格朗日乘子法的。
 
 > 当加上不等式约束后，优化问题的表示如下：
@@ -158,7 +160,7 @@ KKT 条件看起来很多，其实也不难理解：
 
 ## 拉格朗日对偶
 
-可以使用图形化的方法来推导 KKT 条件，在拉格朗日乘子法中，使用拉格朗日对偶是更常用的方法。
+可以使用图形化的方法来推导 KKT 条件，但在拉格朗日乘子法中，使用拉格朗日对偶是更常用的方法。
 
 对于前面讲到的一个优化问题，即：
 
@@ -187,52 +189,56 @@ g_{j}(x) \leq 0, j = 1, 2, ..., n
 &=\underset{\alpha, \beta, \beta \geq 0}{\text{max}}\space\Big[f(x)+ \sum_{i=1}^{m}\alpha_{i}h_{i}(x) + \sum_{j=1}^{n}\beta_{j}g_{j}(x)\Big]
 \end{align}$$`
 
+### 原问题
+
 下面考虑 `$x$` 的约束满足问题，若 `$x$` 不满足 `$h_{i}(x) = 0$` 则令 `$\alpha_{i}=+\infty$`；
 若 `$x$` 不满足 `$g_{j}(x) \leq 0$` 则令 `$\beta_{i}=+\infty$`，在满足约束条件下，即：
 
-`$\theta_{P}(x) = \underset{\alpha, \beta;\beta\geq 0}{max}L(x, \alpha, \beta) = f(x)$`
+`$$\theta_{P}(x) = \underset{\alpha, \beta;\beta\geq 0}{max}L(x, \alpha, \beta) = f(x)$$`
 
 在满足约束条件下求 `$\theta_{P}(x)$` 的最小值，称为原问题，记作 `$p^{*}$`，即：
 
-`$$p^{*}=\underset{x}{\text{max}}\theta_{P}(x)=\underset{x}{\text{min}}\underset{\alpha, \beta;\beta\geq 0}{\text{max}}L(x, \alpha, \beta)$$`
+`$$p^{*}=\underset{x}{\text{min}}\theta_{P}(x)=\underset{x}{\text{min}}\underset{\alpha, \beta;\beta\geq 0}{\text{max}}L(x, \alpha, \beta)$$`
 
-那么原问题的对偶问题是什么呢？
+### 对偶问题
 
-在原问题中先把 `$x$` 看成常数求 `$L(x, \alpha, \beta)$` 的最大值，然后在求关于 `$x$` 的最小值时，
-可根据对偶对调的思路，原问题的对偶问题是，先把 `$\alpha$` 和 `$\beta$` 看作常数，求关于 `$x$` 的最小值，此时得到的 `$x$` 是定值，
-然后再求关于 `$\alpha$`  和 `$\beta$` 的最小值。
+> 那么原问题的对偶问题是什么呢？
+
+在原问题中我们先把 `$x$` 看成常数求 `$L(x, \alpha, \beta)$` 的最大值，然后在求关于 `$x$` 的最小值时，
+可根据**对偶对调**的思路，原问题的对偶问题是，先把 `$\alpha$` 和 `$\beta$` 看作常数，
+求关于 `$x$` 的最小值，此时得到的 `$x$` 是定值，然后再求关于 `$\alpha$`  和 `$\beta$` 的最小值。
 
 定义关于 `$\alpha$` 和 `$\beta$` 的函数：
 
-`$$\theta_{D}(\alpha, \beta) = \underset{x}{\text{min}}L(x, \alpha, \beta)$$`
+`$$\theta_{D}(\alpha, \beta) = \underset{x}{\text{min}}\space L(x, \alpha, \beta)$$`
 
 
 在求得 `$x$` 的值后，`$L(x, \alpha, \beta)$` 最小值只与 `$\alpha$` 和 `$\beta$` 有关，
 求 `$L(x, \alpha, \beta)$` 的极大值，即：
 
-`$$d^{*} = \underset{\alpha, \beta;\beta \geq 0}{\text{max}}\theta_{D}(\alpha, \beta)=\underset{\alpha, \beta;\beta \geq 0}{\text{max}}\underset{x}{\text{min}}L(x, \alpha, \beta)$$`
+`$$d^{*} = \underset{\alpha, \beta;\beta \geq 0}{\text{max}}\theta_{D}(\alpha, \beta)=\underset{\alpha, \beta;\beta \geq 0}{\text{max}}\underset{x}{\text{min}}\space L(x, \alpha, \beta)$$`
 
-这便是原问题的对偶问题。根据前面讲到的若对偶定理可得：
+这便是原问题的对偶问题。根据前面讲到的**弱对偶定理**可得：
 
 `$$d^{*} \leq p^{*}$$`
 
-证明如下：
-
-`$$\begin{align}
- \theta_{D}(\alpha, \beta) 
-&= \underset{x}{\text{min}}L(x, \alpha, \beta) \\
-&\leq L(x, \alpha, \beta) \\
-&\leq \underset{\alpha,\beta;\beta\geq 0}{max} L(x, \alpha, \beta) \\
-&= \theta_{P}(x)
-\end{align}$$`
-
-`$$\underset{\alpha, \beta;\beta\geq 0}{\text{max}}\theta_{D}(\alpha, \beta) \leq \underset{x}{\text{min}}\theta_{P}(x)$$`
-
-即：
-
-`$$d^{*} = \underset{\alpha, \beta;\beta \geq 0}{\text{max}}$$`
-
-通过对偶性为原始问题引入一个下界。
+> 证明如下：
+> 
+> `$$\begin{align}
+> \theta_{D}(\alpha, \beta) 
+> &= \underset{x}{\text{min}}L(x, \alpha, \beta) \\
+> &\leq L(x, \alpha, \beta) \\
+> &\leq \underset{\alpha,\beta;\beta\geq 0}{max} L(x, \alpha, \beta) \\
+> &= \theta_{P}(x)
+> \end{align}$$`
+> 
+> `$$\underset{\alpha, \beta;\beta\geq 0}{\text{max}}\space\theta_{D}(\alpha, \beta) \leq \underset{x}{\text{min}}\space\theta_{P}(x)$$`
+> 
+> 即：
+> 
+> `$$d^{*} = \underset{\alpha, \beta;\beta \geq 0}{\text{max}}\text{min}\space L(x, \alpha, \beta) \leq \underset{x}{\text{min}}\underset{\alpha,\beta;\beta\geq 0}{max}\space L(x, \alpha, \beta) = p^{*}$$`
+> 
+> 通过对偶性为原始问题引入一个下界。
 
 当 `$d^{*} = p^{*}$` 时满足强对偶定理，在强对偶成立的情况下，可以通过求解对偶问题得到原始问题的解，
 使问题满足强对偶关系的条件称为 **KKT 条件**。
@@ -242,12 +248,15 @@ g_{j}(x) \leq 0, j = 1, 2, ..., n
 
 `$$\begin{align}
 f(x^{*}) 
+&= d^{*} \\
+&= p^{*} \\
+&= D(\alpha^{*}, \beta^{*}) \\
 &= \underset{x}{\text{min}}f(x) + \sum_{i=1}^{m}\alpha_{i}^{*}h_{i}(x) + \sum_{j=1}^{n}\beta_{j}^{*}g_{j}(x) \\
 &\leq f(x^{*}) + \sum_{i=1}^{m}\alpha_{i}^{*}h_{i}(x) + \sum_{j=1}^{n}\beta_{j}^{*}g_{j}(x) \\
 &\leq f(x^{*})
 \end{align}$$`
 
-第一个不等式成立时因为 `$x^{*}$` 是 `$L(x, \alpha^{*}, \beta^{*})$` 的一个极大值点，
+第一个不等式成立是因为 `$x^{*}$` 是 `$L(x, \alpha^{*}, \beta^{*})$` 的一个极大值点，
 最后一个不等式成立是因为 `$h_{i}(x^{*})=0$`，且 `$g_{j}(x^{*})\leq 0$`，
 `$\beta_{j} \geq 0$`，因为这个系列的式子里的不等号全部都可以换成等号。
 
@@ -269,6 +278,7 @@ f(x^{*})
 则 `$x^{*}$`、`$\alpha^{*}$` 和 `$\beta^{*}$` 满足 KKT 条件。
 
 总之，拉格朗日乘子法提供了一条思路，可以将有约束优化问题转化成无约束优化问题，进而可以使用梯度方法或启发式算法求解。
+
 拉格朗日乘子法中提到的对偶思想，是对一个约束优化问题，找到其对偶问题，当弱对偶成立时，可以得到原始问题的一个下界。
 如果强对偶成立，则可以直接求解对偶问题来解决原始问题。
 
