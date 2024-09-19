@@ -1,8 +1,9 @@
 ---
-title: Kaggle 概览
+title: 机器学习项目
+subtitle: Machine Learning Projects
 author: 王哲峰
 date: '2023-03-02'
-slug: ml-projects
+slug: projects
 categories:
   - machinelearning
 tags:

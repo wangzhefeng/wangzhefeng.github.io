@@ -55,6 +55,12 @@ img {
 * [fastai](https://docs.fast.ai/)
 * [表格类数据模型](https://zhuanlan.zhihu.com/p/381323980)
 * [稀疏矩阵存储格式总结+存储效率对比:COO,CSR,DIA,ELL,HYB](https://www.cnblogs.com/xbinworld/p/4273506.html?utm_source=tuicool&utm_medium=referral)
+* [机器学习入门清单及路线](https://mp.weixin.qq.com/s/KeD9kPG8PowlKrz69zSHNQ)
+* [机器学习初学者易踩的5个坑](https://mp.weixin.qq.com/s/6r4FX7DEIUHE8pnYkftXSA)
+* [机器学习43条军规：解密谷歌机器学习工程最佳实践（上）](https://zhuanlan.zhihu.com/p/29409286)
+* [机器学习43条军规：解密谷歌机器学习工程最佳实践（下）](https://zhuanlan.zhihu.com/p/29446616)
+* [特征工程](https://www.zhihu.com/question/29316149/answer/110159647)
+* [高斯过程回归](https://zhuanlan.zhihu.com/p/114962778)
 
 ## NAS
 

@@ -9,8 +9,6 @@ tags:
   - model
 ---
 
-
-
 <style>
 details {
     border: 1px solid #aaa;
@@ -36,16 +34,28 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [XGBoost 参数](#xgboost-参数)
-  - [通用参数](#通用参数)
-  - [Tree Booster 参数](#tree-booster-参数)
-  - [Linear Booster 参数](#linear-booster-参数)
-  - [学习任务参数](#学习任务参数)
-  - [参数调节](#参数调节)
+- [参数](#参数)
+    - [通用参数](#通用参数)
+    - [Tree Booster 参数](#tree-booster-参数)
+    - [Linear Booster 参数](#linear-booster-参数)
+    - [DART Booster 参数](#dart-booster-参数)
+    - [学习任务参数](#学习任务参数)
+    - [计算参数](#计算参数)
+        - [外存计算](#外存计算)
+        - [GPU 计算](#gpu-计算)
+- [参数调节](#参数调节)
+    - [参数调优的一般策略](#参数调优的一般策略)
+    - [调参指导](#调参指导)
+- [Python API](#python-api)
+    - [数据接口](#数据接口)
+        - [数据格式](#数据格式)
+        - [DMatrix](#dmatrix)
+    - [模型接口](#模型接口)
+    - [绘图 API](#绘图-api)
 - [参考](#参考)
 </p></details><p></p>
 
-# XGBoost 参数
+# 参数
 
 ## 通用参数
 
@@ -53,9 +63,19 @@ img {
 
 * `booster`：基本学习器类型，默认 `gbtree`
     - `gbtree`：基于树的模型
-    - `gblinear`：线性模型
-    - `dart`：TODO
-* `nthread`：用于运行的并行线程数，默认为最大可用线程数
+    - `gblinear`：线性模型。`gblinear` 使用带 l1，l2 正则化的线性回归模型作为基学习器。
+      因为 boost 算法是一个线性叠加的过程，而线性回归模型也是一个线性叠加的过程。
+      因此叠加的最终结果就是一个整体的线性模型，xgboost 最后会获得这个线性模型的系数
+    - `dart`：DART booster
+* `num_pbuffer`：指定了 prediction buffer 的大小。
+    - 通常设定为训练样本的数量
+    - 该参数由 xgboost 自动设定，无需用户指定
+    - 该 buffer 用于保存上一轮 boostring step 的预测结果
+* `num_feature`：样本的特征数量。
+    - 通常设定为特征的最大维数。
+    - 该参数由 xgboost 自动设定，无需用户指定
+* `nthread`：用于运行的并行线程数量，如果未设定该参数，则默认为最大可用线程数；
+* `silent`：如果为 0(默认值)，则表示打印运行时的信息；如果为 1，则表示 silent mode，不打印这些信息
 * `verbosity`：打印消息的详细程度
     - `0`：静默
     - `1`：警告
@@ -69,10 +89,23 @@ img {
 需要调参：
 
 * `eta`(`learning_rate`)
-    - 学习率，在更新中收缩每步迭代中基本学习期的权重，使模型更加稳健，防止过度拟合
-    - 默认 0.3
+    - 学习率，在更新中收缩每步迭代中基本学习器的权重，使模型更加稳健，防止过度拟合
+    - 默认 `0.3`
     - 范围：`$[0, 1]$`
     - 典型值一般设置为：`$[0.01, 0.2]$` 或 `$[0.05, 0.3]$`
+* `gamma`(`min_split_loss`)
+    - 也称为最小划分损失(`min_split_loss`)树模型节点当分裂结果使得损失函数减少时，才会进行分裂。
+      分裂节点时，损失函数减小值只有大于等于 `gamma` 时节点才分裂。
+      `gamma` 值越大，算法越保守，越不容易过拟合，但性能就不一定能保证，需要平衡。
+    - 默认 `0`
+    - 范围：`$[0，\infty)$`
+    - 典型值一般设置为：`$[0.1, 0.2]$`
+* `min_child_weight`
+    - 子节点中所有样本的权重和的最小值，如果新分裂的节点的样本权重和小于 `min_child_weight` 则停止分裂，
+      可以用来减少过拟合，但是也不能太高，太高会导致欠拟合。
+    - 默认 `1`
+    - 范围：`$[0，\infty)$`
+    - 典型值一般设置为：`1`
 * `n_estimators`
     - 树模型基学习器的数量
 * `max_depth`
@@ -80,19 +113,6 @@ img {
     - 默认 6
     - 范围：`$[0，\infty)$`
     - 典型值一般设置为：`$[3, 10]$`
-* `min_child_weight`
-    - 子节点中所有样本的权重和的最小值，如果新分裂的节点的样本权重和小于 `min_child_weight` 则停止分裂，
-      可以用来减少过拟合，但是也不能太高，太高会导致欠拟合
-    - 默认 1
-    - 范围：`$[0，\infty)$`
-    - 典型值一般设置为：1
-* `gamma`(`min_split_loss`)
-    - 树模型节点当分裂结果使得损失函数减少时，才会进行分裂。
-      分裂节点时，损失函数减小值只有大于等于 gamma 时节点才分裂。
-      gamma 值越大，算法越保守，越不容易过拟合，但性能就不一定能保证，需要平衡
-    - 默认 0
-    - 范围：`$[0，\infty)$`
-    - 典型值一般设置为：`$[0.1, 0.2]$`
 * `subsample`
     - 构建每棵树对样本的采样率
     - 默认 1
@@ -148,22 +168,45 @@ img {
 
 ## Linear Booster 参数
 
-- `lambda`(reg_lambda)：
+重要：
+
+* `lambda`(reg_lambda)：
     - L2 正则化权重项。增加此值将使模型更加保守。归一化为训练示例数
-    - 默认 0
-- `alpha`(reg_alpha)：
+    - 默认 `0`
+* `alpha`(reg_alpha)：
     - 权重的 L1 正则化项。增加此值将使模型更加保守。归一化为训练示例数
-    - 默认 0
-- `updater`：默认 `shotgun`
+    - 默认 `0`
+* `lambda_bias`：
+    - L2 正则化系数(基于 `bias` 的正则化)，没有基于 `bias` 的 L1 正则化，因为它不重要
+    - 默认为 `0`
+
+不重要：
+
+* `updater`：默认 `shotgun`
     - `shotgun`：基于 shotgun 算法的平行坐标下降算法。使用 "hogwild" 并行性，因此每次运行都产生不确定的解决方案
     - `coord_descent`：普通坐标下降算法。同样是多线程的，但仍会产生确定性的解决方案
-- `feature_selector`：特征选择和排序方法，默认 `cyclic`
+* `feature_selector`：特征选择和排序方法，默认 `cyclic`
     - `cyclic`：通过每次循环一个特征来实现的
     - `shuffle`：类似于 `cyclic`，但是在每次更新之前都有随机的特征变换
     - `random`：一个随机(有放回)特征选择器
     - `greedy`：选择梯度最大的特征(贪婪选择)
     - `thrifty`：近似贪婪特征选择(近似于 `greedy`)
-- `top_k`：要选择的最重要特征数(在 `greedy` 和 `thrifty` 内)
+* `top_k`：要选择的最重要特征数(在 `greedy` 和 `thrifty` 内)
+
+## DART Booster 参数
+
+* `sample_type`： 它指定了丢弃时的策略：
+    - `'uniform'`： 随机丢弃子树（默认值）
+    - `'weighted'`： 根据权重的比例来丢弃子树
+* `normaliz_type`：它指定了归一化策略：
+    - `'tree'`： 新的子树将被缩放为 `$\frac{1}{K+v}$`；被丢弃的子树被缩放为 `$\frac{v}{K+v}$`。
+      其中 `$v$` 为学习率，`$K$` 为被丢弃的子树的数量
+    - `'forest'`：新的子树将被缩放为 `$\frac{1}{1+v}$`；被丢弃的子树被缩放为 `$\frac{v}{1+v}$`。
+      其中 `$v$` 为学习率
+* `rate_drop`：dropout rate，指定了当前要丢弃的子树占当前所有子树的比例。范围为 `[0.0,1.0]`， 默认为 `0.0`。
+* `one_drop`：如果该参数为 `true`，则在 dropout 期间，至少有一个子树总是被丢弃。默认为 `0`。
+* `skip_drop`：它指定了不执行 dropout 的概率，其范围是 `[0.0,1.0]`， 默认为 `0.0`。
+  如果跳过了 dropout，则新的子树直接加入到模型中（和 xgboost 相同的方式）
 
 ## 学习任务参数
 
@@ -214,9 +257,18 @@ img {
     - `map`：平均精度
 * `seed`：随机数种子，默认 0
 
-## 参数调节
+## 计算参数
 
-参数调优的一般策略:
+### 外存计算
+
+### GPU 计算
+
+
+
+
+# 参数调节
+
+## 参数调优的一般策略
 
 1. 首先, 选择一个相对较大的 `eta`/`learning_rate`, 比如: 0.1(一般范围在: `$[0.05, 0.3]$`)
     - 根据这个选定的 `learning_rate`，对树的数量 `n_estimators` 进行 CV 调优，
@@ -242,5 +294,75 @@ img {
     - `max_depth`
     - `min_child_weight`
 
+## 调参指导
+
+1. 当出现过拟合时，有两类参数可以缓解：
+    - 第一类参数：用于直接控制模型的复杂度。包括 `max_depth`、`min_child_weight`、`gamma` 等参数
+    - 第二类参数：用于增加随机性，从而使得模型在训练时对于噪音不敏感。包括 `subsample`、`colsample_bytree`
+    - 也可以直接减少步长 `eta`，但是此时需要增加 `num_round` 参数。
+2. 当遇到数据不平衡时（如广告点击率预测任务），有两种方式提高模型的预测性能：
+    - 如果关心的是预测的 AUC：
+        - 可以通过 `scale_pos_weight` 参数来平衡正负样本的权重
+        - 使用 AUC 来评估
+    - 如果关心的是预测的正确率：
+        - 不能重新平衡正负样本
+        - 设置 `max_delta_step` 为一个有限的值（如 `1`），从而有助于收敛
+
+# Python API
+
+## 数据接口
+
+### 数据格式
+
+1. XGBoost 的数据存储在 `DMatrix` 中；
+2. XGBoost 支持直接从下列格式的文件中加载数据：
+    - `libsvm` 文本格式文件。其格式为：
+    
+    ```
+    [label] [index1]:[value1] [index2]:[value2] ...
+    [label] [index1]:[value1] [index2]:[value2] ...
+    ...
+    ```
+
+    - `xgboost binary buffer` 文件
+
+```python
+import xgboost as xgb
+
+dtrain = xgb.DMatrix("train.svm.txt")  # libsvm 格式
+dtest = xgb.DMatrix("test.svm.buffer")  # xgboost binary buffer 文件
+```
+
+
+3. XGBoost 也支持从二维的 Numpy array 中加载数据
+
+```python
+data = np.random.rand(5, 10)
+label = np.random.randint(2, size = 5)
+dtrain = xgb.DMatrix(data, label = label)
+```
+
+4. 也可以从 `scipy.sparse.array` 中加载数据
+
+```python
+csr = scipy.sparse.csr_matrix((dat, (row, col)))
+dtrain = xgb.DMatrix(csr)
+```
+
+### DMatrix
+
+
+
+
+## 模型接口
+
+## 绘图 API
+
+
+
+
+
+
 # 参考
 
+* [XGBoost 使用](https://www.huaxiaozhuan.com/%E5%B7%A5%E5%85%B7/xgboost/chapters/xgboost_usage.html)

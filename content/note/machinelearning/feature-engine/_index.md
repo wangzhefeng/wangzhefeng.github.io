@@ -5,8 +5,6 @@ list_pages: true
 order_by: title
 ---
 
-* https://www.zhihu.com/question/29316149/answer/110159647
-
 ## TODO
 
 * 需要标准化的模型: 

@@ -2,15 +2,53 @@
 title: tensorflow
 author: 王哲峰
 date: '2023-03-27'
-slug: tensorflow
+slug: dl-tensorflow-metrics
 categories:
   - deeplearning
 tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
 
-# 评价指标
+<details><summary>目录</summary><p>
+
+- [评价指标简介](#评价指标简介)
+- [TensorFlow 内置评价指标](#tensorflow-内置评价指标)
+    - [回归指标](#回归指标)
+    - [二分类指标](#二分类指标)
+    - [多分类指标](#多分类指标)
+    - [图像分割指标](#图像分割指标)
+    - [其他指标](#其他指标)
+- [创建自定义评价指标](#创建自定义评价指标)
+    - [类形式评价指标](#类形式评价指标)
+    - [函数形式评价指标](#函数形式评价指标)
+- [评价指标的使用](#评价指标的使用)
+- [评价指标的使用—单独使用](#评价指标的使用单独使用)
+</p></details><p></p>
+
+# 评价指标简介
 
 损失函数除了作为模型训练时的优化目标，也能够作为模型好坏的一种评价指标。
 但是，通常还会从其他角度评估模型的好坏，这就是评价指标
@@ -21,9 +59,9 @@ tags:
 
 TensorFlow 编译模型时，可以通过列表形式指定多个评价指标
 
-## TensorFlow 内置评价指标
+# TensorFlow 内置评价指标
 
-### 回归指标
+## 回归指标
 
 * `MeanSquaredError` 类
     - 函数形式 `mse`
@@ -38,7 +76,7 @@ TensorFlow 编译模型时，可以通过列表形式指定多个评价指标
     - 函数形式 `mape`
     - 平均百分比误差，MAPE
 
-### 二分类指标
+## 二分类指标
 
 * `Accuracy` 类
     - 函数形式 `acc`
@@ -72,7 +110,7 @@ TensorFlow 编译模型时，可以通过列表形式指定多个评价指标
 * `SensitivityAtSpecificity` 类
 * `SpecificityAtSensitivity` 类
 
-### 多分类指标
+## 多分类指标
 
 - `SparseCategoricalAccuracy` 类
     - 稀疏分类准确率，与 `Accuracy` 含义相同
@@ -84,24 +122,24 @@ TensorFlow 编译模型时，可以通过列表形式指定多个评价指标
     - 稀疏多分类 TopK 准确率
     - 要求 `y_true` 为序号编码形式 
 
-### 图像分割指标
+## 图像分割指标
 
 - `MeanIoU` 类
     - Intersection Over Union
     - 常用于图像分割
 
-### 其他指标
+## 其他指标
 
 * Mean
 * Sum
 
-## 创建自定义评价指标
+# 创建自定义评价指标
 
 如果有需要，也可以自定义评价指标。
 自定义评价指标需要接收两个张量 `y_true`、`y_pred` 作为输入参数，
 并输出一个标量作为评价指标
 
-### 类形式评价指标 
+## 类形式评价指标 
 
 自定义评价指标需要继承 `tf.keras.metrics.Metric` 类, 
 并重写 `__init__`、`update_state`、`result` 三个方法实现评价指标的计算逻辑，
@@ -226,7 +264,7 @@ myks.update_state(y_true, y_pred)
 tf.print(myks.result())
 ```
 
-### 函数形式评价指标
+## 函数形式评价指标
 
 如果编写函数形式的评价指标，则只能取 epoch 中各个 batch 计算的评价指标结果的平均值作为整个 epoch 上的评价指标结果，
 这个结果通常会偏离整个 epoch 数据一次计算的结果
@@ -285,7 +323,9 @@ y_pred = tf.constant(
 tf.print(ks(y_true,y_pred))
 ```
 
-## 评价指标的使用—compile() & fit()
+# 评价指标的使用
+
+> compile() & fit()
 
 API:
 
@@ -320,7 +360,7 @@ Metrics Name:
 metrics = ["acc", "accuracy"]
 ```
 
-## 评价指标的使用—单独使用
+# 评价指标的使用—单独使用
 
 * TODO
 

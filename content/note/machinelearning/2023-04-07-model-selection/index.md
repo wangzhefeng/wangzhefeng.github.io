@@ -1,9 +1,9 @@
 ---
-title: 模型选择
+title: 模型选择、调参
 subtitle: Model Selection
 author: 王哲峰
 date: '2023-04-07'
-slug: model-tuning
+slug: model-selection
 categories:
   - machinelearning
 tags:
