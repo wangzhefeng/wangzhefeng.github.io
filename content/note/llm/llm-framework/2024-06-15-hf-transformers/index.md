@@ -2,7 +2,7 @@
 title: LLM 框架--Huggingface
 author: 王哲峰
 date: '2024-06-15'
-slug: huggingface-transformers
+slug: hf-transformers
 categories:
   - llm
 tags:
@@ -39,13 +39,8 @@ img {
 - [Transformers](#transformers)
   - [简介](#简介)
   - [安装](#安装)
-  - [使用](#使用)
-    - [快速上手](#快速上手)
   - [工具 pipeline](#工具-pipeline)
-  - [Fine-tuning Pretrained Model](#fine-tuning-pretrained-model)
-    - [处理数据](#处理数据)
-    - [Fine-tuning model](#fine-tuning-model)
-  - [分享 Models 和 Tokenizers](#分享-models-和-tokenizers)
+    - [快速上手](#快速上手)
   - [模型](#模型)
 - [Datasets](#datasets)
 - [Tokenizers](#tokenizers)
@@ -83,15 +78,15 @@ NLP 任务：
 
 ## 简介
 
-* 🤗 Transformers 提供了数以千计的预训练模型，支持 100 多种语言的文本分类、
+* `transformers` 提供了数以千计的预训练模型，支持 100 多种语言的文本分类、
   信息抽取、问答、摘要、翻译、文本生成。它的宗旨是让最先进的 NLP 技术人人易用。
-* 🤗 Transformers 提供了便于快速下载和使用的 API，让你可以把预训练模型用在给定文本、
+* `transformers` 提供了便于快速下载和使用的 API，让你可以把预训练模型用在给定文本、
   在你的数据集上微调然后通过 model hub 与社区共享。同时，每个定义的 Python 模块均完全独立，
   方便修改和快速研究实验。
-* 🤗 Transformers 支持三个最热门的深度学习库：Jax, PyTorch 以及 TensorFlow — 并与之无缝整合。
-  你可以直接使用一个框架训练你的模型然后用另一个加载和推理。
+* `transformers` 支持三个最热门的深度学习库：Jax, PyTorch 以及 TensorFlow，并与之无缝整合。
+  可以直接使用一个框架训练你的模型然后用另一个加载和推理。
 
-为什么要用 transformers？
+为什么要用 `transformers`？
 
 * 便于使用的先进模型：
     - NLU 和 NLG 上表现优越
@@ -107,7 +102,7 @@ NLP 任务：
     - 模型在不同深度学习框架间任意转移，随你心意
     - 为训练、评估和生产选择最适合的框架，衔接无缝
 * 为你的需求轻松定制专属模型和用例：
-    - 我们为每种模型架构提供了多个用例来复现原论文结果
+    - 为每种模型架构提供了多个用例来复现原论文结果
     - 模型内部结构保持透明一致
     - 模型文件可单独使用，方便魔改和快速实验
 
@@ -119,7 +114,8 @@ NLP 任务：
 pip:
 
 ```bash
-$ pip install transformers
+$ pip install transformers, datasets, evaluate, accelerate
+$ pip install torch
 ```
 
 conda:
@@ -128,7 +124,26 @@ conda:
 $ conda install conda-forge::transformers
 ```
 
-## 使用
+## 工具 pipeline
+
+使用 `transformers.pipeline()` 是利用预训练模型进行推理的最简单的方式，
+`pipeline()` 可以用于跨不同模态的多种任务，下面是 `pipeline()` 支持的任务列表：
+
+| 任务       | 描述                           | 模态                                  | Pipeline   |
+|-----------|--------------------------------|----------------------------------------|------------------------|
+| 文本分类   | 为给定的文本序列分配一个标签 | NLP | `pipeline(task="sentiment-analysis”)` |
+| 文本生成 | 根据给定的提示生成文本 | NLP | `pipeline(task="text-generation”)` |
+| 命名实体识别 | 为序列里的每个 token 分配一个标签（人, 组织, 地址等等）| NLP| `pipeline(task="ner”)` |
+| 问答系统 | 通过给定的上下文和问题, 在文本中提取答案 | NLP | `pipeline(task="question-answering”)` |
+| 掩盖填充 | 预测出正确的在序列中被掩盖的token | NLP | `pipeline(task="fill-mask”)` |
+| 文本摘要 | 为文本序列或文档生成总结 | NLP | `pipeline(task="summarization”)` |
+| 文本翻译 | 将文本从一种语言翻译为另一种语言 | NLP | `pipeline(task="translation”)` |
+| 图像分类 | 为图像分配一个标签 | Computer vision | `pipeline(task="image-classification”)` |
+| 图像分割 | 为图像中每个独立的像素分配标签（支持语义、全景和实例分割） | Computer vision | `pipeline(task="image-segmentation”)` |
+| 目标检测 | 预测图像中目标对象的边界框和类别 | Computer vision | `pipeline(task="object-detection”)` |
+| 音频分类 | 给音频文件分配一个标签 | Audio | `pipeline(task="audio-classification”)` |
+| 自动语音识别 | 将音频文件中的语音提取为文本 | Audio | `pipeline(task="automatic-speech-recognition”)` |
+| 视觉问答 | 给定一个图像和一个问题，正确地回答有关图像的问题 | Multimodal | `pipeline(task="vqa”)` |
 
 ### 快速上手
 
@@ -140,9 +155,14 @@ from transformers import pipeline
 classifier = pipeline("sentiment-analysis")
 res1 = classifier("We are very happy to introduce pipeline to the transformers repository.")
 res2 = classifier(
-    ["I've been waiting for a HuggingFace course my whole life.", "I hate this so much!"]
+    [
+        "I've been waiting for a HuggingFace course my whole life.", 
+        "I hate this so much!"
+    ]
 )
-print(res)
+print(res1)
+for result in res2:
+    print(f"label: {result['label']}, with score: {round(result["score"], 4)}")
 ```
 
 ```
@@ -173,35 +193,25 @@ inputs = tokenizer("Hello world!", return_tensors = "pt")
 outputs = model(**inputs)
 ```
 
-## 工具 pipeline
+4. 自动语音识别
 
-> https://huggingface.co/docs/transformers/main_classes/pipelines#pipelines
+```python
+import torch
+from transformers import pipeline
+from datasets import load_dataset, Audio
 
-可用的 pipeline：
+speech_recognizer = pipeline(
+    "automatic-speech-recognition",
+    model = "facebook/wav2vec2-base-960h",
+)
 
-* `feature-extraction` (get the vector representation of a text)
-* `fill-mask`
-* `ner` (named entity recognition)
-* `question-answering`
-* `sentiment-analysis`
-* `summarization`
-* `text-generation`
-* `translation`
-* `zero-shot-classification`
+dataset = load_dataset("PolyAI/minds14", name = "en-US", split = "train")
+# 确保加载的数据集中的音频采样频率与模型训练用的数据的音频的采样频率一致
+dataset = dataset.cast_column("audio", Audio(sampling_rate = speech_recognizer))
+result = speech_recognizer(dataset[:4]["audio"])
 
-
-## Fine-tuning Pretrained Model
-
-### 处理数据
-
-
-
-### Fine-tuning model
-
-
-
-## 分享 Models 和 Tokenizers
-
+print([d["text"] for d in result])
+```
 
 ## 模型
 
@@ -213,15 +223,18 @@ outputs = model(**inputs)
 
 # Tokenizers
 
+
 # Accelerate
+
 
 # Hugging Face Hub
 
-
-* https://huggingface.co/models
+> * https://huggingface.co/models
 
 # 参考
 
+* [HF Transformers](https://huggingface.co/docs/transformers/v4.44.2/en/index)
+* [HF Pipeline](https://huggingface.co/docs/transformers/main_classes/pipelines#pipelines)
 * [Hugging Face Transformers Github](https://github.com/huggingface/transformers/blob/main/README_zh-hans.md)
 * [DeepLearning.AI’s Natural Language Processing Specialization](https://www.coursera.org/specializations/natural-language-processing?utm_source=deeplearning-ai&utm_medium=institutions&utm_campaign=20211011-nlp-2-hugging_face-page-nlp-refresh)
 * [fast.ai’s Practical Deep Learning for Coders](https://course.fast.ai/)

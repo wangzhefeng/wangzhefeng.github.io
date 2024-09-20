@@ -1,6 +1,6 @@
 ---
-title: Model Tuning
-subtitle: 预训练模型和模型微调
+title: 模型微调
+subtitle: Model Fine-Tune
 author: 王哲峰
 date: '2023-03-16'
 slug: fine-tuning

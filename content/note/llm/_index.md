@@ -30,12 +30,12 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [大语言模型的学习路径](#大语言模型的学习路径)
-- [TODO](#todo)
+- [学习路径](#学习路径)
+- [教程](#教程)
 - [文档](#文档)
 </p></details><p></p>
 
-## 大语言模型的学习路径
+## 学习路径
 
 1. 试用不同的大语言模型(LLM)
     - OpenAI GPT-3.5, GPT-4.0, GPT-4o
@@ -51,14 +51,14 @@ img {
     - 开源 LLM 的部署应用指导，包括命令行调用、在线 Demo 部署(StreamLit)、LangChain 框架集成等；
     - 开源 LLM 的全量微调、高效微调方法，包括分布式全量微调、LoRA、ptuning 等。
 
-## TODO
+## 教程 
 
 * Datawhale
-    - [《ChatGPT 原理与应用开发》](https://github.com/datawhalechina/hugging-llm)
-    - [开源大模型食用指南](https://github.com/datawhalechina/self-llm/tree/master)
-    - [动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
-    - [大模型基础](https://github.com/datawhalechina/so-large-lm)
-    - [RAG：GLM-4 代码](https://github.com/datawhalechina/self-llm/tree/master/GLM-4)
+    - [理论：《ChatGPT 原理与应用开发》](https://github.com/datawhalechina/hugging-llm)
+    - [理论：大模型基础](https://github.com/datawhalechina/so-large-lm)
+    - [实践：开源大模型食用指南](https://github.com/datawhalechina/self-llm)
+    - [实践：动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
+    - [实践：大模型白盒子构建指南](https://github.com/datawhalechina/tiny-universe)
 * [funNLP GitHub](https://github.com/fighting41love/funNLP)
 * [自然语言处理入门练习任务](https://github.com/FudanNLP/nlp-beginner)
 

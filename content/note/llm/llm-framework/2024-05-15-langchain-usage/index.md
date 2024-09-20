@@ -35,7 +35,7 @@ img {
 <details><summary>目录</summary><p>
 
 - [LangChain 简介](#langchain-简介)
-    - [类似框架](#类似框架)
+    - [框架](#框架)
     - [简介](#简介)
     - [核心概念](#核心概念)
     - [核心模块](#核心模块)
@@ -45,7 +45,7 @@ img {
         - [记忆模块](#记忆模块)
         - [代理模块](#代理模块)
         - [回调模块](#回调模块)
-    - [LangChain 生态](#langchain-生态)
+    - [LangChain 生态和架构](#langchain-生态和架构)
 - [LangChain 快速使用](#langchain-快速使用)
     - [LangChain 环境安装](#langchain-环境安装)
         - [开发环境](#开发环境)
@@ -93,44 +93,26 @@ img {
         - [stream](#stream)
         - [batch](#batch)
         - [astream\_log](#astream_log)
-    - [LCEL 高级特性](#lcel-高级特性)
-        - [ConfigurableField](#configurablefield)
-        - [RunnableLambda](#runnablelambda)
-        - [RunnableBranch](#runnablebranch)
-        - [RunnablePassthrough](#runnablepassthrough)
-        - [RunnableParallel](#runnableparallel)
-        - [容错机制](#容错机制)
-    - [Chain 接口](#chain-接口)
-        - [Chain 接口调用](#chain-接口调用)
-        - [自定义 Chain 实现](#自定义-chain-实现)
-        - [工具 Chain](#工具-chain)
-    - [专用 Chain](#专用-chain)
-        - [对话场景](#对话场景)
-        - [基于文档问答场景](#基于文档问答场景)
-        - [数据库问答场景](#数据库问答场景)
-        - [API 查询场景](#api-查询场景)
-        - [文本总结场景](#文本总结场景)
+- [使用 LCEL 构建应用](#使用-lcel-构建应用)
+    - [环境配置](#环境配置)
+    - [构建语言模型应用](#构建语言模型应用)
+        - [依赖安装](#依赖安装)
+        - [构建应用](#构建应用)
+    - [部署语言模型应用](#部署语言模型应用)
+        - [安装依赖](#安装依赖)
+        - [Server](#server)
+        - [Server run](#server-run)
+    - [Client](#client)
 - [RAG](#rag)
-- [智能代理设计](#智能代理设计)
-    - [LangChain 中的代理](#langchain-中的代理)
-    - [设计并实现一个多模态代理](#设计并实现一个多模态代理)
-- [记忆组件](#记忆组件)
+- [Agent](#agent)
+- [Chatbot](#chatbot)
+    - [环境配置](#环境配置-1)
+- [Vector stores and Retrievers](#vector-stores-and-retrievers)
 - [回调机制](#回调机制)
-- [构建多模态机器人](#构建多模态机器人)
 - [参考和资源](#参考和资源)
 </p></details><p></p>
 
 # LangChain 简介
-
-## 类似框架
-
-* crewAI
-* LangChain
-* LlamaIndex
-* SK
-* AutoGPT
-
-## 简介
 
 ChatGPT 的巨大成功激发了越来越多的开发者兴趣，他们希望利用 OpenAI 提供的 API 或者私有化模型，
 来开发基于大型语言模型的应用程序。尽管大型语言模型的调用相对简单，但要创建完整的应用程序，
@@ -144,9 +126,45 @@ LangChain 框架是一个开源工具，充分利用了大型语言模型的强�
 具体来说，LangChain 框架可以实现数据感知和环境互动，也就是说，
 它能够让语言模型与其他数据来源连接，并且允许语言模型与其所处的环境进行互动。
 
-## 核心概念
+## 框架
 
-![img](images/langchain-frame.png)
+* [crewAI](https://github.com/langgenius/dify)
+* [LangChain](https://www.langchain.com/)
+* [LlamaIndex](https://www.llamaindex.ai/)
+* SK
+* AutoGPT
+
+## 简介
+
+![img](images/langchain_stack.svg)
+
+LangChain 是一个用于开发由大型语言模型(LLMs)支持的应用程序的框架。
+LangChain 简化了 LLM 申请生命周期的每个阶段：
+
+* 开发：使用 LangChain 的开源构建块、组件和第三方集成来构建应用程序。
+  使用 LangGraph 构建具有一级流式和人机交互支持的有状态代理
+    - [building blocks](https://python.langchain.com/v0.2/docs/concepts/#langchain-expression-language-lcel)
+    - [commponents](https://python.langchain.com/v0.2/docs/concepts/)
+    - [third-party integrations](https://python.langchain.com/v0.2/docs/integrations/platforms/)
+    - [LangGraph](https://python.langchain.com/v0.2/docs/concepts/#langgraph)
+* 生产化：使用 LangSmith 检查、监控和评估您的链，以便可以充满信心地持续优化和部署
+    - [LangSmith](https://docs.smith.langchain.com/)
+* 部署：使用 LangGraph Cloud 将 LangGraph 应用程序转变为生产就绪的 API 和助手。
+    - [LangGraph Colud](https://langchain-ai.github.io/langgraph/cloud/)
+
+具体来说，该框架由以下开源库组成：
+
+* `langchain-core`：基础抽象和 LangChain Expression Language
+* `langchain-community`：第三方集成
+    - `langchain-openai`
+    - `langchain-anthropic`
+    - ...
+* `langchain`
+* [LangGraph](https://langchain-ai.github.io/langgraph)
+* [LangServer](https://python.langchain.com/v0.2/docs/langserve/)
+* [LangSmith](https://docs.smith.langchain.com/)
+
+## 核心概念
 
 LangChain 作为一种大模型应用开发框架，针对当前 AI 应用开发中的一些关键挑战提供了有效的解决方案，
 概述如下：
@@ -190,9 +208,9 @@ LangChain 通过组件化和现成的链，降低了使用大模型构建应用�
 * 进阶阶段
     - 通过组合一系列提示词创建更复杂的应用
 * 发展阶段
-    - 开发由大模型驱动的智能代理（agent）应用
+    - 开发由大模型驱动的智能代理(agent)应用
 * 探索阶段
-    - 实现多个智能代理（agent）协同工作，以应对高度复杂的应用场景
+    - 实现多个智能代理(agent)协同工作，以应对高度复杂的应用场景
 
 ## 核心模块
 
@@ -311,19 +329,56 @@ LangChain 提供了两种方式来实现链：
 还是处理实时数据流，皆可胜任。这为整个 LangChain 提供了一个可编程的反馈循环，
 使得每个模块都能在适当的时候发挥作用，共同打造出一个高效、智能的大模型应用。
 
-## LangChain 生态
+## LangChain 生态和架构
 
-* **LangChain Community**：专注于第三方集成，极大地丰富了 LangChain 的生态系统，
-  使得开发者可以更容易地构建复杂和强大的应用程序，同时也促进了社区的合作和共享。
-* **LangChain Core**：LangChain 框架的核心库、核心组件，提供了基础抽象和 LangChain 表达式语言（LCEL），
-  提供基础架构和工具，用于构建、运行和与 LLM 交互的应用程序，为 LangChain 应用程序的开发提供了坚实的基础。
+![img](images/langchain-frame.png)
+
+* **LangChain Core**：基础抽象和 LangChain Expression Language。
+  LangChain 框架的核心库、核心组件，提供了基础抽象和 LangChain 表达式语言（LCEL），
+  提供基础架构和工具，用于构建、运行和与 LLM 交互的应用程序，
+  为 LangChain 应用程序的开发提供了坚实的基础。
   用到的处理文档、格式化 prompt、输出解析等都来自这个库。
-* **LangChain CLI**：命令行工具，使开发者能够通过终端与 LangChain 框架交互，执行项目初始化、测试、部署等任务。
-  提高开发效率，让开发者能够通过简单的命令来管理整个应用程序的生命周期。
-* **LangServe**：部署服务，用于将 LangChain 应用程序部署到云端，提供可扩展、高可用的托管解决方案，
+    - Parallelization
+    - Fallbacks
+    - Tracing
+    - Batching
+    - Streaming
+    - Async
+    - Composition
+* **LangChain Community**：第三方集成。专注于第三方集成，极大地丰富了 LangChain 的生态系统，
+  使得开发者可以更容易地构建复杂和强大的应用程序，同时也促进了社区的合作和共享。
+    - Model I/O
+        - Model
+        - Prompt
+        - Example Selector
+        - Output Parser
+    - Retrieval
+        - Retrieval
+        - Document Loader
+        - Vector Store
+        - Text Splitter
+        - Embedding Model
+    - Agent Tooling
+        - Tool
+        - Toolkit
+* **LangChain**
+    - Chains
+    - Agents
+    - Retrieval Strategies
+* **LangGraph**
+* **LangServer**：部署服务，用于将 LangChain 应用程序部署到云端，提供可扩展、高可用的托管解决方案，
   并带有监控和日志功能。简化部署流程，让开发者可以专注于应用程序的开发，而不必担心底层的基础设施和运维工作。
+    - deploy chains as REST APIs
 * **LangSmith**：开发者平台，专注于 LangChain 应用程序的开发、调试和测试，提供可视化界面和性能分析工具，
   旨在帮助开发者提高应用程序的质量，确保它们在部署前达到预期的性能和稳定性标准。
+    - debugging
+    - playground
+    - prompt management
+    - annotation
+    - testing/evaluate
+    - monitoring
+* **LangChain CLI**：命令行工具，使开发者能够通过终端与 LangChain 框架交互，执行项目初始化、测试、部署等任务。
+  提高开发效率，让开发者能够通过简单的命令来管理整个应用程序的生命周期。
 
 # LangChain 快速使用
 
@@ -1689,67 +1744,261 @@ async def astream_log():
     pass
 ```
 
-## LCEL 高级特性
+# 使用 LCEL 构建应用
 
-### ConfigurableField
+* Using **language models**
+* Using `PromptTemplates` and `OutputParsers`
+* Using **LangChain Expression Language (LCEL)** to chain components together
+* Debugging and tracing your application using **LangSmith**
+* Deploying your application with **LangServe**
 
-### RunnableLambda
+## 环境配置
+
+LangChain:
+
+```bash
+$ pip install langchain
+```
+
+LangSmith:
+
+```bash
+$ export LANGCHAIN_TRACING_V2="true"
+$ export LANGCHAIN_API_KEY="..."
+```
+
+```python
+import os
+import getpass
+
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
+```
+
+## 构建语言模型应用
+
+### 依赖安装
+
+```bash
+$ pip install -qU langchain-openai  # OpenAI/Azure/TogetherAI
+$ pip install -qU langchain-anthropic  # Anthropic
+$ pip install -qU langchain-google-vertexai  # Google
+$ pip install -qU langchain-cohere  # Cohere
+$ pip install -qU langchain-nvidia-ai-endpoints  # NVIDIA
+$ pip install -qU langchain-fireworks  # FireworksAI
+$ pip install -qU langchain-groq  # Groq
+$ pip install -qU langchain-mistralai  # MistralAI
+```
+
+### 构建应用
+
+```python
+#!/usr/bin/env python
+# app.py
+import os
+import getpass
+
+from langchain_open_ai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
+from langchain_openai import AzureChatOpenAI
+from langchain_google_vertexai import ChatVertexAI
+from langchain_cohere import ChatCohere
+from langchain import ChatNVIDIA
+from langchain_fireworks import ChatFireworks
+from langchain_groq import ChatGroq
+from langchain_mistralai import ChatMistralAI
+from langchain_core.message import HumanMessage, SystemMessage
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompt import ChatPromptTemplate
+
+os.environ["OPENAI_API_KEY"] = getpass.getpass()
+os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
+os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
+os.environ["GOOGLE_API_KEY"] = getpass.getpass()
+os.environ["COHERE_API_KEY"] = getpass.getpass()
+os.environ["NVIDIA_API_KEY"] = getpass.getpass()
+os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
+os.environ["GROQ_API_KEY"] = getpass.getpass()
+os.environ["MISTRAL_API_KEY"] = getpass.getpass()
+os.environ["TOGETHER_API_KEY"] = getpass.getpass()
+
+__all__ = [
+    "model",
+    "prompt_template",
+    "parser",
+    "chain",
+]
+
+# model
+model = ChatOpenAI(model = "gpt-4")
+model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
+model = AzureChatOpenAI(
+    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
+    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
+)
+model = ChatVertexAI(model="gemini-1.5-flash")
+model = ChatCohere(model="command-r-plus")
+model = ChatNVIDIA(model="meta/llama3-70b-instruct")
+model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
+model = ChatGroq(model="llama3-8b-8192")
+model = ChatMistralAI(model="mistral-large-latest")
+model = ChatOpenAI(
+    base_url = "https://api.together.xyz/v1",
+    api_key = os.environ["TOGETHER_API_KEY"],
+    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
+)
 
 
-### RunnableBranch
+# prompt
+system_template = "Translate the following into {language}."
+prompt_template = ChatPromptTemplate.from_message(
+    [
+        ("system", system_template),
+        ("user", "{text}")
+    ]
+)
 
 
-### RunnablePassthrough
+# output parser
+parser = StrOutputParser()
 
 
-### RunnableParallel
+# chain
+chain = prompt_template | model | parser
 
 
-### 容错机制
+def main():
+    # model
+    messages = [
+        SystemMessage(content = "Translate the following from English into Italian"),
+        HumanMessage(content = "hi!"),
+    ]
+    model.invoke(messages)
 
-## Chain 接口
+    # prompt
+    result = prompt_template.invoke({
+        "language": "italian",
+        "text": "hi",   
+    })
+    print(result.to_message())
+
+    # output parser
+    result = model.invoke(message)
+    parser.invoke(result)
+
+    # chain
+    chain.invoke({
+        "language": "italian",
+        "text": "hi",
+    })
+
+if __name__ == "__main__":
+    main()
+```
+
+## 部署语言模型应用
+
+### 安装依赖
+
+```bash
+$ pip install "langserve[all]"
+```
+
+### Server
+
+```python
+#!/usr/bin/env python
+# serve.py
+
+from fastapi import FastAPI
+from langserve import add_routes
+
+from app import model, prompt_template, parser, chain
+
+# app
+ap = FastAPI(
+    title = "LangChain Server",
+    version = "1.0",
+    description = "A simple API server using LangChain's Runnable interfaces",
+)
+
+# adding chain route
+add_routes(
+    app,
+    chain,
+    path = "/chain",
+)
 
 
-### Chain 接口调用
+def main():
+    import uvicorn
 
+    uvicorn.run(app, host = "localhost", port = 8000)
 
-### 自定义 Chain 实现
+if __name__ == "__main__":
+    main()
+```
 
+### Server run
 
-### 工具 Chain
+```bash
+$ python serve.py
+```
 
+> http://localhost:8000/playground/
 
-## 专用 Chain
+## Client
 
-### 对话场景
+```python
+from langserve import RemoteRunnable
 
-### 基于文档问答场景
-
-
-### 数据库问答场景
-
-
-### API 查询场景
-
-### 文本总结场景
-
+remote_chain = RemoteRunnable("http://localhost:8000/chain/")
+remote_chain.invoke({
+    "language": "italian",
+    "text": "hi",
+})
+```
 
 # RAG
 
-RAG 介绍及实用在[这里](https://wangzhefeng.com/post/2024/03/23/llm-rag/)
-
-# 智能代理设计
-
-## LangChain 中的代理
+# Agent
 
 
-## 设计并实现一个多模态代理
+# Chatbot
 
-# 记忆组件
+## 环境配置
+
+LangChain:
+
+```bash
+$ pip install langchain
+```
+
+LangSmith:
+
+```bash
+$ export LANGCHAIN_TRACING_V2="true"
+$ export LANGCHAIN_API_KEY="..."
+```
+
+```python
+import os
+import getpass
+
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
+```
+
+
+
+# Vector stores and Retrievers
+
+
 
 # 回调机制
 
-# 构建多模态机器人
+
 
 # 参考和资源
 
