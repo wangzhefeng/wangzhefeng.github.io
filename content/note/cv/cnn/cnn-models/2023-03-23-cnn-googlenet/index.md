@@ -10,6 +10,36 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [GoogLeNet 简介](#googlenet-简介)
+- [GoogLeNet 网络结构](#googlenet-网络结构)
+- [参考](#参考)
+</p></details><p></p>
+
 # GoogLeNet 简介
 
 GoogLeNet(Going Deeper with Convolutions，2014) 在借鉴此前 1x1 卷积思想的基础上，
