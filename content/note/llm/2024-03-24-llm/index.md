@@ -36,41 +36,74 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [LLM 学习路径](#llm-学习路径)
+- [LLM 教程](#llm-教程)
 - [LLM 介绍](#llm-介绍)
-  - [LLM 简介](#llm-简介)
-  - [LLM 发展](#llm-发展)
-  - [LLM 能力](#llm-能力)
-    - [涌现能力](#涌现能力)
-    - [作为基座模型支持多元应用的能力](#作为基座模型支持多元应用的能力)
-    - [支持对话作为统一入口的能力](#支持对话作为统一入口的能力)
-  - [LLM 特点](#llm-特点)
-  - [LLM 应用与影响](#llm-应用与影响)
+    - [LLM 简介](#llm-简介)
+    - [LLM 发展](#llm-发展)
+    - [LLM 能力](#llm-能力)
+        - [涌现能力](#涌现能力)
+        - [作为基座模型支持多元应用的能力](#作为基座模型支持多元应用的能力)
+        - [支持对话作为统一入口的能力](#支持对话作为统一入口的能力)
+    - [LLM 特点](#llm-特点)
+    - [LLM 应用与影响](#llm-应用与影响)
 - [LLM 模型](#llm-模型)
-  - [未开源 LLM](#未开源-llm)
-    - [GPT 系列](#gpt-系列)
-    - [Claude 系列](#claude-系列)
-    - [PaLM 和 Gemini 系列](#palm-和-gemini-系列)
-    - [百度文心一言](#百度文心一言)
-    - [科大讯飞星火](#科大讯飞星火)
-  - [开源 LLM](#开源-llm)
-    - [LLaMa 系列](#llama-系列)
-    - [通义千问](#通义千问)
-    - [GLM 系列](#glm-系列)
-    - [Baichuan 系列](#baichuan-系列)
+    - [未开源 LLM](#未开源-llm)
+        - [GPT 系列](#gpt-系列)
+        - [Claude 系列](#claude-系列)
+        - [PaLM 和 Gemini 系列](#palm-和-gemini-系列)
+        - [百度文心一言](#百度文心一言)
+        - [科大讯飞星火](#科大讯飞星火)
+    - [开源 LLM](#开源-llm)
+        - [LLaMa 系列](#llama-系列)
+        - [通义千问](#通义千问)
+        - [GLM 系列](#glm-系列)
+        - [Baichuan 系列](#baichuan-系列)
 - [LLM 应用开发](#llm-应用开发)
-  - [LLM 开发简介](#llm-开发简介)
-  - [LLM 开发流程](#llm-开发流程)
-  - [LLM 项目流程](#llm-项目流程)
-    - [项目规划与需求分析](#项目规划与需求分析)
-    - [数据准备与向量知识库构建](#数据准备与向量知识库构建)
-    - [大模型集成与 API 连接](#大模型集成与-api-连接)
-    - [核心功能实现](#核心功能实现)
-    - [核心功能迭代优化](#核心功能迭代优化)
-    - [前端与用户交互界面开发](#前端与用户交互界面开发)
-    - [部署测试与上线](#部署测试与上线)
-    - [维护与持续改进](#维护与持续改进)
+    - [LLM 开发简介](#llm-开发简介)
+    - [LLM 开发流程](#llm-开发流程)
+    - [LLM 项目流程](#llm-项目流程)
+        - [项目规划与需求分析](#项目规划与需求分析)
+        - [数据准备与向量知识库构建](#数据准备与向量知识库构建)
+        - [大模型集成与 API 连接](#大模型集成与-api-连接)
+        - [核心功能实现](#核心功能实现)
+        - [核心功能迭代优化](#核心功能迭代优化)
+        - [前端与用户交互界面开发](#前端与用户交互界面开发)
+        - [部署测试与上线](#部署测试与上线)
+        - [维护与持续改进](#维护与持续改进)
 - [参考和资料](#参考和资料)
 </p></details><p></p>
+
+# LLM 学习路径
+
+1. 试用不同的大语言模型(LLM)
+    - OpenAI GPT-3.5, GPT-4.0, GPT-4o
+    - Meta LlaMA 3.1-8B-Instruct
+2. 创建一个 AI 智能体(Agent)
+3. 了解目前 LLM 和 AI 的局限性
+4. 创建一个简单的 RAG 系统
+5. 微调一个 LLM
+6. 应用开发
+    - 基于不同操作系统的开源 LLM 环境配置指南；
+    - 针对不同模型要求提供的详细环境配置步骤；
+    - 国内外主流开源 LLM 的部署使用教程；
+    - 开源 LLM 的部署应用指导，包括命令行调用、在线部署(StreamLit)、LangChain 框架集成等；
+    - 开源 LLM 的全量微调、高效微调方法，包括
+        - 分布式全量微调
+        - LoRA
+        - ptuning
+        - ...
+
+# LLM 教程 
+
+* Datawhale
+    - [理论：《ChatGPT 原理与应用开发》](https://github.com/datawhalechina/hugging-llm)
+    - [理论：大模型基础](https://github.com/datawhalechina/so-large-lm)
+    - [实践：开源大模型食用指南](https://github.com/datawhalechina/self-llm)
+    - [实践：动手学大模型应用开发](https://github.com/datawhalechina/llm-universe)
+    - [实践：大模型白盒子构建指南](https://github.com/datawhalechina/tiny-universe)
+* [funNLP GitHub](https://github.com/fighting41love/funNLP)
+* [自然语言处理入门练习任务](https://github.com/FudanNLP/nlp-beginner)
 
 # LLM 介绍
 
