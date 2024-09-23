@@ -1,8 +1,8 @@
 ---
-title: LLM 应用--知识库构建
+title: LLM RAG 应用--搭建知识库、检索问答链、部署知识库助手
 author: 王哲峰
 date: '2024-08-03'
-slug: knowledge-base
+slug: llm-rag-app-knowledge
 categories:
   - llm
 tags:
@@ -34,96 +34,98 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [词向量](#词向量)
-    - [词向量简介](#词向量简介)
-    - [词向量的优势](#词向量的优势)
-    - [构建词向量的方法](#构建词向量的方法)
-- [向量数据库](#向量数据库)
-    - [向量数据库简介](#向量数据库简介)
-    - [向量数据库原理及优势](#向量数据库原理及优势)
-    - [主流向量数据库](#主流向量数据库)
+- [搭建知识库](#搭建知识库)
+     - [词向量](#词向量)
+          - [词向量简介](#词向量简介)
+          - [通用文本向量](#通用文本向量)
+          - [词向量的优势](#词向量的优势)
+          - [构建词向量的方法](#构建词向量的方法)
+     - [向量数据库](#向量数据库)
+          - [向量数据库简介](#向量数据库简介)
 - [调用 Embedding API](#调用-embedding-api)
-    - [OpenAI API](#openai-api)
-    - [文心千帆 API](#文心千帆-api)
-    - [讯飞星火 API](#讯飞星火-api)
-    - [智谱 API](#智谱-api)
+     - [OpenAI API](#openai-api)
+     - [文心千帆 API](#文心千帆-api)
+     - [讯飞星火 API](#讯飞星火-api)
+     - [智谱 API](#智谱-api)
 - [数据处理](#数据处理)
-    - [数据选取](#数据选取)
-        - [PDF 文档](#pdf-文档)
-        - [Markdown 文档](#markdown-文档)
-    - [数据清洗](#数据清洗)
-    - [文档分割](#文档分割)
-        - [文档分割简介](#文档分割简介)
-        - [文档分割 API](#文档分割-api)
-        - [文档分割示例](#文档分割示例)
+     - [数据选取](#数据选取)
+          - [PDF 文档](#pdf-文档)
+          - [Markdown 文档](#markdown-文档)
+     - [数据清洗](#数据清洗)
+     - [文档分割](#文档分割)
+          - [文档分割简介](#文档分割简介)
+          - [文档分割 API](#文档分割-api)
+          - [文档分割示例](#文档分割示例)
 - [搭建并使用向量数据库](#搭建并使用向量数据库)
-    - [配置](#配置)
-    - [构建 Chroma 向量库](#构建-chroma-向量库)
-    - [向量检索](#向量检索)
-        - [相似度检索](#相似度检索)
-        - [MMR 检索](#mmr-检索)
+     - [配置](#配置)
+     - [构建 Chroma 向量库](#构建-chroma-向量库)
+     - [向量检索](#向量检索)
+          - [相似度检索](#相似度检索)
+          - [MMR 检索](#mmr-检索)
+- [基于 LangChain 构建检索问答链](#基于-langchain-构建检索问答链)
+     - [加载数据库向量](#加载数据库向量)
+     - [创建一个 LLM](#创建一个-llm)
+     - [构建检索问答链](#构建检索问答链)
+     - [检索问答链效果测试](#检索问答链效果测试)
+     - [添加历史对话的记忆功能](#添加历史对话的记忆功能)
+- [基于 Streamlit 部署知识库助手](#基于-streamlit-部署知识库助手)
+     - [构建应用程序](#构建应用程序)
+     - [添加检索回答](#添加检索回答)
+     - [部署应用程序](#部署应用程序)
+- [参考](#参考)
 </p></details><p></p>
 
-# 词向量
+# 搭建知识库
 
-## 词向量简介
+## 词向量
 
-在机器学习和自然语言处理（NLP）中，词向量（Embeddings）是一种将非结构化数据，
+### 词向量简介
+
+在机器学习和自然语言处理(NLP)中，词向量(Word Embeddings)是一种将非结构化数据，
 如单词、句子或者整个文档，转化为实数向量的技术。这些实数向量可以被计算机更好地理解和处理。
-嵌入背后的主要想法是，相似或相关的对象在嵌入空间中的距离应该很近。
 
-## 词向量的优势
+词向量(Embedding)背后的主要想法是，相似或相关的对象在嵌入空间中的距离应该很近。
+举个例子，可以使用词向量来表示文本数据。在词向量中，每个单词被转换为一个向量，
+这个向量捕获了这个单词的语义信息。例如，"king" 和 "queen" 这两个单词在向量空间中的位置将会非常接近，
+因为它们的含义相似。而 "apple" 和 "orange" 也会很接近，
+因为它们都是水果。而 "king" 和 "apple" 这两个单词在向量空间中的距离就会比较远，因为它们的含义不同。
 
-在 RAG(Retrieval Augmented Generation，检索增强生成)方面词向量的优势主要有两点：
+### 通用文本向量
+
+词向量实际上是将单词转化为固定的静态的向量，虽然可以在一定程度上捕捉并表达文本中的语义信息，
+但忽略了单词在不同语境中的意思会受到影响这一现实。
+
+因此在 RAG 应用中使用的向量技术一般为**通用文本向量(Universal Text Embedding)**，
+该技术可以对一定范围内任意长度的文本进行向量化，与词向量不同的是向量化的单位不再是单词而是**输入的文本**，
+输出的向量会捕捉更多的语义信息。
+
+### 词向量的优势
+
+在 RAG 里面词向量的优势主要有两点：
 
 * 词向量比文字更适合检索
     - 当在数据库检索时，如果数据库存储的是文字，
       主要通过检索关键词（词法搜索）等方法找到相对匹配的数据，
       匹配的程度是取决于关键词的数量或者是否完全匹配查询句的；
     - 词向量中包含了原文本的语义信息，可以通过计算问题与数据库中数据的点积、
-      余弦距离、欧几里得距离等指标，直接获取问题与数据在语义层面上的相似度；
+      余弦距离、欧几里得距离等指标，直接获取问题与数据在语义层面上的相似度。
 * 词向量比其它媒介的综合信息能力更强
     - 当传统数据库存储文字、声音、图像、视频等多种媒介时，
       很难去将上述多种媒介构建起关联与跨模态的查询方法；
     - 词向量可以通过多种向量模型将多种数据映射成统一的向量形式。
 
-## 构建词向量的方法
+### 构建词向量的方法
 
-在搭建 RAG 系统时，可以通过使用嵌入模型来构建词向量，可以选择：
+在搭建 RAG 系统时，可以通过使用 Embedding 模型来构建词向量，可以选择：
 
 * 使用各个公司的 Embedding API；
 * 在本地使用嵌入模型将数据构建为词向量。
 
-# 向量数据库
+## 向量数据库
 
-## 向量数据库简介
+### 向量数据库简介
 
-向量数据库是用于高效计算和管理大量**向量数据**的解决方案。
-向量数据库是一种专门用于**存储和检索向量数据(embedding)**的数据库系统。
-它与传统的基于关系模型的数据库不同，它主要关注的是**向量数据的特性和相似性**。
-
-在向量数据库中，数据被表示为向量形式，每个向量代表一个数据项。
-这些向量可以是数字、文本、图像或其他类型的数据。
-向量数据库使用高效的索引和查询算法来加速向量数据的存储和检索过程。
-
-## 向量数据库原理及优势
-
-向量数据库中的数据以向量作为基本单位，对向量进行存储、处理及检索。
-向量数据库通过计算与目标向量的余弦距离、点积等获取与目标向量的相似度。
-当处理大量甚至海量的向量数据时，向量数据库索引和查询算法的效率明显高于传统数据库。
-
-## 主流向量数据库
-
-* [Chroma](https://www.trychroma.com/)：是一个轻量级向量数据库，拥有丰富的功能和简单的 API，
-  具有简单、易用、轻量的优点，但功能相对简单且不支持 GPU 加速，适合初学者使用。
-* [Weaviate](https://weaviate.io/)：是一个开源向量数据库。
-  除了支持**相似度搜索**和**最大边际相关性(MMR，Maximal Marginal Relevance)搜索**外，
-  还可以支持**结合多种搜索算法（基于词法搜索、向量搜索）的混合搜索**，
-  从而搜索提高结果的相关性和准确性。
-* [Qdrant](https://qdrant.tech/)：Qdrant 使用 Rust 语言开发，
-  有**极高的检索效率和 RPS(Requests Per Second)**，
-  支持**本地运行**、**部署在本地服务器**及 **Qdrant 云**三种部署模式。
-  且可以通过为页面内容和元数据制定不同的键来复用数据。
+向量数据库介绍在[这里]()。
 
 # 调用 Embedding API
 
@@ -629,3 +631,449 @@ mmr_docs = vector_db.max_marginal_relevance_search(question, k = 3)
 for i, sim_doc in enumerate(mmr_docs):
     print(f"MMR 检索到的第 {i} 个内容：\n{sim_doc.page_content[:200]}", end = "\n-----------\n")
 ```
+
+# 基于 LangChain 构建检索问答链
+
+在[这里]()介绍了如何根据自己的本地知识文档，搭建一个向量知识库。
+使用搭建好的向量数据库，对 query 查询问题进行召回，
+并将召回结果和 query 结合起来构建 prompt，输入到大模型中进行问答。
+
+## 加载数据库向量
+
+
+
+## 创建一个 LLM
+
+
+## 构建检索问答链
+
+
+
+## 检索问答链效果测试
+
+
+## 添加历史对话的记忆功能
+
+
+# 基于 Streamlit 部署知识库助手
+
+当对知识库和 LLM 已经有了基本的理解，现在是将它们巧妙地融合并打造成一个富有视觉效果的界面的时候了。
+这样的界面不仅对操作更加便捷，还能便于与他人分享。
+
+> Streamlit 是一种快速便捷的方法，可以直接在 Python 中通过友好的 Web 界面演示机器学习模型。
+> 在构建了机器学习模型后，如果想构建一个 demo 给其他人看，也许是为了获得反馈并推动系统的改进，
+> 或者只是因为觉得这个系统很酷，所以想演示一下：Streamlit 可以通过 Python 接口程序快速实现这一目标，
+> 而无需编写任何前端、网页或 JavaScript 代码。
+
+## 构建应用程序
+
+```python
+# streamlit_app.py
+import streamlit as st
+from langchain_openai import ChatOpenAI
+
+
+def generate_response(input_text, openai_api_key):
+     """
+     定义一个函数，使用用户密钥对 OpenAI API 进行身份验证、发送提示并获取 AI 生成的响应。
+     该函数接受用户的提示作为参数，并使用 st.info 来在蓝色框中显示 AI 生成的响应。
+     """
+     llm = ChatOpenAI(temperature = 0.7, openai_api_key = openai_api_key)
+     output = llm.invoke(input_text)
+     output_parser = StrOutputParser()
+     output = output_parser.invoke(output)
+     # st.info(output)
+     return output
+
+
+# Streamlit 应用程序界面
+def main():
+     # 创建应用程序的标题
+     st.title("🦜🔗 动手学大模型应用开发")
+
+     # 添加一个文本输入框，供用户输入其 OpenAI API 密钥
+     openai_api_key = st.sidebar.text_input("OpenAI API Key", type = "password")
+
+     # 使用 st.form() 创建一个文本框 st.text_area() 供用户输入。
+     # 当用户点击 Submit 时，generate_response 将使用用户的输入作为参数来调用该函数
+     with st.form("my_form"):
+          text = st.text_area(
+               "Enter text:", 
+               "What are the three key pieces of advice for learning how to code?"
+          )
+          
+          submitted = st.form_submit_button("Submit")
+
+          if not openai_api_key.startswith("sk-"):
+               st.warning("Please enter your OpenAI API key!", icon = "")
+          if submitted and openai_api_key.startswith("sk-"):
+               generate_response(text, openai_api_key)
+  
+     # 通过使用 st.session_state 来存储对话历史，
+     # 可以在用户与应用程序交互时保留整个对话的上下文，
+     # 用于跟踪对话历史
+     if "messages" not in st.session_state:
+          st.session_state.messages = []
+     
+     messages = st.container(height = 300)
+     if prompt := st.chat_input("Say something"):
+          # 将用户输入添加到对话历史中
+          st.session_state.messages.appen({
+               "role": "user",
+               "text": prompt,
+          })
+          
+          # 调用 respond 函数获取回答
+          answer = generate_response(prompt, openai_api_key)
+          # 检查回答是否为 None
+          if answer is not None:
+               # 将 LLM 的回答添加到对话历史中
+               st.session_state.messages.append({
+                    "role": "assistant",
+                    "text": answer,
+               })
+          
+          # 显示整个对话历史
+          for message in st.session_state.messages:
+               if message["role"] == "user":
+                    messages.chat_message("user").write(message["text"])
+               else:
+                    messages.chat_message("assistant").write(message["text"])
+```
+
+```bash
+$ streamlit run streamlit_app.py
+```
+
+## 添加检索回答
+
+构建检索问答链代码：
+
+* `get_vectordb` 函数返回持久化后的向量知识库
+* `get_chat_qa_chain` 函数返回调用带有历史记录的检索问答链后的结果
+* `get_qa_chain` 函数返回调用不带有历史记录的检索问答链后的结果
+
+```python
+def get_vectordb():
+     """
+     函数返回持久化后的向量知识库
+     """
+     # 定义 Embeddings
+     embedding = ZhipuAIEmbeddings()
+     # 向量数据库持久化路径
+     persist_directory = "data_base/vector_db/chroma"
+     # 加载数据库
+     vectordb = Chroma(
+          persist_directory = persist_directory,
+          embedding_function = embedding,
+     )
+     return vectordb
+
+def get_chat_qa_chain(question: str, openai_api_key: str):
+     """
+     带有历史记录的问答链
+     """
+     vectordb = get_vectordb()
+     llm = ChatOpenAI(
+          model_name = "gpt-3.5-turbo", 
+          temperature = 0, 
+          openai_api_key = openai_api_key
+     )
+     memory = ConversationBufferMemory(
+          memory_key = "chat_history",  # 与 prompt 的输入变量保持一致
+          return_messages = True,  # 将消息列表的形式返回聊天记录，而不是单个字符串
+     )
+     retriever = vectordb.as_retriever()
+     qa = ConversationBufferMemory.from_llm(
+          llm, 
+          retriever = retriever,
+          memory = memory,
+     )
+     result = qa({
+          "question": question
+     })
+     
+     return result["answer"]
+
+
+def get_qa_chain(question: str, openai_api_key: str):
+     """
+     不带历史记录的问答链
+     """
+     vectordb = get_vectordb()
+     llm = ChatOpenAI(
+          model = "gpt-3.5-turbo",
+          temperature = 0,
+          opanai_api_key = oepnai_api_key,
+     )
+     template = """"使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
+        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
+        {context}
+        问题: {question}
+        """
+     QA_CHAIN_PROMPT = PromptTemplate(
+          input_variables = ["context", "question"],
+          template = template,
+     )
+     qa_chain = RetrievalQA.from_chain_type(
+          llm,
+          retriever = vectordb.as_retriever(),
+          return_source_documents = True,
+          chain_type_kwargs = {"prompt": QA_CHAIN_PROMPT}
+     )
+     result = qa_chain({"query": question})
+
+     return result["result"]
+```
+
+然后，添加一个单选按钮部件 `st.radio`，选择进行回答模式：
+
+* `None` 不使用检索问答的普通模式
+* `qa_chain` 不带历史记录的检索问答模式
+* `chat_qa_chain` 带历史记录的检索问答模式
+
+```python
+selected_method = st.radio(
+     "你想选择哪种模式进行对话？",
+     [
+          "None", 
+          "qa_chain", 
+          "chat_qa_chain"
+     ],
+     caption = [
+          "不使用检索回答的普通模式", 
+          "不带历史记录的检索问答模式", 
+          "带历史记录的检索问答模式"
+     ]
+)
+```
+
+最后，进入页面，首先先输入 `OPEN_API_KEY`（默认），
+然后点击单选按钮选择进行问答的模式，最后在输入框输入你的问题，按下回车即可。
+
+完整代码：
+
+```python
+# python libraries
+import os
+import sys
+ROOT = os.getcwd()
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+import streamlit as st
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import RetrievalQA
+from langchain.vectorstores.chroma import Chroma
+from langchain.memory import ConversationBufferMemory
+from langchain_core.output_parsers import StrOutputParser
+
+from embedding_api.zhipuai_embedding import ZhipuAIEmbeddings
+from dotenv import load_dotenv, find_dotenv
+
+# 将父目录放入系统路径中
+sys.path.append("../knowledge_lib") 
+# 读取本地 .env 文件
+_ = load_dotenv(find_dotenv())
+# 载入 ***_API_KEY
+os.environ["OPENAI_API_BASE"] = "https://api.chatgptid.net/v1"
+zhipuai_api_key = os.environ["ZHIPUAI_API_KEY"]
+# global variable
+LOGGING_LABEL = __file__.split('/')[-1][:-3]
+
+
+def generate_response(input_text, openai_api_key):
+     """
+     定义一个函数，使用用户密钥对 OpenAI API 进行身份验证、发送提示并获取 AI 生成的响应。
+     该函数接受用户的提示作为参数，并使用 st.info 来在蓝色框中显示 AI 生成的响应。
+     """
+     llm = ChatOpenAI(temperature = 0.7, openai_api_key = openai_api_key)
+     output = llm.invoke(input_text)
+     output_parser = StrOutputParser()
+     output = output_parser.invoke(output)
+     # st.info(output)
+     return output
+
+
+def get_vectordb():
+     """
+     函数返回持久化后的向量知识库
+     """
+     # 定义 Embeddings
+     embedding = ZhipuAIEmbeddings()
+     # 向量数据库持久化路径
+     persist_directory = "data_base/vector_db/chroma"
+     # 加载数据库
+     vectordb = Chroma(
+          persist_directory = persist_directory,
+          embedding_function = embedding,
+     )
+
+     return vectordb
+
+
+def get_chat_qa_chain(question: str, openai_api_key: str):
+     """
+     带有历史记录的问答链
+     """
+     vectordb = get_vectordb()
+     llm = ChatOpenAI(
+          model_name = "gpt-3.5-turbo", 
+          temperature = 0, 
+          openai_api_key = openai_api_key
+     )
+     memory = ConversationBufferMemory(
+          memory_key = "chat_history",  # 与 prompt 的输入变量保持一致
+          return_messages = True,  # 将消息列表的形式返回聊天记录，而不是单个字符串
+     )
+     retriever = vectordb.as_retriever()
+     qa = ConversationBufferMemory.from_llm(
+          llm, 
+          retriever = retriever,
+          memory = memory,
+     )
+     result = qa({
+          "question": question
+     })
+     
+     return result["answer"]
+
+
+def get_qa_chain(question: str, openai_api_key: str):
+     """
+     不带历史记录的问答链
+     """
+     vectordb = get_vectordb()
+     llm = ChatOpenAI(
+          model = "gpt-3.5-turbo",
+          temperature = 0,
+          opanai_api_key = openai_api_key,
+     )
+     template = """"使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
+        案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
+        {context}
+        问题: {question}
+        """
+     QA_CHAIN_PROMPT = PromptTemplate(
+          input_variables = ["context", "question"],
+          template = template,
+     )
+     qa_chain = RetrievalQA.from_chain_type(
+          llm,
+          retriever = vectordb.as_retriever(),
+          return_source_documents = True,
+          chain_type_kwargs = {"prompt": QA_CHAIN_PROMPT}
+     )
+     result = qa_chain({"query": question})
+
+     return result["result"]
+
+
+
+
+# Streamlit 应用程序界面
+def main():
+     # 创建应用程序的标题
+     st.title("🦜🔗 动手学大模型应用开发")
+     # 添加一个文本输入框，供用户输入其 OpenAI API 密钥
+     openai_api_key = st.sidebar.text_input("OpenAI API Key", type = "password")
+     # 添加一个选择按钮来选择不同的模型
+     # selected_method = st.sidebar.selectbox(
+     #      "选择模式", 
+     #      [
+     #           "None", 
+     #           "qa_chain", 
+     #           "chat_qa_chain"
+     #      ]
+     # )
+     selected_method = st.radio(
+          "你想选择哪种模式进行对话？",
+          [
+               "None", 
+               "qa_chain", 
+               "chat_qa_chain"
+          ],
+          caption = [
+               "不使用检索回答的普通模式", 
+               "不带历史记录的检索问答模式", 
+               "带历史记录的检索问答模式"
+          ]
+     )
+
+     # 用于跟踪对话历史
+     # 通过使用 st.session_state 来存储对话历史，
+     # 可以在用户与应用程序交互时保留整个对话的上下文
+     if "messages" not in st.session_state:
+          st.session_state.messages = []
+     
+     # 当用户点击 Submit 时，generate_response 将使用用户的输入作为参数来调用该函数
+     # with st.form("my_form"):
+     #      text = st.text_area("Enter text:", "What are the three key pieces of advice for learning how to code?")
+     #      submitted = st.form_submit_button("Submit")
+     #      if not openai_api_key.startswith("sk-"):
+     #           st.warning("Please enter your OpenAI API key!", icon = "")
+     #      if submitted and openai_api_key.startswith("sk-"):
+     #           generate_response(text, openai_api_key)
+   
+     messages = st.container(height = 300)
+     if prompt := st.chat_input("Say something"):
+          # 将用户输入添加到对话历史中
+          st.session_state.messages.appen({
+               "role": "user",
+               "text": prompt,
+          })
+          # 调用 respond 函数获取回答
+          if selected_method == "None":
+               answer = generate_response(prompt, openai_api_key)
+          if selected_method == "qa_chain":
+               answer = get_qa_chain(prompt, openai_api_key)
+          elif selected_method == "chat_qa_chain":
+               answer = get_chat_qa_chain(prompt, openai_api_key)
+          
+          # 检查回答是否为 None
+          if answer is not None:
+               # 将 LLM 的回答添加到对话历史中
+               st.session_state.messages.append({
+                    "role": "assistant",
+                    "text": answer,
+               })
+          
+          # 显示整个对话历史
+          for message in st.session_state.messages:
+               if message["role"] == "user":
+                    messages.chat_message("user").write(message["text"])
+               else:
+                    messages.chat_message("assistant").write(message["text"])
+
+if __name__ == "__main__":
+    main()
+```
+
+## 部署应用程序
+
+要将应用程序部署到 Streamlit Cloud，请执行以下步骤：
+
+1. 为应用程序创建 GitHub 存储库，存储库应包含两个文件：
+
+```
+your-repository/
+     |_ streamlit_app.py
+     |_ requirements.txt
+```
+
+2. 转到 [Streamlit Community Cloud](https://share.streamlit.io/)，单击工作区中的 `New app` 按钮，
+   然后指定存储库、分支和主文件路径。或者，您可以通过选择自定义子域来自定义应用程序的 URL。
+3. 点击 `Deploy!` 按钮。
+4. 应用程序现在将部署到 Streamlit Community Cloud，并且可以访问应用。
+
+优化方向：
+
+* 界面中添加上传本地文档，建立向量数据库的功能
+* 添加多种LLM 与 embedding方法选择的按钮
+* 添加修改参数的按钮
+* 更多...
+
+# 参考
+
+* [llm-universe](https://github.com/datawhalechina/llm-universe?tab=readme-ov-file)

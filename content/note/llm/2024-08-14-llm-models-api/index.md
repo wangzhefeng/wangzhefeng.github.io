@@ -1,5 +1,6 @@
 ---
-title: LLM 模型-API 调用
+title: LLM 模型
+subtitle: LLMs API
 author: 王哲峰
 date: '2024-08-14'
 slug: llm-models-api
@@ -90,12 +91,12 @@ img {
         - [Output parser](#output-parser)
         - [完整的流程](#完整的流程)
     - [文心一言](#文心一言)
-        - [自定义 LLM 接入 langchain](#自定义-llm-接入-langchain)
-        - [在 langchain 直接调用文心一言](#在-langchain-直接调用文心一言)
+        - [自定义 LLM 接入 LangChain](#自定义-llm-接入-langchain)
+        - [在 LangChain 直接调用文心一言](#在-langchain-直接调用文心一言)
     - [讯飞星火](#讯飞星火-1)
     - [智谱 GLM](#智谱-glm-1)
-        - [自定义 chatglm](#自定义-chatglm)
-        - [自定义 chatglm 接入 LangChain](#自定义-chatglm-接入-langchain)
+        - [自定义 ChatGLM](#自定义-chatglm)
+        - [自定义 ChatGLM 接入 LangChain](#自定义-chatglm-接入-langchain)
 - [参考资料](#参考资料)
 </p></details><p></p>
 
@@ -1313,92 +1314,353 @@ chain.invoke({
 
 通过 LangChain 框架来调用百度文心大模型，以将文心模型接入到应用框架中。
 
-### 自定义 LLM 接入 langchain
+### 自定义 LLM 接入 LangChain
 
-### 在 langchain 直接调用文心一言
-
-## 讯飞星火
-
-## 智谱 GLM
-
-### 自定义 chatglm
-
-由于 LangChain 中提供的 ChatGLM 已不可用，因此需要自定义一个 LLM。
+模型自定义：
 
 ```python
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
+# wenxin_llm.py
+# -*- coding: utf-8 -*-
 
+# ***************************************************
+# * File        : wenxin_llm.py
+# * Author      : Zhefeng Wang
+# * Email       : zfwang7@gmail.com
+# * Date        : 2024-09-23
+# * Version     : 1.0.092315
+# * Description : 基于 LangChain 定义文心模型调用方式
+# * Link        : https://github.com/datawhalechina/llm-universe/blob/cace9198cf14d98c3a266da543d58bd24b07861f/notebook/C4%20%E6%9E%84%E5%BB%BA%20RAG%20%E5%BA%94%E7%94%A8/wenxin_llm.py
+# * Requirement : 相关模块版本需求(例如: numpy >= 2.1.0)
+# * TODO        : 1.
+# ***************************************************
+
+__all__ = []
+
+# python libraries
 import os
+import sys
+ROOT = os.getcwd()
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
 from typing import Any, List, Mapping, Optional, Dict
-from langchain_core.callbacks.manager import CallbackManagerForLLMRun
-from langchain_core.language_models.llms import LLM
-from zhipuai import ZhipuAI
 
-# 继承自 langchain.llms.base.LLM
-class ZhipuAILLM(LLM):
-    # 默认选用 glm-4
-    model: str = "glm-4"
+import qianfan
+from langchain_core.callbacks.manageer import CallbackManagerForLLMRun
+from langchain_core.language_models.llms import LLM
+
+# global variable
+LOGGING_LABEL = __file__.split('/')[-1][:-3]
+
+
+class Wenxin_LLM(LLM):
+    """
+    百度文心大模型接入 LangChain
+    """
+    # 默认选用 ERNIE-Bot-turbo 模型，即目前一般所说的百度文心大模型
+    model: str = "ERNIE-Bot-turbo"
     # 温度系数
     temperature: float = 0.1
     # API_Key
     api_key: str = None
+    # Secret_Key
+    secret_key: str = None
+    # 系统消息
+    system: str = None
     
-    def _call(self, prompt : str, stop: Optional[List[str]] = None,
-                run_manager: Optional[CallbackManagerForLLMRun] = None,
-                **kwargs: Any):
-        client = ZhipuAI(
-            api_key = self.api_key
+    def _call(self, 
+              prompt: str, 
+              stop: Optional[List[str]] = None, 
+              run_manager: Optional[CallbackManagerForLLMRun]  = None,
+              **kwargs: Any):
+        def gen_wenxin_messages(prompt: str):
+            """
+            构造文心模型请求参数 message
+
+            Args:
+                prompt (str): 对应的用户提示词
+            """
+            messages = [{
+                "role": "user",
+                "content": prompt,
+            }]
+            return messages
+        # Completion
+        chat_comp = qianfan.ChatCompletion(ak = self.api_key, sk = self.secret_key)
+        # message
+        messages = gen_wenxin_messages(prompt)
+        # result
+        response = chat_comp.do(
+            messages = messages,
+            model = self.model,
+            temperature = self.temperature,
+            system = self.system,
         )
+        return response["result"]
+    
+    @property
+    def _default_params(self) -> Dict[str, Any]:
+        """
+        定义一个返回默认参数的方法
+        获取调用 Ernie API 的默认参数
+        """
+        normal_params = {
+            "temperature": self.temperature,
+        }
+        return {**normal_params}
+    
+    @property
+    def _llm_type(self) -> str:
+        return "Wenxin"
+    
+    @property
+    def _identifying_params(self) -> Mapping[str, Any]:
+        """
+        Get the identifying parameters.
+        """
+        return {
+            **{"model": self.model}, 
+            **self._default_params
+        }
+
+
+# 测试代码 main 函数
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+```
+
+模型调用：
+
+```python
+import os
+from dotenv import find_dotenv, load_dotenv
+
+from wenxin_llm import WenxinLLM
+
+# 读取本地/项目的环境变量
+_ = load_dotenv(find_dotenv())
+
+# 获取环境变量 API_KEY
+wenxin_api_key = os.environ["QIANFAN_AK"]
+wenxin_secret_key = os.environ["QIANFAN_SK"]
+
+# 模型调用
+llm = Wenxin_LLM(api_key = wenxin_api_key, secret_key = wenxin_secret_key, system = "你是一个助手！")
+llm.invoke("你好，请你自我介绍一下！")
+# or
+llm(prompt = "你好，请你自我介绍一下！")
+```
+
+### 在 LangChain 直接调用文心一言
+
+安装环境依赖：
+
+```bash
+$ pip install -qU langchain langchain-community
+```
+
+使用新版 LangChain，来直接调用文心一言大模型：
+
+```python
+import os
+from dotenv import find_dotenv, load_dotenv
+from langchain_community.llms import QianfanLLMEndpoint
+
+# 读取本地、项目的环境变量
+_ = load_dotenv(find_dotenv())
+
+# 获取环境变量
+QIANFAN_AK = os.environ["QIANFAN_AK"]
+QIANFAN_SK = os.environ["QIANFAN_SK"]
+
+# 模型调用
+llm = QianfanLLMEndpoint(streaming = True)
+response = llm("你好，请你介绍一下自己！")
+print(response)
+```
+
+## 讯飞星火
+
+可以[通过 LangChain 框架来调用讯飞星火大模型](https://python.langchain.com/docs/integrations/llms/sparkllm/)。
+
+```python
+import os
+from dotenv import find_dotenv, load_dotenv
+
+from langchain_community.llms import SparkLLM
+
+# 读取本地/项目的环境变量
+_ = load_dotenv(find_dotenv())
+
+# 获取环境变量 API_KEY
+IFLYTEK_SPARK_APP_ID = os.environ["IFLYTEK_SPARK_APP_ID"]
+IFLYTEK_SPARK_APP_KEY = os.environ["IFLYTEK_SPARK_APP_KEY"]
+IFLYTEK_SPARK_APP_SECRET = os.environ["IFLYTEK_SPARK_APP_SECRET"]
+
+# 模型调用
+def gen_spark_params(model):
+    """
+    构造星火模型请求参数
+    """
+    spark_url_tpl = "wss://spark-api.xf-yun.com/{}/chat"
+    model_params_dict = {
+        # v1.5 版本
+        "v1.5": {
+            "domain": "general", # 用于配置大模型版本
+            "spark_url": spark_url_tpl.format("v1.1") # 云端环境的服务地址
+        },
+        # v2.0 版本
+        "v2.0": {
+            "domain": "generalv2", # 用于配置大模型版本
+            "spark_url": spark_url_tpl.format("v2.1") # 云端环境的服务地址
+        },
+        # v3.0 版本
+        "v3.0": {
+            "domain": "generalv3", # 用于配置大模型版本
+            "spark_url": spark_url_tpl.format("v3.1") # 云端环境的服务地址
+        },
+        # v3.5 版本
+        "v3.5": {
+            "domain": "generalv3.5", # 用于配置大模型版本
+            "spark_url": spark_url_tpl.format("v3.5") # 云端环境的服务地址
+        }
+    }
+
+    return model_params_dict[model]
+
+
+spark_api_url = gen_spark_params(model = "v1.5")["spark_url"]
+llm = SparkLLM(spark_api_url = spark_api_url) 
+response = llm("你好，请你自我介绍一下自己！")
+print(response)
+```
+
+## 智谱 GLM
+
+### 自定义 ChatGLM
+
+由于 LangChain 中提供的 ChatGLM 已不可用，因此需要自定义一个 LLM。
+
+> 根据智谱官方宣布有些模型即将弃用，在这些模型弃用后，会将它们自动路由至新的模型。
+> 请用户注意在弃用日期之前，将新模型编码更新为最新版本，以确保服务的顺畅过渡。
+
+```python
+# -*- coding: utf-8 -*-
+
+# ***************************************************
+# * File        : zhipuai_llm.py
+# * Author      : Zhefeng Wang
+# * Email       : wangzhefengr@163.com
+# * Date        : 2024-08-04
+# * Version     : 0.1.080418
+# * Description : description
+# * Link        : https://github.com/datawhalechina/llm-universe/blob/0ce94e828ce2fb63d47741098188544433c5e878/notebook/C4%20%E6%9E%84%E5%BB%BA%20RAG%20%E5%BA%94%E7%94%A8/zhipuai_llm.py
+# * Requirement : 相关模块版本需求(例如: numpy >= 2.1.0)
+# ***************************************************
+
+# python libraries
+import os
+import sys
+ROOT = os.getcwd()
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+from typing import Any, List, Mapping, Optional, Dict
+
+from zhipuai import ZhipuAI
+from langchain_core.callbacks.manager import CallbackManagerForLLMRun
+from langchain_core.language_models.llms import LLM
+
+# global variable
+LOGGING_LABEL = __file__.split('/')[-1][:-3]
+
+
+class ZhipuAILLM(LLM):
+    """
+    LangChain ChatGLM:
+        https://python.langchain.com/v0.2/docs/integrations/llms/chatglm/
+    ChatGLM model:
+        https://open.bigmodel.cn/dev/howuse/model
+    """
+    # 默认选用 glm-4
+    model: str = "glm-4"
+    # 温度系数
+    temperature: float = 0.1
+    # API key
+    api_key: str = None
+
+    def _call(self, 
+              prompt: str, 
+              stop: Optional[List[str]] = None,
+              run_manager: Optional[CallbackManagerForLLMRun] = None,
+              **kwargs: Any):
+        client = ZhipuAI(api_key = self.api_key)
 
         def gen_glm_params(prompt):
-            '''
-            构造 GLM 模型请求参数 messages
+            """
+            构造 GLM 模型请求参数 message
 
-            请求参数：
+            Params:
                 prompt: 对应的用户提示词
-            '''
-            messages = [{"role": "user", "content": prompt}]
-            return messages
+            """
+            message = [{"role": "user", "content": prompt}]
+
+            return message
         
         messages = gen_glm_params(prompt)
         response = client.chat.completions.create(
             model = self.model,
             messages = messages,
-            temperature = self.temperature
+            temperature = self.temperature,
         )
 
         if len(response.choices) > 0:
             return response.choices[0].message.content
-        return "generate answer error"
-
-
-    # 首先定义一个返回默认参数的方法
+        
+        return "generate answer erro"
+    
     @property
     def _default_params(self) -> Dict[str, Any]:
-        """获取调用API的默认参数。"""
+        """
+        定义一个返回默认参数的方法
+        获取调用 API 的默认参数
+        """
         normal_params = {
             "temperature": self.temperature,
-            }
+        }
         # print(type(self.model_kwargs))
         return {**normal_params}
-
+    
     @property
     def _llm_type(self) -> str:
         return "Zhipu"
 
-    @property
     def _identifying_params(self) -> Mapping[str, Any]:
-        """Get the identifying parameters."""
-        return {**{"model": self.model}, **self._default_params}
+        """
+        Get the identifying parameters.
+        """
+        return {
+            **{"model": self.model}, 
+            **self._default_params
+        }
+
+
+# 测试代码 main 函数
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
 ```
 
-### 自定义 chatglm 接入 LangChain
+### 自定义 ChatGLM 接入 LangChain
 
 ```python
 import os
-from zhipuai_llm import ZhipuAILLM
 from dotenv import find_dotenv, load_dotenv
+
+from zhipuai_llm import ZhipuAILLM
 
 # 读取本地/项目的环境变量
 _ = load_dotenv(find_dotenv())
