@@ -1,6 +1,6 @@
 ---
 title: LLM 模型
-subtitle: LLMs API
+subtitle: LLM API
 author: 王哲峰
 date: '2024-08-14'
 slug: llm-models-api

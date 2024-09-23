@@ -1,6 +1,6 @@
 ---
 title: LLM 模型
-subtitle: Large Language Models
+subtitle: LLM Models
 list_pages: true
 # order_by: title
 ---

@@ -35,10 +35,9 @@ img {
 <details><summary>目录</summary><p>
 
 - [fastText 简介](#fasttext-简介)
-    - [快速开始](#快速开始)
-        - [fastText 是什么](#fasttext-是什么)
-        - [fastText 环境依赖](#fasttext-环境依赖)
-        - [fastText 工具库构建](#fasttext-工具库构建)
+    - [fastText 是什么](#fasttext-是什么)
+    - [fastText 环境依赖](#fasttext-环境依赖)
+    - [fastText 工具库构建](#fasttext-工具库构建)
 - [使用 fastText 进行文本分类](#使用-fasttext-进行文本分类)
     - [准备文本数据](#准备文本数据)
     - [构建分类器](#构建分类器)
@@ -48,28 +47,24 @@ img {
 
 # fastText 简介
 
-- 官网: https://fasttext.cc/
-
-## 快速开始
-
-### fastText 是什么
+## fastText 是什么
 
 fastText is a library for efficient learning of **word representations** and **sentence classification**.
 
-### fastText 环境依赖
+## fastText 环境依赖
 
-- 计算机系统
+* 计算机系统
     - macOS
     - Linux
-- C++11 编译器
+* C++11 编译器
     - (gcc-4.6.3 or newer) or (clang-3.3 or newer)
     - make
-- Python 依赖
+* Python 依赖
     - >=python 2.6
     - numpy
     - scipy
 
-### fastText 工具库构建
+## fastText 工具库构建
 
 1. 构建 fastText 为一个命令行工具(CLT)
 
@@ -310,4 +305,5 @@ model.test("cooking.valid", k = -1)
 
 # 参考
 
-* [fastText]https://fasttext.cc/docs/en/supervised-tutorial.html
+* [fastText 官网](https://fasttext.cc/)
+* [fastText](https://fasttext.cc/docs/en/supervised-tutorial.html)

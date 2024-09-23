@@ -231,7 +231,7 @@ Embedding API 的调用介绍在[这里](https://wangzhefeng.com/note/llm/llm-ar
 
 # RAG 应用
 
-* [基于 LangChain 搭建知识库、搭建检索问答链、部署知识库助手]()
+* [基于 LangChain 搭建知识库、搭建检索问答链、部署知识库助手](https://wangzhefeng.com/note/2024/08/03/llm-rag-app-knowledge/)
 
 # 参考
 

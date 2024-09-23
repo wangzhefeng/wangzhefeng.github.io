@@ -1,5 +1,5 @@
 ---
-title: LoRA
+title: LLM 微调--LoRA
 author: 王哲峰
 date: '2024-08-01'
 slug: lora
@@ -35,10 +35,10 @@ img {
 <details><summary>目录</summary><p>
 
 - [什么是 LoRA](#什么是-lora)
-    - [针对的问题](#针对的问题)
-    - [替代解决方案](#替代解决方案)
-    - [LoRA 的思路](#lora-的思路)
-    - [LoRA 的优势](#lora-的优势)
+  - [针对的问题](#针对的问题)
+  - [替代解决方案](#替代解决方案)
+  - [LoRA 的思路](#lora-的思路)
+  - [LoRA 的优势](#lora-的优势)
 - [LoRA 的原理](#lora-的原理)
 - [LoRA 使用](#lora-使用)
 - [参考](#参考)

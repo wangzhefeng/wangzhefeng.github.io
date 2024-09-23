@@ -1,5 +1,5 @@
 ---
-title: Streamlit
+title: LLM 框架--Streamlit
 author: 王哲峰
 date: '2024-08-04'
 slug: streamlit

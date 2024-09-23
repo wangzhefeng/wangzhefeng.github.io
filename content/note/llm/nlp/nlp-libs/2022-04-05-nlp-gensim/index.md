@@ -35,21 +35,21 @@ img {
 <details><summary>目录</summary><p>
 
 - [Gensim 简介](#gensim-简介)
-  - [Gensim 简介](#gensim-简介-1)
-  - [Demo](#demo)
+    - [Gensim 简介](#gensim-简介-1)
+    - [Gensim Demo](#gensim-demo)
 - [Gensim 安装](#gensim-安装)
-  - [Gensim 安装](#gensim-安装-1)
-  - [Gensim 依赖](#gensim-依赖)
+    - [Gensim 安装](#gensim-安装-1)
+    - [Gensim 依赖](#gensim-依赖)
 - [Gensim 使用](#gensim-使用)
-  - [Gensim 中常用核心概念](#gensim-中常用核心概念)
-    - [Document](#document)
-    - [Corpus](#corpus)
-    - [Vector](#vector)
-    - [Model](#model)
-  - [语料(Corpora)和词空间(Vector Spaces)](#语料corpora和词空间vector-spaces)
-  - [主题(Topics)和转换(Transformations)](#主题topics和转换transformations)
-  - [相似性查询(Similarity Queries)](#相似性查询similarity-queries)
-  - [常用教程](#常用教程)
+    - [Gensim 核心概念](#gensim-核心概念)
+        - [Document](#document)
+        - [Corpus](#corpus)
+        - [Vector](#vector)
+        - [Model](#model)
+    - [语料和词空间](#语料和词空间)
+    - [主题和转换](#主题和转换)
+    - [相似性查询](#相似性查询)
+    - [常用教程](#常用教程)
 - [Gensim 常用 API](#gensim-常用-api)
 </p></details><p></p>
 
@@ -57,12 +57,12 @@ img {
 
 ## Gensim 简介
 
-- Gensim is a Free python library
-- Gensim is a topic modelling for humans
+* Gensim is a Free python library
+* Gensim is a topic modelling for humans
     - Train large-scale semantic NLP models
     - Represent text as semantic vectors
     - Find semantically related documents
-- Why Gensim?
+* Why Gensim?
     - super fast
     - data streaming
     - platform independent
@@ -70,7 +70,7 @@ img {
     - open source
     - ready-to-use models and corpora
 
-## Demo
+## Gensim Demo
 
 ```python
 from gensim import corpora, models, similarities, downloader
@@ -92,32 +92,34 @@ sims = index[query]
 
 ## Gensim 安装
 
+pip:
+
 ```bash
 $ pip install --upgrade gensim
+```
 
+conda:
+
+```bash
 $ conda install -c conda-forge gensim
 ```
 
 ## Gensim 依赖
 
-- Python 3.6, 3.7, 3.8
-- Numpy
-- smart_open: 用于打开远程存储库中的文件或压缩文件
+* Python 3.6, 3.7, 3.8
+* Numpy
+* `smart_open`: 用于打开远程存储库中的文件或压缩文件
 
 # Gensim 使用
 
-```python
-import  pprint
-```
+## Gensim 核心概念
 
-## Gensim 中常用核心概念
+`gensim` 核心概念:
 
-``gensim`` 的核心概念:
-
-- Document
-- Corpus
-- Vector
-- Model
+* Document
+* Corpus
+* Vector
+* Model
 
 ### Document
 
@@ -176,9 +178,9 @@ print(dictionary)
 
 为了推断语料库中的潜在结构，需要可以表示文档的数学处理方式:
 
-- 方法 1: 将文档表示为 **特征向量**
+* 方法 1: 将文档表示为 **特征向量**
     - 密集向量
-- 方法 2: 词袋模型
+* 方法 2: 词袋模型
     - 稀疏向量/词袋向量
 
 ```python
@@ -210,13 +212,21 @@ words = "system minors".lower().split()
 print(tfidf[dictionary.doc2bow(words)])
 ```
 
-## 语料(Corpora)和词空间(Vector Spaces)
+## 语料和词空间
 
-## 主题(Topics)和转换(Transformations)
+> Corpora & Vector Spaces
 
-## 相似性查询(Similarity Queries)
+## 主题和转换
+
+> Topics & Transformations
+
+## 相似性查询
+
+> Similarity Queries
 
 ## 常用教程
+
+
 
 # Gensim 常用 API
 

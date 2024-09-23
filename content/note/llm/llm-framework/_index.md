@@ -1,6 +1,6 @@
 ---
 title: LLM 框架
-subtitle: Large Language Models Framework
+subtitle: LLM Framework
 list_pages: true
 # order_by: title
 ---

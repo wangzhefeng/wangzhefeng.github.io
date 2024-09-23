@@ -34,40 +34,30 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [搭建知识库](#搭建知识库)
+- [搭建向量知识库](#搭建向量知识库)
      - [词向量](#词向量)
           - [词向量简介](#词向量简介)
           - [通用文本向量](#通用文本向量)
           - [词向量的优势](#词向量的优势)
           - [构建词向量的方法](#构建词向量的方法)
      - [向量数据库](#向量数据库)
-          - [向量数据库简介](#向量数据库简介)
-- [调用 Embedding API](#调用-embedding-api)
-     - [OpenAI API](#openai-api)
-     - [文心千帆 API](#文心千帆-api)
-     - [讯飞星火 API](#讯飞星火-api)
-     - [智谱 API](#智谱-api)
-- [数据处理](#数据处理)
-     - [数据选取](#数据选取)
-          - [PDF 文档](#pdf-文档)
-          - [Markdown 文档](#markdown-文档)
-     - [数据清洗](#数据清洗)
-     - [文档分割](#文档分割)
-          - [文档分割简介](#文档分割简介)
-          - [文档分割 API](#文档分割-api)
-          - [文档分割示例](#文档分割示例)
-- [搭建并使用向量数据库](#搭建并使用向量数据库)
-     - [配置](#配置)
-     - [构建 Chroma 向量库](#构建-chroma-向量库)
+     - [调用 Embedding](#调用-embedding)
+     - [数据处理](#数据处理)
+          - [数据选取](#数据选取)
+          - [数据清洗](#数据清洗)
+          - [文档分割](#文档分割)
+     - [构建向量数据库](#构建向量数据库)
      - [向量检索](#向量检索)
-          - [相似度检索](#相似度检索)
-          - [MMR 检索](#mmr-检索)
 - [基于 LangChain 构建检索问答链](#基于-langchain-构建检索问答链)
      - [加载数据库向量](#加载数据库向量)
      - [创建一个 LLM](#创建一个-llm)
      - [构建检索问答链](#构建检索问答链)
      - [检索问答链效果测试](#检索问答链效果测试)
+          - [基于召回结果和 query 结合起来构建 prompt 效果](#基于召回结果和-query-结合起来构建-prompt-效果)
+          - [大模型自己回答的效果](#大模型自己回答的效果)
      - [添加历史对话的记忆功能](#添加历史对话的记忆功能)
+          - [记忆](#记忆)
+          - [对话检索链](#对话检索链)
 - [基于 Streamlit 部署知识库助手](#基于-streamlit-部署知识库助手)
      - [构建应用程序](#构建应用程序)
      - [添加检索回答](#添加检索回答)
@@ -75,7 +65,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 搭建知识库
+# 搭建向量知识库
 
 ## 词向量
 
@@ -123,186 +113,20 @@ img {
 
 ## 向量数据库
 
-### 向量数据库简介
+向量数据库介绍在[这里](https://wangzhefeng.com/note/2024/09/23/llm-vector-database/)。
 
-向量数据库介绍在[这里]()。
+## 调用 Embedding
 
-# 调用 Embedding API
+Embedding API 调用介绍在[这里]()。
 
-为了方便 Embedding API 调用，应将 API key 填入 `.env` 文件，代码将自动读取并加载环境变量。
-
-## OpenAI API
-
-GPT 有封装好的接口，使用时简单封装即可。目前 GPT Embedding model 有三种，性能如下
-
-| 模型                   | 每美元页数 | MTEB得分 | MIRACL得分  |
-|------------------------|-----------|---------|-------------|
-| text-embedding-3-large | 9,615     | 64.6    | 54.9        |
-| text-embedding-3-small | 62,500    | 62.3    | 44.0        |
-| text-embedding-ada-002 | 12,500    | 61.0    | 31.4        |
-
-其中：
-
-* MTEB 得分为 Embedding model 分类、聚类、配对等八个任务的平均得分
-* MIRACL 得分为 Embedding model 在检索任务上的平均得分
-
-从以上三个 Embedding model 可以看出：
-
-* `text-embedding-3-large` 有最好的性能和最贵的价格，
-  当搭建的应用需要更好的表现且成本充足的情况下可以使用；
-* `text-embedding-3-small` 有较好的性价比，当预算有限时可以选择该模型；
-* `text-embedding-ada-002` 是 OpenAI 上一代的模型，
-  无论在性能还是价格都不及前两者，因此不推荐使用。
-
-```python
-import os
-
-from openai import OpenAI
-from dotenv import load_dotenv, find_dotenv
-
-_ = load_dotenv(find_dotenv())
-
-os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7890"
-os.environ["HTTP_PROXY"] = "http://127.0.0.1:7890"
-
-
-def openai_embedding(text: str, model: str = None):
-    # 获取环境变量 OPENAI_API_KEY
-    api_key = os.environ["OPENAI_API_KEY"]
-    client = OpenAI(api_key = api_key)
-    # embedding model
-    if model == None:
-        model = "text-embedding-3-small"
-    # 模型调用    
-    response = client.embeddings.create(
-        input = text,
-        model = model,
-    )
-
-    return response
-
-
-response = openai_embedding(text = "要生成 embedding 的输入文本，字符串形式。")
-print(f"返回的 embedding 类型为：{response.object}")
-print(f"embedding 长度为：{len(response.data[0].embedding)}")
-print(f"embedding (前 10) 为：{response.data[0].embedding[:10]}")
-print(f"本次 embedding model 为：{response.model}")
-print(f"本次 token 使用情况为：{response.usage}")
-```
-
-API 返回的数据为 JSON 格式，除 `object` 向量类型外还有存放数据的 `data`、
-embedding model 型号 `model` 以及本次 token 使用情况 `usage` 等数据，
-具体如下所示：
-
-```json
-{
-  "object": "list",
-  "data": [
-    {
-      "object": "embedding",
-      "index": 0,
-      "embedding": [
-        -0.006929283495992422,
-        ... (省略)
-        -4.547132266452536e-05,
-      ],
-    }
-  ],
-  "model": "text-embedding-3-small",
-  "usage": {
-    "prompt_tokens": 5,
-    "total_tokens": 5
-  }
-}
-```
-
-## 文心千帆 API
-
-Embedding-V1 是基于百度文心大模型技术的文本表示模型，Access token 为调用接口的凭证，
-使用 Embedding-V1 时应先凭 API Key、Secret Key 获取 Access token，
-再通过 Access token 调用接口来 Embedding text。
-同时千帆大模型平台还支持 `bge-large-zh` 等 Embedding model。
-
-```python
-import json
-import requests
-
-def wenxin_embedding(text: str):
-    # 获取环境变量 wenxin_api_key, wenxin_secret_key
-    api_key = os.environ["QIANFN_AK"]
-    secret_key = os.environp["QIANFAN_SK"]
-    # 使用 API Key、Secret Key 向 https://aip.baidubce.com/oauth/2.0/token 获取 Access token
-    url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={api_key}&client_secret={secret_key}"
-    payload = json.dumps("")
-    headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-    }
-    response = requests.request("POST", url, headers = headers, data = payload)
-    # 通过获取的 Access token 来 embedding text
-    url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1?access_token={str(response.json().get('access_token'))}"
-    input = []
-    input.append(text)
-    payload = json.dumps({"input": input})
-    headers = {
-        "Content-Type": "application/json"
-    }
-    response = requests.request("POST", url, headers = headers, data = payload)
-
-    return json.loads(response.text)
-
-
-# text 应为 List(str)
-text = "要生成 embedding 的输入文本，字符串形式。"
-response = wenxin_embedding(text = text)
-
-print(f"本次 embedding id 为：{response["id"]}")
-print(f"本次 embedding 产生的时间戳为：{response["created"]}")
-print(f"返回的 embedding 类型为：{response["object"]}")
-print(f"embedding 长度为：{response["data"][0]["embedding"]}")
-print(f"embedding (前 10) 为：{response["data"][0]["embedding"][:10]}")
-```
-
-## 讯飞星火 API
-
-未开放
-
-## 智谱 API
-
-智谱有封装好的 SDK，直接调用即可。
-
-```python
-from zhipuai import ZhipuAI
-
-
-def zhipu_embedding(text: str):
-    api_key = os.environ["ZHIPUAI_API_KEY"]
-    client = ZhipuAI(api_key = api_key)
-    response = client.embeddings.create(
-        model = "embedding-2",
-        input = text,
-    )
-    
-    return response
-
-text = "要生成 embedding 的输入文本，字符串形式。"
-response = zhipu_embedding(text = text)
-
-print(f"response 类型为：{type(response)}")
-print(f"embedding 类型为：{response.object}")
-print(f"生成 embedding 的 model 为：{response.model}")
-print(f"生成的 embedding 长度为：{len(response.data[0].embedding)}")
-print(f"embedding(前 10)为: {response.data[0].embedding[:10]}")
-```
-
-# 数据处理
+## 数据处理
 
 为构建本地知识库，需要对以多种类型存储的本地文档进行处理，
 读取**本地文档**并通过 **Embedding 方法**将**本地文档的内容**转化为**词向量**来构建**向量数据库**。
 
-## 数据选取
+### 数据选取
 
-### PDF 文档
+> PDF 文档
 
 使用 LangChain 的 `PyMuPDFLoader` 来读取知识库的 PDF 文件。
 `PyMuPDFLoader` 是 PDF 解析器中速度最快的一种，
@@ -317,10 +141,9 @@ loader = PyMuPDFLoader("data_base/knowledge_db/pumpkin_book/pumpkin_book.pdf")
 pdf_pages = loader.load()
 ```
 
-文档加载后储存在 `pdf_pages` 变量中：
+文档加载后储存在 `pdf_pages` 变量中，`pdf_pages` 的变量类型为 `List`。
 
-* `pdf_pages` 的变量类型为 `List`
-* 打印 `pdf_pages` 的长度可以看到 PDF 一共包含多少页
+打印 `pdf_pages` 的长度可以看到 PDF 一共包含多少页：
 
 ```python
 print(f"载入后的变量类型为：{type(pdf_pages)}, 该 PDF 一共包含 {len(pdf_pages)} 页。")
@@ -342,7 +165,7 @@ print(
 )
 ```
 
-### Markdown 文档
+> Markdown 文档
 
 可以按照读取 PDF 文档几乎一致的方式读取 Markdown 文档。
 
@@ -369,7 +192,7 @@ print(
 )
 ```
 
-## 数据清洗
+### 数据清洗
 
 期望知识库的数据尽量是有序的、优质的、精简的，因此要删除低质量的、甚至影响理解文本数据。
 可以看到上下文中读取的 PDF 文件不仅将一句话按照原文的分行添加了换行符 `\n`，
@@ -400,18 +223,20 @@ md_page.page_content = md_page.page_content.replace("\n\n", "\n")
 print(md_page.page_content)
 ```
 
-## 文档分割
+### 文档分割
 
-### 文档分割简介
+> 文档分割简介
 
-由于单个文档的长度往往会超过模型支持的上下文，导致检索得到的知识太长超出模型的处理能力，
+由于单个文档的长度往往会超过模型支持的上下文，导致检索得到的知识太长超出模型的处理能力。
 因此，在构建向量知识库的过程中，往往需要对文档进行分割，
 **将单个文档按长度或者按固定的规则分割成若干个 chunk，然后将每个 chunk 转化为词向量，
-存储到向量数据库中**。在检索时，会以 chunk 作为检索的元单位，
+存储到向量数据库中**。
+
+在检索时，会以 chunk 作为检索的元单位，
 也就是每一次检索到 `k` 个 chunk 作为模型可以参考来回答用户问题的知识，
 这个 `k` 是可以自由设定的。
 
-### 文档分割 API
+> 文档分割 API
 
 Langchain 中文本分割器都根据 `chunk_size`(块大小)和 `chunk_overlap`(块与块之间的重叠大小)进行分割。
 `CharacterTextSpitter` API 示例如下：
@@ -447,7 +272,7 @@ Langchain 提供多种文档分割方式，区别在怎么确定块与块之间�
 * `NLTKTextSplitter()`: 使用 `NLTK`（自然语言工具包）按句子分割文本
 * `SpacyTextSplitter()`: 使用 `Spacy` 按句子的切割文本
 
-### 文档分割示例
+> 文档分割示例
 
 ```python
 ''' 
@@ -485,16 +310,26 @@ print(f"切分后的字符数（可以用来大致评估 token 数）：{sum([le
 但是，如何选择分割方式，往往具有很强的业务相关性——针对不同的业务、不同的源数据，
 往往需要设定个性化的文档分割方式。因此，这里仅简单根据 `chunk_size` 对文档进行分割。
 
-# 搭建并使用向量数据库
+## 构建向量数据库
 
-## 配置
+Langchain 集成了超过 30 个不同的向量存储库。选择 Chroma 是因为它轻量级且数据存储在内存中，
+这使得它非常容易启动和开始使用。LangChain 可以直接使用 OpenAI 和百度千帆的 Embedding，
+同时，也可以针对其不支持的 Embedding API 进行自定义。
 
 ```python
 import os
 from dotenv import load_dotenv, find_dotenv
+
 from langchain.document_loaders.pdf import PyMuPDFLoader
 from langchain.document_loaders.markdown import UnstructuredMarkdownLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# 使用 OpenAI Embedding
+# from langchain.embeddings.openai import OpenAIEmbeddings
+# 使用百度千帆 Embedding
+# from langchain.embeddings.baidu_qianfan_endpoint import QianfanEmbeddingsEndpoint
+# 使用我们自己封装的智谱 Embedding，需要将封装代码下载到本地使用
+from zhipuai_embedding import ZhipuAIEmbeddings
 
 # 读取本地/项目的环境变量
 _ = load_dotenv(find_dotenv())
@@ -542,23 +377,7 @@ text_splitter = RecursiveCharacterTextSplitter(
     chunk_overlap = 50
 )
 split_docs = text_splitter.split_documents(texts)
-```
 
-## 构建 Chroma 向量库
-
-Langchain 集成了超过 30 个不同的向量存储库。选择 Chroma 是因为它轻量级且数据存储在内存中，
-这使得它非常容易启动和开始使用。LangChain 可以直接使用 OpenAI 和百度千帆的 Embedding，
-同时，也可以针对其不支持的 Embedding API 进行自定义。
-
-```python
-# 使用 OpenAI Embedding
-# from langchain.embeddings.openai import OpenAIEmbeddings
-
-# 使用百度千帆 Embedding
-# from langchain.embeddings.baidu_qianfan_endpoint import QianfanEmbeddingsEndpoint
-
-# 使用我们自己封装的智谱 Embedding，需要将封装代码下载到本地使用
-from zhipuai_embedding import ZhipuAIEmbeddings
 
 # 定义 Embeddings
 # embedding = OpenAIEmbeddings() 
@@ -594,7 +413,7 @@ print(f"向量库中存储的数量：{vectordb._collection.count()}")
 
 ## 向量检索
 
-### 相似度检索
+> 相似度检索
 
 Chroma 的相似度搜索使用的是余弦距离，即：
 
@@ -613,47 +432,206 @@ similarity
 question = "什么是大语言模型"
 sim_docs = vectordb.similarity_search(question, k = 3)
 print(f"检索到的内容数：{len(sim_docs)}")
-for i, sim_docs in enumerate(sim_docs):
+for i, sim_doc in enumerate(sim_docs):
     print(f"检索到的第{i}个内容：\n{sim_doc.page_content[:200]}", end = "\n-------------\n")
-
 ```
 
-### MMR 检索
+> MMR 检索
 
 如果只考虑检索出内容的相关性会导致内容过于单一，可能丢失重要信息。
 最大边际相关性(MMR, Maximum Marginal Relevance)可以帮助在保持相关性的同时，
-增加内容的丰富度。核心思想是在已经选择了一个相关性搞得文档之后，
-再选择一个与已选文档相关性较低但是信息丰富的文档。
+增加内容的丰富度。
+
+核心思想是在已经选择了一个相关性高得文档之后，再选择一个与已选文档相关性较低但是信息丰富的文档。
 这样可以在保持相关性的同时，增加内容的多样性，避免过于单一的结果。
 
 ```python
 mmr_docs = vector_db.max_marginal_relevance_search(question, k = 3)
+print(f"检索到的内容数：{len(mmr_docs)}")
 for i, sim_doc in enumerate(mmr_docs):
     print(f"MMR 检索到的第 {i} 个内容：\n{sim_doc.page_content[:200]}", end = "\n-----------\n")
 ```
 
 # 基于 LangChain 构建检索问答链
 
-在[这里]()介绍了如何根据自己的本地知识文档，搭建一个向量知识库。
-使用搭建好的向量数据库，对 query 查询问题进行召回，
-并将召回结果和 query 结合起来构建 prompt，输入到大模型中进行问答。
+在上面介绍了如何根据自己的本地知识文档，搭建了一个向量知识库。
+这里将使用搭建好的向量数据库，对查询问题进行召回，
+并将召回结果和查询结合起来构建 prompt，输入到大模型中进行问答。
 
 ## 加载数据库向量
 
+首先，加载已经构建的向量数据库。注意，此时需要使用和构建时相同的 Embedding。
 
+```python
+import os
+from dotenv import find_dotenv, load_dotenv
+from langchain.vectorstores.chroma import Chroma
+from zhipuai_embedding import ZhipuAIEmbeddings
+
+# 加载环境变量中的 API_KEY
+_ = load_dotenv(find_dotenv())
+zhipuai_api_key = os.environ["ZHIPUAI_API_KEY"]
+
+
+# 定义 Embeddings
+embedding = ZhipuAIEmbeddings()
+# 向量数据库持久化路径
+persisit_directory = "../data_base/vector_db/chroma"
+# 加载数据库
+vectordb = Chroma(
+     persist_directory = persist_directory,
+     embedding_function = embedding,
+)
+print(f"向量库中存储的数量：{vectordb._collection.count()}")
+```
+
+> 测试加载的向量数据库，使用一个问题 query 进行向量检索，在向量数据库中根据相似性进行检索，
+> 返回前 `$k$` 个最相似的文档：
+> 
+> ```python
+> question = "什么是 prompt engineering?"
+> docs = vectordb.similarity_search(question, k = 3)
+> print(f"检索到的内容数：{len(docs)}")
+> 
+> for i, doc in enumerate(docs):
+>      print(f"检索到的第 {i} 个内容：\n{doc.page_content}", end = "\n-------")
+> ```
 
 ## 创建一个 LLM
 
+```python
+import os
+
+from langchain_openai import ChatOpenAI
+
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+
+llm = ChatOpenAI(model_name = "gpt-3.5-turbo", temperature = 0)
+llm.invoke("请你自我介绍一下自己！")
+```
 
 ## 构建检索问答链
 
+```python
+from langchain.prompts import PromptTemplate
+from langchain.chains import RetrievalQA
 
+tempalte = """
+使用以下上下文来回答最后的问题。如果你不知道答案，就说你不知道，不要试图编造答
+案。最多使用三句话。尽量使答案简明扼要。总是在回答的最后说“谢谢你的提问！”。
+{context}
+问题: {question}
+"""
+QA_CHAIN_PROMPT = PromptTemplates(
+     input_variables = ["context", "question"],
+     template = template,
+)
+qa_chain = RetrievalQA.from_chain_type(
+     # 指定使用的 LLM
+     llm,
+     retriever = vectordb.as_retriever(),
+     # 返回源文档，通过指定该参数，可以使用 RetrievalQAWithSourceChain() 方法，
+     # 返回源文档的引用(坐标或者叫主键、索引)
+     return_source_documents = True,
+     # 自定义 prompt
+     chain_type_kwargs = {"prompt": QA_CHAIN_PROMPT},
+)
+```
 
 ## 检索问答链效果测试
 
+```python
+question_1 = "什么是南瓜书？"
+question_2 = "Prompt Engineering for Developer 是谁写的？"
+```
+
+### 基于召回结果和 query 结合起来构建 prompt 效果
+
+```python
+result = qa_chain({"query": question_1})
+print(f"大模型+知识库后回答 question_1 的结果：\n {result["result"]}")
+
+result = qa_chain({"query": question_2})
+print(f"大模型+知识库后回答 question_2 的结果：\n {result["result"]}")
+```
+
+### 大模型自己回答的效果
+
+```python
+prompt_template = f"请回答一下问题：{question_1}"
+llm.predict(prompt_template)
+
+prompt_template = f"请回答一下问题：{question_2}"
+llm.predict(prompt_template)
+```
+
+通过以上的两个问题，发现 LLM 对于一些近几年的知识以及非常识性的专业知识，回答的并不是很好。
+而加上本地知识，就可以帮助 LLM 做出更好的回答。另外，也有助于缓解大模型的“幻觉”问题。
 
 ## 添加历史对话的记忆功能
 
+现在已经实现了通过上传本地知识文档，然后将它们保存到向量知识库，
+通过将查询问题与向量知识库的召回结果进行结合输入到 LLM 中，
+就得到了一个相比于直接让 LLM 回答要好的多的结果。
+
+在与语言模型交互时，可能已经注意到一个关键的问题：**它们并不记得你之前的交流内容**。
+这在构建一些应用程序（如聊天机器人）的时候，带来了很大的挑战，使得对话似乎缺乏真正的连续性。
+
+### 记忆
+
+> Memory
+
+这里将介绍 LangChain 中的存储模块，即如何将先前的对话嵌入到语言模型中，使其具有连续对话的能力。
+将使用 `ConversationBufferMemory` 这个 API，它保存聊天消息历史记录的列表，
+这些历史记录将在回答问题时与问题一起传递给聊天机器人，从而将它们添加到上下文中。
+
+```python
+from langchain.memory import ConversationBufferMemory
+
+memory = ConversationBufferMemory(
+     memory_key = "chat_history",  # 与 prompt 的输入变量保持一致
+     return_messages = True,  # 将以消息列表的形式返回聊天记录，而不是单个字符串
+)
+```
+
+Memory 的配置还包括保留指定对话轮数、保存指定 token 数量、保存历史对话的总结摘要等内容。
+
+### 对话检索链
+
+> Conversational Retrieval Chain
+
+对话索引链在检索 QA 链的基础上，增加了处理对话历史的能力。它的工作流程是：
+
+1. 将之前的对话与新问题合并成一个完整的查询语句；
+2. 在向量数据库中搜索该查询的相关文档；
+3. 获取结果后，存储所有答案到对话记忆区；
+4. 用户可以在 UI 中查看完整的对话流程。
+
+这种链式方式将 **新问题** 放在之前对话的语境中进行检索，可以处理依赖历史信息的查询。
+并保留所有信息在对话记忆中，方便追踪。
+
+接下来让我们使用上一节中的向量数据库和 LLM，测试这个对话检索链的效果。
+
+```python
+from langchain.chains import ConversationalRetrievalChain
+
+qa = ConversationalRetrievalChain.from_llm(
+     llm,
+     retriever = vectordb.as_retriever(),
+     memory = memory,
+)
+
+question = "我可以学习到关于提示工程的知识吗？"
+result = qa({"question": question})
+print(result["answer"])
+
+question = "为什么这门课需要教这方面的知识？"
+result = qa({"question": question})
+print(result["answer"])
+```
+
+可以看到，LLM 它准确地判断了这方面的知识，指代内容是强化学习的知识，也就是说我们成功地传递给了它历史信息。
+这种持续学习和关联前后问题的能力，可大大增强了问答系统的连续性和智能水平。
 
 # 基于 Streamlit 部署知识库助手
 

@@ -41,5 +41,6 @@ img {
 
 # 参考
 
-* [一个基于PyTorch实现的Glove词向量的实例](https://blog.csdn.net/a553181867/article/details/104837957)
-
+* [基于 PyTorch 实现的 Glove 词向量的实例](https://blog.csdn.net/a553181867/article/details/104837957)
+* [GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/projects/glove/)
+* [Glove Python](https://github.com/maciejkula/glove-python)
