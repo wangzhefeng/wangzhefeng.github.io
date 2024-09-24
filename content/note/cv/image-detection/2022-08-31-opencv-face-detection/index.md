@@ -36,10 +36,10 @@ img {
 
 - [目标简介](#目标简介)
 - [项目结构](#项目结构)
-  - [Flask App](#flask-app)
-  - [Web 页面](#web-页面)
-    - [index.html](#indexhtml)
-    - [stop.html](#stophtml)
+    - [Flask App](#flask-app)
+    - [Web 页面](#web-页面)
+        - [index.html](#indexhtml)
+        - [stop.html](#stophtml)
 - [运行 Flask App](#运行-flask-app)
 - [参考](#参考)
 </p></details><p></p>
@@ -188,8 +188,6 @@ $ flask app
 
 - http://127.0.0.1:8000/
 
-
 # 参考
 
 * [Opencv-face-detection-deployment-using-flask-API](https://github.com/DharmarajPi/Opencv-face-detection-deployment-using-flask-API)
-

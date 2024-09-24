@@ -9,6 +9,37 @@ tags:
   - model
 ---
 
+<style>
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+details[open] {
+    padding: .5em;
+}
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+img {
+    pointer-events: none;
+}
+</style>
+
+<details><summary>目录</summary><p>
+
+- [Stable Diffusion 简介](#stable-diffusion-简介)
+- [Stable Diffusion 模型](#stable-diffusion-模型)
+- [Python API](#python-api)
+- [参考](#参考)
+</p></details><p></p>
+
 # Stable Diffusion 简介
 
 Stable Diffusion 是 CompVis、Stability AI 和 LAION 等公司研发的一个文生图模型，

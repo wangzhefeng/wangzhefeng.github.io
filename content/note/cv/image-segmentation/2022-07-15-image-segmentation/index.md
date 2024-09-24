@@ -94,3 +94,4 @@ python 库 scikit-image 具有大多数非 ML 方法的实现。我们在下面�
 # 参考
 
 * [Image Segmentation using Pre-Trained Models (torchvision)](https://coderzcolumn.com/tutorials/artificial-intelligence/pytorch-image-segmentation-using-pre-trained-models)
+* [图像分割影响力最大的10篇论文](https://mp.weixin.qq.com/s/iF9oj0blS-alg--bZVUlGQ)

@@ -259,7 +259,6 @@ You only look once (YOLO) is a state-of-the-art, real-time object detection syst
 ### YOLOv7
 
 
-
 ### Detection Using A Pre-Trained Model
 
 1. 安装 Darknet
@@ -324,36 +323,18 @@ Loading weights from yolov3.weights...Done!
 Enter Image Path: data/horse.jpg
 ```
 
-
-
-
-
-
-
-
 ## ImageNet Classification
-
 
 ## Nightmare
 
-
 ## RNNs in Darknet
-
 
 ## DarkGo
 
-
 ## Tiny Darknet
 
-
 ## Train a Classifier on CIFAR-10
-
-
-
 
 # 参考资料
 
 * https://pjreddie.com/darknet/yolov2/
-
-
-
