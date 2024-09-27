@@ -1,6 +1,6 @@
 ---
-title: LLM-微调
-subtitle: LLM Fine-Tune
+title: 模型微调
+subtitle: Model Fine-tune
 list_pages: true
 # order_by: title
 ---
