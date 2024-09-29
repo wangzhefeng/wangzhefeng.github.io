@@ -36,24 +36,24 @@ img {
 <details><summary>目录</summary><p>
 
 - [Darknet](#darknet)
-  - [安装](#安装)
-    - [依赖](#依赖)
-    - [安装基础系统](#安装基础系统)
-    - [使用 CUDA 编译](#使用-cuda-编译)
-    - [使用 OpenCV 编译](#使用-opencv-编译)
+    - [安装](#安装)
+        - [依赖](#依赖)
+        - [安装基础系统](#安装基础系统)
+        - [使用 CUDA 编译](#使用-cuda-编译)
+        - [使用 OpenCV 编译](#使用-opencv-编译)
 - [Darknet 的应用](#darknet-的应用)
-  - [YOLO: Real-Time Object Dectection](#yolo-real-time-object-dectection)
-    - [YOLOv2](#yolov2)
-    - [YOLOv4](#yolov4)
-    - [YOLOv5](#yolov5)
-    - [YOLOv7](#yolov7)
-    - [Detection Using A Pre-Trained Model](#detection-using-a-pre-trained-model)
-  - [ImageNet Classification](#imagenet-classification)
-  - [Nightmare](#nightmare)
-  - [RNNs in Darknet](#rnns-in-darknet)
-  - [DarkGo](#darkgo)
-  - [Tiny Darknet](#tiny-darknet)
-  - [Train a Classifier on CIFAR-10](#train-a-classifier-on-cifar-10)
+    - [YOLO: Real-Time Object Dectection](#yolo-real-time-object-dectection)
+        - [YOLOv2](#yolov2)
+        - [YOLOv4](#yolov4)
+        - [YOLOv5](#yolov5)
+        - [YOLOv7](#yolov7)
+        - [Detection Using A Pre-Trained Model](#detection-using-a-pre-trained-model)
+    - [ImageNet Classification](#imagenet-classification)
+    - [Nightmare](#nightmare)
+    - [RNNs in Darknet](#rnns-in-darknet)
+    - [DarkGo](#darkgo)
+    - [Tiny Darknet](#tiny-darknet)
+    - [Train a Classifier on CIFAR-10](#train-a-classifier-on-cifar-10)
 - [参考资料](#参考资料)
 </p></details><p></p>
 
@@ -257,6 +257,8 @@ You only look once (YOLO) is a state-of-the-art, real-time object detection syst
 
 
 ### YOLOv7
+
+
 
 
 ### Detection Using A Pre-Trained Model

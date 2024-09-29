@@ -35,33 +35,34 @@ img {
 <details><summary>目录</summary><p>
 
 - [目标检测](#目标检测)
-    - [目标检测概述](#目标检测概述)
-    - [目标检测模型](#目标检测模型)
+  - [目标检测概述](#目标检测概述)
+  - [目标检测模型](#目标检测模型)
 - [目标检测数据集](#目标检测数据集)
-    - [PASCAL VOC](#pascal-voc)
-    - [MS COCO](#ms-coco)
+  - [PASCAL VOC](#pascal-voc)
+  - [MS COCO](#ms-coco)
 - [目标检测性能指标](#目标检测性能指标)
-    - [IoU](#iou)
-    - [AP 和 mAP](#ap-和-map)
-    - [FPS](#fps)
+  - [IoU](#iou)
+  - [AP 和 mAP](#ap-和-map)
+  - [FPS](#fps)
 - [两部走算法系列](#两部走算法系列)
-    - [R-CNN](#r-cnn)
-    - [SPP-Net](#spp-net)
-    - [Fast R-CNN](#fast-r-cnn)
-    - [Faster R-CNN](#faster-r-cnn)
-    - [Mask R-CNN](#mask-r-cnn)
+  - [R-CNN](#r-cnn)
+  - [SPP-Net](#spp-net)
+  - [Fast R-CNN](#fast-r-cnn)
+  - [Faster R-CNN](#faster-r-cnn)
+  - [Mask R-CNN](#mask-r-cnn)
 - [一步走算法系列](#一步走算法系列)
-    - [YOLOv1](#yolov1)
-    - [YOLOv2](#yolov2)
-    - [YOLOv3](#yolov3)
-    - [YOLOv4](#yolov4)
-    - [YOLOX](#yolox)
-    - [YOLOv7](#yolov7)
-    - [SSD](#ssd)
+  - [YOLOv1](#yolov1)
+  - [YOLOv2](#yolov2)
+  - [YOLOv3](#yolov3)
+  - [YOLOv4](#yolov4)
+  - [YOLOX](#yolox)
+  - [YOLOv7](#yolov7)
+  - [YOLOv9](#yolov9)
+  - [SSD](#ssd)
 - [目标检测框架](#目标检测框架)
-    - [DETR](#detr)
-    - [YOLOF](#yolof)
-    - [FCOS](#fcos)
+  - [DETR](#detr)
+  - [YOLOF](#yolof)
+  - [FCOS](#fcos)
 - [目标检测实现框架](#目标检测实现框架)
 - [参考](#参考)
 </p></details><p></p>
@@ -270,9 +271,17 @@ yolo 算法系列的主要思想就是直接从输入图像得到目标物体的
 
 ## YOLOv4
 
+* [Blog](https://mp.weixin.qq.com/s/87aeQpJ_3yW2BYUJpE4I7w)
+
 ## YOLOX
 
 ## YOLOv7
+
+## YOLOv9
+
+* [Paper](https://arxiv.org/pdf/2402.13616.pdf)
+* [GitHub](https://github.com/WongKinYiu/yolov9)
+* [Blog](https://mp.weixin.qq.com/s/ymIPPTmKUf8BLLhl2TO3_g)
 
 ## SSD
 
