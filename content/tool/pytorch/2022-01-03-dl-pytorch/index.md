@@ -43,7 +43,6 @@ img {
     - [构建模型的三种方法](#构建模型的三种方法)
     - [训练模型的三种方法](#训练模型的三种方法)
     - [使用 GPU 训练模型](#使用-gpu-训练模型)
-- [PyTorch 生态资源](#pytorch-生态资源)
 </p></details><p></p>
 
 # PyTorch 建模流程
@@ -150,11 +149,3 @@ PyTorch 没有官方的高阶 API，一般通过 `torch.nn.Module` 来构建模�
 
 ## 使用 GPU 训练模型
 
-
-# PyTorch 生态资源
-
-* [PyTorch tabular](https://github.com/manujosephv/pytorch_tabular)
-* [torchkeras](https://github.com/lyhue1991/torchkeras)
-* [pytorch_lightning](https://www.pytorchlightning.ai/)
-* [Optuna 调参工具](https://github.com/optuna/optuna)
-* [wandb](https://wandb.ai/home)

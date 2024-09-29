@@ -37,14 +37,14 @@ img {
 - [数据增强](#数据增强)
 - [PyTorch transforms](#pytorch-transforms)
     - [torchvision transforms](#torchvision-transforms)
-        - [torchvision transforms 简介](#torchvision-transforms-简介)
-        - [torchvision transforms 机制](#torchvision-transforms-机制)
+        - [transforms 简介](#transforms-简介)
+        - [transforms 机制](#transforms-机制)
         - [常用转换](#常用转换)
     - [torchtext transforms](#torchtext-transforms)
-        - [torchtext transforms 简介](#torchtext-transforms-简介)
+        - [transforms 简介](#transforms-简介-1)
         - [常用转换](#常用转换-1)
     - [torchaudio transforms](#torchaudio-transforms)
-        - [torchaudio transforms 简介](#torchaudio-transforms-简介)
+        - [transforms 简介](#transforms-简介-2)
         - [常用转换](#常用转换-2)
 - [AIbumentations](#aibumentations)
 - [参考](#参考)
@@ -77,7 +77,7 @@ PyTorch 的 `transforms` 就是在线方式。
 
 > `torchvision.transforms`
 
-### torchvision transforms 简介
+### transforms 简介
 
 `torchvision.transforms` 是广泛使用的图像变换库，包含二十多种基础方法以及多种组合功能，
 通常可以用 `torchvision.transforms.Compose([])` 把各方法串联在一起使用。
@@ -98,16 +98,12 @@ PyTorch 的 `transforms` 就是在线方式。
 
 大部分 transform 同时接受 PIL 图像和 tensor 图像，
 但是也有一些 tansform 只接受 PIL 图像，或只接受 tensor 图像。
-
-* PIL 图像
-* tensor 图像
-
-`transform` 接受 tensor 图像或批量 tensor 图像：
+对于 tensor 图像，`transform` 接受 tensor 图像或批量 tensor 图像：
 
 * tensor 图像的 shape 格式是 `(C, H, W)`
 * 批量 tensor 图像的 shape 格式是 `(B, C, H, W)`
 
-### torchvision transforms 机制
+### transforms 机制
 
 开始采用 `torchvision.transforms.Compose` 把变换的方法包装起来，放到 `Dataset` 中；
 在 `DataLoader` 依次读数据时，调用 `Dataset` 的 `__getitem__`，
@@ -157,13 +153,13 @@ PyTorch 的 `transforms` 就是在线方式。
 
 ## torchtext transforms
 
-### torchtext transforms 简介
+### transforms 简介
 
 ### 常用转换
 
 ## torchaudio transforms
 
-### torchaudio transforms 简介
+### transforms 简介
 
 ### 常用转换
 

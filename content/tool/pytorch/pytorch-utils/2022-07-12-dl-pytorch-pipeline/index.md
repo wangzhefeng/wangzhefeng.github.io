@@ -36,12 +36,12 @@ img {
 
 - [Libraries](#libraries)
 - [Data](#data)
-  - [Data Download](#data-download)
-  - [Data Loader](#data-loader)
+    - [Data Download](#data-download)
+    - [Data Loader](#data-loader)
 - [Model](#model)
 - [Model Parameters Optimizing](#model-parameters-optimizing)
-  - [Loss and Optimizer](#loss-and-optimizer)
-  - [Model Training](#model-training)
+    - [Loss and Optimizer](#loss-and-optimizer)
+    - [Model Training](#model-training)
 - [Model Saving](#model-saving)
 - [Model Loading](#model-loading)
 </p></details><p></p>
@@ -100,12 +100,13 @@ for X, y in test_dataloader:
 
 ```python
 # get cpu or gpu device for training.
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using {device} device")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}.")
 
 
 # Define model
 class NeuralNetwork(nn.Module):
+    
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         self.flatten = nn.Flatten()

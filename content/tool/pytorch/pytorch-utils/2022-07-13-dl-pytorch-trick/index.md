@@ -35,39 +35,35 @@ img {
 <details><summary>目录</summary><p>
 
 - [基本配置](#基本配置)
-  - [导入包和版本查询](#导入包和版本查询)
-  - [可复现性](#可复现性)
-    - [随机种子](#随机种子)
-    - [Benchmark](#benchmark)
+    - [导入包和版本查询](#导入包和版本查询)
+    - [可复现性](#可复现性)
+        - [随机种子](#随机种子)
+        - [Benchmark](#benchmark)
 - [GPU 设置](#gpu-设置)
-  - [GPU 参数查看](#gpu-参数查看)
-  - [获取 GPU ID 信息](#获取-gpu-id-信息)
-  - [GPU 启动模式设置](#gpu-启动模式设置)
-  - [节点分配](#节点分配)
-  - [指定 GPU 编号](#指定-gpu-编号)
-  - [清除显存](#清除显存)
+    - [GPU 参数查看](#gpu-参数查看)
+    - [获取 GPU ID 信息](#获取-gpu-id-信息)
+    - [GPU 启动模式设置](#gpu-启动模式设置)
+    - [节点分配](#节点分配)
+    - [指定 GPU 编号](#指定-gpu-编号)
+    - [清除显存](#清除显存)
 - [Tensor 数据类型](#tensor-数据类型)
-  - [tensor 数据类型概述](#tensor-数据类型概述)
-  - [tensor 类型](#tensor-类型)
-  - [tensor 命名](#tensor-命名)
-  - [tensor 类型转换](#tensor-类型转换)
-    - [设置默认类型](#设置默认类型)
-    - [torch tensor 与 numpy ndarray 转换](#torch-tensor-与-numpy-ndarray-转换)
-- [Tensor 操作](#tensor-操作)
-  - [](#)
+    - [tensor 数据类型](#tensor-数据类型-1)
+    - [tensor 类型查看](#tensor-类型查看)
+    - [tensor 命名](#tensor-命名)
+    - [tensor 类型转换](#tensor-类型转换)
+        - [设置默认类型](#设置默认类型)
+        - [torch tensor 与 numpy ndarray 转换](#torch-tensor-与-numpy-ndarray-转换)
 - [模型参数](#模型参数)
-  - [计算模型参数量](#计算模型参数量)
-  - [查看模型参数](#查看模型参数)
-  - [模型信息打印](#模型信息打印)
-  - [模型可视化](#模型可视化)
+    - [计算模型参数量](#计算模型参数量)
+    - [查看模型参数](#查看模型参数)
+    - [模型信息打印](#模型信息打印)
+    - [模型可视化](#模型可视化)
 - [梯度](#梯度)
-  - [梯度裁剪](#梯度裁剪)
+    - [梯度裁剪](#梯度裁剪)
 - [学习率](#学习率)
-  - [学习率衰减](#学习率衰减)
+    - [学习率衰减](#学习率衰减)
 - [参考](#参考)
 </p></details><p></p>
-
-> 所有基于 GPU 的操作都是在 Colab 上进行
 
 # 基本配置
 
@@ -95,8 +91,9 @@ Tesla T4
 
 ### 随机种子
 
-在硬件设备(CPU、GPU)不同时，完全的可复现性无法保证，即使随机种子相同。但是，在同一个设备上，应该保证可复现性。
-具体做法是，在程序开始的时候固定 `torch` 的随机种子，同时也把 `numpy` 的随机种子固定
+在硬件设备(CPU、GPU)不同时，完全的可复现性无法保证，即使随机种子相同。
+但是，在同一个设备上，应该保证可复现性。具体做法是，
+在程序开始的时候固定 `torch` 的随机种子，同时也把 `numpy` 的随机种子固定。
 
 ```python
 import random
@@ -116,7 +113,7 @@ if torch.cuda.is_available():
 ```python
 if torch.cuda.is_available():
     torch.backends.cudnn.deterministic = True
-    # cuDNN 使用非确定性算法，可以使用 torch.backends.cudnn.enabled = False 来进行禁用
+    # cuDNN 使用非确定性算法，可以使用以下命令禁用
     torch.backends.cudnn.benchmark = False
 ```
 
@@ -151,7 +148,7 @@ torch.backends.cudnn.deterministic = True
 ## GPU 参数查看
 
 NVIDIA系统管理界面(`nvidia-smi`)是基于 NVIDIA Management Library(NVML) 的命令行实用程序，
-旨在帮助管理和监视 NVIDIA GPU 设备
+旨在帮助管理和监视 NVIDIA GPU 设备。
 
 ```bash
 $ nvidia-smi
@@ -204,7 +201,7 @@ Sun Mar 28 02:40:38 2021
 
 ## 获取 GPU ID 信息
 
-从左到右依次为：GPU 卡号、GPU 型号、GPU 物理 UUIID 号
+从左到右依次为：GPU 卡号、GPU 型号、GPU 物理 UUIID 号：
 
 ```bash
 $ nvidia-smi -L
@@ -239,11 +236,11 @@ $ sudo nvidia-smi -pm 1
 
 ## 节点分配
 
-解决卡性能不均匀问题，如果是四卡机器，只使用两个节点优先选择 `0` 和 `3`，边界卡槽有利于散热
+解决卡性能不均匀问题，如果是四卡机器，只使用两个节点优先选择 `0` 和 `3`，边界卡槽有利于散热。
 
 ## 指定 GPU 编号
 
-如果只需要一张显卡，设置当前使用的 GPU 设备仅为 0 号设备，设备名称为 `/gpu:0`
+如果只需要一张显卡，设置当前使用的 GPU 设备仅为 0 号设备，设备名称为 `/gpu:0`。
 
 ```python
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -302,7 +299,7 @@ GPU 00000000:00:04.0 is currently in use by another process.
 
 # Tensor 数据类型
 
-## tensor 数据类型概述
+## tensor 数据类型
 
 PyTorch 有 9 种 CPU Tensor 类型和 9 种 GPU Tensor 类型：
 
@@ -318,7 +315,7 @@ PyTorch 有 9 种 CPU Tensor 类型和 9 种 GPU Tensor 类型：
 | 64-bit integer | `torch.int64` | `torch.LongTensor` | `torch.cuda.LongTensor` |
 | Boolean | `torch.bool` | `torch.BoolTensor` | `torch.cuda.BoolTensor` |
 
-## tensor 类型
+## tensor 类型查看
 
 ```python
 tensor = torch.randn(3, 4, 5)
@@ -333,10 +330,14 @@ print(tensor.type())
 NCHW = ["N", "C", "H", "W"]
 
 images = torch.randn(32, 3, 56, 56, names = NCHW)
+
+# sum
 images.sum("C")
+
+# index
 images.select("C", index = 0)
 
-# 排序
+# sort
 tensor = tensor.align_to("N", "C", "H", "W")
 ```
 
@@ -344,7 +345,7 @@ tensor = tensor.align_to("N", "C", "H", "W")
 
 ### 设置默认类型
 
-PyTorch 中的 `FloatTensor` 远远快于 `DoubleTensor`
+> PyTorch 中的 `FloatTensor` 远远快于 `DoubleTensor`
 
 ```python
 torch.set_default_tensor_type(torch.FloatTensor)
@@ -358,16 +359,7 @@ tensor = tensor.long()
 
 ### torch tensor 与 numpy ndarray 转换
 
-除了 `CharTensor`，其他所有 CPU 上的张量都支持转换为 numpy 格式然后再转换回来
-
-# Tensor 操作
-
-## 
-
-
-
-
-
+除了 `CharTensor`，其他所有 CPU 上的张量都支持转换为 numpy 格式然后再转换回来。
 
 # 模型参数
 
@@ -391,7 +383,7 @@ print(param.grad)
 
 ## 模型信息打印
 
-> torchinfo
+> [torchinfo](https://github.com/TylerYep/torchinfo)
 
 ```python
 from torchinfo import summary
@@ -400,11 +392,9 @@ model_stats = summary(your_model, (1, 3, 28, 28), verbose=0)
 summary_str = str(model_stats)
 ```
 
-* [torchinfo](https://github.com/TylerYep/torchinfo)
-
 ## 模型可视化
 
-> torchviz
+> [torchviz](https://github.com/szagoruyko/pytorchviz)
 
 ```python
 import torch.nn as nn
@@ -418,10 +408,13 @@ model.add_module('W1', nn.Linear(16, 1))
 x = torch.randn(1, 8)
 y = model(x)
 
-make_dot(y.mean(), params=dict(model.named_parameters()), show_attrs=True, show_saved=True)
+make_dot(
+    y.mean(), 
+    params = dict(model.named_parameters()), 
+    show_attrs = True, 
+    show_saved = True
+)
 ```
-
-* [torchviz](https://github.com/szagoruyko/pytorchviz)
 
 # 梯度
 
