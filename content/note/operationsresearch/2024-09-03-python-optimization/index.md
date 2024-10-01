@@ -2020,3 +2020,4 @@ Algorithm 类既存储着跟进化算法相关的一些参数，同时也在其�
 * [OR-Tools 官方文档](https://developers.google.com/optimization?hl=zh-cn)
 * [OR-Tools GitHub](https://github.com/google/or-tools?tab=readme-ov-file)
 * [Pyomo Tutorial](https://www.osti.gov/servlets/purl/1376827)
+* [Geatpy GitHub](https://github.com/geatpy-dev/geatpy)
