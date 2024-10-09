@@ -1,5 +1,5 @@
 ---
-title: 对偶问题
+title: 线性规划对偶问题
 subtitle: Dual Problem
 author: 王哲峰
 date: '2024-09-17'
