@@ -49,6 +49,7 @@ img {
     - [CartPole](#cartpole)
         - [开发环境](#开发环境)
         - [CartPole 示例](#cartpole-示例)
+- [资料](#资料)
 </p></details><p></p>
 
 # 强化学习基础
@@ -242,4 +243,8 @@ import tensorflow as tf
 class QNetwork(tf.keras.Model):
     pass
 ```
+
+# 资料
+
+* [强化学习](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwMTU3NjYwOA==&action=getalbum&album_id=3265062318488158212&subscene=159&subscene=189&scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzkwMTU3NjYwOA%3D%3D%26mid%3D2247484478%26idx%3D1%26sn%3D8e573705e9f7eb99fe6d3b41e1125a46%26chksm%3Dc0b3e6f1f7c46fe72dcda053230dcb1d10da23f9060bf6e62073029de2ae0f114f46f9f6c805%26cur_album_id%3D3265062318488158212%26scene%3D189%23wechat_redirect&nolastread=1#wechat_redirect)
 
