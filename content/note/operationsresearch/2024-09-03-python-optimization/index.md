@@ -1,5 +1,6 @@
 ---
-title: Python 数值优化求解器
+title: 数值优化求解器
+subtitle: Optimization
 author: 王哲峰
 date: '2024-09-03'
 slug: python-optimizaion
