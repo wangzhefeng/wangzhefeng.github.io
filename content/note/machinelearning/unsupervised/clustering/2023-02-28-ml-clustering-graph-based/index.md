@@ -1,5 +1,5 @@
 ---
-title: ml-clustering-graph-based
+title: 基于图论的聚类
 author: 王哲峰
 date: '2023-02-28'
 slug: ml-clustering-graph-based
@@ -65,4 +65,4 @@ plt.title("Estimated number of clusters: %d" % n_clusters_)
 plt.show()
 ```
 
-
+# 参考
