@@ -35,21 +35,21 @@ img {
 <details><summary>目录</summary><p>
 
 - [数值变量](#数值变量)
-  - [基于数值观察](#基于数值观察)
-  - [可视化](#可视化)
+    - [基于数值观察](#基于数值观察)
+    - [可视化](#可视化)
 - [类别变量](#类别变量)
-  - [基于数值观察](#基于数值观察-1)
-  - [可视化](#可视化-1)
+    - [基于数值观察](#基于数值观察-1)
+    - [可视化](#可视化-1)
 - [时间变量](#时间变量)
 - [字符串](#字符串)
-  - [wordcloud 可视化](#wordcloud-可视化)
-  - [scattertext 可视化](#scattertext-可视化)
+    - [wordcloud 可视化](#wordcloud-可视化)
+    - [scattertext 可视化](#scattertext-可视化)
 - [图像](#图像)
 - [参考](#参考)
 </p></details><p></p>
 
 针对单变量观测分析，可以将数据按照类型拆分成数值型、类别型、
-时间类型、字符串(`object` 型)、图像
+时间类型、字符串(`object` 型)、图像。
 
 # 数值变量
 
@@ -61,13 +61,13 @@ img {
 ## 基于数值观察
 
 可以直接通过 Pandas 的 `describe()` 函数去观测数值数据的分位数，
-基于分位数判断这些数据是否符合预期
+基于分位数判断这些数据是否符合预期。
 
 ```python
 import pandas as pd
 
 df = pd.read_csv("data.csv")
-df[""].describe(percentiles = np.array(list(range(10))) * 0.1)
+df["var"].describe(percentiles = np.array(list(range(10))) * 0.1)
 ```
 
 ## 可视化
@@ -76,12 +76,12 @@ df[""].describe(percentiles = np.array(list(range(10))) * 0.1)
 plt.figure(figsize = (10, 8))
 
 ax = plt.subplot(221)
-sns.boxplot(data = df[""], ax = ax)
-plt.ylabel("")
+sns.boxplot(data = df["var"], ax = ax)
+plt.ylabel("var")
 
 plt.subplot(222)
-sns.distplot(data = df[""])
-plt.xlabel("")
+sns.distplot(data = df["var"])
+plt.xlabel("var")
 ```
 
 # 类别变量
@@ -230,10 +230,7 @@ plt.imshow(I)
 
 # 参考
 
-* [Text Data Visualization in Python]()
-* [Generating WordClouds in Python]()
 * [word_cloud](https://github.com/amueller/word_cloud)
 * [scattertext](https://github.com/JasonKessler/scattertext)
 * [text-visualization](https://kanoki.org/2019/03/17/text-data-visualization-in-python/)
 * [数据探索分析-单变量数据分析](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247493208&idx=1&sn=0b78caad1b06fe2b18da50c84cea4f23&chksm=c32affd7f45d76c19af81f32e2bc730e33f436c956ffa024098d9ad6857a617c90eddd9ba307&cur_album_id=1701045138849906691&scene=189#wechat_redirect)
-

@@ -1,5 +1,6 @@
 ---
-title: Python 数值优化求解器
+title: 数值优化求解器
+subtitle: Optimization
 author: 王哲峰
 date: '2024-09-03'
 slug: python-optimizaion
@@ -37,7 +38,8 @@ img {
 - [最优化算法求解器](#最优化算法求解器)
 - [Python Gurobi](#python-gurobi)
     - [Gurobi 简介](#gurobi-简介)
-    - [Gurobi 安装](#gurobi-安装)
+    - [Gurobi Optimizer Software 安装](#gurobi-optimizer-software-安装)
+    - [Gurobi Python 安装](#gurobi-python-安装)
     - [Gurobi 数据结构](#gurobi-数据结构)
         - [Multidict](#multidict)
         - [Tuplelist](#tuplelist)
@@ -137,28 +139,43 @@ img {
 开源的求解器有 SCIP、GLPK、Ortools 等，这些求解器都有 Python 接口，
 因此，能够用比较简单的方式对运筹优化问题进行建模。
 
+商用求解器：
+
 * **Gurobi** 是由美国 Gurobi 公司开发的针对算法最优化领域的求解器，可以高效求解算法优化中的建模问题。
-* **SCIP**：
 * **CPLEX** 用于 Python 的 IBM Decision Optimization CPLEX 建模包
-* Ortools 是 Google 开源维护的算法优化求解器，针对 Google 的商业场景进行优化，如 VRP 问题，
+* **Xpress**
+
+开源求解器：
+
+* **SCIP**
+* **GLPK**
+* **Ortools** 是 Google 开源维护的算法优化求解器，针对 Google 的商业场景进行优化，如 VRP 问题，
   对于中小规模的商业场景的使用是个不错的选择。
-* Scipy
-* Xpress
-* GLPK
+* **Scipy**
+
+其他求解器：
+
+* **Pyomo**
+* **PuLP**
+* **Geatpy**
 
 # Python Gurobi
 
-> gurobipy，Gurobi 的 Python API
+> `gurobipy`：Gurobi 的 Python API
 
 ## Gurobi 简介
 
 运筹优化软件 Gurobi 虽然核心是使用 C/C++ 编写的，但也开发了 Python 接口，
 使 Python 使用者能够以其熟悉的方式用 Gurobi 求解算法最优化问题。
 
-## Gurobi 安装 
+## Gurobi Optimizer Software 安装
+
+[Gurobi Optimizer Software 下载页面](https://www.gurobi.com/downloads/gurobi-software/)
+
+## Gurobi Python 安装
 
 Gurobi 的安装根据[参考文档](https://support.gurobi.com/hc/en-us/articles/360044290292-How-do-I-install-Gurobi-for-Python)进行安装即可，在安装了 Gurobi 软件之后，
-Gurobi 的 Python 扩展就可以直接到 Gurobi 的安装目录用一下命令进行安装：
+Gurobi 的 Python 扩展就可以直接到 Gurobi 的安装目录用以下命令进行安装：
 
 ```bash
 $ pip install gurobipy
@@ -172,7 +189,7 @@ $ pip install gurobipy
 
 ### Multidict
 
-Multidict，即复合字典，就是多重字典的意思，`multidict` 函数允许在一个语句中初始化一个或多个字典
+Multidict，即复合字典，就是多重字典的意思，`multidict` 函数允许在一个语句中初始化一个或多个字典。
 
 ```python
 import gurobipy as grb
@@ -279,8 +296,6 @@ Tupledict 是 Python 的 `dict` 的一个子类，
 因此可以使用 `tuplelist` 的 `select` 方法选择集合的子集。在实际使用中，
 通过将元组与每个 Gurobi 变量关联起来，可以有效地创建包含匹配变量子集的表达式。
 
-示例：
-
 下面创建一个 `$3 \times 3$` 的矩阵，里面的每个元素表示线性表达式的变量，
 取其中一部分变量的操作就显得很方便了。
 
@@ -301,7 +316,13 @@ t1 = [
     (2, 1), (2, 2), (2, 3),
     (3, 1), (3, 2), (3, 3),
 ]
-vars = model.addVars(t1, name = "d")
+vars = model.addVars(t1, name = "x")
+model.update()
+print(vars)
+```
+
+```
+{(1, 1): <gurobi.Var x[1,1]>, (1, 2): <gurobi.Var x[1,2]>, (1, 3): <gurobi.Var x[1,3]>, (2, 1): <gurobi.Var x[2,1]>, (2, 2): <gurobi.Var x[2,2]>, (2, 3): <gurobi.Var x[2,3]>, (3, 1): <gurobi.Var x[3,1]>, (3, 2): <gurobi.Var x[3,2]>, (3, 3): <gurobi.Var x[3,3]>}
 ```
 
 对第 1 行求和，即 `$x_{11} + x_{12} + x_{13}$`，下面是两种计算方法：
@@ -313,7 +334,8 @@ print(vars.sum(1, "*"))
 ```
 
 ```
-<gurobi.LinExpr: d[1,1] + d[1,2] + d[1,3]>
+x[1,1] + x[1,2] + x[1,3]
+x[1,1] + x[1,2] + x[1,3]
 ```
 
 上面的例子中讨论的情况是变量的系数都是 1，如果变量系数不是 1，就不能用 `sum` 方法，
@@ -322,32 +344,32 @@ print(vars.sum(1, "*"))
 这样就可以快速匹配系数和对应的变量，然后采用 `prod` 方法来选定的变量和系数来构建线性表达式。
 
 ```python
-import gurobipy as grb
-
 # 创建一个系数矩阵，用 tupledict 格式存储
-c1 = [
+coeff = grb.tupledict([
     (1, 1),
     (1, 2),
     (1, 3),
-]
-coeff = grb.tupledict(c1)
+])
+print(coeff)
 coeff[(1, 1)] = 1
 coeff[(1, 2)] = 0.3
 coeff[(1, 3)] = 0.4
-
+print(coeff)
 print(vars.prod(coeff, 1, "*"))
 ```
 
 ```
-<gurobi.LinExpr: d[1,1] + 0.3 d[1,2] + 0.4 d[1,3]>
+{1: 3}
+{1: 3, (1, 1): 1, (1, 2): 0.3, (1, 3): 0.4}
+x[1,1] + 0.3 x[1,2] + 0.4 x[1,3]
 ```
 
-如果不是选择部分变量而是选择全部变量，`prod` 函数实现的功能就是具有相同下标的变量相乘后加和。
-
-```python
-obj = grb.quicksum(cost[i, j] * x[i, j] for i , j in arcs)
-obj = x.prod(cost)
-```
+> 如果不是选择部分变量而是选择全部变量，`prod` 函数实现的功能就是具有相同下标的变量相乘后加和。
+> 
+> ```python
+> obj = grb.quicksum(cost[i, j] * x[i, j] for i , j in arcs)
+> obj = x.prod(cost)
+> ```
 
 由于 `tupledict` 是 `dict` 的子类，因此可以使用标准的 `dict` 方法来修改 `tupledict`。
 Gurobi 变量一般都是 `tupledict` 类型，用 `tupledict` 定义变量的好处是可以快速选择部分变量，
@@ -370,6 +392,25 @@ m.write("tupledict_vars.lp")
 # con[2]: x[2,0] + x[2,1] + x[2,2] + x[2,3] <= 1
 ```
 
+`tupledict_vars.lp`：
+
+```
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Minimize
+ 
+Subject To
+ con[0]: x[0,0] + x[0,1] + x[0,2] + x[0,3] <= 1
+ con[1]: x[1,0] + x[1,1] + x[1,2] + x[1,3] <= 1
+ con[2]: x[2,0] + x[2,1] + x[2,2] + x[2,3] <= 1
+Bounds
+Binaries
+ x[0,0] x[0,1] x[0,2] x[0,3] x[1,0] x[1,1] x[1,2] x[1,3] x[2,0] x[2,1]
+ x[2,2] x[2,3]
+End
+
+```
+
+
 ### Gurobi 数据结构示例
 
 下面通过一个网络流的例子来讲解 `Multidict`、`Tuplelist`、`Tupledict` 在优化建模的问题中的应用。
@@ -377,6 +418,28 @@ m.write("tupledict_vars.lp")
 网络中每一条弧都有其总容量和成本。
 
 ```python
+# -*- coding: utf-8 -*-
+
+# ***************************************************
+# * File        : network_flow.py
+# * Author      : Zhefeng Wang
+# * Email       : wangzhefengr@163.com
+# * Date        : 2024-09-02
+# * Version     : 0.1.090220
+# * Description : 在这个网络流的例子中，有两个城市（底特律和丹佛）生产了两种商品（铅笔和钢笔），
+# *               必须装运到三个城市的仓库（波士顿、纽约、西雅图），以满足给定的需求。
+# *               网络中每一条弧都有其总容量和成本。
+# * Link        : link
+# * Requirement : 相关模块版本需求(例如: numpy >= 2.1.0)
+# ***************************************************
+
+# python libraries
+import os
+import sys
+ROOT = os.getcwd()
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
 import gurobipy as grb
 
 # global variable
@@ -387,7 +450,7 @@ LOGGING_LABEL = __file__.split('/')[-1][:-3]
 # 两种商品
 # ------------------------------ 
 commodities = ["Pencils", "Pens"]
-
+print(f"commodities:\n {commodities}")
 # ------------------------------
 # 两个产地、三个目的地
 # ------------------------------ 
@@ -398,6 +461,7 @@ nodes = [
     "New York",
     "Seattle",
 ]
+print(f"nodes:\n {nodes}")
 
 # ------------------------------
 # 网络中每条弧的容量(multidict)
@@ -410,8 +474,8 @@ arcs, capacity = grb.multidict({
     ("Denver", "New York"): 120,
     ("Denver", "Seattle"): 120,
 })
-# print(arcs)
-# print(capacity)
+print(f"arcs:\n {arcs}")
+print(f"capacity:\n {capacity}")
 
 # ------------------------------
 # 商品在不同弧上的运输成本(tupledict)
@@ -430,6 +494,7 @@ cost = {
     ("Pens", "Denver", "New York"): 70,
     ("Pens", "Denver", "Seattle"): 30,
 }
+print(f"cost:\n {cost}")
 
 # ------------------------------
 # 商品在不同节点的流入量、流出量（需求量），
@@ -447,6 +512,7 @@ inflow = {
     ("Pens", "New York"): -30,
     ("Pens", "Seattle"): -30,
 }
+print(f"inflow:\n {inflow}")
 
 # ------------------------------
 # 创建模型
@@ -457,22 +523,26 @@ m = grb.Model("netflow")
 # 创建变量(tupledict) 
 # ------------------------------
 flow = m.addVars(commodities, arcs, obj = cost, name = "flow")
-# print(flow)
+print(f"flow:\n {flow}\n")
 
 # ------------------------------
 # 添加约束
 # ------------------------------ 
-# 添加容量约束
-# capacity[i, j] 表示 i->j 的弧的容量，i 是产地，j 是目的地
+# 添加容量约束，capacity[i, j] 表示 i->j 的弧的容量，i 是产地，j 是目的地
 m.addConstrs(
-    (flow.sum("*", i, j) <= capacity[i, j] for i, j in arcs), 
-    "cap"
+    (
+        flow.sum("*", i, j) <= capacity[i, j] 
+        for i, j in arcs
+    ), 
+    name = "cap"
 )
-
 # 添加节点流入=流出的约束
 m.addConstrs(
-    (flow.sum(h, "*", j) + inflow[h, j] == flow.sum(h, j, "*") for h in commodities for j in nodes),
-    "node"
+    (
+        flow.sum(h, "*", j) + inflow[h, j] == flow.sum(h, j, "*") 
+        for h in commodities for j in nodes
+    ), 
+    name = "node"
 )
 
 # ------------------------------
@@ -490,6 +560,75 @@ if m.status == grb.GRB.Status.OPTIMAL:
         for i, j in arcs:
             if solution[h, i, j] > 0:
                 print(f"{i} -> {j}: {solution[h, i, j]}")
+
+
+
+
+# 测试代码 main 函数
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+commodities:
+ ['Pencils', 'Pens']
+nodes:
+ ['Detroit', 'Denver', 'Boston', 'New York', 'Seattle']
+arcs:
+ <gurobi.tuplelist (6 tuples, 2 values each):
+ ( Detroit , Boston   )
+ ( Detroit , New York )
+ ( Detroit , Seattle  )
+ ( Denver  , Boston   )
+ ( Denver  , New York )
+ ( Denver  , Seattle  )
+>
+capacity:
+ {('Detroit', 'Boston'): 100, ('Detroit', 'New York'): 80, ('Detroit', 'Seattle'): 120, ('Denver', 'Boston'): 120, ('Denver', 'New York'): 120, ('Denver', 'Seattle'): 120}
+cost:
+ {('Pencils', 'Detroit', 'Boston'): 10, ('Pencils', 'Detroit', 'New York'): 20, ('Pencils', 'Detroit', 'Seattle'): 60, ('Pencils', 'Denver', 'Boston'): 40, ('Pencils', 'Denver', 'New York'): 40, ('Pencils', 'Denver', 'Seattle'): 30, ('Pens', 'Detroit', 'Boston'): 20, ('Pens', 'Detroit', 'New York'): 20, ('Pens', 'Detroit', 'Seattle'): 80, ('Pens', 'Denver', 'Boston'): 60, ('Pens', 'Denver', 'New York'): 70, ('Pens', 'Denver', 'Seattle'): 30}
+inflow:
+ {('Pencils', 'Detroit'): 50, ('Pencils', 'Denver'): 60, ('Pencils', 'Boston'): -50, ('Pencils', 'New York'): -50, ('Pencils', 'Seattle'): -10, ('Pens', 'Detroit'): 60, ('Pens', 'Denver'): 40, ('Pens', 'Boston'): -40, ('Pens', 'New York'): -30, ('Pens', 'Seattle'): -30}
+Restricted license - for non-production use only - expires 2024-10-28
+flow:
+ {('Pencils', 'Detroit', 'Boston'): <gurobi.Var *Awaiting Model Update*>, ('Pencils', 'Detroit', 'New York'): <gurobi.Var *Awaiting Model Update*>, ('Pencils', 'Detroit', 'Seattle'): <gurobi.Var *Awaiting Model Update*>, ('Pencils', 'Denver', 'Boston'): <gurobi.Var *Awaiting Model Update*>, ('Pencils', 'Denver', 'New York'): <gurobi.Var *Awaiting Model Update*>, ('Pencils', 'Denver', 'Seattle'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Detroit', 'Boston'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Detroit', 'New York'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Detroit', 'Seattle'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Denver', 'Boston'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Denver', 'New York'): <gurobi.Var *Awaiting Model Update*>, ('Pens', 'Denver', 'Seattle'): <gurobi.Var *Awaiting Model Update*>}
+
+Gurobi Optimizer version 10.0.2 build v10.0.2rc0 (win64)
+
+CPU model: 13th Gen Intel(R) Core(TM) i7-13700K, instruction set [SSE2|AVX|AVX2]
+Thread count: 16 physical cores, 24 logical processors, using up to 24 threads
+
+Optimize a model with 16 rows, 12 columns and 36 nonzeros
+Model fingerprint: 0xc43e5943
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+01, 8e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+01, 1e+02]
+Presolve removed 16 rows and 12 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    5.5000000e+03   0.000000e+00   2.000000e+01      0s
+Extra simplex iterations after uncrush: 1
+       1    5.5000000e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  5.500000000e+03
+
+Optimal flows for Pencils
+Detroit -> Boston: 50.0
+Denver -> New York: 50.0
+Denver -> Seattle: 10.0
+
+Optimal flows for Pens
+Detroit -> Boston: 30.0
+Detroit -> New York: 30.0
+Denver -> Boston: 10.0
+Denver -> Seattle: 30.0
 ```
 
 ## Gurobi 参数和属性

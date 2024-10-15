@@ -36,9 +36,9 @@ img {
 <details><summary>目录</summary><p>
 
 - [整数规划简介](#整数规划简介)
-- [整数线性规划模型](#整数线性规划模型)
-- [混合整数规划](#混合整数规划)
-- [0-1 整数规划](#0-1-整数规划)
+  - [整数线性规划](#整数线性规划)
+  - [混合整数规划](#混合整数规划)
+  - [0-1 整数规划](#0-1-整数规划)
 - [整数规划求解](#整数规划求解)
   - [分支定界法](#分支定界法)
     - [问题介绍](#问题介绍)
@@ -66,7 +66,7 @@ img {
 * 如果模型是线性模型，则称为 <span style='border-bottom:1.5px dashed red;'>
   整数线性规划(Integer Linear Programming, ILP)</span>。
 
-# 整数线性规划模型
+## 整数线性规划
 
 > Integer Linear Programming, ILP
 
@@ -78,14 +78,13 @@ img {
 x_{1},x_{2} \geq 0 \text{且为整数}
 \end{cases}$$`
 
-# 混合整数规划
+## 混合整数规划
 
 > Mix Integer Programming, MIP
 
-# 0-1 整数规划
+## 0-1 整数规划
 
 > Binray Integer Programming, MIP
-
 
 # 整数规划求解
 

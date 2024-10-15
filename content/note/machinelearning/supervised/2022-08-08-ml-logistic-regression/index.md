@@ -35,25 +35,26 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [Logistic Regression 模型借简介](#logistic-regression-模型借简介)
-  - [模型基本原理](#模型基本原理)
-  - [模型损失函数](#模型损失函数)
-  - [模型原理解释](#模型原理解释)
+- [Logistic Regression 模型简介](#logistic-regression-模型简介)
+    - [模型基本原理](#模型基本原理)
+    - [模型损失函数](#模型损失函数)
+    - [模型原理解释](#模型原理解释)
 - [Logistic Regression 模型实现](#logistic-regression-模型实现)
-  - [模型类型](#模型类型)
-  - [模型形式](#模型形式)
-  - [模型学习算法](#模型学习算法)
-  - [sklearn PI](#sklearn-pi)
-    - [LogisticRegression](#logisticregression)
-    - [SGDClassifier](#sgdclassifier)
-    - [LogisticRegressionCV](#logisticregressioncv)
+    - [模型类型](#模型类型)
+    - [模型形式](#模型形式)
+    - [模型学习算法](#模型学习算法)
+    - [sklearn PI](#sklearn-pi)
+        - [LogisticRegression](#logisticregression)
+        - [SGDClassifier](#sgdclassifier)
+        - [LogisticRegressionCV](#logisticregressioncv)
 </p></details><p></p>
 
-# Logistic Regression 模型借简介
+# Logistic Regression 模型简介
 
-逻辑回归是在线性回归的基础上加了一个 Sigmoid 函数（非线形）映射，使得逻辑回归成为了一个优秀的分类算法。
-学习逻辑回归模型，首先应该记住一句话：逻辑回归假设数据服从伯努利分布，通过极大化似然函数的方法，
-运用梯度下降来求解参数，来达到将数据二分类的目的
+逻辑回归是在线性回归的基础上加了一个 Sigmoid 函数（非线形）映射，
+使得逻辑回归成为了一个优秀的分类算法。学习逻辑回归模型，首先应该记住一句话：
+逻辑回归假设数据服从伯努利分布，通过极大化似然函数的方法，
+运用梯度下降来求解参数，来达到将数据二分类的目的。
 
 ## 模型基本原理
 
@@ -65,7 +66,25 @@ img {
 
 `$$y = f(x), y \in \{0, 1\}$$`
 
-**伯努利分布：**
+**[伯努利分布](https://zh.wikipedia.org/wiki/%E4%BC%AF%E5%8A%AA%E5%88%A9%E5%88%86%E5%B8%83)：**
+
+> 伯努利分布(Bernouli distribution)，又名 **两点分布** 或者 **0-1 分布**，是一个离散型概率分布。
+> 若伯努利试验成功，则伯努利随机变量取值为 1；若伯努利试验失败，则伯努利随机变量取值为 0。
+> 记其成功概率为 `$p(0\leq p \leq 1)$`，失败概率为 `$q = 1-p$`。则：
+>
+> 概率质量函数为：
+>
+> `$$f_{X}(x) = p^{x}(1-p)^{1-x}=\begin{cases}
+p, \text{if} \space x = 1, \\
+q, \text{if} \space x = 0.
+\end{cases}$$`
+> 期望为：
+>
+> `$$E[X] = \sum_{i=0}^{1}x_{i}f_{X}(x_{i}) = 0 + p = p$$`
+>
+> 方差为：
+>
+> `$$VAR[X] = \sum_{i=0}^{1}(x_{i} - E[X])^{2}f_{X}(x) = (0-p)^{2}(1-p)+(1-p)^{2}p = p(1-p) = pq$$`
 
 `$$y \sim b(0, p)$$`
 
@@ -77,7 +96,7 @@ img {
 
 `$$1-p = P(y = 0)$$`
 
-**事件发生的几率(The odds of experiencing an event)：**: 
+**事件发生的几率(The odds of experiencing an event)：**
 
 `$$odds = \frac{p}{1-p}$$`
 
@@ -125,7 +144,7 @@ img {
 
 似然函数：
 
-`$$l=\prod_{i=1}^{N}[\sigma(x_i)]^{y_{i}}[1-\sigma{x_i}]^{1-y_i}$$`
+`$$l=\prod_{i=1}^{N}[\sigma(x_i)]^{y_{i}}[1-\sigma{(x_i)}]^{1-y_i}$$`
 
 对数似然函数：
 
@@ -162,9 +181,7 @@ Logistic Regression 模型是将特征变量的线性组合作为自变量:
 
 `$$h_{\omega,b}(x)=\sigma(\omega^{T}x + b)$$`
 
-其中：
-
-* `$\sigma(z)$` 是 Sigmoid 函数 
+其中 `$\sigma(z)$` 是 Sigmoid 函数：
 
 `$$\sigma(z)=\frac{1}{1+e^{-z}}$$`
 
@@ -186,7 +203,7 @@ P(y=0|x, \omega) = 1 - h_{\omega, b}(x) =1-\sigma(\omega^{T}x+b)
 
 Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`, 
 使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
-负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`. 
+负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`。
 
 # Logistic Regression 模型实现
 
@@ -201,11 +218,11 @@ Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`,
 
 Logistic Regression with L1 正则化
 
-`$$\min_{w, c} \|w\|_1 + C \sum_{i=1}^n \log(\exp(- y_i (X_i^T w + c)) + 1)$$`
+`$$\min_{w, C} \Big(\|w\|_1 + C \sum_{i=1}^n \log(\exp(- y_i (X_i^T w + c)) + 1)\Big)$$`
 
 Logistic Regression with L2 正则化
 
-`$$\min_{w, c} \frac{1}{2}w^T w + C \sum_{i=1}^n \log(\exp(- y_i (X_i^T w + c)) + 1)$$`
+`$$\min_{w, C} \Big(\frac{1}{2}w^T w + C \sum_{i=1}^n \log(\exp(- y_i (X_i^T w + c)) + 1)\Big)$$`
 
 ## 模型学习算法
 
