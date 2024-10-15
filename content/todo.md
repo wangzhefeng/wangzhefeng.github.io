@@ -95,6 +95,7 @@ img {
 
 * [Colossal-AI](https://github.com/hpcaitech/ColossalAI)
 * [Horovod分布式计算原理与代码实现](https://mp.weixin.qq.com/s/wNeCGMSRF0jg7yNJ_s6dWw)
+* [构建计算机视觉的知识体系](https://zhuanlan.zhihu.com/p/383787715) 
 
 ## Tools
 
