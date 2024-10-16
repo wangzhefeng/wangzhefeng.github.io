@@ -1,5 +1,5 @@
 ---
-title: LLM 架构--Embedding
+title: Embedding
 # subtitle: 词嵌入
 list_pages: true
 # order_by: title
