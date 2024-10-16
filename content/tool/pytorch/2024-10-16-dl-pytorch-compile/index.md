@@ -35,6 +35,11 @@ img {
 <details><summary>目录</summary><p>
 
 - [torch.compile 特性](#torchcompile-特性)
+    - [torch.compile](#torchcompile)
+    - [TorchDynamo](#torchdynamo)
+    - [AOTAutograd](#aotautograd)
+    - [TorchInductor](#torchinductor)
+    - [PrimTorch](#primtorch)
 - [torch.compile 效果](#torchcompile-效果)
 - [torch.compile 接口](#torchcompile-接口)
 - [torch.compile 实验](#torchcompile-实验)
@@ -59,7 +64,7 @@ img {
 
 下面围绕 `torch.compile` 展开梳理几个与编译相关的核心特性。
 
-* 特性一：`torch.compile`
+## torch.compile
 
 `torch.complie` 目的是提高计算速度。通常使用只需要一行代码即可完成，
 例如：`model = torch.compile(model)`。之所以一行能让整个 PyTorch 运算提速，
@@ -70,7 +75,7 @@ img {
 它背后对于计算图的分析、优化和编译是本次更新的核心构成，但对于普通用户而言，
 了解好 `torch.compile` 的接口，了解其可提高模型计算速度就可以。
 
-* 特性二：`TorchDynamo`
+## TorchDynamo
 
 `TorchDynamo` 是支撑 `torch.compile` 的工具，它可进行快速地捕获计算图（Graph），
 计算图在深度学习中至关重要，它描述了数据在网络中的流动形式。
@@ -78,20 +83,20 @@ img {
 但 `TorchDynamo` 相较于之前的工具，在速度上有了更大提升，并且在 99% 的情况下都能正确、
 安全地获取计算图。
 
-* 特性三：`AOTAutograd`
+## AOTAutograd
 
 `AOTAutograd` 的目的是希望在计算运行之前，捕获计算的反向传播过程，
 即 “ahead of time Autograd”。`AOTAutograd` 通过重用和扩展 PyTorch 的现有自动微分系统，
 实现提高训练速度。
 
-* 特性四：`TorchInductor`
+## TorchInductor
 
 `TorchInductor` 是一个新的编译器后端，可以为多个硬件平台进行生成优化的代码，
 例如针对 NVIDIA 和 AMD 的 GPU，
 使用 OpenAI 的 Triton 语言（一门 GPU 编程语言，不是 NVIDIA 的推理框架）作为目标语言，
 针对 CPU，可生成 C++ 代码。由此可见，`TorchInductor` 能够为多种加速器和后端生成快速的代码。
 
-* 特性五：`PrimTorch`
+## PrimTorch
 
 `PrimTorch` 是将 PyTorch 底层操作符（operators）进行归约、精简，
 使下游编译器开发更容易和高效。PyTorch 包含 1200+ 操作符，算上重载，
