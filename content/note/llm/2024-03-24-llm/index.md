@@ -36,8 +36,9 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [LLM 学习路径](#llm-学习路径)
-- [LLM 教程](#llm-教程)
+- [LLM 学习](#llm-学习)
+  - [学习路径](#学习路径)
+  - [学习教程](#学习教程)
 - [LLM 介绍](#llm-介绍)
   - [LLM 简介](#llm-简介)
   - [LLM 发展](#llm-发展)
@@ -74,7 +75,9 @@ img {
 - [参考和资料](#参考和资料)
 </p></details><p></p>
 
-# LLM 学习路径
+# LLM 学习
+
+## 学习路径
 
 1. 试用不同的大语言模型(LLM)
     - OpenAI GPT-3.5, GPT-4.0, GPT-4o
@@ -94,7 +97,7 @@ img {
         - ptuning
         - ...
 
-# LLM 教程 
+## 学习教程
 
 * Datawhale
     - [理论：《ChatGPT 原理与应用开发》](https://github.com/datawhalechina/hugging-llm)
