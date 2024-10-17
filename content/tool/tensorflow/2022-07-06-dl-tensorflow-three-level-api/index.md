@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 三阶 API
-author: 王哲峰
+author: wangzf
 date: '2022-09-20'
 slug: dl-tensorflow-three-level-api
 categories:

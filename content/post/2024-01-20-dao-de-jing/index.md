@@ -1,6 +1,6 @@
 ---
 title: 道德经
-author: 王哲峰
+author: wangzf
 date: '2024-01-20'
 show_toc: true
 slug: dao-de-jing

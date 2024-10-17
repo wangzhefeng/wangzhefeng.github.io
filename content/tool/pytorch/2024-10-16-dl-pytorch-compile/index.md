@@ -1,6 +1,6 @@
 ---
 title: PyTorch torch.Compile
-author: 王哲峰
+author: wangzf
 date: '2024-10-16'
 slug: dl-pytorch-compile
 categories:

@@ -1,7 +1,7 @@
 ---
 title: tsfresh
 subtitle: 机器学习特征工程
-author: 王哲峰
+author: wangzf
 date: '2022-05-03'
 slug: timeseries-lib-tsfresh
 categories:

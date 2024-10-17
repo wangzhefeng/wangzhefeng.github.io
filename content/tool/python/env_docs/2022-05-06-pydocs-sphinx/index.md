@@ -1,6 +1,6 @@
 ---
 title: Sphinx Doc
-author: 王哲峰
+author: wangzf
 date: '2022-05-06'
 slug: pydocs-sphinx
 categories:

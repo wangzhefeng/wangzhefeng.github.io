@@ -1,6 +1,6 @@
 ---
 title: PyTorch 张量
-author: 王哲峰
+author: wangzf
 date: '2022-07-16'
 slug: dl-pytorch-api-tensor
 categories:

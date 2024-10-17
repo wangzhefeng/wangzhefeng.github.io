@@ -1,6 +1,6 @@
 ---
 title: 根因分析
-author: 王哲峰
+author: wangzf
 date: '2022-10-15'
 slug: root-cause-analysis
 categories:

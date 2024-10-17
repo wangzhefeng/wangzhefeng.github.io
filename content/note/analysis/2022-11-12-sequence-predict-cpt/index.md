@@ -1,6 +1,6 @@
 ---
 title: 序列预测算法
-author: 王哲峰
+author: wangzf
 date: '2022-11-12'
 slug: sequence-predict-cpt
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 哲学的故事
-author: 王哲峰
+author: wangzf
 date: '2022-04-19'
 slug: the-story-of-philosohy
 categories:

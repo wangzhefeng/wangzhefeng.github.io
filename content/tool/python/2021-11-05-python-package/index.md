@@ -1,6 +1,6 @@
 ---
 title: Python 项目打包发布
-author: 王哲峰
+author: wangzf
 date: '2021-11-05'
 categories:
   - Python

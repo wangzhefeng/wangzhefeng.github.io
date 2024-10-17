@@ -1,7 +1,7 @@
 ---
 title: GNN
 subtitle: 图神经网络
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: dl-gnn
 categories:

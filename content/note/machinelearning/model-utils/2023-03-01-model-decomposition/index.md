@@ -1,6 +1,6 @@
 ---
 title: 特征降维
-author: 王哲峰
+author: wangzf
 date: '2023-03-01'
 slug: model-decomposition
 categories:

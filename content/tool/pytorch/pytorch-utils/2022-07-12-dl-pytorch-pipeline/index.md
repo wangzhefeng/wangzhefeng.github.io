@@ -1,6 +1,6 @@
 ---
 title: PyTorch Pipeline
-author: 王哲峰
+author: wangzf
 date: '2022-07-12'
 slug: dl-pytorch-pipeline
 categories:

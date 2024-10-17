@@ -1,6 +1,6 @@
 ---
 title: 感知机
-author: 王哲峰
+author: wangzf
 date: '2023-02-27'
 slug: ml-perceptron
 categories:

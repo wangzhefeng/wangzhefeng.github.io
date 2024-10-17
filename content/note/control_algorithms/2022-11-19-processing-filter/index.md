@@ -1,6 +1,6 @@
 ---
 title: 滤波算法
-author: 王哲峰
+author: wangzf
 date: '2022-11-19'
 slug: timeseries-processing-filter
 categories:

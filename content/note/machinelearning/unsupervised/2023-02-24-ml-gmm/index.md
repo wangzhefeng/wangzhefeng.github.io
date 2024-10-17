@@ -1,6 +1,6 @@
 ---
 title: 高斯混合模型
-author: 王哲峰
+author: wangzf
 date: '2023-02-24'
 slug: ml-gmm
 categories:

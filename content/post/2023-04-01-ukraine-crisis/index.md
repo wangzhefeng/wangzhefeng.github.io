@@ -1,6 +1,6 @@
 ---
 title: 《关于政治解决乌克兰危机的中国立场》学习
-author: 王哲峰
+author: wangzf
 date: '2023-04-01'
 slug: ukraine-crisis
 categories:

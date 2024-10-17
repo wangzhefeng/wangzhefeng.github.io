@@ -1,6 +1,6 @@
 ---
 title: LightGBM 安装
-author: 王哲峰
+author: wangzf
 date: '2024-09-18'
 slug: ml-gbm-lightgbm-install
 categories:

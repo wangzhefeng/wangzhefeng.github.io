@@ -1,6 +1,6 @@
 ---
 title: LSTM 时间序列预测
-author: 王哲峰
+author: wangzf
 date: '2022-09-17'
 slug: lstm-app
 categories:

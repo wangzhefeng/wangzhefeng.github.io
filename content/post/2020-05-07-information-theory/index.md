@@ -1,6 +1,6 @@
 ---
 title: 信息论
-author: 王哲峰
+author: wangzf
 date: '2020-05-07'
 slug: information-theory
 categories:

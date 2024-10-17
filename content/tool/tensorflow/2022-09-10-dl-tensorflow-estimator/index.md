@@ -1,6 +1,6 @@
 ---
 title: TensorFlow Estimator
-author: 王哲峰
+author: wangzf
 date: '2022-09-10'
 slug: dl-tensorflow-estimator
 categories:

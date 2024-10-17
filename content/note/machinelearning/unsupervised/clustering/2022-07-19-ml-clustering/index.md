@@ -1,6 +1,6 @@
 ---
 title: 聚类算法概览
-author: 王哲峰
+author: wangzf
 date: '2022-07-19'
 slug: ml-clustering
 categories:

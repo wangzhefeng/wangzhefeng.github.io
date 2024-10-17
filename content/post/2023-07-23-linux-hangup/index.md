@@ -1,6 +1,6 @@
 ---
 title: Linux 后台执行命令
-author: 王哲峰
+author: wangzf
 date: '2023-07-23'
 slug: linux-hangup
 categories:

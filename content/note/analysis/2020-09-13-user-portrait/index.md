@@ -1,6 +1,6 @@
 ---
 title: 用户画像
-author: 王哲峰
+author: wangzf
 date: '2020-09-13'
 slug: user-portrait
 categories:

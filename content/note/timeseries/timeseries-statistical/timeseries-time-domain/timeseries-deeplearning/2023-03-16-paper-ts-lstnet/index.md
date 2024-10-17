@@ -1,6 +1,6 @@
 ---
 title: 【Paper】LSTNet
-author: 王哲峰
+author: wangzf
 date: '2023-03-16'
 slug: paper-ts-lstnet
 categories:

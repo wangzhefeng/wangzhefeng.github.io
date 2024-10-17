@@ -1,6 +1,6 @@
 ---
 title: 【Paper】N-BEATS
-author: 王哲峰
+author: wangzf
 date: '2024-09-06'
 slug: paper-ts-nbeats
 categories:

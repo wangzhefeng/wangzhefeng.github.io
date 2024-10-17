@@ -1,6 +1,6 @@
 ---
 title: PyTorch 技巧
-author: 王哲峰
+author: wangzf
 date: '2022-07-13'
 slug: dl-pytorch-trick
 categories:

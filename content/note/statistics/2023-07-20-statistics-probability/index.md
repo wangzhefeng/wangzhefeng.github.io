@@ -1,6 +1,6 @@
 ---
 title: 概率论
-author: 王哲峰
+author: wangzf
 date: '2023-07-20'
 slug: statistics-probability
 categories:

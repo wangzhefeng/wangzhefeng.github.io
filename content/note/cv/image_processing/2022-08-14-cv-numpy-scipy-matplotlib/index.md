@@ -1,6 +1,6 @@
 ---
 title: Scipy Matplotlib Skimage 图像处理
-author: 王哲峰
+author: wangzf
 date: '2022-08-14'
 slug: cv-numpy-scipy-matplotlib
 categories:

@@ -1,6 +1,6 @@
 ---
 title: PyTorch 自动微分
-author: 王哲峰
+author: wangzf
 date: '2022-07-17'
 slug: dl-pytorch-api-autograd
 categories:

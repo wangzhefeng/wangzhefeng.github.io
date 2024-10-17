@@ -1,6 +1,6 @@
 ---
 title: Git
-author: 王哲峰
+author: wangzf
 date: '2021-11-20'
 slug: git
 categories:

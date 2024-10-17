@@ -1,6 +1,6 @@
 ---
 title: PyTorch 概述
-author: 王哲峰
+author: wangzf
 date: '2022-01-03'
 slug: dl-pytorch
 categories:

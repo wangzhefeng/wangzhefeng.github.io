@@ -1,7 +1,7 @@
 ---
 title: GPT
 subtitle: Generative Pre-Training Transformer
-author: 王哲峰
+author: wangzf
 date: '2023-03-17'
 slug: dl-gpt
 categories:

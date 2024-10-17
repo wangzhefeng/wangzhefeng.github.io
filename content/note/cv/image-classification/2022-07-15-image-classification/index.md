@@ -1,6 +1,6 @@
 ---
 title: 图像分类概述
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: image-classification
 categories:

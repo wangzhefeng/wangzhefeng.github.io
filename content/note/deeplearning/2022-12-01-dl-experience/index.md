@@ -1,6 +1,6 @@
 ---
 title: 经验总结
-author: 王哲峰
+author: wangzf
 date: '2022-12-01'
 slug: dl-experience
 categories:

@@ -1,6 +1,6 @@
 ---
 title: Python 迭代
-author: 王哲峰
+author: wangzf
 date: '2023-01-09'
 slug: python-iter
 categories:

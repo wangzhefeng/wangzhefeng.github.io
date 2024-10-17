@@ -1,7 +1,7 @@
 ---
 title: 异常值检测及处理
 subtitle: Anomaly Detection
-author: 王哲峰
+author: wangzf
 date: '2022-09-13'
 slug: anomaly-detection
 categories:

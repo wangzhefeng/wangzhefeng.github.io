@@ -1,6 +1,6 @@
 ---
 title: wandb
-author: 王哲峰
+author: wangzf
 date: '2023-04-07'
 slug: wandb
 categories:

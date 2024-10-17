@@ -1,6 +1,6 @@
 ---
 title: 时间序列特征工程
-author: 王哲峰
+author: wangzf
 date: '2022-09-13'
 slug: timeseries-feature-engine
 categories:

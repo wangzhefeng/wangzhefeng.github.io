@@ -1,6 +1,6 @@
 ---
 title: VAE 深度生成模型
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: dl-gen-vae
 categories:

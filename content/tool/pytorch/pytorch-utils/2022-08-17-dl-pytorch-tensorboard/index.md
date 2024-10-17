@@ -1,6 +1,6 @@
 ---
 title: PyTorch TensorBoard 可视化
-author: 王哲峰
+author: wangzf
 date: '2022-08-17'
 slug: dl-pytorch-tensorboard
 categories:

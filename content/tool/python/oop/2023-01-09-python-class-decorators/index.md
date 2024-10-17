@@ -1,6 +1,6 @@
 ---
 title: Python 装饰器
-author: 王哲峰
+author: wangzf
 date: '2023-01-09'
 slug: python-class-decorators
 categories:

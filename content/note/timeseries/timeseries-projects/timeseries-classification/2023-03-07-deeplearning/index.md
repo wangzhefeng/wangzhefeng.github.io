@@ -1,6 +1,6 @@
 ---
 title: 深度学习方法
-author: 王哲峰
+author: wangzf
 date: '2023-03-07'
 slug: deeplearning
 categories:

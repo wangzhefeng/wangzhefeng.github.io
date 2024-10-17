@@ -1,6 +1,6 @@
 ---
 title: TODS 异常检测
-author: 王哲峰
+author: wangzf
 date: '2023-03-05'
 slug: timeseries-lib-tods
 categories:

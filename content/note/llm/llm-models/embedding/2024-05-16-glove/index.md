@@ -1,6 +1,6 @@
 ---
 title: GloVe
-author: 王哲峰
+author: wangzf
 date: '2024-05-16'
 slug: glove
 categories:

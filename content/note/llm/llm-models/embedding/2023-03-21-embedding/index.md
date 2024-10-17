@@ -1,7 +1,7 @@
 ---
 title: Word Embedding
 subtitle: Sequence Representation
-author: 王哲峰
+author: wangzf
 date: '2023-03-21'
 slug: embedding
 categories:

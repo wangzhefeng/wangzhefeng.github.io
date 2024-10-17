@@ -1,7 +1,7 @@
 ---
 title: LLM 架构--RAG 应用
 subtitle: 向量知识库-检索问答链-知识库助手
-author: 王哲峰
+author: wangzf
 date: '2024-08-03'
 slug: llm-rag-app-knowledge
 categories:

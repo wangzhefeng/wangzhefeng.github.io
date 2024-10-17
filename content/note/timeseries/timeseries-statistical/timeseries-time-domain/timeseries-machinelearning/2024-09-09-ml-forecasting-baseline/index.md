@@ -1,6 +1,6 @@
 ---
 title: 机器学习预测模型应用 DEMO
-author: 王哲峰
+author: wangzf
 date: '2024-09-09'
 slug: ml-forecasting-baseline
 categories:

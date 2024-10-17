@@ -1,6 +1,6 @@
 ---
 title: Python 基础数据
-author: 王哲峰
+author: wangzf
 date: '2022-07-26'
 slug: python-data-basic
 categories:

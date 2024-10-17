@@ -1,6 +1,6 @@
 ---
 title: 广义线性模型
-author: 王哲峰
+author: wangzf
 date: '2022-09-23'
 slug: ml-glm
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 相似性和距离
-author: 王哲峰
+author: wangzf
 date: '2022-10-30'
 slug: similarity-distances
 categories:

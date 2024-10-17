@@ -1,7 +1,7 @@
 ---
 title: LLM 架构--Prompt
 # subtitle: Prompt Engineering
-author: 王哲峰
+author: wangzf
 date: '2024-04-09'
 slug: llm-prompt
 categories:

@@ -1,7 +1,7 @@
 ---
 title: 模型微调
 subtitle: Model Fine-Tune
-author: 王哲峰
+author: wangzf
 date: '2023-03-16'
 slug: fine-tuning
 categories:

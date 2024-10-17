@@ -1,6 +1,6 @@
 ---
 title: PaddlePaddle 概览
-author: 王哲峰
+author: wangzf
 date: '2023-05-13'
 slug: dl-paddlepaddle
 categories:

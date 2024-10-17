@@ -1,6 +1,6 @@
 ---
 title: 统计假设检验
-author: 王哲峰
+author: wangzf
 date: '2023-07-08'
 slug: python-stats-hypothetical-test
 categories:

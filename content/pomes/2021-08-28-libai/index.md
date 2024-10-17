@@ -1,7 +1,7 @@
 ---
 title: 李白
 subtitle: 唐
-author: 王哲峰
+author: wangzf
 date: '2021-08-28'
 slug: libai
 categories:

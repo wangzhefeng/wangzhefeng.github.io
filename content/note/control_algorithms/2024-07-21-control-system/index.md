@@ -1,6 +1,6 @@
 ---
 title: 控制系统
-author: 王哲峰
+author: wangzf
 date: '2024-07-21'
 slug: control-system
 categories:

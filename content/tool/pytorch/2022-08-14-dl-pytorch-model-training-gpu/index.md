@@ -1,6 +1,6 @@
 ---
 title: PyTorch 训练模型 GPU
-author: 王哲峰
+author: wangzf
 date: '2022-08-15'
 slug: dl-pytorch-model-gup
 categories:

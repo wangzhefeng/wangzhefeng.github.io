@@ -1,6 +1,6 @@
 ---
 title: Word2Vec
-author: 王哲峰
+author: wangzf
 date: '2023-05-10'
 slug: word2vec
 categories:

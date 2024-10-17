@@ -1,6 +1,6 @@
 ---
 title: PyTorch 环境
-author: 王哲峰
+author: wangzf
 date: '2022-07-11'
 slug: dl-pytorch-env
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 时间序列分析观点
-author: 王哲峰
+author: wangzf
 date: '2024-02-28'
 slug: timeseries-view
 categories:

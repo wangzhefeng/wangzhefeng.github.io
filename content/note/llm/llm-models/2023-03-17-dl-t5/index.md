@@ -1,7 +1,7 @@
 ---
 title: T5
 subtitle: Transfer Text-to-Text Transformer
-author: 王哲峰
+author: wangzf
 date: '2023-03-17'
 slug: dl-t5
 categories:

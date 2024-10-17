@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 计算图
-author: 王哲峰
+author: wangzf
 date: '2022-07-04'
 slug: dl-tensorflow-graph
 categories:

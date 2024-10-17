@@ -1,6 +1,6 @@
 ---
 title: 本站构建之路
-author: 王哲峰
+author: wangzf
 date: '2022-02-27'
 slug: blog-build-deploy
 categories:

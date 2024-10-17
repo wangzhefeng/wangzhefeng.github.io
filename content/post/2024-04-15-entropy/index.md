@@ -1,6 +1,6 @@
 ---
 title: 熵 Entropy
-author: 王哲峰
+author: wangzf
 date: '2024-04-15'
 slug: entropy
 categories:

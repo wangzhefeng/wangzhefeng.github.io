@@ -1,7 +1,7 @@
 ---
 title: Sktime 
 subtitle: 机器学习
-author: 王哲峰
+author: wangzf
 date: '2022-05-01'
 slug: timeseries-lib-sktime
 categories:

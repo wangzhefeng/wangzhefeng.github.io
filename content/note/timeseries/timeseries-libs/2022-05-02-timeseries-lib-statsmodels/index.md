@@ -1,6 +1,6 @@
 ---
 title: Statsmodels
-author: 王哲峰
+author: wangzf
 date: '2022-05-02'
 slug: timeseries-lib-statsmodels
 categories:

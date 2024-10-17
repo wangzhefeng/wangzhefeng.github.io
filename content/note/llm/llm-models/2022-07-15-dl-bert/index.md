@@ -1,7 +1,7 @@
 ---
 title: BERT
 subtitle:  Bidirectional Encoder Representations from Transformers
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: dl-bert
 categories:

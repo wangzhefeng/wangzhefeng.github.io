@@ -1,6 +1,6 @@
 ---
 title: 相关性
-author: 王哲峰
+author: wangzf
 date: '2023-07-18'
 slug: correlation
 categories:

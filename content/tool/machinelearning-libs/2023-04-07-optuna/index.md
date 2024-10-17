@@ -1,7 +1,7 @@
 ---
 title: Optuna
 subtitle: A hyperparameter optimization framework
-author: 王哲峰
+author: wangzf
 date: '2023-04-07'
 slug: optuna
 categories:

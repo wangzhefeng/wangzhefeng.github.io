@@ -1,6 +1,6 @@
 ---
 title: PyTorch 模型构建
-author: 王哲峰
+author: wangzf
 date: '2022-08-13'
 slug: dl-pytorch-model-building
 categories:

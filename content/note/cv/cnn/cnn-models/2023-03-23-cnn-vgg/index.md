@@ -1,7 +1,7 @@
 ---
 title: VGG-Net
 subtitle: VGG-16、VGG-19
-author: 王哲峰
+author: wangzf
 date: '2023-03-23'
 slug: cnn-vgg
 categories:

@@ -1,6 +1,6 @@
 ---
 title: GBDT API
-author: 王哲峰
+author: wangzf
 date: '2023-02-24'
 slug: ml-gbm-gbdt-api
 categories: 

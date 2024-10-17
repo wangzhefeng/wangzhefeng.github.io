@@ -1,6 +1,6 @@
 ---
 title: 《台湾问题与新时代中国统一事业-白皮书》学习
-author: 王哲峰
+author: wangzf
 date: '2022-08-16'
 slug: taiwan-question
 categories:

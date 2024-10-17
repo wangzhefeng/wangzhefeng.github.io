@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 模型编译和训练
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: dl-tensorflow-model-training
 categories:

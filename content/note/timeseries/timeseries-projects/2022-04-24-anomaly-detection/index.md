@@ -1,7 +1,7 @@
 ---
 title: 时间序列异常值检测
 subtitle: Anomaly Detection
-author: 王哲峰
+author: wangzf
 date: '2022-04-24'
 slug: anomaly-detection
 categories:

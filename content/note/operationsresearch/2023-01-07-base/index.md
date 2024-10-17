@@ -1,6 +1,6 @@
 ---
 title: 数学优化模型
-author: 王哲峰
+author: wangzf
 date: '2023-01-07'
 slug: base
 categories:

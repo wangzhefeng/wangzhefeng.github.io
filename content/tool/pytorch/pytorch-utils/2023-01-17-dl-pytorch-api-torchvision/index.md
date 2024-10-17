@@ -1,6 +1,6 @@
 ---
 title: torchvision
-author: 王哲峰
+author: wangzf
 date: '2023-01-17'
 slug: dl-pytorch-torchvision
 categories:

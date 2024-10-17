@@ -1,6 +1,6 @@
 ---
 title: OpenCV 图像处理
-author: 王哲峰
+author: wangzf
 date: '2022-03-10'
 slug: cv-opencv
 categories: 

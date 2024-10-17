@@ -1,6 +1,6 @@
 ---
 title: PyTorch 模型训练
-author: 王哲峰
+author: wangzf
 date: '2022-08-14'
 slug: dl-pytorch-model-compile
 categories:

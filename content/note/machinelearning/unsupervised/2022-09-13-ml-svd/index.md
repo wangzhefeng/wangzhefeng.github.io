@@ -1,7 +1,7 @@
 ---
 title: 奇异值分解
 subtitle: SVD
-author: 王哲峰
+author: wangzf
 date: '2022-09-13'
 slug: ml-svd
 categories:

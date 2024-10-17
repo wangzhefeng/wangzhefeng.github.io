@@ -1,6 +1,6 @@
 ---
 title: XGBoost 使用
-author: 王哲峰
+author: wangzf
 date: '2023-03-02'
 slug: ml-gbm-xgboost-usage
 categories:

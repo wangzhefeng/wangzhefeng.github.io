@@ -1,6 +1,6 @@
 ---
 title: 碳中和 Carbon Neutrality
-author: 王哲峰
+author: wangzf
 date: '2024-02-26'
 slug: carbon-neutrality
 categories:

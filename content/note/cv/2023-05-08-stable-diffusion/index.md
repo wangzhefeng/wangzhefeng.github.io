@@ -1,6 +1,6 @@
 ---
 title: Stable Diffusion
-author: 王哲峰
+author: wangzf
 date: '2023-05-08'
 slug: stable-diffusion
 categories:

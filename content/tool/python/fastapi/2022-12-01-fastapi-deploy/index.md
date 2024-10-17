@@ -1,6 +1,6 @@
 ---
 title: FastAPI 部署
-author: 王哲峰
+author: wangzf
 date: '2022-12-01'
 slug: fastapi-deploy
 categories:

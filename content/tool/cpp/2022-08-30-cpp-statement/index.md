@@ -1,6 +1,6 @@
 ---
 title: C++ 语句
-author: 王哲峰
+author: wangzf
 date: '2022-08-30'
 slug: cpp-statement
 categories:

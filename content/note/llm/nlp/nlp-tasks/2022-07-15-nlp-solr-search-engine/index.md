@@ -1,6 +1,6 @@
 ---
 title: NLP-Solr 搜索引擎
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-solr-search-engine
 categories:

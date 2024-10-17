@@ -1,6 +1,6 @@
 ---
 title: C++ 环境
-author: 王哲峰
+author: wangzf
 date: '2022-04-06'
 slug: cpp-envs
 categories:

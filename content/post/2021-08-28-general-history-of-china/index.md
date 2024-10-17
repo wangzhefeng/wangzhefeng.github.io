@@ -1,6 +1,6 @@
 ---
 title: 中国通史
-author: 王哲峰
+author: wangzf
 date: '2021-08-28'
 categories:
   - 纪录片

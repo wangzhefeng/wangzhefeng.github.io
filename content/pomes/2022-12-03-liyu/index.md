@@ -1,7 +1,7 @@
 ---
 title: 李煜
 subtitle: 五代
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: liyu
 categories:

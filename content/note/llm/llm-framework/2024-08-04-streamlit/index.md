@@ -1,6 +1,6 @@
 ---
 title: LLM 框架--Streamlit
-author: 王哲峰
+author: wangzf
 date: '2024-08-04'
 slug: streamlit
 categories:

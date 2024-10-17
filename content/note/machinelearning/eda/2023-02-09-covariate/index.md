@@ -1,6 +1,6 @@
 ---
 title: 交叉变量探索分析
-author: 王哲峰
+author: wangzf
 date: '2023-02-09'
 slug: covariate
 categories:

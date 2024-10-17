@@ -1,6 +1,6 @@
 ---
 title: Python 链式调用
-author: 王哲峰
+author: wangzf
 date: '2022-07-25'
 slug: python-class-chain
 categories:

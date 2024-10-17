@@ -1,6 +1,6 @@
 ---
 title: LLM 模型--Llama
-author: 王哲峰
+author: wangzf
 date: '2024-05-02'
 slug: llm-llama
 categories:

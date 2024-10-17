@@ -1,6 +1,6 @@
 ---
 title: Python 连接数据库
-author: 王哲峰
+author: wangzf
 date: '2022-10-03'
 slug: python-database
 categories:

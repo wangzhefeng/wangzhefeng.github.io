@@ -1,6 +1,6 @@
 ---
 title: LLM 应用-Llama 3.1 8B
-author: 王哲峰
+author: wangzf
 date: '2024-08-15'
 slug: llm-app-llama318b
 categories:

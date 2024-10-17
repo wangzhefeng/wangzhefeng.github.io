@@ -1,6 +1,6 @@
 ---
 title: AIRMA 模型
-author: 王哲峰
+author: wangzf
 date: '2024-03-22'
 slug: forecasting-arima-model
 categories:

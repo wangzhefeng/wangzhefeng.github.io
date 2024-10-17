@@ -1,6 +1,6 @@
 ---
 title: 时间序列回归模型
-author: 王哲峰
+author: wangzf
 date: '2024-03-22'
 slug: forecasting-regression-model
 categories:

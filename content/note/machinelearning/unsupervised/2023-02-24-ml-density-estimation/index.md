@@ -1,6 +1,6 @@
 ---
 title: 核密度估计
-author: 王哲峰
+author: wangzf
 date: '2023-02-24'
 slug: ml-density-estimation
 categories:

@@ -1,6 +1,6 @@
 ---
 title: NLP-句法分析
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-syntax-parsing 
 categories:

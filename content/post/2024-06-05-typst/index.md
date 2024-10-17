@@ -1,6 +1,6 @@
 ---
 title: Typst
-author: 王哲峰
+author: wangzf
 date: '2024-06-05'
 slug: typst
 categories:

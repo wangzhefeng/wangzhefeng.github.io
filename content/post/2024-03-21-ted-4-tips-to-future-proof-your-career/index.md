@@ -1,6 +1,6 @@
 ---
 title: Four Tips to Future-Proof Your Career
-author: 王哲峰
+author: wangzf
 date: '2024-03-21'
 slug: ted-4-tips-to-future-proof-your-career
 categories:

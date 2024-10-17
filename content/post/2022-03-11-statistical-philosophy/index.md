@@ -1,6 +1,6 @@
 ---
 title: 统计哲学
-author: 王哲峰
+author: wangzf
 date: '2022-03-11'
 slug: statistical-philosophy
 categories:

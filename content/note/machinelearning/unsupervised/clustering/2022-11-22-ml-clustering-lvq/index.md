@@ -1,6 +1,6 @@
 ---
 title: 学习向量量化聚类
-author: 王哲峰
+author: wangzf
 date: '2022-11-22'
 slug: ml-clustering-lvq
 categories:

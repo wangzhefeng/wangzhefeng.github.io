@@ -1,6 +1,6 @@
 ---
 title: MATLAB 数学
-author: 王哲峰
+author: wangzf
 date: '2024-03-24'
 slug: matlab-math
 categories:

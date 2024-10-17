@@ -1,7 +1,7 @@
 ---
 title: 线性规划
 subtitle: Linear Programming, LP
-author: 王哲峰
+author: wangzf
 date: '2024-08-26'
 slug: linear-programming
 categories:

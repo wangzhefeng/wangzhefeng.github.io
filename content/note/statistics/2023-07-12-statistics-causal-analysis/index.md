@@ -1,6 +1,6 @@
 ---
 title: 统计因果分析
-author: 王哲峰
+author: wangzf
 date: '2023-07-12'
 slug: statistics-causal-analysis
 categories:

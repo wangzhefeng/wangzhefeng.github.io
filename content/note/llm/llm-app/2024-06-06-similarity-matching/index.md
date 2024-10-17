@@ -1,6 +1,6 @@
 ---
 title: LLM 应用--相似匹配
-author: 王哲峰
+author: wangzf
 date: '2024-06-06'
 slug: similarity-matching
 categories:

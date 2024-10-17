@@ -1,6 +1,6 @@
 ---
 title: C++ 变量和基本类型
-author: 王哲峰
+author: wangzf
 date: '2022-05-01'
 slug: cpp-variable-and-base-type
 categories:

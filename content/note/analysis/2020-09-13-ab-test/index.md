@@ -1,6 +1,6 @@
 ---
 title: A/B test
-author: 王哲峰
+author: wangzf
 date: '2020-09-13'
 slug: ab-test
 categories:

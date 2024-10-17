@@ -1,6 +1,6 @@
 ---
 title: 李商隐
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: lishangyin
 categories:

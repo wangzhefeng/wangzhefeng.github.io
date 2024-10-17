@@ -1,6 +1,6 @@
 ---
 title: LightGBM baseline
-author: 王哲峰
+author: wangzf
 date: '2023-03-07'
 slug: ml-gbm-lightgbm-baseline
 categories:

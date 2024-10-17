@@ -1,6 +1,6 @@
 ---
 title: AdaBoost
-author: 王哲峰
+author: wangzf
 date: '2022-08-01'
 slug: ml-gbm-adaboost
 categories:

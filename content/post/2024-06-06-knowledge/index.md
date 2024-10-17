@@ -1,6 +1,6 @@
 ---
 title: 知识体系
-author: 王哲峰
+author: wangzf
 date: '2024-06-06'
 slug: knowledge
 categories:

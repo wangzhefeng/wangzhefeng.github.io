@@ -1,6 +1,6 @@
 ---
 title: Pyhton 异常处理
-author: 王哲峰
+author: wangzf
 date: '2022-07-26'
 slug: python-exception
 categories:

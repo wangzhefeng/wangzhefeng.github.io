@@ -1,6 +1,6 @@
 ---
 title: PyCaret
-author: 王哲峰
+author: wangzf
 date: '2024-03-01'
 slug: pycaret
 categories:

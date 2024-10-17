@@ -1,7 +1,7 @@
 ---
 title: 深度学习概述
 # subtitle: 
-author: 王哲峰
+author: wangzf
 date: '2022-07-12'
 slug: dl-ann
 categories:

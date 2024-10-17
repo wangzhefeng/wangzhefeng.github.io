@@ -1,6 +1,6 @@
 ---
 title: 基础科学研究是什么
-author: 王哲峰
+author: wangzf
 date: '2022-03-11'
 slug: my-doubt
 categories:

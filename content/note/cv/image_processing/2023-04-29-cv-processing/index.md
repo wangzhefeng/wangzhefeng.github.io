@@ -1,6 +1,6 @@
 ---
 title: 图像及图像处理概览
-author: 王哲峰
+author: wangzf
 date: '2023-04-29'
 slug: cv-processing
 categories:

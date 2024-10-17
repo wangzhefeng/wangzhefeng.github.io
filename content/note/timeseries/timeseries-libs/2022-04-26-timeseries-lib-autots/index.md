@@ -1,6 +1,6 @@
 ---
 title: AutoTS
-author: 王哲峰
+author: wangzf
 date: '2022-04-26'
 slug: timeseries-lib-autots
 categories:

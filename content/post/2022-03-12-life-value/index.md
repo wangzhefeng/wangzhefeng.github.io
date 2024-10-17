@@ -1,6 +1,6 @@
 ---
 title: LIFE Value
-author: 王哲峰
+author: wangzf
 date: '2022-03-12'
 slug: life-value
 categories:

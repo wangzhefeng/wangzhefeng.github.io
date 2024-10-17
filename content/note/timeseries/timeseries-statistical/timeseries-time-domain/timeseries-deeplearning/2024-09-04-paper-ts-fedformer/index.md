@@ -1,6 +1,6 @@
 ---
 title: 【Paper】 FEDformer
-author: 王哲峰
+author: wangzf
 date: '2024-09-04'
 slug: paper-ts-fedformer
 categories:

@@ -1,6 +1,6 @@
 ---
 title: TensorFlow Env
-author: 王哲峰
+author: wangzf
 date: '2022-07-01'
 slug: dl-tensorflow-env
 categories:

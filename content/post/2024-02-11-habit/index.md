@@ -1,6 +1,6 @@
 ---
 title: 2024 自律清单
-author: 王哲峰
+author: wangzf
 date: '2024-02-11'
 categories:
   - 感悟

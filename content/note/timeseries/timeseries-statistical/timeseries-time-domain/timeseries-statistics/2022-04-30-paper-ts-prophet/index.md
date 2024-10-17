@@ -1,6 +1,6 @@
 ---
 title: Prophet
-author: 王哲峰
+author: wangzf
 date: '2022-04-30'
 slug: paper-ts-prophet
 categories:

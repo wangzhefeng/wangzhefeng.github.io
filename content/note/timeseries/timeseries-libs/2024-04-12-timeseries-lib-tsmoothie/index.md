@@ -1,7 +1,7 @@
 ---
 title: tsmoothie
 subtitle: 时间序列平滑和异常检测
-author: 王哲峰
+author: wangzf
 date: '2024-04-12'
 slug: timeseries-lib-tsmoothie
 categories:

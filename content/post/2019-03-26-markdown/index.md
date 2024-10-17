@@ -1,6 +1,6 @@
 ---
 title: RMarkdown、Rmd、Markdown
-author: 王哲峰
+author: wangzf
 date: '2019-03-26'
 slug: markdown
 categories:
@@ -338,7 +338,7 @@ doctoc file.md
 ```yaml/toml
 ---
 title: R Markdown 与 Rmd 与 Markdown 的测试
-author: 王哲峰
+author: wangzf
 date: '2022-03-26'
 slug: rmarkdown-rmd-markdown
 categories:

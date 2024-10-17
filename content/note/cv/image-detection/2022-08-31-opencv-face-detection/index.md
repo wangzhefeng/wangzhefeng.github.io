@@ -1,6 +1,6 @@
 ---
 title: OpenCV 人脸检测
-author: 王哲峰
+author: wangzf
 date: '2022-08-31'
 slug: opencv-face-detection
 categories:

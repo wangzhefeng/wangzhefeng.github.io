@@ -1,7 +1,7 @@
 ---
 title: 模型蒸馏
 subtitle: Model Distilling
-author: 王哲峰
+author: wangzf
 date: '2023-03-17'
 slug: model-distilling
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 逻辑思维, 只要五步
-author: 王哲峰
+author: wangzf
 date: '2021-11-06'
 slug: logical-thinking
 categories:

@@ -1,6 +1,6 @@
 ---
 title: PID 控制算法
-author: 王哲峰
+author: wangzf
 date: '2022-12-01'
 slug: pid
 categories:

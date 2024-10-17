@@ -1,6 +1,6 @@
 ---
 title: Flask 静态文件
-author: 王哲峰
+author: wangzf
 date: '2022-12-01'
 slug: flask-static-file
 categories:

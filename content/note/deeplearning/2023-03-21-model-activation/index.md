@@ -1,6 +1,6 @@
 ---
 title: 激活函数
-author: 王哲峰
+author: wangzf
 date: '2023-03-21'
 slug: model-activation
 categories:

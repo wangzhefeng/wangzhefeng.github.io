@@ -1,6 +1,6 @@
 ---
 title: 基本规则法
-author: 王哲峰
+author: wangzf
 date: '2023-03-26'
 slug: forecast-factor
 categories:

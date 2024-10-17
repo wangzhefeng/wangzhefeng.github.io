@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 张量
-author: 王哲峰
+author: wangzf
 date: '2022-07-02'
 slug: dl-tensorflow-tensor
 categories:

@@ -1,6 +1,6 @@
 ---
 title: Python Wheel 使用
-author: 王哲峰
+author: wangzf
 date: '2022-08-01'
 slug: python-wheel
 categories:

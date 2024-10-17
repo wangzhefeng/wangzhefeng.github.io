@@ -1,6 +1,6 @@
 ---
 title: 时间序列趋势性和周期性
-author: 王哲峰
+author: wangzf
 date: '2022-04-23'
 slug: trend-seasonal
 categories:

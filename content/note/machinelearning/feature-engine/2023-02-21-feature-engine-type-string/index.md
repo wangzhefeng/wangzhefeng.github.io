@@ -1,6 +1,6 @@
 ---
 title: String
-author: 王哲峰
+author: wangzf
 date: '2023-02-21'
 slug: feature-engine-string
 categories:

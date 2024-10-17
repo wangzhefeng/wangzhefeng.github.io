@@ -1,6 +1,6 @@
 ---
 title: 二分类评价指标
-author: 王哲峰
+author: wangzf
 date: '2023-03-19'
 slug: binary-classification
 categories:

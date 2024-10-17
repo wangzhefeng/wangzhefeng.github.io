@@ -1,6 +1,6 @@
 ---
 title: 图像目标检测概述
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: object-detection
 categories:

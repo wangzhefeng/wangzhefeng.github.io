@@ -1,6 +1,6 @@
 ---
 title: 探索性数据分析概述
-author: 王哲峰
+author: wangzf
 date: '2023-02-27'
 slug: eda
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 如何读论文？
-author: 王哲峰
+author: wangzf
 date: '2023-05-21'
 slug: how-to-read-papers
 categories:

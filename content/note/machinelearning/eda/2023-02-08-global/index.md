@@ -1,6 +1,6 @@
 ---
 title: 全局数据探索分析
-author: 王哲峰
+author: wangzf
 date: '2023-02-08'
 slug: global
 categories:

@@ -1,6 +1,6 @@
 ---
 title: Numpy
-author: 王哲峰
+author: wangzf
 date: '2023-04-20'
 slug: numpy
 categories:

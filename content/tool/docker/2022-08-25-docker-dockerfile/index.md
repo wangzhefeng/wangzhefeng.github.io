@@ -1,6 +1,6 @@
 ---
 title: Dockerfile
-author: 王哲峰
+author: wangzf
 date: '2022-08-25'
 slug: docker-dockerfile
 categories:

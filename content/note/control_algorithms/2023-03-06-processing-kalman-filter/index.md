@@ -1,6 +1,6 @@
 ---
 title: 卡尔曼滤波
-author: 王哲峰
+author: wangzf
 date: '2023-03-06'
 slug: processing-kalman-filter
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 【Paper】TBATS
-author: 王哲峰
+author: wangzf
 date: '2023-05-21'
 slug: paper-ts-tbats
 categories:

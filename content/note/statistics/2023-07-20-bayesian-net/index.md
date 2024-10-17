@@ -1,6 +1,6 @@
 ---
 title: 贝叶斯网路
-author: 王哲峰
+author: wangzf
 date: '2023-07-20'
 slug: bayesian-net
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 广义加性模型
-author: 王哲峰
+author: wangzf
 date: '2022-09-23'
 slug: ml-gam
 categories:

@@ -1,7 +1,7 @@
 ---
 title: 动态规划
 subtitle: Dynamic Programming
-author: 王哲峰
+author: wangzf
 date: '2024-08-30'
 slug: dynamic-programming
 categories:

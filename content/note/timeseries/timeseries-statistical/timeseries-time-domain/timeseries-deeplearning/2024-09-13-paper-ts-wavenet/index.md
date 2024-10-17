@@ -1,6 +1,6 @@
 ---
 title: 【Paper】WaveNet
-author: 王哲峰
+author: wangzf
 date: '2024-09-13'
 slug: paper-ts-wavenet
 categories:

@@ -1,6 +1,6 @@
 ---
 title: py2so
-author: 王哲峰
+author: wangzf
 date: '2022-07-26'
 slug: python-py2so
 categories:

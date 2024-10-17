@@ -1,6 +1,6 @@
 ---
 title: PyTorch 模型保存和加载
-author: 王哲峰
+author: wangzf
 date: '2022-08-16'
 slug: dl-pytorch-model-save-load
 categories:

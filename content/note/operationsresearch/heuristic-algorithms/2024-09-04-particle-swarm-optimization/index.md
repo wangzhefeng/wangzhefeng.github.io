@@ -1,7 +1,7 @@
 ---
 title: 粒子群算法
 subtitle: Particle Swarm Optimization
-author: 王哲峰
+author: wangzf
 date: '2024-09-04'
 slug: particle-swarm-optimization
 categories:

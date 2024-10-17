@@ -1,6 +1,6 @@
 ---
 title: 动态时间规整
-author: 王哲峰
+author: wangzf
 date: '2023-03-06'
 slug: model-dtw
 categories:

@@ -1,7 +1,7 @@
 ---
 title: Seq2Seq
 subtitle: Encoder-Decoder
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: dl-seq2seq
 categories:

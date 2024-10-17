@@ -1,6 +1,6 @@
 ---
 title: 【Paper】DeepAR
-author: 王哲峰
+author: wangzf
 date: '2023-03-10'
 slug: paper-ts-deepar
 categories:

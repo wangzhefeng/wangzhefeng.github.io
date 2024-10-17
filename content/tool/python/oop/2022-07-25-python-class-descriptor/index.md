@@ -1,6 +1,6 @@
 ---
 title: Python 描述符
-author: 王哲峰
+author: wangzf
 date: '2022-07-25'
 slug: python-class-descriptor
 categories:

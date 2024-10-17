@@ -1,6 +1,6 @@
 ---
 title: GPU 硬件
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: gpu-hardware
 categories:

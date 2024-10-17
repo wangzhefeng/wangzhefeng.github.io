@@ -1,7 +1,7 @@
 ---
 title: 图与网络分析
 subtitle: Graph and Network
-author: 王哲峰
+author: wangzf
 date: '2023-03-30'
 slug: graph-theory
 categories:

@@ -1,7 +1,7 @@
 ---
 title: cesium
 subtitle: 特征工程
-author: 王哲峰
+author: wangzf
 date: '2022-04-27'
 slug: timeseries-lib-cesium
 categories:

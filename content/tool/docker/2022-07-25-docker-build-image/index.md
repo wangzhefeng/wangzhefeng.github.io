@@ -1,6 +1,6 @@
 ---
 title: Docker 制作镜像
-author: 王哲峰
+author: wangzf
 date: '2022-07-25'
 slug: docker-build-image
 categories:

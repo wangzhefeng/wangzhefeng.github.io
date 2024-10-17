@@ -1,6 +1,6 @@
 ---
 title: LLM 框架--Huggingface
-author: 王哲峰
+author: wangzf
 date: '2024-06-15'
 slug: hf-transformers
 categories:

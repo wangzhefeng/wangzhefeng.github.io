@@ -1,6 +1,6 @@
 ---
 title: 指数平滑
-author: 王哲峰
+author: wangzf
 date: '2024-03-22'
 slug: forecasting-exponential-smoothing
 categories:

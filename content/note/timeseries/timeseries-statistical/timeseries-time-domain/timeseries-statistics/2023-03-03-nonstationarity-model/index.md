@@ -1,6 +1,6 @@
 ---
 title: 时间序列非平稳时序模型
-author: 王哲峰
+author: wangzf
 date: '2023-03-03'
 slug: nonstationarity-model
 categories:

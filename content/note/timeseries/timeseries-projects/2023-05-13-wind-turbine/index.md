@@ -1,6 +1,6 @@
 ---
 title: 风力涡轮机有功功率预测比赛观摩
-author: 王哲峰
+author: wangzf
 date: '2023-05-13'
 slug: wind-turbine
 categories:

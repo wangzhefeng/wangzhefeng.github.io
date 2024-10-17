@@ -1,6 +1,6 @@
 ---
 title: 埋点
-author: 王哲峰
+author: wangzf
 date: '2020-09-22'
 slug: data-buried-point
 categories:

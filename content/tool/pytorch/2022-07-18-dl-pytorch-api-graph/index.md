@@ -1,6 +1,6 @@
 ---
 title: PyTorch 动态计算图
-author: 王哲峰
+author: wangzf
 date: '2022-07-18'
 slug: dl-pytorch-api-graph
 categories:

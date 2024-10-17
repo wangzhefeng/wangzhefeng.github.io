@@ -1,6 +1,6 @@
 ---
 title: How to Calm Your Anxiety
-author: 王哲峰
+author: wangzf
 date: '2024-03-23'
 slug: ted-how-to-calm-your-anxiety
 categories:

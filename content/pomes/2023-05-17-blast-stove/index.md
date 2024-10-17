@@ -1,6 +1,6 @@
 ---
 title: 热风炉
-author: 王哲峰
+author: wangzf
 date: '2023-05-17'
 slug: blast-stove
 categories:

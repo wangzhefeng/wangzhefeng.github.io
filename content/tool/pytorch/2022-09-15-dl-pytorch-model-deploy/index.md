@@ -1,6 +1,6 @@
 ---
 title: PyTorch-模型部署
-author: 王哲峰
+author: wangzf
 date: '2022-09-15'
 slug: model-deploy
 categories:

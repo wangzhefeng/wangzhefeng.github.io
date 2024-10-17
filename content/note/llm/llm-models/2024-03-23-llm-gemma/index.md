@@ -1,6 +1,6 @@
 ---
 title: LLM 模型--Gemma
-author: 王哲峰
+author: wangzf
 date: '2024-03-23'
 slug: llm-gemma
 categories:

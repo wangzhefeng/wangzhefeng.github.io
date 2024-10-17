@@ -1,6 +1,6 @@
 ---
 title: Strade Bianche
-author: 王哲峰
+author: wangzf
 date: '2024-03-07'
 slug: strade-bianche
 categories:

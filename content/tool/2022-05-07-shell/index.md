@@ -1,6 +1,6 @@
 ---
 title: Shell
-author: 王哲峰
+author: wangzf
 date: '2022-05-07'
 slug: shell
 categories:

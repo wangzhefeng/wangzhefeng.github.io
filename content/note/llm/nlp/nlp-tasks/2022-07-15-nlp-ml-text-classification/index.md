@@ -1,6 +1,6 @@
 ---
 title: NLP-文本分类
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-ml-text-classification
 categories:

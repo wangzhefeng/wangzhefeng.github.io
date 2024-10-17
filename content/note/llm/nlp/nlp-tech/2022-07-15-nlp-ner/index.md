@@ -1,6 +1,6 @@
 ---
 title: NLP-命名实体识别
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-ner
 categories:

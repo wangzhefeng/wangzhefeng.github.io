@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 网络层
-author: 王哲峰
+author: wangzf
 date: '2022-07-15'
 slug: dl-tensorflow-model-layer
 categories:

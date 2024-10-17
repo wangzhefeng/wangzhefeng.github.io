@@ -1,6 +1,6 @@
 ---
 title: SMART 原则
-author: 王哲峰
+author: wangzf
 date: '2023-07-28'
 slug: smart-rule
 categories:

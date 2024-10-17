@@ -1,6 +1,6 @@
 ---
 title: C++ 类
-author: 王哲峰
+author: wangzf
 date: '2022-10-01'
 slug: cpp-class
 categories:

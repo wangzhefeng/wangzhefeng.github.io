@@ -1,6 +1,6 @@
 ---
 title: Hugo 边用边学
-author: 王哲峰
+author: wangzf
 date: '2022-03-14'
 slug: hugo-learning
 categories:

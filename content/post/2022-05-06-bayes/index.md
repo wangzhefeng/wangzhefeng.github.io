@@ -1,6 +1,6 @@
 ---
 title: 贝叶斯统计分析
-author: 王哲峰
+author: wangzf
 date: '2022-05-06'
 slug: bayes
 categories:

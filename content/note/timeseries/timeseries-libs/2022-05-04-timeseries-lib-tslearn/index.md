@@ -1,7 +1,7 @@
 ---
 title: tslearn 
 subtitle: 预测
-author: 王哲峰
+author: wangzf
 date: '2022-05-04'
 slug: timeseries-lib-tslearn
 categories:

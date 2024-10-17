@@ -1,6 +1,6 @@
 ---
 title: PPT 写作方法
-author: 王哲峰
+author: wangzf
 date: '2023-08-26'
 slug: slides
 categories:

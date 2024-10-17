@@ -1,7 +1,7 @@
 ---
 title: 遗传算法
 subtitle: Genetic Algorithm
-author: 王哲峰
+author: wangzf
 date: '2023-03-30'
 slug: genetic-algorithm
 categories:

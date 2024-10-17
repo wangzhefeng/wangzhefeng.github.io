@@ -1,7 +1,7 @@
 ---
 title: 机器学习概览
 subtitle: Machine Learning
-author: 王哲峰
+author: wangzf
 date: '2023-02-24'
 slug: ml
 categories:

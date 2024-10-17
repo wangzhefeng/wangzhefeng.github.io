@@ -1,7 +1,7 @@
 ---
 title: 苏轼
 subtitle: 北宋
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: sushi
 categories:

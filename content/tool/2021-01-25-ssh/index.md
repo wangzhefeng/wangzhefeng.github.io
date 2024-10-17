@@ -1,6 +1,6 @@
 ---
 title: SSH
-author: 王哲峰
+author: wangzf
 date: '2021-01-25'
 slug: ssh
 categories:

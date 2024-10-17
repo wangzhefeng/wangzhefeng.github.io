@@ -1,7 +1,7 @@
 ---
 title: 整数规划
 subtitle: Integer Programming
-author: 王哲峰
+author: wangzf
 date: '2024-08-28'
 slug: integer-programming
 categories:

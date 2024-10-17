@@ -1,6 +1,6 @@
 ---
 title: ResNet
-author: 王哲峰
+author: wangzf
 date: '2023-03-23'
 slug: cnn-resnet
 categories:

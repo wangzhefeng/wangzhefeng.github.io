@@ -1,6 +1,6 @@
 ---
 title: 因果推断
-author: 王哲峰
+author: wangzf
 date: '2023-07-25'
 slug: causal-inference
 categories:

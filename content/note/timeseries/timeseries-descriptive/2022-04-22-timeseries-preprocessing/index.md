@@ -1,6 +1,6 @@
 ---
 title: 时间序列预处理
-author: 王哲峰
+author: wangzf
 date: '2022-04-22'
 slug: timeseries-preprocessing
 categories:

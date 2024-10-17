@@ -1,6 +1,6 @@
 ---
 title: PyTorch 模型层
-author: 王哲峰
+author: wangzf
 date: '2022-08-12'
 slug: dl-pytorch-model-layer
 categories:

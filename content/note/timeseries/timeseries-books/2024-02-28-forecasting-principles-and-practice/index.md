@@ -1,6 +1,6 @@
 ---
 title: 预测：方法与实践
-author: 王哲峰
+author: wangzf
 date: '2024-02-28'
 slug: forecasting-principles-and-practice
 categories:

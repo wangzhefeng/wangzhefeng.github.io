@@ -1,6 +1,6 @@
 ---
 title: C++ 字符串、向量、数组
-author: 王哲峰
+author: wangzf
 date: '2022-08-14'
 slug: cpp-string-vector-array
 categories:

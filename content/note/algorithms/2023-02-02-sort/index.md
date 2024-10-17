@@ -1,6 +1,6 @@
 ---
 title: 排序算法
-author: 王哲峰
+author: wangzf
 date: '2023-02-02'
 slug: sort
 categories:

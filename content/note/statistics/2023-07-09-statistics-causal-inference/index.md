@@ -1,6 +1,6 @@
 ---
 title: 读统计之都《因果推断简介》系列文章
-author: 王哲峰
+author: wangzf
 date: '2023-07-09'
 slug: statistics-causal-inference
 categories:

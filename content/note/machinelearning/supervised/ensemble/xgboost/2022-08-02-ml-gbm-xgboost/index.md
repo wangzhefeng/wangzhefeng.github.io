@@ -1,6 +1,6 @@
 ---
 title: XGBoost
-author: 王哲峰
+author: wangzf
 date: '2022-08-02'
 slug: ml-gbm-xgboost
 categories:

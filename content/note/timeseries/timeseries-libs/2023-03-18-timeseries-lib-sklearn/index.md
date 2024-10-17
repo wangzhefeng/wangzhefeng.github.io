@@ -1,7 +1,7 @@
 ---
 title: SKlearn
 subtitle: 相关特征工程
-author: 王哲峰
+author: wangzf
 date: '2023-03-18'
 slug: timeseries-lib-sklearn
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 时间序列特征
-author: 王哲峰
+author: wangzf
 date: '2024-04-24'
 slug: forecasting-features
 categories:

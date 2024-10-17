@@ -1,6 +1,7 @@
 ---
 title: 模型保存和加载
-author: 王哲峰
+subtitle: Model Save & Load
+author: wangzf
 date: '2022-10-24'
 slug: model-save-load
 categories:

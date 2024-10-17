@@ -1,6 +1,6 @@
 ---
 title: CNN 图像学习
-author: 王哲峰
+author: wangzf
 date: '2023-03-20'
 slug: cnn-step
 categories:

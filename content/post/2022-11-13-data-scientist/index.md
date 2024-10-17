@@ -1,6 +1,6 @@
 ---
 title: 优秀数据科学家的五个特征
-author: 王哲峰
+author: wangzf
 date: '2022-11-13'
 slug: data-scientist
 categories:

@@ -1,6 +1,6 @@
 ---
 title: DoWhy：因果推断框架 
-author: 王哲峰
+author: wangzf
 date: '2023-07-15'
 slug: statistics-causal-analysis-dowhy
 categories:

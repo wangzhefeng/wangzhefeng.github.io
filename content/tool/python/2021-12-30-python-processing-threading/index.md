@@ -1,6 +1,6 @@
 ---
 title: Python Processing 和 Threading
-author: 王哲峰
+author: wangzf
 date: '2021-12-30'
 slug: python-processing-threading
 categories:

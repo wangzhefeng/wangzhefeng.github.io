@@ -1,6 +1,6 @@
 ---
 title: 【paper】TimesNet
-author: 王哲峰
+author: wangzf
 date: '2024-05-08'
 slug: paper-ts-timesnet
 categories:

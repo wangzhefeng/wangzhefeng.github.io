@@ -1,6 +1,6 @@
 ---
 title: 傅里叶变换
-author: 王哲峰
+author: wangzf
 date: '2022-03-11'
 slug: fourier-transform
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 模型评价指标
-author: 王哲峰
+author: wangzf
 date: '2022-11-22'
 slug: model-evaluation
 categories:

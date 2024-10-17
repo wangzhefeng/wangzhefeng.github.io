@@ -1,6 +1,6 @@
 ---
 title: 特征采样-回归任务
-author: 王哲峰
+author: wangzf
 date: '2023-03-16'
 slug: feature-engine-resample-regression
 categories:

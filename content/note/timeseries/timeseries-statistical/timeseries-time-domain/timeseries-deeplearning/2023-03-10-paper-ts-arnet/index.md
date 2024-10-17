@@ -1,6 +1,6 @@
 ---
 title: 【Paper】AR-Net
-author: 王哲峰
+author: wangzf
 date: '2023-03-10'
 slug: paper-ts-arnet
 categories:

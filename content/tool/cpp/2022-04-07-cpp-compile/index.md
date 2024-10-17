@@ -1,6 +1,6 @@
 ---
 title: C++ 编译
-author: 王哲峰
+author: wangzf
 date: '2022-04-07'
 slug: cpp-compile
 categories:

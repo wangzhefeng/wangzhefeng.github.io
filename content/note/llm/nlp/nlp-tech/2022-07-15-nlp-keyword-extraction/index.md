@@ -1,6 +1,6 @@
 ---
 title: NLP-关键词提取
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-keyword-extraction
 categories:

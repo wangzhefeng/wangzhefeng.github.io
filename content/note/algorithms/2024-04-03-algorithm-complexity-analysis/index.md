@@ -1,6 +1,6 @@
 ---
 title: 算法复杂度分析
-author: 王哲峰
+author: wangzf
 date: '2024-04-03'
 slug: algorithm-complexity-analysis
 categories:

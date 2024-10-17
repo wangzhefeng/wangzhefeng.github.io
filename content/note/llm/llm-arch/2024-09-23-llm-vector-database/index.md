@@ -1,6 +1,6 @@
 ---
 title: LLM 架构--Vector Database
-author: 王哲峰
+author: wangzf
 date: '2024-09-23'
 slug: llm-vector-database
 categories:

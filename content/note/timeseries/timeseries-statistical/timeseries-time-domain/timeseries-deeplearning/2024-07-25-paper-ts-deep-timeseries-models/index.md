@@ -1,6 +1,6 @@
 ---
 title: Deep Time Series Models 综述
-author: 王哲峰
+author: wangzf
 date: '2024-07-25'
 slug: paper-ts-deep-timeseries-models
 categories:

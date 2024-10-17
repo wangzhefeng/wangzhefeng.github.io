@@ -1,6 +1,6 @@
 ---
 title: 小波分析
-author: 王哲峰
+author: wangzf
 date: '2023-03-14'
 slug: wavelet-analysis
 categories:

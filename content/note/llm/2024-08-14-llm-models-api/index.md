@@ -1,7 +1,7 @@
 ---
 title: LLM 调用
 subtitle: LLM API
-author: 王哲峰
+author: wangzf
 date: '2024-08-14'
 slug: llm-models-api
 categories:

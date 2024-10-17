@@ -1,6 +1,6 @@
 ---
 title: PyTorch 数据增强
-author: 王哲峰
+author: wangzf
 date: '2024-09-01'
 slug: dl-pytorch-data-augmentation
 categories:

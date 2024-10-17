@@ -1,6 +1,6 @@
 ---
 title: 十三邀
-author: 王哲峰
+author: wangzf
 date: '2019-01-13'
 slug: thirteen-invitations
 categories:

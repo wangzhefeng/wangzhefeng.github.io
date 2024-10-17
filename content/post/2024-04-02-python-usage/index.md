@@ -1,6 +1,6 @@
 ---
 title: Python 类使用详解
-author: 王哲峰
+author: wangzf
 date: '2024-04-02'
 slug: python-usage
 categories:

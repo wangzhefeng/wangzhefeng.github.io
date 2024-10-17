@@ -1,6 +1,6 @@
 ---
 title: LLM 框架--LangChain
-author: 王哲峰
+author: wangzf
 date: '2024-05-15'
 slug: langchain-usage
 categories:

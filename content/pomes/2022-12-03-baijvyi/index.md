@@ -1,7 +1,7 @@
 ---
 title: 白居易
 subtitle: 唐
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: baijvyi
 categories:

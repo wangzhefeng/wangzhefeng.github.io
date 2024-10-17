@@ -1,7 +1,7 @@
 ---
 title: VAR
 subtitle: 向量自回归模型
-author: 王哲峰
+author: wangzf
 date: '2023-05-21'
 slug: var
 categories:

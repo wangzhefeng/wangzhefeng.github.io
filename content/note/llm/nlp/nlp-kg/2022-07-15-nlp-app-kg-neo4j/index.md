@@ -1,6 +1,6 @@
 ---
 title: NLP-Neo4j
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: nlp-app-kg-neo4j
 categories:

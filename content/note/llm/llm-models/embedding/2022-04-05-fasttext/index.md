@@ -1,6 +1,6 @@
 ---
 title: 词向量模型 FastText
-author: 王哲峰
+author: wangzf
 date: '2022-04-05'
 slug: fasttext
 categories:

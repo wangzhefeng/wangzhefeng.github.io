@@ -1,6 +1,6 @@
 ---
 title: 模型验证
-author: 王哲峰
+author: wangzf
 date: '2022-11-13'
 slug: model-validation
 categories:

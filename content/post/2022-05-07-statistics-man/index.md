@@ -1,6 +1,6 @@
 ---
 title: 读《漫谈现代统计"四大天王"》
-author: 王哲峰
+author: wangzf
 date: '2022-05-07'
 slug: statistics-man
 categories:

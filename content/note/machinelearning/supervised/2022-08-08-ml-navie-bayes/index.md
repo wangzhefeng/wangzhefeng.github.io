@@ -1,6 +1,6 @@
 ---
 title: Navie Bayes
-author: 王哲峰
+author: wangzf
 date: '2022-08-08'
 slug: ml-navie-bayes
 categories:

@@ -1,6 +1,6 @@
 ---
 title: 书到用时方恨少，上厕所时不好找
-author: 王哲峰
+author: wangzf
 date: '2019-10-01'
 categories:
   - 整理

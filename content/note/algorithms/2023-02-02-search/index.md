@@ -1,6 +1,6 @@
 ---
 title: 搜索算法
-author: 王哲峰
+author: wangzf
 date: '2023-02-02'
 slug: search
 categories:

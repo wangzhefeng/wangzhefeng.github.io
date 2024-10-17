@@ -1,7 +1,7 @@
 ---
 title: 诗经
 subtitle: 先秦
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: shijing
 categories:

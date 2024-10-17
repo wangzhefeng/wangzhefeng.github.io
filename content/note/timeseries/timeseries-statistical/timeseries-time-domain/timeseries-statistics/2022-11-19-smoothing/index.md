@@ -1,6 +1,6 @@
 ---
 title: 时间序列平滑及预测
-author: 王哲峰
+author: wangzf
 date: '2022-11-19'
 slug: timeseries-smoothing
 categories:

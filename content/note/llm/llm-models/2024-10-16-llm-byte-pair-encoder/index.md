@@ -1,7 +1,7 @@
 ---
 title: BPP 算法
 subtitle: Byte Pair Encoder
-author: 王哲峰
+author: wangzf
 date: '2024-10-16'
 slug: llm-byte-pair-encoder
 categories:

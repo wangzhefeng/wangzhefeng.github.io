@@ -1,6 +1,6 @@
 ---
 title: 【Paper】Informer
-author: 王哲峰
+author: wangzf
 date: '2023-04-03'
 slug: paper-ts-informer
 categories:

@@ -1,6 +1,6 @@
 ---
 title: To Things Not To People
-author: 王哲峰
+author: wangzf
 date: '2022-11-07'
 slug: things-people
 categories:

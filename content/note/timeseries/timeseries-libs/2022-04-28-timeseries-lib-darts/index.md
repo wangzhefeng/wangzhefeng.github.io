@@ -1,7 +1,7 @@
 ---
 title: Darts
 subtitle: 预测和异常检测
-author: 王哲峰
+author: wangzf
 date: '2022-04-28'
 slug: timeseries-lib-darts
 categories:

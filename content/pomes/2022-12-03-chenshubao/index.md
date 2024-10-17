@@ -1,7 +1,7 @@
 ---
 title: 陈叔宝
 subtitle: 南北朝
-author: 王哲峰
+author: wangzf
 date: '2022-12-03'
 slug: chenshubao
 categories:

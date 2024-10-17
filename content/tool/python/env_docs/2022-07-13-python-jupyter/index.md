@@ -1,6 +1,6 @@
 ---
 title: Python Jupyter
-author: 王哲峰
+author: wangzf
 date: '2022-07-13'
 slug: python-jupyter
 categories:

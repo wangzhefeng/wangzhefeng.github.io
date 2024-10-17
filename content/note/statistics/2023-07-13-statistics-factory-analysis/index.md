@@ -1,6 +1,6 @@
 ---
 title: 统计因子分析
-author: 王哲峰
+author: wangzf
 date: '2023-07-13'
 slug: statistics-factory-analysis
 categories:

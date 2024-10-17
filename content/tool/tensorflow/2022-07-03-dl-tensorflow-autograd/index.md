@@ -1,6 +1,6 @@
 ---
 title: TensorFlow 自动微分机制
-author: 王哲峰
+author: wangzf
 date: '2022-07-03'
 slug: dl-tensorflow-autograd
 categories:

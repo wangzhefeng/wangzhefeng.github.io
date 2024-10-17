@@ -1,6 +1,6 @@
 ---
 title: SVM 使用
-author: 王哲峰
+author: wangzf
 date: '2023-04-05'
 slug: ml-svm-api
 categories:

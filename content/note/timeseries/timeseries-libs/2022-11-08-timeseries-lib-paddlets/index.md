@@ -1,6 +1,6 @@
 ---
 title: Paddlets
-author: 王哲峰
+author: wangzf
 date: '2022-11-08'
 slug: timeseries-lib-paddlets
 categories:

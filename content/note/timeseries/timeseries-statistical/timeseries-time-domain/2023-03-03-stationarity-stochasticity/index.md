@@ -1,6 +1,6 @@
 ---
 title: 时间序列平稳性和纯随机性
-author: 王哲峰
+author: wangzf
 date: '2023-03-03'
 slug: stationarity-stochasticity
 categories:

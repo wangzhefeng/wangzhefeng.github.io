@@ -1,6 +1,6 @@
 ---
 title: 时间序列预测方式
-author: 王哲峰
+author: wangzf
 date: '2022-04-25'
 slug: forecast-method
 categories:

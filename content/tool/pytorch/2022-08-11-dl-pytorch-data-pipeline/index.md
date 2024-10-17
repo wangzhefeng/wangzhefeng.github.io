@@ -1,6 +1,6 @@
 ---
 title: PyTorch 数据管道
-author: 王哲峰
+author: wangzf
 date: '2022-08-11'
 slug: dl-pytorch-data-pipeline
 categories:

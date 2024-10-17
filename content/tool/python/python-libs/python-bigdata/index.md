@@ -1,6 +1,6 @@
 ---
 title: Python 大数据集处理
-author: 王哲峰
+author: wangzf
 date: '2022-07-24'
 slug: python-bigdata
 categories:

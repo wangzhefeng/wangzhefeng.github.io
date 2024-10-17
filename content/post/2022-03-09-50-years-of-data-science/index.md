@@ -1,6 +1,6 @@
 ---
 title: 读《50 years of Data Science》
-author: 王哲峰
+author: wangzf
 date: '2022-03-09'
 slug: 50-years-of-data-science
 categories: 

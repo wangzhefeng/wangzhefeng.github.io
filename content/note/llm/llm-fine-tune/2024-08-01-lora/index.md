@@ -1,6 +1,6 @@
 ---
 title: LLM 微调--LoRA
-author: 王哲峰
+author: wangzf
 date: '2024-08-01'
 slug: lora
 categories:

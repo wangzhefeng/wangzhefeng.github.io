@@ -1,6 +1,6 @@
 ---
 title: 特征工程概览
-author: 王哲峰
+author: wangzf
 date: '2023-02-27'
 slug: feature-engine
 categories:

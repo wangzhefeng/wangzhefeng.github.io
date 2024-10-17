@@ -1,6 +1,6 @@
 ---
 title: 时间序列分解、移动平均
-author: 王哲峰
+author: wangzf
 date: '2024-03-23'
 slug: forecasting-decomposition
 categories:

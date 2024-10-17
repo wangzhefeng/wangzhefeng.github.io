@@ -1,7 +1,7 @@
 ---
 title: 非线性规划
 subtitle: NonLinear Programming
-author: 王哲峰
+author: wangzf
 date: '2023-03-30'
 slug: nonlinear-programming
 categories:

@@ -1,6 +1,6 @@
 ---
 title: C++ 快速入门
-author: 王哲峰
+author: wangzf
 date: '2022-04-08'
 slug: cpp-helloworld
 categories:

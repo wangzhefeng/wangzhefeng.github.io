@@ -1,6 +1,6 @@
 ---
 title: Decision Tree
-author: 王哲峰
+author: wangzf
 date: '2022-08-09'
 slug: ml-decision-tree
 categories:

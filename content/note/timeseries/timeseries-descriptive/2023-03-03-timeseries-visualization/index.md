@@ -1,6 +1,6 @@
 ---
 title: 时间序列可视化
-author: 王哲峰
+author: wangzf
 date: '2023-03-03'
 slug: timeseries-visualization
 categories:

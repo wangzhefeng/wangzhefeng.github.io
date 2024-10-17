@@ -1,6 +1,6 @@
 ---
 title: Maplotlib QA
-author: 王哲峰
+author: wangzf
 date: '2022-09-22'
 slug: maplotlib-qa
 categories:

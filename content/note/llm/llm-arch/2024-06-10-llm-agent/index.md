@@ -1,6 +1,6 @@
 ---
 title: LLM 架构--Agent
-author: 王哲峰
+author: wangzf
 date: '2024-06-10'
 slug: llm-agent
 categories:

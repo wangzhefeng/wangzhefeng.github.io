@@ -1,6 +1,6 @@
 ---
 title: 机器学习预测方式
-author: 王哲峰
+author: wangzf
 date: '2024-09-10'
 slug: ml-forecasting
 categories:

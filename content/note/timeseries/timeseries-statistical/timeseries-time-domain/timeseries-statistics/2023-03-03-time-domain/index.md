@@ -1,6 +1,6 @@
 ---
 title: 时间序列统计性时域分析
-author: 王哲峰
+author: wangzf
 date: '2023-03-03'
 slug: time-domain
 categories:

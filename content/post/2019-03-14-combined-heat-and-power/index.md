@@ -1,6 +1,6 @@
 ---
 title: 那些年我们搞的热电联产
-author: 王哲峰
+author: wangzf
 date: '2019-03-14'
 slug: combined-heat-and-power
 categories:

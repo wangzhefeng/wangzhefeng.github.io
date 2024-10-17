@@ -1,6 +1,6 @@
 ---
 title: 计算机视觉概览
-author: 王哲峰
+author: wangzf
 date: '2023-04-29'
 slug: cv-summary
 categories:

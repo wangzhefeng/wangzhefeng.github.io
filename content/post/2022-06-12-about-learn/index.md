@@ -1,6 +1,6 @@
 ---
 title: 关于学习
-author: 王哲峰
+author: wangzf
 date: '2022-06-12'
 slug: about-learn
 categories:

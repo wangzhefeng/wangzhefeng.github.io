@@ -1,6 +1,6 @@
 ---
 title: LLM 架构--RAG
-author: 王哲峰
+author: wangzf
 date: '2024-03-23'
 slug: llm-rag
 categories:

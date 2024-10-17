@@ -1,7 +1,7 @@
 ---
 title: NeuralForecast
 subtitle: 深度学习库
-author: 王哲峰
+author: wangzf
 date: '2024-03-01'
 slug: timeseries-lib-neuralforecast
 categories:

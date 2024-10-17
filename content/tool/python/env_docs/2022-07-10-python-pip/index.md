@@ -1,6 +1,6 @@
 ---
 title: Python pip
-author: 王哲峰
+author: wangzf
 date: '2022-07-10'
 slug: python-pip
 categories:

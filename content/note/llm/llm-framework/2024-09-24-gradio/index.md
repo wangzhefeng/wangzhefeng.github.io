@@ -1,6 +1,6 @@
 ---
 title: LLM 框架--Gradio
-author: 王哲峰
+author: wangzf
 date: '2024-09-24'
 slug: gradio
 categories:

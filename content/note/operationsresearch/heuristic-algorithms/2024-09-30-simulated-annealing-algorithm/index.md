@@ -1,7 +1,7 @@
 ---
 title: 模拟退火算法
 subtitle: Simulated Annealing Algorithm
-author: 王哲峰
+author: wangzf
 date: '2024-09-30'
 slug: simulated-annealing-algorithm
 categories:

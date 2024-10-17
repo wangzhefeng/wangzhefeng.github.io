@@ -1,6 +1,6 @@
 ---
 title: Pandas
-author: 王哲峰
+author: wangzf
 date: '2022-10-03'
 slug: python-pandas
 categories:

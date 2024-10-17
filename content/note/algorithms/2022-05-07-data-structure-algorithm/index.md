@@ -1,6 +1,6 @@
 ---
 title: 数据结构与算法概览
-author: 王哲峰
+author: wangzf
 date: '2022-05-07'
 slug: data-structure-algorithm
 categories:

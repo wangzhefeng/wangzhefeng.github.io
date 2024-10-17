@@ -1,6 +1,6 @@
 ---
 title: 层次聚类
-author: 王哲峰
+author: wangzf
 date: '2022-11-22'
 slug: ml-clustering-hierarchical
 categories:

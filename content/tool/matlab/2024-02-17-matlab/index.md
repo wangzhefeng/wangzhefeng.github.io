@@ -1,6 +1,6 @@
 ---
 title: MATLAB 安装及命令行工具
-author: 王哲峰
+author: wangzf
 date: '2024-02-17'
 slug: matlab
 categories: 

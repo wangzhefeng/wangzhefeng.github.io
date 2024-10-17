@@ -1,6 +1,6 @@
 ---
 title: 特征采样-分类任务
-author: 王哲峰
+author: wangzf
 date: '2022-09-13'
 slug: feature-engine-resample
 categories:

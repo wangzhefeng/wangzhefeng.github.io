@@ -1,7 +1,7 @@
 ---
 title: Pandas-Timeseries
 # subtitle: 数据预处理
-author: 王哲峰
+author: wangzf
 date: '2022-11-28'
 slug: timeseries-lib-pandas
 categories:

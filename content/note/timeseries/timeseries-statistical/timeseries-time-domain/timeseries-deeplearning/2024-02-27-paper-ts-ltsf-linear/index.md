@@ -1,6 +1,6 @@
 ---
 title: 【Paper】LTSF-Linear
-author: 王哲峰
+author: wangzf
 date: '2024-02-27'
 slug: paper-ts-ltsf-linear
 categories:

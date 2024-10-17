@@ -1,7 +1,7 @@
 ---
 title: 蚁群算法
 subtitle: Ant Colony Algorithm
-author: 王哲峰
+author: wangzf
 date: '2024-09-30'
 slug: ant-colony-algorithm
 categories:

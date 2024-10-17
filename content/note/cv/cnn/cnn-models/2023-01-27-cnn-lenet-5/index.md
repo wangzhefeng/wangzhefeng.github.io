@@ -1,6 +1,6 @@
 ---
 title: LeNet-5
-author: 王哲峰
+author: wangzf
 date: '2023-01-27'
 slug: cnn-lenet-5
 categories:

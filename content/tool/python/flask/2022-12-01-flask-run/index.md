@@ -1,6 +1,6 @@
 ---
 title: Flask 安装与启动
-author: 王哲峰
+author: wangzf
 date: '2022-12-01'
 slug: flask-run
 categories:

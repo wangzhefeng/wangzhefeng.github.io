@@ -1,7 +1,7 @@
 ---
 title: 模型预训练
 subtitle: Model Pretrain
-author: 王哲峰
+author: wangzf
 date: '2024-09-27'
 slug: model-pretrain
 categories:

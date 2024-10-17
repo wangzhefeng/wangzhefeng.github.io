@@ -1,7 +1,7 @@
 ---
 title: 时间序列分析概述
 subtitle: Time Series
-author: 王哲峰
+author: wangzf
 date: '2022-04-20'
 slug: timeseries
 categories:

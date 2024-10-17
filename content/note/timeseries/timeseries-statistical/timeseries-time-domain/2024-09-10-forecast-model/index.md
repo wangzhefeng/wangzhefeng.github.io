@@ -1,6 +1,6 @@
 ---
 title:  时间序列预测模型
-author: 王哲峰
+author: wangzf
 date: '2024-09-10'
 slug: forecast-model
 categories:

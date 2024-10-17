@@ -1,6 +1,6 @@
 ---
 title: MATLAB 基础语法
-author: 王哲峰
+author: wangzf
 date: '2024-02-17'
 slug: matlab-grammar
 categories:

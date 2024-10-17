@@ -1,6 +1,6 @@
 ---
 title: Matplotlib
-author: 王哲峰
+author: wangzf
 date: '2022-09-23'
 slug: matplotlib-use
 categories:
