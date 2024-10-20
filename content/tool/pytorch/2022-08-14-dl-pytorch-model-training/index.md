@@ -35,8 +35,20 @@ img {
 <details><summary>目录</summary><p>
 
 - [模型训练简介](#模型训练简介)
-    - [MNIST 数据集](#mnist-数据集)
-    - [神经网络示例](#神经网络示例)
+    - [模型训练代码类型](#模型训练代码类型)
+    - [模型训练代码模板](#模型训练代码模板)
+        - [参数设置](#参数设置)
+        - [日志模块](#日志模块)
+        - [训练模块](#训练模块)
+        - [指标统计模块](#指标统计模块)
+    - [模型循环代码模板风格示例](#模型循环代码模板风格示例)
+        - [MINIST 数据](#minist-数据)
+        - [神经网络示例](#神经网络示例)
+        - [脚本风格](#脚本风格)
+        - [函数风格](#函数风格)
+        - [类风格-torchkeras](#类风格-torchkeras)
+            - [KerasModel](#kerasmodel)
+            - [LightModel](#lightmodel)
 - [损失函数](#损失函数)
     - [内置损失函数](#内置损失函数)
         - [常用内置损失函数 API](#常用内置损失函数-api)
@@ -50,29 +62,75 @@ img {
         - [模型训练](#模型训练)
         - [结果可视化](#结果可视化)
         - [通过优化器实现 L2 正则化](#通过优化器实现-l2-正则化)
-- [损失函数、优化器、评价指标](#损失函数优化器评价指标)
-- [脚本风格](#脚本风格)
-- [函数风格](#函数风格)
-- [类风格](#类风格)
-    - [KerasModel](#kerasmodel)
-    - [LightModel](#lightmodel)
+        - [损失函数创建](#损失函数创建)
+- [优化器](#优化器)
+- [评价指标](#评价指标)
+- [参考](#参考)
 </p></details><p></p>
 
 # 模型训练简介
 
-PyTorch 通常需要用户编写自定义训练循环，训练循环的代码风格因人而异。有三类典型的训练循环代码风格：
+## 模型训练代码类型
+
+PyTorch 通常需要用户编写自定义训练循环，训练循环的代码风格因人而异。
+有三类典型的训练循环代码风格：
 
 * 脚本形式训练循环
 * 函数形式训练循环
 * 类形式训练循环
 
-还有一种第三方用户编写的风格，通用的 Keras 风格的脚本形式训练循环，需要安装相应的第三方库：
+## 模型训练代码模板
 
-```bash
-$ pip install torchkeras
-```
+一个良好的训练代码，可以有助于分析和超参调优。训练模型的代码结构可以千变万化，
+每个人结合自己的风格进行编写。`torchvision` 还提供了分割、检测、相似性学习和视频分类的训练脚本，
+可以[参考](https://pytorch.org/vision/stable/training_references.html)。
 
-## MNIST 数据集
+模型训练代码核心内容应该包括：
+
+* **参数设置**：这部分采用 `argparse` 模块进行配置，便于服务器上训练，以及超参数记录；
+* **日志模块**：包括 `logging` 模块记录文本信息 `.log` 文件，以及 `tensorboard` 部分的可视化内容；
+* **训练模块**：封装为通用类 `ModelTrainer`
+* **指标统计模块**
+* **模型保存模块**
+
+### 参数设置
+
+在服务器上进行训练时，通常采用命令行启动，或时采用 shell 脚本批量训练，
+这时候就需要从命令行传入一些参数，用来调整模型超参。
+例如学习率想从 `0.1` 改为 `0.01`，按以往代码，需要进入 `.py` 文件，
+修改代码，保存代码，运行代码。这样操作明显欠妥，因此通常会采用 `argparse` 模块，
+将经常需要调整的参数，可以从命令行中接收。
+
+在代码中可以采用了函数 `get_args_parser()` 实现，有了 `args`，还可以将它记录到日志中，
+便于复现以及查看模型的超参数设置，便于跟踪。
+
+### 日志模块
+
+模型训练的日志很重要，它用于指导下一次实验的超参数如何调整。
+可以采用借助 `logging` 模块构建一个 `logger`，
+并且以时间戳（`年月日-时分秒`）的形式创建文件夹，便于日志管理。
+
+在 `logger` 中使用 `logger.info` 函数代替 `print` 函数，可以实现在终端展示信息，
+还可以将其保存到日志文件夹下的 `log.log` 文件，便于溯源。
+
+### 训练模块
+
+训练过程比较固定，因此会将其封装成 `train_one_epoch` 和 `evaluate` 的两个函数，
+从这两个函数中需要返回我们关心的指标，如 Loss，Accuracy，混淆矩阵等。
+
+### 指标统计模块
+
+Loss 和 Accuracy 需要手动记录每个值，然后取平均，除了它们两个，
+深度学习训练中还有许多指标都需要类似的操作。
+因此，可以抽象出一个 `AverageMeter` 类，用于记录需要求取平均值的那些指标。
+`AverageMeter` 类的使用，使得代码更简洁。
+
+运行代码当训练完成后，可在输出目录下得到以时间戳为文件夹的日志目录，
+里面包括 Loss、Accuracy、混淆矩阵可视化图，最优模型 checkpoint。
+
+## 模型循环代码模板风格示例
+
+### MINIST 数据
 
 ```python
 import os
@@ -162,7 +220,7 @@ plt.show()
 
 ![img](images/mnist.png)
 
-## 神经网络示例
+### 神经网络示例
 
 ```python
 class Net(nn.Module):
@@ -197,6 +255,404 @@ class Net(nn.Module):
     
 net = Net()
 print(net)
+```
+
+### 脚本风格
+
+脚本风格的训练循环最为常见
+
+```python
+# epochs 相关设置
+epochs = 20 
+ckpt_path = 'checkpoint.pt'
+
+# early_stopping 相关设置
+monitor = "val_acc"
+patience = 5
+mode = "max"
+
+# 训练循环
+history = {}
+for epoch in range(1, epochs + 1):
+    printlog(f"Epoch {epoch} / {epochs}")
+    # ------------------------------
+    # 1.train
+    # ------------------------------
+    net.train()
+
+    total_loss, step = 0, 0    
+    loop = tqdm(enumerate(dl_train), total = len(dl_train))
+    train_metrics_dict = deepcopy(metrics_dict) 
+    for i, batch in loop: 
+        features, labels = batch
+        # forward
+        preds = net(features)
+        loss = loss_fn(preds, labels)
+        # backward
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()    
+        # metrics
+        step_metrics = {
+            "train_" + name: metric_fn(preds, labels).item()
+            for name, metric_fn in train_metrics_dict.items()
+        }
+        step_log = dict({
+            "train_loss": loss.item()
+        }, **step_metrics)
+        # 总损失和训练迭代次数更新
+        total_loss += loss.item()
+        step += 1
+
+        if i != len(dl_train) - 1:
+            loop.set_postfix(**step_log)
+        else:
+            epoch_loss = total_loss / step
+            epoch_metrics = {
+                "train_" + name: metric_fn.compute().item() 
+                for name, metric_fn in train_metrics_dict.items()
+            }
+            epoch_log = dict({
+                "train_loss": epoch_loss
+            }, **epoch_metrics)
+            loop.set_postfix(**epoch_log)
+            for name, metric_fn in train_metrics_dict.items():
+                metric_fn.reset()
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # ------------------------------
+    # 2.validate
+    # ------------------------------
+    net.eval()    
+
+    total_loss, step = 0, 0
+    loop = tqdm(enumerate(dl_val), total =len(dl_val))    
+    val_metrics_dict = deepcopy(metrics_dict)     
+    with torch.no_grad():
+        for i, batch in loop: 
+            features, labels = batch            
+            #forward
+            preds = net(features)
+            loss = loss_fn(preds, labels)
+            # metrics
+            step_metrics = {
+                "val_" + name: metric_fn(preds, labels).item() 
+                for name,metric_fn in val_metrics_dict.items()
+            }
+            step_log = dict({
+                "val_loss": loss.item()
+            }, **step_metrics)
+            # 总损失和训练迭代次数更新
+            total_loss += loss.item()
+            step9 += 1
+            if i != len(dl_val) - 1:
+                loop.set_postfix(**step_log)
+            else:
+                epoch_loss = (total_loss / step)
+                epoch_metrics = {
+                    "val_" + name: metric_fn.compute().item() 
+                    for name, metric_fn in val_metrics_dict.items()
+                }
+                epoch_log = dict({
+                    "val_loss": epoch_loss
+                }, **epoch_metrics)
+                loop.set_postfix(**epoch_log)
+                for name, metric_fn in val_metrics_dict.items():
+                    metric_fn.reset()
+    epoch_log["epoch"] = epoch           
+    for name, metric in epoch_log.items():
+        history[name] = history.get(name, []) + [metric]
+    # ------------------------------
+    # 3.early-stopping
+    # ------------------------------
+    arr_scores = history[monitor]
+    best_score_idx = np.argmax(arr_scores) if mode == "max" else np.argmin(arr_scores)
+    
+    if best_score_idx == len(arr_scores) - 1:
+        torch.save(net.state_dict(), ckpt_path)
+        print(f"<<<<<< reach best {monitor} : {arr_scores[best_score_idx]} >>>>>>", file = sys.stderr)
+    
+    if len(arr_scores) - best_score_idx > patience:
+        print(f"<<<<<< {monitor} without improvement in {patience} epoch, early stopping >>>>>>", file = sys.stderr)
+        break
+    net.load_state_dict(torch.load(ckpt_path))
+
+# 模型训练结果
+dfhistory = pd.DataFrame(history)
+```
+
+### 函数风格
+
+函数风格是在脚本风格形式的基础上做了进一步的函数封装
+
+```python
+class StepRunner:
+
+    def __init__(self,
+                 net, 
+                 loss_fn,
+                 stage = "train",
+                 metrics_dict = None,
+                 optimizer = None,
+                 lr_scheduler = None,
+                 accelerator = None):
+        self.net = net
+        self.loss_fn = loss_fn
+        self.metrics_dict = metrics_dict
+        self.stage = stage
+        self.optimizer = optimizer
+        self.lr_scheduler = lr_scheduler
+        self.accelerator = accelerator
+
+    def setp(self, features, labels):
+        # loss
+        preds = self.net(features)
+        loss = self.loss_fn(preds, labels)
+
+        # backward
+        if self.optimizer is not None and self.stage == "train":
+            # backward
+            if self.accelerator is None:
+                loss.backward()
+            else:
+                self.accelerator.backward(loss)
+            # optimizer
+            self.optimizer.step()
+            # learning rate scheduler
+            if self.lr_scheduler is not None:
+                self.lr_scheduler.step()
+            # zero grad
+            self.optimizer.zero_grad()
+        
+        # metrics
+        step_metrics = {
+            self.stage + "_" + name: metric_fn(preds, labels).item() 
+            for name, metric_fn in self.metrics_dict.items()
+        }
+
+        return loss.item(), step_metrics
+
+    def train_step(self, features, labels):
+        """
+        训练模式，dropout 层发生作用
+        """
+        self.net.train()
+        return self.step(features, labels)
+
+    @torch.no_grad()
+    def eval_step(self, features, labels):
+        """
+        预测模式，dropout 层不发生作用
+        """
+        self.net.eval()
+        return self.step(features, labels)
+
+    def __call__(self, features, labels):
+        if self.stage == "train":
+            return self.train_step(features, labels)
+        else:
+            return self.eval_step(features, labels)
+
+
+class EpochRunner:
+
+    def __init__(self, steprunner):
+        self.steprunner = steprunner
+        self.stage = steprunner.stage
+        self.steprunner.net.train() if self.stage == "train" else self.steprunner.net.eval()
+
+    def __call__(self, dataloader):
+        total_loss = 0
+        step = 0
+        loop = tqdm(enumerate(dataloader), total = len(dataloader))
+        for i, batch in loop:
+            if self.stage == "train":
+                loss, step_metrics = self.steprunner(*batch)
+            else:
+                with torch.no_grad():
+                    loss, step_metrics = self.steprunner(*batch)
+            step_log = dict({
+                self.stage + "_loss": loss
+            }, **step_metrics)
+
+            total_loss += loss
+            step += 1
+            if i != len(dataloader) - 1:
+                loop.set_postfix(**step_log)
+            else:
+                epoch_loss = total_loss / step
+                epoch_metrics = {
+                    self.stage + "_" + name: metric_fn.compute().item()
+                                       for name, metric_fn in self.steprunner.metrics_dict.items()
+                }
+                epoch_log = dict({
+                    self.stage + "_loss": epoch_loss
+                }, **epoch_metrics)
+                loop.set_postfix(**epoch_log)
+
+                for name, metric_fn in self.steprunner.metrics_dict.items():
+                    metric_fn.reset()
+
+        return epoch_log
+
+
+def train_model(net, 
+                optimizer, 
+                loss_fn, 
+                metrics_dict, 
+                train_data, 
+                val_data = None, 
+                epochs = 10, 
+                ckpt_path = 'checkpoint.pt',
+                patience = 5, 
+                monitor = "val_loss", 
+                mode = "min"):
+    history = {}
+    for epoch in range(1, epochs+1):
+        printlog("Epoch {0} / {1}".format(epoch, epochs))
+        # ------------------------------
+        # 1.train
+        # ------------------------------
+        train_step_runner = StepRunner(
+            net = net,
+            stage="train",
+            loss_fn = loss_fn,
+            metrics_dict = deepcopy(metrics_dict),
+            optimizer = optimizer
+        )
+        train_epoch_runner = EpochRunner(train_step_runner)
+        train_metrics = train_epoch_runner(train_data)
+        for name, metric in train_metrics.items():
+            history[name] = history.get(name, []) + [metric]
+        # ------------------------------
+        # 2.validate
+        # ------------------------------
+        if val_data:
+            val_step_runner = StepRunner(
+                net = net,
+                stage = "val",
+                loss_fn = loss_fn,
+                metrics_dict = deepcopy(metrics_dict)
+            )
+            val_epoch_runner = EpochRunner(val_step_runner)
+            with torch.no_grad():
+                val_metrics = val_epoch_runner(val_data)
+            val_metrics["epoch"] = epoch
+            for name, metric in val_metrics.items():
+                history[name] = history.get(name, []) + [metric]
+        # ------------------------------
+        # 3.early-stopping
+        # ------------------------------
+        arr_scores = history[monitor]
+        best_score_idx = np.argmax(arr_scores) if mode=="max" else np.argmin(arr_scores)
+        if best_score_idx == len(arr_scores) - 1:
+            torch.save(net.state_dict(), ckpt_path)
+            print(f"<<<<<< reach best {monitor} : {arr_scores[best_score_idx]} >>>>>>", file = sys.stderr)
+        if len(arr_scores) - best_score_idx > patience:
+            print(f"<<<<<< {monitor} without improvement in {patience} epoch, early stopping >>>>>>", file = sys.stderr)
+            break 
+        net.load_state_dict(torch.load(ckpt_path))
+
+    return pd.DataFrame(history)
+```
+
+```python
+df_history = train_model(
+    net = net, 
+    optimizer = optimizer, 
+    loss_fn = loss_fn, 
+    metrics_dict = metrics_dict, 
+    train_data = dl_train,
+    val_data = dl_val,
+    epochs = 10,
+    patience = 3,
+    monitor = "val_acc",
+    mode = "max"
+)
+```
+
+### 类风格-torchkeras
+
+`torchkeras` 安装:
+
+```bash
+$ pip install torchkeras
+```
+
+#### KerasModel
+
+使用 `torchkeras.KerasModel` 高阶 API 接口中的 `fit` 方法训练模型
+
+```python
+from torchkeras import KerasModel
+
+# 模型实例化
+model = KerasModel(
+    net = net, 
+    loss_fn = loss_fn,
+    metrics_dict = metrics_dict,
+    optimizer = optimizer,
+)
+
+# 启动训练循环
+model.fit(
+    trian_data = dl_train,
+    val_data = dl_val,
+    epochs = 10,
+    patience = 3,
+    monitor = "val_acc",
+    mode = "max",
+)
+```
+
+#### LightModel
+
+`torchkeras` 还提供了 `torchkeras.LightModel` 来支持跟多的功能。
+`torchkeras.LightModel` 借鉴了 `pytorch_lightning` 库中的很多功能，
+并演示了对 `pytorch_lightning` 的一种最佳实践
+
+```python
+from torchkeras import LightModel
+import pytorch_lightning as pl
+
+# 模型实例化
+model = LightModel(
+    net = net, 
+    loss_fn = loss_fn,
+    metrics_dict = metrics_dict,
+    optimizer = optimizer,
+)
+
+# 设置回调函数
+model_ckpt = pl.callbacks.ModelCheckpoint(
+    monitor = "val_acc",
+    save_top_k = 1,
+    mode = "max",
+)
+
+# 设置早停
+early_stopping = pl.callbacks.EarlyStopping(
+    monitor = "val_acc",
+    patience = 3,
+    mode = "max",
+)
+
+# 设置训练参数
+trainer = pl.Trainer(
+    logger = True,
+    min_epochs = 10,
+    max_epochs = 20,
+    gpus = 0,
+    callbacks = [model_ckpt, early_stopping],
+    enable_progress_bar = True,
+)
+
+# 启动训练循环
+trianer.fit(
+    model,
+    dl_train,
+    dl_val,
+)
 ```
 
 # 损失函数
@@ -645,413 +1101,31 @@ optimizer = torch.optim.SGD([
 ]，lr = 1e-2，momentum = 0.9)
 ```
 
-# 损失函数、优化器、评价指标
+### 损失函数创建
 
 ```python
 # 损失函数
 loss_fn = nn.CrossEntropyLoss()
+```
+
+# 优化器
+
+```python
 # 优化器
 optimizer = torch.optim.Adam(net.parameters(), lr = 0.01)
+```
+
+# 评价指标
+
+```python
 # 评价指标
 metrics_dict = {
     "acc": Accuracy(task = "binray"),
 }
 ```
 
-# 脚本风格
+# 参考
 
-脚本风格的训练循环最为常见
-
-```python
-# epochs 相关设置
-epochs = 20 
-ckpt_path = 'checkpoint.pt'
-
-# early_stopping 相关设置
-monitor = "val_acc"
-patience = 5
-mode = "max"
-
-# 训练循环
-history = {}
-for epoch in range(1, epochs + 1):
-    printlog(f"Epoch {epoch} / {epochs}")
-    # ------------------------------
-    # 1.train
-    # ------------------------------
-    net.train()
-
-    total_loss, step = 0, 0    
-    loop = tqdm(enumerate(dl_train), total = len(dl_train))
-    train_metrics_dict = deepcopy(metrics_dict) 
-    for i, batch in loop: 
-        features, labels = batch
-        # forward
-        preds = net(features)
-        loss = loss_fn(preds, labels)
-        # backward
-        loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()    
-        # metrics
-        step_metrics = {
-            "train_" + name: metric_fn(preds, labels).item()
-            for name, metric_fn in train_metrics_dict.items()
-        }
-        step_log = dict({
-            "train_loss": loss.item()
-        }, **step_metrics)
-        # 总损失和训练迭代次数更新
-        total_loss += loss.item()
-        step += 1
-
-        if i != len(dl_train) - 1:
-            loop.set_postfix(**step_log)
-        else:
-            epoch_loss = total_loss / step
-            epoch_metrics = {
-                "train_" + name: metric_fn.compute().item() 
-                for name, metric_fn in train_metrics_dict.items()
-            }
-            epoch_log = dict({
-                "train_loss": epoch_loss
-            }, **epoch_metrics)
-            loop.set_postfix(**epoch_log)
-            for name, metric_fn in train_metrics_dict.items():
-                metric_fn.reset()
-    for name, metric in epoch_log.items():
-        history[name] = history.get(name, []) + [metric]
-    # ------------------------------
-    # 2.validate
-    # ------------------------------
-    net.eval()    
-
-    total_loss, step = 0, 0
-    loop = tqdm(enumerate(dl_val), total =len(dl_val))    
-    val_metrics_dict = deepcopy(metrics_dict)     
-    with torch.no_grad():
-        for i, batch in loop: 
-            features, labels = batch            
-            #forward
-            preds = net(features)
-            loss = loss_fn(preds, labels)
-            # metrics
-            step_metrics = {
-                "val_" + name: metric_fn(preds, labels).item() 
-                for name,metric_fn in val_metrics_dict.items()
-            }
-            step_log = dict({
-                "val_loss": loss.item()
-            }, **step_metrics)
-            # 总损失和训练迭代次数更新
-            total_loss += loss.item()
-            step9 += 1
-            if i != len(dl_val) - 1:
-                loop.set_postfix(**step_log)
-            else:
-                epoch_loss = (total_loss / step)
-                epoch_metrics = {
-                    "val_" + name: metric_fn.compute().item() 
-                    for name, metric_fn in val_metrics_dict.items()
-                }
-                epoch_log = dict({
-                    "val_loss": epoch_loss
-                }, **epoch_metrics)
-                loop.set_postfix(**epoch_log)
-                for name, metric_fn in val_metrics_dict.items():
-                    metric_fn.reset()
-    epoch_log["epoch"] = epoch           
-    for name, metric in epoch_log.items():
-        history[name] = history.get(name, []) + [metric]
-    # ------------------------------
-    # 3.early-stopping
-    # ------------------------------
-    arr_scores = history[monitor]
-    best_score_idx = np.argmax(arr_scores) if mode == "max" else np.argmin(arr_scores)
-    
-    if best_score_idx == len(arr_scores) - 1:
-        torch.save(net.state_dict(), ckpt_path)
-        print(f"<<<<<< reach best {monitor} : {arr_scores[best_score_idx]} >>>>>>", file = sys.stderr)
-    
-    if len(arr_scores) - best_score_idx > patience:
-        print(f"<<<<<< {monitor} without improvement in {patience} epoch, early stopping >>>>>>", file = sys.stderr)
-        break
-    net.load_state_dict(torch.load(ckpt_path))
-
-# 模型训练结果
-dfhistory = pd.DataFrame(history)
-```
-
-# 函数风格
-
-函数风格是在脚本风格形式的基础上做了进一步的函数封装
-
-```python
-class StepRunner:
-
-    def __init__(self,
-                 net, 
-                 loss_fn,
-                 stage = "train",
-                 metrics_dict = None,
-                 optimizer = None,
-                 lr_scheduler = None,
-                 accelerator = None):
-        self.net = net
-        self.loss_fn = loss_fn
-        self.metrics_dict = metrics_dict
-        self.stage = stage
-        self.optimizer = optimizer
-        self.lr_scheduler = lr_scheduler
-        self.accelerator = accelerator
-
-    def setp(self, features, labels):
-        # loss
-        preds = self.net(features)
-        loss = self.loss_fn(preds, labels)
-
-        # backward
-        if self.optimizer is not None and self.stage == "train":
-            # backward
-            if self.accelerator is None:
-                loss.backward()
-            else:
-                self.accelerator.backward(loss)
-            # optimizer
-            self.optimizer.step()
-            # learning rate scheduler
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
-            # zero grad
-            self.optimizer.zero_grad()
-        
-        # metrics
-        step_metrics = {
-            self.stage + "_" + name: metric_fn(preds, labels).item() 
-            for name, metric_fn in self.metrics_dict.items()
-        }
-
-        return loss.item(), step_metrics
-
-    def train_step(self, features, labels):
-        """
-        训练模式，dropout 层发生作用
-        """
-        self.net.train()
-        return self.step(features, labels)
-
-    @torch.no_grad()
-    def eval_step(self, features, labels):
-        """
-        预测模式，dropout 层不发生作用
-        """
-        self.net.eval()
-        return self.step(features, labels)
-
-    def __call__(self, features, labels):
-        if self.stage == "train":
-            return self.train_step(features, labels)
-        else:
-            return self.eval_step(features, labels)
-
-
-class EpochRunner:
-
-    def __init__(self, steprunner):
-        self.steprunner = steprunner
-        self.stage = steprunner.stage
-        self.steprunner.net.train() if self.stage == "train" else self.steprunner.net.eval()
-
-    def __call__(self, dataloader):
-        total_loss = 0
-        step = 0
-        loop = tqdm(enumerate(dataloader), total = len(dataloader))
-        for i, batch in loop:
-            if self.stage == "train":
-                loss, step_metrics = self.steprunner(*batch)
-            else:
-                with torch.no_grad():
-                    loss, step_metrics = self.steprunner(*batch)
-            step_log = dict({
-                self.stage + "_loss": loss
-            }, **step_metrics)
-
-            total_loss += loss
-            step += 1
-            if i != len(dataloader) - 1:
-                loop.set_postfix(**step_log)
-            else:
-                epoch_loss = total_loss / step
-                epoch_metrics = {
-                    self.stage + "_" + name: metric_fn.compute().item()
-                                       for name, metric_fn in self.steprunner.metrics_dict.items()
-                }
-                epoch_log = dict({
-                    self.stage + "_loss": epoch_loss
-                }, **epoch_metrics)
-                loop.set_postfix(**epoch_log)
-
-                for name, metric_fn in self.steprunner.metrics_dict.items():
-                    metric_fn.reset()
-
-        return epoch_log
-
-
-def train_model(net, 
-                optimizer, 
-                loss_fn, 
-                metrics_dict, 
-                train_data, 
-                val_data = None, 
-                epochs = 10, 
-                ckpt_path = 'checkpoint.pt',
-                patience = 5, 
-                monitor = "val_loss", 
-                mode = "min"):
-    history = {}
-    for epoch in range(1, epochs+1):
-        printlog("Epoch {0} / {1}".format(epoch, epochs))
-        # ------------------------------
-        # 1.train
-        # ------------------------------
-        train_step_runner = StepRunner(
-            net = net,
-            stage="train",
-            loss_fn = loss_fn,
-            metrics_dict = deepcopy(metrics_dict),
-            optimizer = optimizer
-        )
-        train_epoch_runner = EpochRunner(train_step_runner)
-        train_metrics = train_epoch_runner(train_data)
-        for name, metric in train_metrics.items():
-            history[name] = history.get(name, []) + [metric]
-        # ------------------------------
-        # 2.validate
-        # ------------------------------
-        if val_data:
-            val_step_runner = StepRunner(
-                net = net,
-                stage = "val",
-                loss_fn = loss_fn,
-                metrics_dict = deepcopy(metrics_dict)
-            )
-            val_epoch_runner = EpochRunner(val_step_runner)
-            with torch.no_grad():
-                val_metrics = val_epoch_runner(val_data)
-            val_metrics["epoch"] = epoch
-            for name, metric in val_metrics.items():
-                history[name] = history.get(name, []) + [metric]
-        # ------------------------------
-        # 3.early-stopping
-        # ------------------------------
-        arr_scores = history[monitor]
-        best_score_idx = np.argmax(arr_scores) if mode=="max" else np.argmin(arr_scores)
-        if best_score_idx == len(arr_scores) - 1:
-            torch.save(net.state_dict(), ckpt_path)
-            print(f"<<<<<< reach best {monitor} : {arr_scores[best_score_idx]} >>>>>>", file = sys.stderr)
-        if len(arr_scores) - best_score_idx > patience:
-            print(f"<<<<<< {monitor} without improvement in {patience} epoch, early stopping >>>>>>", file = sys.stderr)
-            break 
-        net.load_state_dict(torch.load(ckpt_path))
-
-    return pd.DataFrame(history)
-```
-
-```python
-df_history = train_model(
-    net = net, 
-    optimizer = optimizer, 
-    loss_fn = loss_fn, 
-    metrics_dict = metrics_dict, 
-    train_data = dl_train,
-    val_data = dl_val,
-    epochs = 10,
-    patience = 3,
-    monitor = "val_acc",
-    mode = "max"
-)
-```
-
-# 类风格
-
-`torchkeras` 安装:
-
-```bash
-$ pip install torchkeras
-```
-
-## KerasModel
-
-使用 `torchkeras.KerasModel` 高阶 API 接口中的 `fit` 方法训练模型
-
-```python
-from torchkeras import KerasModel
-
-# 模型实例化
-model = KerasModel(
-    net = net, 
-    loss_fn = loss_fn,
-    metrics_dict = metrics_dict,
-    optimizer = optimizer,
-)
-
-# 启动训练循环
-model.fit(
-    trian_data = dl_train,
-    val_data = dl_val,
-    epochs = 10,
-    patience = 3,
-    monitor = "val_acc",
-    mode = "max",
-)
-```
-
-## LightModel
-
-`torchkeras` 还提供了 `torchkeras.LightModel` 来支持跟多的功能。
-`torchkeras.LightModel` 借鉴了 `pytorch_lightning` 库中的很多功能，
-并演示了对 `pytorch_lightning` 的一种最佳实践
-
-```python
-from torchkeras import LightModel
-import pytorch_lightning as pl
-
-# 模型实例化
-model = LightModel(
-    net = net, 
-    loss_fn = loss_fn,
-    metrics_dict = metrics_dict,
-    optimizer = optimizer,
-)
-
-# 设置回调函数
-model_ckpt = pl.callbacks.ModelCheckpoint(
-    monitor = "val_acc",
-    save_top_k = 1,
-    mode = "max",
-)
-
-# 设置早停
-early_stopping = pl.callbacks.EarlyStopping(
-    monitor = "val_acc",
-    patience = 3,
-    mode = "max",
-)
-
-# 设置训练参数
-trainer = pl.Trainer(
-    logger = True,
-    min_epochs = 10,
-    max_epochs = 20,
-    gpus = 0,
-    callbacks = [model_ckpt, early_stopping],
-    enable_progress_bar = True,
-)
-
-# 启动训练循环
-trianer.fit(
-    model,
-    dl_train,
-    dl_val,
-)
-```
+* [torchkeras](https://github.com/lyhue1991/torchkeras)
+* [PyTorch 实用教程-模型训练代码模板](https://tingsongyu.github.io/PyTorch-Tutorial-2nd/chapter-7/7.4-training-script.html)
+* [torchvision 提供的模型训练代码](https://github.com/pytorch/vision/tree/main/references)

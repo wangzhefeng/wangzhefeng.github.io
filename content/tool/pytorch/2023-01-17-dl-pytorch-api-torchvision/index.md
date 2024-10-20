@@ -1,8 +1,8 @@
 ---
-title: torchvision
+title: PyTorch torchvision
 author: wangzf
 date: '2023-01-17'
-slug: dl-pytorch-torchvision
+slug: dl-pytorch-api-torchvision
 categories:
   - pytorch
 tags:
@@ -35,32 +35,32 @@ img {
 <details><summary>目录</summary><p>
 
 - [数据集](#数据集)
-  - [内置数据集](#内置数据集)
-  - [自定义图像数据集的基本类](#自定义图像数据集的基本类)
+    - [内置数据集](#内置数据集)
+    - [自定义图像数据集的基本类](#自定义图像数据集的基本类)
 - [数据集读写](#数据集读写)
-  - [视屏](#视屏)
-  - [图像](#图像)
+    - [视屏](#视屏)
+    - [图像](#图像)
 - [数据转换与增强](#数据转换与增强)
-  - [数据转换与增强简介](#数据转换与增强简介)
-  - [常用转换](#常用转换)
+    - [数据转换与增强简介](#数据转换与增强简介)
+    - [常用转换](#常用转换)
 - [特征提取](#特征提取)
 - [预训练模型和权重](#预训练模型和权重)
-  - [模型类型](#模型类型)
-  - [预训练权重的一般信息](#预训练权重的一般信息)
-  - [初始化预训练模型](#初始化预训练模型)
-  - [使用预训练模型](#使用预训练模型)
-  - [模型注册机制](#模型注册机制)
-  - [从 Hub 中使用模型](#从-hub-中使用模型)
+    - [模型类型](#模型类型)
+    - [预训练权重的一般信息](#预训练权重的一般信息)
+    - [初始化预训练模型](#初始化预训练模型)
+    - [使用预训练模型](#使用预训练模型)
+    - [模型注册机制](#模型注册机制)
+    - [从 Hub 中使用模型](#从-hub-中使用模型)
 - [工具](#工具)
-  - [APIs](#apis)
-  - [TODO](#todo)
+    - [APIs](#apis)
+    - [TODO](#todo)
 - [操作](#操作)
 - [任务](#任务)
-  - [classification](#classification)
-  - [detection](#detection)
-  - [segmentation](#segmentation)
-  - [similarity learning](#similarity-learning)
-  - [video classification](#video-classification)
+    - [classification](#classification)
+    - [detection](#detection)
+    - [segmentation](#segmentation)
+    - [similarity learning](#similarity-learning)
+    - [video classification](#video-classification)
 - [其他 APIs](#其他-apis)
 </p></details><p></p>
 

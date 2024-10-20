@@ -1,13 +1,12 @@
 ---
-title: LLM 微调-SFT
-subtitle: Supervised Fine-tuning
+title: PyTorch torchaudio
 author: wangzf
-date: '2024-09-27'
-slug: supervised-fine-tuning
+date: '2023-01-17'
+slug: dl-pytorch-api-torchaudio
 categories:
-  - deeplearning
+  - pytorch
 tags:
-  - article
+  - tool
 ---
 
 <style>
@@ -37,4 +36,5 @@ img {
 
 - [TODO](#TODO)
 </p></details><p></p>
+
 

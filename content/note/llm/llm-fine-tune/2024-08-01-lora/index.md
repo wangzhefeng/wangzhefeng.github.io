@@ -1,5 +1,5 @@
 ---
-title: LLM 微调--LoRA
+title: LLM 微调-LoRA
 author: wangzf
 date: '2024-08-01'
 slug: lora

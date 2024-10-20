@@ -34,46 +34,287 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [PyTorch GPU 模型训练方式](#pytorch-gpu-模型训练方式)
-    - [GPU 训练模型](#gpu-训练模型)
-    - [多 GPU 训练模型](#多-gpu-训练模型)
-- [GPU 相关操作](#gpu-相关操作)
+- [GPU 与 CPU](#gpu-与-cpu)
+- [PyTorch GPU 相关操作](#pytorch-gpu-相关操作)
+    - [PyTorch 的设备](#pytorch-的设备)
+    - [torch.cuda](#torchcuda)
     - [查看 GPU 设备是否可用](#查看-gpu-设备是否可用)
     - [查看 GPU 设备数量](#查看-gpu-设备数量)
     - [将张量在 GPU 和 CPU 之间移动](#将张量在-gpu-和-cpu-之间移动)
+        - [to 函数](#to-函数)
         - [tensor](#tensor)
         - [tensor on gpu](#tensor-on-gpu)
         - [tensor on cpu](#tensor-on-cpu)
         - [将模型中的全部张量移动到 GPU 上](#将模型中的全部张量移动到-gpu-上)
         - [创建支持多个 GPU 数据并行的模型](#创建支持多个-gpu-数据并行的模型)
-- [矩阵乘法示例](#矩阵乘法示例)
-    - [使用 CPU](#使用-cpu)
-    - [使用 GPU](#使用-gpu)
-- [线性回归示例](#线性回归示例)
-    - [使用 CPU](#使用-cpu-1)
-    - [使用 GPU](#使用-gpu-1)
-- [图片分类示例](#图片分类示例)
-    - [使用 CPU 训练](#使用-cpu-训练)
-    - [使用 GPU 训练](#使用-gpu-训练)
-- [训练循环中使用 GPU](#训练循环中使用-gpu)
-    - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
-    - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
-- [PyTorch CUDA](#pytorch-cuda)
-    - [CUDA 语义](#cuda-语义)
-    - [torch.cuda](#torchcuda)
-        - [随机数生成](#随机数生成)
-        - [Communication collectives](#communication-collectives)
-        - [Streams 和 events](#streams-和-events)
-        - [Graphs](#graphs)
-        - [内存管理](#内存管理)
-        - [NVIDIA 工具扩展(NVTX)](#nvidia-工具扩展nvtx)
-        - [Jiterator](#jiterator)
+- [PyTorch GPU 模型训练方式](#pytorch-gpu-模型训练方式)
+    - [GPU 训练模型](#gpu-训练模型)
+    - [多 GPU 训练模型](#多-gpu-训练模型)
+- [PyTorch GPU 使用示例](#pytorch-gpu-使用示例)
+    - [矩阵乘法示例](#矩阵乘法示例)
+        - [使用 CPU](#使用-cpu)
+        - [使用 GPU](#使用-gpu)
+    - [线性回归示例](#线性回归示例)
+        - [使用 CPU](#使用-cpu-1)
+        - [使用 GPU](#使用-gpu-1)
+    - [图片分类示例](#图片分类示例)
+        - [使用 CPU 训练](#使用-cpu-训练)
+        - [使用 GPU 训练](#使用-gpu-训练)
+    - [训练循环中使用 GPU](#训练循环中使用-gpu)
+        - [torchkeras.KerasModel 中使用 GPU](#torchkeraskerasmodel-中使用-gpu)
+        - [torchkeras.LightModel 中使用 GPU](#torchkeraslightmodel-中使用-gpu)
 - [参考](#参考)
 </p></details><p></p>
 
 深度学习模型训练过程的耗时主要来自于两个部分，一部分来自数据准备，另一部分来自参数迭代。
 当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。
 当参数迭代过程成为训练时间的主要瓶颈时，通常的方法是应用 GPU 来进行加速。
+
+# GPU 与 CPU
+
+在处理器家族中，有两大阵营，分别是 CPU 和 GPU，它们分工协作，共同完成计算机复杂功能。
+但它们两者主要差别在哪里？
+
+* CPU(central processing unit, 中央处理器) 主要包括两个部分，即控制器、运算器，除此之外还包括高速缓存等；
+* GPU(Graphics Processing Unit, 图形处理器) 是为处理类型统一并且相互无依赖的大规模数据运算，
+  以及不需要被打断的纯净的计算环境为设计的处理器，因早期仅有图形图像任务中设计大规模统一无依赖的运算，
+  因此该处理器称为图像处理器，俗称显卡。
+
+那么它们之间主要区别在哪里呢，来看一张示意图：
+
+![img](images/cup_gpu.png)
+
+上图中，绿色的是 **计算单元**，橙红色的是 **存储单元**，橙黄色的是 **控制单元**，
+从示意图中看出，GPUt 的重点在计算，CPU 的重点在控制，这就是两者之间的主要差异。
+
+在 PyTorch 中，可以将训练数据以及模型参数迁移到 GPU 上，这样就可以加速模型的运算。
+
+# PyTorch GPU 相关操作
+
+## PyTorch 的设备
+
+> `torch.device()`
+
+PyTorch 的运算需要将运算数据放到同一个设备上。目前，PyTorch 支持两种设备，CPU 与 cuda，
+为什么是 cuda 而不是 GPU？因为早期，只有 Nvidia 的 GPU 能用于模型训练加速，因此称之为 cuda。
+即使现在支持了 AMD 显卡进行加速，仍旧使用 cuda 来代替 gpu。
+
+PyTorch中表示设备通常用 `torch.device()` 这个函数进行设置：
+
+```python
+>>> torch.device('cuda:0')
+device(type='cuda', index=0)
+
+>>> torch.device('cpu')
+device(type='cpu')
+
+>>> torch.device('cuda')  # current cuda device
+device(type='cuda')
+```
+
+## torch.cuda
+
+在 `torch.cuda` 中有几十个关于 cuda 的函数，下面介绍几个常用的函数。
+
+* `torch.cuda.is_available()`：查看 cuda 是否可用
+* `torch.cuda.device_count()`：查看可用 GPU 数量
+* `torch.cuda.current_device()`：查看当前使用的设备的序号
+* `torch.cuda.get_device_name()`：获取设备的名称
+* `torch.cuda.get_device_capability(device=None)`：查看设备的计算力
+* `torch.cuda.get_device_properties()`：查看GPU属性
+* `torch.cuda.set_device(device)`：设置可用设备，已不推荐使用，
+  建议通过 `CUDA_VISIBLE_DEVICES` 来设置，下文会讲解 `CUDA_VISIBLE_DEVICES` 的使用。
+* `torch.cuda.mem_get_info(device=None)`：查询 GPU 空余显存以及总显存。
+* `torch.cuda.memory_summary(device=None, abbreviated=False)`：类似模型的 summary，它将 GPU 的详细信息进行输出。
+* `torch.cuda.empty_cache()`：清空缓存，释放显存碎片。
+* `torch.backends.cudnn.benchmark = True`：提升运行效率，仅适用于输入数据较固定的，
+  如卷积会让程序在开始时花费一点额外时间，为整个网络的每个卷积层搜索最适合它的卷积实现算法，
+  进而实现网络的加速让内置的 cuDNN 的 auto-tuner 自动寻找最适合当前配置的高效算法，
+  来达到优化运行效率的问题；
+* `torch.backends.cudnn.deterministic`：用以保证实验的可重复性。
+
+由于 cnDNN 每次都会去寻找一遍最优配置，会产生随机性，为了模型可复现，
+可设置 `torch.backends.cudnn.deterministic = True`。
+
+```python
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+print(f"device_count: {torch.cuda.device_count()}")
+print(f"current_device: {torch.cuda.current_device()}")
+print(torch.cuda.get_device_name())
+print(torch.cuda.get_device_capability(device = None))
+print(torch.cuda.is_available())
+print(torch.cuda.get_arch_list())
+print(torch.cuda.get_device_properties(0))
+print(torch.cuda.mem_get_info(device = None))
+print(torch.cuda.memory_summary(device = None, abbreviated = False))
+print(torch.cuda.empty_cache())
+```
+
+## 查看 GPU 设备是否可用
+
+```python
+import torch
+
+if_cuda = torch.cuda.is_available()
+print(f"if_cuda = {if_cuda}")
+```
+
+## 查看 GPU 设备数量
+
+```python
+import torch
+
+gup_count = torch.cuda.device_count()
+print(f"gpu_count = {gpu_count}")
+```
+
+## 将张量在 GPU 和 CPU 之间移动
+
+### to 函数
+
+在 PyTorch 中，只需要将要进行运算的数据放到 GPU 上，即可使用 GPU 加速运算。
+在模型运算过程中，需要放到 GPU 的主要是两个：
+
+* 输入数据：形式为 `tensor`
+* 网络模型：形式为 `module`
+
+PyTorch 中针对这两种数据都有相应的函数把它们放到 GPU 上，就是 `to()` 函数。
+
+* `tensor` 的 `to()` 函数：
+    - 功能：转换张量的数据类型或者设备
+    - 注意事项：`to()` 函数不是 inplace 操作，所以需要重新赋值，
+      这与 `module` 的 `to()` 函数不同
+    - 使用：
+
+    ```python
+    # 转换数据类型
+    x = torch.ones((3, 3))
+    x = x.to(torch.float64)
+
+    # 转换设备
+    x = torch.ones((3, 3))
+    x = x.to("cuda")
+    ```
+
+* `module` 的 `to()` 函数：
+    - 功能：move and/or cast the parameters and buffers，转换模型中的参数和缓存
+    - 注意事项：实行的是 inplace 操作
+    - 使用：
+
+    ```python
+    # 转换数据类型
+    linear = nn.Linear(2, 2)
+    print(linear.weight)
+
+    linear.to(torch.double)
+    print(linear.weight)
+
+    # 迁移至 GPU
+    gpu1 = torch.device("cuda:1")
+    linear.to(gpu1)
+    print(linear.weight)
+    ```
+
+将 `torch.device()` 与 `to()` 函数联合使用：
+
+```python
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model.to(device)
+inputs, labels = inputs.to(device), labels.to(device)
+```
+
+通常，会采用 `torch.cuda.is_available()` 函数来自适应当前设备，若没有 GPU 可用，
+自动设置 device 为 CPU，不会影响代码的运行。
+
+### tensor
+
+```python
+import torch
+from torch import nn
+
+tensor = torch.rand((100, 100))
+```
+
+### tensor on gpu
+
+```python
+if torch.cuda.is_available():
+    tensor_gpu = tensor.to("cuda:0")  
+    # or tensor_gpu = tensor.cuda()
+
+    print(tensor_gpu.device)
+    print(tensor_gpu.is_cuda)
+```
+
+```
+device(type='gpu')
+True
+```
+
+### tensor on cpu
+
+```python
+tensor_cpu = tensor_gpu.to("cpu")  
+# or tensor_cpu = tensor_gpu.cpu()
+
+print(tensor_cpu.device)
+print(tensor_cpu.is_cuda)
+```
+
+```
+device(type='cpu')
+False
+```
+
+### 将模型中的全部张量移动到 GPU 上
+
+```python
+import tensor
+from torch import nn
+
+# 模型
+net = nn.linear(2, 1)
+print(next(net.parameters()).device)
+print(next(net.parameters()).is_cuda)
+
+# 移动模型到 GPU 上
+# 注意: 无需重新赋值为 net= = net.to("cuda:0")
+if torch.cuda.is_available():
+    net.to("cuda:0")
+    print(next(net.parameters()).device)
+    print(next(net.parameters()).is_cuda)
+```
+
+### 创建支持多个 GPU 数据并行的模型
+
+```python
+import tensor
+from torch import nn
+
+# 模型
+linear = nn.Linear(2, 1)
+print(next(linear.parameters()).device)
+print(next(linear.parameters()).is_cuda)
+
+# 包装模型为并行风格
+if torch.cuda.device_count() > 1:
+    model = nn.DataParallel(linear)
+    print(model.device_ids)
+    print(next(model.module.parameters()).device)
+
+    # 保存参数时要指定保存 model.module 的参数
+    torch.save(
+        model.module.state_dict(), 
+        "model_parameter.pt"
+    )
+
+    # 加载模型
+    linear = nn.Linear(2, 1)
+    linear.load_state_dict(torch.load("model_parameter.pt"))
+```
 
 # PyTorch GPU 模型训练方式
 
@@ -192,122 +433,13 @@ labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
 ```
 
-# GPU 相关操作
+# PyTorch GPU 使用示例
 
-## 查看 GPU 设备是否可用
-
-```python
-import torch
-
-if_cuda = torch.cuda.is_available()
-print(f"if_cuda = {if_cuda}")
-```
-
-## 查看 GPU 设备数量
-
-```python
-import torch
-
-gup_count = torch.cuda.device_count()
-print(f"gpu_count = {gpu_count}")
-```
-
-## 将张量在 GPU 和 CPU 之间移动
-
-```python
-import torch
-from torch import nn
-```
-
-### tensor
-
-```python
-tensor = torch.rand((100, 100))
-```
-
-### tensor on gpu
-
-```python
-if torch.cuda.is_available():
-    tensor_gpu = tensor.to("cuda:0")  
-    # or tensor_gpu = tensor.cuda()
-
-    print(tensor_gpu.device)
-    print(tensor_gpu.is_cuda)
-```
-
-```
-device(type='gpu')
-True
-```
-
-### tensor on cpu
-
-```python
-tensor_cpu = tensor_gpu.to("cpu")  
-# or tensor_cpu = tensor_gpu.cpu()
-
-print(tensor_cpu.device)
-print(tensor_cpu.is_cuda)
-```
-
-```
-device(type='cpu')
-False
-```
-
-### 将模型中的全部张量移动到 GPU 上
-
-```python
-import tensor
-from torch import nn
-
-# 模型
-net = nn.linear(2, 1)
-print(next(net.parameters()).device)
-print(next(net.parameters()).is_cuda)
-
-# 移动模型到 GPU 上
-# 注意: 无需重新赋值为 net= = net.to("cuda:0")
-if torch.cuda.is_available():
-    net.to("cuda:0")
-    print(next(net.parameters()).device)
-    print(next(net.parameters()).is_cuda)
-```
-
-### 创建支持多个 GPU 数据并行的模型
-
-```python
-import tensor
-from torch import nn
-
-# 模型
-linear = nn.Linear(2, 1)
-print(next(linear.parameters()).device)
-print(next(linear.parameters()).is_cuda)
-
-# 包装模型为并行风格
-if torch.cuda.device_count() > 1:
-    model = nn.DataParallel(linear)
-    print(model.device_ids)
-    print(next(model.module.parameters()).device)
-
-    # 保存参数时要指定保存 model.module 的参数
-    torch.save(
-        model.module.state_dict(), 
-        "model_parameter.pt"
-    )
-
-    # 加载模型
-    linear = nn.Linear(2, 1)
-    linear.load_state_dict(torch.load("model_parameter.pt"))
-```
-
-# 矩阵乘法示例
+## 矩阵乘法示例
 
 分别使用 CPU 和 GPU 做矩阵乘法，并比较其计算效率
 
-## 使用 CPU
+### 使用 CPU
 
 ```python
 import time
@@ -326,7 +458,7 @@ print(a.device)
 print(b.device)
 ```
 
-## 使用 GPU
+### 使用 GPU
 
 ```python
 import time
@@ -354,11 +486,11 @@ print(a.device)
 print(b.device)
 ```
 
-# 线性回归示例
+## 线性回归示例
 
 使用 CPU 和 GPU 训练一个线性回归模型的效率
 
-## 使用 CPU
+### 使用 CPU
 
 ```python
 import torch
@@ -417,7 +549,7 @@ def train(epoches):
 train(500)
 ```
 
-## 使用 GPU
+### 使用 GPU
 
 ```python
 import torch
@@ -503,7 +635,7 @@ def train(epoches):
 train(500)
 ```
 
-# 图片分类示例
+## 图片分类示例
 
 ```python
 import torch
@@ -559,7 +691,7 @@ def create_net():
     return net
 ```
 
-## 使用 CPU 训练
+### 使用 CPU 训练
 
 ```python
 import os
@@ -726,7 +858,7 @@ for epoch in range(1, epochs + 1):
 dfhistory = pd.DataFrame(history)
 ```
 
-## 使用 GPU 训练
+### 使用 GPU 训练
 
 ```python
 import os
@@ -908,12 +1040,12 @@ for epoch in range(1, epochs + 1):
 dfhistory = pd.DataFrame(history)
 ```
 
-# 训练循环中使用 GPU
+## 训练循环中使用 GPU
 
 在 PyTorch 中使用 GPU 并不复杂，但模型和数据移动还是很麻烦的，
 不小心忘记了移动某些数据或者 Module，就会导致报错
 
-## torchkeras.KerasModel 中使用 GPU
+### torchkeras.KerasModel 中使用 GPU
 
 ```python
 # pip install torchkeras
@@ -953,7 +1085,7 @@ model.fit(
 )
 ```
 
-## torchkeras.LightModel 中使用 GPU
+### torchkeras.LightModel 中使用 GPU
 
 ```python
 # pip install torchkeras
@@ -1017,35 +1149,6 @@ trainer = pl.Trainer(
 # 启动训练循环
 trainer.fit(model, dl_train, dl_val)
 ```
-
-# PyTorch CUDA
-
-## CUDA 语义
-
-`torch.cuda` 用于设置和运行 CUDA 操作，它跟踪当前选择的 GPU，
-默认情况下，分配的所有 CUDA 张量都将在该设备上创建。
-可以使用 `torch.cuda.device` 上下文管理器更改所选设备
-
-## torch.cuda
-
-* `torch.cuda` 支持 CUDA tensor 类型
-* 延迟初始化的，因此可以随时导入 `torch.cuda`
-* 可以使用 `torch.cuda.is_available()` 查看系统是否支持 CUDA
-
-### 随机数生成
-
-### Communication collectives
-
-### Streams 和 events
-
-### Graphs
-
-### 内存管理
-
-### NVIDIA 工具扩展(NVTX)
-
-### Jiterator
-
 
 # 参考
 
