@@ -60,11 +60,21 @@ img {
 - [大语言模型的能力](#大语言模型的能力)
     - [能力概述](#能力概述)
     - [语言模型的适应性](#语言模型的适应性)
+        - [从语言模型到任务模型的转化](#从语言模型到任务模型的转化)
+        - [语言模型](#语言模型)
+        - [任务模型](#任务模型)
+            - [问答](#问答)
+            - [文本翻译](#文本翻译)
+            - [算术](#算术)
+            - [新文章生成](#新文章生成)
+            - [新任务](#新任务)
+            - [其他任务](#其他任务)
+    - [大语言模型的能力总结](#大语言模型的能力总结)
 - [最小语义单位 Token 与 Embedding](#最小语义单位-token-与-embedding)
     - [Token](#token)
     - [Bag Of Words](#bag-of-words)
     - [Embedding](#embedding)
-- [语言模型](#语言模型)
+- [语言模型](#语言模型-1)
     - [贪心搜索和集束搜索](#贪心搜索和集束搜索)
     - [简单语言模型-N-Gram](#简单语言模型-n-gram)
     - [复杂语言模型-RNN](#复杂语言模型-rnn)
@@ -779,15 +789,219 @@ EleutherAI 和斯坦福大学的 CRFM 项目。鉴于语言模型日益增长的
    意味着它有很大的潜力在许多其他任务上表现良好（就像在一次性任务上的表现一样）。
 
 此外，如果希望在任何特定任务（例如问题回答）上表现良好，
-原则上应能够利用大量的标签数据来适应 GPT-3，并超越当前的技术水平。
+原则上应能够 **利用大量的标签数据来适应** GPT-3，并超越当前的技术水平。
 
 ## 语言模型的适应性
 
-> 从 **语言模型** 到 **任务模型** 的转化
+### 从语言模型到任务模型的转化
 
 在自然语言处理的世界中，语言模型 `$p$` 是一种对 token 序列 `$x_{1:L}$` 的分布。
-这样的模型能够用于评估序列，例如 `$p(\text{the, mouse, ate, the, cheese})$`。
-同样，它还能用于在给定提示的条件下生成完成的序列
+这样的模型能够用于 **评估序列**，例如 `$p(\text{the, mouse, ate, the, cheese})$`。
+同样，它还能用于在 **给定提示的条件下生成完整的序列**，
+例如 `$\text{the mouse ate} \leadsto \text{the cheese}$`。在这里，任务被定义为从输入映射到输出。
+以问答任务为例，可能有如下的输入、输出：
+
+```
+输入：What school did Burne Hogarth establish?
+输出：School of Visual Arts
+```
+
+使用 **“适应（Adaptation）”** 一词来指代将 **语言模型** 转化为 **任务模型** 的过程。
+这个过程需要以下两个输入：
+
+* 任务的自然语言描述
+* 一组训练实例：输入-输出对
+
+主要有两种方式来进行这种适应：
+
+* **训练（标准的有监督学习）**：
+    - **探针法**：训练一个新模型，使其能将输入映射到输出。
+      这可以通过创建一个新模型并利用语言模型作为特征；
+    - **微调**：从现有的语言模型出发，根据训练实例进行更新；
+    - **轻量级微调**：在探针法和微调这两者之间找到平衡。
+* **提示（上下文）学习**：根据对任务的描述建一个或一组提示/上下文信息(Prompt)，
+  将其输入到语言模型中以获取基于该任务的生成结果。
+  根据提示/上下文信息(Prompt)的数量，还可以进一步细分：
+    - **零样本学习(Zero-shot)**：提示/上下文信息的数量为 0，模型直接基于对任务的理解输出结果。
+    - **单样本学习(One-shot)**：提示/上下文信息的数量为 1，
+      一般来说模型基于 1 个例子可以更好的理解任务从而较好的生成结果。
+    - **少样本学习(Few-shot)**：提示/上下文信息的数量大于 1，大模型可以看到更丰富的例子，
+      一般来说获得比单样本学习更好的效果。
+
+> 现在，先满足于使用提示进行 GPT-3 的适应。但是值得注意的是，
+> 提示的局限性在于只能利用少量的训练实例（一般情况只能塞进一个提示的数量）。
+> 这种输入的局限性由于 Transformer 自身的局限性导致的，
+> 模型可输入的长度具有约束（一般来讲是 2048 个 tokens）。
+> 
+> 在 GPT-3 的论文中，作者们评估了 GPT-3 在大量任务上的表现。
+> 这里选择其中的一部分，对于每个任务，讨论以下几点：
+> 
+> * **定义**：任务是什么，以及其动机？
+> * **适应**：如何通过提示将任务简化为语言模型？
+> * **结果**：与该任务的最先进模型相比，GPT-3 的定量性能如何？
+>   
+> 模型的大小和训练样本的数量都很重要。在下面的多个任务中，对于 GPT-3 的默认实验设置为：
+> 
+> * 完整的 GPT-3 模型（davinci），其拥有 1750 亿参数；
+> * 使用尽可能多的使用训练数据的实例进行上下文学习。
+> 
+> 在此过程中，实验将进行消融实验，以查看模型的大小和上下文训练实例的数量是否真的重要。
+> 对于实验结果这里先做一个预告，大模型具体很不错的性能，并且上下文的数量更多总是更好。
+> 实验的任务选择如下：
+> 
+> * Language modeling
+> * Question answering
+> * Translation
+> * Arithmetic
+> * News article generation
+> * Novel tasks
+
+### 语言模型
+
+> Language Model
+
+在自然语言处理（NLP）领域，除了研究大型语言模型，还需深入探讨一些**基础任务**。
+比如，要对 GPT-3 的各种功能有深入的认知，
+并真正理解如何优化给模型的提示（当前只通过基于提出信息就可以获得性能的提示已经成为了共识）。
+这些都是语言模型研究的核心部分。最直观的方法是 **验证语言模型是否能够有效地模仿和理解语言**。
+
+> 在之前的语言模型里，语言模型 `$p$` 是关于词汇序列的概率分布。
+> 假设有一段文本 `$x_{1:L}$`，例如：`the mouse ate the cheese`。
+> 我们可以询问：语言模型会给这段文本分配什么概率 `$p(\text{the mouse ate the cheese})$`。
+> 可以将联合概率分解为每个 token 的条件概率的乘积，
+> 这是通过链式法则完成的：`$p(x_{1:L})=\prod_{i=1}^{L}p(x_{i}|x_{1:i-1})$`。
+
+**困惑度(Perplexity)** 是一个重要的指标，是自然语言处理和语言模型中的一个重要概念，
+用于衡量语言模型的性能。它可以解释为模型在预测下一个词时的平均不确定性。
+简单来说，如果一个模型的困惑度较低，那么它在预测下一个词的时候就会更加准确。
+
+对于给定的语言模型和一个测试数据集，困惑度被定义为：
+
+`$$P(X) = P(x_{1}, \cdots, x_{N})^{-\frac{1}{N}}$$`
+
+其中，`$X=x_{1}, \cdots, x_{N}$`，`$N$` 是测试集中的总次数。
+
+一个序列的联合概率取决于其长度，并且随着长度的增长，其值趋近于零，这使得困惑度变得难以追踪。
+直观上，希望对每个词标记（token）的概率 `$p(x_{i}|x_{1:i-1})$` 进行平均。
+这样做的目的是评估模型在处理各种词标记时的平均性能。
+
+* 事实上不希望采取 **算术平均**，因为如果给一个词标记分配了 0 的概率，
+  即模型认为这个词在特定的上下文中绝对不可能出现，那么在算术平均中这会造成极大的问题。
+  因为算术平均并不会为此惩罚，它只是简单地将所有词标记的概率加在一起，然后除以总数，
+  因此一个非常低的概率（如 0）可能会被其他较高的概率抵消。
+* 相反，希望采用 **几何平均**，这就是困惑度（perplexity）所做的。在几何平均中，
+  每个词标记的概率都被同等看待，并且一个极低的概率（如 0）将会导致整个几何平均大幅度下降。
+  因此，通过计算几何平均，可以更好地衡量模型在处理所有可能的词标记时的性能，
+  特别是在处理那些模型可能会出错的情况。
+
+`$$\text{Perplexity} \space p(x_{1:L})=\exp \left(\frac{1}{L} \sum_{i=1}^L \log \frac{1}{p\left(x_i \mid x_{1: i-1}\right)}\right) \text {. } $$`
+
+困惑度可以被理解为每个标记（token）的平均"分支因子（branching factor）"。
+这里的“分支因子”可以理解为在每个位置，模型认为有多少种可能的词会出现。
+例如，若困惑度为 10，那意味着每次模型在预测下一个词时，平均上会考虑 10 个词作为可能的选择。
+
+这个理解与公式中的 `$\log (1 / p(x_{i}|x_{1:i-1}))$` 密切相关，这个表达式代表了编码长度。
+我们在计算的是平均编码长度，这个长度反映了给定当前词或标记后，下一个词或标记可能的选择数量。
+因此，通过对平均编码长度取指数，我们可以得到可能的选择数量，这也就是"分支因子"。
+
+为了更好地理解，我们可以考虑一个均匀分布的例子：一个长度为 3 的二进制字符串可以编码 `$2^{3}=8$` 个可能的字符串。
+同样，困惑度反映了模型预测下一个词时，考虑的平均可能性数。
+如果困惑度为 8，那么对于序列中的每个词，模型会考虑 8 个可能的词。
+这个例子类似于我们的语言模型：在给定特定词或标记后，模型需要从多个可能的选项中预测下一个词或标记。
+如果选择的可能性多，模型的预测任务就更为复杂，相应的困惑度就会更高。
+
+两类错误：语言模型可能会犯两种类型的错误，而困惑度对这两种错误的处理方式并不对称：
+
+* 召回错误：语言模型未能正确地为某个词符分配概率值。这种情况下，困惑度是毫不留情的。
+  例如，如果模型为词组 `'ate'` 在 `'the,mouse'` 后出现的概率预测为接近 0，
+  那么对应的困惑度值将趋近于无穷大。
+
+  `$$p(\text{ate}|\text{the, mouse}) \rightarrow 0 \Rightarrow \text{Perplexity}_{p}(\text{the, mouse, ate, the cheese}) \rightarrow \infty$$`
+
+* 精确度错误：语言模型为某些错误的词序列过度分配了概率值。在这种情况下，困惑度会进行适度的惩罚。
+  给定一个语言模型 `$p$`，假设我们将一些垃圾分布 `$r$` 按照概率 `$\epsilon$` 混入：
+
+  `$$q(x_{i}|x_{1:i-1})=(1-\epsilon)p(x_{i}|x_{1:i-1}) + \epsilon r(x_{i}|x_{1:i-1})$$`
+
+那么，可以计算在 `$q$` 下的 `$x_{1:L}$` 的困惑度：
+
+`$$ \text{perplexity}\space q(x_{1:L}) \le \frac{1}{1-\epsilon} \text{perplexity}\space p(x_{1:L}) \approxeq (1 + \epsilon) \text{perplexity}\space p(x_{1:L})$$`
+
+其中，最后一个近似等式在 `$\epsilon$` 的值较小时成立。
+如果我们混入 5% 的垃圾信息，那么困惑度只增加 5%。
+需要注意的是，这样生成的语言结果会非常糟糕，
+因为平均每 20 个词符就会生成一个无意义的词符。
+
+### 任务模型
+
+#### 问答
+
+> Question Answering
+
+#### 文本翻译
+
+> Translation
+
+#### 算术
+
+>  Arithmetic
+
+#### 新文章生成
+
+> News article generation
+
+#### 新任务
+
+> Novel Tasks
+
+1. **使用新词**
+    - 任务：给定一个新造的词和定义，生成使用该词的句子。 依旧只需在提示中描述任务：
+
+    ```
+    To “screeg” something is to swing a sword at it. An example of a sentence that uses the word screeg is: We screeged the tree with our swords.
+    ```
+2. **纠正英语语法**
+    - 任务：给定一个不合语法的句子，生成其合语法的版本。通过给出提示来描述任务（提示是有输入和输入对组成的）：
+
+    ```
+    Poor English input: I eated the purple berries.  
+    Good English output: I ate the purple berries.  
+    Poor English input: Thank you for picking me as your designer. I’d appreciate it.  
+    Good English output: Thank you for choosing me as your designer. I appreciate it.  
+    Poor English input: The mentioned changes have done. or I did the alteration that you  
+    requested. or I changed things you wanted and did the modifications.  
+    Good English output: The requested changes have been made. or I made the alteration that you  
+    requested. or I changed things you wanted and made the modifications.  
+    Poor English input: I’d be more than happy to work with you in another project.  
+    Good English output: I would be happy to work with you on another project.
+    ```
+
+#### 其他任务
+
+> Other tasks
+
+自原始论文以来，GPT-3 已应用于许多更多的任务，
+包括基准数据集(Benchmark)和一次性的演示(one-off deoms)。
+以下是一个不详尽的列表: 
+
+* Benchmarks：
+    - [SWORDS](https://arxiv.org/pdf/2106.04102.pdf)：词汇替换，目标是在句子的上下文中预测同义词。
+    - [Massive Multitask Language Understanding](https://arxiv.org/pdf/2009.03300.pdf)：包括数学，美国历史，
+      计算机科学，法律等 57 个多选问题。
+    - [TruthfulQA](https://arxiv.org/pdf/2109.07958.pdf)：人类由于误解而错误回答的问答数据集。 
+        - **结果：** 虽说 GPT-3 在这些 Benchmark 数据集中的表现平庸，
+          但是考虑到只使用了 few-shot 的情况，或许不算太差。
+* one-off Demos：
+    - [Examples from the OpenAI website](https://beta.openai.com/examples/)
+    - [Examples from gpt3demo.com](https://gpt3demo.com/)：这些演示既创新又有趣，但很难判断它们的可靠性如何。
+
+## 大语言模型的能力总结
+
+* GPT-3 在广泛的标准 NLP 基准测试和一次性任务上进行了评估；
+* GPT-3 可以表现得极好或者非常普通；
+* 增加模型的大小和示例的数量都有助于提高性能；
+* 有一些启发式的方法可以将语言模型适应到感兴趣的任务；
+* 但是为什么会有这样表现，没有人知道。
 
 # 最小语义单位 Token 与 Embedding
 
