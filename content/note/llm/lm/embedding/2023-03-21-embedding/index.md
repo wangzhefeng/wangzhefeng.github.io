@@ -95,12 +95,6 @@ img {
         - [Skip-gram 模型概述](#skip-gram-模型概述)
         - [Skip-gram 简介](#skip-gram-简介)
         - [Skip-gram 模型解释](#skip-gram-模型解释)
-    - [GloVe](#glove)
-        - [GloVe 词向量简介](#glove-词向量简介)
-        - [GloVe vs Word2Vec](#glove-vs-word2vec)
-    - [fasttext](#fasttext)
-        - [fasttext 算法简介](#fasttext-算法简介)
-        - [fasttext 算法实现](#fasttext-算法实现)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -786,9 +780,6 @@ print("Finished Saved.")
 4. 训练样本准备好之后即可定义 skip-gram 模型网络结构，损失函数和优化计算过程
 5. 最后保存训练好的词向量即可
 
-
-
-
 ## CBOW
 
 ### CBOW 模型概述
@@ -926,114 +917,6 @@ Skip-gram 模型的训练方法也是基于损失函数的梯度计算，目标�
 `$$L = \sum_{w \in C} log \prod_{u \in context(w)} \prod_{j=2}^{l^{u}}\{[\sigma(v(w)^{T}\theta_{j-1}^{u})]^{1-d_{j}^{u}} \cdot [1-\sigma(v(w)^{T}\theta_{j-1}^{u})]^{d_{j}^{u}} \} \\
 = \sum_{w \in C} \sum_{u \in context(w)} \sum_{j=2}^{l^{u}} {(1-d_{j}^{u}) \cdot log[\sigma(v(w)^{T}\theta_{j-1}^{u})] + d_{j}^{u} \cdot log[1 - \sigma(v(w)^{T}\theta_{u}^{j-1})]}$$`
 
-## GloVe
-
-> 全局词向量表示，Global Vectors for Word Representation, GloVe
-
-除了 Word2Vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
-GloVe 词向量、fasttext 词向量等等
-
-### GloVe 词向量简介
-   
-GloVe 词向量直译为全局的词向量表示，跟 Word2Vec 词向量一样本质上是基于词共现矩阵来进行处理的。
-GloVe 词向量模型基本步骤如下:
-
-1. 基于词共现矩阵收集词共现信息
-    - 假设 `$X_{ij}$` 表示词汇 `$i$` 出现在词汇 `$j$` 上下文的概率，首先对语料库进行扫描，
-    对于每个词汇，我们定义一个 `window_size`，即每个单词向两边能够联系到的距离，在一句话中如果一个词距离中心词越远，
-    我们给与这个词的权重越低
-2. 对于每一组词，都有
-
-    `$$\omega_{i}^{T}\omega_{j} + b_{i} + b_{j} = log(X_{ij})$$`
-    
-    - 其中， `$\omega_{i}$` 表示中心词向量，
-      `$\omega_{j}$` 表示上下文词向量，
-      `$b_{i}$` 和 `$b_{j}$` 均表示上下文词的常数偏倚
-3. 定义 GloVe 模型损失函数
-
-    `$$J = \sum_{i=1}^{V}\sum_{j=1}^{V}f(X_{ij})(\omega_{i}^{T}\omega_{j} + b_{i} + b_{j} - log X_{ij})^{2}$$`
-
-    - 其中，加权函数 `$f$` 可以帮助我们避免只学习到一个常见词的词向量模型， `$f$` 函数的选择原则在于既不给常见词(this/of/and)以过分的权重，
-      也不回给一些不常见词(durion)太小的权重，参考形式如下:
-
-    `$$\begin{split}
-    f(X_{ij})= \left \{
-    \begin{array}{rcl}
-    (\frac{X_{ij}}{x_{max}})^{\alpha}, & & {如果 X_{ij} < x_{max}} \\
-    1,                                 & & {否则}                  \\
-    \end{array}
-    \right.
-    \end{split}$$`
-
-4. 计算余弦相似度
-    - 为了衡量两个单词在语义上的相近性，我们采用余弦相似度来进行度量。余弦相似度的计算公式如下:
-
-    `$$CosineSimilarity(u, v)=\frac{uv}{||u||_{2} ||v||_{2}}=cos(\theta)$$`
-
-    - 基于余弦相似度的词汇语义相似性度量:
-
-    ![img](images/cosine_similarity.png)
-
-5. 语义类比
-    - 有了词汇之间的相似性度量之后，便可以基于此做进一步分析，
-      比如要解决 `a is to b as c is to _` 这样的语义填空题，
-      可以利用词汇之间的余弦相似性计算空格处到底填什么单词.
-
-### GloVe vs Word2Vec
-
-![img](images/GloVe_vs_word2vec.png)
-
-## fasttext
-
-### fasttext 算法简介
-
-fasttext 的模型与 CBOW 类似，实际上，fasttext 的确是由 CBOW 演变而来的。
-CBOW 预测上下文的中间词，fasttext 预测文本标签。与 Word2Vec 算法的衍生物相同，
-稠密词向量也是训练神经网路的过程中得到的
-
-![img](images/fasttext.png)
-
-1. fasttext 的输入是一段词的序列，即一篇文章或一句话，输出是这段词序列属于某个类别的概率，所以，fasttext 是用来做文本分类任务的
-2. fasttext 中采用层级 Softmax 做分类，这与 CBOW 相同。fasttext 算法中还考虑了词的顺序问题，即采用 N-gram，与之前介绍的离散表示法相同，如:
-    - 今天天气非常不错，Bi-gram 的表示就是:今天、天天、天气、气非、非常、常不、不错
-
-fasttext 做文本分类对文本的存储方式有要求:
-
-```
-__label__1, It is a nice day.
-__label__2, I am fine, thank you.
-__label__3, I like play football.
-```
-
-其中:
-
-* `__label__`:为实际类别的前缀，也可以自己定义
-
-### fasttext 算法实现
-
-GitHub：
-
-* https://github.com/facebookresearch/fastText
-
-示例:
-
-```python
-import fasttext
-
-classifier = fasttext.supervised(
-    input_file, 
-    output, 
-    label_prefix = "__label__"
-)
-result = classifier.test(test_file)
-print(result.precision, result.recall)
-```
-
-其中:
-
-* `input_file`：是已经按照上面的格式要求做好的训练集 txt
-* `output`：后缀为 `.model`，是保存的二进制文件
-* `label_prefix`：可以自定类别前缀
 
 # 参考
 

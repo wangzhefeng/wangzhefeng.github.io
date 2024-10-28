@@ -1,5 +1,5 @@
 ---
-title: 词向量模型 FastText
+title: FastText
 author: wangzf
 date: '2022-04-05'
 slug: fasttext
@@ -34,6 +34,8 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [fasttext 算法简介](#fasttext-算法简介)
+- [fasttext 算法实现](#fasttext-算法实现)
 - [词向量模型 FastText](#词向量模型-fasttext)
     - [模型](#模型)
         - [Skip-gram](#skip-gram)
@@ -53,6 +55,57 @@ img {
         - [使用 CBOW 训练词向量模型](#使用-cbow-训练词向量模型)
 - [参考](#参考)
 </p></details><p></p>
+
+# fasttext 算法简介
+
+fasttext 的模型与 CBOW 类似，实际上，fasttext 的确是由 CBOW 演变而来的。
+CBOW 预测上下文的中间词，fasttext 预测文本标签。与 Word2Vec 算法的衍生物相同，
+稠密词向量也是训练神经网路的过程中得到的
+
+![img](images/fasttext.png)
+
+1. fasttext 的输入是一段词的序列，即一篇文章或一句话，输出是这段词序列属于某个类别的概率，所以，fasttext 是用来做文本分类任务的
+2. fasttext 中采用层级 Softmax 做分类，这与 CBOW 相同。fasttext 算法中还考虑了词的顺序问题，即采用 N-gram，与之前介绍的离散表示法相同，如:
+    - 今天天气非常不错，Bi-gram 的表示就是:今天、天天、天气、气非、非常、常不、不错
+
+fasttext 做文本分类对文本的存储方式有要求:
+
+```
+__label__1, It is a nice day.
+__label__2, I am fine, thank you.
+__label__3, I like play football.
+```
+
+其中:
+
+* `__label__`:为实际类别的前缀，也可以自己定义
+
+# fasttext 算法实现
+
+GitHub：
+
+* https://github.com/facebookresearch/fastText
+
+示例:
+
+```python
+import fasttext
+
+classifier = fasttext.supervised(
+    input_file, 
+    output, 
+    label_prefix = "__label__"
+)
+result = classifier.test(test_file)
+print(result.precision, result.recall)
+```
+
+其中:
+
+* `input_file`：是已经按照上面的格式要求做好的训练集 txt
+* `output`：后缀为 `.model`，是保存的二进制文件
+* `label_prefix`：可以自定类别前缀
+
 
 # 词向量模型 FastText
 

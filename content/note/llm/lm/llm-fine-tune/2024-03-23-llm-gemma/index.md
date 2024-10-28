@@ -37,15 +37,12 @@ img {
 
 - [Gemma 模型介绍](#gemma-模型介绍)
     - [Prompt 提示词格式](#prompt-提示词格式)
-    - [探索未知领域](#探索未知领域)
     - [与 Google Cloud 集成](#与-google-cloud-集成)
     - [与推理端点集成](#与推理端点集成)
     - [Gemma 指令模型互动对话体验](#gemma-指令模型互动对话体验)
 - [使用 Hugging Face Transformers 模型推理](#使用-hugging-face-transformers-模型推理)
     - [JAX 权重](#jax-权重)
-- [使用 Hugging Face TRL 进行模型微调](#使用-hugging-face-trl-进行模型微调)
 - [Gemma 模型中文指令微调](#gemma-模型中文指令微调)
-    - [简介](#简介)
     - [预训练模型和微调数据](#预训练模型和微调数据)
     - [Hugging Face TRL + Colab GPU](#hugging-face-trl--colab-gpu)
         - [加载微调数据](#加载微调数据)
@@ -53,22 +50,8 @@ img {
         - [微调数据分割及保存](#微调数据分割及保存)
         - [模型微调](#模型微调)
     - [Keras + Kaggle TPU -\> Hugging Face](#keras--kaggle-tpu---hugging-face)
-    - [苹果 MLX 框架](#苹果-mlx-框架)
-    - [总结](#总结)
 - [参考](#参考)
 </p></details><p></p>
-
-> 关键词:
-> 
-> * 预训练模型
-> * 指令调优
-> * tokens 处理能力
-> * TRL
-> * Prompt 提示词格式
-> * 零样本任务
-> * 少样本任务
-> * 顺序微调技术（SFT）
-> * 基于人类反馈的强化学习（RLHF）
 
 # Gemma 模型介绍
 
@@ -85,10 +68,10 @@ Gemma 是基于 Gemini 技术推出的新型大型语言模型（LLM），Gemma 
 拥有高达 <span style='border-bottom:1.5px dashed red;'>8K tokens</span> 的处理能力。
 在 Hagging Face Hub 上，可以找到这四个公开可访问的模型（包括两个基础模型和两个经过调优的模型）：
 
-* [gemma-7b](https://huggingface.co/google/gemma-7b)：7B 参数的基础模型。
-* [gemma-7b-it](https://huggingface.co/google/gemma-7b-it)：7B 参数的指令优化版本。
-* [gemma-2b](https://huggingface.co/google/gemma-2b)：2B 参数的基础模型。
-* [gemma-2b-it](https://huggingface.co/google/gemma-2b-it)：2B 参数的指令优化版本。
+* [gemma-7b](https://huggingface.co/google/gemma-7b)：7B 参数的基础模型
+* [gemma-7b-it](https://huggingface.co/google/gemma-7b-it)：7B 参数的指令优化版本
+* [gemma-2b](https://huggingface.co/google/gemma-2b)：2B 参数的基础模型
+* [gemma-2b-it](https://huggingface.co/google/gemma-2b-it)：2B 参数的指令优化版本
 
 此次发布的亮点包括：
 
@@ -98,12 +81,21 @@ Gemma 是基于 Gemini 技术推出的新型大型语言模型（LLM），Gemma 
 * 与推理端点 (Inference Endpoints) 的集成
 * 使用 Hugging Face TRL 在单个 GPU 上对 Gemma 进行微调的示例
 
+尽管技术报告提供了关于基础模型训练和评估过程的信息，
+但关于数据集构成和预处理的具体细节则较为欠缺。
+据悉，这些模型是基于来自互联网文档、编程代码和数学文本等多种数据源训练而成，
+经过严格筛选，以排除含有敏感信息和不适内容的数据。
+
+对于 Gemma 的指令优化模型，
+关于 <span style='border-bottom:1.5px dashed red;'>微调数据集</span> 以及与 <span style='border-bottom:1.5px dashed red;'>顺序微调技术（SFT）</span> 和 <span style='border-bottom:1.5px dashed red;'>基于人类反馈的强化学习（RLHF）</span> 相关的超参数设置，细节同样未公开。
+
 ## Prompt 提示词格式
 
 Gemma 的基础模型不限定特定的提示格式。如同其他基础模型，
 它们能够根据输入序列生成一个合理的续接内容，
 适用于 <span style='border-bottom:1.5px dashed red;'>零样本</span> 或 <span style='border-bottom:1.5px dashed red;'>少样本</span> 的推理任务。
 这些模型也为针对特定应用场景的微调提供了坚实的基础。
+
 指令优化版本则采用了一种极其简洁的对话结构：
 
 ```xml
@@ -118,17 +110,6 @@ LaMDA who?<end_of_turn>
 ```
 
 要有效利用这一格式，必须严格按照上述结构进行对话。
-我们将演示如何利用 `transformers` 库中提供的聊天模板简化这一过程。
-
-## 探索未知领域
-
-尽管技术报告提供了关于基础模型训练和评估过程的信息，
-但关于数据集构成和预处理的具体细节则较为欠缺。
-据悉，这些模型是基于来自互联网文档、编程代码和数学文本等多种数据源训练而成，
-经过严格筛选，以排除含有敏感信息和不适内容的数据。
-
-对于 Gemma 的指令优化模型，
-关于 <span style='border-bottom:1.5px dashed red;'>微调数据集</span> 以及与 <span style='border-bottom:1.5px dashed red;'>顺序微调技术（SFT）</span> 和 <span style='border-bottom:1.5px dashed red;'>基于人类反馈的强化学习（RLHF）</span> 相关的超参数设置，细节同样未公开。
 
 ## 与 Google Cloud 集成
 
@@ -329,49 +310,7 @@ output_text = tokenizer.batch_decode(
 
 如果你在 TPU 或多个 GPU 设备上运行，可以利用 `jit` 和 `pmap` 来编译和并行执行推理任务。
 
-# 使用 Hugging Face TRL 进行模型微调
-
-在消费级 GPU 上训练大型语言模型既是技术上的挑战，也是计算上的挑战。
-本节将介绍 Hugging Face 生态系统中可用的工具，
-这些工具可以帮助你高效地在消费级 GPU 上训练 Gemma。
-
-一个微调 Gemma 的示例命令如下。我们利用 <span style='border-bottom:1.5px dashed red;'>4 位量化</span> 和 <span style='border-bottom:1.5px dashed red;'>QLoRA（一种参数效率微调技术）</span> 来减少内存使用，
-目标是所有注意力块的线性层。值得注意的是，与密集型 Transformer 不同，
-MLP 层（多层感知器层）因其稀疏性不适合与 PEFT（参数效率微调）技术结合使用。
-
-1. 首先，安装 Hugging Face TRL 的最新版本并克隆仓库以获取训练脚本：
-
-```bash
-$ pip install -U transformers
-$ pip install git+https://github.com/huggingface/trl
-$ git clone https://github.com/huggingface/trl
-$ cd trl
-```
-
-2. 然后运行脚本：
-
-```bash
-accelerate launch --config_file examples/accelerate_configs/multi_gpu.yaml --num_processes=1 \
-    examples/scripts/sft.py \
-    --model_name google/gemma-7b \
-    --dataset_name OpenAssistant/oasst_top1_2023-08-25 \
-    --per_device_train_batch_size 2 \
-    --gradient_accumulation_steps 1 \
-    --learning_rate 2e-4 \
-    --save_steps 20_000 \
-    --use_peft \
-    --peft_lora_r 16 --peft_lora_alpha 32 \
-    --target_modules q_proj k_proj v_proj o_proj \
-    --load_in_4bit
-```
-
-在单个 A10G GPU 上，这个训练过程大约需要 9 小时。
-通过调整 `--num_processes` 参数为你可用的 GPU 数量，
-可以实现并行化训练，从而缩短训练时间。
-
 # Gemma 模型中文指令微调
-
-## 简介
 
 谷歌在 2 月 21 日放出开放权重的 Gemma 系列大模型，包括 2B 和 7B 两个大小，
 并且有预训练和指令微调两个版本。
@@ -593,20 +532,6 @@ zsh的特性包括：
 4.支持命令历史 
 5.支持命令行参数
 ```
-
-## 苹果 MLX 框架
-
-* 略
-
-## 总结
-
-这里介绍了三个针对谷歌 gemma-2b 模型进行中文指令微调的简单方法，
-这里展示的所有的代码都在 GitHub 上，并且配有有 2 个简短的视频讲解。
-
-当然这里我们使用的数据，模型和算力都是比较小的，
-所以完成以后的模型性能肯定不能和最先进的模型相比，
-如果有足够资源可以自己去探索收集更多的中文数据，使用 7b 模型，
-使用多 GPU/TPU 分布式训练等途径来打造更强大的自由模型。
 
 # 参考
 
