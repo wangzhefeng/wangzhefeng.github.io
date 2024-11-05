@@ -71,7 +71,7 @@ img {
 
 * 质疑基于 Transformer 的序列预测模型在长时间序列预测任务(LTSF，long-term time series forecasting)的有效性
     - 大部分模型无法从长序列中抽取时序信息（实验中预测误差并没有随着历史窗口增大而减少）
-    - 大部分模型相对于 baseline（rnn 类）的提升是将预测方法从 IMS 替换成 DMS 得到的。
+    - 大部分模型相对于 baseline（RNN 类）的提升是将预测方法从 IMS 替换成 DMS 得到的。
 * 提出只有 one-layer linear model：**LTSF-Linear**，通过 DMS 方式预测效果超过之前模型。
 * 对已有模型的能力进行实验分析
     - 建模长输入的能力
