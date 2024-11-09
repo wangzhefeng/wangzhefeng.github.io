@@ -40,6 +40,7 @@ img {
 - [NeuralForecast 简介](#neuralforecast-简介)
 - [NeuralForecast 使用](#neuralforecast-使用)
   - [安装](#安装)
+  - [主要功能](#主要功能)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -68,7 +69,7 @@ conda:
 $ conda install -c conda-forge neuralforecast
 ```
 
-
+## 主要功能
 
 
 

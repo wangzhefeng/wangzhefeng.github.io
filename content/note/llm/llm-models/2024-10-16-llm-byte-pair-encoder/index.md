@@ -1,5 +1,5 @@
 ---
-title: BPP 算法
+title: BPE 算法
 subtitle: Byte Pair Encoder
 author: wangzf
 date: '2024-10-16'
