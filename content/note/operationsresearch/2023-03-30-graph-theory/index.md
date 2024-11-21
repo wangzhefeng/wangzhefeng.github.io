@@ -66,8 +66,11 @@ img {
         - [Dijkstra 算法基本思路](#dijkstra-算法基本思路)
         - [Dijkstra 算法求解最短路径步骤](#dijkstra-算法求解最短路径步骤)
     - [网络最大流问题](#网络最大流问题)
-    - [路径规划](#路径规划)
-    - [车辆路径问题](#车辆路径问题)
+    - [车辆路径规划问题](#车辆路径规划问题)
+        - [车辆路径规划问题简介](#车辆路径规划问题简介)
+    - [算法实现](#算法实现-2)
+        - [CVRP](#cvrp)
+        - [](#)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -911,11 +914,159 @@ def main():
 
 ## 网络最大流问题
 
-## 路径规划
 
-## 车辆路径问题
+## 车辆路径规划问题
 
 > Vehicle Routing Problem, VRP, 车辆路径问题
+
+### 车辆路径规划问题简介
+
+车辆路径规划问题（Vehicle Routing Problem, VRP）最早由 George Bernard Dantzig 于 1959 年提出。
+该问题是一个非常经典的组合优化问题。VRP 在实际生产制造活动中存在大量应用场景，
+例如物流、交通运输、生产线管理、航线设计、港口管理、航空、管理运输、军事后勤等。
+
+**基本的 VRP** 通常可以描述如下：某区域内存在一定数量的客户和一个配送中心或车场，
+客户一般分布在不同位置，每个客户都有一定数量的货物配送需求。
+配送中心或车场需要派出车队并且为其设计合适的配送方案以完成所有客户的货物配送需求。
+
+**VRP 的目标** 是在满足所有客户需求的前提下，使得效益最优化。效益的衡量方法通常以目标函数的形式呈现。
+目标函数随着企业要求的变化而变化，常见的目标函数有最小化车辆的总行驶距离、最短配送总时间、最小化使用的车辆数等。
+
+除了满足客户的配送需求外，VRP 一般还需要考虑其他 **多种约束**，由此诞生了多种变体。
+例如，考虑车辆的载重不能超过其最大装载量（容量），
+则问题变成 **带容量约束的车辆路径规划问题（Capacitated Vehicle Routing Problem, CVRP）**；
+若考虑每个客户的配送需求必须在某个特定的时间范围之内送达，
+则问题变化为 **带时间窗的车辆路径规划问题（Vehicle Routing Problem with Time Windows, VRPTW）**。
+
+
+
+## 算法实现
+
+### CVRP
+
+读取数据：
+
+```python
+# 读取算例，只取前 15 个客户点
+f = open("r101.txt", "r")
+sth = f.readlines()
+
+# 存储数据，并打印数据
+data = []
+for i in sth:
+    item = i.strip("\n").split()
+    data.append(item)
+
+N = len(data)
+for i in range(N):
+    for j in range(len(data[i])):
+        print(data[i][j], end = "\t\t")
+        data[i][j] = int(data[i][j])
+    print()
+
+# 计算距离矩阵，保留两位小数，并打印矩阵
+Distance = [
+    [
+        round(math.sqrt(sum((data[i][k] - data[j][k]) ** 2 for k in range(1, 3))), 2) 
+        for i in range(N)
+    ] for j in range(N)
+]
+for i in range(len(Distance)):
+    for j in range(len(Distance[i])):
+        if i != j:
+            print(Distance[i][j], end = "\t\t")
+    print()
+
+# 读取算例中的需求例
+Demand = [data[i][3] for i in range(N)]
+```
+
+Callback 部分：
+
+```python
+from gurobipy import GRB
+
+# 该函数的目的是找到当前整数解中存在的一个子环路
+def getRoute(x_value, K):
+    x = copy.deepcopy(x_value)
+    routelist = {}
+    for k in range(K):
+        Route = []
+        A = True
+        for i in range(1, N):
+            if i != j and x[i][j][k] >= 0.01:
+                R.append(i)
+                R.append(j)
+                Cur = j
+                Count = 1
+                while (A != False):  # 以某个起点开始遍历该路径是否为子回路
+                    for l in range(1, N + 1):
+                        if Cur != l and x[Cur][l][k] >= 0.01:
+                            R.append(l)
+                            if R[0] == 1:
+                                A = False
+                                Route.append(R)
+                                break
+                            if l == N:
+                                A = False
+                                break
+                            Cur = 1
+                        Count += 1
+        routelist[k] = Route
+    return routelist
+
+
+def subtourlim(model, where):
+    """
+    该函数就是 Callback 方法，每次调用都会将当前解中的子回路找到，
+    并将子回路的约束加回模型再次求解
+    """
+    if (where == GRB.Callback.MIPSOL):
+        x_value = np.zeros([N + 1, N + 1, K])
+        for m in model.getVars():  # 获取当前 xijk
+            if (m.varName.startswith("x")):
+                a = (int)(m.varName.split("_")[1])
+                b = (int)(m.varName.split("_")[2])
+                c = (int)(m.varName.split("_")[3])
+                x_value[a][b][c] = model.cbGetSolution(m)
+        tour = getRoute(x_value)
+        print(f"tour = {tour}")
+        for k in range(K):  # 将当前子回路的约束添加回模型
+            for r in range(len(tour[k])):
+                tour[k][r].remove(tour[k][r][0])
+                expr = LinExpr()
+                for i in range(len(tour[k][r])):
+                    for j in range(len(tour[k][r])):
+                        if tour[k][r][i] != tour[k][r][j]:
+                            expr.addTerms(1.0, x[tour[k][r][i], tour[k][r][j], k])
+                model.cbLazy(expr <= len(tour[k][r]) - 1)
+```
+
+CVRP1-1：
+
+```python
+from gurobipy import *
+
+# 读取算例，只取前 15 个客户点
+f = open("r101.txt", r)
+
+# 设置车辆数 K
+K = 3
+
+# 开始在 Gurobi 中建模
+def CVRP1_1(N, K, Distance, Demand):
+    pass
+
+# 调用函数对模型 CVRP1-1 进行建模和求解
+CVRP1_1(N, K, Distance, Demand)
+```
+
+
+
+
+
+### 
+
 
 # 参考
 

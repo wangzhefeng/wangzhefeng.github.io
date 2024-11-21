@@ -1581,11 +1581,11 @@ Tokenization 是将原始文本分割为一个个 token。
           通过在输入中引入正余弦函数构造的位置编码 PositionEncoding 一定程度上补充了位置信息，
           但还是不如循环神经网络那样自然和高效
 
-
 # 参考
 
 * [Transformer 介绍](https://mp.weixin.qq.com/s?__biz=MzUyNzA1OTcxNg==&mid=2247486160&idx=1&sn=2dfdedb2edbca76a0c7b110ca9952e98&chksm=fa0414bbcd739dad0ccd604f6dd5ed99e8ab7f713ecafc17dd056fc91ad85968844e70bbf398&scene=178&cur_album_id=1577157748566310916#rd)
 * [《The Illustrated Transformer》](http://jalammar.github.io/illustrated-transformer/)
+* [Transformers](https://trite-song-d6a.notion.site/Transformers-Week-2-1210af77bef38088b253e28a351b7212)
 
 # TODO
 

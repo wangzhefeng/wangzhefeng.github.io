@@ -36,15 +36,15 @@ img {
 <details><summary>目录</summary><p>
 
 - [T5 模型简介](#t5-模型简介)
-    - [Why Text-to-Text](#why-text-to-text)
-    - [Data-C4](#data-c4)
+  - [Why Text-to-Text](#why-text-to-text)
+  - [Data-C4](#data-c4)
 - [T5 模型架构](#t5-模型架构)
-    - [架构-The Best One](#架构-the-best-one)
-    - [Objectives-SearchSearchSearch](#objectives-searchsearchsearch)
-    - [Datasets](#datasets)
-        - [Training：Multi-Task Learning](#trainingmulti-task-learning)
-        - [Scaling：bigger is better?](#scalingbigger-is-better)
-        - [Models](#models)
+  - [架构-The Best One](#架构-the-best-one)
+  - [Objectives-SearchSearchSearch](#objectives-searchsearchsearch)
+  - [Datasets](#datasets)
+    - [Training：Multi-Task Learning](#trainingmulti-task-learning)
+    - [Scaling：bigger is better?](#scalingbigger-is-better)
+    - [Models](#models)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -97,7 +97,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 大概清理过程如下：
 
 * 只保留结尾是正常符号的行；
-* 删除任何包含不好的词的页面，具体词表参考 [List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words](https://link.zhihu.com/?target=https%3A//github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words) 库；
+* 删除任何包含不好的词的页面，具体词表参考 [List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words) 库；
 * 包含 Javascript 词的行全去掉；
 * 包含编程语言中常用大括号的页面；
 * 任何包含 "lorem ipsum"(用于排版测试) 的页面；
