@@ -45,68 +45,21 @@ img {
         - [记忆模块](#记忆模块)
         - [代理模块](#代理模块)
         - [回调模块](#回调模块)
-- [LangChain 环境安装](#langchain-环境安装)
-    - [开发环境](#开发环境)
-    - [langchain 库安装](#langchain-库安装)
-    - [其他库安装](#其他库安装)
 - [LangChain 使用](#langchain-使用)
-    - [LLM 应用](#llm-应用)
-        - [语言模型](#语言模型)
-            - [简介](#简介)
-            - [示例](#示例)
-        - [提示模版](#提示模版)
-            - [简介](#简介-1)
-            - [示例](#示例-1)
-        - [输出解析器](#输出解析器)
-            - [简介](#简介-2)
-            - [示例](#示例-2)
-        - [使用 LCEL 进行组合](#使用-lcel-进行组合)
-            - [LCEL](#lcel)
-            - [示例](#示例-3)
-        - [使用 LangSmith 进行观测](#使用-langsmith-进行观测)
-        - [使用 LangServe 提供服务](#使用-langserve-提供服务)
-            - [简介](#简介-3)
-            - [示例](#示例-4)
-    - [Chatbots](#chatbots)
-        - [环境配置](#环境配置)
-        - [依赖安装](#依赖安装)
-        - [Chatbot 探索](#chatbot-探索)
-        - [消息历史](#消息历史)
-        - [Promot 模板](#promot-模板)
-        - [管理对话历史记录](#管理对话历史记录)
-        - [流式处理](#流式处理)
-    - [Vector stores](#vector-stores)
-        - [环境配置](#环境配置-1)
-        - [Documents](#documents)
-        - [Vector stores](#vector-stores-1)
-            - [Embedding](#embedding)
-            - [查询示例](#查询示例)
-        - [Retrievers](#retrievers)
-            - [RunnableLambda](#runnablelambda)
-            - [as\_retriever](#as_retriever)
-            - [RAG](#rag)
-    - [RAG](#rag-1)
-        - [概念](#概念)
-            - [索引](#索引)
-            - [检索和生成](#检索和生成)
-        - [环境配置](#环境配置-2)
-        - [简单 RAG](#简单-rag)
-        - [Indexing-Load](#indexing-load)
-        - [Indexing-Split](#indexing-split)
-        - [Indexing-Store](#indexing-store)
-            - [API](#api)
-        - [Retrieval \& Generation-Retrieve](#retrieval--generation-retrieve)
-        - [Retrieval \& Generation-Generate](#retrieval--generation-generate)
-    - [Agent](#agent)
-        - [End-to-end Agent](#end-to-end-agent)
-        - [环境配置](#环境配置-3)
-        - [定义工具](#定义工具)
-        - [语言模型](#语言模型-1)
-        - [创建 Agent](#创建-agent)
-        - [运行 Agent](#运行-agent)
-        - [流式消息](#流式消息)
-        - [流式 tokens](#流式-tokens)
-        - [添加记忆](#添加记忆)
+    - [LangChain 环境安装](#langchain-环境安装)
+        - [开发环境](#开发环境)
+        - [langchain 库安装](#langchain-库安装)
+        - [其他库安装](#其他库安装)
+    - [语言模型](#语言模型)
+    - [提示模版](#提示模版)
+    - [输出解析器](#输出解析器)
+    - [使用 LCEL 进行组合](#使用-lcel-进行组合)
+        - [LCEL](#lcel)
+        - [示例](#示例)
+    - [使用 LangSmith 进行观测](#使用-langsmith-进行观测)
+    - [使用 LangServe 提供服务](#使用-langserve-提供服务)
+        - [简介](#简介)
+        - [示例](#示例-1)
 - [模型输入与输出](#模型输入与输出)
     - [大模型输入与输出](#大模型输入与输出)
     - [提示模板组件](#提示模板组件)
@@ -115,22 +68,22 @@ img {
         - [使用 FewShotPromptTemplate](#使用-fewshotprompttemplate)
         - [示例选择器](#示例选择器)
     - [输出解析器](#输出解析器-1)
-        - [示例](#示例-5)
+        - [示例](#示例-2)
 - [大模型接口](#大模型接口)
     - [聊天模型](#聊天模型)
     - [聊天模型提示词的构建](#聊天模型提示词的构建)
-        - [示例](#示例-6)
+        - [示例](#示例-3)
     - [定制大模型接口](#定制大模型接口)
-        - [示例](#示例-7)
+        - [示例](#示例-4)
     - [扩展模型接口](#扩展模型接口)
 - [LCEL](#lcel-1)
     - [LCEL 特点](#lcel-特点)
     - [LCEL 操作指南](#lcel-操作指南)
     - [Runnable 接口](#runnable-接口)
     - [使用 LCEL 构建应用](#使用-lcel-构建应用)
-        - [环境配置](#环境配置-4)
+        - [环境配置](#环境配置)
         - [构建语言模型应用](#构建语言模型应用)
-            - [依赖安装](#依赖安装-1)
+            - [依赖安装](#依赖安装)
             - [构建应用](#构建应用)
         - [部署语言模型应用](#部署语言模型应用)
             - [安装依赖](#安装依赖)
@@ -406,13 +359,30 @@ LangChain 提供了两种方式来实现链：
 还是处理实时数据流，皆可胜任。这为整个 LangChain 提供了一个可编程的反馈循环，
 使得每个模块都能在适当的时候发挥作用，共同打造出一个高效、智能的大模型应用。
 
-# LangChain 环境安装
+# LangChain 使用
 
-## 开发环境
+LangChain 为构建 LLM 应用提供了多种模块，这些模块既可以在简单应用中独立使用，
+也可以通过 LCEL 进行复杂的组合。LCEL 定义了统一的可执行接口，让许多模块能够在组件之间无缝衔接。
+
+一条简单而常见的处理链通常包含以下三个要素：
+
+* 语言模型(LLM/ChatModel)
+    - 作为核心推理引擎，语言模型负责理解输入并生成输出。
+      要有效地使用 LangChain，需要了解不同类型的语言模型及其操作方式
+* 提示模板(prompt template)
+    - 提示模板为语言模型提供具体的指令，指导其生成期望的输出。
+      正确配置指示模板可以显著提升模型的响应质量
+* 输出解析器(output parser)
+    - 输出解析器将语言模型的原始响应转换成更易于理解和处理的格式，
+      以便后续步骤可以更有效地利用这些信息
+
+## LangChain 环境安装
+
+### 开发环境
 
 * Python 3.9+
 
-## langchain 库安装
+### langchain 库安装
 
 pip:
 
@@ -435,7 +405,7 @@ $ cd langchain
 $ pip install -e .
 ```
 
-## 其他库安装
+### 其他库安装
 
 LLM 应用托管服务 LangServe：用于一键部署 LangChain 应用
 
@@ -467,28 +437,9 @@ $ pip install python-dotenv
 $ pip install fastapi
 ```
 
-# LangChain 使用
+## 语言模型
 
-## LLM 应用
-
-LangChain 为构建 LLM 应用提供了多种模块，这些模块既可以在简单应用中独立使用，
-也可以通过 LCEL 进行复杂的组合。LCEL 定义了统一的可执行接口，让许多模块能够在组件之间无缝衔接。
-
-一条简单而常见的处理链通常包含以下三个要素：
-
-* 语言模型(LLM/ChatModel)
-    - 作为核心推理引擎，语言模型负责理解输入并生成输出。
-      要有效地使用 LangChain，需要了解不同类型的语言模型及其操作方式
-* 提示模板(prompt template)
-    - 提示模板为语言模型提供具体的指令，指导其生成期望的输出。
-      正确配置指示模板可以显著提升模型的响应质量
-* 输出解析器(output parser)
-    - 输出解析器将语言模型的原始响应转换成更易于理解和处理的格式，
-      以便后续步骤可以更有效地利用这些信息
-
-### 语言模型
-
-#### 简介
+**简介：**
 
 LangChain 集成的模型主要分为两种：
 
@@ -515,7 +466,7 @@ LangChain 集成的模型主要分为两种：
     - `ChatMessage`：如果上述内置角色不能满足你的需求，可以用它自定义需要的角色，
       LangChain 在这方面提供了足够的灵活性
 
-#### 示例
+**示例：**
 
 导入一个 LLM 和一个 ChatModel：
 
@@ -533,7 +484,7 @@ LLM 和 ChatModel 对象均提供了丰富的初始化配置，这里只传入�
 
 ```python
 # 导入表示用户输入的 HumanMessage
-from langchain.schema import HumanMessage
+from langchain_core.messages import HumanMessage
 
 text = "给生产杯子的公司取一个名字。"
 message = [HumanMessage(content = text)]
@@ -548,9 +499,9 @@ if __name__ = "__main__":
     main()
 ```
 
-### 提示模版
+## 提示模版
 
-#### 简介
+**简介：**
 
 大多数 LLM 应用不会直接将用户输入传递给 LLM，而是将其添加到预先设计的 **提示模板**，
 目的是给具体的任务提供额外的上下文。
@@ -567,7 +518,7 @@ API：
   比如 `ChatPromptTemplate` 作为 `ChatMessageTemplate` 的一个集合，
   每个 `ChatMessageTemplate` 都定义了格式化聊天消息的规则，包括角色和内容的指定。
 
-#### 示例
+**示例：**
 
 示例 1：
 
@@ -610,9 +561,9 @@ print(res)
 ]
 ```
 
-### 输出解析器
+## 输出解析器
 
-#### 简介
+**简介：**
 
 输出解析器将大模型的原始输出转换为下游应用易于使用的格式，主要类型包括：
 
@@ -620,7 +571,7 @@ print(res)
 * 将 `ChatMessage` 转换为纯字符串
 * 将除消息外的内容（如从自定义函数调用中返回的额外信息）转换为字符串
 
-#### 示例
+**示例：**
 
 编写一个将 **以逗号分隔的字符串** 转换为 **列表** 的解析器
 
@@ -658,12 +609,12 @@ if __name__ == "__main__":
 ["杯子之家", "瓷杯工坊", "品质杯子"]
 ```
 
-### 使用 LCEL 进行组合
+## 使用 LCEL 进行组合
 
 将上述环节组合成一个 **应用**，这个应用会将 **输入变量** 传递给 **提示模板** 以创建 **提示词**，
 将 **提示词** 传递给 **大模型**，然后通过一个**输出解析器**（可选步骤）处理输出。
 
-#### LCEL
+### LCEL
 
 LCEL 提供了一种声明式的方法，用于简化不同组件的组合过程。随着越来越多 LCEL 组件的推出，
 LCEL 的功能也在不断扩展。它巧妙地融合了专业编程和低代码编程两种方式的优势。
@@ -721,7 +672,7 @@ LCEL 的功能也在不断扩展。它巧妙地融合了专业编程和低代码
 所有继承自 `Runnable` 对象的组件都必须包括输入和输出模式说明，
 即 `input_schema` 和 `output_schema`，用于校验输入和输出数据。
 
-#### 示例
+### 示例
 
 ```python
 from typing import List
@@ -760,7 +711,7 @@ if __name__ == "__main__":
 ["狗, 猫, 鸟, 鱼, 兔子"]
 ```
 
-### 使用 LangSmith 进行观测
+## 使用 LangSmith 进行观测
 
 在 `env` 文件中设置好下面的环境变量，接着执行一次之前的应用示例，
 会发现所有组件的调用过程都自动记录到 LangSmith 中。
@@ -770,9 +721,9 @@ if __name__ == "__main__":
 
 有了这些指标，对应用运行时的状态进行观测就方便了很多，也可以将这些监控记录用于评估 AI 应用的稳定性。
 
-### 使用 LangServe 提供服务
+## 使用 LangServe 提供服务
 
-#### 简介
+### 简介
 
 构建了一个 LangChain 程序，接下来需要对其进行部署，通过接口的方式供下游应用调用，
 而 LangServe 的作用就在于此：帮助开发者将 LCEL 链作为 RESTful API 进行部署。
@@ -782,7 +733,7 @@ if __name__ == "__main__":
 * FastAPI 应用声明
 * 用于服务链的路由定义，可以使用 `langserve.add_routes` 完成
 
-#### 示例
+### 示例
 
 ```python
 from typing import List
@@ -899,1427 +850,6 @@ if __name__ == "__main__":
 ```
 ["狗, 猫, 鸟, 鱼, 兔子"]
 ```
-
-## Chatbots
-
-### 环境配置
-
-LangChain:
-
-```bash
-$ pip install langchain
-```
-
-LangSmith:
-
-```bash
-$ export LANGCHAIN_TRACING_V2="true"
-$ export LANGCHAIN_API_KEY="..."
-```
-
-```python
-# notebook
-import os
-import getpass
-
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
-```
-
-### 依赖安装
-
-```bash
-$ pip install -qU langchain-openai  # OpenAI/Azure/TogetherAI
-$ pip install -qU langchain-anthropic  # Anthropic
-$ pip install -qU langchain-google-vertexai  # Google
-$ pip install -qU langchain-cohere  # Cohere
-$ pip install -qU langchain-nvidia-ai-endpoints  # NVIDIA
-$ pip install -qU langchain-fireworks  # FireworksAI
-$ pip install -qU langchain-groq  # Groq
-$ pip install -qU langchain-mistralai  # MistralAI
-```
-
-### Chatbot 探索
-
-```python
-#!/usr/bin/env python
-# app.py
-import os
-import getpass
-
-# models
-from langchain_open_ai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_openai import AzureChatOpenAI
-from langchain_google_vertexai import ChatVertexAI
-from langchain_cohere import ChatCohere
-from langchain import ChatNVIDIA
-from langchain_fireworks import ChatFireworks
-from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
-# langchain core
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
-os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
-os.environ["GOOGLE_API_KEY"] = getpass.getpass()
-os.environ["COHERE_API_KEY"] = getpass.getpass()
-os.environ["NVIDIA_API_KEY"] = getpass.getpass()
-os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
-os.environ["GROQ_API_KEY"] = getpass.getpass()
-os.environ["MISTRAL_API_KEY"] = getpass.getpass()
-os.environ["TOGETHER_API_KEY"] = getpass.getpass()
-
-__all__ = [
-    "model",
-    "prompt_template",
-    "parser",
-    "chain",
-]
-
-# model
-model = ChatOpenAI(model = "gpt-4")
-model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
-model = AzureChatOpenAI(
-    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
-)
-model = ChatVertexAI(model="gemini-1.5-flash")
-model = ChatCohere(model="command-r-plus")
-model = ChatNVIDIA(model="meta/llama3-70b-instruct")
-model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
-model = ChatGroq(model="llama3-8b-8192")
-model = ChatMistralAI(model="mistral-large-latest")
-model = ChatOpenAI(
-    base_url = "https://api.together.xyz/v1",
-    api_key = os.environ["TOGETHER_API_KEY"],
-    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-)
-
-
-def main():
-    # model
-    model.invoke([HumanMessage(content = "Hi! I'm Bob")])
-    model.invoke([HumanMessage(content = "What's my name?")])
-    
-    import langchain_core.messages import AIMessage
-    model.invoke([
-        HumanMessage(content = "Hi, I'm Bob"),
-        AIMessage(content = "Hello Bob! How can I assist you today?"),
-        HumanMessage(content = "What's my name?"),
-    ])
-
-if __name__ == "__main__":
-    main()
-```
-
-```
-AIMessage(content='Hello Bob! How can I assist you today?', response_metadata={'token_usage': {'completion_tokens': 10, 'prompt_tokens': 12, 'total_tokens': 22}, 'model_name': 'gpt-3.5-turbo-0125', 'system_fingerprint': None, 'finish_reason': 'stop', 'logprobs': None}, id='run-d939617f-0c3b-45e9-a93f-13dafecbd4b5-0', usage_metadata={'input_tokens': 12, 'output_tokens': 10, 'total_tokens': 22})
-```
-
-```
-AIMessage(content="I'm sorry, I don't have access to personal information unless you provide it to me. How may I assist you today?", response_metadata={'token_usage': {'completion_tokens': 26, 'prompt_tokens': 12, 'total_tokens': 38}, 'model_name': 'gpt-3.5-turbo-0125', 'system_fingerprint': None, 'finish_reason': 'stop', 'logprobs': None}, id='run-47bc8c20-af7b-4fd2-9345-f0e9fdf18ce3-0', usage_metadata={'input_tokens': 12, 'output_tokens': 26, 'total_tokens': 38})
-```
-
-```
-AIMessage(content='Your name is Bob. How can I help you, Bob?', response_metadata={'token_usage': {'completion_tokens': 13, 'prompt_tokens': 35, 'total_tokens': 48}, 'model_name': 'gpt-3.5-turbo-0125', 'system_fingerprint': None, 'finish_reason': 'stop', 'logprobs': None}, id='run-9f90291b-4df9-41dc-9ecf-1ee1081f4490-0', usage_metadata={'input_tokens': 35, 'output_tokens': 13, 'total_tokens': 48})
-```
-
-### 消息历史
-
-> Message History
-
-安装依赖：
-
-```bash
-$ pip install langchain_community
-```
-
-应用开发：
-
-```python
-#!/usr/bin/env python
-# app.py
-import os
-import getpass
-
-# model api
-from langchain_open_ai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_openai import AzureChatOpenAI
-from langchain_google_vertexai import ChatVertexAI
-from langchain_cohere import ChatCohere
-from langchain import ChatNVIDIA
-from langchain_fireworks import ChatFireworks
-from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
-# langchain core
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.chat_history import (
-    BaseChatMessageHistory,
-    InMemoryChatMessageHistory,
-)
-from langchain_core.runnalbes.history import RunnableWithMessageHistory
-
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
-os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
-os.environ["GOOGLE_API_KEY"] = getpass.getpass()
-os.environ["COHERE_API_KEY"] = getpass.getpass()
-os.environ["NVIDIA_API_KEY"] = getpass.getpass()
-os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
-os.environ["GROQ_API_KEY"] = getpass.getpass()
-os.environ["MISTRAL_API_KEY"] = getpass.getpass()
-os.environ["TOGETHER_API_KEY"] = getpass.getpass()
-
-__all__ = [
-    "model",
-    "prompt_template",
-    "parser",
-    "chain",
-]
-
-# model
-model = ChatOpenAI(model = "gpt-4")
-model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
-model = AzureChatOpenAI(
-    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
-)
-model = ChatVertexAI(model="gemini-1.5-flash")
-model = ChatCohere(model="command-r-plus")
-model = ChatNVIDIA(model="meta/llama3-70b-instruct")
-model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
-model = ChatGroq(model="llama3-8b-8192")
-model = ChatMistralAI(model="mistral-large-latest")
-model = ChatOpenAI(
-    base_url = "https://api.together.xyz/v1",
-    api_key = os.environ["TOGETHER_API_KEY"],
-    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-)
-
-
-# message history
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    """
-    接受 session_id 并返回消息历史记录对象
-    这个 session_id 用于区分单独的对话，并且应该在调用新链时作为配置的一部分传入
-    """
-    store = {}
-    if session_id not in store:
-        store[session_id] = InMemoryChatMessageHistory()
-    
-    return store[session_id]
-
-with_message_history = RunnableWithMessageHistory(
-    model, 
-    get_session_history,
-)
-
-# 创建一个每次传递到可运行程序中 config
-config = {"configurable": {"session_id": "abc2"}}
-
-# session 1
-response = with_message_history.invoke(
-    [HumanMessage(content = "Hi, I'm Bob")],
-    config = config,
-)
-print(response.content)
-
-# session 2
-response = with_message_history.invoke(
-    [HumanMessage(content = "What's my name?")],
-    config = config,
-)
-print(response.content)
-
-# 更新 config 以引用不同的 session_id
-config = {"configurable": {"session_id": "abc3"}}
-response = with_message_history.invoke(
-    [HumanMessage(content = "What's my name?")],
-    config = config,
-)
-print(response.content)
-
-# 回到原来的对话
-config = {"configurable": {"session_id": "abc2"}}
-response = with_message_history.invoke(
-    [HumanMessage(content = "What's my name?")],
-    config = config,
-)
-print(response.content)
-```
-
-```
-'Hi Bob! How can I assist you today?'
-```
-
-```
-'Your name is Bob. How can I help you today, Bob?'
-```
-
-```
-"I'm sorry, I cannot determine your name as I am an AI assistant and do not have access to that information."
-```
-
-
-```
-'Your name is Bob. How can I assist you today, Bob?'
-```
-
-### Promot 模板
-
-> Prompt templates
-
-```python
-#!/usr/bin/env python
-# app.py
-import os
-import getpass
-
-# model api
-from langchain_open_ai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_openai import AzureChatOpenAI
-from langchain_google_vertexai import ChatVertexAI
-from langchain_cohere import ChatCohere
-from langchain import ChatNVIDIA
-from langchain_fireworks import ChatFireworks
-from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
-# langchain core
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
-)
-from langchain_core.chat_history import (
-    BaseChatMessageHistory,
-    InMemoryChatMessageHistory,
-)
-from langchain_core.runnalbes.history import RunnableWithMessageHistory
-
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
-os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
-os.environ["GOOGLE_API_KEY"] = getpass.getpass()
-os.environ["COHERE_API_KEY"] = getpass.getpass()
-os.environ["NVIDIA_API_KEY"] = getpass.getpass()
-os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
-os.environ["GROQ_API_KEY"] = getpass.getpass()
-os.environ["MISTRAL_API_KEY"] = getpass.getpass()
-os.environ["TOGETHER_API_KEY"] = getpass.getpass()
-
-__all__ = [
-    "model",
-    "prompt_template",
-    "parser",
-    "chain",
-]
-
-# model
-model = ChatOpenAI(model = "gpt-4")
-model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
-model = AzureChatOpenAI(
-    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
-)
-model = ChatVertexAI(model="gemini-1.5-flash")
-model = ChatCohere(model="command-r-plus")
-model = ChatNVIDIA(model="meta/llama3-70b-instruct")
-model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
-model = ChatGroq(model="llama3-8b-8192")
-model = ChatMistralAI(model="mistral-large-latest")
-model = ChatOpenAI(
-    base_url = "https://api.together.xyz/v1",
-    api_key = os.environ["TOGETHER_API_KEY"],
-    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-)
-
-# message history
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    """
-    接受 session_id 并返回消息历史记录对象
-    这个 session_id 用于区分单独的对话，并且应该在调用新链时作为配置的一部分传入
-    """
-    store = {}
-    if session_id not in store:
-        store[session_id] = InMemoryChatMessageHistory()
-    
-    return store[session_id]
-
-
-# prompt
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system", 
-            "You are a helpful assistant. Answer all questions to the best of your ability.",
-        ),
-        MessagesPlaceholder(variable_name = "messages"),
-    ]
-)
-
-
-# chain
-chain = prompt | model
-
-# session 1
-response = chain.invoke({"messages": [HumanMessages(content = "Hi! I'm Bob")]})
-print(response.content)
-
-# session 2
-with_message_history = RunnableWithMessageHistory(chain, get_session_history)
-config = {"configurable": {"session_id": "abc5"}}
-
-response = with_message_history.invoke(
-    [HumanMessage(content = "Hi, I'm Jim")],
-    config = config,
-)
-print(response.content)
-
-# session 2
-response = with_message_history.invoke(
-    [HumanMessage(content = "What's my name?")],
-    config = config,
-)
-print(response.content)
-```
-
-```
-'Hello Bob! How can I assist you today?'
-
-'Hello, Jim! How can I assist you today?'
-
-'Your name is Jim.'
-```
-
-```python
-# prompt
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system", 
-            "You are a helpful assistant. Answer all questions to the best of your ability in {language}.",
-        ),
-        MessagesPlaceholder(variable_name = "messages"),
-    ]
-)
-
-
-# chain
-chain = prompt | model
-response = chain.invoke(
-    {
-        "messages": [HumanMessage(content = "Hi! I'm Bob")], 
-        "language": "Spanish"
-    }
-)
-print(response.content)
-
-# messages history
-with_message_history = RunnableWithMessageHistory(
-    chain,
-    get_sesssion_history,
-    input_messages_key = "messages"
-)
-config = {"configurable": {"sesssion_id": "abc11"}}
-
-response = with_message_history.invoke(
-    {
-        "messages": [HunamMessage(content = "Hi, I'm todd")],
-        "language": "Spanish",
-    },
-    config = config,
-)
-print(response.content)
-
-response = with_messsage_history.invoke(
-    {
-        "messages": [HumanMessage(content = "What's my name?")],
-        "language": "Spanish",
-    },
-    config = config,
-)
-print(response.content)
-```
-
-```
-'¡Hola, Bob! ¿En qué puedo ayudarte hoy?'
-
-'¡Hola Todd! ¿En qué puedo ayudarte hoy?'
-
-'Tu nombre es Todd.'
-```
-
-### 管理对话历史记录
-
-> Managing Conversation History
-
-```python
-from langchain_core.messages import SystemMessage, trim_messages
-from operator import itermgetter
-from langchain_core.runnables import RunnablePassthrough
-
-
-trimmer = trim_messages(
-    max_tokens = 65,
-    strategy = "last",
-    token_counter = model,
-    include_system = True,
-    allow_partial = False,
-    start_on = "human",
-)
-
-
-messages = [
-    SystemMessage(content = "you're a good assistant"),
-    HumanMessage(content = "hi, I'm bob"),
-    AIMessage(content = "hi!"),
-    HumanMessage(content = "I lkie vanilla ice cream"),
-    AIMessage(content = "nice"),
-    HumanMessage(content = "whats 2 + 2"),
-    AIMessage(content = "4"),
-    HumanMessage(content = "thanks"),
-    AIMessage(content = "no problem!"),
-    HumanMessage(content = "having fun?"),
-    AIMessage(content = "yes!"),
-]
-trimmer.invoke(messages)
-
-
-chain = (
-    RunnablePassthrough.assign(messages = itermgetter("messages") | trimmer) 
-    | prompt 
-    | model
-)
-
-
-# session 1
-response = chain.invoke(
-    {
-        "messages": messages + [HumanMessage(content = "What's my name?")],
-        "language": "English",
-    }
-)
-print(response.content)
-
-# session 2
-response = chain.invoke(
-    {
-        "messages": messages + [HumanMessage(content = "what math problem did i ask")],
-        "language": "English",
-    }
-)
-print(response.content)
-
-# session 3
-with_message_history = RunnableWithMessageHistory(
-    chain,
-    get_session_history,
-    input_messages_key = "messages",
-)
-config = {"configurable": {"session_id": "abc20"}}
-response = with_message_history.invoke(
-    {
-        "messages": messages + [HumanMessage(content = "what's my name?")],
-        "language": "English",
-    },
-    config = config,
-)
-print(response.content)
-
-# session 4
-response = with_message_history.invoke(
-    {
-        "messages": [HumanMessage(content = "what math problem did i ask?")],
-        "language": "English",
-    },
-    config = config,
-)
-print(response.content)
-```
-
-```
-[SystemMessage(content="you're a good assistant"),
- HumanMessage(content='whats 2 + 2'),
- AIMessage(content='4'),
- HumanMessage(content='thanks'),
- AIMessage(content='no problem!'),
- HumanMessage(content='having fun?'),
- AIMessage(content='yes!')]
-```
-
-```
-"I'm sorry, but I don't have access to your personal information. How can I assist you today?"
-```
-
-```
-'You asked "what\'s 2 + 2?"'
-```
-
-```
-"I'm sorry, I don't have access to that information. How can I assist you today?"
-```
-
-```
-"You haven't asked a math problem yet. Feel free to ask any math-related question you have, and I'll be happy to help you with it."
-```
-
-### 流式处理
-
-> Streaming
-
-```python
-config = {"configurable": {"session_id": "abc15"}}
-
-for r in with_message_history.stream(
-    {
-        "messages": [HumanMessage(content = "hi! I'm todd. tell me a joke")],
-        "language": "English",
-    },
-    config = config,
-    ):
-    print(r.content, end = "|")
-```
-
-```
-|Hi| Todd|!| Sure|,| here|'s| a| joke| for| you|:| Why| couldn|'t| the| bicycle| find| its| way| home|?| Because| it| lost| its| bearings|!| 😄||
-```
-
-
-## Vector stores
-
-> Vector stores and Retrievers
-
-### 环境配置
-
-LangChain:
-
-```bash
-$ pip install langchain langchain-chroma langchain-openai
-```
-
-LangSmith:
-
-```bash
-$ export LANGCHAIN_TRACING_V2="true"
-$ export LANGCHAIN_API_KEY="..."
-```
-
-```python
-# notebook
-import os
-import getpass
-
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
-```
-
-### Documents
-
-LangChain 实现了 `Document` 抽象，表示文本单元和相关元数据，有两个属性：
-
-* `page_content`：表示内容的字符串
-* `metadata`：包含元数据的字典
-
-```python
-from langchain_core.documents import Document
-
-documents = [
-    Document(
-        page_content = "Dogs are great companions, known for their loyalty and friendliness.",
-        metadata = {"source": "mammal-pets-doc"},
-    ),
-    Document(
-        page_content = "Cats are independent pets that often enjoy their own space.",
-        metadata = {"source": "mammal-pets-doc"},
-    ),
-    Document(
-        page_content = "Goldfish are popular pets for beginners, requiring relatively simple care.",
-        metadata = {"source": "fish-pets-doc"},
-    ),
-    Document(
-        page_content = "Parrots are intelligent birds capable of mimicking human speech.",
-        metadata = {"source": "bird-pets-doc"},
-    ),
-    Document(
-        page_content = "Rabbits are social animals that need plenty of space to hop around.",
-        metadata = {"source": "mammal-pets-doc"},
-    ),
-]
-```
-
-### Vector stores
-
-向量搜索是存储和搜索非结构化数据的常用方法，给定一个**查询**，我们可以将其**嵌入为相同维度的向量**，
-并使用**向量相似性度量**来识别存储中的相关数据。
-
-LangChain `VectorStore` 对象包含将文本和 `Document` 对象添加到存储，
-并使用各种相似性度量查询它们的方法。它们通常使用 Embedding 模型进行初始化，
-该模型决定如何将文本数据转换为数字向量。
-
-LangChain 包含一套与不同向量存储技术的集成。
-
-* 一些向量存储由提供商（例如，各种云提供商）托管，并且需要特定的凭据才能使用；
-* 有些（例如 `Postgres`）在单独的基础设施中运行，可以在本地或通过第三方运行；
-* 其他可以在内存中运行以处理轻量级工作负载。
-
-下面将使用 `Chroma` 演示 LangChain `VectorStores` 的用法，其中包括内存中实现。
-
-#### Embedding
-
-```python
-from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
-
-vectorstore = Chroma.from_documents(
-    documents,
-    embedding = OpenAIEmbeddingss(),
-)
-```
-
-一旦实例化了包含文档的 `VectorStroe`，就可以查询它，`VectorStore` 包含查询方法：
-
-* 同步和异步查询；
-* 按字符串查询和按向量查询；
-* 是否返回相似度分数；
-* 通过相似性和最大边际相关性（以平衡查询的相似性和检索结果的多样性）
-
-#### 查询示例
-
-根据与字符串查询的相似性返回文档：
-
-```python
-vectorstore.similarity_search("cat")
-```
-
-异步查询：
-
-```python
-await vectorstore.asimilarity_search("cat")
-```
-
-返回分数：
-
-```python
-vectorstore.similarity_search_with_score("cat")
-```
-
-根据与嵌入查询相似性返回文档：
-
-```python
-embedding = OpenAIEmbeddings().embed_query("cat")
-vectorstore.similarity_search_by_vector(embedding)
-```
-
-### Retrievers
-
-LangChain `VectorStore` 对象不是 Runnable 的子类，因此不能立即集成到 LCEL 链中。
-LangChain `Retriever` 是 Runnable 的子类，因此它们实现了一组标准方法（例如，
-同步和异步 `invoke` 和 `batch` 操作），并被设计为合并到 LCEL 链中。
-
-#### RunnableLambda
-
-下面创建一个简单的版本，无需子类化 `Retriever`，围绕 `similarity_search` 方法创建一个检索方法的可运行程序：
-
-```python
-from langchain_core.documents import Document
-from langchain_core.runnables import RunnableLambda
-
-retriever = RunnableLambda(vectorstore.similarity_search).bind(k = 1)  # select top result
-retriever.batch(["cat", "shark"])
-```
-
-#### as_retriever
-
-Vectorstores 实现了 `as_retriever` 方法，该方法将生成检索器，特别是检索器 `VectorStoreRetriever`。
-这些检索器包括特定的 `search_type` 和 `search_kwargs` 属性，用于标识要调用的底层向量存储的方法以及如何参数化它们。
-以下示例与上面的操作是相同的效果：
-
-```python
-retriever = vectorstore.as_retriever(
-    search_type = "similarity",
-    search_kwargs = {"k": 1},
-)
-retriever.batch(["cat", "shark"])
-```
-
-`VectorStoreRetriever` 支持 `similarity`(默认)、`mmr`(最大边际相关性)、`similarity_score_threshold` 的搜索类型。
-可以使用 `similarity_score_threshold` 通过相似度分数来对检索器输出的文档进行阈值处理。
-
-#### RAG
-
-检索器可以轻松地合并到更复杂的应用程序中，比如 RAG，它将给定的问题与检索到的上下文结合到 LLM 的提示中。
-
-```python
-#!/usr/bin/env python
-# app.py
-import os
-import getpass
-
-# model api
-from langchain_open_ai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_openai import AzureChatOpenAI
-from langchain_google_vertexai import ChatVertexAI
-from langchain_cohere import ChatCohere
-from langchain import ChatNVIDIA
-from langchain_fireworks import ChatFireworks
-from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
-# langchain core
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
-)
-from langchain_core.chat_history import (
-    BaseChatMessageHistory,
-    InMemoryChatMessageHistory,
-)
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.runnables import RunnablePassthrough
-
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
-os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
-os.environ["GOOGLE_API_KEY"] = getpass.getpass()
-os.environ["COHERE_API_KEY"] = getpass.getpass()
-os.environ["NVIDIA_API_KEY"] = getpass.getpass()
-os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
-os.environ["GROQ_API_KEY"] = getpass.getpass()
-os.environ["MISTRAL_API_KEY"] = getpass.getpass()
-os.environ["TOGETHER_API_KEY"] = getpass.getpass()
-
-__all__ = [
-    "model",
-    "prompt_template",
-    "parser",
-    "chain",
-]
-
-
-# model
-model = ChatOpenAI(model = "gpt-4")
-model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
-model = AzureChatOpenAI(
-    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
-)
-model = ChatVertexAI(model="gemini-1.5-flash")
-model = ChatCohere(model="command-r-plus")
-model = ChatNVIDIA(model="meta/llama3-70b-instruct")
-model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
-model = ChatGroq(model="llama3-8b-8192")
-model = ChatMistralAI(model="mistral-large-latest")
-model = ChatOpenAI(
-    base_url = "https://api.together.xyz/v1",
-    api_key = os.environ["TOGETHER_API_KEY"],
-    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-)
-
-
-# prompt
-message = """
-Answer this question using the provided context only.
-
-{question}
-
-Context:
-{context}
-"""
-prompt = ChatPromptTemplate.from_messages([
-    "human": message
-])
-
-
-# rag chain
-rag_chain = {
-    "context": retriever,
-    "question": RunnablePassthrough()
-} | prompt | model
-
-
-# result
-response = rag_chain.invoke("tell me aboud cats")
-print(response.content)
-```
-
-
-## RAG
-
-> Q&A app using RAG
-
-### 概念
-
-典型的 RAG 应用程序有两个主要组件：
-
-* 索引(Indexing)：用于从源获取数据并为其建立索引的管道。通常发生在离线状态
-* 检索和生成(Retrieval & Generation)：实际的 RAG 链，它在运行时接受用户查询并从索引中检索相关数据，然后将其传递给模型
-
-#### 索引
-
-![img](images/rag_indexing.png)
-
-1. Load
-    - 首先需要加载数据，这是通过[文档加载器(Document Loader)](https://python.langchain.com/docs/concepts/#document-loaders)完成的
-2. Split
-    - [文档分割器(Text Splitters)](https://python.langchain.com/docs/concepts/#text-splitters)将大 `Documents` 分成更小的块。
-      这对于索引数据和其他传递到模型都很有用，因为大块文档更难搜索并且不适合模型的优先上下文窗口
-3. Store
-    - 需要在某个地方存储和索引分割，以便以后可以搜索它们。
-      这通常是使用 [`VectorStore`](https://python.langchain.com/docs/concepts/#vector-stores) 和 [`Embeddings`](https://python.langchain.com/docs/concepts/#embedding-models) 模型来完成的。
-
-#### 检索和生成
-
-![img](images/rag_retrieval_generation.png)
-
-4. Retrieve
-    - 给定用户输入，使用 [Retriever](https://python.langchain.com/docs/concepts/#retrievers) 从存储中检索相关的分割
-5. Generate
-    - [ChatModel](https://python.langchain.com/docs/concepts/#chat-models)/[LLM](https://python.langchain.com/docs/concepts/#llms) 使用包含问题和检索到的数据的 Prompt 生成答案
-
-### 环境配置
-
-LangChain:
-
-```bash
-$ pip install langchain langchain-community langchain-chroma
-```
-
-LangSmith:
-
-```bash
-$ export LANGCHAIN_TRACING_V2="true"
-$ export LANGCHAIN_API_KEY="..."
-```
-
-```python
-# notebook
-import os
-import getpass
-
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
-```
-
-### 简单 RAG
-
-构建一个应用程序来回答有关网站内容的问题。将适用的网站是 Lilian Weng 的 [LLM Powered Autonomouse Agents] 博客文章，
-该网站允许就该文章的内容提出问题。
-
-```python
-import os
-import getpass
-
-import bs4
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain import hub
-from langchain_chroma import Chroma
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-
-
-# model
-llm = ChatOpenAI(model = "gpt-4o-mini")
-
-# load, chunk and index the contents of the blog.
-loader = WebBaseLoader(
-    web_paths = ("https://lilianweng.github.io/posts/2023-06-23-agent/",),
-    bs_kwargs = {
-        "parse_only": bs4.SoupStrainer(class_ = ("post-content", "post-title", "post-header"))
-    }
-)
-docs = loader.load()
-
-def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)
-
-# text split
-text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 200)
-splits = text_splitter.split_documents(docs)
-
-# vector store
-vectorstore = Chroma.from_documents(documents = splits, embedding = OpenAIEmbeddings())
-
-# retrieve and generate using the relevant snippets of the blog.
-retriever = vectorstore.as_retriever()
-
-# prompt
-prompt = hub.pull("rlm/rag-prompt")
-
-# RAG
-rag_chain = (
-    {
-        "content": retriever | format_docs, 
-        "question": RunnablePassthrough()
-    },
-    | prompt
-    | llm
-    | StrOutputParser()
-)
-
-# task
-rag_chain.invoke("What is Task Decomposition?")
-```
-
-```
-'Task Decomposition is a process where a complex task is broken down into smaller, simpler steps or subtasks. This technique is utilized to enhance model performance on complex tasks by making them more manageable. It can be done by using language models with simple prompting, task-specific instructions, or with human inputs.'
-```
-
-```python
-# cleanup
-vectorstore.delete_collection()
-```
-
-### Indexing-Load
-
-首先加载博客文章内容，可以使用 `DocumentLoaders`，它们从数据源加载数据并返回 `Documents` 列表的对象。
-`Document` 是一个具有一些 `page_content` 和 `metadata` 的对象。
-
-在本例中，使用 `WebBaseLoader`，它使用 `urllib` 从 Web URL 加载 HTML，并使用 `BeautifulSoup` 将其解析为文本。
-可以通过 `bs_kwargs` 将参数传递给 `BeautifulSoup` 解析器来自定义 HTML 的文本解析。在这种情况下，只有 `post-content`、
-`post-title` 或 `post-header` 类的 HTML 标记是相关的，因此删除所有其他标记。
-
-```python
-import bs4
-from langchain_community.document_loaders import WebBaseLoader
-
-# Only keep post title, headers, content from the full HTML
-bs4_strainer = bs4.SoupStrainer(class_ = ("post-title", "post-header", "post-content"))
-loader = WebBaseLoader(
-    web_paths = ("https://lilianweng.github.io/posts/2023-06-23-agent/",),
-    bs_kwargs = {"parse_only": bs4_strainer}
-)
-docs = loader.load()
-
-print(len(docs[0].page_content))
-print(docs[0].page_content[:500])
-```
-
-```
-43131
-```
-
-```
-      LLM Powered Autonomous Agents
-    
-Date: June 23, 2023  |  Estimated Reading Time: 31 min  |  Author: Lilian Weng
-
-
-Building agents with LLM (large language model) as its core controller is a cool concept. Several proof-of-concepts demos, such as AutoGPT, GPT-Engineer and BabyAGI, serve as inspiring examples. The potentiality of LLM extends beyond generating well-written copies, stories, essays and programs; it can be framed as a powerful general problem solver.
-Agent System Overview#
-In
-```
-
-`DocumentLoader`：从数据源加载数据作为 `Documents` 列表的对象。
-
-* [Docs](https://python.langchain.com/docs/how_to/#document-loaders)
-* [Integrations](https://python.langchain.com/docs/integrations/document_loaders/)
-* [Interface](https://python.langchain.com/api_reference/core/document_loaders/langchain_core.document_loaders.base.BaseLoader.html)
-
-### Indexing-Split
-
-上面加载的文档长度超过 42k 个字符，这么长的字符无法适应许多模型的上下文窗口。
-即使对于那些可以在其上下文窗口中容纳完整 post 的模型，
-模型也可能很难在很长的输入中找到信息。
-
-为了解决这个问题，把 `Document` 分割成块以进行嵌入和向量存储。
-这样可以帮助系统在运行时仅检索博客文章中最相关的部分。
-
-在本例中，将把文档分成 1000 个字符的块，块之间有 200 个字符的重叠。
-重叠有助于降低将语句与与其相关的重要上下文分开的可能性。
-使用 `RecursiveCharacterTextSplitter` 将使用常见的分隔符（例如换行符）递归地分割文档，
-直到每个块的大小合适。这是针对一般文本用例推荐的文本分割器。
-设置 `add_start_index=True` 以便将每个分割文档在初始文档中开始的字符索引保留为元数据属性 `start_index`。
-
-```python
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size = 1000,
-    chunk_overlap = 200,
-    add_start_index = True,
-)
-all_splits = text_splitter.split_documents(docs)
-print(len(all_splits))
-print(len(all_splits[0].page_content))
-print(all_splits[0].metadata)
-```
-
-`TextSplitter` 将 `Document` 列表拆分为更小的块的对象。
-
-* TODO
-
-`DocumentTransformer` 的子类：
-
-* Docs
-* Integrations
-* Interface
-
-### Indexing-Store
-
-现在需要为 66 个文本块建立索引，以便可以在运行时搜索它们。
-最常见的方法是嵌入每个文档分割的内容并将这些 Embedding 插入向量数据库（或向量存储）中。
-当想要搜索分割时，采用文本搜索查询，将其嵌入，并执行某种相似性搜索，已识别与查询嵌入最相关的嵌入的存储分割。
-最简单的相似性度量是余弦相似度。
-
-可以额使用 Chroma 向量存储和 OpenAIEmbeddings 模型将所有文档分割嵌入并存储在单个命令中。
-
-```python
-from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
-
-vectorstore = Chroma.from_documents(
-    documents = all_splits, 
-    embedding = OpenAIEmbeddings()
-)
-```
-
-#### API
-
-* `Embeddings`
-* `VectorStore`
-
-### Retrieval & Generation-Retrieve
-
-
-### Retrieval & Generation-Generate
-
-
-## Agent
-
-语言模型本身无法采取行动——它们只是输出文本。 LangChain 的一个重要用例是创建 Agent。
-Agent 是使用 LLMs 作为推理引擎来确定要采取哪些操作以及传递这些操作的输入的系统。
-执行操作后，结果可以反馈到 LLM 以确定是否需要更多操作，或者是否可以完成。
-
-下面将构建一个可以与搜索引擎交互的 Agent，能够向该 Agent 询问问题，观看它调用搜索工具，并与其进行对话。
-
-### End-to-end Agent
-
-```python
-from lnagchain_anthropic import ChatAnthropic
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_core.messages import HumanMessage
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.prebuild import create_react_agent
-
-
-# ------------------------------
-# create agent
-# ------------------------------
-# 对话记忆
-memory = MemorySaver()
-# 模型
-model = ChatAnthropic(model_name = "claude-3-sonnet-20240229")
-# 搜索工具
-search = TavilySearchResults(max_results = 2)
-tools = [search]
-# Agent
-agent_executor = create_react_agent(model, tools, checkpointer = memory)
-
-# ------------------------------
-# use agent 
-# ------------------------------
-config = {"configurable": {"thread_id": "abc123"}}
-for chunk in agent_exector.stream(
-    {"messages": [HumanMessage(content = "hi im bob! and i live in sf")]}, 
-    config
-):
-    print(chunk)
-    print("----")
-
-for chunk in agent_exector.stream(
-    {"messages": [HumanMessage(content = "whats the weather where I live?")]}, 
-    config
-):
-    print(chunk)
-    print("----")
-```
-
-### 环境配置
-
-LangChain:
-
-```bash
-$ pip install langchain-community langgraph langchain-anthropic tavily-python langgraph-checkpoint-sqlite
-```
-
-LangSmith:
-
-```bash
-$ export LANGCHAIN_TRACING_V2="true"
-$ export LANGCHAIN_API_KEY="..."
-```
-
-```python
-# notebook
-import os
-import getpass
-
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = getpass.getpass()
-```
-
-Tavily:
-
-> 使用 Tavily(搜索引擎) 作为工具，需要获取并设置 API key
-
-```bash
-$ export TAVILY_API_KEY="..."
-```
-
-```python
-# notebook
-import os
-import getpass
-
-os.environ["TAVILY_API_KEY"] = get_pass.getpass()
-```
-
-### 定义工具
-
-```python
-from langchain_community.tools.tavily_search import TavilySearchResults
-
-search = TavilySearchResults(max_results = 2)
-search_results = search.invoke("what is the weather in SF")
-print(search_results)
-
-tools = [search]
-```
-
-### 语言模型
-
-```python
-#!/usr/bin/env python
-# app.py
-import os
-import getpass
-
-# model api
-from langchain_open_ai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_openai import AzureChatOpenAI
-from langchain_google_vertexai import ChatVertexAI
-from langchain_cohere import ChatCohere
-from langchain import ChatNVIDIA
-from langchain_fireworks import ChatFireworks
-from langchain_groq import ChatGroq
-from langchain_mistralai import ChatMistralAI
-# langchain core
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
-)
-from langchain_core.chat_history import (
-    BaseChatMessageHistory,
-    InMemoryChatMessageHistory,
-)
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.runnables import RunnablePassthrough
-
-
-os.environ["OPENAI_API_KEY"] = getpass.getpass()
-os.environ["ANTHROPIC_API_KEY"] = getpass.getpass()
-os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass()
-os.environ["GOOGLE_API_KEY"] = getpass.getpass()
-os.environ["COHERE_API_KEY"] = getpass.getpass()
-os.environ["NVIDIA_API_KEY"] = getpass.getpass()
-os.environ["FIREWORKS_API_KEY"] = getpass.getpass()
-os.environ["GROQ_API_KEY"] = getpass.getpass()
-os.environ["MISTRAL_API_KEY"] = getpass.getpass()
-os.environ["TOGETHER_API_KEY"] = getpass.getpass()
-
-__all__ = [
-    "model",
-    "prompt_template",
-    "parser",
-    "chain",
-]
-
-
-# model
-model = ChatOpenAI(model = "gpt-4")
-model = ChatAnthropic(model = "claude-3-5-sonnet-20240620")
-model = AzureChatOpenAI(
-    azure_endpoint = os.environ["AZURE_OPENAI_ENDPOINT"],
-    azure_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    openai_api_version = os.environ["AZURE_OPENAI_API_VERSION"],
-)
-model = ChatVertexAI(model="gemini-1.5-flash")
-model = ChatCohere(model="command-r-plus")
-model = ChatNVIDIA(model="meta/llama3-70b-instruct")
-model = ChatFireworks(model="accounts/fireworks/models/llama-v3p1-70b-instruct")
-model = ChatGroq(model="llama3-8b-8192")
-model = ChatMistralAI(model="mistral-large-latest")
-model = ChatOpenAI(
-    base_url = "https://api.together.xyz/v1",
-    api_key = os.environ["TOGETHER_API_KEY"],
-    model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
-)
-
-response = model.invoke([HumanMessage(content = "hi!")])
-print(response.content)
-```
-
-```
-'Hi there!'
-```
-
-查看模型进行工具调用是什么样子：
-
-```python
-model_with_tools = model.bind_tools(tools)
-
-response = model_with_tools.invoke([HumanMessage(content = "Hi!")])
-print(f"ContentString: {response.content}")
-print(f"ToolCalls: {response.tool_calls}")
-
-response = model_with_tools.invoke([HumanMessage(content = "What's the weather in SF?")])
-print(f"ContentString: {response.content}")
-print(f"ToolCalls: {response.tool_calls}")
-```
-
-```
-ContentString: Hello!
-ToolCalls: []
-```
-
-```
-ContentString: 
-ToolCalls: [{'name': 'tavily_search_results_json', 'args': {'query': 'weather san francisco'}, 'id': 'toolu_01VTP7DUvSfgtYxsq9x4EwMp'}]
-```
-
-### 创建 Agent
-
-```python
-from langgraph.prebuild import create_react_agent
-
-agent_executor = create_react_agent(model, tools)
-```
-
-### 运行 Agent
-
-针对一些查询运行 Agent，注意：目前这些都是无状态查询（它不会记住以前的交互）。代理将在交互结束时返回最终状态。
-
-不调用工具：
-
-```python
-response = agent_executor.invoke({
-    "messages": [HummanMessage(content = "hi!")]
-})
-print(response["messages"])
-```
-
-调用工具：
-
-```python
-response = agent_executor.invoke({
-    "messages": [HumanMessage(content = "what the weather in sf?")]
-})
-print(response["messages"])
-```
-
-### 流式消息
-
-```python
-for chunk in agent_executor.stream(
-    {"messages": [HumanMessage(content = "what's the weather in sf?")]}
-):
-    print(chunk)
-    print("----")
-```
-
-### 流式 tokens
-
-```python
-async for event in agent_executor.astream_events(
-    {"messages": [HumanMessage(content = "whats the weather in sf?")]}, 
-    version = "v1"
-):
-    kind = event["event"]
-    if kind == "on_chain_start":
-        if (event["name"] == "Agent"):  # Was assigned when creating the agent with `.with_config({"run_name": "Agent"})`
-            print(f"Starting agent: {event['name']} with input: {event['data'].get('input')}")
-    elif kind == "on_chain_end":
-        if (event["name"] == "Agent"):  # Was assigned when creating the agent with `.with_config({"run_name": "Agent"})`
-            print()
-            print("--")
-            print(f"Done agent: {event['name']} with output: {event['data'].get('output')['output']}")
-    elif kind == "on_chat_model_stream":
-        content = event["data"]["chunk"].content
-        if content:
-            # Empty content in the context of OpenAI means
-            # that the model is asking for a tool to be invoked.
-            # So we only print non-empty content
-            print(content, end="|")
-    elif kind == "on_tool_start":
-        print("--")
-        print(f"Starting tool: {event['name']} with inputs: {event['data'].get('input')}")
-    elif kind == "on_tool_end":
-        print(f"Done tool: {event['name']}")
-        print(f"Tool output was: {event['data'].get('output')}")
-        print("--")
-```
-
-### 添加记忆
-
-```python
-from langgraph.checkpoint.memory import MemorySaver
-
-# memory
-memory = MemorySaver()
-
-# agent
-agent_executor = create_react_agent(model, tools, checkpointer = memory)
-
-config = {"configurable": {"thread_id": "abc123"}}
-for chunk in agent_executor.stream(
-    {"messages": [HumanMessage(content = "hi im bob!")]},
-    config
-):
-    print(chunk)
-    print("----")
-
-for chunk in agent_executor.stream(
-    {"messages": [HumanMessage(content = "whats my name?")]},
-    config
-):
-    print(chunk)
-    print("----")
-
-config = {"configurable": {"thread_id": "xyz123"}}
-for chunk in agent_executor.stream(
-    {"messages": [HumanMessage(content = "whats my name?")]},
-    config
-):
-    print(chunk)
-    print("----")
-```
-
-
 
 # 模型输入与输出
 
@@ -3447,8 +1977,6 @@ async def astream_log():
 
 
 # 回调机制
-
-
 
 # 参考和资源
 
