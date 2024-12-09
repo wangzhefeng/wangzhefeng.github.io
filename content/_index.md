@@ -8,6 +8,10 @@ disable_highlight: true
 工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，
 记录学习。
 
+下面是我的 Github 贡献图，看看我在忙些啥：
+
+<img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart" />
+
 <!--
 
 关于人生，钟叔河说：
