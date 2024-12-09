@@ -34,15 +34,15 @@ menu:
     # - name: "诗词"
     #   url: "/pomes/"
     #   weight: 5
-    - name: "分类"
-      url: "/categories/"
-      weight: 6
-    - name: "事务"
-      url: "/todo/"
-      weight: 7
-    - name: "简历"
-      url: "/resume/"
-      weight: 8
+    # - name: "分类"
+    #   url: "/categories/"
+    #   weight: 6
+    # - name: "事务"
+    #   url: "/todo/"
+    #   weight: 7
+    # - name: "简历"
+    #   url: "/resume/"
+    #   weight: 8
     - name: "主题"
       url: "/Ivy/"
       weight: 9
