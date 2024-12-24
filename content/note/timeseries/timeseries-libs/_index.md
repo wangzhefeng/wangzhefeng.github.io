@@ -25,5 +25,7 @@ list_pages: true
 | mlforecast      |                    |                    |                            |                    |
 | statsforecast   |                    |                    |                            |                    |
 | sktime          |                    |                    |                            |                    |
+| tspiral         |                    |                    |                            |                    |
+| Paddlets        |                    |                    |                            |                    |
 
 ## Docs
