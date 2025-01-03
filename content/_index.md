@@ -8,6 +8,10 @@ disable_highlight: true
 工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，
 记录学习。
 
+这是我的 GitHub 贡献图，看看我在忙些啥：
+
+<img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart" />
+
 <!--
 
 关于人生，钟叔河说：
@@ -41,15 +45,16 @@ disable_highlight: true
  
 关于人生和阅读，杨立华说：
 
-> “人活着不能图省力，正确的道路一定是用力的方向，活的太轻松肯定不对，要么是方向不对，要么是自己努力程度不够，
-  这个努力程度不够，实际上是把上天给我们的天赋浪费掉了。我特别喜欢程颢的一句话：“天地生一世人，自足了一世事”，
-  上天降生下一代人，这代人其实是足够去解决这代人的问题，但是总有一些因为我们没有尽心。
+> “人活着不能图省力，正确的道路一定是用力的方向，活的太轻松肯定不对，要么是方向不对，
+> 要么是自己努力程度不够，这个努力程度不够，实际上是把上天给我们的天赋浪费掉了。
+> 我特别喜欢程颢的一句话：“天地生一世人，自足了一世事”，上天降生下一代人，
+> 这代人其实是足够去解决这代人的问题，但是总有一些因为我们没有尽心。
   努力地生活就是：把炉火烧的通红，把生活作为一块铁，自己是捶打生活的那个铁匠。”
 
-> “阅读很重要，阅读对人的意义在于，通过阅读你才能凝聚精神，阅读需要调动起人最高的主动性，你的主动性不够，其实读不进去的。
-  要尽可能地去读提升自己的书，不要只去读让自己舒服的书，让自己舒服的书，其实很大程度上是自我的简单重复，它不指向提升和成长。
-  读得少一点、读得深一点、读得精一点，再好的注释，再好的解说，再好的课程最终都指向经典本身，最终还是要回到经典。”
-
+> “阅读很重要，阅读对人的意义在于，通过阅读你才能凝聚精神，阅读需要调动起人最高的主动性，
+> 你的主动性不够，其实读不进去的。要尽可能地去读提升自己的书，不要只去读让自己舒服的书，
+> 让自己舒服的书，其实很大程度上是自我的简单重复，它不指向提升和成长。读得少一点、读得深一点、
+> 读得精一点，再好的注释，再好的解说，再好的课程最终都指向经典本身，最终还是要回到经典。”
 
 ### TODO
 
@@ -69,6 +74,8 @@ disable_highlight: true
     - [x] 申请恢复访问
     - [x] 部署相关文件
 * :white_check_mark: 添加 favicon.ico 
+
 -->
 
-[<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.svg" width="6%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
+<!-- <dev align="center">[<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.svg" width="6%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
+</dev> -->

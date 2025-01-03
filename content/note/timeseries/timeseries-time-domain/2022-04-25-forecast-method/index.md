@@ -34,63 +34,26 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [预测模型数据](#预测模型数据)
-  - [训练数据](#训练数据)
-  - [测试数据](#测试数据)
 - [按输入变量](#按输入变量)
-  - [单变量预测](#单变量预测)
-  - [多变量预测](#多变量预测)
-    - [独立多变量预测](#独立多变量预测)
-    - [相关多变量预测](#相关多变量预测)
+    - [单变量预测](#单变量预测)
+    - [多变量预测](#多变量预测)
+        - [独立多变量预测](#独立多变量预测)
+        - [相关多变量预测](#相关多变量预测)
 - [按预测步长](#按预测步长)
-  - [单步预测](#单步预测)
-    - [扩展窗口](#扩展窗口)
-    - [滑动窗口](#滑动窗口)
-  - [多步预测](#多步预测)
-    - [直接多输出预测](#直接多输出预测)
-    - [递归多步预测](#递归多步预测)
-    - [直接多步预测](#直接多步预测)
-    - [直接递归混合预测](#直接递归混合预测)
-    - [Seq2Seq 多步预测](#seq2seq-多步预测)
+    - [单步预测](#单步预测)
+    - [多步预测](#多步预测)
+        - [直接多输出预测](#直接多输出预测)
+        - [递归多步预测](#递归多步预测)
+        - [直接多步预测](#直接多步预测)
+        - [直接-递归混合预测](#直接-递归混合预测)
+        - [Seq2Seq 多步预测](#seq2seq-多步预测)
 - [按目标个数](#按目标个数)
-  - [一元预测](#一元预测)
-  - [多元预测](#多元预测)
-  - [递归多元预测](#递归多元预测)
-  - [多重预测](#多重预测)
+    - [一元预测](#一元预测)
+    - [多元预测](#多元预测)
+    - [递归多元预测](#递归多元预测)
+    - [多重预测](#多重预测)
 - [参考](#参考)
 </p></details><p></p>
-
-# 预测模型数据
-
-用机器学习算法构造时间序列预测模型，关键的思路在于，通过时间滑窗，
-人为地构造 “未来” Target，来给算法进行学习。
-
-从时间的角度上来看，有历史数据和新数据。但这里，不能简单地把历史数据作为训练集、把新数据作为测试集。
-
-![img](images/ml.png)
-
-## 训练数据
-
-1. 首先，在历史数据上，通过截取不同时间窗口的数据来构造一组或几组数据
-    - 比如，历史数据是 2017 年 1 月到 12 月每家店每天的销售数据，那么可以截取 3 组数据（见上图的深绿、浅绿部分）：
-        - 2017 年 1 月到 10 月的数据
-        - 2017 年 2 月到 11 月的数据
-        - 2017 年 3 月到 12 月的数据
-2. 然后，人为地给每组数据划分历史窗口（对应上图的深绿色部分）和未来窗口（对应上图的浅绿色部分）
-    - 比如，对于 2017 年 1 月到 10 月的数据，把 1 月到 9 月作为历史窗口，10 月作为未来窗口，以此类推
-3. 接着，分别给每组数据构建预测特征，包括历史特征（预测特征 A）和未来特征（预测特征 B）。
-   而此时，每组数据还有预测 Target
-
-这个时候，把得到的所有预测特征（例子里是三组预测特征）都合并起来作为训练集特征、
-把所有预测 Target（例子里是三组预测 Target）合并起来作为训练集 Target，之后就可以构建机器学习模型了。
-
-## 测试数据
-
-测试集的构建遵循之前的数据处理逻辑，拿历史数据构建历史特征，拿新数据构建未来特征，
-然后把这些特征加入到从训练集上训练出的预测模型中去，即可得到任务需要的最终预测值。
-
-这里需要注意，划多少个时间窗口因数据而异。此外，
-数据的历史窗口（图上深绿部分）和未来窗口（图上浅绿部分）可以是定长也可以是变长，看具体情况。
 
 # 按输入变量
 
@@ -153,9 +116,7 @@ img {
 
 上图中，左图为扩展窗口，右侧为滑动窗口。
 
-### 扩展窗口
-
-### 滑动窗口
+![img](images/1.png)
 
 ## 多步预测
 
@@ -179,10 +140,10 @@ img {
 
 > Direct Multi-Output Forecasting
 
-某些机器学习模型，例如长短期记忆神经网络(LSTM)，可以同时预测一个序列的多个值（一次性预测）。
-对于这个策略是比较好理解与实现的，对于机器学习，需要在模型预测时连续预测两个值。
-对于深度学习，只不过需要在模型最终的线性层设置为多个输出神经元即可。
-正常单输出预测，预测未来一个时刻的模型最终的输出层为 `Linear(hidden_size, 1)`，
+某些深度学习模型，例如长短期记忆神经网络(LSTM)，可以同时预测一个序列的多个值（一次性预测）。
+对于这个策略是比较好理解与实现的，比如，需要在模型预测时连续预测两个值，
+只不过需要在模型最终的线性层设置为多个输出神经元即可，即：正常单输出预测，
+预测未来一个时刻的模型最终的输出层为 `Linear(hidden_size, 1)`，
 对于直接多步预测修改输出层为 `Linear(hidden_size, 2)` 即可，
 最后一层的两个神经元分别预测 `$\{t6, t7\}$`。
 
@@ -216,7 +177,7 @@ img {
 <!-- ![img](images/recursive_multi_step.png) -->
 
 ![img](images/diagram-recursive-mutistep-forecasting.png)
-
+![img](images/2.png)
 <!-- 
 `$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `$$\{t2, t3, t4, t5, t6\} \Rightarrow \{t7\}$$` -->
@@ -244,7 +205,7 @@ img {
 <!-- ![img](images/direct_multi_step.png) -->
 
 ![img](images/diagram-direct-multi-step-forecasting.png)
-
+![img](images/3.png)
 <!-- `model_t6`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `model_t7`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t7\}$$` -->
 
@@ -290,7 +251,7 @@ img {
 
 可以发现，这样的话，我们虽然没有尽最大可能的去使用 lag 特征，但是，计算量相比于使用 n 个模型直接小了一半 -->
 
-### 直接递归混合预测
+### 直接-递归混合预测
 
 > Direct Recursive Hybrid Forecasting
 
@@ -302,7 +263,7 @@ img {
 定义的模型结构状态为：
 
 ![img](images/direct_recursive_mixure.png)
-
+![img](images/4.png)
 <!-- `model_t6`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `model_t7`：`$$\{t2, t3, t4, t5, t6\} \Rightarrow \{t7\}$$` -->
 
@@ -368,22 +329,25 @@ scikit-learn 通过 `RegressorChain` 类为其提供了一个实现。
 
 ## 多重预测
 
+* TODO
+
 # 参考
 
-* [机器学习多步时间序列预测解决方案](https://aws.amazon.com/cn/blogs/china/machine-learning-multi-step-time-series-prediction-solution/)
-* [时间序列多步预测经典方法总结](https://weibaohang.blog.csdn.net/article/details/128754086)
-* [时间序列的多步预测方法总结](https://zhuanlan.zhihu.com/p/390093091)
-* [skforecast 时序预测库](https://mp.weixin.qq.com/s/61MUqOZvQcNHtFnjyQMaQg)
-* [sktime 时序预测库](https://github.com/sktime/sktime)
-* [Time Series Forecasting as Supervised Learning](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/)
-* [How to Convert a Time Series to a Supervised Learning Problem in Python](https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/)
-* [How To Resample and Interpolate Your Time Series Data With Python](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
-* [Multistep Time Series Forecasting with LSTMs in Python](https://machinelearningmastery.com/multi-step-time-series-forecasting-long-short-term-memory-networks-python/)
-* [Machine Learning Strategies for Time Series Forecasting](https://link.springer.com/chapter/10.1007%2F978-3-642-36318-4_3)
-* [Machine Learning Strategies for Time Series Forecasting. Slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
-* [Machine Learning for Sequential Data: A Review](http://web.engr.oregonstate.edu/~tgd/publications/mlsd-ssspr.pdf)
-* [如何用 Python 将时间序列转换为监督学习问题](https://cloud.tencent.com/developer/article/1042809)
-* [sktime.RecursiveTimeSeriesRegressionForecaster](https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.compose.RecursiveTimeSeriesRegressionForecaster.html)
-* [机器学习多步时间序列预测解决方案](https://aws.amazon.com/cn/blogs/china/machine-learning-multi-step-time-series-prediction-solution/)
-* [时间序列的多步预测方法总结](https://zhuanlan.zhihu.com/p/390093091)
-* [机器学习与时间序列预测](https://www.jianshu.com/p/e81ab6846214)
+* packages
+    - [sktime 时序预测库](https://github.com/sktime/sktime)
+    - [Skforecast](https://cienciadedatos.net/documentos/py27-time-series-forecasting-python-scikitlearn.html)
+* machinelearningmastery
+    - [Time Series Forecasting as Supervised Learning](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/)
+    - [How to Convert a Time Series to a Supervised Learning Problem in Python](https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/)
+    - [How To Resample and Interpolate Your Time Series Data With Python](https://machinelearningmastery.com/resample-interpolate-time-series-data-python/)
+    - [Multistep Time Series Forecasting with LSTMs in Python](https://machinelearningmastery.com/multi-step-time-series-forecasting-long-short-term-memory-networks-python/)
+* papers
+    - [Machine Learning Strategies for Time Series Forecasting. Slide](http://di.ulb.ac.be/map/gbonte/ftp/time_ser.pdf)
+    - [Machine Learning Strategies for Time Series Forecasting](https://www.researchgate.net/profile/Gianluca-Bontempi/publication/236941795_Machine_Learning_Strategies_for_Time_Series_Forecasting/links/00b4951a46e8e0ef6c000000/Machine-Learning-Strategies-for-Time-Series-Forecasting.pdf)
+    - [Machine Learning for Sequential Data: A Review](http://web.engr.oregonstate.edu/~tgd/publications/mlsd-ssspr.pdf)
+* blog
+    - [时间序列的多步预测方法总结](https://zhuanlan.zhihu.com/p/390093091)
+    - [机器学习与时间序列预测](https://www.jianshu.com/p/e81ab6846214)
+    - [机器学习多步时间序列预测解决方案](https://aws.amazon.com/cn/blogs/china/machine-learning-multi-step-time-series-prediction-solution/)
+    - [时间序列多步预测经典方法总结](https://weibaohang.blog.csdn.net/article/details/128754086)
+    - [时间序列的多步预测方法总结](https://zhuanlan.zhihu.com/p/390093091)

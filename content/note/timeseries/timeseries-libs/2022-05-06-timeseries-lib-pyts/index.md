@@ -75,4 +75,3 @@ $ pip install pyts
 * [LSTM Fully Convolutional Networks for Time Series Classification]()
 * [PyTS GitHub](https://github.com/johannfaouzi/pyts)
 * [PyTS Doc](https://pyts.readthedocs.io/en/latest/)
-
