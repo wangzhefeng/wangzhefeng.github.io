@@ -77,3 +77,4 @@ img {
 # 资料
 
 * [HuggingFace Blog](https://huggingface.co/blog/zh/informer)
+* [Informer算法原理与代码详解](https://zhuanlan.zhihu.com/p/646853438)
