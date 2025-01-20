@@ -230,3 +230,4 @@ NLinear 将输入序列每一个值减去该序列最后一个值，然后输入
 # 资料
 
 * [Blog](https://blog.xiang578.com/post/are-transformers-effective-for-time-series-forecasting.html)
+* [Are Transformers Effective for Time Series Forecasting?](https://blog.xiang578.com/post/are-transformers-effective-for-time-series-forecasting.html)
