@@ -1,7 +1,7 @@
 ---
-title: 强化学习概览
+title: 强化学习
 author: wangzf
-date: '2022-07-15'
+date: '2025-06-18'
 slug: reinforcementlearning
 categories:
   - deeplearning
@@ -49,6 +49,11 @@ img {
     - [CartPole](#cartpole)
         - [开发环境](#开发环境)
         - [CartPole 示例](#cartpole-示例)
+- [强化学习指南](#强化学习指南)
+    - [问题](#问题)
+    - [什么是强化学习](#什么是强化学习)
+    - [从 RLHF、PPO 到 GRPO 和 RLVR](#从-rlhfppo-到-grpo-和-rlvr)
+    - [Luck(well Patience) Is All You Need](#luckwell-patience-is-all-you-need)
 - [资料](#资料)
 </p></details><p></p>
 
@@ -244,7 +249,100 @@ class QNetwork(tf.keras.Model):
     pass
 ```
 
+# 强化学习指南
+
+## 问题
+
+> 1. 什么是 RL？RLVR？PPO？GRPO？RLHF？RFT？
+>     - `Is "Luck is All You Need?" for RL?`
+> 2. 什么是 Environment？Agent？Action？Reward function？Rewards？
+
+## 什么是强化学习
+
+强化学习的目标是：
+
+1. **提高** 出现 **“好(good)”** 结果的概率。
+2. **降低** 出现 **“坏(bad)”** 结果的概率。
+
+关于"好"和"坏"的具体含义，或者我们如何"增加"或"减少"它，甚至"结果"是什么，都有一些复杂之处。
+例如，在吃豆人游戏中：
+
+1. 环境(environment)是游戏世界
+2. 你可以采取的行动(actions)有向上、向左、向右和向下。
+3. 如果你吃到饼干，奖励(rewards)是好的；如果你撞到任何一个波浪形敌人，奖励(rewards)是坏的。
+4. 在强化学习中，你不能知道你能采取的"最佳行动"，但你可以观察到中间步骤，或者最终的游戏状态（胜利或失败）
+
+## 从 RLHF、PPO 到 GRPO 和 RLVR
+
+OpenAI 推广了 **RLHF（从人类反馈中进行强化学习）**的概念，我们训练一个"智能体"来生成对问题（状态）的输出，
+这些输出被人类认为更有用。例如，ChatGPT 中的点赞和点踩可以用于 RLHF 过程。
+
+![img](images/RLHF.png)
+
+为了进行 RLHF，开发了 **PPO（近端策略优化）**。
+
+![img](images/PPO.png)
+
+在这种情况下，智能体是语言模型。实际上它由 3 个系统组成：
+
+1. Generating Policy (current trained model): 生成策略（当前训练的模型）
+2. Reference Policy (original model): 参考策略（原始模型）
+3. Value Model (average reward estimator): 值模型（平均奖励估计器）
+
+DeepSeek 开发了 **GRPO（Group Relative Policy Optimization, 组相对策略优化）** 来训练他们的 R1 推理模型。
+
+![img](images/GRPO.png)
+
+与 PPO 的主要区别在于：
+
+1. 移除了价值模型(Value Model)，用多次调用奖励模型得到的统计信息来替代。
+2. 移除了奖励模型(Reward Model)，用自定义奖励函数(Reward function)替代，RLVR 可用于此。
+
+这意味着 GRPO 非常高效。之前 PPO 需要训练多个模型——现在移除了奖励模型和价值模型，
+我们可以节省内存并加快所有进程。
+
+**RLVR (Reinforcement Learning with Verifiable Rewards, 可验证奖励的强化学习)** 允许我们根据具有易于验证的解决方案的任务来奖励模型。例如：
+
+1. 数学方程式可以轻松验证。例如 2+2 = 4。
+2. 代码输出可以验证是否正确执行。
+3. 设计可验证的奖励函数可能很困难，因此大多数示例都是数学或代码。
+4. GRPO 的应用场景并不仅限于代码或数学——其推理过程可以提升电子邮件自动化、数据库检索、法律和医学等任务，
+   根据您的数据集和奖励函数极大地提高准确性——关键在于定义一个标准——即一个由多个可验证的小奖励组成的列表，
+   而不是一个最终消耗性的单一奖励。例如，OpenAI 在其强化学习微调（RFT）服务中推广了这一方法。
+
+为什么是 "Group Relative(组相对)"？
+
+GRPO 完全移除了价值模型，但我们仍然需要根据当前状态估计"平均奖励"。
+诀窍是采样 LLM！然后我们通过跨多个不同问题的采样过程的统计数据来计算平均奖励。
+
+例如对于 `"2+2 等于多少？"` 这个问题，我们采样 4 次。可能会得到 `4`、`3`、`D`、`C`。
+然后我们计算每个答案的奖励，接着计算平均奖励和标准差，最后对 Z-score 进行标准化！
+
+![img](images/GRPO-ac.png)
+
+这样就创建了 **优势 A(advantages A)**，我们将用它来替代价值模型。这能节省大量内存！
+
+## Luck(well Patience) Is All You Need
+
+强化学习的诀窍只需要两样东西：
+
+1. 一个问题或指令，例如 `"2+2 等于多少？"`、`"用 Python 创建一个 Flappy Bird 游戏"`；
+2. 一个奖励函数和验证器来验证输出是否良好或糟糕。
+
+仅凭这两样，我们基本上可以无限次地训练调用语言模型，直到得到一个良好的答案。例如，对于 `"2+2 等于多少？"`，
+一个未经训练的糟糕语言模型会输出：
+
+> `0, cat, -10, 1928, 3, A, B, 122, 17, 182, 172, A, C, BAHS, %$, #, 9, -192, 12.31` then suddenly `4`.
+> 
+> The reward signal was `0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0` then suddenly `1`.
+
+所以通过运气和偶然，强化学习设法在多次展开中找到正确答案。我们的目标是希望看到好答案 `4` 更多，
+而其余（坏答案）要少得多。
+
+**所以强化学习的目标是要有耐心——在极限情况下，如果正确答案的概率至少是一个小数（不为零），
+那只是一个等待游戏——你必定会在极限情况下遇到正确答案。**
+
 # 资料
 
 * [强化学习](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwMTU3NjYwOA==&action=getalbum&album_id=3265062318488158212&subscene=159&subscene=189&scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzkwMTU3NjYwOA%3D%3D%26mid%3D2247484478%26idx%3D1%26sn%3D8e573705e9f7eb99fe6d3b41e1125a46%26chksm%3Dc0b3e6f1f7c46fe72dcda053230dcb1d10da23f9060bf6e62073029de2ae0f114f46f9f6c805%26cur_album_id%3D3265062318488158212%26scene%3D189%23wechat_redirect&nolastread=1#wechat_redirect)
-
+* [Reinforcement Learning Guide](https://docs.unsloth.ai/basics/reinforcement-learning-guide)
