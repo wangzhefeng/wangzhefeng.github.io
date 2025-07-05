@@ -1,5 +1,5 @@
 ---
-title: Pytorch Automatic Mixed Precision
+title: PyTorch Automatic Mixed Precision
 author: wangzf
 date: '2025-01-19'
 slug: pytorch-automatic-mixed-precision

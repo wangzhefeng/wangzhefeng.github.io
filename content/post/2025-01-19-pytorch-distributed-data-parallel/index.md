@@ -1,5 +1,5 @@
 ---
-title: Pytorch Distributed Data Parallel
+title: PyTorch Distributed Data Parallel
 author: wangzf
 date: '2025-01-19'
 slug: pytorch-distributed-data-parallel
@@ -34,23 +34,52 @@ img {
 
 <details><summary>目录</summary><p>
 
+- [训练方法介绍](#训练方法介绍)
 - [单机单卡训练](#单机单卡训练)
 - [模型分布式训练](#模型分布式训练)
     - [单机多卡训练](#单机多卡训练)
         - [原理](#原理)
         - [示例](#示例)
     - [多机多卡训练](#多机多卡训练)
+- [torchrun](#torchrun)
+    - [torchrun 使用](#torchrun-使用)
+        - [单节点多进程](#单节点多进程)
+        - [堆叠式单节点多工作进程](#堆叠式单节点多工作进程)
+        - [容错](#容错)
+        - [Elastic](#elastic)
+    - [torchrun 重要提示](#torchrun-重要提示)
+- [分布式训练框架](#分布式训练框架)
 - [参考](#参考)
 </p></details><p></p>
 
-常用的分布式训练框架：
+# 训练方法介绍
 
-* PyTorch 分布式训练框架 DDP
-* DeepSpeed 分布式训练框架
+并行方法：
+
+* 数据并行
+* 模型并行
+* 流水线并行
+
+硬件分类方法：
+
+* 单机单卡
+* 单机多卡
+* 多机多卡（集群）
 
 # 单机单卡训练
 
 * 单线程
+
+```bash
+export CUDA_VISIBLE_DEVICES="0"
+
+python -u YOUR_TRAINING_SCRIPT.py \
+    --num_workders 4 \
+    --use_gpu 1 \
+    --gpu_type cuda \
+    --use_multi_gpu 0 \
+    --devices 0,1,2,3,4,5,6,7
+```
 
 # 模型分布式训练
 
@@ -119,7 +148,167 @@ model = torch.nn.parallel.DistributedDataParallel(
 ## 多机多卡训练
 
 
+# torchrun
+
+> Elastic Launch
+
+`torch.distributed.run` 是一个在每台训练节点上启动多个分布式训练进程的模块。
+
+`torchrun` 是一个 Python 控制台脚本，
+对应于在 `setup.py` 中 `entry_points` 配置中声明的 `torch.distributed.run` 主模块。
+它等同于调用 `python -m torch.distributed.run`。
+
+> torchrun 将 `--local-rank=<rank>` 参数传递给您的脚本。从 PyTorch 2.0.0 开始，
+> 推荐使用连字符 `--local-rank` 而不是之前使用的下划线 `--local_rank`。
+
+## torchrun 使用
+
+### 单节点多进程
+
+> Single-node multi-worker
+
+```shell
+torchrun
+    --standalone
+    --nnodes=1
+    --nproc-per-node=$NUM_TRAINERS
+    YOUR_TRAINING_SCRIPT.py (--arg1 ... train script args...)
+```
+
+* `--nproc-per-node`
+    - `gpu`：每个 GPU 启动一个进程
+    - `cup`：每个 CPU 启动一个进程
+    - `auto`：如果 CUDA 可用则等效于 `"gpu"`，否则等效于 `"cpu"`，或指定进程数的整数
+
+### 堆叠式单节点多工作进程
+
+> Stacked single-node multi-worker
+
+要在同一主机上运行多个单节点多工作进程实例（分离的任务），我们需要确保每个实例（任务）在不同的端口上设置，
+以避免端口冲突（或者更糟，两个任务被合并为一个任务）。
+为此，你必须使用 `--rdzv-backend=c10d` 并通过设置 `--rdzv-endpoint=localhost:$PORT_k` 指定不同的端口。
+对于 `--nodes=1`，通常让 torchrun 自动选择一个空闲的随机端口更方便，而不是手动为每次运行分配不同的端口。
+
+```shell
+torchrun
+    --rdzv-backend=c10d
+    --rdzv-endpoint=localhost:0
+    --nnodes=1
+    --nproc-per-node=$NUM_TRAINERS
+    YOUR_TRAINING_SCRIPT.py (--arg1 ... train script args...)
+```
+
+### 容错
+
+> Fault tolerant (fixed sized number of workers, no elasticity, tolerates 3 failures)
+> 
+> 容错（固定数量的工作进程，无弹性，可容忍 3 次失败）
+
+```bash
+torchrun
+    --nnodes=$NUM_NODES
+    --nproc-per-node=$NUM_TRAINERS
+    --max-restarts=3
+    --rdzv-id=$JOB_ID
+    --rdzv-backend=c10d
+    --rdzv-endpoint=$HOST_NODE_ADDR
+    YOUR_TRAINING_SCRIPT.py (--arg1 ... train script args...)
+```
+
+### Elastic
+
+> Elastic (min=1, max=4, tolerates up to 3 membership changes or failures)
+> 
+> 弹性 ( min=1 , max=4 , 可容忍最多 3 次成员变更或故障)
+
+```bash
+torchrun
+    --nnodes=1:4
+    --nproc-per-node=$NUM_TRAINERS
+    --max-restarts=3
+    --rdzv-id=$JOB_ID
+    --rdzv-backend=c10d
+    --rdzv-endpoint=$HOST_NODE_ADDR
+    YOUR_TRAINING_SCRIPT.py (--arg1 ... train script args...)
+```
+
+## torchrun 重要提示
+
+1. `torchrun` 和多进程分布式（单节点或多节点）GPU 训练目前仅在使用 NCCL 分布式后端时能达到最佳性能。
+   因此，NCCL 后端是 GPU 训练推荐使用的后端。
+2. 初始化 Torch 进程组所需的环境变量由该模块提供，无需手动传递 `RANK`。
+   要在训练脚本中初始化进程组，只需运行：
+
+   ```python
+   import torch.distributed as dist
+    dist.init_process_group(backend="gloo|nccl")
+   ```
+
+3. 在训练程序中，可以使用常规的分布式函数，或者使用 `torch.nn.parallel.DistributedDataParallel()` 模块。
+   如果训练程序使用 GPU 进行训练，并且想使用 `torch.nn.parallel.DistributedDataParallel()` 模块，
+   以下是配置方法：
+
+    ```python
+    local_rank = int(os.environ["LOCAL_RANK"])
+    model = torch.nn.parallel.DistributedDataParallel(
+        model, device_ids=[local_rank], output_device=local_rank
+    )
+    ```
+
+    - 请确保 `device_ids` 参数设置为将操作的唯一 GPU 设备 ID。这通常是进程的本地排名。换句话说，
+      `device_ids` 需要是 [`int(os.environ("LOCAL_RANK"))`] ，
+      并且 `output_device` 需要是 `int(os.environ("LOCAL_RANK"))`，才能使用这个工具。
+
+4. 在失败或成员资格变更时，所有存活的进程将立即被终止。确保保存您的进度。
+   检查点的频率应根据您的工作对丢失工作的容忍度来决定。
+5. 该模块仅支持同构的 `LOCAL_WORLD_SIZE`。也就是说，假设所有节点运行相同数量的本地进程（按角色划分）。
+6. `RANK` 是不稳定的。在重启之间，节点上的本地进程可能被分配与之前不同的排名范围。
+   永远不要硬编码任何关于排名稳定性的假设，或 `RANK` 和 `LOCAL_RANK` 之间某些关联的假设。
+7. 在使用弹性（`min_size!=max_size`）时，不要硬编码关于 `WORLD_SIZE` 的假设，因为当节点允许离开和加入时，
+   世界大小可能会改变。
+8. 建议您的脚本具有以下结构：
+
+    ```python
+    def main():
+        load_checkpoint(checkpoint_path)
+        initialize()
+        train()
+
+    def train():
+        for batch in iter(dataset):
+            train_step(batch)
+
+            if should_checkpoint:
+                save_checkpoint(checkpoint_path)
+    ```
+
+9. (推荐) 当工作进程出错时，该工具将总结错误详情（例如时间、排名、主机、进程 ID、堆栈跟踪等）。
+    在每个节点上，按时间戳排序的第一个错误会被启发式地报告为“根本原因”错误。
+    要获取作为此错误总结输出的一部分的堆栈跟踪，您必须在训练脚本中的主入口函数上添加装饰器，
+    如下面的示例所示。如果没有添加装饰器，则总结将不包含异常的堆栈跟踪，而只包含退出码。
+
+    ```python
+    from torch.distributed.elastic.multiprocessing.errors import record
+
+    @record
+    def main():
+        # do train
+        pass
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+# 分布式训练框架
+
+常用的分布式训练框架：
+
+* PyTorch 分布式训练框架 DDP
+* DeepSpeed 分布式训练框架
+
 # 参考
 
-* [https://pytorch.org/tutorials/intermediate/ddp_tutorial.html](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html)
+* [torchrun](https://docs.pytorch.org/docs/stable/elastic/run.html)
+* [大模型分布式并行训练范式原理篇](https://mp.weixin.qq.com/s/xtYqNQJBb5vJ11NWzbrAFg)
 * [pytorch单机多卡训练](https://zhuanlan.zhihu.com/p/510718081)
