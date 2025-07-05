@@ -78,6 +78,16 @@ img {
     - [Adapter Tuning](#adapter-tuning)
     - [Lightweight Fine-tuning 的其他性质](#lightweight-fine-tuning-的其他性质)
     - [Lightweight Fine-tuning 总结](#lightweight-fine-tuning-总结)
+- [LLMs 微调](#llms-微调)
+    - [In-Context Learning](#in-context-learning)
+    - [Indexing](#indexing)
+    - [Feature-Based 和 Finetuning 方法](#feature-based-和-finetuning-方法)
+        - [Feature-Based 方法](#feature-based-方法)
+        - [Finetuning I-更新输出层](#finetuning-i-更新输出层)
+        - [Finetuning II-更新所有层](#finetuning-ii-更新所有层)
+    - [Parameter-Efficient Finetuning](#parameter-efficient-finetuning)
+    - [RLHF](#rlhf)
+    - [总结](#总结)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -1097,6 +1107,274 @@ Adapter Tuning 通常是操作于序列中每个元素 `$x \in \mathbb{R}^d$` �
     - [LoRA](https://arxiv.org/pdf/2106.09685.pdf)
     - [BitFit](https://arxiv.org/pdf/2106.10199.pdf)
 
+# LLMs 微调
+
+在快速发展的人工智能领域，高效且有效地利用大型语言模型（LLMs）变得越来越重要。
+本质上，我们可以通过两种主要方式使用预训练的大型语言模型来执行新任务：
+**情境学习（in-context learning）** 和 **微调（finetuning）**。
+
+下面，我们将简要解释什么是情境学习，然后我们将探讨我们可以以各种方式微调 LLMs。
+
+## In-Context Learning
+
+> 情境学习
+
+自从 GPT-2（Radford 等人）和 GPT-3（Brown 等人）以来，我们已经看到，
+在通用文本语料库上预训练的生成式大型语言模型（LLMs）能够进行情境学习，
+这种学习方式不需要我们对预训练的 LLMs 进行进一步训练或微调，
+如果我们想要执行 LLMs 没有明确训练过的特定或新任务。
+相反，我们可以通过输入提示直接提供一些目标任务的示例，如下面的示例所示：
+
+```
+Translate the following German sentences into English:
+
+Example 1:
+German: "Ich liebe Eis."
+Englist: "I love ice cream."
+
+Example 2:
+GermanA: "Draußen ist es stürmisch und regnerisch"
+Englist: "It's stormy and rainy outside."
+
+Translate this sentence:
+German: "Wo ist die naechste Supermarkt?"
+```
+
+如果我们无法直接访问模型，例如通过 API 使用模型时，情境学习非常实用。
+
+与 **情境学习** 相关的是 **硬提示微调(hard prompt tuning)** 的概念，其中我们修改输入，
+希望以此改善输出，如下所示：
+
+```txt
+1) "Translate the English sentence '{english_sentence}' into German: {german_translation}"
+2) "Englist: '{english_sentence}' | German: {german_translation}"
+3) "From Englist to German: '{english_sentence}' -> {german_translation}"
+```
+
+顺便提一下，我们称之为 **硬提示微调(hard prompt tuning)**，
+因为我们直接修改输入的单词或标记。稍后，我们将讨论一种不同的版本，
+称为 **软提示微调(soft prompt tuning)**（或通常简称为 **提示微调(prompt tuning)**）。
+
+上述提到的提示微调方法为参数微调提供了一种更资源高效的替代方案。
+然而，它的性能通常低于 **参数微调(parameter finetuning)**，
+因为它不会更新模型针对特定任务的参数，这可能限制其适应特定任务细微差别的能力。
+此外，提示微调可能非常费时费力，因为它通常需要人工参与比较不同提示的质量。
+
+## Indexing
+
+> 索引
+
+在更详细地讨论微调之前，另一种利用纯情境学习方法的途径是 **索引(indexing)**。
+在 LLMs 领域内，索引可以被视为一种情境学习的变通方法，它能够将 LLMs 转化为信息检索系统，
+用于从外部资源和网站中提取数据。在这个过程中，索引模块将文档或网站分解为更小的片段，
+并将它们转换为可以存储在向量数据库中的向量。然后，当用户提交查询时，
+索引模块会计算嵌入查询与数据库中每个向量之间的向量相似度。
+最终，索引模块获取最相似的 `$k$` 个嵌入来生成响应。
+
+![img](images/indexing.jpg)
+
+## Feature-Based 和 Finetuning 方法
+
+情境学习是一种有价值且用户友好的方法，适用于直接访问大型语言模型（LLM）受限的情况，
+例如通过 API 或用户界面与 LLM 交互。
+
+然而，如果我们能够访问 LLM，使用来自目标领域的数据在目标任务上调整和微调它通常能带来更优越的结果。
+那么，我们如何将模型调整到目标任务呢？下面图中概述了三种传统方法。
+
+![img](images/feature-based-finetuning.png)
+
+### Feature-Based 方法
+
+在基于特征的方法中，我们加载一个预训练的 LLM，并将其应用于我们的目标数据集。
+在这里，我们特别关注生成训练集的输出嵌入(output embedding)，
+这些 Embedding 可以用作训练分类模型的输入特征。
+虽然这种方法对于 BERT 等专注于 Embedding 的任务特别常见，
+但我们也可以从生成式 GPT 风格的模型中提取 Embedding。
+
+分类模型可以是逻辑回归模型、随机森林或 XGBoost——随心所欲。
+（然而，根据经验，这里逻辑回归等线性分类器表现最佳。）
+
+```python
+model = AutoModel.from_pretrained("distilbert-base-uncased")
+
+# ...
+# tokenize dataset
+# ...
+
+# generate embeddings
+@torch.inference_mode()
+def get_output_embeddings(batch): 
+    output = model(
+        batch["input_ids"],
+        attention_mask=batch["attention_mask"]
+    ).last_hidden_state[:, 0]
+return {"features": output}
+  
+dataset_features = dataset_tokenized.map(
+  get_output_embeddings, batched=True, batch_size=10)
+
+X_train = np.array(imdb_features["train"]["features"])
+y_train = np.array(imdb_features["train"]["label"])
+
+X_val = np.array(imdb_features["validation"]["features"])
+y_val = np.array(imdb_features["validation"]["label"])
+
+X_test = np.array(imdb_features["test"]["features"])
+y_test = np.array(imdb_features["test"]["label"])
+
+# train classifier
+from sklearn.linear_model import LogisticRegression
+
+clf = LogisticRegression()
+clf.fit(X_train, y_train)
+
+print("Training accuracy", clf.score(X_train, y_train))
+print("Validation accuracy", clf.score(X_val, y_val))
+print("test accuracy", clf.score(X_test, y_test))
+```
+
+### Finetuning I-更新输出层
+
+与上述基于特征的方法相关的一种流行方法是微调输出层（我们将此方法称为微调 I）。
+类似于基于特征的方法，我们保持预训练 LLM 的参数冻结。我们仅训练新添加的输出层，
+类似于在嵌入特征上训练逻辑回归分类器或小型多层感知器。
+
+理论上，这种方法在建模性能和速度方面应该与基于特征的方法表现相似，因为我们使用了相同的冻结主干模型。
+然而，由于基于特征的方法使得预先计算和存储训练数据集的嵌入特征稍微更容易，
+因此基于特征的方法可能在特定的实际场景中更加方便。
+
+```python
+model = AutoModelForSequenceClassification.from_pretrained(
+    "distilbert-base-uncased",
+     num_labels=2
+) 
+
+# freeze all layers
+for param in model.parameters():
+    param.requires_grad = False
+    
+# then unfreeze the two last layers (output layers)
+for param in model.pre_classifier.parameters():
+    param.requires_grad = True
+
+for param in model.classifier.parameters():
+    param.requires_grad = True
+    
+# finetune model
+lightning_model = CustomLightningModule(model)
+
+trainer = L.Trainer(
+    max_epochs=3,
+    ...
+)
+
+trainer.fit(
+    model=lightning_model,
+    train_dataloaders=train_loader,
+    val_dataloaders=val_loader
+)
+
+# evaluate model
+trainer.test(lightning_model, dataloaders=test_loader)
+```
+
+### Finetuning II-更新所有层
+
+虽然原始 BERT 论文（Devlin 等人）报告仅微调输出层即可获得与微调所有层相当的建模性能，
+但后者由于涉及更多参数，成本要高得多。例如，BERT 基础模型大约有 1.1 亿个参数。
+然而，用于二分类的 BERT 基础模型的最后一层仅包含 1,500 个参数。
+此外，BERT 基础模型的最后两层包含 60,000 个参数——这仅占模型总规模的 0.6%。
+
+我们的效果会因目标任务和目标领域与模型预训练数据集的相似程度而异。
+但在实践中，微调所有层几乎总是能带来更优越的建模性能。
+
+因此，在优化建模性能时，使用预训练 LLMs 的金标准是更新所有层（此处称为微调 II）。
+从概念上讲，微调 II 与微调 I 非常相似。唯一的不同之处在于，我们不冻结预训练 LLM 的参数，
+而是对其进行微调：
+
+```python
+model = AutoModelForSequenceClassification.from_pretrained(
+    "distilbert-base-uncased",
+     num_labels=2
+) 
+
+# freeze layers (which we don't do here)
+# for param in model.parameters():
+#    param.requires_grad = False
+    
+
+# finetune model
+lightning_model = LightningModel(model)
+
+trainer = L.Trainer(
+    max_epochs=3,
+    ...
+)
+
+trainer.fit(
+    model=lightning_model,
+    train_dataloaders=train_loader,
+    val_dataloaders=val_loader
+)
+
+# evaluate model
+trainer.test(lightning_model, dataloaders=test_loader)
+```
+
+## Parameter-Efficient Finetuning
+
+> 参数高效微调
+
+参数高效微调允许我们在最小化计算和资源的同时重用预训练模型。总而言之，参数高效微调至少有五个优点：
+
+1. 降低计算成本（需要更少的 GPU 和 GPU 时间）；
+2. 更快的训练时间（更快完成训练）;
+3. 更低的硬件要求（可在更小的 GPU 和更少的内存上运行）;
+4. 更好的建模性能（减少过拟合）；
+5. 存储空间更小（大部分权重可以在不同任务间共享）。
+
+之前，我们了解到微调更多层通常能带来更好的结果。现在，上述实验是基于一个相对较小的 DistilBERT 模型进行的。
+如果我们想微调那些仅勉强能放入 GPU 内存的大型模型，例如最新的生成式 LLMs，该怎么办呢？
+当然，我们可以使用之前提到的基于特征或微调 I 的方法。但假设我们希望获得与微调 II 相似的建模质量呢？
+
+多年来，研究人员开发了几种技术，这些技术能够在仅需要训练少量参数的情况下，
+对 LLM 进行高建模性能的微调。这些方法通常被称为参数高效微调技术（PEFT）。
+
+下面总结了最广泛使用的部分 PEFT 技术。
+
+![img](images/peft.png)
+
+那么，这些技术是如何工作的呢？简而言之，
+它们都涉及引入少量额外的参数进行微调（与我们之前在 Finetuning II 方法中微调所有层的方式相反）。
+从某种意义上说，Finetuning I（仅微调最后一层）也可以被视为一种参数高效微调技术。
+然而，诸如前缀微调、适配器和低秩适应等技术，这些技术“修改”了多个层，却以较低的成本实现了更好的预测性能。
+
+## RLHF
+
+在人类反馈强化学习（RLHF）中，
+预训练模型通过监督学习和强化学习的结合进行微调——这种方法由最初的 ChatGPT 模型推广开来，
+而 ChatGPT 模型本身则基于 InstructGPT。
+
+在 RLHF 中，通过让人类对不同的模型输出进行排序或评分来收集人类反馈，从而提供一个奖励信号。
+收集到的奖励标签可以用来训练一个奖励模型，该模型随后被用来指导 LLMs 适应人类偏好。
+
+奖励模型本身是通过监督学习学习的（通常使用一个预训练的 LLM 作为基础模型）。
+接下来，使用奖励模型来更新要适应人类偏好的预训练 LLM，
+训练过程使用一种称为近端策略优化(proximal policy optimization, PPO)的强化学习方法。
+
+下面是 InstructGPT 论文中的 RLHF 流程：
+
+![img](images/rlhf.jpg)
+
+为什么使用奖励模型而不是直接在人类反馈上训练预训练模型？这是因为将人类纳入学习过程会形成瓶颈，
+因为我们无法实时获取反馈。
+
+## 总结
+
+微调预训练 LLM 的所有层仍然是适应新目标任务的金标准，但使用预训练转换器有几个高效的替代方法。
+基于特征的方法、情境学习以及参数高效的微调技术能够在最小化计算成本和资源的同时，使 LLM 有效地应用于新任务。
+此外，带人类反馈的强化学习（RLHF）可作为监督微调的替代方案，有可能提升模型性能。
+
 # 参考
 
 * [关于 Pre-train 和 Fine-tuning](https://www.cnblogs.com/jiading/p/11995883.html)
@@ -1108,6 +1386,7 @@ Adapter Tuning 通常是操作于序列中每个元素 `$x \in \mathbb{R}^d$` �
 * [深入浅出 LoRA](https://zhuanlan.zhihu.com/p/650197598)
 * [LoRA: Low-rank Adaptation of Large Language Models](https://arxiv.org/pdf/2106.09685)
 * [LoRA GitHub](https://github.com/microsoft/LoRA)
+
 * [Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning](https://arxiv.org/abs/2012.13255)
 * [大模型之 Adaptation](https://github.com/datawhalechina/so-large-lm/blob/main/docs/content/ch07.md)
 * [Probing 策略](https://arxiv.org/pdf/1909.03368.pdf)
@@ -1119,3 +1398,4 @@ Adapter Tuning 通常是操作于序列中每个元素 `$x \in \mathbb{R}^d$` �
 * [适配器调整(Adapter Tuning)](https://arxiv.org/pdf/1902.00751.pdf)
 * [P-Tuning v2](https://arxiv.org/pdf/2110.07602.pdf)
 * [Prompt Tuning 方法提高了 OOD 的准确性](https://arxiv.org/pdf/2104.08691.pdf)
+* [Finetuning Large Language Models](https://magazine.sebastianraschka.com/p/finetuning-large-language-models)

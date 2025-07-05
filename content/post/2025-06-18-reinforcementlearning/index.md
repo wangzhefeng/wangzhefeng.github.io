@@ -54,6 +54,7 @@ img {
     - [什么是强化学习](#什么是强化学习)
     - [从 RLHF、PPO 到 GRPO 和 RLVR](#从-rlhfppo-到-grpo-和-rlvr)
     - [Luck(well Patience) Is All You Need](#luckwell-patience-is-all-you-need)
+- [奖励模型](#奖励模型)
 - [资料](#资料)
 </p></details><p></p>
 
@@ -341,6 +342,14 @@ GRPO 完全移除了价值模型，但我们仍然需要根据当前状态估计
 
 **所以强化学习的目标是要有耐心——在极限情况下，如果正确答案的概率至少是一个小数（不为零），
 那只是一个等待游戏——你必定会在极限情况下遇到正确答案。**
+
+# 奖励模型
+
+> Reward Model
+
+
+
+
 
 # 资料
 
