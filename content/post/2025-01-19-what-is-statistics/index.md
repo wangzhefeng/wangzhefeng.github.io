@@ -9,6 +9,8 @@ tags:
   - article
 ---
 
+![img](images/stat.jpg)
+
 Prof. C.R.Rao:
 
 > * All knowledge is, in final analysis, **history**.

@@ -125,7 +125,6 @@ python -u YOUR_TRAINING_SCRIPT.py \
    具体操作就是需要在代码最前端添加：
 
 ```python
-import os
 import torch.distributed as dist
 
 local_rank = int(os.environ["LOCAL_RANK"])
@@ -134,9 +133,17 @@ dist.init_process_group(backend = "gloo|nccl")
 
 `local_rank` 是每个进程的标签，对于八个进程，`local_rank` 这个变量最后会被分配 `0~7` 的整数。
 
+在 torch 1.10 之前是用 `argparse` 拿 `local rank` 这个参数的。
+但是新版的 api 已经改成了用 `os.environ["LOCAL_RANK"]`的写法。
+
 2. 第二步，让模型支持分布式
 
 ```python
+import os
+import torch
+
+local_rank = os.environ["LOCAL_RANK"]
+
 model = torch.nn.parallel.DistributedDataParallel(
     model, 
     device_ids=[local_rank],
@@ -144,6 +151,101 @@ model = torch.nn.parallel.DistributedDataParallel(
 )
 ```
 
+第二句代码很有意思，`device_ids=[local_rank]`。假设我们有八个 GPU，
+我们同时知道对于不同的进程 `local_rank` 被赋的值是不一样的。
+所以这一步在不同的线程中，会把 `model` 放在不同的 GPU 上，
+这样就非常简洁地完成了 GPU 和进程之间的对应操作。
+
+3. 要让 dataset 被分布式地 sample 到不同的进程上
+
+```python
+import torch
+
+def load_data(train_file, test_file, batch_size=32):
+    train_dataset = SentenceDataset(train_file)
+    test_dataset = SentenceDataset(test_file)
+
+    train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_dataloader, test_dataloader
+```
+
+如同我前面提到的，想分布式地处理 train 的过程，但是不想分布式地处理 evaluation，
+所以这边对于 train set 我使用了 distributed sampler，对于 test set 用了传统的 load 方式。
+
+4. 另外在 evaluation 的地方，加了对于 local rank 的判断，保证只有主线程在指定的时间会做 evaluation。
+
+```python
+import torch
+
+if local_rank == 0:
+    MSE = nn.MSELoss()
+    with torch.no_grad():
+         model.eval()
+         for test_batch in test_dataloader:
+            ...
+```
+
+这里 `with torch.no_grad()` 必须要加。我们都知道这句话的作用是在代码块中不进行梯度的追踪，
+一般用于在 evaluation 中加速运算和节省资源。但是在本实验中如果不加这行代码会报错。
+推测的原因是：在多个进程中，`model` 的参数是一直保持一致的，
+也就是 `torch distributed` 使用了某种机制控制了多个进程在运算中产生的梯度，再进行反向传播的调度。
+但是现在限制了只在线程 `0` 进行了一次额外的 evaluation 运算，虽然 `eval` 过程中不会进行梯度反向传播，
+但是如果不加 `no_grad` 依然会有梯度的计算，可能会影响到 `torch` 的调度过程。
+总之加上这句既避免了 error 又加速了 eval。
+
+5. 到这里，写代码的部分基本就结束了，进入 Debug 环节。先分布式运行 Python 文件：
+
+```bash
+$ OMP_NUM_THREADS=12 torchrun \
+    --standalone \
+    --nnodes=1 \
+    --nproc_per_node=8 \
+    train.py \
+    ...
+```
+
+在 `torchrun` 和 `.py` 文件之间又三个关于分布式的参数，如果是单机多卡前两个都是不变的，
+最后一个 `nproc_per_node` 填显卡个数即可。如果是多机多卡这边会有不同的写法，建议查询官方文档。
+
+> torchrun前面还有一个 `OMP_NUM_THREAD` 的参数，如果不写，程序也可以执行，
+> 但是会报一个警告：
+> ```
+> warning: Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, 
+> to avoid your system being overloaded, please further tune the variable for optimal performance 
+> in your application as needed
+> ```
+> 我的理解是由于使用了多进程运行 `.py` 文件，intel 怕使用太多线程把 CPU 过载了，
+> 默认将每个进程可以使用的线程数调成了 `1`，最大程度地避免过载。
+> 可以直接不写 OMP 参数并且忽略这个 warning，因为我认为机器学习的主要时间耗费在 GPU 运算上而不是 CPU 的调度。
+> 但是如果设备说明书上写了可以支持超过一百个线程，那可以设置成 12，同时使用 8 个进程也只会耗费 96 个线程不会过载。
+
+6. 在加载模型时，也有一个很重要的问题。正常来说，当我们在 train 完 model 之后会用 `torch.save` 储存模型。
+   日后要用的时候再用 `model.load` 或者 `model.load_state_dict` 加载模型。
+   由于 `eval` 一直是单线程的设计，所以在 `eval.py` 中并没有使用任何有关多线程的代码。
+   这个时候在使用 `load` 方法的时候，会报错。在 `train.py` 中，虽然也有 `eval` 的操作，
+   但是是直接用 `train.py` 中多线程的 `model` 做 `eval` 的，自然不会报错。
+   但是在 `eval.py` 使用单线程的模型去读多线程的参数，自然是不可以的。
+   那怎么解决这个问题呢？其实思路很简单，多线程不是加了个前缀嘛，
+   我们读参数的时候把那个多出来的前缀删掉不就好了。
+
+    ```python
+    model.load_state_dict(
+        {
+            k.replace('module.', ''): v 
+            for k, v in torch.load(args.model_path, map_location=device)['model'].items()
+        },
+        strict=True
+    )
+    ```
+
+    所以在 `eval.py` 文件中，`load` 这么改写了一下。`torch.load` 本质上就是 load 了一个词典进来，
+    我把词典的每一个 item 都读一下，如果 key 里面有 module.，我们就把他换成空字符串。
+    这种解决方案意思是我存下来的 model 文件是多线程的，但是我读的时候按单线程的读。
+    所以我们也可以在存的时候就用类似的方法改写字典，这样存下来的就直接是单线程的 model 了。
 
 ## 多机多卡训练
 
