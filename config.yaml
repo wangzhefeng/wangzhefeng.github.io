@@ -33,7 +33,7 @@ menu:
       weight: 5
     # - name: "诗词"
     #   url: "/pomes/"
-    #   weight: 5
+    #   weight: 6
     # - name: "分类"
     #   url: "/categories/"
     #   weight: 6
