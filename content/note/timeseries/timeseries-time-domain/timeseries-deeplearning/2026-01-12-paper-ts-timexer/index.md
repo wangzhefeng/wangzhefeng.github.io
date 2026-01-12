@@ -1,5 +1,5 @@
 ---
-title: TimeXer：融合外生变量的时间序列预测 Transformer 模型
+title: 【Paper】TimeXer：融合外生变量的时间序列预测 Transformer 模型
 author: wangzf
 date: '2026-01-12'
 slug: paper-ts-timexer
