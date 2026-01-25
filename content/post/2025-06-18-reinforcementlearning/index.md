@@ -223,6 +223,8 @@ Reward Model 为这些补全结果中的每一个分配一个分数，
 
 <img src="images/rt-model-example.png" width=70% height="750px" />
 
+<!-- ![img](images/rt-model-example.png) -->
+
 偏好数据(Preference Data)。成对偏好数据(Pairwise preference)在 LLMs 的 post-training 中被广泛使用，
 并且已经使用了相当长的时间。这类数据由许多不同的提示组成，我们的目标是在数据中最大化提示的多样性。
 提示分布应该能代表模型在真实环境中会看到的提示。对于每个提示，我们有一对候选补全结果，
@@ -235,7 +237,7 @@ Reward Mode 是基于 Bradley-Terry 偏好模型，但可以以多种方式在�
 在 LLMs 领域，这些模型可以使用一个 LLM 实现。然而，与标准的（生成式）仅解码器 LLMs 相比，
 Reward Model 修改了底层架构和训练目标。
 
-![img](images/Reward Model-arc.png)
+![img](images/rm-arc.png)
 
 Reward Model 从 LLM 接收一个提示-补全对作为输入，并输出一个（标量）偏好分数。
 在实践中，Reward Model 通过在 decoder-only 架构的末尾添加一个线性头(linear head)来实现。
@@ -248,9 +250,10 @@ Reward Model 的参数通常使用一个现有策略(Policy)进行初始化，�
 初始化 Reward Model 的策略有多种选择；例如，正在训练的 LLM 或该模型的先前版本，如预训练基础模型或 SFT 模型。
 一旦 Reward Model 初始化补全，我们向该模型添加线性头，并在偏好数据集（即针对提示选择和拒绝的模型响应对）上进行训练。
 
-![img](images/Reward Model-training.jpg)
+![img](images/rm-training.jpg)
 
 # 资料
 
 * [强化学习](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwMTU3NjYwOA==&action=getalbum&album_id=3265062318488158212&subscene=159&subscene=189&scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzkwMTU3NjYwOA%3D%3D%26mid%3D2247484478%26idx%3D1%26sn%3D8e573705e9f7eb99fe6d3b41e1125a46%26chksm%3Dc0b3e6f1f7c46fe72dcda053230dcb1d10da23f9060bf6e62073029de2ae0f114f46f9f6c805%26cur_album_id%3D3265062318488158212%26scene%3D189%23wechat_redirect&nolastread=1#wechat_redirect)
 * [Reinforcement Learning Guide](https://docs.unsloth.ai/basics/reinforcement-learning-guide)
+* [RLHF_Q&A系列](https://www.zhihu.com/column/c_1991812183886152898)
