@@ -38,6 +38,7 @@ img {
 - [OpenAI: codex](#openai-codex)
 - [Anthropic: Claude Code](#anthropic-claude-code)
 - [Anthropic: Cowork](#anthropic-cowork)
+- [Anthropic: Claude Skills](#anthropic-claude-skills)
 - [Skywork](#skywork)
 </p></details><p></p>
 
@@ -126,6 +127,16 @@ Claude Code 官方推出的[入门课程](https://anthropic.skilljar.com/claude-
 # Anthropic: Cowork
 
 * [Getting started with Cowork](https://support.claude.com/en/articles/13345190-getting-started-with-cowork)
+
+# Anthropic: Claude Skills
+
+* [Agent Skills 终极指南：入门、精通、预测](https://zhuanlan.zhihu.com/p/1992272492392380044?share_code=2ubO4NqsZxWB&utm_psn=2000838846183674669)
+    * https://skillsmp.com/zh
+    * https://github.com/anthropics/skills/tree/main/skills/skill-creator
+    * 
+* [A complete guide to building skills for Claude](https://claude.com/blog/complete-guide-to-building-skills-for-claude)
+* [The Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf?hsLang=en)
+* [Anthropic 首个公开的 Skills 构建指南](https://mp.weixin.qq.com/s/PcyKi5q8zT-tJ_9rzgKSqg)
 
 # Skywork
 
