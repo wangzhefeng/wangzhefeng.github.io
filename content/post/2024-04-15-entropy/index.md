@@ -70,7 +70,7 @@ details[open] summary {
         - [性质 4](#性质-4)
     - [熵的衍生物](#熵的衍生物)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 # 熵的概念
 

@@ -34,18 +34,20 @@ img {
 
 <details><summary>目录</summary><p>
 
-- [TODO](#todo)
-</p></details><p></p>
+- [为什么是 Typst](#为什么是-typst)
+- [资源整理](#资源整理)
+</p></details>
 
-舍弃 LaTex，使用 Typst！ 
+舍弃 LaTeX，使用 Typst。
 
+## 为什么是 Typst
 
+相比传统 LaTeX 工作流，Typst 更轻量，语法也更直观，比较适合快速写文档、简历和技术笔记。
 
+## 资源整理
 
-# TODO
-
-* [如何看待 typst？](https://www.zhihu.com/question/591143170/answer/2953618467)
-* [Chinese Resume in Typst](https://github.com/OrangeX4/Chinese-Resume-in-Typst)
-* [My Resume and LaTeX Template](https://github.com/liweitianux/resume)
-* [typst.app](https://typst.app/)
-* [Typst GitHub](https://github.com/typst/typst)
+- [如何看待 Typst？](https://www.zhihu.com/question/591143170/answer/2953618467)
+- [Chinese Resume in Typst](https://github.com/OrangeX4/Chinese-Resume-in-Typst)
+- [My Resume and LaTeX Template](https://github.com/liweitianux/resume)
+- [Typst 官网](https://typst.app/)
+- [Typst GitHub](https://github.com/typst/typst)

@@ -55,7 +55,7 @@ img {
 - [Post-training 效率](#post-training-效率)
 - [Post-training 集成和适配](#post-training-集成和适配)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 # LLM Pre-training 问题
 

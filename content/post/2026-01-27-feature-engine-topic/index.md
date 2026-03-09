@@ -42,7 +42,7 @@ img {
 - [4. 预处理(以归一化为例)和划分 train/test 的顺序](#4-预处理以归一化为例和划分-traintest-的顺序)
 - [5.不平衡条件下的 test 是否需要 resampling？](#5不平衡条件下的-test-是否需要-resampling)
 - [6. 特征工程与表示学习](#6-特征工程与表示学习)
-</p></details><p></p>
+</p></details>
 
 
 # 1.特征工程与表示学习

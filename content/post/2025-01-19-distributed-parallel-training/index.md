@@ -74,7 +74,7 @@ img {
         - [资源配置-单节点](#资源配置-单节点)
     - [DeepSpeed 资料](#deepspeed-资料)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 # 训练方法介绍
 

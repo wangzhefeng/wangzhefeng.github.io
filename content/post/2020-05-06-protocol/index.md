@@ -74,7 +74,7 @@ img {
   - [UDP 协议](#udp-协议)
   - [TCP 协议](#tcp-协议)
 - [应用层](#应用层)
-</p></details><p></p>
+</p></details>
 
 
 互联网的核心是一些列协议, 总称为"互联网协议(Internet Protocol

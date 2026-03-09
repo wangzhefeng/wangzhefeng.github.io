@@ -55,7 +55,7 @@ img {
         - [发现一个任务要多个流程协同完成](#发现一个任务要多个流程协同完成)
     - [资料](#资料)
 - [Skywork](#skywork)
-</p></details><p></p>
+</p></details>
 
 # OpenAI: codex
 

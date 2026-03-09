@@ -63,7 +63,7 @@ details[open] summary {
 - [EM 算法及其 MCMC 方法](#em-算法及其-mcmc-方法)
 - [总结](#总结)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 
 # 蒙特卡洛方法

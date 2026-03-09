@@ -39,7 +39,7 @@ img {
 - [指令微调 Instruction Fine-tuning](#指令微调-instruction-fine-tuning)
 - [偏好微调 Preference Fine-tuning, PFT](#偏好微调-preference-fine-tuning-pft)
 - [推理微调 Reasoning Fine-tuning](#推理微调-reasoning-fine-tuning)
-</p></details><p></p>
+</p></details>
 
 从零开始训练大语言模型（LLM），使其能够应用于真实场景的四个阶段，包括以下内容：
 
