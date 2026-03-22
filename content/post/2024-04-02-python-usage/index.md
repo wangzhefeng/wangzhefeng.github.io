@@ -79,7 +79,7 @@ details[open] summary {
 - [本地测试](#本地测试)
 - [类参数](#类参数)
 - [attr \& cattr](#attr--cattr)
-</p></details><p></p>
+</p></details>
 
 # 定义一个类
 

@@ -42,7 +42,7 @@ img {
     - [获取 MCP](#获取-mcp)
     - [配置 MCP-Windsurf](#配置-mcp-windsurf)
 - [支持 MCP 服务的客户端](#支持-mcp-服务的客户端)
-</p></details><p></p>
+</p></details>
 
 # 什么是 MCP
 

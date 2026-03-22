@@ -45,7 +45,7 @@ img {
 - [分离权重(组, groups)](#分离权重组-groups)
 - [1x1 卷积](#1x1-卷积)
 - [Demo](#demo)
-</p></details><p></p>
+</p></details>
 
 # conv1d 简介
 

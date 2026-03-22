@@ -61,7 +61,7 @@ img {
   - [Integrity](#integrity)
   - [Flexibility](#flexibility)
   - [Efficiency](#efficiency)
-</p></details><p></p>
+</p></details>
 
 
 

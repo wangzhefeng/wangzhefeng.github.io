@@ -60,7 +60,7 @@ img {
 - [Hugo 安装](#hugo-安装)
 - [Hugo 主题](#hugo-主题)
 - [参考资料](#参考资料)
-</p></details><p></p>
+</p></details>
 
 # Hugo 简介
 

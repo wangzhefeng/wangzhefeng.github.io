@@ -64,7 +64,7 @@ details[open] summary {
   - [第二遍](#第二遍)
   - [第三遍](#第三遍)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 # 论文的基本结构
 

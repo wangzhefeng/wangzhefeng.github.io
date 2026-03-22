@@ -78,7 +78,7 @@ img {
   - [插入 HTML](#插入-html)
 - [RMarkdwon](#rmarkdwon)
 - [参考资料](#参考资料)
-</p></details><p></p>
+</p></details>
 
 
 # Markdown
@@ -361,7 +361,7 @@ output:
 * [Header1-1](#header1-label)
 * [Header1-2](#header2-label)
   - [Header2-1](##header2-1-label)
-</p></details><p></p>
+</p></details>
 ```
 
 ## 插入Note、Important

@@ -183,18 +183,18 @@ olympic_running</code></pre>
 PBS</code></pre>
 <pre><code>## # A tsibble: 67,596 x 9 [1M]
 ## # Key:       Concession, Type, ATC1, ATC2 [336]
-##        Month Concession   Type     ATC1  ATC1_desc ATC2  ATC2_desc Scripts  Cost
-##        &lt;mth&gt; &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
-##  1  1991 7月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18228 67877
-##  2  1991 8月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15327 57011
-##  3  1991 9月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14775 55020
-##  4 1991 10月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15380 57222
-##  5 1991 11月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14371 52120
-##  6 1991 12月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15028 54299
-##  7  1992 1月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   11040 39753
-##  8  1992 2月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15165 54405
-##  9  1992 3月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   16898 61108
-## 10  1992 4月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18141 65356
+##       Month Concession   Type      ATC1  ATC1_desc ATC2  ATC2_desc Scripts  Cost
+##       &lt;mth&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
+##  1 1991 Jul Concessional Co-payme… A     Alimenta… A01   STOMATOL…   18228 67877
+##  2 1991 Aug Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15327 57011
+##  3 1991 Sep Concessional Co-payme… A     Alimenta… A01   STOMATOL…   14775 55020
+##  4 1991 Oct Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15380 57222
+##  5 1991 Nov Concessional Co-payme… A     Alimenta… A01   STOMATOL…   14371 52120
+##  6 1991 Dec Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15028 54299
+##  7 1992 Jan Concessional Co-payme… A     Alimenta… A01   STOMATOL…   11040 39753
+##  8 1992 Feb Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15165 54405
+##  9 1992 Mar Concessional Co-payme… A     Alimenta… A01   STOMATOL…   16898 61108
+## 10 1992 Apr Concessional Co-payme… A     Alimenta… A01   STOMATOL…   18141 65356
 ## # ℹ 67,586 more rows</code></pre>
 <pre class="r"><code>PBS |&gt; 
     filter(ATC2 == &quot;A10&quot;) |&gt;
@@ -204,9 +204,9 @@ PBS</code></pre>
 </div>
 <div id="读取-csv-文件并将其转化为-tsibble-对象" class="section level2">
 <h2>读取 CSV 文件并将其转化为 tsibble 对象</h2>
-<pre class="r"><code>library(readr)
-
-prison &lt;- readr::read_csv(&quot;https://OTexts.com/fpp3/extrafiles/prison_population.csv&quot;)</code></pre>
+<pre class="r"><code>library(readr)</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.4.3</code></pre>
+<pre class="r"><code>prison &lt;- readr::read_csv(&quot;https://OTexts.com/fpp3/extrafiles/prison_population.csv&quot;)</code></pre>
 <pre><code>## `curl` package not installed, falling back to using `url()`
 ## Rows: 3072 Columns: 6
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -470,9 +470,6 @@ visitors |&gt;
 <pre class="r"><code>visitors |&gt;
     pivot_wider(values_from = Trips, names_from = State) |&gt;
     GGally::ggpairs(columns = 2:9)</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
-##   method from   
-##   +.gg   ggplot2</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
 </div>

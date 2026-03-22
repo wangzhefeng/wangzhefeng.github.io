@@ -89,7 +89,7 @@ img {
     - [RLHF](#rlhf)
     - [总结](#总结)
 - [参考](#参考)
-</p></details><p></p>
+</p></details>
 
 # 预训练模型
 

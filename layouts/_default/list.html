@@ -6,23 +6,27 @@
 {{ if (or .Params.list_pages (not .Content)) }}
 <div class="archive">
 {{ if .Params.list_pages }}
+  <div class="archive-group">
   {{ range .Pages.ByParam (or .Params.order_by "date" ) }}
-  <p>
-    <span>{{ .Date.Format "2006-01-02" }}</span>
-    <a href="{{ .RelPermalink }}">{{ .Title }} {{ with .Params.subtitle }}<span class='subtitle'> &middot; {{ . }} </span>{{ end }}</a>
+  <p class="archive-item">
+    <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
+    <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }} {{ with .Params.subtitle }}<span class='subtitle'> &middot; {{ . }} </span>{{ end }}</a>
   </p>
   {{ end }}
+  </div>
 {{ else }}
   {{ range .Pages.GroupByDate "2006" }}
   <h2 class="archive-title">{{ .Key }}</h2>
+  <div class="archive-group">
   {{ range .Pages.GroupByDate "2006-01-02" }}
   {{ range .Pages }}
-  <p>
-    <span>{{ .Date.Format "2006-01-02" }}</span>
-    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+  <p class="archive-item">
+    <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
+    <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
   </p>
   {{ end }}
   {{ end }}
+  </div>
   {{ end }}
 {{ end }}
 

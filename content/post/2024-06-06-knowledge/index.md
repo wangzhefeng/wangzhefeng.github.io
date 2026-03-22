@@ -75,7 +75,7 @@ img {
         - [Word Representation to Contextual Representation](#word-representation-to-contextual-representation)
         - [Encoder-Decoder Model](#encoder-decoder-model)
     - [Distributed Representation](#distributed-representation)
-</p></details><p></p>
+</p></details>
 
 # 概率与统计
 
