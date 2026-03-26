@@ -84,7 +84,7 @@ features for writing technical documentation including:
 - A vibrant ecosystem of first and third-party [extensions](https://www.sphinx-doc.org/en/master/usage/extensions/index.html#builtin-sphinx-extensions)
 
 
-# 安装环境
+## 安装环境
 
 (1)激活 Python 虚拟环境
 
@@ -100,7 +100,7 @@ $ pip3 install sphinx-autobuild
 $ pip3 install sphinx_rtd_theme
 ```
 
-# 创建文档
+## 创建文档
 
 (1)创建 Sphinx Doc 项目目录
 
@@ -118,9 +118,9 @@ $ cd docs
 $ sphinx quickstart
 ```
 
-# 修改配置文件
+## 修改配置文件
 
-## 更改主题
+### 更改主题
 
 ```python
 # ./project/docs/source/conf.py
@@ -132,7 +132,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 ```
 
 
-## 支持 markdown 语法
+### 支持 markdown 语法
 
 (1)安装扩展库: 
 
@@ -159,7 +159,7 @@ source_suffix = ['.rst', '.md']
 ```
 
 
-# 编译文档
+## 编译文档
 
 ```bash
 cd ./project/docs/
@@ -167,7 +167,7 @@ make html
 ```
 
 
-# GitHub 代码托管
+## GitHub 代码托管
 
 ```bash
 cd ./project/
@@ -180,7 +180,7 @@ git push -u origin master
 ```
 
 
-# 绑定 Read the Docs
+## 绑定 Read the Docs
 
 1. [Import your docs.](https://docs.readthedocs.io/en/stable/intro/import-guide.html)
 2. [Read the Docs dashboard](https://readthedocs.org/dashboard/)
@@ -188,13 +188,13 @@ git push -u origin master
 
 
 
-# 版本管理
+## 版本管理
 
 - [Version Doc](https://docs.readthedocs.io/en/stable/versions.html)
 
 
 
-# 资源
+## 资源
 
 - [Sphinx documentation](https://www.sphinx-doc.org/en/master/)
 - [RestructuredText primer](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
@@ -202,7 +202,7 @@ git push -u origin master
 
 
 
-# config.py 模板
+## config.py 模板
 
 ```python
 # -*- coding: utf-8 -*-
@@ -416,7 +416,7 @@ htmlhelp_basename = 'OpenCVdoc'
 # }
 ```
 
-# reStructuredText Markup 语法
+## reStructuredText Markup 语法
 
 [reStructured](https://docutils.sourceforge.io/rst.html)
 [A ReStructuredText Primer](https://docutils.sourceforge.io/docs/user/rst/quickstart.html)

@@ -46,7 +46,7 @@ img {
     - [nn.ModuleDict](#nnmoduledict)
 </p></details><p></p>
 
-# 模型创建简介
+## 模型创建简介
 
 使用 PyTorch 通常有三种方式构建模型:
 
@@ -59,11 +59,11 @@ img {
     - `torch.nn.ModuleList`
     - `torch.nn.ModuleDict`
 
-# 使用 Sequential 按层顺序构建模型
+## 使用 Sequential 按层顺序构建模型
 
 使用 `nn.Sequential` 按层顺序构建模型无需定义 `forward` 方法，仅仅适用于简单的模型
 
-## add_module 方法
+### add_module 方法
 
 ```python
 import torch.nn as nn
@@ -93,7 +93,7 @@ print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
-## 变长参数
+### 变长参数
 
 * 不能给每个层指定名称
 
@@ -118,7 +118,7 @@ print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
-## OrderedDict
+### OrderedDict
 
 ```python
 import torch.nn as nn
@@ -152,7 +152,7 @@ print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
-# 继承 nn.Module
+## 继承 nn.Module
 
 ```python
 import torch.nn as nn
@@ -201,14 +201,14 @@ print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
-# 继承 nn.Module 基类并应用模型容器
+## 继承 nn.Module 基类并应用模型容器
 
 当模型的结构比较复杂时，可以应用模型容器 `nn.Sequential`、`nn.ModuleList`、
 `nn.ModuleDict` 对模型的部分结构进行封装。
 这样做会让模型整体更加有层次感，有时候也能减少代码量。
 模型容器的使用是非常灵活的，可以在一个模型中任意组合任意嵌套使用
 
-## nn.Sequential
+### nn.Sequential
 
 ```python
 import torch.nn as nn
@@ -245,7 +245,7 @@ net = Net()
 print(net)
 ```
 
-## nn.ModuleList
+### nn.ModuleList
 
 > `nn.ModuelList` 不能用 Python 中的 List 代替
 
@@ -282,7 +282,7 @@ net = Net()
 print(net)
 ```
 
-## nn.ModuleDict
+### nn.ModuleDict
 
 > `nn.ModuleDict` 不能用 Python 中的 Dict 代替
 

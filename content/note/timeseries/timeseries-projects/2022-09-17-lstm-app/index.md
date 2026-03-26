@@ -45,12 +45,12 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 目标
+## 目标
 
 * CSV 文件中包含了谷歌从 2001-01-25 到 2021-09-29 的股票数据，数据是按照天数频率的
 * 预测 Open 列的未来值
 
-# Python 依赖
+## Python 依赖
 
 ```python
 import numpy as np
@@ -64,7 +64,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
 ```
 
-# 数据
+## 数据
 
 ```python
 df = pd.read_csv("train.csv", parse_dates = ["Date"], index_col = [0])
@@ -73,7 +73,7 @@ df.tail()
 df.shape
 ```
 
-# 训练数据分割
+## 训练数据分割
 
 ```python
 test_split = round(len(df) * 0.2)
@@ -85,7 +85,7 @@ print(df_train)
 print(df_test)
 ```
 
-# 数据规范化
+## 数据规范化
 
 ```python
 scaler = MinMaxScaler(feature_range = (0, 1))
@@ -96,7 +96,7 @@ df_test_scaled = scaler.transform(df_test)
 print(df_train_scaled)
 ```
 
-# 数据处理
+## 数据处理
 
 ```python
 def create_x_y(data, n_past):
@@ -136,7 +136,7 @@ print(f"train_y[0]: {train_y[0]}")
     - `[2:32, 0:5]` -- `[32, 0]` 
     - ...
 
-# 超参数调优
+## 超参数调优
 
 ```python
 def build_model(optimizer):
@@ -176,7 +176,7 @@ grid_search = grid_search.fit(train_x, train_y)
 grid_search.best_params_
 ```
 
-# 模型预测
+## 模型预测
 
 ```python
 # 训练好的模型
@@ -193,7 +193,7 @@ prediction_copy_array = np.repeat(prediction, 5, axis = -1)
 pred = scaler.inver_transform(prediction_copy_array)
 ```
 
-# 参考
+## 参考
 
 * [使用 LSTM 进行多变量时间序列预测的保姆级教程](https://mp.weixin.qq.com/s?__biz=MzU1MjYzNjQwOQ==&mid=2247499754&idx=1&sn=183c8aa1156023a19b061c27a0be8407&chksm=fbfda57ccc8a2c6a60f630b2cd9b2d587d345ea002c8af81b5059154c97398589a6c86e15bfd&scene=132#wechat_redirect)
 * [GitHub](https://github.com/sksujan58/Multivariate-time-series-forecasting-using-LSTM)

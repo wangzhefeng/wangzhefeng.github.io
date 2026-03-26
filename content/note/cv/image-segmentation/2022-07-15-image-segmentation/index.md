@@ -42,12 +42,12 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 图像分割简介
+## 图像分割简介
 
 图像分割是将图像分割成片段（也称为对象）的过程。检测图像中存在的对象并为它们着色以将它们彼此分开。
 它主要专注于检测物体的边界，因此可以很容易地将它们分开。很多时候，甚至标记检测到的每个片段/对象。
 
-## 图像分割应用
+### 图像分割应用
 
 * 人脸检测
 * 视频监控
@@ -56,7 +56,7 @@ img {
 * 用于检测肿瘤的医学成像
 * 基于内容的图像检索，它搜索图像的内容而不是元数据、名称等来检索数据
 
-## 图像分割类型
+### 图像分割类型
 
 ![img](images/seg.png)
 
@@ -67,7 +67,7 @@ img {
     - 所有相同类型的对象都用不同的颜色/标签标记。每个对象都有自己的颜色/标签。
       如上图，图像中的个人会有不同的颜色/标签
 
-## 图像分割方法
+### 图像分割方法
 
 多年来，已经开发了许多方法来解决图像分割任务。其中一些使用机器学习（深度学习），
 而另一些则使用非机器学习解决方案。Python 库 `scikit-image` 具有大多数非机器学习方法的实现。
@@ -91,7 +91,7 @@ img {
 * LRASPP
 * Gates-SCNN
 
-# 参考
+## 参考
 
 * [Image Segmentation using Pre-Trained Models (torchvision)](https://coderzcolumn.com/tutorials/artificial-intelligence/pytorch-image-segmentation-using-pre-trained-models)
 * [图像分割影响力最大的10篇论文](https://mp.weixin.qq.com/s/iF9oj0blS-alg--bZVUlGQ)

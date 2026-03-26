@@ -12,7 +12,7 @@ tags:
 
 GluonTS is a Python package for probabilistic time series modeling, focusing on deep learning based models, based on PyTorch and MXNet.
 
-# 安装
+## 安装
 
 ```bash
 $ pip install "gluonts[mxnet,pro]"
@@ -34,7 +34,7 @@ $ pip install "gluonts[shell]"
 ```
 
 
-# 示例
+## 示例
 
 ```python
 import pandas as pd
@@ -75,19 +75,19 @@ plt.legend(["True values"], loc = "upper left", fontsize = "xx-large")
 plt.show()
 ```
 
-# 概念
+## 概念
 
-## 时间序列预测
+### 时间序列预测
 
 预测不可预测的事情是不可能的，预测的前提是生成时间序列值的潜在因素在未来不会发生根本性变化。
 它是一种预测平凡而非意外的工具
 
-## 目标和特征
+### 目标和特征
 
 * 静态特征
 * 动态特征
 
-## 概率预测
+### 概率预测
 
 一个直观的看待这个问题的方法是想象预测一个时间序列 100 次，它返回 100 个不同的时间序列样本，
 这些样本围绕它们形成一个分布——除了我们可以直接发出这些分布然后从中抽取样本
@@ -96,7 +96,7 @@ plt.show()
 如果我们买得太少，我们将无法满足客户的需求，但买太多会产生浪费。因此，当我们预测需求时，
 如果模型可以告诉我们可能有 50 道菜的需求，但不太可能超过 60 道，那将是有价值的
 
-## 局部和全局模型
+### 局部和全局模型
 
 在 GluonTS 中，我们使用局部和全局模型的概念
 
@@ -108,7 +108,7 @@ plt.show()
 
 在 GluonTS 中，局部模型可直接用作预测器，而全局模型可用作估计器，需要先对其进行训练
 
-## 估计器和预测器
+### 估计器和预测器
 
 Estimator 将和 Predictor 分成两类的原因是许多模型需要专门的训练步骤来生成全局模型。
 这个全局模型只训练一次，但用于对所有时间序列进行预测
@@ -126,7 +126,7 @@ predictor = estimator.train(train_data)
 predictor = ProphetPredictor(prediction_length=24)
 ```
 
-## 数据集
+### 数据集
 
 任何可以发出字典的东西都可以充当 `Dataset`
 
@@ -141,11 +141,11 @@ class Dataset(Protocol):
         ...
 ```
 
-# 深度模型列表
+## 深度模型列表
 
 * https://ts.gluon.ai/stable/getting_started/models.html
 
 
-# 参考
+## 参考
 
 * [Doc](https://ts.gluon.ai/stable/index.html)

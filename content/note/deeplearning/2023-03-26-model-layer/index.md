@@ -53,27 +53,27 @@ img {
 </p></details><p></p>
 
 
-# 归一化层 Normalization
+## 归一化层 Normalization
 
 重点说说各种归一化层:
 
 `$$y = \frac{x - \mathrm{E}[x]}{ \sqrt{\mathrm{Var}[x] + \epsilon}} \cdot \gamma + \beta$$`
 
-## 结构化数据的 BatchNorm1d
+### 结构化数据的 BatchNorm1d
 
 结构化数据的主要区分度来自每个样本特征在全体样本中的排序，将全部样本的某个特征都进行相同的放大缩小平移操作，
 样本间的区分度基本保持不变，所以结构化数据可以做 BatchNorm，但 LayerNorm 会打乱全体样本根据某个特征的排序关系，引起区分度下降
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5mbd2ill5j20a808z0ta.jpg)
 
-## 图片数据的 BatchNorm2d
+### 图片数据的 BatchNorm2d
 
 图片数据的主要区分度来自图片中的纹理结构，所以图片数据的归一化一定要在图片的宽高方向上操作以保持纹理结构，
 此外在 Batch 维度上操作还能够引入少许的正则化，对提升精度有进一步的帮助
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5m92dtnd0j20tn07ztab.jpg)
 
-## 文本数据的 LayerNorm
+### 文本数据的 LayerNorm
 
 文本数据的主要区分度来自于词向量(Embedding 向量)的方向，所以文本数据的归一化一定要在特征(通道)维度上操作以保持词向量方向不变。
 此外文本数据还有一个重要的特点是不同样本的序列长度往往不一样，所以不可以在 Sequence 和 Batch 维度上做归一化，
@@ -81,13 +81,13 @@ img {
 
 <img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5m903lv0nj20jc0iawfx.jpg" width=50% height="50%" />
 
-## 自适应学习 SwitchableNorm
+### 自适应学习 SwitchableNorm
 
 有论文提出了一种可自适应学习的归一化：`SwitchableNorm`，可应用于各种场景且有一定的效果提升
 
 `SwitchableNorm` 是将 BatchNorm、LayerNorm、InstanceNorm 结合，赋予权重，让网络自己去学习归一化层应该使用什么方法
 
-## 对 BatchNorm 需要注意的几点
+### 对 BatchNorm 需要注意的几点
 
 1. BatchNorm 放在激活函数前还是激活函数后？
     - 原始论文认为将 BatchNorm 放在激活函数前效果较好，
@@ -102,7 +102,7 @@ img {
       训练阶段时使用的 mini-batch 上的均值和方差的估计和预测阶段时使用的全体样本上的均值和方差的估计差异可能会较大，
       效果会变差。这时候，可以尝试 `LayerNorm` 或者 `GroupNorm` 等归一化方法
 
-## 归一化层 PyTorch 示例
+### 归一化层 PyTorch 示例
 
 BatchNorm2d：
 
@@ -141,7 +141,7 @@ print(f"token mean: {token_mean.item()}")
 print(f"token std: {token_std.item()}")
 ```
 
-# 卷积层
+## 卷积层
 
 卷积层的输出尺寸计算：
 
@@ -162,7 +162,7 @@ print(f"token std: {token_std.item()}")
 * `$s$` 是 stride 步长
 * `$d$` 是空洞卷积 dilation 膨胀系数
 
-## 普通卷积
+### 普通卷积
 
 普通卷积的操作分为 3 个维度:
 
@@ -176,7 +176,7 @@ print(f"token std: {token_std.item()}")
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nhe0lsutg20az0aln03.gif)
 
-## 空洞卷积
+### 空洞卷积
 
 和普通卷积相比，空洞卷积可以在保持较小参数规模的条件下增大感受野，
 常用于图像分割领域
@@ -188,7 +188,7 @@ print(f"token std: {token_std.item()}")
 
 * [Dilated Convolution(空洞卷积、膨胀卷积)详解](https://developer.orbbec.com.cn/v/blog_detail/892)
 
-## 分组卷积
+### 分组卷积
 
 和普通卷积相比，分组卷积将输入通道分成 g 组，卷积核也分成对应的 g 组，
 每个卷积核只在其对应的那组输入通道上做卷积，最后将 g 组结果堆叠拼接
@@ -200,7 +200,7 @@ print(f"token std: {token_std.item()}")
 
 * [理解分组卷积和深度可分离卷积如何降低参数量](https://zhuanlan.zhihu.com/p/65377955)
 
-## 深度可分离卷积
+### 深度可分离卷积
 
 深度可分离卷积的思想是将融合空间信息和融合通道信息的操作在卷积中分成独立的两步完成。
 深度可分离卷积的思想是先用 `$g=m$`(输入通道数)的分组卷积逐通道作用融合空间信息，
@@ -211,7 +211,7 @@ print(f"token std: {token_std.item()}")
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5npbiuvzvj20uq0e7dge.jpg)
 
-## 转置卷积
+### 转置卷积
 
 一般的卷积操作后会让特征图尺寸变小，但转置卷积(也被称为反卷积)可以实现相反的效果，即放大特征图尺寸
 
@@ -225,7 +225,7 @@ print(f"token std: {token_std.item()}")
 
 * [转置卷积(Transpose Convolution)](https://zhuanlan.zhihu.com/p/115070523)
 
-## 卷积层 PyTorch 示例
+### 卷积层 PyTorch 示例
 
 卷积输出尺寸关系演示：
 
@@ -368,7 +368,7 @@ features_like.shape: torch.Size([8, 64, 128, 128])
 conv_t.weight.shape: torch.Size([32, 64, 3, 3])
 ```
 
-# 上采样层
+## 上采样层
 
 除了使用转置卷积进行上采样外，在图像分割领域更多的时候一般是使用双线性插值的方式进行上采样，
 该方法没有需要学习的参数，通常效果也更好，除了双线性插值之外，
@@ -376,7 +376,7 @@ conv_t.weight.shape: torch.Size([32, 64, 3, 3])
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h5nsi5pt4eg20na0co74k.gif)
 
-## 上采样层 PyTorch 示例
+### 上采样层 PyTorch 示例
 
 ```python
 import torch 

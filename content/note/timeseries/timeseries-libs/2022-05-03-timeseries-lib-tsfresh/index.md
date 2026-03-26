@@ -57,13 +57,13 @@ img {
 
 tsfresh 是一个自动化提取时序特征的库
 
-# tsfresh 安装
+## tsfresh 安装
 
 ```bash
 $ pip install tsfresh
 ```
 
-# tsfresh 使用步骤
+## tsfresh 使用步骤
 
 使用tsfresh的使用步骤如下：
 
@@ -80,9 +80,9 @@ $ pip install tsfresh
 1. 数据准备：准备符合 tsfresh 输入格式的数据集
 2. 特征选择：对滑窗样本生成特征，并收集它们
 
-# tsfresh 数据格式
+## tsfresh 数据格式
 
-## 输入数据格式 
+### 输入数据格式 
 
 * Flat DataFrame
 * Stacked DataFrame
@@ -98,7 +98,7 @@ $ pip install tsfresh
 * `tsfresh.extract_features()`
 * `tsfresh.`
 
-### Flat DataFrame
+#### Flat DataFrame
 
 | id       | time     | x        | y        |          |          |          |          |          |    | A  | t1  | x(A, t1) | y(A, t1) |
 |----------|----------|----------|----------|----------|----------|----------|----------|----------|----|----|----|----|----|
@@ -106,7 +106,7 @@ $ pip install tsfresh
 | x(B, t1) | y(B, t1) | B        | t2       | x(B, t2) | y(B, t2) | B        | t3       | x(B, t3) |    |    |     |          |          |
 | y(B, t3) |          |          |          |          |          |          |          |          |    |    |     |          |          |
 
-### Stacked DataFrame
+#### Stacked DataFrame
 
 | id | time | kind | value    |   |    |   |          |   |   | A | t1       | x | x(A, t1) |
 |----|------|------|----------|---|----|---|----------|---|---|---|----------|---|----------|
@@ -115,7 +115,7 @@ $ pip install tsfresh
 | B  | t2   | x    | x(B, t2) | B | t3 | x | x(B, t3) | B |t1 |y  | y(B, t1) |   |          |
 | B  | t2   | y    | y(B, t2) | B | t3 | y | y(B, t3) |   |   |   |          |   |          |
 
-### Dictionary of flat DataFrame
+#### Dictionary of flat DataFrame
 
 ```
 { 
@@ -140,7 +140,7 @@ $ pip install tsfresh
 }
 ```
 
-## 输出数据格式
+### 输出数据格式
 
 | id | x feature 1 | … | x feature N | y feature 1 | `$\ldots$` | y feature N |
 |----|-----------------|---|-----------------|-----------------|---|-----------------|
@@ -148,17 +148,17 @@ $ pip install tsfresh
 | B  | …               | … | …               | …               | … | …               |
 
 
-# scikit-learn Transformers
+## scikit-learn Transformers
 
-## Feature extraction
+### Feature extraction
 
 * `tsfresh.FeatureAugmenter`
 
-## Feature selection
+### Feature selection
 
 * `tsfresh.FeatureSelector`
 
-### Feature extraction and selection
+#### Feature extraction and selection
 
 * `tsfresh.RelevantFeatureAugmenter`
 
@@ -186,20 +186,20 @@ pipeline.fit(X, y)
 ```
 
 
-# 大数据
+## 大数据
 
-## Dask
+### Dask
 
 
-## PySpark
+### PySpark
 
-# Rolling 和 时间序列预测
+## Rolling 和 时间序列预测
 
 ![img](images/rolling_mechanism_1.png)
 
 
 
-# 参考
+## 参考
 
 * [tsfresh Github](https://github.com/blue-yonder/tsfresh‍)
 * [tsfresh 文档](https://tsfresh.readthedocs.io)

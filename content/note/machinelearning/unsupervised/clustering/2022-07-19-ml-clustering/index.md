@@ -54,7 +54,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 聚类算法
+## 聚类算法
 
 聚类是从数据集中挖掘相似观测值集合的方法。聚类试图将数据集中的样本划分为若干个通常是不相交的子集，
 每个子集称为一个"簇"(cluster)。通过这样的划分，每个簇可能对应于一些潜在的概念(类别)。
@@ -98,7 +98,7 @@ img {
 | BIRCH                    | | | | |
 | Bisecting K-Means        | | | | |
 
-## 基于原型的聚类
+### 基于原型的聚类
 
 基于原型的聚类(Prototype-based Clustering) 假设聚类结构能通过一组原形刻画。
 通常情况下，算法先对原型进行初始化，然后对原型进行迭代更新求解，
@@ -106,11 +106,11 @@ img {
 
 常见的基于原型的聚类有：
 
-* [K 均值聚类(K-Means)]()
-* [学习向量量化聚类(Learning Vector Quantization)]()
-* [高斯混合聚类(Mixture-of-Gaussian)]()
+* K 均值聚类(K-Means)
+* 学习向量量化聚类(Learning Vector Quantization)
+* 高斯混合聚类(Mixture-of-Gaussian)
 
-## 基于密度的聚类
+### 基于密度的聚类
 
 基于密度的聚类(Density-based Clustering) 假设聚类结构能通过样本分布的紧密程度确定。
 密度聚类算法从样本密度的角度来考察样本之间的可连续性，并基于可连续样本不断扩展聚类簇以获得最终的聚类结果
@@ -120,7 +120,7 @@ img {
 * [DBSCAN(Density-Based Spatial Clustering of Application with Noise)](https://en.wikipedia.org/wiki/DBSCAN)
 * [OPTICS(Ordering Points To Identify the Clustering Structure)](https://en.wikipedia.org/wiki/OPTICS_algorithm)
 
-## 层次聚类算法
+### 层次聚类算法
 
 层次聚类(Hierarchical Clustering) 也称为基于连通性的聚类。
 这种算法试图在不同层次对数据进行划分，从而形成树形的聚类结构
@@ -128,21 +128,21 @@ img {
 数据集的划分采用不同的策略会生成不同的层次聚类算法：
 
 * "自底向上" 的聚合策略
-    - [AGNES(Agglomerative Nesting)]()
+    - AGNES(Agglomerative Nesting)
 * "自顶向下" 的分拆策略
 
-## 基于模型的聚类
+### 基于模型的聚类
 
 * 混合回归模型
 
-## 其他聚类算法
+### 其他聚类算法
 
 - 谱聚类
 - Chameleon
 - Canopy
 - ...
 
-# 聚类数据
+## 聚类数据
 
 假定样本集 `$D$` 包含 `$n$` 个无标记样本:
 
@@ -173,9 +173,9 @@ img {
 
 `$$\lambda=(\lambda_{1}, \lambda_{2}, \ldots, \lambda_{n})$$`
 
-# 聚类性能度量
+## 聚类性能度量
 
-# 聚类距离计算
+## 聚类距离计算
 
 距离度量(distance measure)函数 `$dist(,)$` 需满足的基本性质：
 
@@ -194,7 +194,7 @@ img {
 * 混合特征
     - 闵可夫斯基距离与 VDM 混合距离
 
-## 闵可夫斯基距离
+### 闵可夫斯基距离
 
 > Minkowski distance
 
@@ -218,7 +218,7 @@ x_{j}=(x_{j1}, x_{j2}, \ldots, x_{jp}),i=1,2,\ldots, n
 
 `$$dist_{ed}(x_{i}, x_{j})=\|x_{i}-x_{j}\|_{2}=\sqrt{\sum^{p}_{u=1}|x_{iu}-x_{ju}|^{2}}$$`
 
-## VDM
+### VDM
 
 > VDM，Value Difference Metric，值差异指标
 
@@ -228,13 +228,13 @@ x_{j}=(x_{j1}, x_{j2}, \ldots, x_{jp}),i=1,2,\ldots, n
 
 `$$VDM_{q}(a, b)=\sum^{k}_{i=1}\bigg|\frac{m_{u,a,i}}{m_{u,a}}-\frac{m_{u,b,i}}{m_{u,b}}\bigg|^{q}$$`
 
-## 闵可夫斯基距离与 VDM 混合距离
+### 闵可夫斯基距离与 VDM 混合距离
 
 假设有 `$p_{c}$` 个有序特征，`$p-p_{c}$` 个无序特征，有序特征排列在无序特征之前：
 
 `$$MinkovDM_{q}(x_{i}, x_{j})=\bigg(\sum^{p_{c}}_{u=1}|x_{i,u}-x_{j,u}|^{q}+\sum^{p}_{u=p_{c}+1}VDM_{q}(x_{i,u},x_{j,u})\bigg)^{\frac{1}{q}}$$`
 
-## 加权闵可夫斯基距离
+### 加权闵可夫斯基距离
 
 当样本在空间中不同特征的重要性不同时：
 
@@ -245,13 +245,13 @@ x_{j}=(x_{j1}, x_{j2}, \ldots, x_{jp}),i=1,2,\ldots, n
 * 权重 `$w_{i}\geqslant 0(i=1, 2, \ldots, p)$` 表示不同特征的重要性，
   通常 `$\sum_{i=1}^{n}w_{i}=1$`
 
-# 聚类算法库
+## 聚类算法库
 
 * sklearn
     - sklearn.cluster
     - sklearn.feature_extraction
     - sklearn.metrics.pairwise
 
-# 参考
+## 参考
 
 * [将聚类聚类](http://langdawei.com/2014/12/28/cluster-analysis.html)

@@ -59,9 +59,9 @@ img {
 </p></details><p></p>
 
 
-# DataFrame 多层索引
+## DataFrame 多层索引
 
-## 多层索引取值
+### 多层索引取值
 
 下面是一个多索引 DataFrame 数据：
 
@@ -96,7 +96,7 @@ class2 HanMeiMei    57    70      88    68
        HanMeiMei    85    89      73    52
 ```
 
-### 根据行索引查询
+#### 根据行索引查询
 
 1. 取外层索引为 `class1` 的数据：
 
@@ -169,7 +169,7 @@ class2    57    70      88    68
 class2    85    89      73    52
 ```
 
-### 根据 column 查询
+#### 根据 column 查询
 
 1. 根据外层 column 取值
 
@@ -220,7 +220,7 @@ class2 HanMeiMei    57       88
        HanMeiMei    85       73
 ```
 
-## 索引与列转换
+### 索引与列转换
 
 下面是一个单索引 DataFrame 数据：
 
@@ -243,7 +243,7 @@ print(df)
 4  4  4  b  2
 ```
 
-### 列转化为索引
+#### 列转化为索引
 
 1. 指定某一列为索引
 
@@ -293,7 +293,7 @@ b 2  3  3  b  2
   2  4  4  b  2
 ```
 
-### 索引转换为列
+#### 索引转换为列
 
 1. 指定多行列作为索引
 
@@ -359,7 +359,7 @@ print(df_multiindex)
 4  b  2  4  4
 ```
 
-# Pyjanitor
+## Pyjanitor
 
 `pyjanitor` 库的灵感来自于 R 语言的 `janitor` 包，英文单词即为清洁工之意，也就是通常用来进行数据处理或清洗数据。
 `pyjanitor` 脱胎于 Pandas 生态圈，其使用的核心也是围绕着链式展开，可以使得我们更加专注于每一步操作的动作或谓词（Verbs）
@@ -375,7 +375,7 @@ print(df_multiindex)
 需要注意的是，尽管 `pyjanitor` 库名称带有 py 二字，但是在导入时则是输入 `janitor`；
 就像 `Beautifulsoup4` 库在导入时写为 `bs4` 一样，以免无法导入而报错
 
-## coalesc
+### coalesc
 
 示例：比如我数据中有两个字段 a 和 b，但是两个字段或多或少都有缺失值。
 需要定义一个新的字段 c，它由两个字段构建而来。如果第一个字段中存在缺失值，
@@ -425,7 +425,7 @@ df.coalesc(
 )
 ```
 
-## concatenate_columns 和 deconcatenate_column
+### concatenate_columns 和 deconcatenate_column
 
 * `concatenate_columns()` 将多个列根据某个分隔符合并成一个新列
 * `deconcatnate_column()` 将单个列拆分成多个列
@@ -464,7 +464,7 @@ df = pd.DataFrame({
 )
 ```
 
-## take_first
+### take_first
 
 有的时候，会 `groupby()` 某个字段并对一些数值列进行操作、倒序排列，
 最后每组取最大的数即倒序后的第一行。在 R 语言中可以很轻易直接这么实现：
@@ -517,7 +517,7 @@ df = pd.DataFrame({
 df.take_first(subset = "a", by = "b", ascending = False)
 ```
 
-## 自定义 janitor
+### 自定义 janitor
 
 pyjanitor 中的方法仅仅只是一些通用的实现方法，不同的人在使用过程中可能也会有不同的需要。
 但好在我们也可以实现自己的 janitor 方法。pyjanitor 得益于 pandas-flavor 库的加持得以轻松实现链式方法
@@ -557,9 +557,9 @@ data
 dta.strip_names()
 ```
 
-# 最佳实践
+## 最佳实践
 
-## pipe
+### pipe
 
 `pipe` 即为管道, 把前一项输出的 df，作为后一项输入的 df,
 同时把 df 操作函数对象作为第一参数，它所需的参数以 `args` 和 `kwargs` 形式传入。
@@ -597,7 +597,7 @@ def clean_data(df):
     return df_cleaned
 ```
 
-## assign
+### assign
 
 可以使用 `assign` 方法，把一些列生成操作集中在一起。
 和直接用 `df['x'] = ...` 不同的是 `assign` 方法会生成一个新的 df，
@@ -616,7 +616,7 @@ df_new = df.assign(
 )
 ```
 
-## query
+### query
 
 用 `query` 可以解决很多条件的筛选问题，明显 `query` 方法简洁，而且条件越多，
 逻辑判断越多，可读性优势就越明显(前提是单个条件都是简单的判断)
@@ -635,21 +635,21 @@ df.query("(a > 0 and b < 0.05) or c > b")
 ```
 
 
-## resample
+### resample
 
 
 
-## groupby 和 transform
+### groupby 和 transform
 
 
 
 
 
-## 向量化计算
+### 向量化计算
 
 
 
-## assign 和 numpy select
+### assign 和 numpy select
 
 在下面 df 上成列 c，如果同行列 a 的值 >0.5 并且 <0.9，那么列 c 同行的值等于列 b，
 否则为 None
@@ -708,7 +708,7 @@ df.assign(c = np.select(
 ```
 
 
-## timeseries
+### timeseries
 
 一年的时间序列数据，读取每月第一天的数据
 
@@ -750,7 +750,7 @@ df_droped.asfreq("MS")
 df_droped.groupby(pd.Grouper(freq = "MS")).first()
 ```
 
-# 参考
+## 参考
 
 * [Python 自动探索性数据分析神库](https://mp.weixin.qq.com/s/F9Ixe9_d4XDxK-MJOMaVqQ)
 * [用 Pyjanitor 更好地进行数据清洗与处理](https://mp.weixin.qq.com/s/9AasPTO-7Caku3_5CMj5kQ)

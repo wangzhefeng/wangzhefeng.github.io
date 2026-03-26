@@ -70,7 +70,7 @@ img {
 当数据准备过程还是模型训练时间的主要瓶颈时，可以使用更多进程来准备数据。
 当参数迭代过程成为训练时间的主要瓶颈时，通常的方法是应用 GPU 来进行加速。
 
-# GPU 与 CPU
+## GPU 与 CPU
 
 在处理器家族中，有两大阵营，分别是 CPU 和 GPU，它们分工协作，共同完成计算机复杂功能。
 但它们两者主要差别在哪里？
@@ -89,9 +89,9 @@ img {
 
 在 PyTorch 中，可以将训练数据以及模型参数迁移到 GPU 上，这样就可以加速模型的运算。
 
-# PyTorch GPU 相关操作
+## PyTorch GPU 相关操作
 
-## PyTorch 的设备
+### PyTorch 的设备
 
 > `torch.device()`
 
@@ -112,7 +112,7 @@ device(type='cpu')
 device(type='cuda')
 ```
 
-## torch.cuda
+### torch.cuda
 
 在 `torch.cuda` 中有几十个关于 cuda 的函数，下面介绍几个常用的函数。
 
@@ -153,7 +153,7 @@ print(torch.cuda.memory_summary(device = None, abbreviated = False))
 print(torch.cuda.empty_cache())
 ```
 
-## 查看 GPU 设备是否可用
+### 查看 GPU 设备是否可用
 
 ```python
 import torch
@@ -162,7 +162,7 @@ if_cuda = torch.cuda.is_available()
 print(f"if_cuda = {if_cuda}")
 ```
 
-## 查看 GPU 设备数量
+### 查看 GPU 设备数量
 
 ```python
 import torch
@@ -171,9 +171,9 @@ gup_count = torch.cuda.device_count()
 print(f"gpu_count = {gpu_count}")
 ```
 
-## 将张量在 GPU 和 CPU 之间移动
+### 将张量在 GPU 和 CPU 之间移动
 
-### to 函数
+#### to 函数
 
 在 PyTorch 中，只需要将要进行运算的数据放到 GPU 上，即可使用 GPU 加速运算。
 在模型运算过程中，需要放到 GPU 的主要是两个：
@@ -229,7 +229,7 @@ inputs, labels = inputs.to(device), labels.to(device)
 通常，会采用 `torch.cuda.is_available()` 函数来自适应当前设备，若没有 GPU 可用，
 自动设置 device 为 CPU，不会影响代码的运行。
 
-### tensor
+#### tensor
 
 ```python
 import torch
@@ -238,7 +238,7 @@ from torch import nn
 tensor = torch.rand((100, 100))
 ```
 
-### tensor on gpu
+#### tensor on gpu
 
 ```python
 if torch.cuda.is_available():
@@ -254,7 +254,7 @@ device(type='gpu')
 True
 ```
 
-### tensor on cpu
+#### tensor on cpu
 
 ```python
 tensor_cpu = tensor_gpu.to("cpu")  
@@ -269,7 +269,7 @@ device(type='cpu')
 False
 ```
 
-### 将模型中的全部张量移动到 GPU 上
+#### 将模型中的全部张量移动到 GPU 上
 
 ```python
 import tensor
@@ -288,7 +288,7 @@ if torch.cuda.is_available():
     print(next(net.parameters()).is_cuda)
 ```
 
-### 创建支持多个 GPU 数据并行的模型
+#### 创建支持多个 GPU 数据并行的模型
 
 ```python
 import tensor
@@ -316,9 +316,9 @@ if torch.cuda.device_count() > 1:
     linear.load_state_dict(torch.load("model_parameter.pt"))
 ```
 
-# PyTorch GPU 模型训练方式
+## PyTorch GPU 模型训练方式
 
-## GPU 训练模型
+### GPU 训练模型
 
 PyTorch 中使用 GPU 加速模型非常简单，只要将**模型**和**数据**移动到 GPU 上，
 核心代码只有几行：
@@ -373,7 +373,7 @@ labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
 ```
 
-## 多 GPU 训练模型
+### 多 GPU 训练模型
 
 > PyTorch 默认使用单个 GPU 执行运算
 
@@ -433,13 +433,13 @@ labels = labels.to(device)
 # labels = labels.cuda() if torch.cuda.is_available() else labels
 ```
 
-# PyTorch GPU 使用示例
+## PyTorch GPU 使用示例
 
-## 矩阵乘法示例
+### 矩阵乘法示例
 
 分别使用 CPU 和 GPU 做矩阵乘法，并比较其计算效率
 
-### 使用 CPU
+#### 使用 CPU
 
 ```python
 import time
@@ -458,7 +458,7 @@ print(a.device)
 print(b.device)
 ```
 
-### 使用 GPU
+#### 使用 GPU
 
 ```python
 import time
@@ -486,11 +486,11 @@ print(a.device)
 print(b.device)
 ```
 
-## 线性回归示例
+### 线性回归示例
 
 使用 CPU 和 GPU 训练一个线性回归模型的效率
 
-### 使用 CPU
+#### 使用 CPU
 
 ```python
 import torch
@@ -549,7 +549,7 @@ def train(epoches):
 train(500)
 ```
 
-### 使用 GPU
+#### 使用 GPU
 
 ```python
 import torch
@@ -635,7 +635,7 @@ def train(epoches):
 train(500)
 ```
 
-## 图片分类示例
+### 图片分类示例
 
 ```python
 import torch
@@ -691,7 +691,7 @@ def create_net():
     return net
 ```
 
-### 使用 CPU 训练
+#### 使用 CPU 训练
 
 ```python
 import os
@@ -858,7 +858,7 @@ for epoch in range(1, epochs + 1):
 dfhistory = pd.DataFrame(history)
 ```
 
-### 使用 GPU 训练
+#### 使用 GPU 训练
 
 ```python
 import os
@@ -1040,12 +1040,12 @@ for epoch in range(1, epochs + 1):
 dfhistory = pd.DataFrame(history)
 ```
 
-## 训练循环中使用 GPU
+### 训练循环中使用 GPU
 
 在 PyTorch 中使用 GPU 并不复杂，但模型和数据移动还是很麻烦的，
 不小心忘记了移动某些数据或者 Module，就会导致报错
 
-### torchkeras.KerasModel 中使用 GPU
+#### torchkeras.KerasModel 中使用 GPU
 
 ```python
 # pip install torchkeras
@@ -1085,7 +1085,7 @@ model.fit(
 )
 ```
 
-### torchkeras.LightModel 中使用 GPU
+#### torchkeras.LightModel 中使用 GPU
 
 ```python
 # pip install torchkeras
@@ -1150,7 +1150,7 @@ trainer = pl.Trainer(
 trainer.fit(model, dl_train, dl_val)
 ```
 
-# 参考
+## 参考
 
 * [当代研究生应当掌握的5种Pytorch并行训练方法（单机多卡）](https://mp.weixin.qq.com/s/mwGr69QlUBb2naqJXj__0g)
 * [Distribution is all you need](https://github.com/tczhangzhi/pytorch-distributed)

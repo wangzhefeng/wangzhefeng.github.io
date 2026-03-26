@@ -43,7 +43,7 @@ img {
 
 
 
-# 参考
+## 参考
 
 * [A Neural Algorithm of Artistic Style](https://www.jianshu.com/p/9f03b61fdeac)
 * [neural style GitHub](https://github.com/jcjohnson/neural-style)

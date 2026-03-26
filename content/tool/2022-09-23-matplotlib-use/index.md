@@ -125,7 +125,7 @@ img {
 - [资料](#资料)
 </p></details><p></p>
 
-# 一个 Plot 的生命周期
+## 一个 Plot 的生命周期
 
 ```python
 import numpy as np
@@ -208,7 +208,7 @@ fig.savefig("sale.png", transparent = False, dpi = 80, bbox_inches = "tight")
 plt.show()
 ```
 
-# 快速开始
+## 快速开始
 
 ```python
 def quick_start():
@@ -235,11 +235,11 @@ quick_start()
 
 <img src="images/quick_start.png" width="100%" />
 
-# 一张统计图的结构
+## 一张统计图的结构
 
 <img src="images/anatomy.png" width="100%" />
 
-# 图形 API
+## 图形 API
 
 ```python
 import matplotlib.pyplot as plt
@@ -268,7 +268,7 @@ fig, ax = plt.subplots()
     - xlabel: `ax.set_xlabel`
     - Minor tick label: `ax.xaxis.set_minor_formatter`
 
-## Figure
+### Figure
 
 > - image 图像
 > - graph 图形
@@ -287,7 +287,7 @@ fig, ax = plt.subplots()
 > - legend 图例
 > - title 标题
 
-### Figure class
+#### Figure class
 
 - Figure
     - Axes
@@ -300,7 +300,7 @@ fig, ax = plt.subplots()      # a figure with a single Axes
 fig, ax = plt.subplots(2, 2) # a figure with a 2x2 grid of Axes
 ```
 
-### Axes class
+#### Axes class
 
 - Figure
     - Axes: a plot：data 在 image 中的区域
@@ -310,7 +310,7 @@ fig, ax = plt.subplots(2, 2) # a figure with a 2x2 grid of Axes
         - x-label: `axes.Axes.set_xlabel()`
         - y-label: `axes.Axes.set_ylabel()`
 
-### Axis class
+#### Axis class
 
 - Figure
     - Axes
@@ -334,7 +334,7 @@ fig, ax = plt.subplots(2, 2) # a figure with a 2x2 grid of Axes
                 - 副刻度标签(Minor tick label)
                 - 刻度标签格式 Formatter
 
-### Artist class
+#### Artist class
 
 - 图形中可见的东西都是一个 Artist，包括 Figure、Axes、Axis、Text、Line2D、collections、Patch等对象
 - 当一个 figure(图形) 被渲染时，所有的 artist 都被画在 canvas 上
@@ -348,15 +348,15 @@ fig, ax = plt.subplots(2, 2) # a figure with a 2x2 grid of Axes
             - Pathc
 
 
-## Subplots layout
+### Subplots layout
 
 > Subplots layout，子图布局
 
-### API
+#### API
 
 <img src="images/subplots_layout_api.png" width="70%" />
 
-### subplots
+#### subplots
 
 ```python
 def subplots_layout():
@@ -366,30 +366,30 @@ def subplots_layout():
 
 ![img](images/subplots_layout.png)
 
-### gridsepc
+#### gridsepc
 
-### inset_axes
+#### inset_axes
 
-### make_axes_locatable
+#### make_axes_locatable
 
-# Matplotlib 开发环境
+## Matplotlib 开发环境
 
-## Python Script
+### Python Script
 
 ```python
 plt.show()
 ```
 
-## IPython shell
+### IPython shell
 
  
-## IPython Notebook
+### IPython Notebook
 
 ```bash
 %matploblib inline
 ```
 
-# Matplotlib 编程接口
+## Matplotlib 编程接口
 
 > Matplotlib 的文档和示例同时使用 OO 和 pyplot 方法（它们同样强大），
 > 可以随意使用其中任何一种（但是，最好选择其中之一并坚持使用，而不是混合使用它们）。
@@ -430,7 +430,7 @@ ax.plot(
 );
 ```
 
-## pyplot 接口
+### pyplot 接口
 
 > MatLab 风格接口
 
@@ -438,7 +438,7 @@ pyplot 是使 Matplotlib 像 MATLAB 一样工作的函数集合。每个 `pyplot
 例如，创建图形、在图形中创建绘图区域、在绘图区域中绘制一些线条、用标签装饰绘图等。
 在 pyplot 函数调用中保留各种状态，以便跟踪当前图形(figure)和绘图区域(plotting area)等内容，并且绘图函数指向当前轴(axes)
 
-### API
+#### API
 
 * Figure 和 Axes
     - `fig = plt.figure(num = n, figsize = ())`
@@ -473,7 +473,7 @@ pyplot 是使 Matplotlib 像 MATLAB 一样工作的函数集合。每个 `pyplot
         - `plt.show()`
         - `plt.grid()`
 
-### 示例
+#### 示例
 
 ```python
 # 图形
@@ -504,9 +504,9 @@ plt.gcf() # 获取当前图形(figure)
 plt.gca() # 获取当前坐标轴(axes)
 ```
 
-## OOP 接口
+### OOP 接口
 
-### API
+#### API
 
 * Figure 和 Axes
     - `fig, ax = plt.subplots(nrows, ncols, figsize, sharex, sharey)`
@@ -533,7 +533,7 @@ plt.gca() # 获取当前坐标轴(axes)
     - 其他
         - `ax.set(xlim, ylim, xlabel, ylabel, title)`
 
-### 示例
+#### 示例
 
 ```python
 # data
@@ -566,11 +566,11 @@ ax[2].set_title("cubic Plot")
 ax[2].legend();
 ```
 
-## GUI 应用程序中嵌入 Matplotlib
+### GUI 应用程序中嵌入 Matplotlib
 
 - 略
 
-## 最佳实践
+### 最佳实践
 
 - 用不同数据绘制同样的图片
 - 方法
@@ -626,7 +626,7 @@ my_plotter(ax, data3, data4, {"marker": "o"})
 
 ![image-20211201235141268](/Users/zfwang/Library/Application Support/typora-user-images/image-20211201235141268.png)
 
-# Matplotlib 个性化
+## Matplotlib 个性化
 
 * rcParams
 * style sheets
@@ -634,7 +634,7 @@ my_plotter(ax, data3, data4, {"marker": "o"})
 
 > 优先级： rcParams > style sheets > matplotlibrc file
 
-## rcParams
+### rcParams
 
 > rc: runtime configuration
 
@@ -644,14 +644,14 @@ my_plotter(ax, data3, data4, {"marker": "o"})
 * rc 设置可以直接修改
 
 
-### API
+#### API
 
 * `mpl.rc()`
 * `mpl.rcParams`
 * `mpl.rc_context()`
 * `@mpl.rc_context()`
 
-### 配置选项
+#### 配置选项
 
 ```python
 rc = dict(mpl.rcParams)
@@ -662,7 +662,7 @@ rc_table = pd.DataFrame({
 # rc_table
 ```
 
-### 全局设置
+#### 全局设置
 
 ```python
 from cycler import cycler
@@ -675,7 +675,7 @@ mpl.rc("lines", linewidth = 4, linestyle = "--")
 mpl.rcParams["axes.porp_cycle"] = cycler(color = ["r", "g", "b", "y"])
 ```
 
-### 临时设置
+#### 临时设置
 
 ```python
 with mpl.rc_context({"lines.linewidth": 2, "lines.linestyle": ":"}):
@@ -686,18 +686,18 @@ def plotting_function():
     plt.plot(data)
 ```
 
-## style sheets
+### style sheets
 
 * `matplotlib.pyplot.style`
 
-### API
+#### API
 
 * `plt.style`
 * `plt.style.available`
 * `plt.style.use()`
 * `plt.style.context()`
 
-### 所有样式
+#### 所有样式
 
 ```python
 print(plt.style.available)
@@ -734,7 +734,7 @@ print(plt.style.available)
  'tableau-colorblind10']
 ```
 
-### 全局样式
+#### 全局样式
 
 ```python
 plt.style.use("ggplot")
@@ -742,14 +742,14 @@ plt.style.use("./images/presentation.mplstyle")
 plt.style.use(["dark_background", "presentation"])
 ```
 
-### 临时样式
+#### 临时样式
 
 ```python
 with plt.style.context("dark_background"):
     plt.plot(data)
 ```
 
-## matplotlibrc file
+### matplotlibrc file
 
 matplotlibrc 文件的位置：
 
@@ -768,9 +768,9 @@ mpl.matploblib_fname()
 'D:\\software\\miniconda3\\envs\\pysci\\lib\\site-packages\\matplotlib\\mpl-data\\matplotlibrc'
 ```
 
-# Matplotlib 图形保存
+## Matplotlib 图形保存
 
-## 图像文件格式
+### 图像文件格式
 
 在 `savefig()` 里面，保存的图片文件格式就是文件的扩展名。
 Matplotlib 支持许多图形格式，可以通过 `canvas` 对象的方法查看系统支持的文件格式
@@ -797,13 +797,13 @@ fig.canvas.get_supported_filetypes()
  'webp': 'WebP Image Format'}
 ```
 
-## 保存
+### 保存
 
 ```python
 fig.savefig("my_figure.png")
 ```
 
-## 展示
+### 展示
 
 ```python
 from IPython.display import Image
@@ -811,9 +811,9 @@ from IPython.display import Image
 Image("my_figure.png")
 ```
 
-# 基本图形
+## 基本图形
 
-## plot
+### plot
 
 * 线形图
 * 散点图
@@ -822,7 +822,7 @@ Image("my_figure.png")
 plot([X], Y, [fmt], color, marker, linestyle)
 ```
 
-## scatter
+### scatter
 
 散点图
 
@@ -830,69 +830,69 @@ plot([X], Y, [fmt], color, marker, linestyle)
 scatter(X, Y, [s]izes, [c]olors, markers, alpha, cmap)
 ```
 
-## bar
+### bar
 
 ```python
 bar[h](x, height, width, bottom, align, color)
 ```
 
-## imshow
+### imshow
 
 ```python
 imshow(Z, cmap, interpolation, extent, origin)
 ```
 
-## contour
+### contour
 
 ```python
 contour[f]([X], [Y], Z, levels, colors, extent, origin)
 ```
 
-## pcolormesh
+### pcolormesh
 
 ```python
 pcolormesh([X], [Y], Z, vmin, vmax, cmap)
 ```
 
-## quiver
+### quiver
 
 ```python
 quiver([X], [Y], U, V, C, units, angles)
 ```
 
-## pie
+### pie
 
 ```python
 pie(Z, explode, labels, colors, raidus)
 ```
 
-## text
+### text
 
 ```python
 text(x, y, text, va, ha, size, weight, transform)
 ```
 
-## fill
+### fill
 
 ```python
 fill[_between][x](X, Y1, Y2, color, where)
 ```
 
-# 高级图形
+## 高级图形
 
-## step
+### step
 
 ```python
 step(X, Y, [fmt], color, marker, where)
 ```
 
-## boxplot
+### boxplot
 
 ```python
 boxplot(X, notch, sym, bootstrap, widths)
 ```
 
-## errorbar
+### errorbar
 
 ```python
 errorbar(X, Y, xerr, yerr, fmt)
@@ -921,31 +921,31 @@ plt.errorbar(
 ```
 
 
-## hist
+### hist
 
 ```python
 hist(X, bins, range, density, weights)
 ```
 
-## violinplot
+### violinplot
 
 ```python
 violinplot(D, positions, widths, vert)
 ```
 
-## barbs
+### barbs
 
 ```python
 barbs([X], [Y], U, V, C, length, pivot, sizes)
 ```
 
-## eventplot
+### eventplot
 
 ```python
 eventplot(positions, orientation, lineoffsets)
 ```
 
-## hexbin
+### hexbin
 
 ```python
 hexbin(X, Y, C, gridsize, bins)
@@ -953,11 +953,11 @@ hexbin(X, Y, C, gridsize, bins)
 
 
 
-# Color, Line, Marker
+## Color, Line, Marker
 
-## Color
+### Color
 
-### Sigle Color
+#### Sigle Color
 
 常用单色：
 
@@ -989,7 +989,7 @@ ax.legend(loc = "best");
 
 ![img](images/color.png)
 
-### Colormaps
+#### Colormaps
 
 * `plt.get_cmap(name)`
     - Uniform
@@ -1012,7 +1012,7 @@ ax.legend(loc = "best");
 
 ![img](images/colormap2.png)
 
-## Line
+### Line
 
 `linestyle` 或者 `ls`：
 
@@ -1042,7 +1042,7 @@ plt.legend(loc = "best");
 
 ![img](images/line.png)
 
-## Marker
+### Marker
 
 `marker`:
 
@@ -1107,7 +1107,7 @@ plt.plot(
 )
 ```
 
-## Color 加 Line 和 Marker
+### Color 加 Line 和 Marker
 
 使用示例：
 
@@ -1132,7 +1132,7 @@ plt.plot(x, x + 5, '^k');
 plt.legend(loc = "best");
 ```
 
-# Scales
+## Scales
 
 `ax.set_[xy]scale(scale, ...)`
 
@@ -1141,7 +1141,7 @@ plt.legend(loc = "best");
 * symlog
 * logit
 
-# Projections
+## Projections
 
 `subplot(..., projection = p)`
 
@@ -1149,7 +1149,7 @@ plt.legend(loc = "best");
 * p = "3d"
 * p = Orthographic() `from cartopy.crs import Cartographic`
 
-# Tick locators
+## Tick locators
 
 ```python
 from matplotlib import ticker
@@ -1167,7 +1167,7 @@ ax.[xy]axis.set_[minor|major]_locator(locator)
 * ticker.MaxNLocator(n = 4)
 * ticker.LogLocator(base = 10, numticks = 15)
 
-# Tick formatters
+## Tick formatters
 
 ```python
 from matplotlib import ticker
@@ -1185,13 +1185,13 @@ ax.[xy]axis.set_[minor|major]_formatter(formatter)
 * ticker.StrMethodFormatter("{x}")
 * ticker.PercentFormatter(xmax = 5)
 
-# Ornaments
+## Ornaments
 
 * `ax.legend(...)`
 * ax.colorbar()
 * ax.annotate()
 
-# Event handling
+## Event handling
 
 ```python
 import matplotlib.pyplot as plt
@@ -1204,7 +1204,7 @@ def on_click(event):
 fig.canvas.mpl_connect("button_press_event", on_click)
 ```
 
-# Animation
+## Animation
 
 ```python
 import matplotlib.animation as mpla
@@ -1220,7 +1220,7 @@ anim = mpla.FuncAnimation(plt.gcf(), animate, interval = 5)
 plt.show()
 ```
 
-# Quick reminder
+## Quick reminder
 
 ```python
 import matplotlib.pyplot as plt
@@ -1249,7 +1249,7 @@ mpl.rc("axes", linewidth = 1, ...)
 text = r"$frac{-e^{i\pi}}{2^n}"
 ```
 
-# 函数输入格式
+## 函数输入格式
 
 - numpy.array
     - pandas data object => np.array
@@ -1267,7 +1267,7 @@ array_inputs = numpy.asarray(numpy_matrix)
 
 - numpy.ma.masked_array
 
-# Image
+## Image
 
 - Matplotlib 依赖 Pillow 库导入图片数据
 
@@ -1275,7 +1275,7 @@ array_inputs = numpy.asarray(numpy_matrix)
 import matplotlib.image as mpimg
 ```
 
-## 将 image 数据转换为 Numpy array
+### 将 image 数据转换为 Numpy array
 
 ![../../_images/stinkbug.png](https://matplotlib.org/stable/_images/stinkbug.png)
 
@@ -1348,7 +1348,7 @@ print(img.shape)
 (375, 500, 3)
 ```
 
-## 将 Numpy array 绘制成图片
+### 将 Numpy array 绘制成图片
 
 ```python
 imgplot = plt.imshow(img)
@@ -1356,7 +1356,7 @@ imgplot = plt.imshow(img)
 
 ![image-20211204001730928](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204001730928.png)
 
-## 将伪彩色方案应用于图像
+### 将伪彩色方案应用于图像
 
 - 伪彩色可以使图像增强对比度和更轻松地可视化数据
 - 伪彩色仅与单通道、灰度、亮度图像有关
@@ -1383,7 +1383,7 @@ imgplot.set_cmap("nipy_spectral")
 
 ![image-20211204004118731](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204004118731.png)
 
-## 色标参考
+### 色标参考
 
 ```python
 lum_img = img[:, : 0]
@@ -1393,7 +1393,7 @@ plt.colorbar()
 
 ![image-20211204004308940](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204004308940.png)
 
-## 检查特定数据范围
+### 检查特定数据范围
 
 ```python
 lum_img = img[:, :, 0]
@@ -1429,7 +1429,7 @@ plt.colorbar(ticks=[0.1, 0.3, 0.5, 0.7], orientation='horizontal')
 
 ![image-20211204011743914](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011743914.png)
 
-## 数组插值
+### 数组插值
 
 ```python
 from PIL import Image
@@ -1461,6 +1461,6 @@ imgplot = plt.imshow(img, interpolation = "bicubic")
 
 ![image-20211204011514588](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011514588.png)
 
-# 资料
+## 资料
 
 * [Matplotlib颜色对照表](https://zhuanlan.zhihu.com/p/65220518)

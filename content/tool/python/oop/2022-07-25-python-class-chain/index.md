@@ -10,7 +10,7 @@ tags:
 ---
 
 
-# Python 链式调用
+## Python 链式调用
 
 在 Python 中实现一个简单的链式调用就是通过构建方法并返回对象自身或返回归属类
 
@@ -41,5 +41,5 @@ if __name__ == "__main__":
     chain.introduce().talk().greet()
 ```
 
-# Pandas 链式调用
+## Pandas 链式调用
 

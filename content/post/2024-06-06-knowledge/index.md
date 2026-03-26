@@ -77,18 +77,18 @@ img {
     - [Distributed Representation](#distributed-representation)
 </p></details>
 
-# 概率与统计
+## 概率与统计
 
 ![img](images/prob_stat.png)
 
-## Basic
+### Basic
 
 * Sample Space：样本空间
 * Random Variable：随机变量
 * Independent：独立性
 * Conjucate：共轭
 
-### Basic Term
+#### Basic Term
 
 * Expecation：期望
 * Mean：均值
@@ -103,7 +103,7 @@ img {
     - Mahalanobis
     - Correlation
 
-### Probability Distribution
+#### Probability Distribution
 
 * PDF：概率分布函数
 * CDF：累积分布函数
@@ -124,14 +124,14 @@ img {
 * Central Limit Theorem：中心极限定理
 * degree of freedom：自由度
 
-## Information Theory
+### Information Theory
 
 * KL Divergence：KL 散度
 * Cross Entropy：交叉熵
     - Uncertainty
 * Shannon Entropy：信息熵
 
-## Sampling
+### Sampling
 
 * Candidate Sampling：候选人抽样
 * Negative Sampling：负采样
@@ -140,7 +140,7 @@ img {
     - Markov Chain：马尔科夫链
 * Gibbs：吉布斯采样
 
-## Model
+### Model
 
 * Discriminative：判别性
     - Linear Regression
@@ -153,18 +153,18 @@ img {
         - Linear Discriminant Analysis
         - Logistic Regression
 
-## Baysian
+### Baysian
 
 * Joint Probability
 * Posterior
 * Evidence
 
-### Likelihood
+#### Likelihood
 
 * Marginal Probability
 * Class-Conditional Density
 
-### Inference
+#### Inference
 
 - Estimator
     - Statistical Estimation
@@ -190,11 +190,11 @@ img {
         - Normalizing Flow
         - Mean Field Approximate
 
-# 机器学习
+## 机器学习
 
 ![img](images/ml.png)
 
-## Linear Regression
+### Linear Regression
 
 * MSE
 * Regularized
@@ -204,7 +204,7 @@ img {
         - Forbenius Norm
         - Norm
 
-## Logistic Regression
+### Logistic Regression
 
 * From Gerneative to Discriminative Proof
     - logits
@@ -236,7 +236,7 @@ img {
             - Gradient Vanishing & Exploding Proof
         - Finite Difference Method
 
-## Non-Probabilistic
+### Non-Probabilistic
 
 * SVM
     - Lagrangian approach
@@ -249,13 +249,13 @@ img {
         - Mapping Function
         - Kernel Trick
 
-## Ensemble
+### Ensemble
 
 * Bagging
 * AdaBoost
 * Random Forest
 
-## Clustering
+### Clustering
 
 * Hierarchical
 * Pational
@@ -265,7 +265,7 @@ img {
 * KNN Algorithm
 * Instance-based Learning
 
-## Dimensionality Reduction
+### Dimensionality Reduction
 
 * Eigen Decomposition
     - Eigen Value
@@ -280,7 +280,7 @@ img {
         - Orthogonal
         - Singular
 
-## Training
+### Training
 
 * Data Splitting
     - Training
@@ -299,7 +299,7 @@ img {
             - Type 1, 2 Error
         - F1 Score
 
-## Regularization
+### Regularization
 
 * **Early Stopping**
 * **Weight Decay**
@@ -309,11 +309,11 @@ img {
     - **Batch**
     - **Weight**
 
-# 文本挖掘
+## 文本挖掘
 
 ![img](images/textmining.png)
 
-## Basic Procedure
+### Basic Procedure
 
 - Morphological & Lexical
     - Analysis Procedure
@@ -326,9 +326,9 @@ img {
         - CKY Algorithm
         - Graph Parsing
 
-## NLP Basic HyPothesis
+### NLP Basic HyPothesis
 
-## Sequential Labeling
+### Sequential Labeling
 
 - HMM
     - Markov Assumption
@@ -339,7 +339,7 @@ img {
 - Condition Random Field
 - RNN
 
-## Word Embedding
+### Word Embedding
 
 * Topic Modeling
     - LDA(LDI)
@@ -369,7 +369,7 @@ img {
         - Shifted PPMI
 * Character Embedding
 
-## Graph
+### Graph
 
 * Ranking Algorithm
     - Text Rank
@@ -380,15 +380,15 @@ img {
     - RWR
     - SimRank
 
-## Document
+### Document
 
-### String Distance
+#### String Distance
 
 - Levenshitein
 - Jaccard
 - Cosine
 
-### Classification
+#### Classification
 
 - Logistic Regression
 - LASSO Regression
@@ -396,7 +396,7 @@ img {
 - Support Vector Machine
 - Decision Tree
 
-### Clustering
+#### Clustering
 
 - K-Means
     - Lloyd
@@ -409,7 +409,7 @@ img {
 - Hierarchical Clustering
 - DBSCAN
 
-### Bag of Words model
+#### Bag of Words model
 
 - Term Vector Representation
     - TF-IDF
@@ -417,15 +417,15 @@ img {
     - Euclidean
     - Cosine
 
-### Embedding
+#### Embedding
 
 * Doc2Vec
 
-# 自然语言处理
+## 自然语言处理
 
 ![img](images/nlp.png)
 
-## Task
+### Task
 
 * POS Tagging：词性标注
 * Parsing：解析
@@ -443,9 +443,9 @@ img {
 * Language Modeling：语言模型
     - Preplexity
 
-## Basic
+### Basic
 
-### Recurrent Model
+#### Recurrent Model
 
 * Sequential Model
     - n-gram
@@ -463,22 +463,22 @@ img {
 * `$P(w_{i}|w_{1:i-1})$`
     - Greedy Search
     - Beam Search
-### Convolutional Model
+#### Convolutional Model
 
 * Kernel Size = n-gram
 * Channel = number of Perception
 * TextCNN
 * DCNN
 
-### Recursive Model
+#### Recursive Model
 
 * Syntatically-Untied RNN
 * RNTN
 * Matrix-Vector RNN
 
-## Language Model
+### Language Model
 
-### Word Representation to Contextual Representation
+#### Word Representation to Contextual Representation
 
 * CoVe
 * ELMo
@@ -522,7 +522,7 @@ img {
             - Segment Recurrence Mechanism
 
 
-### Encoder-Decoder Model
+#### Encoder-Decoder Model
 
 * Source-Target
     - OOV Problem Slove
@@ -557,7 +557,7 @@ img {
         - Masked Multi-Head Attention
     - Unsupervised Machine Translation
 
-## Distributed Representation
+### Distributed Representation
 
 * Word Representation
 * Co-Occurrence Matrix

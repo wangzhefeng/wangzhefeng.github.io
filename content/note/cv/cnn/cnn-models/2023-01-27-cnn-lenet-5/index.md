@@ -41,13 +41,13 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# LeNet-5 简介
+## LeNet-5 简介
 
 在神经网络的和深度学习领域，Yann LeCun 在 1998 年在 IEEE 上发表了 (Gradient-based learning applied to document recognition，1998)，
 文中首次提出了 **卷积-池化-全连接** 的神经网络结构，
 由 LeCun 提出的七层网络命名为 LeNet-5，因而也为他赢得了 CNN 之父的美誉。
 
-# LeNet-5 网络结构
+## LeNet-5 网络结构
 
 作为标准的卷积网络结构，LeNet-5 对后世的影响深远，以至于在 16 年后，谷歌提出 Inception 网络时也将其命名为 GoogLeNet，
 以致敬 Yann LeCun 对卷积神经网络发展的贡献。然而 LeNet-5 提出后的十几年里，由于神经网络的可解释性问题和计算资源的限制，
@@ -87,7 +87,7 @@ LeNet-5 共有 5 层(输入输出层不计入层数，池化层与卷积层算 1
 > Finally，we have the output layer which has 10 output neurons，
 > since the MNIST data have 10 classes for each of the represented 10 numerical digits.
 
-# 参考
+## 参考
 
 * [Gradient-Based Learning Applied to Document Recognition](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf)
 * [卷积神经网络（CNN）基础及经典模型介绍](https://zhuanlan.zhihu.com/p/344562609)

@@ -62,7 +62,7 @@ img {
 - [论文](#论文)
 </p></details>
 
-# 文章内容目录
+## 文章内容目录
 
 - 1.Today's Data Science Moment
 - 2.Data Science ‘versus’ Statistics
@@ -76,10 +76,10 @@ img {
 - 10.The Next 50 Years of Data Science
 - 11.Conclusion
 
-# TODO
+## TODO
 
 
 
-# 论文
+## 论文
 
 - [David Donoho. 50 years of Data Science. Sept. 18, 2015 Version 1.00.](https://courses.csail.mit.edu/18.337/2015/docs/50YearsDataScience.pdf)

@@ -6,4 +6,6 @@
 Thumbs.db
 /public/
 /resources/
+/static/pagefind/
 .vscode/
+node_modules/

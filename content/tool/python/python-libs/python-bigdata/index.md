@@ -65,7 +65,7 @@ img {
 </p></details><p></p>
 
 
-# Python 主流数据处理工具
+## Python 主流数据处理工具
 
 如何在有限的 RAM 下快速地读取数据，使用更少的 disk 来存储数据是我们在处理大型数据时需要特别考虑的
 
@@ -87,7 +87,7 @@ img {
 * RAPIDS
     - Rapids 将数据的处理迁移到了 GPU 上面，所以在速度上得到了大大的提升
 
-## pandas
+### pandas
 
 ```python
 # jupyter lab/notebook
@@ -112,7 +112,7 @@ print("Train size:", df.shape)
 df.head()
 ```
 
-## Dask
+### Dask
 
 ```python
 # jupyter lab/notebook
@@ -137,7 +137,7 @@ print("Train size:", data.shape)
 df.head()
 ```
 
-## datatable
+### datatable
 
 ```python
 # jupyter lab/notebook
@@ -149,7 +149,7 @@ print("Train size:", df.shape)
 df.head()
 ```
 
-## rapids
+### rapids
 
 ```python
 # jupyter lab/notebook
@@ -170,11 +170,11 @@ print("Train size:", df.shape)
 df.head()
 ```
 
-## 参考资料
+### 参考资料
 
 - https://www.kaggle.com/code/rohanrao/tutorial-on-reading-large-datasets/notebook
 
-# Python 主流数据存储格式
+## Python 主流数据存储格式
 
 * csv
     - csv格式是使用最多的一个存储格式，但是其存储和读取的速度会略慢
@@ -197,7 +197,7 @@ df.head()
       Python 对象可以以 pickle 文件的形式存储，pandas 可以直接读取 pickle 文件。
       注意，pickle 模块不安全。最好只 unpickle 你信任的数据
 
-## csv
+### csv
 
 ```python
 # jupyter lab/notebook
@@ -208,7 +208,7 @@ train_df = pd.read_csv("data/train.csv")
 train_df.info
 ```
 
-## csv 格式转换为 pickle/feather/parquet/jay/h5
+### csv 格式转换为 pickle/feather/parquet/jay/h5
 
 ```python
 import pandas as pd
@@ -224,7 +224,7 @@ train_df.to_hdf("data/train.h5", "train")
 dt.Frame(train_df).to_jay("data/train.jay")
 ```
 
-## pickle
+### pickle
 
 ```python
 # jupyter lab/notebook
@@ -235,7 +235,7 @@ train_pickle = pd.read_pickle("data/train.pkl.gzip")
 train_pickle.info()
 ```
 
-## feather
+### feather
 
 ```python
 # jupyter lab/notebook
@@ -246,7 +246,7 @@ train_feather = pd.read_feather("data/train.feather")
 train_feather.info()
 ```
 
-## parquet
+### parquet
 
 ```python
 # jupyter lab/notebook
@@ -257,7 +257,7 @@ train_parquet = pd.read_parquet("data/train.parquet")
 train_parquet.info()
 ```
 
-## jay
+### jay
 
 ```python
 # jupyter lab/notebook
@@ -269,7 +269,7 @@ train.jay.shape
 ```
 
 
-## 参考资料
+### 参考资料
 
 - https://www.kaggle.com/code/pedrocouto39/fast-reading-w-pickle-feather-parquet-jay
 
@@ -283,17 +283,17 @@ train.jay.shape
 
 
 
-# pandas
+## pandas
 
 
-## 参考资料
+### 参考资料
 
 * https://www.kaggle.com/code/sohier/competition-api-detailed-introduction/notebook
 
 
-# datatable
+## datatable
 
-## 安装
+### 安装
 
 ```bash
 $ pip install datatable
@@ -304,13 +304,13 @@ import datatable as dt
 print(dt.__version__)
 ```
 
-## 核心概念
+### 核心概念
 
 * `f.`
 * `g`
 
 
-## 核心方法
+### 核心方法
 
 * 数据加载
     - 创建数据结构
@@ -343,18 +343,18 @@ print(dt.__version__)
     - `.`
 
 
-## 最佳实践
+### 最佳实践
 
 
 
-## 参考资料
+### 参考资料
 
 * https://datatable.readthedocs.io/en/latest/index.html
 * https://github.com/parulnith/An-Overview-of-Python-Datatable-package
 
-# Dask
+## Dask
 
-## 安装
+### 安装
 
 ```bash
 $ pip install 'dask[complete]'  # Install everything
@@ -368,16 +368,16 @@ $ pip install 'dask[distributed]'  # Install requirements for distributed dask
 ```
 
 
-## 参考资料
+### 参考资料
 
 * https://www.dask.org/
 
-# RAPIDS
+## RAPIDS
 
 
-# tqdm
+## tqdm
 
 
 
 
-# PySpark
+## PySpark

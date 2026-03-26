@@ -53,7 +53,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# Gemma 模型介绍
+## Gemma 模型介绍
 
 > Gemma: Google 最新推出开源大语言模型(Google's new open LLM)
 
@@ -89,7 +89,7 @@ Gemma 是基于 Gemini 技术推出的新型大型语言模型（LLM），Gemma 
 对于 Gemma 的指令优化模型，
 关于 <span style='border-bottom:1.5px dashed red;'>微调数据集</span> 以及与 <span style='border-bottom:1.5px dashed red;'>顺序微调技术（SFT）</span> 和 <span style='border-bottom:1.5px dashed red;'>基于人类反馈的强化学习（RLHF）</span> 相关的超参数设置，细节同样未公开。
 
-## Prompt 提示词格式
+### Prompt 提示词格式
 
 Gemma 的基础模型不限定特定的提示格式。如同其他基础模型，
 它们能够根据输入序列生成一个合理的续接内容，
@@ -111,7 +111,7 @@ LaMDA who?<end_of_turn>
 
 要有效利用这一格式，必须严格按照上述结构进行对话。
 
-## 与 Google Cloud 集成
+### 与 Google Cloud 集成
 
 可以通过 Vertex AI 或 Google Kubernetes Engine(GKE) 在 Google Cloud 上部署和训练 Gemma，
 利用 <span style='border-bottom:1.5px dashed red;'>文本生成推理</span> 和 <span style='border-bottom:1.5px dashed red;'>Transformers</span> 实现。
@@ -126,7 +126,7 @@ LaMDA who?<end_of_turn>
   这将引导你进入 Google Cloud Console，在那里你可以在 Vertex AI 或 GKE 上访问笔记本，
   以在这些平台上微调 Gemma。
 
-## 与推理端点集成
+### 与推理端点集成
 
 可以 <span style='border-bottom:1.5px dashed red;'>在 Hugging Face 的推理端点上部署 Gemma</span>，
 该端点使用文本生成推理作为后端。
@@ -162,11 +162,11 @@ for message in chat_completion:
     print(message.choices[0].delta.content, end = "")
 ```
 
-## Gemma 指令模型互动对话体验
+### Gemma 指令模型互动对话体验
 
 可以在 Hugging Chat 上体验[与 Gemma 指令模型的互动对话](https://hf.co/chat?model=google/gemma-7b-it)！ 
 
-# 使用 Hugging Face Transformers 模型推理
+## 使用 Hugging Face Transformers 模型推理
 
 借助 Transformers 的 4.38 版本，你可以轻松地使用 Gemma 模型，
 并充分利用 Hugging Face 生态系统内的工具，包括：
@@ -266,7 +266,7 @@ pipeline = pipeline(
 
 更多关于如何使用 transformers 和模型的详情，请参阅模型卡片。
 
-## JAX 权重
+### JAX 权重
 
 所有 Gemma 模型变种都可以用 PyTorch 或 JAX / Flax 使用。
 若要加载 Flax 权重，你需要按照以下方式使用仓库中的 `flax` 修订版本：
@@ -310,7 +310,7 @@ output_text = tokenizer.batch_decode(
 
 如果你在 TPU 或多个 GPU 设备上运行，可以利用 `jit` 和 `pmap` 来编译和并行执行推理任务。
 
-# Gemma 模型中文指令微调
+## Gemma 模型中文指令微调
 
 谷歌在 2 月 21 日放出开放权重的 Gemma 系列大模型，包括 2B 和 7B 两个大小，
 并且有预训练和指令微调两个版本。
@@ -323,7 +323,7 @@ output_text = tokenizer.batch_decode(
 而是希望将预训练模型重新进行中文指令微调，来达到我们的要求，
 所以在这里我们就分享三个方法来进行 <span style='border-bottom:1.5px dashed red;'>Gemma 的中文指令微调</span>。
 
-## 预训练模型和微调数据
+### 预训练模型和微调数据
 
 * 预训练模型: 在这里我们统一使用 [gemma-2b](https://hf.co/google/gemma-2b-it) 这个模型。
 
@@ -334,14 +334,14 @@ output_text = tokenizer.batch_decode(
 
 ![img](images/hc3-chinese.png)
 
-## Hugging Face TRL + Colab GPU
+### Hugging Face TRL + Colab GPU
 
 Hugging Face 的工程师 Phil Schmid 在 2024 年 1 月底写了 一篇很好的博客，
 详细讲解如何用 Hugging Face TRL 库来进行模型微调。其中的代码绝大部分都可以复用，
 不过他使用的是 `b-mc2/sql-create-contex` 数据集（用于自然语言生成 SQL 语句），
 所以我们只需要将数据这部分换成我们想要的中文指令微调数据即可。
 
-### 加载微调数据
+#### 加载微调数据
 
 ```python
 from datasets import load_dataset
@@ -351,7 +351,7 @@ dataset_dict = load_dataset("Hello-SimpleAI/HC3-Chinese", name = "baike")
 dataset = dataset_dict["train"]
 ```
 
-### 微调数据转换为 OAI messages
+#### 微调数据转换为 OAI messages
 
 ```python
 def create_conversation(sample):
@@ -392,7 +392,7 @@ Generated Answer:
 模型很快陷入循环（注意这里使用的不是已经做过指令微调的模型 `gemma-2b-it`，
 所以陷入循环是正常的，也正是我们要进行指令微调的原因）。完成我们的微调之后再测试：
 
-### 微调数据分割及保存
+#### 微调数据分割及保存
 
 ```python
 # train and test data split
@@ -403,7 +403,7 @@ dataset["train"].to_json("train_dataset.json", orient = "records")
 dataset["test"].to_json("test_dataset.json", orient = "records")
 ```
 
-### 模型微调
+#### 模型微调
 
 TRL 库可以自行处理 ChatML 格式，所以我们只需要将提问和人类回答填入模板即可。
 之后即可运行 trainer.train() 进行 LoRA 训练。
@@ -424,7 +424,7 @@ Generated Answer:
 rm 是 remove 的缩写，用于删除指定的目录或文件，语法形式为：rm -r /path/to/file。
 ```
 
-## Keras + Kaggle TPU -> Hugging Face
+### Keras + Kaggle TPU -> Hugging Face
 
 > Keras 使用 JAX 后端
 
@@ -533,7 +533,7 @@ zsh的特性包括：
 5.支持命令行参数
 ```
 
-# 参考
+## 参考
 
 * [Gemma: Google 最新推出开源大语言模型](https://mp.weixin.qq.com/s?__biz=Mzk0MDQyNTY4Mw==&mid=2247490714&idx=1&sn=fd6f17929d52e11efe98b2e254ead7aa&chksm=c2e0b426f5973d3014a0f46c0f1d17aefb045031b2c244aa7081a6e41e38d654cb1023acf68d&scene=21#wechat_redirect)
 * [Hugging Chat 体验与 Gemma 指令模型的互动对话](https://hf.co/chat?model=google/gemma-7b-it)

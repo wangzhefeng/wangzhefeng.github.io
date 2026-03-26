@@ -50,7 +50,7 @@ img {
 - pydantic enforces type hints at runtime, and provides user friendly errors when data *s invalid.
 * Define how data should be in pure, canonical python; validate it with pydantic.
 
-# pydantic 示例
+## pydantic 示例
 
 ```python
 from datetime import datetime
@@ -82,7 +82,7 @@ except ValidationError as e:
     print(e.json())
 ```
 
-# pydantic 特性
+## pydantic 特性
 
 * 与 IDE/linter/brain 配合的很好
 * Pydantic 的 BaseSettings 类允许在 验证此请求数据、加载系统设置中使用
@@ -91,9 +91,9 @@ except ValidationError as e:
 * 可扩展
 * 数据类集成
 
-# pydantic 安装
+## pydantic 安装
 
-## pydantic 依赖库
+### pydantic 依赖库
   
 * typing-extensions
 * dataclasses
@@ -101,7 +101,7 @@ except ValidationError as e:
 * [email-validator](https://github.com/JoshData/python-email-validator)
 * [python-dotenv](https://pypi.org/project/python-dotenv/)
 
-## pip 安装
+### pip 安装
 
 ```bash
 $ pip install pydantic
@@ -112,20 +112,20 @@ $ pip install email-validation
 $ pip install .
 ```
 
-## conda 安装
+### conda 安装
 
 ```bash
 $ codna install pydantic -c conda-forge
 ```
 
-## 测试安装
+### 测试安装
 
 ```python
 import pydantic
 print("compiled", pydantic.compiled)
 ```
 
-# pydantic 使用
+## pydantic 使用
 
-# Models
+## Models
 

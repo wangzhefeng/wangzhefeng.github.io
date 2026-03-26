@@ -89,9 +89,9 @@ img {
 >   - project => package => distribution package => archives => PyPI => pip
 
 
-# 创建一个简单的 project
+## 创建一个简单的 project
 
-## 创建一个 project
+### 创建一个 project
 
 1. 创建 project 目录
 
@@ -135,7 +135,7 @@ $ vim example.py
 -- INSERT --
 ```
 
-## 生成的 project 结构
+### 生成的 project 结构
 
 ```
 packaging_tutorial/
@@ -145,7 +145,7 @@ packaging_tutorial/
         └── example.py
 ```
 
-# 创建 package 文件
+## 创建 package 文件
 
 最终生成的 project 结构如下：
 
@@ -162,7 +162,7 @@ packaging_tutorial/         # project
 └── tests/                  # 单元测试
 ```
 
-## 创建用于单元测试的 tests 目录
+### 创建用于单元测试的 tests 目录
 
 > `tests` 目录用于存放单元测试脚本，关于 Python 单元测试另外介绍
 
@@ -176,7 +176,7 @@ $ cd ../..
 $ mkdir tests
 ```
 
-## 创建 pyproject.toml 文件
+### 创建 pyproject.toml 文件
 
 > `pyproject.toml` 用于...
 
@@ -203,7 +203,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 ```
 
-## 配置 metadata
+### 配置 metadata
 
 > metadata 用于...
 
@@ -291,7 +291,7 @@ setuptools.setup(
 )
 ```
 
-## 创建 README.md 文件
+### 创建 README.md 文件
 
 > - 每个 project 都应该有一个 `README.md` 文件，`README.md` 文件用于对整个项目进行一个简单的功能介绍。
 >   包括 project 安装、功能、使用
@@ -319,7 +319,7 @@ This is a simple example package. You can use
 to write your content.
 ```
 
-## 创建 LICENSE 文件
+### 创建 LICENSE 文件
 
 > - 选择一个适合自己 project 的 license：<https://choosealicense.com/>
 > - 下面以 MIT license 举例子
@@ -360,12 +360,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 创建其他文件
+### 创建其他文件
 
 - <https://packaging.python.org/en/latest/guides/using-manifest-in/#using-manifest-in>
 - <https://setuptools.pypa.io/en/latest/userguide/datafiles.html>
 
-# 生成分发档案
+## 生成分发档案
 
 > 为 **包(package)** 生成 **分发包(distribution packages)**。这些 **archives** 被上传到 **Python Package Index(PyPI)** 上，
 > 并且通过 **pip** 安装
@@ -400,17 +400,17 @@ packaging_tutorial/
 
 ![packaging_tutorial](images/packaging_tutorial.jpg)
 
-# 上传分发档案
+## 上传分发档案
 
 > - 这里为了进行测试，在 TestPyPI 上进行
 > - TestPyPI 地址：<https://test.pypi.org/manage/projects/>
 
-## 在 TestPyPI 上注册账户，并生成一个 API token
+### 在 TestPyPI 上注册账户，并生成一个 API token
 
 - <https://test.pypi.org/account/register/>
 - <https://test.pypi.org/manage/account/#api-tokens>
 
-## 将生成的 API token 配置在本地
+### 将生成的 API token 配置在本地
 
 > 原理：
 
@@ -424,7 +424,7 @@ password = ***
 -- INSERT --
 ```
 
-## 上传分发档案
+### 上传分发档案
 
 > 原理：
 
@@ -436,7 +436,7 @@ $ python3 -m pip install --upgrade twine
 $ python3 -m twine upload --repository testpypi dist/*
 ```
 
-# 安装新上传的 package
+## 安装新上传的 package
 
 - 安装 package
 
@@ -454,7 +454,7 @@ $ python3
 3
 ```
 
-# 下一步--PyPI
+## 下一步--PyPI
 
 > - 上面的第 4~5 步，都是在 TestPyPI 上为了进行测试完成的，
 如果一个包要正式发布在 PyPI 上，需要将第 4~5 步切换到 PyPI 上进行
@@ -504,9 +504,9 @@ $ python3
 >>> ...
 ```
 
-# 最后 Git 和 GitHub
+## 最后 Git 和 GitHub
 
-## Clone
+### Clone
 
 1. 在 GitHub 上新建一个 `packaging_tutorial` 空仓库，并 Clone 到本地
 
@@ -519,7 +519,7 @@ $ git clone git@github.com:wangzhefeng/packaging_example.git
 
 - ...
 
-## 在命令行新建一个 GitHub 仓库
+### 在命令行新建一个 GitHub 仓库
 
 1. 在 GitHub 上新建一个 `packaging_tutorial` 空仓库
 2. 将本地 project 进行 Git 初始化，并 Push 到 GitHub 仓库 `packaging_tutorial`
@@ -537,7 +537,7 @@ $ git remote add origin git@github.com:wangzhefeng/packaging_example.git
 $ git push -u origin main
 ```
 
-## 将本地仓库直接推送到一个 GitHub 仓库
+### 将本地仓库直接推送到一个 GitHub 仓库
 
 1. 在 GitHub 上新建一个 `packaging_tutorial` 空仓库
 2. 将本地 project 直接 Push 到 GitHub 仓库 `packaging_tutorial`
@@ -548,11 +548,11 @@ $ git branch -M main
 $ git push -u origin main
 ```
 
-## 从其他仓库导入代码
+### 从其他仓库导入代码
 
 - 暂时没用过，不知道是啥
 
-# 参考
+## 参考
 
 - [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 * [开源 Python 项目详细指南](https://mp.weixin.qq.com/s/zYpEXK6YTkZ5C6uU2kkexQ)

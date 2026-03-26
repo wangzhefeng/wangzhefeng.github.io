@@ -64,11 +64,11 @@ img {
 </p></details>
 
 
-# 第一章 时间序列数据的特征本质与采样原理
+## 第一章 时间序列数据的特征本质与采样原理
 
 时间序列（Time Series）不同于独立同分布（I.I.D.）的表格数据，其本质是随时间演变的随机过程（Stochastic Process）的离散实现。
 
-## 1.1 核心统计属性：平稳性与自相关性
+### 1.1 核心统计属性：平稳性与自相关性
 
 * **平稳性（Stationarity）**：指序列的统计特性（均值、方差、自协方差）不随时间平移而改变。
   强平稳要求联合分布不变，而工业应用中通常关注 **弱平稳（Wide-Sense Stationarity）**。
@@ -77,23 +77,23 @@ img {
   通过 ACF（自相关函数）可以识别周期性，通过 **PACF（偏自相关函数）** 则可以剔除中间步长的干扰，
   识别出对当前时刻有直接影响的显著滞后阶数。
 
-## 1.2 数据清洗中的数学插值
+### 1.2 数据清洗中的数学插值
 
 对于非均匀采样或存在缺失值的序列，简单的填充会引入噪声：
 
 * **线性与样条插值**：样条插值能产生更平滑的导数，适合物理传感器数据。  
 * **季节性调节插值**：先进行 STL 分解，在残差项上插值后再还原，能最大限度保留季节特征。
 
-# 第二章 预处理深层机理：诱导平稳性与外推补偿
+## 第二章 预处理深层机理：诱导平稳性与外推补偿
 
 非线性树模型（GBDT）在数学上被定义为**局部逼近器**。其预测值由落入特定叶子节点的训练样本均值决定。
 
-## 2.1 树模型的外推困境（Extrapolation Problem）
+### 2.1 树模型的外推困境（Extrapolation Problem）
 
 当未来的时间戳或特征值超出训练集范围（例如持续增长的销售额），树模型无法像线性回归那样沿斜率延伸，
 而会陷入“水平平台”现象 3。
 
-## 2.2 目标转换的数学诱导
+### 2.2 目标转换的数学诱导
 
 为解决外推问题，必须通过转换使模型预测“变化”而非“绝对值”：
 
@@ -102,21 +102,21 @@ img {
   能生成更平滑的预测轨迹 3。  
 * **对数/Box-Cox 变换**：针对指数增长和**异方差性（Heteroscedasticity）**，通过压缩长尾分布使残差符合正态假设。
 
-# 第三章 特征工程：构建高维时序依赖特征
+## 第三章 特征工程：构建高维时序依赖特征
 
 树模型不理解“顺序”，特征工程的任务是将时间拓扑结构映射到欧几里得空间。
 
-## 3.1 滞后特征（Lag Features）与自回归模拟
+### 3.1 滞后特征（Lag Features）与自回归模拟
 
 滞后项本质上是在模拟 AR 模型。选择滞后阶数时，应参考 PACF 截尾阶数，避免引入冗余特征导致树的深度过大（维度灾难）。
 
-## 3.2 周期性编码的三角映射
+### 3.2 周期性编码的三角映射
 
 将日期特征（如 1-12 月）视为连续数值会导致模型认为 12 月与 1 月距离极远。
 
 * **原理**：利用 `$\sin(2\pi \cdot \text{month}/12)$` 和 `$\cos(2\pi \cdot \text{month}/12)$` 将时间投影到单位圆。这确保了时间循环的连续性，显著增强模型对日内或季节性波动的捕获能力 4。
 
-## 3.3 时序目标编码（Target Encoding）防泄露
+### 3.3 时序目标编码（Target Encoding）防泄露
 
 在处理高基数类别（如数万个 SKU ID）时，目标编码极具威力，但极易引发 **回看偏差（Look-ahead Bias）** 6。
 
@@ -124,7 +124,7 @@ img {
   即 `$t$` 时刻的特征只能使用 `$1, \cdots, t-1$` 时刻的均值，
   严禁使用当前时刻及未来的标签信息 6。
 
-# 第四章 算法选型：GBDT 族群的底层对比
+## 第四章 算法选型：GBDT 族群的底层对比
 
 | 维度 | XGBoost | LightGBM | CatBoost |
 | :---- | :---- | :---- | :---- |
@@ -132,11 +132,11 @@ img {
 | **缺失值** | 自动学习默认分支 9 | 视为零或独立分支 | 需预处理 |
 | **类别特征** | 需 One-hot 或外部编码 11 | 统计分箱优化 | **Ordered TS**（排序目标统计）：原生防泄露编码 9 |
 
-# 第五章 深度解析：多步预测策略（Multi-step Strategies）
+## 第五章 深度解析：多步预测策略（Multi-step Strategies）
 
 这是时序任务中最关键的工程决策，涉及 **偏差（Bias）与方差（Variance）** 的深刻博弈。
 
-## 5.1 递归预测 (Recursive / Iterated Strategy)
+### 5.1 递归预测 (Recursive / Iterated Strategy)
 
 * **数学形式**：`$\hat{y}_{t+1}=f(y_{t}, y_{t-1}); \hat{y}_{t+2}=f(\hat{y}_{t+1}, y_{t}), \cdots$`
 * **深层原理**：训练一个单一模型最小化一步预测误差。在推理阶段，将预测值作为“伪真实值”反馈给输入 12。  
@@ -144,7 +144,7 @@ img {
   * **优点**：参数量少，计算开销最低，能捕获细粒度的自相关性。  
   * **致命缺陷：误差累积（Error Propagation）**。第一步的微小偏差 `$\epsilon$` 会通过 Jacobian 放大因子在后续步骤中呈指数级扩散，导致长远期预测完全失真。
 
-## 5.2 直接预测 (Direct Strategy)
+### 5.2 直接预测 (Direct Strategy)
 
 * **数学形式**：为每个步长训练独立模型 `$f_{h}$`，使得 `$\hat{y}_{t+h}=f_{h}(y_{t}, y_{t-1},\cdots)$`。
 * **深层原理**：每个模型针对特定的视界进行特征筛选。例如，`$f_{7}$` 可能完全忽略 Lag 1，而专注于 Lag 7（周偏好）。  
@@ -152,52 +152,52 @@ img {
   * **优点**：**无误差累积**；在模型设定不正确（Misspecified）时比递归更鲁棒。  
   * **缺点**：训练 `$H$` 个模型开销巨大；独立预测忽略了时间步之间的随机依赖关系，预测曲线可能出现不自然的跳变。
 
-## 5.3 多输入多输出 (MIMO Strategy)
+### 5.3 多输入多输出 (MIMO Strategy)
 
 * **数学形式**：`$[\hat{y}_{t+1},\cdots,\hat{y}_{t+H}]=F(y_{t}, y_{t-1}\cdots)$`。  
 * **深层原理**：训练一个单一模型输出一个向量。它学习的是未来序列片段的**联合分布映射**。  
 * **优劣分析**：**利用了步长间的相关性**，推理效率高，且无累积误差。但在树模型中需要特殊的包装器（如 MultiOutputRegressor）。
 
-## 5.4 混合策略 (DirRec & Rectify)
+### 5.4 混合策略 (DirRec & Rectify)
 
 * **DirRec**：在 Direct 的基础上，模型 `$f_{h}$` 的输入包含前序模型 `$f_{1}, \cdots, f_{h-1}$` 的预测值，
   试图兼顾两者优点。  
 * **Rectify/Stratify**：先用递归得到有偏预测，再训练 Direct 模型预测残差进行“纠偏”，是目前学术界前沿的策略。
 
-# 第六章 模型验证与诊断：超越简单 MSE
+## 第六章 模型验证与诊断：超越简单 MSE
 
-## 6.1 时间序列交叉验证 (TimeSeriesSplit)
+### 6.1 时间序列交叉验证 (TimeSeriesSplit)
 
 * **原理**：采用“前推验证”。验证集始终在训练集时间线之后，模拟“历史预测未来”的真实时序约束 14。
 
-## 6.2 残差分析（Residual Diagnostics）
+### 6.2 残差分析（Residual Diagnostics）
 
 * **数学准则**：优秀的模型残差应近似为**白噪声（White Noise）**。  
 * **Ljung-Box 检验**：统计学测试残差是否存在显著自相关。如果 `$p<0.05$`，
   说明特征工程中遗漏了重要的时序信息（如隐藏的季节性）。
 
-# 第七章 MLOps 实践：实验追踪与模型固化
+## 第七章 MLOps 实践：实验追踪与模型固化
 
-## 7.1 MLflow 实验管理
+### 7.1 MLflow 实验管理
 
 * **父子运行（Parent-Child Runs）**：父运行记录超参数搜索范围，
   子运行记录每个交叉验证 Fold 的 RMSE、MAE 及对应的 **SHAP 特征贡献图**。  
 * **Artifacts 保存**：除了二进制模型，还应保存残差分布图（Q-Q Plot）以评估预测区间的可靠性。
 
-## 7.2 序列化选型
+### 7.2 序列化选型
 
 * 推荐使用原生格式（如 .json 或 .ubj），因为 Pickle 在不同 Python 或库版本间存在严重的兼容性风险，
   不适合长期生产环境。
 
-# 第八章 工业级部署：高并发推理架构
+## 第八章 工业级部署：高并发推理架构
 
-## 8.1 异步预测流水线 (FastAPI + Redis)
+### 8.1 异步预测流水线 (FastAPI + Redis)
 
 1. **模型热加载**：利用 FastAPI 的 lifespan 事件在进程启动时加载模型至内存。  
 2. **特征检索延迟**：由于预测需要 Lag 特征，API 不能仅依赖客户端传参。
    生产中常将历史观测值存入 **Redis**，推理时亚毫秒级检索历史窗口。
 
-## 8.2 监控与自愈
+### 8.2 监控与自愈
 
 * **漂移检测**：使用 **K-S 检验** 监控输入特征分布（Data Drift）
   当 `$p$` 值显著下降时，自动触发重训练流水线（Continuous Training）。
@@ -322,11 +322,11 @@ if __name__ == "__main__":
     print(f"未来7天递归预测结果: {res.round(2)}")
 ```
 
-# 结论
+## 结论
 
 本报告确立了非线性树模型在时序预测中的**全栈方法论**。核心见解在于：**特征工程解决了树模型对时间的盲视，而多步策略的选择决定了模型在长视界下的精度上限**。对于高噪声、长周期任务，推荐使用 **MIMO** 策略以平衡计算成本与预测稳定性；对于实时性要求极高的小规模任务，**递归策略**结合 Redis 特征缓存是性价比最高的部署方案。未来的演进方向应关注**概率预测（Probabilistic Forecasting）**，通过输出分位数区间来量化误差传播的不确定性。
 
-# 引用的著作
+## 引用的著作
 
 1. Time-Series Forecasting: Comparing Transform Techniques for Tree ..., 访问时间为 二月 3, 2026， [https://www.snowflake.com/en/engineering-blog/time-series-forecasting-comparing-transform-techniques-tree-based-models/](https://www.snowflake.com/en/engineering-blog/time-series-forecasting-comparing-transform-techniques-tree-based-models/)  
 2. Feature Engineering for Time-Series Data: A Deep Yet Intuitive Guide - Synogize, 访问时间为 二月 3, 2026， [https://www.synogize.io/feature-engineering-for-time-series-data-a-deep-yet-intuitive-guide](https://www.synogize.io/feature-engineering-for-time-series-data-a-deep-yet-intuitive-guide)  

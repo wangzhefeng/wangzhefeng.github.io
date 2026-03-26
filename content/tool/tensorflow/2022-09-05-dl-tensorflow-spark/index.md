@@ -13,7 +13,7 @@ tags:
 从而可以让训练好的 TensorFlow 模型在成百上千的机器上分布式并行执行模型推断，
 这里的 Spark 指 Scala 版本的 Spark
 
-# Spark 调用 TensorFlow 模型简介
+## Spark 调用 TensorFlow 模型简介
 
 在 Spark 中调用 TensorFlow 模型进行预测需要完成以下几个步骤:
 
@@ -23,7 +23,7 @@ tags:
 4. 在 Spark 项目中通过 RDD 在 executor 上加载 TensorFlow 模型，调试成功
 5. 在 Spark 项目中通过 DataFrame 在 executor 上加载 TensorFlow 模型，调试成功
 
-# 准备 protobuf 文件
+## 准备 protobuf 文件
 
 ```python
 import tensorflow as tf
@@ -70,7 +70,7 @@ $ !saved_model_cli show --dir {export_path + str(version)} --all
 
 ![img](images/model.png)
 
-# 创建 Spark 项目
+## 创建 Spark 项目
 
 创建 Spark 项目，在项目中添加 Java 版本的 TensorFlow 对应的 Jar 包依赖。
 如果使用 Maven 管理项目，需要添加如下 jar 包依赖
@@ -88,7 +88,7 @@ $ !saved_model_cli show --dir {export_path + str(version)} --all
 `org.tensorflow.tensorflow` 的 jar 包依赖，
 以及其依赖的 `org.tensorflow.libtensorflow` 和 `org.tensorflowlibtensorflow_jni` 的 jar 包放到项目中
 
-# 在 Spark 项目中 driver 端加载调试 TensorFlow 模型
+## 在 Spark 项目中 driver 端加载调试 TensorFlow 模型
 
 1. `load` 函数的第二个参数一般都是 `"serve"`，可以从模型文件相关信息中找到
 2. 在 Java 版本的 TensorFlow 中还是类似 TensorFlow 1.0 中静态计算图的模式，
@@ -135,6 +135,6 @@ result
 Array(Array(3.019596), Array(3.9878292))
 ```
 
-# 在 Spark 项目中通过 RDD 在 executor 上加载调试 TensorFlow 模型
+## 在 Spark 项目中通过 RDD 在 executor 上加载调试 TensorFlow 模型
 
 

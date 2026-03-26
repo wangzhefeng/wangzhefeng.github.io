@@ -39,7 +39,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# GBDT 参数类型
+## GBDT 参数类型
 
 * 决策树参数
     - `min_samples_split`
@@ -79,7 +79,7 @@ img {
     - `warm_start`
     - `presort`
 
-# GBDT 调参策略
+## GBDT 调参策略
 
 * 一般参数调节策略: 
     - 选择一个相对来说较高的 learning rate, 先选择默认值 0.1(0.05-0.2)
@@ -105,6 +105,6 @@ img {
 
 
 
-# 参考
+## 参考
 
 

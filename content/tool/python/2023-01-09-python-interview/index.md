@@ -59,7 +59,7 @@ img {
 - [解析字符串](#解析字符串)
 </p></details><p></p>
 
-# Python 数据结构
+## Python 数据结构
 
 对象分类: 
 
@@ -87,7 +87,7 @@ img {
 - 列表、字典、元组可以任意嵌套; 
 - 列表、字典可以动态地扩大克缩小; 
 
-# Python Tuple 赋值问题
+## Python Tuple 赋值问题
 
 下面的代码输出什么结果?
 
@@ -108,7 +108,7 @@ finally:
 ```
 
 
-# python buildin functions
+## python buildin functions
 
 - `int()`
 - `float()`
@@ -274,7 +274,7 @@ isinstance(a, int)
 isinstance(a, [str, int, list])
 ```
 
-# python collections 库
+## python collections 库
 
 ```python
 from collections import OrderedDict, Counter
@@ -286,7 +286,7 @@ x = OrderedDict(a = 1, b = 2, c = 3)
 y = Counter("Hello World!")
 ```
 
-# Python 单例模式
+## Python 单例模式
 
 > Singleton Pattern
 
@@ -304,7 +304,7 @@ y = Counter("Hello World!")
         - 相关知识
         - 实现单例模式
 
-# Python 深拷贝和浅拷贝 
+## Python 深拷贝和浅拷贝 
 
 * https://docs.python.org/3.6/library/copy.html
 
@@ -361,7 +361,7 @@ print('c = ', c)
 print('d = ', d)
 ```
 
-## 浅拷贝
+### 浅拷贝
 
 在Python中标识一个对象的唯一身份是: 对象的 `id, id(object)` (内存地址)、对象类型、对象值. 
 浅拷贝就是创建一个具有相同类型、相同值但不同`id` 的新对象
@@ -375,7 +375,7 @@ print('d = ', d)
 因此使用浅拷贝的典型使用场景是:  **对象自身发生改变的同时需要保持对象中的值完全相同** , 
 比如: list 排序 
 
-## 深拷贝
+### 深拷贝
 
 深拷贝不仅拷贝了原始对象的地址, 也对其包含的值进行拷贝. 他会递归的查找对象中包含的其他对象的引用, 
 来完成更深层次拷贝. 因此, 深拷贝产生的副本可以随意修改而不需要担心会引起原始值的改变
@@ -386,7 +386,7 @@ print('d = ', d)
 
 使用 `__copy__` 和 `__deepcopy` 可以完成对一个对象拷贝的定制
 
-# Python 序列反转
+## Python 序列反转
 
 - 将序列(有序)中的元素位置反转
     - list
@@ -420,11 +420,11 @@ S_reversed_v2 = "".join(reversed(S))
 print(S_reversed_v1, S_reversed_v2)
 ```
 
-# Python 字典反转
+## Python 字典反转
 
 字典的 key 和 value 对换
 
-## 压缩器
+### 压缩器
 
 ```python
 D = {
@@ -444,7 +444,7 @@ D_reversed_v1 = dict(zip(D.values(), D.keys()))
 print(D_reversed_v1)
 ```
 
-## 字典解析
+### 字典解析
 
 ```python
 D_reversed_v2 = {v: k for k, v in D.items()}
@@ -452,7 +452,7 @@ print(D_reversed_v2)
 ```
 
 
-# Python求众数
+## Python求众数
 
 - np.argmax(numpy.bincount()) : 只在在非负数集上有效
 - scipy.stats.mode()
@@ -464,14 +464,14 @@ np.random.seed(123)
 nums = np.random.randint(low = 1, high = 10, size = 10)
 ```
 
-## numpy.argmax(np.bincount())
+### numpy.argmax(np.bincount())
 
 ```python
 nums_mode_v1 = np.argmax(np.bincount(nums))
 print(nums_mode_v1)
 ```
 
-## scipy.stats
+### scipy.stats
 
 ```python
 from scipy import stats
@@ -479,7 +479,7 @@ nums_mode_v2 = stats.mode(nums)[0][0]
 print(nums_mode_v2)
 ```
 
-# Panda 和 Numpy 连接
+## Panda 和 Numpy 连接
 
 > Pandas DataFrame 合并,连接 & Numpy ndarray 合并, 连接
 
@@ -501,14 +501,14 @@ print(nums_mode_v2)
    - r\_
    - c\_
 
-# 字符串拼接
+## 字符串拼接
 
 - +=
 - %
 - .format()
 - "".join()
 
-## +=
+### +=
 
 ```python
 pieces = ['Today', 'is', 'really', 'a', 'nice', 'day', '!']
@@ -521,7 +521,7 @@ for s in pieces:
 print(BigString)
 ```
 
-## % / .format()
+### % / .format()
 
 ```python
 S1 = '%s, Your current money is %.1f' % ('Nupta', 500.52)
@@ -530,14 +530,14 @@ print(S1)
 print(S2)
 ```
 
-## "".join()
+### "".join()
 
 ```python
 S = " ".join(pieces)
 print(S)
 ```
 
-# 随机数生成 (函数参数)
+## 随机数生成 (函数参数)
 
 ```python
 np.random.seed(123)                    # 设置随机数
@@ -562,7 +562,7 @@ np.random.chisquare(5)
 np.random.gamma(5)
 ```
 
-# Python-Numpy
+## Python-Numpy
 
 * `.ravel()`, `.flatten()`, `.flat()`
    - 功能: 将多维array降为一维array
@@ -635,7 +635,7 @@ f1.next()
 f1.copy()
 ```
 
-# 解析字符串
+## 解析字符串
 
 ```python
 import json

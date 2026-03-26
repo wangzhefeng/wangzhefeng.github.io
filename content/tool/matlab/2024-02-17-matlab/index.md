@@ -43,7 +43,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# MATLAB 下载
+## MATLAB 下载
 
 夸克网盘地址 1：
 
@@ -55,13 +55,13 @@ img {
 * [地址：https://pan.quark.cn/s/c669fb805e88](https://pan.quark.cn/s/c669fb805e88)
 * 提取码：xtfl
 
-# MATLAB 安装
+## MATLAB 安装
 
-## 解压安装文件
+### 解压安装文件
 
 ![img](images/install1.png)
 
-## 运行安装文件
+### 运行安装文件
 
 ![img](images/install2.png)
 
@@ -73,7 +73,7 @@ img {
 
 ![img](images/install6.png)
 
-## 安装 MATLAB
+### 安装 MATLAB
 
 ![img](images/install8.png)
 
@@ -99,11 +99,11 @@ img {
 
 ![img](images/install20.png)
 
-## 安装好的 MATLAB
+### 安装好的 MATLAB
 
 ![img](images/install7.png)
 
-# 参考
+## 参考
 
 * [matlab入门图文教程](https://zhuanlan.zhihu.com/p/77669451)
 * [最新MATLAB R2020b超详细安装教程](https://www.cnblogs.com/sixuwuxian/p/13973003.html#title1)

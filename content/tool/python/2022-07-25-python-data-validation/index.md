@@ -67,15 +67,15 @@ Python 数据校验、类型提示库:
 - validators
 - voluptuous
 
-# validators
+## validators
 
-## 安装 validators
+### 安装 validators
 
 ```bash
 $ pip install validators
 ```
 
-## 基础的 validators
+### 基础的 validators
 
 在 `validators` 中每一个 `validator` 是一个简单的函数, 
 函数参数为要验证的值, 一些函数可能有额外的关键字参数. 
@@ -128,7 +128,7 @@ $ pip install validators
 
 - 验证 Finnish Social Security Number
 
-## 装饰器、自定义验证函数
+### 装饰器、自定义验证函数
 
 - API
 
@@ -162,15 +162,15 @@ if __name__ == "__main__":
     print is_string(3)
 ```
 
-# validator
+## validator
 
-## 安装 validator
+### 安装 validator
 
 ```bash
 $ pip install validator.py
 ```
 
-## 示例
+### 示例
 
 ```python
 from validator import validate
@@ -199,7 +199,7 @@ fails = {
 validate(rules, fails)
 ```
 
-## validator 内置验证器
+### validator 内置验证器
 
 - Equals("")
 - Required
@@ -212,7 +212,7 @@ validate(rules, fails)
 - SubclassOf(value)
 - Length(value, minimum, maximum)
 
-## 条件验证
+### 条件验证
 
 ```python
 pet = {
@@ -235,7 +235,7 @@ validation = {
 validate(validation, pet)
 ```
 
-## 嵌套验证
+### 嵌套验证
 
 ```python
 validator = {
@@ -265,7 +265,7 @@ test_case = {
 validate(validator, test_case)
 ```
 
-## 自定义 validator 验证器
+### 自定义 validator 验证器
 
 ```python
 dictionary = {
@@ -279,17 +279,17 @@ validate(validation, dictionary)
 
 
 
-# voluptuous
+## voluptuous
 
-## 安装 voluptuous
+### 安装 voluptuous
 
 ```bash
 $ pip install voluptuous
 ```
 
-## voluptuous 字典数据验证
+### voluptuous 字典数据验证
 
-### 验证数据类型
+#### 验证数据类型
 
 1. 先定义一个 schema
 
@@ -323,7 +323,7 @@ except MultipleInvalid as e:
     print(e.errors)
 ```
 
-### 验证必须字段
+#### 验证必须字段
 
 ```python
 from voluptuous import Schema, MultipleInvalid
@@ -360,7 +360,7 @@ except MultipleInvalid as e:
     print(e.errors)
 ```
 
-### 验证数据长度、数据值范围
+#### 验证数据长度、数据值范围
 
 ```python
 from voluptuous import Required, All, Length, Range
@@ -372,9 +372,9 @@ schema = Schema({
 })
 ```
 
-## voluptuous 验证其他类型数据
+### voluptuous 验证其他类型数据
 
-### 字面值(Literals)
+#### 字面值(Literals)
 
 ```python
 from voluptuous import Schema
@@ -390,7 +390,7 @@ schema = Schema("a string")
 schema("a string")
 ```
 
-### 类型(types)
+#### 类型(types)
 
 ```python
 from voluptuous import Schema
@@ -404,7 +404,7 @@ schema(1)
 schema("one")
 ```
 
-### ULRs
+#### ULRs
 
 ```python
 from voluptuous import Schema, Url
@@ -422,7 +422,7 @@ except: MultipleInvalid as e:
     print(e.errors)
 ```
 
-### Lists
+#### Lists
 
 ```python
 from voluptuous import Schema
@@ -457,7 +457,7 @@ except MultipleInvalid as e:
 schema([])
 ```
 
-### 自定义函数
+#### 自定义函数
 
 ```python
 from datetime import datetime
@@ -474,7 +474,7 @@ except MultipleInvalid as e:
     print(e.errors)
 ```
 
-### 字典
+#### 字典
 
 - 待验证的数据中每一个键值对需要在字典中已定义, 否则, 验证失败
 

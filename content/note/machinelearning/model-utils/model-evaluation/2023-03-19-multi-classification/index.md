@@ -43,7 +43,7 @@ img {
 </p></details><p></p>
 
 
-# Categorization Accuracy
+## Categorization Accuracy
 
 > Categorization Accuracy，分类准确率
 
@@ -67,7 +67,7 @@ img {
   如果标签为 `$k$` 则是 1，反之为 0
 * `$p_{i,k}$` 表示模型预测第 `$i$` 个样本属于 `$k$` 的概率
 
-# Multi Class Log Loss
+## Multi Class Log Loss
 
 定义：
 
@@ -87,7 +87,7 @@ img {
 * `$N$` 为测试样本的个数
 * `$M$` 为类标签的个数
 
-# MAP-Mean Average Precision
+## MAP-Mean Average Precision
 
 定义：
 
@@ -102,7 +102,7 @@ img {
 
 使用 Sigmoid Cross Entropy，注意与其它常用的多分类损失函数的区别
 
-# Mean F1
+## Mean F1
 
 定义：
 
@@ -115,7 +115,7 @@ img {
 
 Mean Square Loss
 
-# Average Jaccard Index
+## Average Jaccard Index
 
 两个区域 A 和 B 的 Jaccard Index 可以表示为：
 
@@ -127,7 +127,7 @@ Mean Square Loss
 * `$FP$` 表示 False Positive 的面积
 * `$FN$` 表示 False Negative 的面积
 
-# 参考
+## 参考
 
 * [多分类相关指标优化​](https://mp.weixin.qq.com/s?__biz=Mzk0NDE5Nzg1Ng==&mid=2247492485&idx=1&sn=440c944d690f4df4dd4279aea07d2cfc&chksm=c32afa0af45d731cf4af9bc6dd848dcd38d724c57cd9bacad16dd8d5db19b925ac7ea3ae4d89&scene=21#wechat_redirect)
 

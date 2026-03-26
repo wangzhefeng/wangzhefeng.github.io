@@ -40,7 +40,7 @@ img {
 - [Backend API](#backend-api)
 </p></details><p></p>
 
-# 什么是 Keras 后端
+## 什么是 Keras 后端
 
 Keras 后端:
 
@@ -57,7 +57,7 @@ Keras 后端:
    - Theano
    - CNTK
 
-# 从一个后端切换到另一个后端
+## 从一个后端切换到另一个后端
 
 如果您至少运行过一次 Keras, 您将在以下位置找到 Keras 配置文件. 如果没有, 可以手动创建它.
 
@@ -120,7 +120,7 @@ Using TensorFlow backend.
        }
        ```
 
-# keras.json 详细配置
+## keras.json 详细配置
 
 - `image_data_format`:
    - `"channels_last"`
@@ -137,7 +137,7 @@ Using TensorFlow backend.
 - `backend`:
    - 字符串: `tensorflow`, `theano`, `cntk`
 
-# Backend API
+## Backend API
 
 * `tf.keras.backend.clear_session()`
 * `tf.keras.backend.epsilon()`

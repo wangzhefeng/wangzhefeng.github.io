@@ -46,9 +46,9 @@ img {
   - [最佳实践](#最佳实践)
 </p></details><p></p>
 
-# Flask 安装
+## Flask 安装
 
-## Flask 依赖
+### Flask 依赖
 
 * 依赖
     - Werkzeug 用于实现 WSGI ，应用和服务之间的标准 Python 接口。
@@ -63,13 +63,13 @@ img {
     - Watchdog 为开发服务器提供快速高效的重载。
 
 
-## PyPI
+### PyPI
 
 ```bash
 $ pip install Flask
 ```
 
-## Flask 配置和惯例
+### Flask 配置和惯例
 
 Flask 有许多带有合理缺省值的配置值和惯例。按照惯例，
 模板和静态文件存放在应用的 Python 源代码树的子目录中，
@@ -79,9 +79,9 @@ Flask 有许多带有合理缺省值的配置值和惯例。按照惯例，
 
 
 
-# Flask 启动
+## Flask 启动
 
-## 示例应用
+### 示例应用
 
 ```python
 # hello.py
@@ -94,7 +94,7 @@ def hello_world():
     return "Hello, World!"
 ```
 
-## macOS, Linux 启动 Flask 应用
+### macOS, Linux 启动 Flask 应用
 
 方法 1
 
@@ -119,7 +119,7 @@ $ python -m flask run
 $ python hello.py
 ```
 
-## Windows 启动 Flask 应用
+### Windows 启动 Flask 应用
 
 Command Prompt
 
@@ -133,7 +133,7 @@ PowerShell
 $ PS C:\path\to\app> $env:FLASK_APP="hello.py"
 ```
 
-## 启动 Flask 调试模式
+### 启动 Flask 调试模式
 
 1.激活调试器
 2.激活自动重载
@@ -153,7 +153,7 @@ $ C:\path\to\app>set FLASK_ENV=development
 $ C:\path\to\app>flask run 
 ```
 
-## 最佳实践
+### 最佳实践
 
 * 系统: macOS
 

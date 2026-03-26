@@ -40,9 +40,9 @@ img {
 - [参考资料](#参考资料)
 </p></details><p></p>
 
-# spaCy 安装
+## spaCy 安装
 
-## 官网安装
+### 官网安装
 
 ```bash
 # Install spaCy
@@ -66,7 +66,7 @@ $ python -m spacy download en_core_web_sm
 $ pip3 install -U textacy
 ```
 
-## pip 安装
+### pip 安装
 
 - (1)从 GitHub 上安装
 
@@ -115,7 +115,7 @@ $ python3 setup.py install /your_path/zh_core_web_md-x.x.x.tar.gz
 $ python3 setup.py install /your_path/zh_core_web_sm-x.x.x.tar.gz
 ```
 
-# 参考资料
+## 参考资料
 
 * [NeuralCoref](https://github.com/huggingface/neuralcoref) 
 * [spaCy](https://spacy.io/) 

@@ -63,7 +63,7 @@ img {
 - [JupyterLab 1.0](#jupyterlab-10)
 </p></details><p></p>
 
-# Install Jupyter
+## Install Jupyter
 
 Jupyter 相关库：
 
@@ -79,7 +79,7 @@ Jupyter 相关库：
 * `jupyterlab-server`
 * `voila`
 
-## 安装 Jupyter 相关库
+### 安装 Jupyter 相关库
 
 * Jupyter
 
@@ -105,7 +105,7 @@ $ pip install jupyterlab
 $ pip install voila
 ```
 
-## Jupyter kernel 设置
+### Jupyter kernel 设置
 
 * 安装 `ipykernel` 在当前环境：
 
@@ -133,7 +133,7 @@ $ ipykernel install --name env_name --user
 $ jupyter kernelspec remove python3
 ```
 
-# JupyterLab 1.0
+## JupyterLab 1.0
 
 - JupyterLab 帮助
 

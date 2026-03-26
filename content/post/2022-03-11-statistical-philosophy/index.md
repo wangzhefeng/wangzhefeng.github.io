@@ -42,16 +42,16 @@ img {
 </p></details>
 
 
-# 五种统计陷阱
+## 五种统计陷阱
 
 * [数据科学家应该避免的5种统计陷阱](https://mp.weixin.qq.com/s/gbYskAo8fkoZ7LyRSLGJww)
 
 
 
 
-# 参考
+## 参考
 
-* [统计之美]()
-* [统计使人豁达]()
-* [谢邦昌]()
+* 统计之美
+* 统计使人豁达
+* 谢邦昌
 * [Philosophy of Statistics](https://plato.stanford.edu/entries/statistics/)

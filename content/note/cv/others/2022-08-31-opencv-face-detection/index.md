@@ -44,7 +44,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 目标简介
+## 目标简介
 
 目标: 使用 Flask API 部署 OpenCV App 进行人脸检测
 实现技术: 
@@ -59,11 +59,11 @@ img {
 
 ![img](images/haarcascade.jpeg)
 
-# 项目结构
+## 项目结构
 
 ![img](images/opencv_flask_face.png)
 
-## Flask App
+### Flask App
 
 ```python
 from flask import Flask, render_template, Response
@@ -111,9 +111,9 @@ if __name__ == "__main__":
     app.run(debug = True, use_reloader = False, port = 8000)
 ```
 
-## Web 页面
+### Web 页面
 
-### index.html
+#### index.html
 
 ```html
 <!DOCTYPE html>
@@ -147,7 +147,7 @@ img {
 </html>
 ```
 
-### stop.html
+#### stop.html
 
 ```html
 <!DOCTYPE html>
@@ -180,7 +180,7 @@ img {
 </html>
 ```
 
-# 运行 Flask App
+## 运行 Flask App
 
 ```bash
 $ flask app
@@ -188,6 +188,6 @@ $ flask app
 
 - http://127.0.0.1:8000/
 
-# 参考
+## 参考
 
 * [Opencv-face-detection-deployment-using-flask-API](https://github.com/DharmarajPi/Opencv-face-detection-deployment-using-flask-API)

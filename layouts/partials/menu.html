@@ -1,11 +1,16 @@
-<nav class="menu" aria-label="主导航">
-  <input id="menu-check" type="checkbox" />
-  <label class="site-menu-toggle unselectable" for="menu-check">菜单</label>
-  <ul class="site-menu-list">
+<nav class="site-nav" aria-label="主导航">
+  <ul class="site-nav__list">
     {{ $currentPage := . }}
-    {{ range (default .Site.Menus.main (index .Site.Menus ($.Scratch.Get "section"))) }}
-      <li class="site-menu-item{{ if eq .URL $currentPage.RelPermalink }} active{{ end }}"><a href="{{ .URL }}">{{ .Name }}</a></li>
+    {{ range .Site.Menus.main }}
+      {{ $active := false }}
+      {{ if eq .URL "/" }}
+        {{ $active = $currentPage.IsHome }}
+      {{ else if hasPrefix $currentPage.RelPermalink .URL }}
+        {{ $active = true }}
+      {{ end }}
+      <li class="site-nav__item{{ if $active }} is-active{{ end }}">
+        <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      </li>
     {{ end }}
-    {{ partial "menu_extra.html" . }}
   </ul>
 </nav>

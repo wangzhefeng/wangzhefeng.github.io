@@ -50,7 +50,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 数据增强
+## 数据增强
 
 数据增强(Data Augmentation)已经成为深度学习时代的常规做法，
 数据增强目的是为了增加训练数据的丰富度，
@@ -65,7 +65,7 @@ img {
 实际上，这两种方法理论上是等价的，一般的框架都采用在线方式的数据增强，
 PyTorch 的 `transforms` 就是在线方式。
 
-# PyTorch transforms
+## PyTorch transforms
 
 可以使用 `transforms` 对数据集进行转换操作，使得数据集可以作为机器学习算法可以使用的形式：
 
@@ -73,11 +73,11 @@ PyTorch 的 `transforms` 就是在线方式。
 * `torchtext.transforms`
 * `torchaudio.transforms`
 
-## torchvision transforms
+### torchvision transforms
 
 > `torchvision.transforms`
 
-### transforms 简介
+#### transforms 简介
 
 `torchvision.transforms` 是广泛使用的图像变换库，包含二十多种基础方法以及多种组合功能，
 通常可以用 `torchvision.transforms.Compose([])` 把各方法串联在一起使用。
@@ -103,7 +103,7 @@ PyTorch 的 `transforms` 就是在线方式。
 * tensor 图像的 shape 格式是 `(C, H, W)`
 * 批量 tensor 图像的 shape 格式是 `(B, C, H, W)`
 
-### transforms 机制
+#### transforms 机制
 
 开始采用 `torchvision.transforms.Compose` 把变换的方法包装起来，放到 `Dataset` 中；
 在 `DataLoader` 依次读数据时，调用 `Dataset` 的 `__getitem__`，
@@ -111,7 +111,7 @@ PyTorch 的 `transforms` 就是在线方式。
 以此完成在线数据增强。而具体的 `transforms` 方法通常包装成一个 `Module` 类，
 具体实现会在各 `functional` 中。
 
-### 常用转换
+#### 常用转换
 
 `torchvision.transform` 模块提供了多个常用转换
 
@@ -151,24 +151,24 @@ PyTorch 的 `transforms` 就是在线方式。
       这意味着必须指定/生成所有参数，但函数转换将提供跨调用的可重现结果
     - `torchvision.transform.functional`
 
-## torchtext transforms
+### torchtext transforms
 
-### transforms 简介
+#### transforms 简介
 
-### 常用转换
+#### 常用转换
 
-## torchaudio transforms
+### torchaudio transforms
 
-### transforms 简介
+#### transforms 简介
 
-### 常用转换
+#### 常用转换
 
-# AIbumentations
-
-
+## AIbumentations
 
 
-# 参考
+
+
+## 参考
 
 * [transforms 的二十二个方法](https://zhuanlan.zhihu.com/p/53367135)
 * [AIbumentations](https://albumentations.ai/)

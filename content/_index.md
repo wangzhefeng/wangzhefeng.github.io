@@ -56,7 +56,7 @@ disable_highlight: true
 > 让自己舒服的书，其实很大程度上是自我的简单重复，它不指向提升和成长。读得少一点、读得深一点、
 > 读得精一点，再好的注释，再好的解说，再好的课程最终都指向经典本身，最终还是要回到经典。”
 
-### TODO
+## TODO
 
 * :white_check_mark: 评论在一些页面不启用
 * :white_check_mark: 集成 Disqus 和 Utterances 到评论区

@@ -76,7 +76,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 论文简介
+## 论文简介
 
 > 论文：[Forecast at Scale](https://peerj.com/preprints/3190/)
 > 
@@ -84,12 +84,12 @@ img {
 > 
 > 文档：[https://facebook.github.io/prophet/](https://facebook.github.io/prophet/)
 
-# 历史研究和瓶颈
+## 历史研究和瓶颈
 
 ARMA 模型在时间序列的趋势和季节上没有很好的处理，
 ETA(指数平滑，Exponential Smoothing) 和 SNAIVE(季节朴素法，Seasonal Navie)虽然能抓住季节性但不能抓到更长周期性。
 
-# 论文贡献
+## 论文贡献
 
 Facebook 开源了一个时间序列预测的算法，叫做 **fbprophet**。
 从官网的介绍来看，Facebook 所提供的 Prophet 算法不仅可以处理时间序列存在一些异常值的情况，
@@ -108,12 +108,12 @@ Facebook 开源了一个时间序列预测的算法，叫做 **fbprophet**。
 在用户不是很懂时间序列的前提下都可以使用这个工具得到一个能接受的结果。
 具体是否用 Prophet 则需要根据具体的时间序列来确定。
 
-# 模型定义
+## 模型定义
 
 2018 年 Facebook 提出的 Prophet，主要是让分析师将业务知识融入到时序建模当中，
 同时能批量建模。
 
-## 概率视角下的贝叶斯线性回归
+### 概率视角下的贝叶斯线性回归
 
 从概率的角度来讲，时间序列是随机过程在时间方向上的一次采样，
 所以时间序列模型的建模过程是期望通过这样的采样数据来学习模型。
@@ -137,7 +137,7 @@ Facebook 开源了一个时间序列预测的算法，叫做 **fbprophet**。
 
 在概率视角下，和频率学派一样，要去学习参数 `$\theta$`。
 
-### 频率学派学习方法
+#### 频率学派学习方法
 
 频率学派的学习方法是通过训练数据和最大似然估计去得到 `$\theta$` 的具体值。
 `$p(x|\theta)$` 中的 `$\theta$` 是一个常量，对于 `$N$` 个观测来说观测集的概率为：
@@ -148,7 +148,7 @@ Facebook 开源了一个时间序列预测的算法，叫做 **fbprophet**。
 
 `$$\theta_{MLE}=\underset{\theta}{argmax} \text{ } log \text{ } p(\mathbf{x}|\theta) \underset{iid}{=}\underset{\theta}{argmax}\sum_{i=1}^{N} log \text{ } p(x_{i}|\theta)$$`
 
-### 贝叶斯学派学习方法
+#### 贝叶斯学派学习方法
 
 贝叶斯学派中 `$\theta$` 是一个随机变量而不是一个固定的值，它由一个先验分布进行约束，下面是贝叶斯线形回归：
 
@@ -191,7 +191,7 @@ Facebook 开源了一个时间序列预测的算法，叫做 **fbprophet**。
 得到的也是 `$y$` 的分布。这一点开始我们可以往 Prophet 走了，记得 Prophet 里面有一个 `y_upper`, `y_lower` 吗，
 这不就是说明 `$y$` 也是有一个范围吗，而不是完完全全的一个确定值。
 
-## 时间序列分解
+### 时间序列分解
 
 在时间序列分析中，常见的分析方法叫做时间序列的分解(Decomposition of Time Series)，
 时间序列分解的原理是将时间序列 `$y(t)$` 分为三个部分: 
@@ -230,7 +230,7 @@ Prophet 的输入只需要 `ts` 和 `y`。所以核心公式是：
 * `$h(t)$` 表示节假日项，或者更泛指外部变量，表示在当天是否存在节假日
 * `$\epsilon_t$` 表示误差项或者称为剩余项，或者无法解释项
 
-## 趋势项模型 
+### 趋势项模型 
 
 > 趋势项模型：g(t)
 
@@ -246,7 +246,7 @@ Prophet 的输入只需要 `ts` 和 `y`。所以核心公式是：
 
 `$$g(t) = kt + m$$`
 
-### 饱和趋势项
+#### 饱和趋势项
 
 首先，介绍一下基于逻辑回归函数(logistic function)的饱和趋势项(Nonlinear，Saturating Growth)。
 
@@ -338,7 +338,7 @@ g(t) &= \frac{C(t)}{1+e^{-k(t)(t-m(t))}} \\
 
 
 
-### 分段线性函数
+#### 分段线性函数
 
 > Piecewise Linear Function
 
@@ -381,7 +381,7 @@ g(t) &= \frac{C(t)}{1+e^{-k(t)(t-m(t))}} \\
 > 也可以写作 `m = Prophet(growth = 'linear')`。
 
 
-### 变点的选择
+#### 变点的选择
 
 > Changepoint Selection
 
@@ -414,7 +414,7 @@ g(t) &= \frac{C(t)}{1+e^{-k(t)(t-m(t))}} \\
 因此，当 `$\tau$` 趋近于零的时候，`$\delta_{j}$` 也是趋向于零的，
 此时的增长函数将变成全段的逻辑回归函数或者线性函数。这一点从 `$g(t)$` 的定义可以轻易地看出。
 
-### 对未来的预估 
+#### 对未来的预估 
 
 > Trend Forecast Uncertainty
 
@@ -449,7 +449,7 @@ changepoint_ts = np.concatenate((
 > 
 > 假设未来出现变点的频率和历史一样。 历史一共 T 个点，其中有 S 个是变点，因此未来也应该是 S/T 的频率出现变点。
 
-## 季节性趋势
+### 季节性趋势
 
 > 季节性趋势：s(t)
 
@@ -492,7 +492,7 @@ changepoint_ts = np.concatenate((
 * 在代码里面，`seasonality_mode` 也对应着两种模式，分别是加法和乘法，默认是加法的形式
 * 在开源代码中，`$X(t)$` 函数是通过 `fourier_series` 来构建的
 
-## 节假日效应
+### 节假日效应
 
 > 节假日效应(Holidays and Events effect)：h(t)
 
@@ -521,7 +521,7 @@ changepoint_ts = np.concatenate((
   默认值是 10，当值越大时，表示节假日对模型的影响越大；当值越小时，
   表示节假日对模型的额效果越小。
 
-## 时序模型拟合
+### 时序模型拟合
 
 时间序列已经可以通过趋势项、季节项、节假日项来构建了:
 
@@ -531,9 +531,9 @@ changepoint_ts = np.concatenate((
 作者使用了 `pyStan` 这个开源工具中的 `L-BFGS` 方法来进行函数的拟合。 
 具体可以参考 `forecast.py` 里面的 `stan_init` 函数。
 
-# Prophet 使用
+## Prophet 使用
 
-## Prophet 安装
+### Prophet 安装
 
 ```bash
 # install on PyPI
@@ -543,9 +543,9 @@ $ pip install prophet
 $ conda install -c conda-forge prophet
 ```
 
-## Prophet 简单使用
+### Prophet 简单使用
 
-### Prophet 时间序列格式
+#### Prophet 时间序列格式
 
 Prophet 所需要的时间序列也是这种格式的，根据官网的描述，只要用 `csv` 文件存储两列即可:
 
@@ -574,7 +574,7 @@ Prophet 所需要的时间序列也是这种格式的，根据官网的描述，
 | 3268 | 2017-10-20 22:02:00| 8.14  | 7.42      |       8.86   |
 | 3269 | 2017-10-20 22:02:00| 8.15  | 7.39      |       8.88   |
 
-### 使用示例
+#### 使用示例
 
 * Question:
    - [Wikipedia page for Peyton Manning](https://en.wikipedia.org/wiki/Peyton_Manning)
@@ -641,7 +641,7 @@ fig4 = plot_components_plotly(m, forecast)
 py.iplot(fig)
 ```
 
-### 数据操作
+#### 数据操作
 
 因为 Prophet 所需要的两列名称是 `ds` 和 `y`，其中，`ds` 表示时间戳，
 `y` 表示时间序列的值，因此通常来说都需要修改 `pandas.DataFrame` 的列名字
@@ -667,7 +667,7 @@ df["ds"] = pd.to_datetime(df["ds"], unit = "s")
 df["y"] = (df["y"] - df["y"].mean()) / (df["y"].std())
 ```
 
-### 模型拟合
+#### 模型拟合
 
 先初始化模型，然后拟合模型
 
@@ -679,7 +679,7 @@ model = Prophet()
 model.fit(X_train)
 ```
 
-### 模型预测
+#### 模型预测
 
 ```python
 # 计算预测值: periods 表示需要预测的点数，freq 表示时间序列的频率. 
@@ -704,7 +704,7 @@ plt.show()
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 ```
 
-## Prophet 的参数设置
+### Prophet 的参数设置
 
 在 Prophet 中，用户一般可以设置以下四种参数: 
 
@@ -749,7 +749,7 @@ class Prophet:
         pass
 ```
 
-### 增长函数
+#### 增长函数
 
 在 Prophet 里面，有两个增长函数，分别是分段线性函数(linear)和逻辑回归函数(logistic). 
 而 `m = Prophet()` 默认使用的是分段线性函数(linear)，并且如果要是用逻辑回归函数的时候，
@@ -761,7 +761,7 @@ m = Prophet(growth = 'linear')
 m = Prophet(growth = 'logistic')
 ```
 
-### 变点
+#### 变点
 
 在 Prophet 里面，变点默认的选择方法是前 80% 的点中等距选择 25 个点作为变点，
 也可以通过以下方法来自行设置变点，甚至可以人为设置某些点。 
@@ -787,7 +787,7 @@ fig = m.plot(forecast)
 a = add_changepoints_to_plot(fig.gca(), m, forecast)
 ```
 
-### 周期性
+#### 周期性
 
 可以在 Prophet 中设置周期性，无论是按月(month)还是周(week)都是可以的。
 
@@ -805,7 +805,7 @@ model = Prophet(weekly_seasonality = True)
 model.add_seasonality(name = "weekly", period = 7, fourier_order = 3, prior_scale = 0.1)
 ```
 
-### 节假日
+#### 节假日
 
 可以设置某些天是节假日，并且设置它的前后影响范围，也就是 `lower_window` 和 `upper_window`
 
@@ -840,11 +840,11 @@ model = Prophet(holidays = holidays, holidays_prior_scale = 10.0)
 用 Prophet 可能就不合适了。 但是，Prophet 提供了一种时序预测的方法，在用户不是很懂时间序列的前提下都可以使用这
 个工具得到一个能接受的结果。 具体是否用 Prophet 则需要根据具体的时间序列来确定。 
 
-## 饱和预测
+### 饱和预测
 
 > Staturating Forecast
 
-### Forecasting Growth
+#### Forecasting Growth
 
 默认情况下，Prophet 使用线性模型进行预测。在预测增长时，通常有一些可达到的最大点：
 市场总规模、总人口规模等。这称为承载能力，预测应在该点饱和。
@@ -871,7 +871,7 @@ forecast = m.predict(future_df)
 fig = m.plot(forecast)
 ```
 
-### Saturating Minimum
+#### Saturating Minimum
 
 > Saturating Minimum, 饱和最小值
 
@@ -898,11 +898,11 @@ forecast = m.predict(future_df)
 fig = m.plot(forecast)
 ```
 
-## 季节性和节假日效应和建模
+### 季节性和节假日效应和建模
 
 > Seasonality, Holiday Effects, And Regressors
 
-### 假期和特殊事件建模
+#### 假期和特殊事件建模
 
 如果一个需要建模的时间序列中存在假期或其他重要的事件，
 则必须为这些特殊事件创建单独的 DataFrame. 
@@ -976,7 +976,7 @@ plot_forecast_components(m, forecast, "superbowl")
 ```
 
 
-### 指定内置的国家/地区假期
+#### 指定内置的国家/地区假期
 
 > Build-in Country Holiday
 
@@ -998,7 +998,7 @@ forecast = m.predict(future)
 fig = m.plot_components(forecast)
 ```
 
-### 季节性的傅里叶变换
+#### 季节性的傅里叶变换
 
 > Fourier Order for Seasonalities
 
@@ -1029,7 +1029,7 @@ a = plot_yearly(m)
 增加傅里叶项的数量可以使季节性适应更快的变化周期，但也可能导致过拟合: N
 傅里叶项对应于用于建模循环的 2N 变量。 
 
-### 指定自定义季节性
+#### 指定自定义季节性
 
 如果时间序列长度超过两个周期，Prophet
 将默认自适应每周、每年的季节性。 它还适合时间序列的每日季节性，可以通过
@@ -1042,7 +1042,7 @@ forecast = m.fit(df).predict(future)
 fig = m.plot_components(forecast)
 ```
 
-# 参考
+## 参考
 
 * [Facebook 时间序列预测算法 Prophet 的研究](https://zr9558.com/2018/11/30/timeseriespredictionfbprophet/)
 * [Facebook 时间序列预测算法 Prophet 的研究](https://zhuanlan.zhihu.com/p/52330017)

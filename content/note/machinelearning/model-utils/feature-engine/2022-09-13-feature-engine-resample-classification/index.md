@@ -89,7 +89,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 不平衡数据集的问题描述
+## 不平衡数据集的问题描述
 
 样本类别样本不平衡(class-imbalance)数据集是指一个类中的示例数量与另一类中的示例数量显著不同的情况。
 例如在一个二元分类问题中，一个类只占总样本的一小部分，这被称为不平衡数据集。
@@ -116,9 +116,9 @@ img {
 将涵盖的一些技术包括重采样技术、代价敏感学习、使用适当的性能指标、集成方法和其他策略。
 通过这些技巧，可以为不平衡的数据集构建有效的模型
 
-# 不平衡数据集的处理方法
+## 不平衡数据集的处理方法
 
-## 处理不平衡数据集的技巧
+### 处理不平衡数据集的技巧
 
 重采样技术是处理不平衡数据集的最流行方法之一。
 这些技术涉及减少多数类中的示例数量或增加少数类中的示例数量
@@ -145,7 +145,7 @@ img {
 重采样技术、成本敏感学习、使用适当的性能指标和集成方法是一些技巧和策略，
 可以帮助处理不平衡的数据集并提高机器学习模型的性能
 
-## 在不平衡数据集上提高模型性能的策略
+### 在不平衡数据集上提高模型性能的策略
 
 * 收集更多数据是在不平衡数据集上提高模型性能的最直接策略之一。
   通过增加少数类中的示例数量，模型将有更多信息可供学习，并且不太可能偏向多数类。
@@ -165,15 +165,15 @@ img {
 以及使用异常检测等先进技术是一些可用于提高模型在不平衡数据集上的性能的策略。
 这些策略可以帮助平衡数据集，为模型提供更多示例以供学习，并识别数据集中信息量最大的示例
 
-# 算法
+## 算法
 
-## 随机过采样
+### 随机过采样
 
 通过有放回随机抽样替换当前可用样本来生成新样本，通过复制一些少数类的原始样本
 
-## SMOTE
+### SMOTE
 
-### SMOTE 算法简介
+#### SMOTE 算法简介
 
 SMOTE(Synthetic Minority Oversampling Technique)，合成少数类过采样技术。
 它是基于随机过采样算法的一种改进方案，由于随机过采样采取简单复制样本的策略来增加少数类样本，
@@ -195,7 +195,7 @@ SMOTE 算法的伪代码如下:
 
 ![img](images/SMOTE.png)
 
-### SMOTE 算法的缺陷
+#### SMOTE 算法的缺陷
 
 * 一是在近邻选择时，存在一定的盲目性。从上面的算法流程可以看出，在算法执行过程中，需要确定 `k` 值，
   即选择多少个近邻样本，这需要用户自行解决。从 `k` 值的定义可以看出，
@@ -207,7 +207,7 @@ SMOTE 算法的伪代码如下:
   从而模糊了正类样本和负类样本的边界，而且使边界变得越来越模糊。这种边界模糊性，虽然使数据集的平衡性得到了改善，
   但加大了分类算法进行分类的难度
 
-### 针对 SMOTE 算法的进一步改进
+#### 针对 SMOTE 算法的进一步改进
 
 针对 SMOTE 算法存在的边缘化和盲目性等问题，很多人纷纷提出了新的改进办法，
 在一定程度上改进了算法的性能，但还存在许多需要解决的问题。
@@ -218,58 +218,56 @@ Han 等人在 SMOTE 算法基础上进行了改进，
 然后在该区域内进行插值，以使新增加的"人造”样本更有效。这个适当的区域一般由经验给定，因此算法在执行的过程中有一定的局限性
 
 
-## ADASYN
+### ADASYN
 
 [Adasyn: adaptive synthetic sampling approach for imbalanced learning](https://sci2s.ugr.es/keel/pdf/algorithm/congreso/2008-He-ieee.pdf)
 
-## Borderline SMOTE
+### Borderline SMOTE
 
 
 
 
-## SVM SMOTE
+### SVM SMOTE
 
-## KMeans SMOTE
-
-
-
-
-## 联合采样
-
-### SMOTE Tomek
+### KMeans SMOTE
 
 
 
-### SMOTE ENN
+
+### 联合采样
+
+#### SMOTE Tomek
+
+
+
+#### SMOTE ENN
 
 edited nearest-neighbors
 
 
 
-## 集成采样器
+### 集成采样器
 
-### Bagging 分类器 
-
-
-### 随机森林分类器
+#### Bagging 分类器 
 
 
-
-### Boosting 分类器
-
-## 其他采样器
-
-### 自定义采样器
+#### 随机森林分类器
 
 
-### 自定义生成器
 
-#### TensorFlow
+#### Boosting 分类器
+
+### 其他采样器
+
+#### 自定义采样器
 
 
-#### Keras
+#### 自定义生成器
+
+##### TensorFlow
 
 
+##### Keras
 
 
 
@@ -284,32 +282,34 @@ edited nearest-neighbors
 
 
 
-# 不平衡数据集分类器指标
 
-## sklearn 指标
+
+## 不平衡数据集分类器指标
+
+### sklearn 指标
 
 `sklearn.metrics.balanced_accuracy_score`
 
-## imblearn 指标
+### imblearn 指标
 
-### 灵敏性和特异性指标
+#### 灵敏性和特异性指标
 
-### Macro-Averaged Mean Absolute Error
+#### Macro-Averaged Mean Absolute Error
 
 MA-MAE
 
-### 重要性指标
+#### 重要性指标
 
 
-# imblearn
+## imblearn
 
-## 安装
+### 安装
 
 ```bash
 $ pip install -U imbalanced-learn
 ```
 
-## 使用
+### 使用
 
 Estimator:
 
@@ -347,7 +347,7 @@ Outputs:
     - `pandas.Series`
 
 
-## 过采样
+### 过采样
 
 > Over-sampling
 
@@ -375,7 +375,7 @@ Outputs:
     - `SMOTENC`
     - `SVMSMOTE`
 
-### Random Over Sampler
+#### Random Over Sampler
 
 > * Naive Strategy: generate new samples by randomly sampling with replacement the current available samples
 > * API: `imblearn.over_sampling.RandomOverSampler`
@@ -457,7 +457,7 @@ df_resampled.head()
 
 随机过采样示例(Random Over-Sampling Examples)[Training and assessing classification rules with imbalanced data](https://doi.org/10.1007/s10618-012-0295-5)：
 
-### SMOTE
+#### SMOTE
 
 ```python
 from imblearn.over_sampling import ADASYN
@@ -468,7 +468,7 @@ print(sorted(Counter(y_resampled).items()))
 clf_smote = LinearSVC().fit(X_resampled, y_resampled)
 ```
 
-### ANASYN
+#### ANASYN
 
 ```python
 from imblearn.over_sampling import ADASYN
@@ -479,7 +479,7 @@ print(sorted(Counter(y_resampled).items()))
 clf_adasyn = LinearSVC().fit(X_resampled, y_resampled)
 ```
 
-### Borderline SMOTE
+#### Borderline SMOTE
 
 ```python
 from imblearn.over_sampling import BorderlineSMOTE
@@ -488,7 +488,7 @@ X_resampled, y_resampled = BorderlineSMOTE().fit_resample(X, y)
 print(sorted(Counter(y_resampled).items()))
 ```
 
-### SMOTENC
+#### SMOTENC
 
 > 处理类别型数据
 
@@ -512,7 +512,7 @@ print(sorted(Counter(y_resampled).items()))
 print(X_resampled[-5:])
 ```
 
-### SMOTEN
+#### SMOTEN
 
 > 处理类别型数据
 
@@ -536,19 +536,19 @@ X_res[y.size:]
 y_res[y.size:]
 ```
 
-### SVM SMOTE
+#### SVM SMOTE
 
 ```python
 
 ```
 
-### KMeans SMOTE
+#### KMeans SMOTE
 
 ```python
 
 ```
 
-## 降采样
+### 降采样
 
 > Under-sampling
 
@@ -567,7 +567,7 @@ y_res[y.size:]
         - `RandomUnderSampler()`
         - `TomekLinks()`
 
-### 原型生成
+#### 原型生成
 
 给定原始数据集 `$S$`, 原型生成算法会生成一个新的集合 `$S'$`。其中：
 
@@ -601,7 +601,7 @@ X_resampled, y_resampled = cc.fit_resample(X, y)
 print(sorted(Counter(y_resampled).items()))
 ```
 
-### 原型选择
+#### 原型选择
 
 与原型生成算法相反，原型选择算法将从原始集合中选择样本 
 . 所以， 
@@ -616,7 +616,7 @@ print(sorted(Counter(y_resampled).items()))
 
 第一组方法允许采用欠采样策略，其中样本数量在由用户指定。相比之下，清洁欠采样技术不允许此规范，并且旨在清洁特征空间
 
-#### Controlled 降采样
+##### Controlled 降采样
 
 ```python
 from imblearn.under_sampling import RandomUnderSampler
@@ -626,7 +626,7 @@ X_resampled, y_resampled = rus.fit_resample(X, y)
 print(sorted(Counter(y_resampled).items()))
 ```
 
-#### Cleaning 降采样
+##### Cleaning 降采样
 
 Tomek's links：
 
@@ -634,7 +634,7 @@ Condensed nearest neighbors and derived algorithms
 
 Instance hardness threshold：
 
-## 联合采样
+### 联合采样
 
 > Combination of over and under sampling
 
@@ -642,13 +642,13 @@ Instance hardness threshold：
     - imblearn.combine.SMOTEENN
     - imblearn.combine.SMOTETomek
 
-## 集成采样
+### 集成采样
 
 > Ensemble of samplers
 
 * imblearn.ensemble
 
-## 其他
+### 其他
 
 * imblearn.keras
 * imblearn.tensorflow
@@ -657,7 +657,7 @@ Instance hardness threshold：
 * imblearn.datasets
 * imblearn.utils
 
-# 参考
+## 参考
 
 * [SMOTE](https://www.jair.org/index.php/jair/article/view/10302/24590)
 * [Borderline-SMOTE](https://sci2s.ugr.es/keel/keel-dataset/pdfs/2005-Han-LNCS.pdf)

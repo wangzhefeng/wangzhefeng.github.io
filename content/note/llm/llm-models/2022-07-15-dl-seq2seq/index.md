@@ -44,7 +44,7 @@ img {
 </p></details><p></p>
 
 
-# Seq2Seq 模型简介
+## Seq2Seq 模型简介
 
 自然语言处理的很多应用中，输入和输出都可以是不定长序列。当输入和输出都是不定长序列时，
 可以使用 **编码器—解码器(Encoder-Decoder)** 或者 **Seq2Seq 模型**。
@@ -72,7 +72,7 @@ img {
     - 解码器在各个时间步中使用输入句子的编码信息和上个时间步的输出以及隐藏状态作为输入 
     - 希望解码器在各个时间步能正确依次输出翻译后的：法语单词、标点和特殊符号 `<eos>`
 
-# 编码器
+## 编码器
 
 编码器的作用是把一个不定长的输入序列变换为一个定长的背景变量(上下文向量, context vector) `$c$`，
 并在该背景变量中编码输入序列信息。编码器可以使用循环神经网络（RNN）。
@@ -95,7 +95,7 @@ img {
 也可以使用双向循环神经网络构造编码器。在这种情况下，编码器每个时间步的隐藏状态同时取决于该时间
 步之前和之后的子序列(包括当前时间步的输入)，并编码了整个序列的信息。
 
-# 解码器
+## 解码器
 
 编码器输出的背景变量 `$\boldsymbol{c} = q(\boldsymbol{h}_{1}, \boldsymbol{h}_{2}, \ldots, \boldsymbol{h}_{T})$` 编码了整个输入序列 `$x_{1}, \cdots, x_{T}$` 的信息。
 
@@ -114,7 +114,7 @@ img {
 例如，基于当前时间步的解码器隐藏状态 `$\boldsymbol{s}_{t^\prime}$`、上一时间步的输出 `$y_{t^\prime-1}$`，
 以及背景变量 `$c$` 来计算当前时间步输出 `$y_{t^\prime}$` 的概率分布。
 
-# 训练模型
+## 训练模型
 
 根据最大似然估计，可以最大化输出序列基于输入序列的条件概率
 
@@ -132,13 +132,13 @@ P(y_{1}, \ldots, y_{T'} \mid x_{1}, \ldots, x_{T})
 需要将解码器在上一个时间步的输出作为当前时间步的输入。与此不同，在训练中也可以将标签
 序列(训练集的真实输出序列)在上一个时间步的标签作为解码器在当前时间步的输入。这叫作 **强制教学(teacher forcing)**。
 
-# 总结
+## 总结
 
 * encoder-decoder 可以输入并输出不定长的序列
 * encoder-decoder 使用了两个循环神经网络
 * 在 encoder-decoder 的训练中，可以采用强制教学
 
-# 参考
+## 参考
 
 * [Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation](https://arxiv.org/abs/1409.0473)
 * [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/abs/1409.3215)

@@ -92,9 +92,9 @@ img {
 </p></details><p></p>
 
 
-# OpenCV 简介
+## OpenCV 简介
 
-## OpenCV 基本信息
+### OpenCV 基本信息
 
 > OpenCV (Open Source Computer Vision Library)，一个开源的计算机视觉库，
 > 官方网站为 [http://opencv.org](http://opencv.org/)。它提供了很多函数，
@@ -115,7 +115,7 @@ img {
   这个子库聚焦于统计模式识别以及聚类。ML 模块对 OpenCV 的核心任务(计算机视觉)相当有用，
   但是这个库也足够通用，可以用于任意机器学习问题。
 
-## IPPICV 加速
+### IPPICV 加速
 
 - 如果希望得到更多在英特尔架构上的自动优化，可以购买英特尔的集成性能基元(IPP)库，
   该库包含了许多算法领域的底层优化程序。在库安装完毕的情况下 OpenCV 在运行的时候会自动调用合适的 IPP 库
@@ -125,29 +125,29 @@ img {
   会替代相应的低级优化的 C 语言代码(在 cmake 中设置 `WITH_IPP=ON/OFF` 来开启或者关闭这一功能，默认情况为开启)。
   使用 IPP 获得的速度提升非常可观
 
-# OpenCV-Python
+## OpenCV-Python
 
 OpenCV-Python 是用于 OpenCV 的 Python API，结合了 OpenCV C++ API 和 Python 的最佳特性。
 
 OpenCV-Python 依赖于 Numpy 库，所有的 OpenCV 数组结构都能够与 Numpy 数组相互转换，
 这也使得使用 OpenCV 与 Numpy 的其他库的集成变得更加容易。
 
-## OpenCV-Python 依赖
+### OpenCV-Python 依赖
 
 * OpenCV 3.x
 * Python 3
 * Numpy
 * Matplotlib
 
-## OpenCV-Python 安装
+### OpenCV-Python 安装
 
-### 使用预构建的二进制文件和源代码
+#### 使用预构建的二进制文件和源代码
 
 - [Ubuntu doc](https://mp.weixin.qq.com/s?__biz=MzU2NTUwNjQ1Mw==&mid=2247484077&idx=1&sn=f8ac89b218addfe8b4110b8dfa121938&scene=19#wechat_redirect)
 - [Windows doc](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_setup/py_setup_in_windows/py_setup_in_windows.html)
 - [macOS doc](https://www.pyimagesearch.com/2016/12/19/install-opencv-3-on-macos-with-homebrew-the-easy-way/)
 
-### 使用非官方的 Python 预构建 OpenCV 包 
+#### 使用非官方的 Python 预构建 OpenCV 包 
 
 在 macOS、Windows、Linux 环境中安装:
 
@@ -163,7 +163,7 @@ $ pip install opencv-python
 $ pip install opencv-contrib-python
 ```
 
-## OpenCV-Python 调用
+### OpenCV-Python 调用
 
 > `cv2` 模块内采用的是面向对象的编程方式，而 `cv` 模块内更多采用的是面向过程的编程方式。
 
@@ -172,16 +172,16 @@ import cv2 as cv
 print(cv.__version__)
 ```
 
-# OpenCV 图像基本操作
+## OpenCV 图像基本操作
 
 * 键盘上的 Escape 键(`0xFF == 27`)
     - 如果按下了退出键，则循环将中断并且程序停止
 * `cv2.destroyAllWindow()`
     - 如果要销毁任何特定窗口，将确切的窗口名称作为参数传递
 
-## 图像读取
+### 图像读取
 
-### API
+#### API
 
 * `cv2.imread(filename, flags)`
     - `filename`：要读取的图像的完整文件名
@@ -196,7 +196,7 @@ print(cv.__version__)
             - 将图像调整为三通道的 BGR 彩色图像，任何图像的透明度都会被忽视，默认选项 
             - 参数编码：`1`  
 
-### 示例
+#### 示例
 
 ```python
 import cv2
@@ -264,9 +264,9 @@ print(img)
   [ 92  75 166]]]
 ```
 
-## 图像显示
+### 图像显示
 
-### API
+#### API
 
 1. `cv2.imshow(winname, mat)`
 
@@ -323,7 +323,7 @@ print(img)
 </div>
 
 
-### Jupyter Notebook
+#### Jupyter Notebook
 
 OpenCV 显示图像：
 
@@ -355,7 +355,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-### Python Script
+#### Python Script
 
 ```python
 import cv2
@@ -369,9 +369,9 @@ while True:
 cv2.destroyAllWindows()
 ```
 
-## 图像保存
+### 图像保存
 
-### API
+#### API
 
 `cv2.imwrite()`
 
@@ -385,7 +385,7 @@ cv2.destroyAllWindows()
     - `filename`：要保存的目标文件的完整路径名，包括文件扩展名
     - `img`：被保存图像的名称
 
-### 示例
+#### 示例
 
 ```python
 import cv2
@@ -394,11 +394,11 @@ img = cv2.imread("img.jpg")
 cv2.imwrite("final_image.png", img)
 ```
 
-## 像素处理
+### 像素处理
 
 像素是图像构成的基本单位，像素处理是图像处理的基本操作，可以通过索引对图像内的元素进行访问和处理。
 
-### 二值图像及灰度图像
+#### 二值图像及灰度图像
 
 OpenCV 中的最小的数据类型是无符号的 8 位二进制数，其最小值是 0，最大值是 255。
 其使用 8 位二进制数的最小值 0 表示二值图像中的黑色，
@@ -490,7 +490,7 @@ img[50, 90] 修改值：255
 
 <img src="images/after.png" width="50%" />
 
-### 彩色图像
+#### 彩色图像
 
 OpenCV 在处理 RGB 模式的彩色图像时，会按照行方向依次分别读取该 RGB 图像像素点的 B 通道、
 G 通道、R 通道的像素值，并将像素值以行为单位存储在 `ndarray` 的列中。
@@ -564,13 +564,13 @@ cv2.destroyAllWindows()
 修改后 img[100, 0] = [0 0 0]
 ```
 
-## 通道处理
+### 通道处理
 
 RGB 图像是由 R 通道、G 通道、B 通道三个通道构成的。
 需要注意的是，OpenCV 中的通道是按照 B->G->R 通道的顺序存储的。
 在图像处理过程中，可以根据需要对通道进行拆分和合并。
 
-### 通道拆分
+#### 通道拆分
 
 针对 RGB 图像，可以分别拆分出其 R 通道、G 通道、B 通道。
 在 OpenCV 中，通过索引可以直接将各个通道从图像内提出来。
@@ -624,7 +624,7 @@ cv2.imshow("lenab0g0", lena)
 b, g, r = cv2.split(img)
 ```
 
-### 通道合并
+#### 通道合并
 
 通道合并是通道拆分的逆过程，通过合并通道可以将三个通道的灰度图像合并成一副彩色图像。
 函数 `cv2.merge()` 可以实现通道合并。例如，使用函数 `cv2.merge()` 将 B 通道图像 `b`、
@@ -661,7 +661,7 @@ cv2.destroyAllWindows()
 <img src="images/channel-bgr.png" width="30%" />
 <img src="images/channel-rgb.png" width="30%" />
 
-## 调整图像大小
+### 调整图像大小
 
 OpenCV 使用函数 `cv2.resize()` 实现对图像的缩放，该函数的具体语法为：
 
@@ -681,19 +681,19 @@ dst = cv2.resize(src, dsize[, fx[, fy[, interpolation]]])
 
 
 
-## 掩模
+### 掩模
 
 
 
-## 色彩处理
+### 色彩处理
 
 
-## 滤波处理
+### 滤波处理
 
 
-## 形态学
+### 形态学
 
-## 图像变换
+### 图像变换
 
 图像变换包括:
 
@@ -703,7 +703,7 @@ dst = cv2.resize(src, dsize[, fx[, fy[, interpolation]]])
 * 裁剪
 * 翻转
 
-### 图像翻转
+#### 图像翻转
 
 ```python
 import matplotlib.pyplot as plt
@@ -713,9 +713,9 @@ img = cv2.imread("img.jpg")
 cv2.flip()
 ```
 
-## 在图像上绘图
+### 在图像上绘图
 
-### 基本流程
+#### 基本流程
 
 1. 读取或创建一个图像作为模板
 
@@ -756,7 +756,7 @@ cv2.shape(img, pt1, pt2, color, thickness, lineType)
 - `thickness`: 几何图形的厚度
 - `lineType`: 线类型
 
-### 直线
+#### 直线
 
 ```python
 import matplotlib.pyplot as plt
@@ -776,7 +776,7 @@ plt.show()
 
 ![img](images/img_line.png)
 
-### 矩形
+#### 矩形
 
 ```python
 import matplotlib.pyplot as plt
@@ -796,7 +796,7 @@ plt.show()
 
 ![img](images/img_rectangle.png)
 
-### 圆圈
+#### 圆圈
 
 ```python
 import matplotlib.pyplot as plt
@@ -816,9 +816,9 @@ plt.show()
 
 ![img](images/img_circle.png)
 
-## 在图像上写文字
+### 在图像上写文字
 
-### API
+#### API
 
 ```python
 cv2.putText(
@@ -844,7 +844,7 @@ cv2.putText(
 - `thickness`: 文字字体粗细
 - `lineType`: 文字线条类型
 
-### 示例
+#### 示例
 
 ```python
 import matplotlib.pyplot as plt
@@ -867,12 +867,12 @@ plt.show()
 
 ![img](images/img_text.png)
 
-# OpenCV 收集图片数据集
+## OpenCV 收集图片数据集
 
 通过视频截取图像来创建图像数据集是收集和格式化图像数据的最简单方法之一。
 建议在有一面空白墙壁来收集数据，以确保框架中没有外部噪音
 
-## 初始化
+### 初始化
 
 创建一个 VideoCapture 对象，该对象从系统的网络摄像头实时捕获视频
 
@@ -880,7 +880,7 @@ plt.show()
 * `images_collected`：这是一个整数变量，用于指示系统中收集和保存的图像数量
 * `images_required`：这是一个整数变量，用于指示我们打算收集的图像数量
 
-## 示例
+### 示例
 
 ```python
 import os
@@ -939,14 +939,14 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 
-## 参考
+### 参考
 
 * [Capture Video from Camera](https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html)
 * [使用 OpenCV 收集数据](https://mp.weixin.qq.com/s/R9uBQaVl2Zlr2rZ5kaq4Rw)
 
-# OpenCV 图像投影变换
+## OpenCV 图像投影变换
 
-## 投影变换(仿射变换)
+### 投影变换(仿射变换)
 
 在数学中，线性变换是将一个向量空间映射到另一个向量空间的函数，通常由矩阵实现。
 如果映射保留向量加法和标量乘法，则映射被认为是线性变换
@@ -954,7 +954,7 @@ cv2.destroyAllWindows()
 要将线性变换应用于向量(即，一个点的坐标，在图像中就是像素的 `$x$` 和 `$y$`值)，
 需要将该向量乘以表示线性变换的矩阵。作为输出，将获得一个坐标转换后的向量
 
-### 投影变换矩阵
+#### 投影变换矩阵
 
 投影变换可以用下面的矩阵表示
 
@@ -998,7 +998,7 @@ cv2.destroyAllWindows()
 
 是投影向量，对于仿射变换，该向量的所有元素始终等于 0
 
-### 投影变换
+#### 投影变换
 
 如果 `$x$` 和 `$y$` 是一个点的坐标，则可以通过简单的乘法进行变换
 
@@ -1027,7 +1027,7 @@ cv2.destroyAllWindows()
 
 其中: `$x^{'}$` 和 `$y^{'}$` 是变换点的坐标
 
-## 示例
+### 示例
 
 1. 读取源图像并获取源图像的大小
 
@@ -1110,9 +1110,9 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
-# OpenCV BGR 像素强度图
+## OpenCV BGR 像素强度图
 
-## 图像属性、像素属性
+### 图像属性、像素属性
 
 ```python
 import numpy as np
@@ -1126,7 +1126,7 @@ print(f"Pixels num: {img.size}")
 print(f"First pixel: {img[0][0]}")
 ```
 
-## BGR 像素强度线(计数图)
+### BGR 像素强度线(计数图)
 
 ```python
 colors = ("blue", "green", "red")
@@ -1153,6 +1153,6 @@ for count, color in enumerate(colors):
 
 
 
-# 参考
+## 参考
 
 * [图像上的 OpenCV 算术运算](https://mp.weixin.qq.com/s/6hCjjUi9H5RiP_ijdTuFIA)

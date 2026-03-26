@@ -41,9 +41,9 @@ img {
 - [查看 Graph 和 Profile 信息](#查看-graph-和-profile-信息)
 </p></details><p></p>
 
-# 实时查看参数变化情况
+## 实时查看参数变化情况
 
-## TensorBoard 使用介绍
+### TensorBoard 使用介绍
 
 1. 首先, 在代码目录下建立一个文件夹, 存放 TensorBoard 的记录文件
 
@@ -84,7 +84,7 @@ $ tensorboard --logdir=./tensorboard
       或者建立一个新的记录文件夹并开启 TensorBoard, 将 `--logdir` 参数设置为新建里的文件夹
    - 记录文件夹目录许保持全英文
 
-## TensorBoard 代码框架
+### TensorBoard 代码框架
 
 ```python
 
@@ -101,7 +101,7 @@ with summary_writer.as_default():
    tf.summary.scalar("MyScalar", my_scalar, step = batch_index)
 ```
 
-# 查看 Graph 和 Profile 信息
+## 查看 Graph 和 Profile 信息
 
 在训练时使用 `tf.summary.trace_on` 开启 Trace, 此时 TensorFlow 会将训练时的大量信息, 
 如:计算图的结构、每个操作所耗费的时间等, 记录下来。

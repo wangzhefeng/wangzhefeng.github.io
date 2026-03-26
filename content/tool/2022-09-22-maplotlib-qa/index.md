@@ -60,11 +60,11 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 颜色搭配
+## 颜色搭配
 
-# 图像风格设置
+## 图像风格设置
 
-# 解决使用中文乱码问题
+## 解决使用中文乱码问题
 
 在使用 Matplotlib 画图的时候，发现一些 Unicode 字符(例如，汉字) 无法正常显示：在生成的图片中，
 汉字是乱码的，显示为一个方框。经过大量的查找和阅读，
@@ -75,9 +75,9 @@ img {
 需要指示 Matplotlib 使用一种支持中文的字体即可。
 或者，更直接地，在画图时可以直接给 Matplotlib 提供一个中文字体的路径
 
-## 查看可以指定的中文字体
+### 查看可以指定的中文字体
 
-### 查找系统已安装的中文字体
+#### 查找系统已安装的中文字体
 
 Matplotlib 提供了 `FontManager` 类来处理字体相关的操作，这个类有一个 `ttflist` 属性，
 该属性提供了 Matplotlib 所能够发现到的字体列表。从这个字体列表，可以很容易得到这些字体的名称。
@@ -91,7 +91,7 @@ $ fc-list :lang=zh
 * Linux/macOS: 在 Linux/macOS 系统上，`fc_list` 程序通常是自带的，无需安装
 * 在 Windows 系统上，可以安装 MiKTeX 或 Tex Live 来使用 `fc-list` 命令
 
-### 查找 Matplotlib 可以使用的中文字体
+#### 查找 Matplotlib 可以使用的中文字体
 
 使用 `fc-list :lang=zh` 可以列出系统上可用的中文字体，值的注意的是，这些中文字体并非都可以被 Matplotlib 使用，
 Matplotlib 无法使用其中的 ttc(TrueType Collection) 格式的字体，
@@ -105,7 +105,7 @@ mat_fonts = set(f.name for f in fm.ttflist)
 print(mat_fonts)
 ```
 
-### 在系统上安装中文字体
+#### 在系统上安装中文字体
 
 在开始下面步骤之前，确保你的系统上已经安装了中文字体，如果你使用的是中文系统，
 这应该不是问题；或者如果你想使用一种新的中文字体，
@@ -116,11 +116,11 @@ print(mat_fonts)
 * macOS 中字体册
     ![img](images/mac_font.png)
 
-## 指定中文字体名称
+### 指定中文字体名称
 
 第一种使用中文的方式是给 Matplotlib 提供一个有效的中文字体名，有两种方式
 
-### Matplotlib rc 设置全局字体
+#### Matplotlib rc 设置全局字体
 
 第一种方式是，使用 `rcParams` 设置全局中文字体名。
 找到了 Matplotlib 索引的中文字体以后，
@@ -153,7 +153,7 @@ plt.text(0.5, 0.5, s = u"测试")
 plt.show()
 ```
 
-### 在画图函数中使用字体名称
+#### 在画图函数中使用字体名称
 
 第二种方式是，仅想在某个画图命令中使用中文字体，可以在画图命令中指定使用的字体名称
 
@@ -167,7 +167,7 @@ plt.text(0.5, 0.5, s = u"测试", fontname = font_name)
 plt.show()
 ```
 
-## 指定中文字体的具体路径
+### 指定中文字体的具体路径
 
 为了使用系统中的任何字体，也可以使用第二种方式：直接给 Matplotlib 提供一个字体的路径
 
@@ -196,9 +196,9 @@ macOS:
 
 ```
 
-# 解决其他乱码问题
+## 解决其他乱码问题
 
-## 负号的乱码问题
+### 负号的乱码问题
 
 ```python
 import matplotlib as mpl
@@ -206,7 +206,7 @@ import matplotlib as mpl
 mpl.rcParams["axes.unicode_minus"] = False # 解决图像中的 “-” 负号的乱码问题
 ```
 
-## 支持数学符号
+### 支持数学符号
 
 ```python
 from matplotlib import rc
@@ -214,7 +214,7 @@ from matplotlib import rc
 rc('mathtext', default = 'regular')  # 支持数学符号
 ```
 
-# 双坐标轴
+## 双坐标轴
 
 ```python
 import matplotlib as mpl
@@ -292,12 +292,12 @@ def timeseries_plot_two_yaxis(df,
         plt.savefig(os.path.join(os.path.dirname(__file__), imgpath))
 ```
 
-# 控制坐标轴刻度间距和标签
+## 控制坐标轴刻度间距和标签
 
 Matplotlib 默认自动处理刻度在坐标轴上的位置，但有时我们需要覆盖默认的坐标轴刻度配置，
 以便更加快速估计图形中点的坐标。
 
-## 添加主刻度和副刻度
+### 添加主刻度和副刻度
 
 举例说明：强制水平刻度每隔 5 个单位步长呈现一次。此外，还添加了副刻度，
 副刻度的间隔为 1 个单位步长。
@@ -319,7 +319,7 @@ plt.show()
 
 ![img](images/ticker1.png)
 
-## 为刻度添加辅助网络
+### 为刻度添加辅助网络
 
 ```python
 import numpy as np
@@ -377,14 +377,14 @@ plt.show()
 ![img](images/ticker4.png)
 
 
-## 控制刻度标签
+### 控制刻度标签
 
 刻度标签是图形空间中的坐标，虽然数字刻度标签对于大多说场景来说是足够的，但是却并不总是能够满足需求。
 例如，我们需要显示 100 个公司的营收情况，这时候我们就需要横坐标刻度标签为公司名，而非数字；
 同样对于时间序列，我们希望横坐标刻度标签为日期。考虑到此类需求，
 我们需要使用 Matplotlib 为此提供了的 API 控制刻度标签。
 
-### ticker.Locator 和 ticker.Formatter
+#### ticker.Locator 和 ticker.Formatter
 
 ```python
 import numpy as np
@@ -415,7 +415,7 @@ plt.show()
 * 用 `ticker.FixedLocator` 来确保每个标签中心都正好与刻度中间对齐
 * 用 `ticker.set_major_locator` 设置坐标轴标签位置
 
-### plt.xticks
+#### plt.xticks
 
 虽然使用上述方法可以控制刻度标签，但可以看出此方法过于复杂，
 如果刻度标签是固定的字符列表，那么可以用以下简单的设置方法。
@@ -436,7 +436,7 @@ plt.show()
 使用 plt.xticks() 函数为一组固定的刻度提供固定标签，此函数接受位置列表和名称列表作为参数值，
 可以看出，此方法比第一种方法实现起来更简单。
 
-## 高级刻度标签控制
+### 高级刻度标签控制
 
 不仅可以使用固定标签，使用 ticker API 可以使用函数生成的标签：
 
@@ -492,6 +492,6 @@ plt.show()
 以避免长标签之间重叠，旋转使用 `plt.setp()` 函数，其接受刻度标签实例和旋转角度作为参数值。
 
 
-# 参考
+## 参考
 
 * [Matplotlib控制坐标轴刻度间距和标签](https://developer.aliyun.com/article/840487)

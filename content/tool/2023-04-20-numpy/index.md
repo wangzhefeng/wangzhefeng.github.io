@@ -71,9 +71,9 @@ import numpy as np
 np.set_printoptions(threshold = 'nan')
 ```
 
-# ndarray 一种多维数组对象
+## ndarray 一种多维数组对象
 
-## 创建 ndarray
+### 创建 ndarray
 
 ```python
 data_list = [1, 2, 3]
@@ -96,7 +96,7 @@ np.eye(4)
 np.identity(4)
 ```
 
-## 查看 ndarray
+### 查看 ndarray
 
 > 维度, 形状, 大小, 类型, 数据存储
 
@@ -110,7 +110,7 @@ print(arr_list.data)
 type(arr_list)
 ```
 
-## ndarray 的数据类型
+### ndarray 的数据类型
 
 ```
 np.array(
@@ -150,7 +150,7 @@ arr2 = np.array(data2)
 arr2.astype(arr1.dtype)
 ```
 
-## 数组与标量之间的运算
+### 数组与标量之间的运算
 
 > 矢量化 vectorization
 
@@ -165,9 +165,9 @@ arr * arr
 arr ** 0.5
 ```
 
-## 基本的索引和切片
+### 基本的索引和切片
 
-### 1d
+#### 1d
 
 ```python
 arr = np.arange(10)
@@ -182,7 +182,7 @@ print(arr[1:7])
 print(arr[:])
 ```
 
-### 2d
+#### 2d
 
 ```python
 arr2d = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -199,7 +199,7 @@ print(arr2d[:, ])
 print(arr2d[, 1])
 ```
 
-### 3d
+#### 3d
 
 ```python
 arr3d = np.array([
@@ -230,7 +230,7 @@ print(arr3d[, :, ])
 print(arr3d[, , :])
 ```
 
-## 布尔型索引
+### 布尔型索引
 
 > 布尔型数组的长度必须和被索引的轴的长度一致, 此外还可以将布尔型数组跟切片、整数混合使用
 
@@ -244,7 +244,7 @@ print(arr3d[, , :])
 * `&`（条件和）
 * `|`（条件或）
 
-## 花式索引
+### 花式索引
 
 > Fancy indexing
 
@@ -266,7 +266,7 @@ print(arr[[1, 5, 7, 2]][: [0, 3, 1, 2]])
 print(arr[np.ix_([1, 5, 7, 2], [0, 3, 1, 2])])
 ```
 
-## 数组转置和轴对换(View)
+### 数组转置和轴对换(View)
 
 * `.T`
 * `.transpose()`
@@ -286,7 +286,7 @@ arr.transpose((1, 0, 2))
 arr.swapaxex(1, 2)
 ```
 
-# 通用函数
+## 通用函数
 
 > ufunc:执行元素级运算的函数
 
@@ -351,7 +351,7 @@ np.logical_or(arr1, arr2)            # |
 np.logical_xor(arr1, arr2)            # ^
 ```
 
-# 利用数组进行数据处理
+## 利用数组进行数据处理
 
 ```python
 np.meshgrid() # 接受两个一维数组, 并且产生两个举证,对应于两个数组中所有的(x, y)对
@@ -362,7 +362,7 @@ print(xs)
 print(ys)
 ```
 
-## 将条件逻辑表达为数组运算
+### 将条件逻辑表达为数组运算
 
 ```python
 # np.where()  ### x if condetion else y
@@ -381,7 +381,7 @@ np.where(arr > 0, 2, arr)
 # np.where(cond1 & cond2, 0, np.where(cond1, 1, np.where(cond2, 2, 3)))
 ```
 
-## 数学和统计方法
+### 数学和统计方法
 
 ```python
 arr = np.random.randn(5, 4)
@@ -412,7 +412,7 @@ np.argmax() # index
 .argmax()
 ```
 
-## 用于布尔型数组的方法
+### 用于布尔型数组的方法
 
 ```python
 .sum()   # 布尔数组中的True值计数
@@ -426,7 +426,7 @@ bools.any()
 bools.all()
 ```
 
-## 排序
+### 排序
 
 ```python
 np.sort()             #（副本）
@@ -439,7 +439,7 @@ arr = np.random.randn(5, 3)
 arr.sort(axis = 1)
 ```
 
-## 唯一化及其他的集合逻辑
+### 唯一化及其他的集合逻辑
 
 > 一维数组
 
@@ -458,11 +458,11 @@ np.setdiff1d(x, y)   # 差集
 np.setxor1d(x, y)    # 异或
 ```
 
-# 用于数组的文件输入输出
+## 用于数组的文件输入输出
 
 > 二进制数据和文本数据
 
-## 二进制
+### 二进制
 
 ```python
 np.save('.npy', arr)
@@ -472,7 +472,7 @@ np.savez('.npz', arr1, arr2)
 np.load('.npz')
 ```
 
-## 文本
+### 文本
 
 ```python
 np.loadtxt('.txt', delimiter = ',')
@@ -480,7 +480,7 @@ np.genfromtxt()
 np.savetxt()
 ```
 
-# 线性代数
+## 线性代数
 
 ```python
 from numpy.linalg import *
@@ -503,15 +503,15 @@ np.linalg.solve()
 np.linalg.lstsq()
 ```
 
-# 随机数生成
+## 随机数生成
 
-## 设置随机数
+### 设置随机数
 
 ```python
 np.random.seed(123)
 ```
 
-## 随机排序
+### 随机排序
 
 ```python
 # 返回一个序列的随机排列或返回一个随机排列的范围
@@ -521,7 +521,7 @@ np.random.permutation(np.arange(16))
 np.random.shuffle(np.arange(5))
 ```
 
-## 均匀分布
+### 均匀分布
 
 ```python
 np.random.rand(5)       # 生成均匀分布随机数[0, 1)
@@ -529,7 +529,7 @@ np.random.uniform(10)   # 均匀分布(0, 1)
 np.random.randint()     # 从给定范围内随机取整数
 ```
 
-## 正态分布
+### 正态分布
 
 ```python
 # 一般正态分布
@@ -545,7 +545,7 @@ np.random.randn()
 np.random.normal(loc = 0, scale = 1, size = (6))
 ```
 
-## 其他分布
+### 其他分布
 
 ```python
 np.random.binomial(5)
@@ -554,7 +554,7 @@ np.random.chisquare(5)
 np.random.gamma(5)
 ```
 
-# 其他
+## 其他
 
 ```python
 np.array().reshape()

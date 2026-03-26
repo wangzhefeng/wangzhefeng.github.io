@@ -43,9 +43,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 为什么要使用描述符? 
+## 为什么要使用描述符? 
 
-## 问题
+### 问题
 
 假想你正在给学校写一个成绩管理系统, 并没有太多编码经验的你, 可能按照下面的常规思路来写. 
 看起来一切都很合理. 
@@ -102,7 +102,7 @@ img {
 > 如果实例字典中有与描述符同名的属性, 如果描述符是数据描述符, 优先使用数据描述符, 
 > 如果是非数据描述符, 优先使用字典中的属性。
 
-## 常规思路: 
+### 常规思路: 
 
 ```python
 class Student:
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## 加入判断逻辑
+### 加入判断逻辑
 
 ```python
 class Student:
@@ -154,7 +154,7 @@ class Student:
             )
 ```
 
-## Property 特性
+### Property 特性
 
 ```python
 class Student:
@@ -203,7 +203,7 @@ class Student:
             )
 ```
 
-## 描述符
+### 描述符
 
 ```python
 class Score:
@@ -244,6 +244,6 @@ class Student:
             )
 ```
 
-# 参考
+## 参考
 
 * [描述符](https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496467&idx=1&sn=927f0093e62a78a1a04d1b0305c45c7a&source=41#wechat_redirect)

@@ -63,7 +63,7 @@ img {
       - 创建检查点文件并从故障中恢复
       - 保存 TensorBoard 的摘要
 
-# 预创建的 Estimator
+## 预创建的 Estimator
 
 **预创建的 Estimator 程序的结构**
 
@@ -116,7 +116,7 @@ estimator.train(input_fn = my_training_set, setps = 2000)
    - 事件(汇总)编写和普遍有用的汇总的最佳做法。
 
 
-# 自定义的 Estimator
+## 自定义的 Estimator
 
 - 每个
    Estimator(无论是预创建还是自定义)的核心都是其模型函数, 这是一种为训练、评估和预测构建图的方法。如果您使用预创建的
@@ -131,7 +131,7 @@ estimator.train(input_fn = my_training_set, setps = 2000)
    - 4.可以通过构建自定义的Estimator进一步改进模型; 
 
 
-# 从 Keras 模型创建 Estimator
+## 从 Keras 模型创建 Estimator
 
 
 - 可以将现有的Keras的模型转换为Estimator, 这样Keras模型就可以利用Estimator的优势, 比如进行分布式训练; 

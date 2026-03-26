@@ -83,9 +83,9 @@ img {
 - [参考资料](#参考资料)
 </p></details><p></p>
 
-# 回调函数
+## 回调函数
 
-# 模型训练
+## 模型训练
 
 TensorFlow 训练模型通常有 3 种方法:
 
@@ -93,15 +93,15 @@ TensorFlow 训练模型通常有 3 种方法:
 * 内置 `train_on_batch()` 方法
 * 自定义训练循环
 
-## 使用 GPU 训练模型
+### 使用 GPU 训练模型
 
-### 使用单 GPU 训练模型
+#### 使用单 GPU 训练模型
 
-### 使用多 GPU 训练模型
+#### 使用多 GPU 训练模型
 
-## 使用 TPU 训练模型
+### 使用 TPU 训练模型
 
-# 损失函数
+## 损失函数
 
 一般来说，监督学习的目标函数由损失函数和正则化项组成，
 
@@ -122,9 +122,9 @@ TensorFlow 训练模型通常有 3 种方法:
 如果有需要，也可以自定义损失函数，自定义损失函数需要接收两个张量 `y_true`，`y_pred` 作为输入参数，
 并输出一个标量作为损失函数值
 
-## 内置损失函数
+### 内置损失函数
 
-### 内置损失函数的两种形式
+#### 内置损失函数的两种形式
 
 内置的损失函数一般有类的实现和函数的实现两种形式，如
 
@@ -173,7 +173,7 @@ bce = tf.keras.losses.BinaryCrossentropy(
 bce(y_true，y_pred).numpy()
 ```
 
-### 回归损失
+#### 回归损失
 
 * `MeanSquaredError` 类、`mean_squared_error` 函数，MSE
     - 均方误差损失，mse
@@ -185,7 +185,7 @@ bce(y_true，y_pred).numpy()
 * `MeanAbsolutePercentageError` 类、`mean_absolute_percentage_error` 函数
     - 平均百分比误差损失，mape
 
-### 二分类损失
+#### 二分类损失
 
 * `BinaryCrossentropy` 类、`binary_crossentropy()` 函数
     - 二元交叉熵损失
@@ -193,7 +193,7 @@ bce(y_true，y_pred).numpy()
     - 合页损失
     - 最著名的应用是支持向量机的损失函数
 
-### 多分类损失
+#### 多分类损失
 
 * `CategoricalCrossentropy` 类、`categorical_crossentropy()` 函数
     - 类别交叉熵
@@ -205,18 +205,18 @@ bce(y_true，y_pred).numpy()
 * `CosineSimilarity` 类、`cosine_similarity` 函数
     - 余弦相似度
 
-### 概率损失
+#### 概率损失
 
 * `KLDivergence` 类、`kl_divergence()` 函数，KLD
     - 相对熵损失，KL 散度
     - 常用于最大期望算法 EM 的损失函数，两个概率分布差异的一种信息度量
 
-## 创建自定义损失函数
+### 创建自定义损失函数
 
 如果有需要，也可以自定义损失函数，自定义损失函数需要接收两个张量 `y_true`，`y_pred` 作为输入参数，
 并输出一个标量作为损失函数值
 
-### 类形式的损失函数
+#### 类形式的损失函数
 
 自定义损失函数需要继承 `tf.keras.losses.Loss` 类，重写 `call` 方法即可，
 输入真实值 `y_true` 和模型预测值 `y_pred`，输出模型预测值和真实值之间通
@@ -260,7 +260,7 @@ class FocalLoss(losses.Loss):
         return loss
 ```
 
-### 函数形式的损失函数
+#### 函数形式的损失函数
 
 ```python
 import tensorflow as tf
@@ -280,9 +280,9 @@ def focal_loss(gamma = 2.0，alpha = 0.75):
     return focal_loss_fixed
 ```
 
-## 损失函数的使用—compile() & fit()
+### 损失函数的使用—compile() & fit()
 
-### 通过实例化一个损失类创建损失函数
+#### 通过实例化一个损失类创建损失函数
 
 * 可以传递配置参数
 
@@ -309,7 +309,7 @@ model.compile(
 )
 ```
 
-### 直接使用损失函数
+#### 直接使用损失函数
 
 ```python
 from tensorflow import keras
@@ -335,7 +335,7 @@ model.compile(
 )
 ```
 
-## 损失函数的使用—单独使用
+### 损失函数的使用—单独使用
 
 ```python
 tf.keras.losses.mean_squared_error(tf.ones((2，2))，tf.zeros((2，2)))
@@ -355,7 +355,7 @@ loss_fn = tf.keras.losses.MeanSquaredError()
 loss_fn(tf.ones((2，2))，tf.zeros((2，2)))
 ```
 
-# TensorFlow 优化器
+## TensorFlow 优化器
 
 模型优化算法的选择直接关系到最终模型的性能，有时候效果不好，
 未必是特征的问题或者模型设计的问题，很可能就是优化算法的问题
@@ -371,7 +371,7 @@ loss_fn(tf.ones((2，2))，tf.zeros((2，2)))
 此外，目前也有一些前沿的优化算法，据称效果比 Adam 更好，
 例如: LazyAdam、Look-ahead、RAdam、Ranger 等
 
-## TensorFlow 内置优化器
+### TensorFlow 内置优化器
 
 在 `tf.keras.optimizers` 子模块中，深度学习优化算法基本都有对应的类实现
 
@@ -379,7 +379,7 @@ loss_fn(tf.ones((2，2))，tf.zeros((2，2)))
 from tensorflow.keras import optimizers
 ```
 
-### SGD
+#### SGD
 
 SGD，默认参数为纯 SGD
 
@@ -395,7 +395,7 @@ model.compile(loss, optimizer = sgd)
 model.compile(loss, optimizer = "sgd")
 ```
 
-### SGDM(TODO)
+#### SGDM(TODO)
 
 ```python
 sgdm = optimizers.SGD(lr = 0.01, momentum = 0.1)
@@ -404,7 +404,7 @@ model.compile(loss, optimizer = sgdm)
 model.compile(loss, optimizer = "sgdm")
 ```
 
-### NAG(TOOD)
+#### NAG(TOOD)
 
 ```python
 nag = optimizers.SGD(lr = 0.01, nesterov = True)
@@ -413,7 +413,7 @@ model.compile(loss, optimizer = nag)
 model.compile(loss, optimizer = "nag")
 ```
 
-### RMSprop
+#### RMSprop
 
 ```python
 rmsprop = optimizers.RMSprop(lr = 0.001)
@@ -422,10 +422,10 @@ model.compile(loss, optimizer = rmsprop)
 model.compile(loss, optimizer = "rmsprop")
 ```
 
-### NAG
+#### NAG
 
 
-### Adagrad
+#### Adagrad
 
 ```python
 adagrad = optimizers.Adagrad(lr = 0.01)
@@ -434,7 +434,7 @@ model.compile(loss, optimizer = adagrad)
 model.compile(loss, optimizer = "adagrad")
 ```
 
-### Adadelta
+#### Adadelta
 
 ```python
 adadelta = optimizers.Adadelta(lr = 1.0)
@@ -443,7 +443,7 @@ model.compile(loss, optimizer = adadelta)
 model.compile(loss, optimizer = "adadelta")
 ```
 
-### Adam
+#### Adam
 
 ```python
 adam = optimizers.Adam(lr = 0.001)
@@ -452,7 +452,7 @@ model.compile(loss, optimizer = adam)
 model.compile(loss, optimizer = "adam")
 ```
 
-### Adamax(TODO)
+#### Adamax(TODO)
 
 ```python
 adamax = optimizers.Adamax(lr = 0.02)
@@ -461,7 +461,7 @@ model.compile(loss, optimizer = adamax)
 model.compile(loss, optimizer = "adamax")
 ```
 
-### Nadam
+#### Nadam
 
 ```python
 nadam = optimizers.Nadam(lr = 0.002)
@@ -470,7 +470,7 @@ model.compile(loss, optimizer = nadam)
 model.compile(loss, optimizer = "nadam")
 ```
 
-## TensorFlow 优化器使用方法
+### TensorFlow 优化器使用方法
 
 * `optimizer.apply_gradients`
     - TensorFlow 优化器主要使用 `optimizer.apply_gradients` 方法传入变量和对应梯度，
@@ -483,7 +483,7 @@ model.compile(loss, optimizer = "nadam")
 初始化优化器时会创建一个变量 `optimizer.iterations` 用于记录迭代的次数。
 因此优化器和 `tf.Variable` 一样，一般需要在 `@tf.function` 外创建
 
-### 模型编译和拟合
+#### 模型编译和拟合
 
 ```python
 from tensorflow import keras
@@ -501,7 +501,7 @@ model.compile(loss = "categorical_crossentropy", optimizer = opt)
 # model.compile(loss = "categorical_crossentropy", optimizer = "adam")
 ```
 
-### 自定义迭代训练
+#### 自定义迭代训练
 
 ```python
 # Instantiate an optimizer
@@ -524,7 +524,7 @@ for x, y in dataset:
     optimizer.apply_gradients(zip(gradients, model.trainable_weights))
 ```
 
-### 学习率衰减和调度
+#### 学习率衰减和调度
 
 * 可以使用学习率时间表来调整优化器的学习率如何随时间变化
 * ExponentialDecay: 指数衰减
@@ -541,9 +541,9 @@ lr_schedule = keras.optimizers.schedules.ExponentialDecay(
 optimizer = keras.optimizers.SGD(learning_rate = lr_schedule)
 ```
 
-## TensorFlow 优化器使用示例
+### TensorFlow 优化器使用示例
 
-### optimizer.apply_gradients
+#### optimizer.apply_gradients
 
 求 `$f(x) = a \times x^{2} + b \times x + c$` 的最小值
 
@@ -586,7 +586,7 @@ tf.print(f"y = {minimizef()}")
 tf.print(f"x = {x}")
 ```
 
-### optimizer.minimize
+#### optimizer.minimize
 
 求 `$f(x) = a \times x^{2} + b \times x + c$` 的最小值
 
@@ -618,7 +618,7 @@ tf.print(f"y = {f()}")
 tf.print(f"x = {x}")
 ```
 
-### model.compile 和 model.fit
+#### model.compile 和 model.fit
 
 求 `$f(x) = a \times x^{2} + b \times x + c$` 的最小值
 
@@ -687,14 +687,14 @@ tf.print(f"loss = {model(tf.constant(0.0))}")
 
 
 
-## TensorFlow 优化器核心 API
+### TensorFlow 优化器核心 API
 
 * apply_gradients
 * weights_property
 * get_weights
 * set_weights
 
-### apply_gradients
+#### apply_gradients
 
 - 语法
 
@@ -719,7 +719,7 @@ grads = tf.distribute.get_replica_context().all_reduce("sum", grads)
 optimizer.apply_gradients(zip(grad, vars), experimental_aggregate_gradients = False)
 ```
 
-### weights_property
+#### weights_property
 
 - 语法
 
@@ -729,7 +729,7 @@ import tensorflow as tf
 tf.keras.optimizers.Optimizer.weights
 ```
 
-### get_weights
+#### get_weights
 
 - 语法
 
@@ -758,7 +758,7 @@ results = m.fit(data, labels)
 print(opt.get_weights)
 ```
 
-### set_weights
+#### set_weights
 
 - 语法
 
@@ -795,7 +795,7 @@ opt.iteration
 ```
 
 
-## TensorFlow 优化器共有参数
+### TensorFlow 优化器共有参数
 
 control gradient clipping
 
@@ -815,6 +815,6 @@ sgd = optimizers.SGD(lr = 0.01, clipnorm = 1)
 sgd = optimizers.SGD(lr = 0.01, clipvalue = 0.5)
 ```
 
-# 参考资料
+## 参考资料
 
 * [Focal Loss](https://zhuanlan.zhihu.com/p/80594704)

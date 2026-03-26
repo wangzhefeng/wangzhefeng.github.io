@@ -84,7 +84,7 @@ img {
 > 后来慢慢发现了 R 包 blogdown，重新激起我建站的动力，
   经过断断续续的折腾，2022.02.27 终于连上了 Internet，不容易啊，慢慢维护
 
-# 软件/知识
+## 软件/知识
 
 - R
 - RStudio IDE
@@ -98,13 +98,13 @@ img {
 - Disqus
 - Utterances
 
-# 1.创建 GitHub 仓库
+## 1.创建 GitHub 仓库
 
 1. 在 GitHub 上新建一个仓库，并在仓库中初始化一个 `README.md` 文件，
    但不要添加 `.gitignore` 文件(一会再处理)
 2. 克隆仓库到本地
 
-# 2.创建项目
+## 2.创建项目
 
 1. 在 RStudio 中创建一个新项目
 2. 使用 `blogdown` 创建一个带有 Hugo Ivy 主题的网站项目
@@ -119,7 +119,7 @@ img {
 blogdown::serve_site()
 ```
 
-# 3.新建文章
+## 3.新建文章
 
 ```r
 blogdown::new_post(title = "Hi Hugo", 
@@ -127,12 +127,12 @@ blogdown::new_post(title = "Hi Hugo",
                    subdir = "post")
 ```
 
-# 4.评论功能
+## 4.评论功能
 
 - Disqus
 - Utterances
 
-# 5.页面自定义
+## 5.页面自定义
 
 - HTML
 - CSS
@@ -143,7 +143,7 @@ blogdown::new_post(title = "Hi Hugo",
 - Hugo
 - blogdown
 
-# 6.部署前检查
+## 6.部署前检查
 
 - 检查 `.gitignore` 文件
 
@@ -157,7 +157,7 @@ blogdown::check_gitignore()
 blogdown::check_content()
 ```
 
-# 7.提交代码到 GitHub
+## 7.提交代码到 GitHub
 
 ```r
 file.edit(".gitignore")
@@ -174,37 +174,37 @@ file.edit(".gitignore")
 Thumbs.db
 ```
 
-# 8.部署
+## 8.部署
 
-## 8.1 Netlify
+### 8.1 Netlify
 
-### 8.1.1 部署
+#### 8.1.1 部署
 
 1. 注册、登录 [Netlify](https://app.netlify.com/sites/wangzf/overview)
 2. 导入 GitHub 仓库 [wangzhefeng.github.io](https://github.com/wangzhefeng/wangzhefeng.github.io)
 3. 点击部署
 
-### 8.1.2 设置私有域名
+#### 8.1.2 设置私有域名
 
 - 腾讯域名: wangzhefeng.com
 
-## 8.2 Vercel
+### 8.2 Vercel
 
-### 8.2.1 部署
+#### 8.2.1 部署
 
 1. 注册、登录 [Vercel](https://vercel.com/login)
 2. 导入 GitHub 仓库 [wangzhefeng.github.io](https://github.com/wangzhefeng/wangzhefeng.github.io)
 3. 点击部署
 
-### 8.2.2 设置私有域名
+#### 8.2.2 设置私有域名
 
 - 腾讯域名: wangzhefeng.com
 
-# 9.最终效果
+## 9.最终效果
 
 - [wangzhefeng.com](https://wangzhefeng.com/)
 
-# 参考资料
+## 参考资料
 
 - [谢益辉的网站](https://yihui.org/)
 - [统计之都--用 R 语言的 blogdown+hugo+netlify+github 建博客](https://cosx.org/2018/01/build-blog-with-blogdown-hugo-netlify-github/)

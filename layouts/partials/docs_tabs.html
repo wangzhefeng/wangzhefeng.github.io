@@ -1,0 +1,18 @@
+{{ if not .IsHome }}
+<nav class="docs-tabs" aria-label="文档分区">
+  <ul class="docs-tabs__list">
+    {{ $currentPage := . }}
+    {{ range .Site.Menus.main }}
+      {{ if ne .URL "/" }}
+        {{ $active := false }}
+        {{ if hasPrefix $currentPage.RelPermalink .URL }}
+          {{ $active = true }}
+        {{ end }}
+        <li class="docs-tabs__item{{ if $active }} is-active{{ end }}">
+          <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+        </li>
+      {{ end }}
+    {{ end }}
+  </ul>
+</nav>
+{{ end }}

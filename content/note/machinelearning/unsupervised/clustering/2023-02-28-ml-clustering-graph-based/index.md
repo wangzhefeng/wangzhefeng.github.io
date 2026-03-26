@@ -9,10 +9,10 @@ tags:
     - model
 ---
 
-# 基于图论的距离
+## 基于图论的距离
 
 
-# Affinity Propagation
+## Affinity Propagation
 
 > Affinity Propagation，亲和力传播
 
@@ -65,4 +65,4 @@ plt.title("Estimated number of clusters: %d" % n_clusters_)
 plt.show()
 ```
 
-# 参考
+## 参考

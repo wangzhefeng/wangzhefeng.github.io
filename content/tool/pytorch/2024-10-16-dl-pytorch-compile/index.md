@@ -53,7 +53,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# torch.compile 特性
+## torch.compile 特性
 
 > PyTorch 2.0 虽然发布了很多特性，但是对于入门/普通开发者而言，关系不大。
 > PyTorch 从 2017 年发展到 2022 年已经过去五年，从最初的用户易用逐步向工程化、
@@ -64,7 +64,7 @@ img {
 
 下面围绕 `torch.compile` 展开梳理几个与编译相关的核心特性。
 
-## torch.compile
+### torch.compile
 
 `torch.complie` 目的是提高计算速度。通常使用只需要一行代码即可完成，
 例如：`model = torch.compile(model)`。之所以一行能让整个 PyTorch 运算提速，
@@ -75,7 +75,7 @@ img {
 它背后对于计算图的分析、优化和编译是本次更新的核心构成，但对于普通用户而言，
 了解好 `torch.compile` 的接口，了解其可提高模型计算速度就可以。
 
-## TorchDynamo
+### TorchDynamo
 
 `TorchDynamo` 是支撑 `torch.compile` 的工具，它可进行快速地捕获计算图（Graph），
 计算图在深度学习中至关重要，它描述了数据在网络中的流动形式。
@@ -83,20 +83,20 @@ img {
 但 `TorchDynamo` 相较于之前的工具，在速度上有了更大提升，并且在 99% 的情况下都能正确、
 安全地获取计算图。
 
-## AOTAutograd
+### AOTAutograd
 
 `AOTAutograd` 的目的是希望在计算运行之前，捕获计算的反向传播过程，
 即 “ahead of time Autograd”。`AOTAutograd` 通过重用和扩展 PyTorch 的现有自动微分系统，
 实现提高训练速度。
 
-## TorchInductor
+### TorchInductor
 
 `TorchInductor` 是一个新的编译器后端，可以为多个硬件平台进行生成优化的代码，
 例如针对 NVIDIA 和 AMD 的 GPU，
 使用 OpenAI 的 Triton 语言（一门 GPU 编程语言，不是 NVIDIA 的推理框架）作为目标语言，
 针对 CPU，可生成 C++ 代码。由此可见，`TorchInductor` 能够为多种加速器和后端生成快速的代码。
 
-## PrimTorch
+### PrimTorch
 
 `PrimTorch` 是将 PyTorch 底层操作符（operators）进行归约、精简，
 使下游编译器开发更容易和高效。PyTorch 包含 1200+ 操作符，算上重载，
@@ -113,11 +113,11 @@ img {
 对于普通用户，重点关注 `torch.compile` 的接口使用，
 接下来将对 `torch.compile` 的概念和使用展开说明。
 
-# torch.compile 效果
+## torch.compile 效果
 
 得益于多个模块的优点组合，`torch.compile` 模式对大部分模型均有加速效果。
 
-# torch.compile 接口
+## torch.compile 接口
 
 根据官方文档定义，"Optimizes given model/function using TorchDynamo and specified backend."。
 `torch.compile` 是采用 `TorchDynamo` 和指定的后端对模型/计算进行优化，
@@ -151,9 +151,9 @@ img {
 * `disable`(bool): Turn `torch.compile()` into a no-op for testing；
 
 
-# torch.compile 实验
+## torch.compile 实验
 
-## 试验设计
+### 试验设计
 
 为了充分观察 `torch.compile` 带来的速度变化，以及不同 `mode` 之间的影响，
 下面针对四种情况分别进行速度的观察。四种情况包括：
@@ -166,13 +166,13 @@ img {
 并在三种型号 GPU 进行了测试，分别是 RTX 4060 Laptop GPU 、L20、H20。
 注意，`torch.compile` 目前仅支持与 Linux 系统，并且不支持 python≥3.12。
 
-## 实验结论
+### 实验结论
 
 * 常见模型均有 10-30% 的耗时降低
 * Numpy 也可以用 `torch.compile` 加速，并且耗时降低高达 90%
 * 简单的 PyTorch 计算并无法带来速度提升（应该是没有复杂的计算图，无优化空间了）
 
-## 测试代码
+### 测试代码
 
 ```python
 import torch
@@ -181,7 +181,7 @@ mode_list = "default reduce-overhead max-autotune".split()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 ```
 
-### sin 函数
+#### sin 函数
 
 ```python
 import time
@@ -226,7 +226,7 @@ for mode in mode_list:
     
 ```
 
-### resnet 18
+#### resnet 18
 
 ```python
 import torch
@@ -272,7 +272,7 @@ with torch.no_grad():
         print(f"mode: {mode}, 编译耗时:{compile_time:.2f}，编译前运行耗时:{pre_time:.2f}, 编译后运行耗时:{post_time:.2f}，速度提升比例:{speedup_ratio:.2%}")
 ```
 
-### BERT
+#### BERT
 
 ```python
 import time
@@ -329,7 +329,7 @@ with torch.no_grad():
         print(f"mode: {mode}, 编译耗时:{compile_time:.2f}，编译前运行耗时:{pre_time:.2f}, 编译后运行耗时:{post_time:.2f}，速度提升比例:{speedup_ratio:.2%}")
 ```
 
-### Numpy 计算
+#### Numpy 计算
 
 ```python
 import numpy as np
@@ -409,7 +409,7 @@ for mode in mode_list:
            速度提升比例:{speedup_ratio:.2%}")
 ```
 
-# 参考
+## 参考
 
 * [PyTorch 2.0 与torch.compile](https://tingsongyu.github.io/PyTorch-Tutorial-2nd/chapter-1/1.7-PyTorch2.0.html)
 * [torch-compile.ipynb](https://github.com/TingsongYu/PyTorch-Tutorial-2nd/blob/main/code/chapter-1/03-torch-compile.ipynb)

@@ -71,13 +71,13 @@ img {
 最近突然想回忆一下，所以稍作整理，希望有空的时候可以读一读，对照一下自己，帮助自己进步。
 师父领进门，修行在个人
 
-# LIFE 价值观
+## LIFE 价值观
 
 目的：LIFE 四个字简洁明了，若在工作和生活中不断践行这四字原则，定会不断进步，离目标更近。
 LIFE 四个字重在持续不断的实践，并定期给自己反馈，以更新改进计划。
 
 
-## Leadership
+### Leadership
 
 **Company**: To us, Leadership means much more than retaining and extending our market positions.
              It applies to all our employees, not just managers. They should:
@@ -110,7 +110,7 @@ Additional examples for managers with personnel responsibility
   - 工作行为符合公司业务需求，考虑公司利益和声望
   - 心胸开阔
 
-## Integrity
+### Integrity
 
 **Company**: Following the rules of law and regulations is a given to Bayer. 
              Our integrity enhances the legitimacy of our operations and strengthens 
@@ -134,7 +134,7 @@ Additional examples for managers with personnel responsibility
   - 安全第一，生活和工作中践行安全、环保
 
 
-## Flexibility
+### Flexibility
 
 **Company**: In today's  ever-changing business landscape, the ability to adapt to different situations is crucial for future success.
              Therefore, Flexibility means:
@@ -154,7 +154,7 @@ Additional examples for managers with personnel responsibility
   - 有勇气改变可以改变的事情，有胸怀接受不可改变的事情
   - 面对改变，积极主动适应，让自己适应环境的改变
 
-## Efficiency
+### Efficiency
 
 **Company**: Efficiency implies our overall approach to make the best possible use of resources, 
              thus improving our overall performance. This is achieved by:

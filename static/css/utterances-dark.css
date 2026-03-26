@@ -1,0 +1,84 @@
+html,
+body {
+  background: #171513 !important;
+}
+
+body {
+  color: #f1ece4 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif !important;
+}
+
+.timeline,
+.timeline-comment,
+.timeline-comment-wrapper,
+.comment,
+.new-comment,
+.tabnav,
+.write-content,
+.preview-content,
+.form-control,
+.comment-body,
+.comment-form-head,
+.timeline-comment-header,
+.timeline-comment-current-user,
+.previewable-comment-form,
+.edit-comment-hide,
+.comment-form-error,
+.flash,
+.flash-warn {
+  background: #211d1a !important;
+}
+
+.timeline-comment,
+.previewable-comment-form,
+.form-control,
+.comment-form-head,
+.timeline-comment-header,
+.tabnav,
+.write-content,
+.comment-body {
+  border-color: #3a332c !important;
+  box-shadow: none !important;
+}
+
+.tabnav-tab {
+  color: #c7beb2 !important;
+  background: transparent !important;
+}
+
+.tabnav-tab.selected,
+.tabnav-tab[aria-selected="true"] {
+  color: #f1ece4 !important;
+  background: #2a2521 !important;
+  border-color: #3a332c !important;
+}
+
+.form-control,
+textarea,
+.preview-content,
+.markdown-body {
+  color: #f1ece4 !important;
+}
+
+.form-control::placeholder,
+textarea::placeholder {
+  color: #9a9083 !important;
+}
+
+.btn-primary {
+  background: #d68452 !important;
+  border-color: #d68452 !important;
+  color: #171513 !important;
+}
+
+.btn-primary:hover {
+  background: #f0a26d !important;
+  border-color: #f0a26d !important;
+}
+
+a,
+.link-gray,
+.text-gray,
+.timeline-comment-label {
+  color: #c7beb2 !important;
+}

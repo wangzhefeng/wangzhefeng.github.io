@@ -56,7 +56,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# fasttext 算法简介
+## fasttext 算法简介
 
 fasttext 的模型与 CBOW 类似，实际上，fasttext 的确是由 CBOW 演变而来的。
 CBOW 预测上下文的中间词，fasttext 预测文本标签。与 Word2Vec 算法的衍生物相同，
@@ -80,7 +80,7 @@ __label__3, I like play football.
 
 * `__label__`:为实际类别的前缀，也可以自己定义
 
-# fasttext 算法实现
+## fasttext 算法实现
 
 GitHub：
 
@@ -107,7 +107,7 @@ print(result.precision, result.recall)
 * `label_prefix`：可以自定类别前缀
 
 
-# 词向量模型 FastText
+## 词向量模型 FastText
 
 FastText 是由 Facebook 提出的，一般有两个含义：
 
@@ -119,9 +119,9 @@ FastText 可以认为是从 Word2Vec 进化而来的，其结构类似。
 其主要改进在于引入了 sub-word(也表述为 Character N-Grams)，
 能够有效的解决 OOV 问题。
 
-## 模型
+### 模型
 
-### Skip-gram
+#### Skip-gram
 
 FastText 算是 Word2Vec 的一个扩展，因此在了解 FastText 之前，先回顾下 Skip-gram。
 给定一个词典其大小为 `$W$`，单词的索引为： `$w \in \{1, 2, \cdots, W\}$`，
@@ -137,7 +137,7 @@ FastText 算是 Word2Vec 的一个扩展，因此在了解 FastText 之前，先
 
 其中，`$D$` 是正样本，`$\bar{D}$` 是负采样后的负样本。
 
-### FastText
+#### FastText
 
 由于 Skip-gram 模型忽略了单词的内部结构。FastText 中最大的改进就是拆词，
 将 word 拆成 sub-word，特殊的约束符号 `<` 和 `>` 分别加在单词前和单词后，
@@ -166,7 +166,7 @@ FastText 算是 Word2Vec 的一个扩展，因此在了解 FastText 之前，先
 由于 sub-word 带来的词表远大于 word 带来的此表，因此会带来非常大的存储消耗，
 所以文中使用了哈希函数对文本进行处理并存储。
 
-## 模型总结
+### 模型总结
 
 FastText 是从 Word2Vec 进化而来的，最大的改变就是拆词，
 将 word 拆成 Character N-Grams。此时带来的两个优点：
@@ -174,9 +174,9 @@ FastText 是从 Word2Vec 进化而来的，最大的改变就是拆词，
 * 解决了 OOV 的问题；
 * 对罕见单词能够学习到较为可靠的表示。
 
-# fastText 库
+## fastText 库
 
-## fastText 是什么
+### fastText 是什么
 
 `fastText` is a library for efficient **text classification** and **representation learning**.
 
@@ -184,7 +184,7 @@ FastText is an open-source, free, lightweight library that allows users to learn
 and text classifiers. It works on standard, generic hardware. 
 Models can later be reduced in size to even fit on mobile devices.
 
-## fastText 环境依赖
+### fastText 环境依赖
 
 * 计算机系统
     - macOS
@@ -197,12 +197,12 @@ Models can later be reduced in size to even fit on mobile devices.
     - `numpy`
     - `scipy`
 
-## 下载预训练模型
+### 下载预训练模型
 
 * English word vectors: Pre-trained on English webcrawl and Wikipedia.
 * Multi-lingual word vectors: Pre-trained models for 157 different languages.
 
-## fastText 工具库构建
+### fastText 工具库构建
 
 1. 构建 fastText 为一个命令行工具(CLT)
 
@@ -256,7 +256,7 @@ $ pip install
 >>> help(fasttext.FastText)
 ```
 
-## 使用 fastText 进行文本分类
+### 使用 fastText 进行文本分类
 
 文本分类可以应用在许多方面:
 
@@ -264,7 +264,7 @@ $ pip install
 * 情感分析(sentiment analysis)
 * 智能回复(smart replies)
 
-### 准备文本数据
+#### 准备文本数据
 
 数据来源：
 
@@ -314,7 +314,7 @@ $ tail -n 3000 cooking.stackexchange.txt > cooking.valid
 $ wc cooking.valid
 ```
 
-### 构建分类器
+#### 构建分类器
 
 - 基本模型
 
@@ -438,11 +438,11 @@ model.predict(
 model.test("cooking.valid", k = -1)
 ```
 
-## 使用 fastText 进行词表示
+### 使用 fastText 进行词表示
 
 > word representations
 
-### 获取文本语料数据
+#### 获取文本语料数据
 
 为了计算 word vectors，需要一个大型的文本语料(text corpus)。
 基于这个文本语料，word vectors 将会学习到到不同的信息。
@@ -475,7 +475,7 @@ $ head -c 80 data/fil9
 
 文本已经很好地预处理过，可以用来学习我们的词向量。
 
-### 训练词向量模型
+#### 训练词向量模型
 
 在文本语料数据上学习词向量：
 
@@ -512,7 +512,7 @@ import fasttext
 model = fasttext.load_model("result/fil9.bin")
 ```
 
-### 使用 CBOW 训练词向量模型
+#### 使用 CBOW 训练词向量模型
 
 fastText 提供了两种模型来计算单词表示：skipgram 和 cbow（continuous bag of words）。
 
@@ -527,7 +527,7 @@ model = fasttext.train_unsupervised("data/fil9", "cbow")
 
 在实践中，skipgram 模型在处理子词信息时比 cbow 模型表现更好。
 
-# 参考
+## 参考
 
 * [fastText 官网](https://fasttext.cc/)
 * [fastText](https://fasttext.cc/docs/en/supervised-tutorial.html)

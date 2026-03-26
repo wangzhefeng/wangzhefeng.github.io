@@ -64,12 +64,12 @@ img {
 - [其他 APIs](#其他-apis)
 </p></details><p></p>
 
-# 数据集
+## 数据集
 
 > * torchvision.datasets
 > * torch.utils.data.DataLoader
 
-## 内置数据集
+### 内置数据集
 
 示例：
 
@@ -96,7 +96,7 @@ data_loader = DataLoader(
 * Image captioning
 * Video classification
 
-## 自定义图像数据集的基本类
+### 自定义图像数据集的基本类
 
 * `DatasetFolder(root, loader[, extensions, ...])`
     - 通用数据加载器
@@ -105,11 +105,11 @@ data_loader = DataLoader(
 * `VisionDataset(root, [transorms, transform,...])`
     - 用于制作与 torchvision 兼容的数据集
 
-# 数据集读写
+## 数据集读写
 
 > torchvision.io
 
-## 视屏
+### 视屏
 
 * read_video
 * read_video_timestamps
@@ -140,7 +140,7 @@ print(reader_md["video"]["fps"])
 video.set_current_stream("video:0")
 ```
 
-## 图像
+### 图像
 
 * ImageReadMode
 * JPEG 和 PNG
@@ -159,11 +159,11 @@ video.set_current_stream("video:0")
     - read_file
     - write_file
 
-# 数据转换与增强
+## 数据转换与增强
 
 > torchvision.transforms
 
-## 数据转换与增强简介
+### 数据转换与增强简介
 
 所有的 torchvision datasets 都有两个接受包含转换逻辑的可调用对象的参数:
 
@@ -192,7 +192,7 @@ transform 接受 tensor 图像或批量 tensor 图像
 * Module transforms
 * functional transforms
 
-## 常用转换
+### 常用转换
 
 * Scriptable transforms
     - `torch.nn.Sequential`
@@ -233,16 +233,16 @@ transform 接受 tensor 图像或批量 tensor 图像
     - `torchvision.transform.functional`
 
 
-# 特征提取
+## 特征提取
 
 
 
 
-# 预训练模型和权重
+## 预训练模型和权重
 
 > torchvision.models
 
-## 模型类型
+### 模型类型
 
 * image classification
     - AlexNet
@@ -294,13 +294,13 @@ transform 接受 tensor 图像或批量 tensor 图像
 * optical flow
     - RAFT
 
-## 预训练权重的一般信息
+### 预训练权重的一般信息
 
 * `torch.hub`
     - 缓存目录可以通过 `TORCH_HOME` 环境变量设置
         - `torch.hub.load_state_dict_from_url()`
 
-## 初始化预训练模型
+### 初始化预训练模型
 
 * Multi-weight support API
 
@@ -323,7 +323,7 @@ resnet50(weights = None)
 resnet50()  # new API
 ```
 
-## 使用预训练模型
+### 使用预训练模型
 
 在使用预训练模型前，必须对图像数据进行预处理，处理方式因模型而异，比如：
 
@@ -355,14 +355,14 @@ model = resnet50(weights = weights)
 model.eval()
 ```
 
-## 模型注册机制
+### 模型注册机制
 
 * get_model()
 * get_model_weights()
 * get_weights()
 * list_models()
 
-## 从 Hub 中使用模型
+### 从 Hub 中使用模型
 
 PyTorch Hub
 
@@ -390,9 +390,9 @@ model = torch.hub.load(
 print(weight for weight in weights)
 ```
 
-# 工具
+## 工具
 
-## APIs
+### APIs
 
 * draw_bounding_boxes
 * draw_segmentation_masks
@@ -401,11 +401,11 @@ print(weight for weight in weights)
 * make_grid
 * save_image
 
-## TODO
+### TODO
 
 * https://pytorch.org/vision/stable/auto_examples/plot_visualization_utils.html#sphx-glr-auto-examples-plot-visualization-utils-py
 
-# 操作
+## 操作
 
 > torchvision.ops
 
@@ -415,23 +415,23 @@ print(weight for weight in weights)
 
 
 
-# 任务
+## 任务
 
-## classification
-
-
-## detection
+### classification
 
 
-## segmentation
+### detection
 
 
-## similarity learning
-
-## video classification
+### segmentation
 
 
-# 其他 APIs
+### similarity learning
+
+### video classification
+
+
+## 其他 APIs
 
 * torchvision.get_image_backend()
 * torchvision.set_image_backend()

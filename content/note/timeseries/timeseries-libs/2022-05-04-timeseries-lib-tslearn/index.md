@@ -66,25 +66,25 @@ img {
 > `tslearn` is a Python package that provides 
 > machine learning tools for the analysis of time series. 
 
-# tslearn 安装
+## tslearn 安装
 
-## conda
+### conda
 
-### requirements
+#### requirements
 
 * numpy
 * scikit-learn
 * scipy
 
-### installation
+#### installation
 
 ```bash
 $ conda install -c conda-forge tslearn
 ```
 
-## PyPI
+### PyPI
 
-### requirements
+#### requirements
 
 * numpy
 * scikit-learn
@@ -92,15 +92,15 @@ $ conda install -c conda-forge tslearn
 * cython
 * C++ build tools
 
-### installation
+#### installation
 
 ```bash
 $ python -m pip install tslearn
 ```
 
-## Latest GitHub-hosted Version
+### Latest GitHub-hosted Version
 
-### requirements
+#### requirements
 
 * numpy
 * scikit-learn
@@ -113,13 +113,13 @@ $ python -m pip install cython
 
 * C++ build tools
 
-### installation
+#### installation
 
 ```bash
 $ python -m pip install https://github.com/tslearn-team/tslearn/archive/main.zip
 ```
 
-## Requirements
+### Requirements
 
 * scikit-learn
 * numpy
@@ -130,11 +130,11 @@ $ python -m pip install https://github.com/tslearn-team/tslearn/archive/main.zip
 * h5py
     - 读写 hdf5 文件格式
 
-# tslearn 快速开始
+## tslearn 快速开始
 
-## 时间序列格式
+### 时间序列格式
 
-### tslearn.utils.to_time_series
+#### tslearn.utils.to_time_series
 
 ```python
 from tslearn.utils import to_time_series
@@ -144,7 +144,7 @@ formatted_time_series = to_time_series(my_first_time_series)
 print(formatted_time_series.shape)  # (4, 1)
 ```
 
-### tslearn.utils.to_time_series_dataset
+#### tslearn.utils.to_time_series_dataset
 
 ```python
 from tslearn.utils import to_time_series_dataset
@@ -166,9 +166,9 @@ formatted_dataset = to_time_series_dataset([
 print(formatted_dataset.shape)  # (3, 5, 1)
 ```
 
-## 载入标准时间序列数据集
+### 载入标准时间序列数据集
 
-### tslearn datasets
+#### tslearn datasets
 
 ```python
 from tslearn.datasets import UCR_UEA_datasets
@@ -178,7 +178,7 @@ print(X_train.shape)
 print(y_train.shape)
 ```
 
-### text 格式数据
+#### text 格式数据
 
 text 格式数据示例：
 
@@ -196,7 +196,7 @@ time_series_dataset = load_time_series_txt("path/to/your/file.txt")
 save_time_series_txt("path/to/another/file.txt", dataset_to_be_saved)
 ```
 
-## 使用示例
+### 使用示例
 
 ```python
 from tslearn.clustering import TimeSeriesKMeans
@@ -207,25 +207,25 @@ km = fit(X_train)
 
 
 
-# tslearn 任务
+## tslearn 任务
 
-## Clustering
-
-
-
-## Classification
-
-
-## Regression
+### Clustering
 
 
 
-# tslearn 和其他包
+### Classification
+
+
+### Regression
+
+
+
+## tslearn 和其他包
 
 
 
 
-## cesium
+### cesium
 
 
 
@@ -249,7 +249,7 @@ len(to_cesium_dataset(
 ```
 
 
-# 参考
+## 参考
 
 * [Doc](https://tslearn.readthedocs.io/en/latest/)
 * [Gallery of examples](https://tslearn.readthedocs.io/en/latest/auto_examples/index.html)

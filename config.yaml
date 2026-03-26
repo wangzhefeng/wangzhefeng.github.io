@@ -31,18 +31,18 @@ menu:
     - name: "工具"
       url: "/tool/"
       weight: 5
-    # - name: "诗词"
-    #   url: "/pomes/"
-    #   weight: 6
+    - name: "诗词"
+      url: "/pomes/"
+      weight: 6
     # - name: "分类"
     #   url: "/categories/"
     #   weight: 6
-    # - name: "事务"
-    #   url: "/todo/"
-    #   weight: 7
-    # - name: "简历"
-    #   url: "/resume/"
-    #   weight: 8
+    - name: "事务"
+      url: "/todo/"
+      weight: 7
+    - name: "简历"
+      url: "/resume/"
+      weight: 8
     - name: "主题"
       url: "/Ivy/"
       weight: 9
@@ -55,8 +55,8 @@ menu:
 
 # https://simpleicons.org/icons/github.svg
 params:
-  description: ""
-  footer: "&copy; [wangzf](https://wangzhefeng.com) 2017-2026 | [<img src='https://simpleicons.org/icons/github.svg' width='3%'>](https://github.com/wangzhefeng)"
+  description: "统计、时间序列、机器学习与大模型的长期写作与知识整理。"
+  footer: "&copy; [wangzf](https://wangzhefeng.com) 2017-2026 | [GitHub](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
   githubContentURL: "https://github.com/wangzhefeng"
   twitterImage: "/images/logo.jpeg"
@@ -70,7 +70,14 @@ params:
     img: "images/logo.jpeg"
     url: "/"
     alt: "logo"
+    wordmark: "Wangzf Doc"
+    # tag: "Statistics· TimeSeries· MachineLearning· LLM"
     tag: ""
+  design:
+    style: anthropic-docs
+    search: true
+    section_cards_limit: 6
+    recent_updates_limit: 6
   # comment
   utteranc: 
     enable: true

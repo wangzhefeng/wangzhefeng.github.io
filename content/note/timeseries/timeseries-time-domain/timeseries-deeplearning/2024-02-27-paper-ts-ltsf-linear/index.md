@@ -53,13 +53,13 @@ img {
 </p></details><p></p>
 
 
-# 论文简介
+## 论文简介
 
 > * 论文名称：Are Transformers Effective for Time Series Forecasting? 
 > * 论文地址：[https://arxiv.org/abs/2205.13504](https://arxiv.org/abs/2205.13504)
 > * 模型代码：[https://github.com/cure-lab/LTSF-Linear](https://github.com/cure-lab/LTSF-Linear)
 
-# 历史研究和瓶颈
+## 历史研究和瓶颈
 
 基于 Transformer 的长时间序列预测模型：
 
@@ -67,7 +67,7 @@ img {
 * Informer
 * ...
 
-# 论文贡献
+## 论文贡献
 
 * 质疑基于 Transformer 的序列预测模型在长时间序列预测任务(LTSF，long-term time series forecasting)的有效性
     - 大部分模型无法从长序列中抽取时序信息（实验中预测误差并没有随着历史窗口增大而减少）
@@ -80,7 +80,7 @@ img {
     - 子序列 embdding 影响
     - 模型性能
 
-# 问题定义
+## 问题定义
 
 时间序列预测问题主要形式是：已知前 `$t$` 时间的特征，然后预测未来一段时间的结果。
 如果需要预测的时间很长，被称之为**长时间序列预测**。
@@ -114,27 +114,27 @@ Time Series Transformer 框架：
 * self-attention 机制让 attention 矩阵计算尽可能稀疏
 * Decoders 改进原始 Transformer 的自回归模式
 
-# 模型定义
+## 模型定义
 
 * Linear: Just one linear layer.
 * DLinear: Decomposition Linear to handle data with trend and seasonality patterns.
 * NLinear: A Normalized Linear to deal with train-test set distribution shifts. 
 
-## LTSF-Linear
+### LTSF-Linear
 
 * 通过一层神经网对过去信息加权得到未来预测结果
 * 不同变量间共享参数并且不对 spatial correlations 建模
 
 ![img](images/LTSF-Linear.png)
 
-## DLinear
+### DLinear
 
 * D 对应 Decomposition scheme，将输入数据分解成 trend 和 remaninder 两部分
     - trend 通过移动平均核得到
     - remaninder 是输入数据减去 trend 结果得到
 * 在数据集有明显趋势性的时候该方法能提升预测效果
 
-## NLinear
+### NLinear
 
 部分数据集的训练数据和测试数据存在分布偏移（下图中 b），无法使用训练集的均值和方差进行归一化。
 
@@ -142,9 +142,9 @@ NLinear 将输入序列每一个值减去该序列最后一个值，然后输入
 
 ![img](images/lsft-dis-shift.png)
 
-# 实验结果
+## 实验结果
 
-## 定量分析
+### 定量分析
 
 ![img](images/1.png)
 
@@ -152,14 +152,14 @@ NLinear 将输入序列每一个值减去该序列最后一个值，然后输入
 * NLiner 和 DLinear 的结果比 Linear 好，说明处理分布偏移和分解趋势-周期特征的重要性。
 * FEDformer 相比其他 Transformer 方法好，是因为它采用经典的时间序列分析技术，不太依赖自注意力机制。
 
-## 定性分析
+### 定性分析
 
 ![img](images/2.png)
 
 * 过去 96 预测未来 192 时，下图 a 和 c，部分 Tranformer 模型根本无法预测未来数据的取值范围和偏差。
 * 在非周期数据（图 b，汇率）Tranformer 模型几乎无法预测适当的趋势。
 
-# Transformer 类模型进一步分析
+## Transformer 类模型进一步分析
 
 1. 能否从长序列中提取时序信息？
     - 历史窗口(look-back window)越长(输入信息越多)，预测效果应该越好。
@@ -217,7 +217,7 @@ NLinear 将输入序列每一个值减去该序列最后一个值，然后输入
         - 另外在通过 96 步预测 720 步任务上，原始 Tranformer 的参数 GPU 也放得下……
     ![img](images/ltsf-t8.png)
 
-# 总结
+## 总结
 
 * 模型可解释性
     - 由于模型是线性模型，不同输入位置的权重可以直接用来解释模型如何生效以及反应特点。
@@ -227,7 +227,7 @@ NLinear 将输入序列每一个值减去该序列最后一个值，然后输入
 * 读论文需要更加仔细思考，之前根本没有想过 informer 这种**点注意力**其实在时间序列预测上的有效性
 * Transformer 在时序预测的应用还是值得进一步思考
 
-# 资料
+## 资料
 
 * [Blog](https://blog.xiang578.com/post/are-transformers-effective-for-time-series-forecasting.html)
 * [Are Transformers Effective for Time Series Forecasting?](https://blog.xiang578.com/post/are-transformers-effective-for-time-series-forecasting.html)

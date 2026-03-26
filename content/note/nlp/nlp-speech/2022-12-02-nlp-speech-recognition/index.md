@@ -9,11 +9,11 @@ tags:
   - model
 ---
 
-# TODO
+## TODO
 
 * [语音识别](https://mp.weixin.qq.com/s?__biz=MzA5MjEyMTYwMg==&mid=2650243458&idx=1&sn=ca710d875a71f8e1287a00103efb9d61&chksm=8872deefbf0557f91878516d9cd765849a2594fa7f4baeffd2181d4f70fbae7fc94586b8f22d&scene=21#wechat_redirect)
 
-# 语音数据的表示方式
+## 语音数据的表示方式
 
 语音通常是由音频信号构成的, 而音频信号本身又是以声波的形式传递的, 
 一段语音的波形通常是一种时序状态, 也就是说音频信号是按照时间顺序播放的。

@@ -38,12 +38,12 @@ img {
 - [AutoEncoder 自编码器](#autoencoder-自编码器)
 </p></details><p></p>
 
-# TODO
+## TODO
 
 * [深入理解生成模型VAE](https://mp.weixin.qq.com/s/exaBFn4cjedwDVbGKC-UUw)
 
 
-# AutoEncoder 自编码器
+## AutoEncoder 自编码器
 
 作为一种无监督或者自监督模型, 自编码器本质上是一种数据压缩方法。
 从现有情况来看, 无监督学习很有可能是一把决定深度学习未来发展方向的钥匙, 

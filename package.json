@@ -1,0 +1,12 @@
+{
+  "name": "wangzhefeng-blog",
+  "private": true,
+  "scripts": {
+    "build": "hugo && npx pagefind --site public",
+    "search:local": "npx pagefind --site public --output-path static/pagefind",
+    "build:local-search": "hugo && npx pagefind --site public && npx pagefind --site public --output-path static/pagefind"
+  },
+  "devDependencies": {
+    "pagefind": "1.3.0"
+  }
+}

@@ -38,7 +38,7 @@ img {
    - [字典中的键映射多个值](#字典中的键映射多个值)
 </p></details><p></p>
 
-# Python String
+## Python String
 
 ```python
 # 字符串方法
@@ -76,7 +76,7 @@ print("42" + str(1))
 print(int("42") + 1)
 ```
 
-## 字典中的键映射多个值
+### 字典中的键映射多个值
 
 普通做法: 
 

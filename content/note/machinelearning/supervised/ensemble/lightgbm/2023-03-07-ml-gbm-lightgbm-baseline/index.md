@@ -104,7 +104,7 @@ sample_submit["loan_default"] = sample_submit["loan_default"].apply(
 sample_submit.to_csv("baseline_result.csv", index = False)
 ```
 
-# 参考
+## 参考
 
 * [百行代码入手数据挖掘赛](https://mp.weixin.qq.com/s/k-0qYiuzzzUZ5nay4LHQBw?forceh5=1)
 

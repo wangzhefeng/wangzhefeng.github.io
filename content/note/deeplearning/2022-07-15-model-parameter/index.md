@@ -59,7 +59,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 参数初始化
+## 参数初始化
 
 在神经网络的学习中，权重 `$W$` 的的初始值特别重要。
 设定什么样的权重初始值，经常关系到神经网络的学习能否成功。
@@ -89,7 +89,7 @@ img {
   反之，如果传递的是有所偏向的数据，就会出现梯度消失或者“表现力受限”的问题，
   导致学习无法顺利进行。
 
-## Xavier初始值
+### Xavier初始值
 
 > Xavier 初始值
 
@@ -99,7 +99,7 @@ img {
 Xavier 的论文中，为了使各层的激活值呈现出具有相同广度的分布，推导了合适的权重尺度。结论就是：
 如果前一层的节点数为 `$n$`，则初始值使用标准差为 `$\frac{1}{\sqrt{n}}$` 的分布。
 
-## He 初始值
+### He 初始值
 
 > He 初始值
 
@@ -111,12 +111,12 @@ Xavier 初始值是以**激活函数是线性函数**为前提推导出来的，
 Kaiming He 等人推荐了一种初始值，俗称 “He 初始值”。
 结论就是：如果前一层的节点数为 `$n$`，则初始值使用标准差为 `$\sqrt{\frac{2}{n}}$` 的高斯分布。
 
-## 结论
+### 结论
 
 * 当激活函数使用 ReLU 时，权重初始值使用 **He 初始值**
 * 当激活函数为 Sigmoid 或 tanh 等 S 型函数时，初始值使用 **Xavier 初始值**
 
-# PyTorch 参数初始化
+## PyTorch 参数初始化
 
 `torch.nn.init` 模块中的所有函数旨在用于初始化神经网络参数，
 因此它们都在 `torch.no_grad()` 模式中运行，不会被 `autograd` 考虑在内。
@@ -124,26 +124,26 @@ Kaiming He 等人推荐了一种初始值，俗称 “He 初始值”。
 * `torch.nn.init.calculate_gain(nonlinearity, param = None)`
     - 给定非线性函数的推荐增益值
 
-## 常用分布初始化
+### 常用分布初始化
 
 * `torch.nn.init.uniform_(tensor, a = 0.0, b = 1.0)`
     - 从均匀分布 `$U(a, b)$` 中抽样填充输入张量的值
 * `torch.nn.init.normal_(tensor, mean = 0.0, std = 1.0)`
     - 从正态分布 `$N(\mu, \sigma^{2})$` 中抽样填充输入张量的值
 
-## 常数初始值
+### 常数初始值
 
 * `torch.nn.init.constant_(tensor, val)`
 * `torch.nn.init.ones_(tensor)`
 * `torch.nn.init.zeros_(tensor)`
 * `torch.nn.init.eye_(tensor)`
 
-## Glorot 初始化
+### Glorot 初始化
 
 * `torch.nn.init.xavier_uniform_(tensor, gain = 0.1)`
 * `torch.nn.init.xavier_normal_(tensor, gain = 0.1)`
 
-## He 初始化
+### He 初始化
 
 * `torch.nn.init.kaiming_uniform_(
     tensor, 
@@ -165,14 +165,14 @@ w = torch.empty(3, 5)
 nn.init.kaiming_uniform_(w)
 ```
 
-## 狄利克雷初始化
+### 狄利克雷初始化
 
 Fills the {3, 4, 5}-dimensional input Tensor with the Dirac delta function. 
 Preserves the identity of the inputs in Convolutional layers, 
 where as many input channels are preserved as possible. 
 In case of groups>1, each group of channels preserves identity
 
-## 其他
+### 其他
 
 * `torch.nn.init.dirac_(tensor, groups = 1)`
 * `torch.nn.init.trunc_normal_(tensor, mean = 0.0, std = 1.0, a = -2.0, b = 2.0)`
@@ -182,16 +182,16 @@ In case of groups>1, each group of channels preserves identity
     - The input tensor must have at least 2 dimensions, 
       and for tensors with more than 2 dimensions the trailing dimensions are flattened
 
-## 稀疏初始化
+### 稀疏初始化
 
 * `torch.nn.init.sparse_(tensor, sparsity, std = 0.01)`
     - Fills the 2D input Tensor as a sparse matrix, 
       where the non-zero elements will be drawn from 
       the normal distribution `$N(0,0.01)$`
 
-# TensorFlow 参数初始化
+## TensorFlow 参数初始化
 
-## Initializers 的使用方法
+### Initializers 的使用方法
 
 初始化定义了设置 Keras Layer 权重随机初始的方法
 
@@ -199,7 +199,7 @@ In case of groups>1, each group of channels preserves identity
    - `"random_uniform"`
 - `bias_initializer` 参数
 
-## 常数初始化器
+### 常数初始化器
 
 - `tf.keras.initializers.Initializer()`
     - 基类
@@ -213,7 +213,7 @@ In case of groups>1, each group of channels preserves identity
     - `tf.keras.initializers.Constant(value = 1)`
         - `1`
 
-## 分布初始化器
+### 分布初始化器
 
 `tf.keras.initializers.RandomNormal(mean = 0.0, stddev = 0.05, seed = None)`
    - 正态分布
@@ -224,7 +224,7 @@ In case of groups>1, each group of channels preserves identity
       但是在距离平均值两个标准差之外的随机值将被丢弃并重新生成。
       这是用来生成神经网络权重和滤波器的推荐初始化器
 
-## 矩阵初始化器
+### 矩阵初始化器
 
 `tf.keras.initializers.VarianveScaling(scale = 1.0, mode = "fan_in", distribution = "normal", seed = None)`
     - 根据权值的尺寸调整其规模
@@ -233,7 +233,7 @@ In case of groups>1, each group of channels preserves identity
 `tf.keras.initializers.Identity(gain = 1.0)`
     - 生成单位矩阵的初始化器。仅用于 2D 方阵
 
-## LeCun 分布初始化器
+### LeCun 分布初始化器
 
 `tf.keras.initializers.lecun_normal()`
 
@@ -247,7 +247,7 @@ In case of groups>1, each group of channels preserves identity
 - 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{3}{fanin}}$`，
   其中 `fanin` 是权值张量中的输入单位的数量
 
-## Glorot 分布初始化器
+### Glorot 分布初始化器
 
 `tf.keras.initializers.glorot_normal()`
 
@@ -261,7 +261,7 @@ In case of groups>1, each group of channels preserves identity
 - 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 limit 是 `$\sqrt{\frac{6}{fanin + fanout}}$`， 
   `fanin` 是权值张量中的输入单位的数量, `fanout` 是权值张量中的输出单位的数量
 
-## He 正态分布和均匀分布初始化器
+### He 正态分布和均匀分布初始化器
 
 `tf.keras.initializers.he_normal()`: He 正态分布初始化器
 
@@ -273,10 +273,10 @@ In case of groups>1, each group of channels preserves identity
 * 它从 `$[-limit, limit]$` 中的均匀分布中抽取样本,  其中 `limit` 是 `$\sqrt{\frac{6}{fan\_in}}$`，
  其中 `fan_in` 是权值张量中的输入单位的数量
 
-## 自定义初始化器
+### 自定义初始化器
 
 
-# 超参数的调优
+## 超参数的调优
 
 神经网络中的超参数是指，各层的神经元数量、batch 大小、参数更新时的学习率、权值衰减参数(正则化参数)等
 
@@ -287,6 +287,6 @@ In case of groups>1, each group of channels preserves identity
     - 验证数据用于超参数的性能评估
     - 测试数据确认泛化能力，要在最后使用(比较理想的是只用一次)
 
-# 参考
+## 参考
 
 * [torch.nn.init Doc](https://pytorch.org/docs/stable/nn.init.html#)

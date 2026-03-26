@@ -51,9 +51,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
    
-# Ubuntu
+## Ubuntu
 
-## 安装 Nvidia 显卡驱动
+### 安装 Nvidia 显卡驱动
 
 最简单的方式是通过系统的软件与更新来安装:
 
@@ -72,9 +72,9 @@ sudo apt upgrade
 这里会连带 Nvidia 的驱动一起升级一遍，更新到最新的驱动；
 更新完可能会出现 `nvidia-smi` 命令报错，再重启一遍就解决了
 
-## 安装 CUDA
+### 安装 CUDA
 
-### CUDA 介绍
+#### CUDA 介绍
 
 NVIDIA CUDA 工具包提供了开发环境，可供创建经 GPU 加速的高性能应用。
 借助 CUDA 工具包，可以在经 GPU 加速的嵌入式系统、台式工作站、企业数据中心、
@@ -86,7 +86,7 @@ NVIDIA CUDA 工具包提供了开发环境，可供创建经 GPU 加速的高性
 借助多 GPU 配置中用于分布式计算的多项内置功能，
 科学家和研究人员能够开发出可从单个 GPU 工作站扩展到配置数千个 GPU 的云端设施的应用。
 
-### CUDA 安装
+#### CUDA 安装
 
 1. 如果之前安装了旧版本的 CUDA 和 cudnn 的话，需要先卸载后再安装, 卸载 CUDA:
 
@@ -138,7 +138,7 @@ make
 ./deviceQuery
 ```
 
-## 安装 cuDNN
+### 安装 cuDNN
 
 1. 下载 cuDNN 安装包--cuDNN Download|NVIDIA Developer
     - https://developer.nvidia.com/rdp/cudnn-download
@@ -157,7 +157,7 @@ sudo cp cuda/include/* /usr/local/cuda-11.0/include/
 $ cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
 ```
 
-## 安装 PyTorch
+### 安装 PyTorch
 
 [PyTorch Org 安装](https://pytorch.org/get-started/locally/)
 
@@ -173,28 +173,28 @@ import torch
 torch.cuda.is_available()
 ```
 
-# Windows
+## Windows
 
-## 查看系统信息
+### 查看系统信息
 
 * 系统：win10 64 位操作系统
 * 安装组合：Miniconda + PyTorch(GPU version) + RTX 4070
 
-## 安装 Nvidia 显卡驱动
+### 安装 Nvidia 显卡驱动
 
 * [显卡驱动程序安装](https://blog.csdn.net/A_Small_Man/article/details/126945715)
 
-## 安装 CUDA 和 cuDNN
+### 安装 CUDA 和 cuDNN
 
-### 安装 CUDA
-
-* [CUDA 与 cuDNN 安装教程](https://blog.csdn.net/anmin8888/article/details/127910084)
-
-### 安装 cuDNN
+#### 安装 CUDA
 
 * [CUDA 与 cuDNN 安装教程](https://blog.csdn.net/anmin8888/article/details/127910084)
 
-## 安装 PyTorch
+#### 安装 cuDNN
+
+* [CUDA 与 cuDNN 安装教程](https://blog.csdn.net/anmin8888/article/details/127910084)
+
+### 安装 PyTorch
 
 * [PyTorch Org 安装](https://pytorch.org/get-started/locally/)
 
@@ -203,7 +203,7 @@ $ pip install torch torchvision torchaudio --index-url https://download.pytorch.
 $ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 
-# 参考
+## 参考
 
 * [深度学习环境配置指南](https://mp.weixin.qq.com/s/ZTzfC7xp8PVMvOONVIiK6g)
 * [个人深度学习工作站配置指南](https://mp.weixin.qq.com/s/TsETgLLNWRskYbmh2wdiLg)

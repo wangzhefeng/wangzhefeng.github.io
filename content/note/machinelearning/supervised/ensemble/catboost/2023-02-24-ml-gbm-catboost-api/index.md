@@ -48,7 +48,7 @@ img {
   - [数据可视化 API](#数据可视化-api)
 </p></details><p></p>
 
-# CatBoost 参数
+## CatBoost 参数
 
 - Objectives and metrics
     - Regression
@@ -103,27 +103,27 @@ img {
         - WKappa
     - Ranking
 
-# CatBoost API
+## CatBoost API
 
-## CatBoost 安装
+### CatBoost 安装
 
-### 安装依赖库
+#### 安装依赖库
 
 ```bash
 $ pip install numpy six
 ```
 
-### 安装 CatBoost 库
+#### 安装 CatBoost 库
 
 ```bash
 $ pip install catboost
 ```
 
-## 核心数据结构
+### 核心数据结构
 
-## Learning API
+### Learning API
 
-### CatBoostClassifier
+#### CatBoostClassifier
 
 ```python
 import numpy as np
@@ -153,7 +153,7 @@ print("class = ", y_pred)
 print("proba = ", y_pred_proba)
 ```
 
-### CatBoostRegressor
+#### CatBoostRegressor
 
 ```python
 import numpy as np
@@ -184,7 +184,7 @@ y_pred = model.predict(test_pool)
 print(y_pred)
 ```
 
-### CatBoost
+#### CatBoost
 
 ```python
 import numpy as np
@@ -217,7 +217,7 @@ print("Proba", y_pred_proba)
 print("Raw", y_pred_raw_valss)
 ```
 
-## 数据可视化 API
+### 数据可视化 API
 
 安装 `ipywidgets` 可视化库:
 

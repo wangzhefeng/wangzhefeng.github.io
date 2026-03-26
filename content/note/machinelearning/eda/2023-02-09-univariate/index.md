@@ -51,14 +51,14 @@ img {
 针对单变量观测分析，可以将数据按照类型拆分成数值型、类别型、
 时间类型、字符串(`object` 型)、图像。
 
-# 数值变量
+## 数值变量
 
 关于数值变量分析，一般会有下面几点：
 
 1. 是否存在异常值
 2. 数据的整体分布情况
 
-## 基于数值观察
+### 基于数值观察
 
 可以直接通过 Pandas 的 `describe()` 函数去观测数值数据的分位数，
 基于分位数判断这些数据是否符合预期。
@@ -70,7 +70,7 @@ df = pd.read_csv("data.csv")
 df["var"].describe(percentiles = np.array(list(range(10))) * 0.1)
 ```
 
-## 可视化
+### 可视化
 
 ```python
 plt.figure(figsize = (10, 8))
@@ -84,7 +84,7 @@ sns.distplot(data = df["var"])
 plt.xlabel("var")
 ```
 
-# 类别变量
+## 类别变量
 
 关于类别变量，一般可以分为两类：
 
@@ -96,7 +96,7 @@ plt.xlabel("var")
 * 类别变量的 nunique 情况
 * 类别变量在数据集的占比分布，比如：出现次数、占比
 
-## 基于数值观察
+### 基于数值观察
 
 使用 pandas 的 `nunique`、`value_counts` 等函数进行观察即可
 
@@ -106,7 +106,7 @@ df[""].value_counts()
 df[""].value_counts(normalize = True)
 ```
 
-## 可视化
+### 可视化
 
 同样地，可以通过可视化的方式来看数据的分布，此处我们可以直接用柱状图图来进行观测。
 在数据的 nunique 值非常大的时候，一般会选择摘取出现次数最多的 Top N 个数据进行观测
@@ -123,7 +123,7 @@ df[""].value_counts(normalize = True).plot(kind = "bar")
 plt.xlabel("")
 ```
 
-# 时间变量
+## 时间变量
 
 关于时间类型的数据，需要重点观测下面的几点内容：
 
@@ -145,7 +145,7 @@ df['day'] = df['dt'].apply(lambda x: x.day)
 df['week_day'] = df['dt'].apply(lambda x: x.day % 7) 
 ```
 
-# 字符串
+## 字符串
 
 字符串类型的数据是最为复杂的一类数据，所有的数值、类别、时间等信息全部可以设置为字符串类型，
 因而第一时间，需要判断字符串是不是真正意义上的字符串类型：
@@ -161,7 +161,7 @@ df['week_day'] = df['dt'].apply(lambda x: x.day % 7)
 * 情感词汇的信息
 * 等
 
-## wordcloud 可视化
+### wordcloud 可视化
 
 ```python
 # !pip install wordcloud
@@ -177,7 +177,7 @@ plt.axis("off")
 plt.show() 
 ```
 
-## scattertext 可视化
+### scattertext 可视化
 
 ```python
 # !pip install scattertext
@@ -210,7 +210,7 @@ html = st.produce_scattertext_explorer(
 open('./demo_compact.html', 'w').write(html)
 ```
 
-# 图像
+## 图像
 
 图像数据和文本数据都属于特殊的数据，暂时将其放在单变量一起介绍。
 图像的数据可以直接进行可视化，有些朋友会加入不同的算子或者预处理之类的，
@@ -228,7 +228,7 @@ I = np.array(Image.open(path) )
 plt.imshow(I) 
 ```
 
-# 参考
+## 参考
 
 * [word_cloud](https://github.com/amueller/word_cloud)
 * [scattertext](https://github.com/JasonKessler/scattertext)

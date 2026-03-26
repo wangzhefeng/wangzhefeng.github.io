@@ -65,14 +65,14 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# Embedding 模型使用
+## Embedding 模型使用
 
 为了方便 Embedding API 调用，首先，应将 API key 填入 `.env` 文件，
 然后使用代码读取并加载环境变量。
 
-## OpenAI API
+### OpenAI API
 
-### 模型简介
+#### 模型简介
 
 GPT 有封装好的接口，使用时简单封装即可。目前 GPT Embedding model 有三种，性能如下
 
@@ -95,7 +95,7 @@ GPT 有封装好的接口，使用时简单封装即可。目前 GPT Embedding m
 * `text-embedding-ada-002` 是 OpenAI 上一代的模型，
   无论在性能还是价格都不及前两者，因此不推荐使用。
 
-### 使用示例
+#### 使用示例
 
 ```python
 import os
@@ -171,16 +171,16 @@ embedding（前 10）为：[0.03884002938866615, 0.013516489416360855, -0.002425
 本次 token 使用情况为：Usage(prompt_tokens=12, total_tokens=12)
 ```
 
-## 文心千帆 API
+### 文心千帆 API
 
-### 模型简介
+#### 模型简介
 
 Embedding-V1 是基于百度文心大模型技术的文本表示模型，`Access token` 为调用接口的凭证，
 使用 Embedding-V1 时应先凭 `API Key`、`Secret Key` 获取 `Access token`，
 再通过 `Access token` 调用接口来 Embedding text。
 同时千帆大模型平台还支持 `bge-large-zh` 等 Embedding 模型。
 
-### 使用示例
+#### 使用示例
 
 ```python
 # -*- coding: utf-8 -*-
@@ -270,13 +270,13 @@ embedding 长度为：384
 embedding（前 10）为：[0.060567744076251984, 0.020958080887794495, 0.053234219551086426, 0.02243831567466259, -0.024505289271473885, -0.09820500761270523, 0.04375714063644409, -0.009092536754906178, -0.020122773945331573, 0.015808865427970886]
 ```
 
-## 智谱 API
+### 智谱 API
 
-### 模型简介
+#### 模型简介
 
 智谱有封装好的 SDK，直接调用即可。
 
-### 使用示例
+#### 使用示例
 
 ```python
 # -*- coding: utf-8 -*-
@@ -357,7 +357,7 @@ embedding类型为：list
 embedding（前10）为: [0.017892399802803993, 0.0644201710820198, -0.009342825971543789, 0.02707476168870926, 0.004067837726324797, -0.05597858875989914, -0.04223804175853729, -0.03003198653459549, -0.016357755288481712, 0.06777040660381317]
 ```
 
-## M3E
+### M3E
 
 > HuggingFace M3E: https://huggingface.co/moka-ai/m3e-base
 
@@ -368,13 +368,13 @@ M3E 是 Moka Massive Mixed Embedding 的缩写。
 * `Mixed`，此模型支持中英双语的同质文本相似度计算，异质文本检索等功能，未来还会支持代码检索
 * `Embedding`，此模型是文本嵌入模型，可以将自然语言转换成稠密的向量
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install sentence-transformers
 ```
 
-### 模型 Embedding
+#### 模型 Embedding
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -398,7 +398,7 @@ for sentence, embedding in zip(sentences, embeddings):
     print("")
 ```
 
-### 模型微调
+#### 模型微调
 
 ```python
 from datasets import load_dataset
@@ -411,16 +411,16 @@ finetuner = FineTuner.from_pretrained('moka-ai/m3e-small', dataset = dataset)
 finetuner.run(epochs = 1)
 ```
 
-## 讯飞星火 API
+### 讯飞星火 API
 
 未开放
 
-# Embedding 模型微调
+## Embedding 模型微调
 
 > * [uniem 中文通用文本嵌入模型](https://github.com/wangyuxinwhy/uniem)
 > * [uniem 微调示例](https://github.com/wangyuxinwhy/uniem/blob/main/examples/finetune.ipynb)
 
-## uniem 微调示例
+### uniem 微调示例
 
 `uniem` 安装：
 
@@ -594,7 +594,7 @@ Saving model to finetuned-model\model
 
 总结一下，FineTuner 会自动完成微调所需的各种工作，只要您的数据类型在 FineTuner 支持的范围内！
 
-## FineTuner 支持的数据类型
+### FineTuner 支持的数据类型
 
 `FineTuner` 中 `dataset` 参数是一个可供迭代 (`for` 循环) 的数据集，
 每次迭代会返回一个样本，这个样本应该是以下三种格式之一：
@@ -624,7 +624,7 @@ print(f"record_type: {[record_type.value for record_type in RecordType]}")
 record_types: ['pair', 'triplet', 'scored_pair']
 ```
 
-### PairRecord
+#### PairRecord
 
 PairRecord 就是句对样本，每一个样本都代表一对相似的句子，
 字段的名称是 `text` 和 `text_pos`。
@@ -641,7 +641,7 @@ print(f'pair_record: {pair_record}')
 pair_record: PairRecord(text='肾结石如何治疗？', text_pos='如何治愈肾结石')
 ```
 
-### TripletRecord
+#### TripletRecord
 
 TripletRecord 就是句子三元组样本，
 在 PairRecord 的基础上增加了一个不相似句子负例，
@@ -660,7 +660,7 @@ print(f'triplet_record: {triplet_record}')
 triplet_record: TripletRecord(text='肾结石如何治疗？', text_pos='如何治愈肾结石', text_neg='胆结石有哪些治疗方法？')
 ```
 
-### ScoredPairRecord
+#### ScoredPairRecord
 
 ScoredPairRecord 就是带有分数的句对样本，
 在 PairRecord 的基础上添加了句对的相似分数(程度)。
@@ -711,9 +711,9 @@ scored_pair_record: ScoredPairRecord(sentence1='肾结石如何治疗？', sente
 scored_pair_record: ScoredPairRecord(sentence1='肾结石如何治疗？', sentence2='失眠如何治疗', label=0)
 ```
 
-## 微调示例
+### 微调示例
 
-### 微调 M3E
+#### 微调 M3E
 
 > 医疗相似问题数据集
 
@@ -759,7 +759,7 @@ finetuner = FineTuner.from_pretrained(
 fintuned_model = finetuner.run(epochs = 3)
 ```
 
-### 微调 text2vec
+#### 微调 text2vec
 
 > 猜谜数据集
 
@@ -818,7 +818,7 @@ TripletRecord 类型的数据集的读取和训练过程与 PairRecord 类型的
 `FineTuner` 接受的 `dataset` 参数，只要是可以迭代的产生有指定格式的字典 `dict` 就行了，
 所以上述示例分别使用 `datasets.DatasetDict` 和 `list[dict]` 两种数据格式。
 
-### 微调 sentences_transformers
+#### 微调 sentences_transformers
 
 `FineTuner` 在设计实现的时候也同时兼容了其他框架的模型，而不仅仅是 uniem！
 比如，sentece_transformers 的 `all-MiniLM-L6-v2` 是一个广受欢迎的模型。
@@ -838,7 +838,7 @@ finetuner = FineTuner.from_pretrained(
 fintuned_model = finetuner.run(epochs = 3, batch_size = 32)
 ```
 
-### 从头训练
+#### 从头训练
 
 除了可以在训练好的 Embedding 模型基础上进行微调外，还可以选择从一个预训练模型开始训练，
 这个预训练模型可以是 BERT，RoBERTa，T5 等。
@@ -875,7 +875,7 @@ fintuned_model = finetuner.run(
 )
 ```
 
-### SGPT
+#### SGPT
 
 `FineTuner` 在设计实现的时候还提供了更多的灵活性，以 `SGPT` 为例，`SGPT` 和前面介绍的模型主要有以下三点不同：
 
@@ -915,7 +915,7 @@ finetuner.run(
 )
 ```
 
-# 参考
+## 参考
 
 * [Embedding 中文模型-uniem](https://github.com/wangyuxinwhy/uniem)
 * [uniem 微调示例](https://github.com/wangyuxinwhy/uniem/blob/main/examples/finetune.ipynb)

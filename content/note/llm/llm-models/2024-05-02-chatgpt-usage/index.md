@@ -47,22 +47,22 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# ChatGPT 基础
+## ChatGPT 基础
 
-## 最强表示架构 Transformer 设计与演变
-
-
-## 生成语言模型 GPT 进化与逆袭
+### 最强表示架构 Transformer 设计与演变
 
 
-
-## 利器强化学习 RLHF 流程与思想
+### 生成语言模型 GPT 进化与逆袭
 
 
 
-# ChatGPT 应用开发
+### 利器强化学习 RLHF 流程与思想
 
-## ChatGPT Embedding 接口
+
+
+## ChatGPT 应用开发
+
+### ChatGPT Embedding 接口
 
 > 获取给定文本的向量表示
 
@@ -126,18 +126,18 @@ type(emb1) == list
 
 
 
-## ChatGPT 接口 + 提示词
+### ChatGPT 接口 + 提示词
 
 > 完成语义匹配任务
 
 
 
 
-# Jupyter 中使用 ChatGPT
+## Jupyter 中使用 ChatGPT
 
 通过自定义魔法命令，可以在 Jupyter Notebook/Lab 中直接调用 ChatGPT。
 
-## 安装
+### 安装
 
 1. 首先，通过注册一个 ChatGPT 账号获取一个 ChatGPT 的 `api_key`。
    并将 `api_key` 导入脚本:
@@ -214,7 +214,7 @@ def load_ipython_extension(ipython):
     ipython.register_magics(ChatGPTMagics)
 ```
 
-## 使用
+### 使用
 
 1. 导入魔法命令：
 
@@ -232,7 +232,7 @@ def load_ipython_extension(ipython):
 问题 2.
 ```
 
-# 参考
+## 参考
 
 * [算法工程师如何优雅地使用 ChatGPT](https://mp.weixin.qq.com/s?__biz=MzU3OTQzNTU2OA==&mid=2247491771&idx=1&sn=f6a4780106f72c47c28f51cf3a303a46&chksm=fd648de4ca1304f29d2ad7e5282e71215c039dcd717fa350453dcfafaca53e6735b32ebbfd99&cur_album_id=2917869728717750275&scene=190#rd)
 * 《ChatGPT 原理及应用开发》

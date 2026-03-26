@@ -48,7 +48,7 @@ img {
 </p></details><p></p>
 
 
-# re 库介绍
+## re 库介绍
 
 `re` 库是 Python 处理文本的标准库
 
@@ -58,13 +58,13 @@ Python `re` 库主要定义了:
 - 12 个函数
 - 1 个异常
 
-# re 库使用
+## re 库使用
 
 ```python
 import re
 ```
 
-## re 库常量
+### re 库常量
 
 `re` 库 中的常量表示不可更改的变量, 一般用于做标记. \ `re`
 模块中有 9 个常量, 常量值都是 `int` 类型: 
@@ -80,7 +80,7 @@ import re
 - `re.DEBUG`
 
 
-### re 库源码 
+#### re 库源码 
 
 ```python
 class RegexFlag(enum.IntFlag):
@@ -119,7 +119,7 @@ class RegexFlag(enum.IntFlag):
    __str__ = object.
 ```
 
-### re.IGNORECASE 使用
+#### re.IGNORECASE 使用
 
 - 语法: 
    - `re.IGNORECASE` or `re.I`
@@ -134,7 +134,7 @@ print("默认模式: ", re.findall(pattern, text))
 print("忽略大小写模式: ", re.findall(pattern, text, re.I))
 ```
 
-### re.ASCII 使用
+#### re.ASCII 使用
 
 - 语法: 
    - `re.ASCII` or `re.A`
@@ -150,7 +150,7 @@ print("Unicode:", re.findall(pattern, text))
 print("ASCII:", re.findall(pattern, text, re.A))
 ```
 
-### re.DOTALL 使用
+#### re.DOTALL 使用
 
 - 语法: 
    - `re.DOTALL` or `re.S`
@@ -165,16 +165,16 @@ print("默认模式:", re.findall(pattern, text))
 print(".匹配所有模式:", re.findall(pattern, text, re.S))
 ```
 
-## re 库函数
+### re 库函数
 
 
-## re 库异常
+### re 库异常
 
 
-## 正则对象 pattern
+### 正则对象 pattern
 
 
-# 参考
+## 参考
 
 1. [re 模块官方文档](https://docs.python.org/zh-cn/3.8/library/re.html)
 2. [re 模块库源码](https://github.com/python/cpython/blob/3.8/Lib/re.py)

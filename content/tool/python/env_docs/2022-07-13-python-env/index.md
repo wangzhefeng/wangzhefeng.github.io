@@ -93,9 +93,9 @@ img {
 
 
 
-# Python 环境使用需求
+## Python 环境使用需求
 
-## 检查 Python 环境
+### 检查 Python 环境
 
 - 检查项
    - Python
@@ -108,7 +108,7 @@ $ python3 --version
 $ pip3 --version
 ```
 
-## 检查 Python 安装的位置
+### 检查 Python 安装的位置
 
 - 检查项
    - Python
@@ -123,15 +123,15 @@ $ which pip
 $ which pip3
 ```
 
-# 安装和卸载 Python3 环境
+## 安装和卸载 Python3 环境
 
-## macOS
+### macOS
 
-### Python.org 安装
+#### Python.org 安装
 
 - TODO
 
-### Brew 安装
+#### Brew 安装
 
 - 安装 brew:
 
@@ -158,13 +158,13 @@ $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ python get-pip.py
 ```
 
-### Anaconda
+#### Anaconda
 
 * TODO
 
-### Minconda
+#### Minconda
 
-#### 安装
+##### 安装
 
 > Installing on macOS
 
@@ -195,7 +195,7 @@ $ bash Miniconda3-lastest-MacOSX-x86_64.sh
 
     - A list of installed packages appears if it has been installed correctly
 
-#### 更新
+##### 更新
 
 > Updating Miniconda on macOS
 
@@ -203,7 +203,7 @@ $ bash Miniconda3-lastest-MacOSX-x86_64.sh
 2. Navigate to the `miniconda` directory
 3. Run `conda update conda`
 
-#### 卸载
+##### 卸载
 
 > Uninstall Miniconda on macOS
 
@@ -225,19 +225,19 @@ $ rm -rf ~/miniconda
     $ rm -rf ~/.condarc ~/.conda ~/.continuum
     ```
 
-### pyenv 安装
+#### pyenv 安装
 
 - 参考 pyenv 的使用
 
-## Ubuntu
+### Ubuntu
 
-### Linux Version
+#### Linux Version
 
 - Ubuntu 16.04 LTS
 - Ubuntu 18.04 LTS
 - Ubuntu 20.04 LTS
 
-### 安装 Python 3.7
+#### 安装 Python 3.7
 
 - 配置Ubuntu环境: 
 
@@ -282,7 +282,7 @@ sudo install virtualenv
 sudo install virtualenvwrapper
 ```
 
-### 修改 python3 的默认指向
+#### 修改 python3 的默认指向
 
 ```bash
 # 删除软连接
@@ -311,7 +311,7 @@ $ cd /usr/lib/python3/dist-packages/
 $ sudo cp apt_pkg.cpython-36m-x86_64-linux-gnu.so apt_pkg.cpython-37m-x86_64-linux-gnu.so
 ```
 
-### 卸载 Python 3.7
+#### 卸载 Python 3.7
 
 ```bash
 # 卸载 Python 3.7
@@ -325,16 +325,16 @@ $ sudo apt-get purge python3.7
 $ sudo apt-get purge [--auto-remove] python3.7
 ```
 
-## Windows
+### Windows
  
-### 官网下载安装
+#### 官网下载安装
 
 * https://www.python.org/downloads/windows/
 
 注意：升级系统 pip 可能会导致问题。如果不是在虚拟环境中，请针对下面的命令使用 `python3 -m pip`。
 这样可以确保您升级并使用 Python pip，而不是系统 pip
 
-### Chocolatey 安装
+#### Chocolatey 安装
 
 1. 环境
     - Windows 7+ / Windows Server 2003+
@@ -350,9 +350,9 @@ $ sudo apt-get purge [--auto-remove] python3.7
 C:/> choco install python
 ```
 
-# 创建 Python 虚拟环境
+## 创建 Python 虚拟环境
 
-## virtualenv
+### virtualenv
 
 - Ubuntu/macOS
 
@@ -379,7 +379,7 @@ C:\> virtualenv --system-site-packages -p python3 ./venv
 (venv) C:\> deactivate
 ```
 
-## conda
+### conda
 
 ```bash
 $ conda create -n venv pip python3.7
@@ -388,7 +388,7 @@ $ source activate venv
 (venv) $ source deactivate
 ```
 
-## pyenv
+### pyenv
 
 1. 安装多个版本的 Python
    - 在 user 下安装 Python
@@ -402,7 +402,7 @@ $ source activate venv
 > 这里只介绍 Linux 和 macOS 的使用, 对于 Windows 用户参考 https://github.com/pyenv-win/pyenv-win。
 > 还有一篇详细介绍的文章：[好家伙，妥妥的 Python Master](https://mp.weixin.qq.com/s/M7dmRl3fSujNKRETEXlhSg)
 
-### 安装 pyenv
+#### 安装 pyenv
 
 1. 构建依赖
 
@@ -465,7 +465,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
-### 安装和卸载 Python
+#### 安装和卸载 Python
 
 1. 查看使用 pyenv 可以安装的 Python 版本
    - 查看所有可用的 Cython 3.6~3.8
@@ -516,7 +516,7 @@ $ rm -rf ~/.pyenv/version/3.7.10
 $ pyenv uninstall 3.7.10
 ```
 
-### 切换 Python 版本
+#### 切换 Python 版本
 
 * pyenv 如何准确地解析使用的 Python 版本
 
@@ -543,7 +543,7 @@ $ pyenv version
 $ echo $PYENV_VERSION
 ```
 
-### 构建 Python 虚拟环境
+#### 构建 Python 虚拟环境
 
 pyenv 、pyenv-virtualenv 与 virtualenv、venv 的区别
 
@@ -568,7 +568,7 @@ $ pyenv activate <envirionment_name>
 $ pyenv deactivate
 ```
 
-### 使用多个 Python 环境
+#### 使用多个 Python 环境
 
 假设在机器中安装了如下 Python 版本: 
 
@@ -610,7 +610,7 @@ $ pyenv local project2 3.6.8
 $ python3.6 -V
 ```
 
-### 探索 pyenv 命令
+#### 探索 pyenv 命令
 
 * 查看 pyenv 所有可用的命令完整列表
 
@@ -668,9 +668,9 @@ $ pyenv local 3.6
 $ pyenv shell 3.8-dev
 ```
 
-# Python 项目管理
+## Python 项目管理
 
-## requirements.txt
+### requirements.txt
 
 * Method 1:
 

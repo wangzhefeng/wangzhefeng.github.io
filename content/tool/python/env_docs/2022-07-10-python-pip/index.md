@@ -60,11 +60,11 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# TODO
+## TODO
 
 * [关于 pip 的 15 个使用小技巧](https://mp.weixin.qq.com/s/2pxwZ15rA9wv9urPiOCuDg)
 
-# pip 介绍
+## pip 介绍
 
 pip - The Python Package Installer
 
@@ -76,9 +76,9 @@ packages from the Python Package Index(PyPI) and other indexs.
 - Python Package Index(PyPI)
     - https://pypi.org/
 
-# pip 安装
+## pip 安装
 
-## Install with get-pip.py
+### Install with get-pip.py
 
 1. 下载 `get-pip.py`
     - 方法一：直接从下面的连接下载
@@ -116,11 +116,11 @@ $ python get-pip.py --proxy="http://[user:password@]proxy.server:port"
 $ python get-pip.py pip=9.0.2 wheel=0.30.0 setuptools=28.8.0
 ```
 
-## 使用 Linux Package Managers
+### 使用 Linux Package Managers
 
 See [Installing pip/setuptools/wheel with Linux Package Managers](https://packaging.python.org/guides/installing-using-linux-tools/#installing-pip-setuptools-wheel-with-linux-package-managers) in the [Python Packaging User Guide](https://packaging.python.org/guides/tool-recommendations/).
 
-## 更新 pip
+### 更新 pip
 
 - Linux / macOS
 
@@ -134,45 +134,45 @@ $ pip install -U pip
 C:/> python -m pip install -U pip
 ```
 
-# 安装 package
+## 安装 package
 
-## Install a package from PyPI
+### Install a package from PyPI
 
 ```bash
 $ pip install SomePackage
 ```
 
-## Install a package from PyPI or somewhere downloaded .whl file
+### Install a package from PyPI or somewhere downloaded .whl file
 
 ```bash
 $ pip install SomePackage-1.0-py2.py3-none-any.whl
 ```
 
-## Show what files were installed
+### Show what files were installed
 
 ```bash
 $ pip show --files SomePackage
 ```
 
-## List what package are outdated
+### List what package are outdated
 
 ```bash
 $ pip list --outdated
 ```
 
-## Upgrade a package
+### Upgrade a package
 
 ```bash
 $ pip install --upgrade SomePackage
 ```
 
-## Uninstall a package
+### Uninstall a package
 
 ```bash
 $ pip uninstall SomePackage
 ```
 
-# 更改 PyPi pip 源
+## 更改 PyPi pip 源
 
 将 PyPi 的 pip 源更改为国内 pip 源，国内常用的 pip 源列表如下：
 
@@ -186,7 +186,7 @@ $ pip uninstall SomePackage
     - http://pypi.douban.com/simple/
 
 
-## Windows
+### Windows
 
 临时更改 PyPi pip 源：
 
@@ -209,7 +209,7 @@ index-url=https://pypi.tuna.tsinghua.edu.cn/simple/
 trusted-host=pypi.tuna.tsinghua.edu.cn
 ```
 
-## Linux 和 macOS
+### Linux 和 macOS
 
 临时更改 PyPi pip 源：
 
@@ -254,23 +254,23 @@ index-url=https://pypi.tuna.tsinghua.edu.cn/simple/
 trusted-host=pypi.tuna.tsinghua.edu.cn
 ```
 
-# pipdeptree
+## pipdeptree
 
 pipdeptree 用来产看某个 Python 环境中依赖库之间的依赖关系
 
-## 安装
+### 安装
 
 ```bash
 $ pip install pipdeptree
 ```
 
-## 使用
+### 使用
 
 ```bash
 $ pipdeptree
 ```
 
-# 参考
+## 参考
 
 * [pip reference guide list](https://pip.pypa.io/en/stable/reference/)
 

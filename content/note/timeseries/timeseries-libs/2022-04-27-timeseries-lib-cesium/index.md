@@ -49,7 +49,7 @@ img {
 </p></details><p></p>
 
 
-# 安装
+## 安装
 
 ```bash
 $ pip install cesium
@@ -58,7 +58,7 @@ $ pip install cesium
 
 
 
-# 使用示例
+## 使用示例
 
 > EEG 数据上的癫痫分类检测
 
@@ -76,7 +76,7 @@ $ pip install cesium
 2. 构建分类模型
 3. 预测
 
-## 构建数据集
+### 构建数据集
 
 ```python
 import numpy as np
@@ -89,9 +89,9 @@ from cesium import datasets
 eeg = datasets.fetch_andrzejak()
 ```
 
-## 特征工程
+### 特征工程
 
-### 类别标签处理
+#### 类别标签处理
 
 ```python
 eeg["classes"] = eeg["classes"].astype("U16")
@@ -106,7 +106,7 @@ for label, ax in zip(np.unique(eeg["classes"]), axs):
     ax.set(xlabel = "time (s)", ylabel = "signal", title = label)
 ```
 
-### 特征构造
+#### 特征构造
 
 ```python
 from cesium import featurize
@@ -134,7 +134,7 @@ fset_cesium = featurize.featurize_time_series(
 )
 ```
 
-### 自定义特征函数
+#### 自定义特征函数
 
 ```python
 import numpy as np
@@ -172,7 +172,7 @@ fset_guo = featurize.featurize_time_series(
 )
 ```
 
-### 多通道时间序列特征工程
+#### 多通道时间序列特征工程
 
 ```python
 import pywt
@@ -193,7 +193,7 @@ fset_dwt = featurize.featurize_time_series(
 
 
 
-## 模型构建
+### 模型构建
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
@@ -229,7 +229,7 @@ model_dwt.fit(
 )
 ```
 
-## 预测
+### 预测
 
 ```python
 from sklearn.metrics import accuracy_score
@@ -250,7 +250,7 @@ print("Wavelet transform features: training accuracy={:.2%}, test accuracy={:.2%
 ```
 
 
-# 参考
+## 参考
 
 * [cesium Doc](https://cesium-ml.org/docs/index.html)
 * [cesium GitHub](https://github.com/cesium-ml/cesium)

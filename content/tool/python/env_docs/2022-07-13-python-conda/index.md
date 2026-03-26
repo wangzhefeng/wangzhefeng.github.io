@@ -41,14 +41,14 @@ img {
     - [Python 管理](#python-管理)
 </p></details><p></p>
 
-# Conda 下载
+## Conda 下载
 
 - [Anaconda3](https://www.anaconda.com/products/individual) 
     - [Anaconda 老版本](https://repo.anaconda.com/archive/) 
 - [Miniconda3](https://docs.conda.io/en/latest/miniconda.html) 
     - [Miniconda 老版本](https://repo.anaconda.com/miniconda/) 
 
-# Conda 安装
+## Conda 安装
 
 1. 如何检查当前环境中是否安装了 Conda?
    - Windows(Anaconda Prompt)
@@ -61,7 +61,7 @@ img {
     - macOS 和 Linux
         - `which python`
 
-# Conda 使用
+## Conda 使用
 
 Package, dependency and environment management for any 
 language—Python, R, Ruby, Lua, Scala, Java, JavaScript, 
@@ -74,7 +74,7 @@ C/ C++, FORTRAN, and more.
 - channels 管理
 - Python 管理
 
-## conda 管理
+### conda 管理
 
 1. 验证 conda 是否已经安装
 
@@ -110,7 +110,7 @@ conda config --set notify_outdated_conda false
 notify_updated_conda: false
 ```
 
-## Python 管理
+### Python 管理
 
 Conda treats Python the same as any other package, so it is easy to manage and update multiple installations.
 

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{{ partial "html_open.html" . }}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ if eq .RelPermalink "/" }}
+    <title>{{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Site.Title }}">
+    <meta property="og:type" content="website">
+    {{ else }}
+    <title>{{ .Title }}{{ with .Params.subtitle }} - {{ . }}{{ end }} - {{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}">
+    {{ end }}
+    <meta name="twitter:card" content="summary">
+    <meta name="theme-color" content="#fbfaf7" data-theme-color>
+
+    {{ $summary := "" }}
+    {{ with .Description }}
+      {{ $summary = markdownify . }}
+    {{ else }}
+      {{ $summary = ((delimit (findRE "(<p.*?>(.|\n)*?</p>\\s*)+" .Content) "[&hellip;] ") | plainify | truncate (default 200 .Site.Params.summary_length) (default " &hellip;" .Site.Params.text.truncated)) }}
+    {{ end }}
+
+    {{ if eq .RelPermalink "/" }}
+    <meta property="description" content="{{ .Site.Params.description }}">
+    <meta property="og:description" content="{{ .Site.Params.description }}">
+    {{ else }}
+      {{ with $summary }}
+      <meta property="description" content="{{ . }}">
+      <meta property="og:description" content="{{ . }}">
+      {{ end }}
+    {{ end }}
+
+    {{ $autoImage := false }}
+    {{ range (findRE "<img src=\"https?://[^\"]+" .Content 1) }}
+    {{ $autoImage = true }}
+    <meta name="twitter:image" content="{{ replaceRE "<img src=\"" "" . | htmlUnescape }}">
+    {{ end }}
+    {{ with .Site.Params.twitterImage }}
+    {{ if not $autoImage }}
+    <meta name="twitter:image" content="{{ absURL . }}">
+    {{ end }}
+    {{ end }}
+
+    {{ if .Keywords }}
+    <meta property="keywords" content="{{ delimit .Keywords ", " }}">
+    {{ end }}
+
+    {{ with .OutputFormats.Get "RSS" }}
+    <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}">
+    {{ end }}
+    <script>
+      (function () {
+        try {
+          var localeKey = "wzf-locale";
+          var locale = localStorage.getItem(localeKey) || "zh-CN";
+          document.documentElement.setAttribute("data-locale", locale);
+          document.documentElement.lang = locale === "en" ? "en" : "zh-CN";
+          var key = "wzf-theme";
+          var stored = localStorage.getItem(key);
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var theme = stored || (prefersDark ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    {{ partial "head_highlightjs" . }}
+    <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
+    <link rel="stylesheet" href="{{ "/css/fonts.css" | relURL }}">
+    {{ partial "head_custom.html" . }}
+  </head>
+
+  <body class="page{{ if .IsHome }} page--home{{ else }}{{ with .Section }} page--{{ . }}{{ end }}{{ end }} kind-{{ .Kind }}{{ if .IsPage }} is-page{{ end }}{{ if .IsSection }} is-section{{ end }}{{ with .Params.page_class }} {{ . }}{{ end }}">
+    <header class="site-header{{ if not .IsHome }} site-header--docs{{ end }}" data-site-header>
+      <div class="site-header__inner">
+        <div class="site-header__lead">
+          <a class="site-brand" href="{{ "/" | relURL }}">
+            <span class="site-brand__mark">{{ or .Site.Params.logo.wordmark .Site.Title }}</span>
+            {{ with .Site.Params.logo.tag }}<span class="site-brand__meta">{{ . }}</span>{{ end }}
+          </a>
+        </div>
+
+        <div class="site-header__desktop">
+          {{ if .IsHome }}
+          {{ partial "menu.html" . }}
+          {{ end }}
+        </div>
+
+        <div class="site-header__actions">
+          {{ if .Site.Params.design.search }}
+          <button class="site-search-trigger" type="button" data-open-search>
+            <span class="site-search-trigger__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="8.5" cy="8.5" r="5.25"></circle>
+                <path d="M12.25 12.25L16.5 16.5"></path>
+              </svg>
+            </span>
+            <span class="site-search-trigger__text">搜索...</span>
+            <kbd>⌘K</kbd>
+          </button>
+          {{ end }}
+          <button class="locale-toggle" type="button" aria-label="切换语言" title="切换语言" data-locale-toggle>
+            <span class="locale-toggle__label" data-locale-label>简体中文</span>
+            <span class="locale-toggle__chevron" aria-hidden="true">▾</span>
+          </button>
+          <button class="theme-toggle" type="button" aria-label="切换到深色模式" title="切换主题" data-theme-toggle>
+            <span class="theme-toggle__icon" aria-hidden="true" data-theme-toggle-icon>◐</span>
+            <span class="sr-only" data-theme-toggle-label>切换到深色模式</span>
+          </button>
+          <button class="site-menu-trigger" type="button" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+            菜单
+          </button>
+        </div>
+      </div>
+
+      {{ if not .IsHome }}
+      <div class="site-header__subnav">
+        <div class="site-header__subnav-inner">
+          {{ partial "docs_tabs.html" . }}
+        </div>
+      </div>
+      {{ end }}
+
+      <div class="site-mobile-nav" id="mobile-nav" hidden data-mobile-nav>
+        {{ partial "menu.html" . }}
+        {{ if .Site.Params.design.search }}
+        <button class="site-search-trigger site-search-trigger--mobile" type="button" data-open-search>
+          <span class="site-search-trigger__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="8.5" cy="8.5" r="5.25"></circle>
+              <path d="M12.25 12.25L16.5 16.5"></path>
+            </svg>
+          </span>
+          <span class="site-search-trigger__text">搜索文档...</span>
+          <kbd>⌘K</kbd>
+        </button>
+        {{ end }}
+        <button class="locale-toggle locale-toggle--mobile" type="button" aria-label="切换语言" title="切换语言" data-locale-toggle>
+          <span class="locale-toggle__label" data-locale-label>简体中文</span>
+          <span class="locale-toggle__chevron" aria-hidden="true">▾</span>
+        </button>
+        <button class="theme-toggle theme-toggle--mobile" type="button" aria-label="切换到深色模式" title="切换主题" data-theme-toggle>
+          <span class="theme-toggle__icon" aria-hidden="true" data-theme-toggle-icon>◐</span>
+          <span class="sr-only" data-theme-toggle-label>切换到深色模式</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <article class="page-main{{ if .IsHome }} page-main--home{{ else }} page-main--docs{{ end }}">

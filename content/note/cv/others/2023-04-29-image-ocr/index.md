@@ -46,36 +46,36 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# OCR 模型
+## OCR 模型
 
-## CRNN
-
-
-## CRAFT
+### CRNN
 
 
-# OCR 任务
+### CRAFT
 
 
-
-
-## 从图像中删除文本
-
-## 车牌识别
+## OCR 任务
 
 
 
 
-# 工具
+### 从图像中删除文本
 
-## Keras OCR
+### 车牌识别
+
+
+
+
+## 工具
+
+### Keras OCR
 
 Keras-OCR 提供现成的 OCR 模型和端到端训练管道，以构建新的 OCR 模型
 
 在这种情况下，使用预训练的模型，它对任务非常有效。Keras-OCR 将自动下载探测器和识别器的预训练权重。
 当通过 Keras-OCR 传递图像时，它将返回一个 `(word，box)` 元组，其中框(`box`)包含四个角的坐标 `(x，y)`
 
-# 参考
+## 参考
 
 * [使用CV2和Keras OCR从图像中删除文本](https://mp.weixin.qq.com/s/I1_2xGMGxBkUK7gMyrE9gQ)
 * [keras-ocr](https://keras-ocr.readthedocs.io/en/latest/index.html)

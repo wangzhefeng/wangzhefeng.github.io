@@ -42,7 +42,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# pyts Demo
+## pyts Demo
 
 ```python
 from pyts.classification import BOSSVS
@@ -54,24 +54,24 @@ clf.fit(X_train, y_train)
 clf.score(X_test, y_test)
 ```
 
-# pyts 安装
+## pyts 安装
 
 ```bash
 $ pip install pyts
 ```
 
-# 特征提取
+## 特征提取
 
-## Shapelet Transform
-
-
+### Shapelet Transform
 
 
-# 参考
 
-* [Time Series Classifification from Scratch with Deep Neural Networks: A Strong Baseline]()
+
+## 参考
+
+* Time Series Classifification from Scratch with Deep Neural Networks: A Strong Baseline
 * [DTW & KNN](https://nbviewer.jupyter.org/github/markdregan/K-Nearest-Neighbors-with-Dynamic-Time-Warping/blob/master/K_Nearest_Neighbor_Dynamic_Time_Warping.ipynb)
 * [BiGRU CNN](http://www.doc88.com/p-0334856528441.html)
-* [LSTM Fully Convolutional Networks for Time Series Classification]()
+* LSTM Fully Convolutional Networks for Time Series Classification
 * [PyTS GitHub](https://github.com/johannfaouzi/pyts)
 * [PyTS Doc](https://pyts.readthedocs.io/en/latest/)

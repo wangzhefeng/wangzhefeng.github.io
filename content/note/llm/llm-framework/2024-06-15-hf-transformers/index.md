@@ -49,7 +49,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# Huggging Face NLP ecosystem
+## Huggging Face NLP ecosystem
 
 ![img](images/overview.png)
 
@@ -59,7 +59,7 @@ img {
 * [Accelerate](https://github.com/huggingface/accelerate)
 * [Hugging Face Hub](https://huggingface.co/models)
 
-# NLP 介绍
+## NLP 介绍
 
 NLP 任务：
 
@@ -74,9 +74,9 @@ NLP 任务：
 * **Generating a new sentence from an input text**: Translating a text into another language, 
   summarizing a text
 
-# Transformers
+## Transformers
 
-## 简介
+### 简介
 
 * `transformers` 提供了数以千计的预训练模型，支持 100 多种语言的文本分类、
   信息抽取、问答、摘要、翻译、文本生成。它的宗旨是让最先进的 NLP 技术人人易用。
@@ -106,7 +106,7 @@ NLP 任务：
     - 模型内部结构保持透明一致
     - 模型文件可单独使用，方便魔改和快速实验
 
-## 安装
+### 安装
 
 * Python 3.8+
 * PyTorch 1.11+
@@ -124,7 +124,7 @@ conda:
 $ conda install conda-forge::transformers
 ```
 
-## 工具 pipeline
+### 工具 pipeline
 
 使用 `transformers.pipeline()` 是利用预训练模型进行推理的最简单的方式，
 `pipeline()` 可以用于跨不同模态的多种任务，下面是 `pipeline()` 支持的任务列表：
@@ -145,7 +145,7 @@ $ conda install conda-forge::transformers
 | 自动语音识别 | 将音频文件中的语音提取为文本 | Audio | `pipeline(task="automatic-speech-recognition”)` |
 | 视觉问答 | 给定一个图像和一个问题，正确地回答有关图像的问题 | Multimodal | `pipeline(task="vqa”)` |
 
-### 快速上手
+#### 快速上手
 
 1. 使用 `pipeline` 判断正负面情绪
 
@@ -213,25 +213,25 @@ result = speech_recognizer(dataset[:4]["audio"])
 print([d["text"] for d in result])
 ```
 
-## 模型
+### 模型
 
 * [模型架构](https://huggingface.co/docs/transformers/model_summary)
 * [支持的模型(包括 tokenizer 模型)](https://huggingface.co/docs/transformers/index#supported-frameworks)
 
-# Datasets
+## Datasets
 
 
-# Tokenizers
+## Tokenizers
 
 
-# Accelerate
+## Accelerate
 
 
-# Hugging Face Hub
+## Hugging Face Hub
 
 > * https://huggingface.co/models
 
-# 参考
+## 参考
 
 * [HF Transformers](https://huggingface.co/docs/transformers/v4.44.2/en/index)
 * [HF Pipeline](https://huggingface.co/docs/transformers/main_classes/pipelines#pipelines)

@@ -43,7 +43,7 @@ img {
 
 LightGBM 的安装非常简单，在 Linux 下很方便的就可以开启 GPU 训练。可以优先选用从 pip 安装，如果失败再从源码安装。
 
-# pip 安装
+## pip 安装
 
 ```bash
 pip install lightgbm
@@ -64,9 +64,9 @@ pip install lightgbm --install-option=--gpu --install-option="--opencl-include-d
 #    opencl-library
 ```
 
-# 从源码安装
+## 从源码安装
 
-## Linux
+### Linux
 
 1. 下载源码
 
@@ -104,7 +104,7 @@ $ cd python-package
 $ sudo python setup.py install --precompile
 ```
 
-## Windows
+### Windows
 
 1. 下载源码
 
@@ -144,4 +144,4 @@ $ cd python-package
 $ python setup.py install --precompile
 ```
 
-## macOS
+### macOS

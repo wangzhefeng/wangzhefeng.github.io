@@ -38,7 +38,7 @@ img {
 - [算法实现](#算法实现)
 </p></details><p></p>
 
-# 算法介绍
+## 算法介绍
 
 LVQ(Learning vector Quantization) 假设数据样本带有类别标记, 
 学习过程利用样本的这些监督信息来辅助聚类. 
@@ -104,5 +104,5 @@ LVQ的目标是学得一组 `$n$` 维原型向量 `$\{p_{1}, p_{2}, \ldots, p_{q
       由此形成了对样本空间 `$\mathcal{X}$` 的簇划分 `$\{R_{1}, R_{2}, \ldots, R_{q}\}$`, 该划分通常称为"Voronoi剖分"(Voronoi tessellation).
 
 
-# 算法实现
+## 算法实现
 

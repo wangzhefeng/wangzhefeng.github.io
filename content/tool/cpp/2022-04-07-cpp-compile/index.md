@@ -45,13 +45,13 @@ img {
 </p></details><p></p>
 
 
-# 操作系统与编译器
+## 操作系统与编译器
 
 - 编译器
 
-# 编译
+## 编译
 
-## 程序源文件命名约定
+### 程序源文件命名约定
 
 - `.cc`
 - `.cxx`
@@ -59,7 +59,7 @@ img {
 - `.cp`
 - `.C`
 
-## 从命令行运行编译器
+### 从命令行运行编译器
 
 在不同操作系统和编译器系统中, 运行 C++ 编译器的命令也各不相同, 
 最常用的编译器是 GUN 编译器和微软的 Visual Studio 编译器
@@ -75,7 +75,7 @@ $ g++ -o prog prog.cc
     - 如果省略该参数, 在 Windows 中生成 `prog.exe` 文件; 在 UNIX 系统中生成 `prog.out` 文件
 - 根据使用的 GNU 编译器的版本, 可能需要指定 `-std=c++0x` 参数来打开对 C++11 的支持
 
-### Windows
+#### Windows
 
 编译文件 `prog.cc`:
 
@@ -100,7 +100,7 @@ Windows 系统中访问 `main` 返回值
 $ echo %ERRORLEVEL%
 ```
 
-### UNIX
+#### UNIX
 
 编译文件 `prog.cc`:
 
@@ -126,12 +126,12 @@ UNIX 系统中访问 `main` 返回值
 $ echo $?
 ```
 
-### 从键盘输入文件结束符
+#### 从键盘输入文件结束符
 
 - Windows: `Ctrl+z` + `Enter`
 - UNIX: `Ctrl+d`
 
-## IDE 运行编译器
+### IDE 运行编译器
       
 > 运行 Visual Studio 2010 编译器的命令是 `cl`:
 

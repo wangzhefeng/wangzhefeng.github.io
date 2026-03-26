@@ -43,7 +43,7 @@ img {
 
 
 
-# tf.train.Checkpoint: 变量的保存与恢复
+## tf.train.Checkpoint: 变量的保存与恢复
 
 很多时候, 希望在模型训练完成后能将训练好的参数(变量)保存起来, 这样在需要使用模型的其他地方载入模型和参数, 
 就能直接得到训练好的模型, 保存模型有很多中方式:
@@ -57,7 +57,7 @@ img {
 import pickle
 ```
 
-## tf.train.Checkpoint 介绍
+### tf.train.Checkpoint 介绍
 
 - `tf.train.Checkpoint` 简介
 
@@ -115,7 +115,7 @@ tf.train.latest_checkpoint(save_path)
     - 载入前缀为 `model.ckpt`、序号为 `1` 的文件来恢复模型
 
 
-## tf.train.Checkpoint 代码框架
+### tf.train.Checkpoint 代码框架
 
 1.train.py 模型训练阶段
 
@@ -158,7 +158,7 @@ checkpoint.restore(tf.train.latest_checkpoint("./save))
 - `tf.train.Checkpoint` (检查点)只保存模型的参数, 不保存模型的计算过程, 
     因此一般用于在具有的模型源码时恢复之前训练好的模型参数。如果需要导出模型(无须源代码也能运行模型)。
 
-# 使用 SaveModel 完整导出模型
+## 使用 SaveModel 完整导出模型
 
 作为模型导出格式的 `SaveModel` 包含了一个 TensorFlow 程序的完整信息: 不仅包含参数的权值, 还包含计算的流程(计算图)。
 当模型导出为 SaveModel 文件时, 无须模型的源代码即可再次运行模型, 这使得 `SaveModel` 尤其适用于模型的分享和部署。
@@ -191,7 +191,7 @@ model = tf.saved_model.load("保存的目标文件夹名称")
 
 
 
-# Keras 自有的模型导出格式
+## Keras 自有的模型导出格式
 
 示例:
 

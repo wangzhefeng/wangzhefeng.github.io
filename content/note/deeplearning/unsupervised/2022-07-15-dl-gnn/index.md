@@ -51,11 +51,11 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# TODO
+## TODO
 
 * [终于有人总结了图神经网络](https://mp.weixin.qq.com/s/HDXfbP7jZp3qONKFcmrTbA)
 
-# GNN 解决什么问题
+## GNN 解决什么问题
 
 近十年来(从 2012 年 AlexNet 开始计算)，深度学习在计算机视觉(CV)和自然语言处理(NLP)等领域得到的长足的发展，
 深度神经网络对于图像和文字等欧几里得数据(Euclidean data)可以进行较好的处理，之所以被称为欧几里得数据，
@@ -83,9 +83,9 @@ img {
 * 社区预测：识别密集连接的节点所形成的簇
 * 网络相似性: 两个(子)网络是否相似
 
-# 图
+## 图
 
-## 图介绍
+### 图介绍
 
 图(Graph)是图论的研究对象，图论是欧拉在研究哥尼斯堡七桥问题过程中，创造出来的新数学分支
 
@@ -99,11 +99,11 @@ img {
 * 微信好友是双向的，你我互为好友(不考虑拉黑/屏蔽)，对应于无向图(Undirected Graph)
 * 微博的关注是单向的，我粉你，你未必粉我，对应有向图，也可以将无向图视为双向的有向图
 
-## 图表示
+### 图表示
 
 图本身也具有表达其自身的全局属性，来描述整个图
 
-### 邻接矩阵
+#### 邻接矩阵
 
 如何用数学表示图中顶点的关系呢？最常见的方法是邻接矩阵(Adjacency Matrix)，
 下图中 A 和 B、C、E 相连，故第一行和第一列对应的位置为 1，其余位置为 0
@@ -123,7 +123,7 @@ img {
 
 ![img](images/graph_to_tensor_text.png)
 
-### 邻接列表
+#### 邻接列表
 
 也可以选用边来表示图，即邻接列表(Adjacency List)，这可以大幅减少对空间的消耗，因为实际的边比所有可能的边(邻接矩阵)数量往往小很多
 
@@ -144,21 +144,21 @@ img {
 
 
 
-# 神经网络特点
+## 神经网络特点
 
-# 节点特征的表达学习
+## 节点特征的表达学习
 
-# 消息传递
+## 消息传递
 
-# 节点嵌入的计算
-
-
+## 节点嵌入的计算
 
 
 
-# 附录
 
-## 图表示实现
+
+## 附录
+
+### 图表示实现
 
 ```python
 class Vertex:
@@ -281,7 +281,7 @@ print(graph(g))
  [ 1.  0.  1.  0.  0.]]
 ```
 
-# 参考
+## 参考
 
 * [理解图神经网络：从CNN到GNN](https://zhuanlan.zhihu.com/p/463666907)
 * [Directed and Undirected Graph](https://sites.google.com/a/cs.christuniversity.in/discrete-mathematics-lectures/graphs/directed-and-undirected-graph)

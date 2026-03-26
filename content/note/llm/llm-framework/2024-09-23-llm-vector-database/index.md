@@ -60,7 +60,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 向量数据库简介
+## 向量数据库简介
 
 向量数据库是用于高效计算和管理大量 **向量数据** 的解决方案。
 向量数据库是一种专门用于 **存储和检索向量数据(embedding)** 的数据库系统。
@@ -70,13 +70,13 @@ img {
 这些向量可以是数字、文本、图像或其他类型的数据。
 向量数据库使用高效的 **索引** 和 **查询** 算法来加速向量数据的存储和检索过程。
 
-# 向量数据库原理及优势
+## 向量数据库原理及优势
 
 向量数据库中的 **数据以向量作为基本单位**，对向量进行 **存储**、**处理** 及 **检索**。
 向量数据库通过计算与目标向量的 **余弦距离**、**点积**、**Squared L2** 等获取与目标向量的相似度。
 当处理大量甚至海量的向量数据时，向量数据库 **索引** 和 **查询** 算法的效率明显高于传统数据库。
 
-# 主流向量数据库
+## 主流向量数据库
 
 * [Chroma](https://www.trychroma.com/)：是一个轻量级向量数据库，拥有丰富的功能和简单的 API，
   具有简单、易用、轻量的优点，但功能相对简单且不支持 GPU 加速，适合初学者使用。
@@ -89,9 +89,9 @@ img {
   支持 **本地运行**、**部署在本地服务器** 及 **Qdrant 云** 三种部署模式。
   且可以通过为页面内容和元数据制定不同的键来复用数据。
 
-# Chroma
+## Chroma
 
-## Chroma 简介
+### Chroma 简介
 
 > Chroma is the AI-native open-source vector database. 
 > Chroma makes it easy to build LLM apps by making knowledge, 
@@ -112,13 +112,13 @@ Chroma prioritizes:
 * simplicity and developer productivity
 * it also happens to be very quick
 
-## Chroma 安装
+### Chroma 安装
 
 ```bash
 $ pip insall chromadb
 ```
 
-## Chroma 使用
+### Chroma 使用
 
 1. 创建一个 Chroma Client
 
@@ -177,9 +177,9 @@ print(result)
 }
 ```
 
-## Chroma API
+### Chroma API
 
-### 创建 Chroma Client
+#### 创建 Chroma Client
 
 ```python
 import chromadb
@@ -198,7 +198,7 @@ client.heartbeat()
 client.reset()
 ```
 
-### 启动 Client-Server
+#### 启动 Client-Server
 
 本地启动 Chroma Server:
 
@@ -232,9 +232,9 @@ async def main():
 asyncio.run(main())
 ```
 
-### Collections 操作
+#### Collections 操作
 
-#### Creating-Inspecting-Deleting
+##### Creating-Inspecting-Deleting
 
 ```python
 collection = client.create_collection(name="my_collection", embedding_function=emb_fn)
@@ -251,7 +251,7 @@ collection = client.get_or_create_collection(name="test")
 client.delete_collection(name="my_collection") 
 ```
 
-#### 修改距离函数
+##### 修改距离函数
 
 > Changing distance function
 
@@ -262,7 +262,7 @@ collection = client.create_collection(
 )
 ```
 
-#### Add data
+##### Add data
 
 ```python
 collection.add(
@@ -309,7 +309,7 @@ collection.add(
 )
 ```
 
-#### Query
+##### Query
 
 ```python
 collection.query(
@@ -328,7 +328,7 @@ collection.query(
 )
 ```
 
-#### Where
+##### Where
 
 > where filters
 
@@ -341,7 +341,7 @@ collection.query(
 
 
 
-#### Updating data
+##### Updating data
 
 ```python
 collection.update(
@@ -381,7 +381,7 @@ collection.upsert(
 )
 ```
 
-#### Deleting data
+##### Deleting data
 
 ```python
 collection.delete(
@@ -392,7 +392,7 @@ collection.delete(
 )
 ```
 
-## Chorma 部署
+### Chorma 部署
 
 Chroma Server：
 
@@ -410,7 +410,7 @@ Chroma Server：
 * GCP
 * Azure
 
-### Client-Server Mode
+#### Client-Server Mode
 
 Run Chroma in client/server mode by using CLI:
 
@@ -443,7 +443,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Chorma's Thin-Client
+#### Chorma's Thin-Client
 
 ```bash
 $ pip install chromadb-client
@@ -460,15 +460,15 @@ async def main():
     client = await chromadb.AsyncHttpClient(host='localhost', port=8000)
 ```
 
-# Weaviate
+## Weaviate
 
 * https://weaviate.io/developers/weaviate
 
-# Qdrant
+## Qdrant
 
 * https://qdrant.tech/documentation/
 
-# 参考
+## 参考
 
 * [向量及向量知识库](https://github.com/datawhalechina/llm-universe/blob/main/notebook/C3%20%E6%90%AD%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%BA%93/1.%E5%90%91%E9%87%8F%E5%8F%8A%E5%90%91%E9%87%8F%E7%9F%A5%E8%AF%86%E5%BA%93%E4%BB%8B%E7%BB%8D.md)
 * [LangChain Components Vectorstores](https://python.langchain.com/docs/integrations/vectorstores/)

@@ -46,7 +46,7 @@ img {
 - [资料](#资料)
 </p></details><p></p>
 
-# 论文简介
+## 论文简介
 
 * 论文名称：Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting.
 * 论文地址：[https://arxiv.org/abs/2012.07436](https://arxiv.org/abs/2012.07436)
@@ -54,27 +54,27 @@ img {
     - [https://github.com/thuml/Time-Series-Library](https://github.com/thuml/Time-Series-Library)
     - [https://github.com/zhouhaoyi/Informer2020](https://github.com/zhouhaoyi/Informer2020)
 
-# 历史研究和瓶颈
+## 历史研究和瓶颈
 
 
-# 论文贡献
-
-
-
-# 问题定义
+## 论文贡献
 
 
 
-# 模型定义
+## 问题定义
 
 
-# 实验结果
+
+## 模型定义
 
 
-# 总结
+## 实验结果
 
 
-# 资料
+## 总结
+
+
+## 资料
 
 * [HuggingFace Blog](https://huggingface.co/blog/zh/informer)
 * [Informer算法原理与代码详解](https://zhuanlan.zhihu.com/p/646853438)

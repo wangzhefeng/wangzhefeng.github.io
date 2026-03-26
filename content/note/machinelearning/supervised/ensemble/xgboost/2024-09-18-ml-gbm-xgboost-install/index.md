@@ -39,7 +39,7 @@ img {
 - [macOS](#macos)
 </p></details><p></p>
 
-# Linux
+## Linux
 
 1. 下载源码
 
@@ -72,7 +72,7 @@ $ cd python-package
 $ sudo python setup.py intall
 ```
 
-# Windows
+## Windows
 
 1. 下载源码
 
@@ -107,5 +107,5 @@ $ cd python-package
 $ python setup.py intall
 ```
 
-# macOS
+## macOS
 

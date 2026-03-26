@@ -55,9 +55,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 参数
+## 参数
 
-## 通用参数
+### 通用参数
 
 > 控制整个模型的通用性能
 
@@ -82,7 +82,7 @@ img {
     - `2`：信息
     - `3`：调试
 
-## Tree Booster 参数
+### Tree Booster 参数
 
 > 控制每步迭代中每个基学习器(树模型)
 
@@ -166,7 +166,7 @@ img {
     - 例如 `params_constrained['monotone_constraints'] = "(1,-1)"`，
       `(1,-1)` 表示对第一个预测变量施加增加的约束，对第二个预测变量施加减小的约束
 
-## Linear Booster 参数
+### Linear Booster 参数
 
 重要：
 
@@ -193,7 +193,7 @@ img {
     - `thrifty`：近似贪婪特征选择(近似于 `greedy`)
 * `top_k`：要选择的最重要特征数(在 `greedy` 和 `thrifty` 内)
 
-## DART Booster 参数
+### DART Booster 参数
 
 * `sample_type`： 它指定了丢弃时的策略：
     - `'uniform'`： 随机丢弃子树（默认值）
@@ -208,7 +208,7 @@ img {
 * `skip_drop`：它指定了不执行 dropout 的概率，其范围是 `[0.0,1.0]`， 默认为 `0.0`。
   如果跳过了 dropout，则新的子树直接加入到模型中（和 xgboost 相同的方式）
 
-## 学习任务参数
+### 学习任务参数
 
 > 控制模型优化的表现
 
@@ -257,18 +257,18 @@ img {
     - `map`：平均精度
 * `seed`：随机数种子，默认 0
 
-## 计算参数
+### 计算参数
 
-### 外存计算
+#### 外存计算
 
-### GPU 计算
-
-
+#### GPU 计算
 
 
-# 参数调节
 
-## 参数调优的一般策略
+
+## 参数调节
+
+### 参数调优的一般策略
 
 1. 首先, 选择一个相对较大的 `eta`/`learning_rate`, 比如: 0.1(一般范围在: `$[0.05, 0.3]$`)
     - 根据这个选定的 `learning_rate`，对树的数量 `n_estimators` 进行 CV 调优，
@@ -294,7 +294,7 @@ img {
     - `max_depth`
     - `min_child_weight`
 
-## 调参指导
+### 调参指导
 
 1. 当出现过拟合时，有两类参数可以缓解：
     - 第一类参数：用于直接控制模型的复杂度。包括 `max_depth`、`min_child_weight`、`gamma` 等参数
@@ -308,11 +308,11 @@ img {
         - 不能重新平衡正负样本
         - 设置 `max_delta_step` 为一个有限的值（如 `1`），从而有助于收敛
 
-# Python API
+## Python API
 
-## 数据接口
+### 数据接口
 
-### 数据格式
+#### 数据格式
 
 1. XGBoost 的数据存储在 `DMatrix` 中；
 2. XGBoost 支持直接从下列格式的文件中加载数据：
@@ -349,20 +349,20 @@ csr = scipy.sparse.csr_matrix((dat, (row, col)))
 dtrain = xgb.DMatrix(csr)
 ```
 
-### DMatrix
+#### DMatrix
 
 
 
 
-## 模型接口
+### 模型接口
 
-## 绘图 API
-
-
+### 绘图 API
 
 
 
 
-# 参考
+
+
+## 参考
 
 * [XGBoost 使用](https://www.huaxiaozhuan.com/%E5%B7%A5%E5%85%B7/xgboost/chapters/xgboost_usage.html)

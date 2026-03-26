@@ -62,7 +62,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 模型验证介绍
+## 模型验证介绍
 
 机器学习模型项目不是一次性的，它是一个持续的过程。
 如果存在任何异常，则需要对生产中的模型进行持续监控。
@@ -78,11 +78,11 @@ img {
 此外，一个鲁棒的验证策略，还可以帮助我们更好地调整我们模型的参数，
 验证各种框架以及特征的重要性等等。
 
-# 模型验证方法
+## 模型验证方法
 
-## 训练集验证集分割验证
+### 训练集验证集分割验证
 
-### 随机划分
+#### 随机划分
 
 **简介：**
 
@@ -123,7 +123,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = val_ratio)
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape) 
 ```
 
-### 分层划分
+#### 分层划分
 
 **简介：**
 
@@ -162,13 +162,13 @@ print('label distribution in train: ',Counter(y_train))
 print('label distribution in test: ',Counter(y_test)) 
 ```
 
-## 交叉验证
+### 交叉验证
 
 交叉验证是保证模型有效的方法，同时也是防止模型过拟合的方法。
 
-### Hold Out 交叉验证
+#### Hold Out 交叉验证
 
-### 随机 K-Fold CV
+#### 随机 K-Fold CV
 
 **简介：**
 
@@ -216,7 +216,7 @@ for train_index, test_index in kf.split(X, y):
     ...
 ```
 
-### 分层 K-Fold CV
+#### 分层 K-Fold CV
 
 **简介：**
 
@@ -241,7 +241,7 @@ for train_index, test_index in kf.split(X, y):
 
 ```
 
-### 分组 K-Fold CV
+#### 分组 K-Fold CV
 
 **简介：**
 
@@ -284,7 +284,7 @@ for fold, (trn_idx, val_idx) in enumerate(kf.split(X, y, group)):
     X_tr, X_val,y_tr,y_val = X[trn_idx],X[val_idx], y[trn_idx],y[val_idx]
 ```
 
-### 分层分组 K-Fold CV
+#### 分层分组 K-Fold CV
 
 **简介：**
 
@@ -355,7 +355,7 @@ def stratified_group_k_fold(X, y, groups, k, seed=None):
         yield train_indices, test_indices
 ```
 
-### Repeated K-Fold CV
+#### Repeated K-Fold CV
 
 **简介：**
 
@@ -457,7 +457,7 @@ pyplot.show()
 >15 mean=0.8653 se=0.003 
 '''
 ```
-### Nested K-Fold CV
+#### Nested K-Fold CV
 
 **简介：**
 
@@ -556,20 +556,20 @@ NCV.fit(X=X,y=y)
 NCV.outer_scores
 ```
 
-# 模型验证工具
+## 模型验证工具
 
-## evidently
+### evidently
 
 Evidently 是一个用于分析和监控机器学习模型的开源 Python 包。开发该软件包的目的是建立一个易于监控的机器学习仪表盘，
 并检测数据中的漂移。它是专门为生产而设计的，所以在有数据管道的情况下使用它会更好。然而，即使在开发阶段，仍然可以使用它
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install evidently
 ```
 
-### 使用-数据统计
+#### 使用-数据统计
 
 ```python
 import pandas as pd
@@ -599,7 +599,7 @@ data_drift_report.save("reports/my_report.html")
 有一个监视器仪表板。我们可以在这个仪表板中看到每个特征分布和数据漂移的统计测试。
 在我们的样本中，训练数据和测试数据之间没有显示任何漂移，这意味着所有数据分布都是相似的
 
-### 使用-机器学习
+#### 使用-机器学习
 
 可以用来创建一个机器学习分类仪表板来监控机器学习的健康状况。例如，让我们使用之前的数据训练一个分类模型
 
@@ -663,7 +663,7 @@ churn_model_performance_dashboard.save("reports/classification_churn.html")
 
 如上面所示，我们可以监控机器学习模型指标和每个特征的预测，可以知道在接收新数据时是否存在差异
 
-## deepchecks
+### deepchecks
 
 deepchecks 是一个 Python 工具包，只需用几行代码就可以验证机器学习模型。
 许多 API 可用于检测数据漂移、标签漂移、列车测试比较、评估模型等。
@@ -672,13 +672,13 @@ deepchecks 非常适合在研究阶段和模型投产前使用
 deepchecks 完整报告包含许多信息，例如混淆矩阵、简单模型比较、混合数据类型、数据漂移等。
 检查机器学习模型所需的所有信息都可以在单个代码运行中获得
 
-### 安装
+#### 安装
 
 ```bash
 $ pip isntall deepchecks
 ```
 
-### 使用
+#### 使用
 
 ```python
 import pandas as pd
@@ -722,20 +722,20 @@ suite.run(
 )
 ```
 
-## TFDV
+### TFDV
 
 > tensorflow-data-validation
 
 TFDV(TensorFlow Data Validation) 是 TensorFlow 开发人员开发的用于管理数据质量问题的 python 包。
 它用于自动描述数据统计、推断数据模式以及检测传入数据中的任何异常
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install tesnsorflow-data-validation
 ```
 
-### 使用
+#### 使用
 
 ```python
 import tensorflow_data_validation as tfdv
@@ -777,7 +777,7 @@ anomalies = tfdv.validate_statistics(
 tfdv.display_anomalies(anomalies)
 ```
 
-# 参考
+## 参考
 
 * [机器学习模型验证](https://mp.weixin.qq.com/s?__biz=MzA3MTM5MDYyMA==&mid=2656763105&idx=1&sn=2c481069a1d2849b1f816075ba122df9&chksm=84801812b3f79104a6ec6f26db92dc452342ebcce6fcb6ff2928d966d9ea90d182baed1a2b52&scene=132#wechat_redirect)
 * [交叉验证常见的6个错误](https://mp.weixin.qq.com/s/OirhNWfpz-mRJpSb_CwIXA)

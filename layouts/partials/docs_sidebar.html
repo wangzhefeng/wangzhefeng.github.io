@@ -1,0 +1,49 @@
+{{ $root := . }}
+{{ if .IsPage }}
+  {{ with .CurrentSection }}
+    {{ $root = . }}
+  {{ end }}
+{{ end }}
+{{ $isPostSection := eq $root.Section "post" }}
+{{ $sidebarHiddenRoutes := slice "/about/" "/todo/" "/resume/" "/ivy/" }}
+{{ $sidebarHidden := in $sidebarHiddenRoutes (lower .RelPermalink) }}
+<aside class="docs-sidebar">
+  <div class="docs-sidebar__inner">
+    {{ if not $sidebarHidden }}
+    <div class="docs-sidebar__title">
+      <a href="{{ $root.RelPermalink }}">{{ $root.Title }}</a>
+    </div>
+
+    {{ $directPages := cond $isPostSection ($root.RegularPages.ByDate.Reverse) ($root.RegularPages.ByWeight.ByTitle) }}
+    {{ if gt (len $directPages) 0 }}
+    <div class="docs-nav-group">
+      <ul class="docs-nav-list">
+        {{ range $directPages }}
+        <li class="docs-nav-list__item{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}">
+          <a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+
+    {{ range $section := $root.Sections.ByWeight.ByTitle }}
+    <div class="docs-nav-group">
+      <div class="docs-nav-group__title">
+        <a href="{{ $section.RelPermalink }}">{{ $section.Title }}</a>
+      </div>
+      {{ $sectionPages := cond $isPostSection ($section.RegularPages.ByDate.Reverse) ($section.RegularPages.ByWeight.ByTitle) }}
+      {{ if gt (len $sectionPages) 0 }}
+      <ul class="docs-nav-list">
+        {{ range $sectionPages }}
+        <li class="docs-nav-list__item{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}">
+          <a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>
+        </li>
+        {{ end }}
+      </ul>
+      {{ end }}
+    </div>
+    {{ end }}
+    {{ end }}
+  </div>
+</aside>

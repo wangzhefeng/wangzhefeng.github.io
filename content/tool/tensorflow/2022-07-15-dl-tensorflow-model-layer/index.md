@@ -66,11 +66,11 @@ img {
 如果这些内置模型层不能够满足需求，可以通过编写 `tf.keras.Lambda` 匿名模型层，
 或继承 `tf.keras.layers.Layer` 基类构建自定义的模型层
 
-# 内置模型层
+## 内置模型层
 
-## 模型层共有的方法
+### 模型层共有的方法
 
-### 权重设置与获取
+#### 权重设置与获取
 
 - `.get_weights()`
 - `.set_weights(weights)`
@@ -78,7 +78,7 @@ img {
     - `tf.keras.layer.Dense.from_config(config)`
     - `tf.keras.layer.deserialize({"class_name": class_name, "config": config})`
 
-### 层属性获取
+#### 层属性获取
 
 - 如果 Layer 是单个节点(不是共享 layer), 可以使用以下方式获取 layer 的属性:
     - `.input`
@@ -91,9 +91,9 @@ img {
     - `.getinputshapeat(noteindex)`
     - `.getoutputshaepat(noteindex)`
 
-## 常用内置模型层
+### 常用内置模型层
 
-### 常用核心层
+#### 常用核心层
 
 * `Dense()`: 密集连接层
     - 参数个数 = 输入层特征数 `$\times$` 输出层特征数(weight) + 输出层特征数(bias)
@@ -150,7 +150,7 @@ img {
     - `RepeatVector()`
     - `Masking()`
 
-### 卷积网络相关层
+#### 卷积网络相关层
 
 * 卷积层
     - `Conv1D`: 普通一维卷积
@@ -209,7 +209,7 @@ img {
             - 每个通道仅保留一个值
         - `GlobalAveragePolling3D()`
 
-### 循环网络相关层
+#### 循环网络相关层
 
 * RNN
     - `RNN()`: RNN基本层
@@ -252,9 +252,9 @@ img {
         - 包装后可以将 Dense、Conv2D 等作用到每一个时间片段上
     - `Bidirectional()`: 双向循环网络包装器
 
-# 自定义模型层
+## 自定义模型层
 
-## 编写 tf.keras.Lambda 层
+### 编写 tf.keras.Lambda 层
 
 如果自定义模型层没有需要被训练的参数，一般推荐使用 `Lambda` 层实现。
 `Lambda` 层由于没有需要被训练的参数，只需要定义正向传播逻辑即可，使用比 `Layer` 基类子类化更加简单。
@@ -268,7 +268,7 @@ mypower = layers.Lambda(lambda x: tf.math.pow(x, 2))
 mypower(tf.range(5))
 ```
 
-## 继承 tf.keras.layers.Layer 基类
+### 继承 tf.keras.layers.Layer 基类
 
 如果自定义模型层有需要被训练的参数，则可以通过对 `Layer` 基类子类化实现。
 通过 `Layer` 的子类化自定义层一般需要继承 `tf.keras.layers.Layers` 类, 
@@ -299,7 +299,7 @@ class MyLayer(tf.keras.layers.Layer):
         return output
 ```
 
-## 线性层示例
+### 线性层示例
 
 ```python
 import numpy as np
@@ -428,7 +428,7 @@ predictions = model_loaded_tf.predict(tf.constant(
 
 
 
-# 模型层配置
+## 模型层配置
 
 ```python
 model.add(Layer(
@@ -455,15 +455,15 @@ inputs = Input()
 model.add(Activation)
 ```
 
-## 输入
+### 输入
 
 
-## 输出
+### 输出
 
 
-## 激活函数
+### 激活函数
 
-### 模型可用的激活函数
+#### 模型可用的激活函数
 
 * Softmax:
     - `tf.nn.softmax`
@@ -486,7 +486,7 @@ model.add(Activation)
 * GELU:
     - TODO
 
-### 在模型中使用激活函数
+#### 在模型中使用激活函数
 
 在 TensorFlow Keras 模型中使用激活函数一般有两种方式
 
@@ -512,7 +512,7 @@ model.add(layers.Activation(tf.nn.softmax))
 model.summary()
 ```
 
-## 正则化
+### 正则化
 
 正则化器允许在优化过程中对层的参数或层的激活函数情况进行惩罚, 
 并且神经网络优化的损失函数的惩罚项也可以使用
@@ -520,34 +520,34 @@ model.summary()
 惩罚是以层为对象进行的。具体的 API 因层而异, 但 Dense, Conv1D, Conv2D 和
 Conv3D 这些层具有统一的 API
 
-### Regularizers 的使用方法
+#### Regularizers 的使用方法
 
 - [class] keras.regularizers.Regularizer
    - [instance] `kernel_regularizer` param
    - [instance] `bias_regularizer` param
    - [instance] `activity_regularizer` param
 
-### 可用的 Regularizers
+#### 可用的 Regularizers
 
 - keras.regularizers.l1(0.)
 - keras.regularizers.l2(0.)
 - keras.regularizers.l1_l2(l1 = 0.01, l2 = 0.01)
 
-### 自定义的 Regularizer
+#### 自定义的 Regularizer
 
-## 约束
+### 约束
 
 `constraints` 模块的函数允许在优化期间对网络参数设置约束(例如非负性)
 
 约束是以层为对象进行的。具体的 API 因层而异, 但 Dense, Conv1D, Conv2D 和
 Conv3D 这些层具有统一的 API
 
-### Constraints 的使用方法
+#### Constraints 的使用方法
 
 * `kernel_constraint` 参数
 * `bias_constraint` 参数
 
-### 可用的 Constraints
+#### 可用的 Constraints
 
 * `tf.keras.constraints.MaxNorm(max_value = 2, axis = 0)`
     - 最大范数权值约束

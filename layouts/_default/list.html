@@ -1,36 +1,149 @@
 {{ partial "header.html" . }}
 
-{{ if .Content }}
-{{ .Content }}
-{{ end }}
-{{ if (or .Params.list_pages (not .Content)) }}
-<div class="archive">
-{{ if .Params.list_pages }}
-  <div class="archive-group">
-  {{ range .Pages.ByParam (or .Params.order_by "date" ) }}
-  <p class="archive-item">
-    <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
-    <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }} {{ with .Params.subtitle }}<span class='subtitle'> &middot; {{ . }} </span>{{ end }}</a>
-  </p>
+<div data-pagefind-body>
+{{ if .IsHome }}
+  {{ $posts := where .Site.RegularPages "Section" "post" }}
+  {{ $notes := where .Site.RegularPages "Section" "note" }}
+  {{ $tools := where .Site.RegularPages "Section" "tool" }}
+  {{ $latest := where .Site.RegularPages.ByDate.Reverse "Section" "in" (slice "post" "note" "tool") }}
+  {{ $noteRoot := .Site.GetPage "/note/" }}
+  {{ $noteTopics := slice }}
+  {{ with $noteRoot }}
+    {{ $noteTopics = .Sections.ByTitle }}
   {{ end }}
-  </div>
+  {{ $topicPaths := slice "/note/timeseries" "/note/machinelearning" "/note/llm" "/note/analysis" "/tool/python" "/tool/pytorch" }}
+  {{ $topics := slice }}
+  {{ range $topicPaths }}
+    {{ with $.Site.GetPage . }}
+      {{ $topics = $topics | append . }}
+    {{ end }}
+  {{ end }}
+  <section class="home-hero" data-reveal>
+    <div class="home-hero__copy">
+      <h1 data-i18n="home_hero_title">统计、时间序列、机器学习与大模型的个人知识库。</h1>
+      <p class="home-hero__lead" data-i18n="home_hero_lead">这个站点更接近一个持续维护的个人知识库，而不是只按时间滚动的博客首页。内容围绕统计、时间序列、机器学习与大模型展开，强调结构化浏览、快速检索和长期复用。</p>
+      <div class="home-hero__story" data-reveal>
+        <p data-i18n="home_story_intro">2017 年我从上海大学数学系毕业后，开始了在上海工作、生活的日子。工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，记录学习。</p>
+        <p data-i18n="home_github_intro">这是我的 GitHub 贡献图，看看我在忙些啥：</p>
+        <img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart" />
+      </div>
+    </div>
+    <aside class="home-hero__panel">
+      <div class="hero-panel-block">
+        <div class="home-note-topics">
+          {{ range $noteTopics }}
+          <a class="home-note-topic" href="{{ .RelPermalink }}">
+            <strong>{{ .Title }}</strong>
+            {{ with .Params.subtitle }}<span>{{ . }}</span>{{ end }}
+          </a>
+          {{ end }}
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section-block latest-section" data-reveal>
+    <div class="section-heading">
+      <h2 data-i18n="recent_updates">最近更新</h2>
+      <p data-i18n="recent_updates_desc">更像 docs changelog 的阅读入口，优先看标题、栏目、更新时间和摘要。</p>
+    </div>
+    <div class="latest-list">
+      {{ range first (default 6 .Site.Params.design.recent_updates_limit) $latest }}
+      {{ $excerpt := "" }}
+      {{ with .Params.subtitle }}
+        {{ $excerpt = . }}
+      {{ else }}
+        {{ $raw := .RawContent }}
+        {{ $clean := $raw | replaceRE "(?s)<style[^>]*>.*?</style>" "" | replaceRE "(?s)<details[^>]*>.*?</details>" "" | replaceRE "(?s)<!--.*?-->" "" | replaceRE "(?m)^#+\\s*" "" | replaceRE "(?m)^\\s*[-*+]\\s+" "" | replaceRE "(\\*\\*|__|`|~~)" "" | replaceRE "(?m)^>\\s*" "" | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+        {{ $excerpt = $clean | truncate 120 }}
+      {{ end }}
+      <a class="latest-row" href="{{ .RelPermalink }}" data-reveal>
+        <div class="latest-row__primary">
+          <h3>{{ .Title }}</h3>
+          {{ with $excerpt }}
+          <p>{{ . }}</p>
+          {{ end }}
+        </div>
+        <div class="latest-row__meta">
+          <span>{{ .Date.Format "2006-01-02" }}</span>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+  </section>
 {{ else }}
-  {{ range .Pages.GroupByDate "2006" }}
-  <h2 class="archive-title">{{ .Key }}</h2>
-  <div class="archive-group">
-  {{ range .Pages.GroupByDate "2006-01-02" }}
-  {{ range .Pages }}
-  <p class="archive-item">
-    <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
-    <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
-  </p>
-  {{ end }}
-  {{ end }}
+  {{ $sectionContent := .Content }}
+  {{ $sectionContent = replaceRE `(?s)<style[^>]*>.*?</style>\s*<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $sectionContent }}
+  {{ $sectionContent = replaceRE `(?s)<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $sectionContent }}
+  <div class="docs-layout">
+    {{ partial "docs_sidebar.html" . }}
+    <div class="docs-content" data-pagefind-body>
+      <header class="title">
+        {{ partial "meta.html" . }}
+      </header>
+
+      {{ if $sectionContent }}
+      <section class="docs-section">
+        <div class="article-content" id="article-content">
+          {{ $sectionContent | safeHTML }}
+        </div>
+      </section>
+      {{ end }}
+
+      {{ if and (gt (len .Sections) 0) (not (in (slice "note" "tool") .Section)) }}
+      <section class="docs-section">
+        <div class="section-heading">
+          <h2 data-i18n="start_with_subsection">先从子专题进入</h2>
+        </div>
+        <div class="section-card-grid">
+          {{ range first (default 6 .Site.Params.design.section_cards_limit) .Sections.ByTitle }}
+          <a class="section-card" href="{{ .RelPermalink }}" data-reveal>
+            <h3>{{ .Title }}</h3>
+            <p data-i18n-count="subsection_pages" data-count="{{ len .RegularPagesRecursive }}">{{ len .RegularPagesRecursive }} pages in this subsection.</p>
+            <span class="section-card__meta" data-i18n="open_subsection">Open subsection</span>
+          </a>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+
+      {{ if (or .Params.list_pages (not .Content)) }}
+      <section class="docs-section archive-block">
+        <div class="section-heading">
+          <h2 data-i18n-archive-title="{{ .Title }}">{{ .Title }}归档</h2>
+        </div>
+        <div class="archive">
+        {{ if .Params.list_pages }}
+          <div class="archive-group">
+          {{ range .Pages.ByParam (or .Params.order_by "date") }}
+          <p class="archive-item" data-reveal>
+            <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
+            <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}{{ with .Params.subtitle }}<span class="subtitle"> · {{ . }}</span>{{ end }}</a>
+          </p>
+          {{ end }}
+          </div>
+        {{ else }}
+          {{ range .Pages.GroupByDate "2006" }}
+          <h2 class="archive-title">{{ .Key }}</h2>
+          <div class="archive-group">
+            {{ range .Pages.GroupByDate "2006-01-02" }}
+              {{ range .Pages }}
+              <p class="archive-item" data-reveal>
+                <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
+                <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+              </p>
+              {{ end }}
+            {{ end }}
+          </div>
+          {{ end }}
+        {{ end }}
+        </div>
+      </section>
+      {{ end }}
+    </div>
+    {{ partial "page_rail.html" . }}
   </div>
-  {{ end }}
 {{ end }}
 
 </div>
-{{ end }}
-
 {{ partial "footer.html" . }}

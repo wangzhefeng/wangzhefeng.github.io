@@ -44,16 +44,16 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 时间序列聚类算法简介
+## 时间序列聚类算法简介
 
 时间序列的聚类在工业生产生活中非常常见，大到工业运维中面对海量 KPI 曲线的隐含关联关系的挖掘，
 小到股票收益曲线中的增长模式归类，都要用到时序聚类的方法帮助发现数据样本中一些隐含的、深层的信息
 
 根据对时间序列的距离度量方法，可以采用机器学习中很多聚类算法
 
-# 时间序列聚类算法
+## 时间序列聚类算法
 
-## K-Means DBA 聚类
+### K-Means DBA 聚类
 
 时间序列的 K 均值聚类需要时间序列的平均策略。一种可能性是 DTW 重心平均(Barycenter Average DBA)
 
@@ -115,7 +115,7 @@ new_center = dtw_barycenter.dba_loop(
 )
 ```
 
-## K-Medoids 聚类
+### K-Medoids 聚类
 
 ```python
 from dtaidistance import dtw, clustering
@@ -139,7 +139,7 @@ cluster_idx = model.fit(s)
 model.plot("kmedoids.png")
 ```
 
-## 层次聚类
+### 层次聚类
 
 层次聚类是一种很直观的方法，就是一层一层的对数据进行聚类操作，可以自低向上进行合并聚类、也可以自顶向下进行分裂聚类
 
@@ -159,7 +159,7 @@ model.plot("kmedoids.png")
 距离越小表示两者之间越相似，距离越大则表示两者之间越不相似。
 除此之外，还可以设置两个元素之间的相似度
 
-### 分层凝聚聚类
+#### 分层凝聚聚类
 
 > Hierarchical Agglomerative clustering
 
@@ -205,14 +205,14 @@ model.plot(
 )
 ```
 
-## 主动半监督聚类
+### 主动半监督聚类
 
 > Active semi-supervised clustering
 
 使用 DTAIDistance 执行主动半监督聚类的推荐方法是使用 COBRAS 进行时间序列聚类。
 COBRAS 是一个使用成对约束进行半监督时间序列聚类的库，它本身支持 `dtaidistance.dtw` 和 `kshape`
 
-# 参考
+## 参考
 
 - [时间序列聚类](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247484837&idx=1&sn=cdc922e6a213064485113bbb9b8e911e&chksm=cecef050f9b9794672f0227b36212a1fcf8acb1916c6e12e923bcdf5e9ac71b0aa9e7bb7f58d&scene=21#wechat_redirect)
 * [dtaidistance Clustering](https://dtaidistance.readthedocs.io/en/latest/usage/clustering.html)

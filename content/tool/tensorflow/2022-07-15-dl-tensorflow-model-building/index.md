@@ -47,7 +47,7 @@ img {
 * 使用函数式 API(Functional API) 构建任意结构模型
 * 继承 Model 基类(Subclassing API)构建自定义模型
 
-# 模型共有的方法和属性
+## 模型共有的方法和属性
 
 ```python
 from tf.keras.model import Model
@@ -77,7 +77,7 @@ from tf.keras.model import model_from_json, model_from_yaml
    - modeltoyaml()
       - modelfromyaml()
 
-# Sequential API
+## Sequential API
 
 Sequential 模型是层(layers)的线性堆叠
 
@@ -104,7 +104,7 @@ loss_and_metrics = model.evaluate(x_test, y_test, batch_size = 128)
 classes = model.predict(x_test, batch_size = 128)
 ```
 
-# Functional API
+## Functional API
 
 * Keras 函数式 API 是定义复杂模型的方法
 * Keras 函数式 API 可以重用经过训练的模型, 可以通过在张量上调用任何模型并将其视为一个层(layers)
@@ -128,7 +128,7 @@ outputs = tf.keras.layers.Softmax()(x)
 model = tf.keras.Model(inputs = inputs, outputs = outputs)
 ```
 
-# Subclassing API
+## Subclassing API
 
 - 使用 Subclassing API 建立模型, 即对 `tf.keras.Model` 类进行扩展以定义自己的新模型
 - 实现 forward pass in the ``call`` method
@@ -173,7 +173,7 @@ grads = tape.gradient(loss_value, model.trainable_variables)
 optimizer.apply(zip(grads, model.trainable_variables))
 ```
 
-# 回调函数-Callbacks
+## 回调函数-Callbacks
 
 - 回调函数是一个函数的集合, 会在训练的阶段使用
 - 可以使用回调函数查看训练模型的内在状态和统计。

@@ -49,14 +49,14 @@ img {
         - [LogisticRegressionCV](#logisticregressioncv)
 </p></details><p></p>
 
-# Logistic Regression 模型简介
+## Logistic Regression 模型简介
 
 逻辑回归是在线性回归的基础上加了一个 Sigmoid 函数（非线形）映射，
 使得逻辑回归成为了一个优秀的分类算法。学习逻辑回归模型，首先应该记住一句话：
 逻辑回归假设数据服从伯努利分布，通过极大化似然函数的方法，
 运用梯度下降来求解参数，来达到将数据二分类的目的。
 
-## 模型基本原理
+### 模型基本原理
 
 **线性模型：**
 
@@ -126,7 +126,7 @@ q, \text{if} \space x = 0.
 
 `$$\sigma(x) = \frac{1}{1+e^{-(\omega \cdot x + b)}}$$`
 
-## 模型损失函数
+### 模型损失函数
 
 **Logistic Regression 模型：**
 
@@ -165,7 +165,7 @@ q, \text{if} \space x = 0.
 
 `$$L(\omega) = - \sum_{i=1}^{N} [y_{i} \log \hat{y}_{i} + (1-y_{i}) \log(1- \hat{y}_{i})]$$`
 
-## 模型原理解释
+### 模型原理解释
 
 Logistic Regression 的目的是从特征学习出一个 0/1 分类模型 `$f(\cdot)$`：
 
@@ -205,16 +205,16 @@ Logistic Regression 的目标就是从数据中学习得到 `$\omega, b$`,
 使得正例 `$y=1$` 的特征 `$\omega^{T}x+b$` 远大于 `$0$`, 
 负例 `$y=0$` 的特征 `$\omega^{T}x + b$` 远小于 `$0$`。
 
-# Logistic Regression 模型实现
+## Logistic Regression 模型实现
 
-## 模型类型
+### 模型类型
 
 - binray classification
 - multiclass classification
    - One-vs-Rest classification
 - Multinomial classification
 
-## 模型形式
+### 模型形式
 
 Logistic Regression with L1 正则化
 
@@ -224,7 +224,7 @@ Logistic Regression with L2 正则化
 
 `$$\min_{w, C} \Big(\frac{1}{2}w^T w + C \sum_{i=1}^n \log(\exp(- y_i (X_i^T w + c)) + 1)\Big)$$`
 
-## 模型学习算法
+### 模型学习算法
 
 > * 梯度下降法
 > * 拟牛顿法
@@ -244,7 +244,7 @@ Logistic Regression with L2 正则化
 * `SGDClassifier with log loss`
    - 适用于大数据集, 高维数据集
 
-## sklearn PI
+### sklearn PI
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -252,7 +252,7 @@ from sklearn.linear_model import LogisticRegressionCV
 from sklearn.linear_model import SGDClassifier 
 ```
 
-### LogisticRegression
+#### LogisticRegression
 
 ```python
 lr = LogisticRegression(penalty = "l2", 
@@ -297,7 +297,7 @@ lr.n_iter_
     - `solver in ["newton-cg", "sag", "lbfgs"], penalty = "l2"`
     - `solver = "liblinear", penalty in ["l2", "l1"]`
 
-### SGDClassifier
+#### SGDClassifier
 
 ```python
 # 使用SGD算法训练的线性分类器: SVM, Logistic Regression
@@ -325,7 +325,7 @@ sgdc_lr = SGDClassifier(loss = 'log',
                         n_iter = None)
 ```
 
-### LogisticRegressionCV
+#### LogisticRegressionCV
 
 ```python
 import numpy as np

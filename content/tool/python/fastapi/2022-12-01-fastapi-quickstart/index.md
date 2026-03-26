@@ -49,7 +49,7 @@ img {
 - [OpenAPI](#openapi)
 </p></details><p></p>
 
-# FastAPI 介绍
+## FastAPI 介绍
 
 FastAPI 是一个用于构建 API 的现代、快速(高性能)的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
 
@@ -69,16 +69,16 @@ FastAPI 是一个用于构建 API 的现代、快速(高性能)的 web 框架，
        - Typer 是 FastAPI 的小同胞。它想要成为命令行中的 FastAPI。
     - FastAPI
 
-# FastAPI 安装
+## FastAPI 安装
 
-## Requirements
+### Requirements
 
 * Python 3.6 +
 * FastAPI 站在巨人的肩膀上:
     - `Starlette`: 负责 web 部分
     - `Pydantic`: 负责 data 部分
 
-## Installation
+### Installation
 
 * 安装 fastAPI
 
@@ -97,9 +97,9 @@ $ pip install "fastapi[all]"
 $ pip install "uvicorn[standard]"
 ```
 
-# FastAPI 示例
+## FastAPI 示例
 
-## 创建一个 `main.py`
+### 创建一个 `main.py`
 
 ```python
 from typing import Optional
@@ -143,7 +143,7 @@ async def read_item(item_id: int, q: Optional[str] = None):
     }
 ```
 
-## 运行
+### 运行
 
 ```bash
 $ uvicorn main:app --reload
@@ -155,7 +155,7 @@ $ uvicorn main:app --reload
 * `app`: 在 `main.py` 文件中通过 `app = FastAPI()` 创建的对象
 * `--reload`: 让服务器在更新代码后重新启动。仅在开发时使用该选项
 
-## 检查
+### 检查
 
 访问 http://127.0.0.1:8000/items/5?q=somequery，可以看到如下的 JSON 响应: 
 
@@ -174,7 +174,7 @@ $ uvicorn main:app --reload
 * `/items/{item_id}` 路径有一个路径参数 `item_id` 并且应该为 `int` 类型
 * `/items/{item_id}` 路径有一个可选的 `str` 类型的查询参数 `q`
 
-## 交互式 API 文档
+### 交互式 API 文档
 
 - 交互式 API 文档
     - 访问 http://127.0.0.1:8000/docs，
@@ -183,9 +183,9 @@ $ uvicorn main:app --reload
     - 访问 http://127.0.0.1:8000/redoc，
       可以看到由 [ReDoc](https://github.com/Rebilly/ReDoc) 生成的交互式 API 文档.
 
-# 升级示例
+## 升级示例
 
-## 修改 main.py 文件来从 `PUT` 请求中接收请求体
+### 修改 main.py 文件来从 `PUT` 请求中接收请求体
 
 借助 `Pydantic` 来使用标准的 Python 类型声明请求体。
 
@@ -222,14 +222,14 @@ def update_item(item_id: int, item: Item):
     }
 ```
 
-## 升级交互式 API 文档
+### 升级交互式 API 文档
 
 * 交互式 API 文档
     - 访问 http://127.0.0.1:8000/docs，可以看到由 `Swagger UI` 生成的交互式 API 文档中已经加入新的请求体.
 * 备选 API 文档
     - 访问 http://127.0.0.1:8000/redoc，可以看到由 `ReDoc` 生成的交互式 API 文档中已经加入了新的请求参数和请求体.
 
-# OpenAPI
+## OpenAPI
 
 FastAPI 使用定义 API 的 OpenAPI 标准将你的所有 API 转换成[模式]
   

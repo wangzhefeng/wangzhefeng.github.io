@@ -48,7 +48,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# T5 模型简介
+## T5 模型简介
 
 类似 T5 这样的大型实验探索论文，首先提出一个通用框架，接着进行了各种比对实验，
 获得一套建议参数，最后得到一个很强的 baseline。而我们之后做这方面实验就能参考它的一套参数。
@@ -65,7 +65,7 @@ img {
 其实这让我想起 Jeff Dean 在某次谈话中谈到的谷歌未来方向，想做一个超级模型，
 什么任务都能直接处理，而它内部可以是稀疏的，或者可以局部 Distill，来对单独任务进行处理。
 
-## Why Text-to-Text
+### Why Text-to-Text
 
 首先为什么叫 T5 模型，因为是 Transfer Text-to-Text Transformer 的简写。
 Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transformer 也不必多说。
@@ -89,7 +89,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 通过这样的方式就能将 NLP 任务都转换成 Text-to-Text 形式，也就可以**用同样的模型，同样的损失函数，
 同样的训练过程，同样的解码过程来完成所有 NLP 任务**。其实这个思想之前 GPT-2 论文里有提。
 
-## Data-C4
+### Data-C4
 
 作者从 Common Crawl（一个公开的网页存档数据集，每个月大概抓取 20TB 文本数据） 里清出了 750 GB 的训练数据，
 然后取名为 ” Colossal Clean Crawled Corpus （超大型干净爬取数据）“，简称 C4，论作者取名之恶趣味。
@@ -103,9 +103,9 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 * 任何包含 "lorem ipsum"(用于排版测试) 的页面；
 * 连续三句话重复出现情况，保留一个。
 
-# T5 模型架构
+## T5 模型架构
 
-## 架构-The Best One
+### 架构-The Best One
 
 首先作者们先对预训练模型中的多种模型架构（Transformer）进行了比对，
 最主要的模型架构可以分成下面三种。
@@ -126,7 +126,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 通过实验作者们发现，在提出的这个 Text-to-Text 架构中，Encoder-Decoder 模型效果最好。
 于是乎，就把它定为 T5 模型，因此所谓的 T5 模型其实就是个 Transformer 的 Encoder-Decoder 模型。
 
-## Objectives-SearchSearchSearch
+### Objectives-SearchSearchSearch
 
 之后是对预训练目标的大范围探索，具体做了哪些实验，下面这张图就能一目了然。
 
@@ -172,7 +172,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 
 到此基本上 T5 预训练就大致说完了，之后是些细碎探索。
 
-## Datasets
+### Datasets
 
 接着作者们拿着 C4 数据集做了各种实验，比如说从里面分出各种类型的数据集，单独训练 T5 模型，
 之后看在下游任务的表现，发现一些情况领域内的预训练数据可以增强下游任务（想当然的）。
@@ -182,19 +182,19 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 
 ![img](images/training-loss.png)
 
-### Training：Multi-Task Learning
+#### Training：Multi-Task Learning
 
 作者们之后又针对 MTDNN 给 T5 做了一系列类似训练，在一堆监督和非监督数据上进行预训练。
 
 结果发现，只要混合训练比例调得OK，和前面说的非监督预训练性能差不多。
 
-### Scaling：bigger is better?
+#### Scaling：bigger is better?
 
 接着又做了当放大模型某方面规模的相关实验，分别是增大模型，增大数据，还有在一定资源限制下的集成。
 
 结论是，当这些因素放大时对性能都有提高，但其中大模型是最必要的。
 
-### Models
+#### Models
 
 最后就是结合上面所有实验结果，训练了不同规模几个模型，由小到大：
 
@@ -214,7 +214,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 根据这几个模型的对比，可以发现即使是容量提到 11B，性能提升的间隔还是没有变缓，
 因此我认为再往上加容量还是有提升空间。
 
-# 参考
+## 参考
 
 * [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/pdf/1910.10683)
 * [T5 模型：NLP Text-to-Text 预训练模型超大规模探索](https://zhuanlan.zhihu.com/p/88438851)

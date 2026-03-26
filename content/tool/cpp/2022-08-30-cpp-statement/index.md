@@ -72,13 +72,13 @@ img {
   - [标准异常](#标准异常)
 </p></details><p></p>
 
-# 内容
+## 内容
 
 * 条件执行语句
 * 循环语句
 * 控制流跳转语句
 
-# 简单语句
+## 简单语句
 
 C++ 语言中的大多数语句都以分号结束，
 一个表达式末尾加上分号就变成了表达式语句(expression statement)。
@@ -89,7 +89,7 @@ ival + 5;  // 一条没什么实际用处的表达式
 cont << ival;  // 一条有用的表达式语句
 ```
 
-## 空语句
+### 空语句
 
 最简单的语句是空语句(null statement)，空语句中只有一个单独的分号：
 
@@ -113,7 +113,7 @@ while (cin >> s && s != sought)
 * 使用空语句时应该加上注释，从而令读这段代码的人知道该语句是有意省略的
 ***
 
-## 别漏写分号也别多写分号
+### 别漏写分号也别多写分号
 
 因为空语句是一条语句，所以可用在任何允许使用语句的地方。
 由于这个原因，某些看起来非法的分号往往只不过是一条空语句而已。
@@ -139,7 +139,7 @@ while (iter != svec.end()) ;  // while 循环体是那条空语句
 * 多余的空语句并非总是无害的
 ***
 
-## 复合语句(块)
+### 复合语句(块)
 
 复合语句(compound statement)是指用花括号括起来的(可能为空的)语句和声明的序列，
 复合语句也被称为块(block)。一个块就是一个作用域，
@@ -154,7 +154,7 @@ while (iter != svec.end()) ;  // while 循环体是那条空语句
 * 块不以分号作为结束
 ***
 
-# 语句作用域
+## 语句作用域
 
 可以在 `if`、`switch`、`while`、和 `for` 语句的控制结构内定义变量。
 定义在控制结构当中的变量只在相应语句的内部可见，一旦语句结束，变量也就超出其作用范围了
@@ -181,11 +181,11 @@ if (beg == v.end()) {
 }
 ```
 
-# 条件语句
+## 条件语句
 
-## if 语句
+### if 语句
 
-### if 语句语法
+#### if 语句语法
 
 * `if`
 
@@ -217,7 +217,7 @@ else
 有些编码风格要求在 `if` 或 `else` 之后必须写上花括号，对于 `while` 和 `for` 语句的循环体两端也有同样的要求。
 这么做的好处是可以避免代码混乱不堪，以后修改代码时如果想添加别的语句，也可以很容易地找到正确的位置
 
-### 垂悬 else
+#### 垂悬 else
 
 当一个 `if` 语句嵌套在另一个 `if` 语句内部时，很可能 `if` 分支会多于 `else` 分支。
 这时问题出现了: 我们怎么知道某个给定的 `else` 是和哪个 `if` 匹配呢？
@@ -228,11 +228,11 @@ else
 它规定 `else` 与离它最近的尚未匹配的 `if` 匹配，从而消除了程序的二叉性。
 可以使用花括号控制执行路径
 
-## switch 语句
+### switch 语句
 
 switch 语句(switch statement)提供了一条便利的途径使得我们能够在若干固定选项中做出选择
 
-### switch 语句语法
+#### switch 语句语法
 
 ```cpp
 switch (expression) {
@@ -248,7 +248,7 @@ switch (expression) {
 }
 ```
 
-### switch 内部的控制流
+#### switch 内部的控制流
 
 switch 语句首先对括号里的表达式求值，
 该表达式紧跟在关键字 switch 的后面，可以是一个初始化的变量声明。
@@ -298,23 +298,23 @@ switch (ch) {
 }
 ```
 
-### case 标签
+#### case 标签
 
 case 关键字和它对应的值一起被称为 case 标签(case label)。case 标签必须是整型常量表达式。
 任何两个 case 标签的值不能相同，否则就会引发错误。另外，default 也是一种特殊的 case 标签
 
-### default 标签
+#### default 标签
 
 
 
 
 
 
-# 迭代语句
+## 迭代语句
 
-## while 语句
+### while 语句
 
-### while 语句语法
+#### while 语句语法
 
 ```cpp
 while (condition)
@@ -324,7 +324,7 @@ while (condition)
 * `while` 的条件部分可以是一个表达式或者是一个带初始化的变量声明
 * 定义在 `while` 条件部分或者 `while` 循环体内的变量每次迭代都经历从创建到销毁的过程
 
-### 使用 while 循环
+#### 使用 while 循环
 
 * 当不确定到底要迭代多少次时，使用 `while` 循环比较合适，比如读取输入的内容
 * 想在循环结束后访问循环控制变量时，也应该使用 `while` 循环
@@ -350,16 +350,16 @@ if (beg == v.end()) {
 }
 ```
 
-## 传统的 for 语句
+### 传统的 for 语句
 
-### 语法
+#### 语法
 
 ```cpp
 for (init-statement; condition; expression)
     statement
 ```
 
-### 执行流程
+#### 执行流程
 
 * `init-statement` 负责初始化一个值，这个值随着循环的进行而改变
 * `condition` 作为循环控制的条件，只要 `condition` 为真，就执行一次 `statement`，
@@ -372,7 +372,7 @@ for (init-statement; condition; expression)
 * `init-statement` 可以定义多个对象，但是 `init-statement` 只能有一条声明语句，
   因此，所有变量的基础类型必须相同
 
-## 省略 for 语句头的某些部分
+### 省略 for 语句头的某些部分
 
 * `for` 语句头能省略掉 `init-statement`、`condition`、`expression` 中的任何一个(或者全部)
 * 如果无需初始化，可以使用一条空语句作为 `init-statement`
@@ -401,11 +401,11 @@ for (int i; cin >> i; /* 表达式为空 */) {
 }
 ```
 
-## 范围 for 语句
+### 范围 for 语句
 
 C++11 新标准引入了一种更简单的 `for` 语句，这种语句可以遍历容器或其他序列的所有元素
 
-### 语法
+#### 语法
 
 ```cpp
 for (declaration : expression) 
@@ -417,9 +417,9 @@ for (declaration : expression)
 
 
 
-## do while 语句
+### do while 语句
 
-### 语法
+#### 语法
 
 ```cpp
 do
@@ -430,26 +430,26 @@ while (condition);
 
 
 
-# 跳转语句
+## 跳转语句
 
 
 
-## break 语句
+### break 语句
 
 
-## continue 语句
+### continue 语句
 
-## goto 语句
-
-
-## return 语句
-
-# try 语句和异常处理
-
-## throw 表达式
+### goto 语句
 
 
-## try 语句块
+### return 语句
+
+## try 语句和异常处理
+
+### throw 表达式
 
 
-## 标准异常
+### try 语句块
+
+
+### 标准异常

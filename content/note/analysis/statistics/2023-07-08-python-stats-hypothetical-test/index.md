@@ -59,7 +59,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 假设检验
+## 假设检验
 
 假设检验(Hypothesis Test)是由 K.Pearson 于 20 世纪初提出的，
 之后由费希尔进行了细化，并最终由 Neyman 和 E.Pearson 提出了较完整的假设检验理论。
@@ -70,7 +70,7 @@ img {
 一般假设检验分为参数检验和非参数检验，其运用逻辑上的反证法，依据统计上的小概率原理来实现，
 假设检验分为原假设 `$H0$` 和备择假设 `$H1$`
 
-## 统计显著性
+### 统计显著性
 
 显著性、统计显著性(Statistical Significance)是指零假设为真的情况下拒绝零假设所要承担的风险水平，
 又叫概率水平，或者显著水平(Significant Level)。
@@ -82,7 +82,7 @@ img {
 总的来说，它表示群体之间得以相互区别的能力。在统计假设检验中，公认的小概率事件的概率值被称为统计假设检验的显著性水平，
 对同一量，进行多次计量，然后算出平均值。
 
-## 假设检验的基本思想
+### 假设检验的基本思想
 
 假如实验结果与原假设 `$H$` 发生矛盾就拒绝原假设 `$H$`，否则就接受原假设 `$H$`。
 
@@ -104,9 +104,9 @@ img {
 否则称为非参数假设检验问题，上面的问题就是一个参数假设检验问题，
 而对假设"总体为正态"作出检验的问题就是一个非参数假设检验问题。
 
-## 假设检验的基本步骤
+### 假设检验的基本步骤
 
-### 建立假设
+#### 建立假设
 
 假设的基本形式：
 
@@ -126,7 +126,7 @@ img {
 
 在假设检验中，通常将不宜轻易加以否定的假设作为原假设 
 
-### 选择检验统计量并给出拒绝域形式
+#### 选择检验统计量并给出拒绝域形式
 
 拒绝域：对于一个假设的检验就是指这样一个法则：当有了具体的样本后，
 按照该法则就可以决定是接受  `$H_0$` 还是拒绝 `$H_0$`，
@@ -136,7 +136,7 @@ img {
 
 检验统计量：由样本对原假设进行检验总是通过一个统计量完成的，该统计量称为检验统计量 
 
-### 选择显著性水平
+#### 选择显著性水平
 
 由于样本是随机的，当应用某种检验做判断时，可能做出正确的判断，也可能做出错误的判断 
 
@@ -197,17 +197,17 @@ img {
         - 假设检验可以从两个方面进行: 其一是建立拒绝域，考察样本观测值是否落在拒绝域中，
         其二是根据样本观测值计算检验的 `$p$` 值，通过将 `$p$` 值与事先设定的显著性水平进行比较
 
-## 抽样分布
+### 抽样分布
 
-# 常用假设检验
+## 常用假设检验
 
-## 正态性检验
+### 正态性检验
 
 * Shapiro-Wilk Test (W 检验)
 * D'Agostino's K2 Test (Normal Test)
 * Anderson-Darling Test
 
-### Shapiro-Wilk Test
+#### Shapiro-Wilk Test
 
 Shapiro-Wilk Test 用于检验样本数据是否来自服从某个正态分布的总体。
 在实际应用中，Shapiro-Wilk Test 被认为是一个可靠的正态性检验，
@@ -243,7 +243,7 @@ else:
     print("拒绝原假设，样本数据不服从正态分布")
 ```
 
-### D'Agostino's K2 Test
+#### D'Agostino's K2 Test
 
 D'Agostino's K2 Test，用于检验样本数据是否来自服从正态分布的总体。是通过计算样本数据的峰度和偏度，
 来判断其分布是否偏离正态分布。偏度是对数据分布对称性的测度，衡量数据分布是否左偏或右偏。
@@ -278,7 +278,7 @@ else:
     print("拒绝原假设，样本数据不服从正态分布")
 ```
 
-### Anderson-Darling Test
+#### Anderson-Darling Test
 
 Anderson-Darling Test，用于检验样本数据是否服从某一已知分布。
 该检验修改自一种更复杂的非参数的拟合良好的检验统计（Kolmogorov-Smirnov Test）。
@@ -317,14 +317,14 @@ for i in range(len(result.critical_values)):
         print(f"显著性水平为 {sl/100:.3f}时，p 值为 {cv:.3f}，拒绝原假设，样本数据不服从正态分布")
 ```
 
-## 相关性检验
+### 相关性检验
 
 * Pearson 相关系数
 * Spearman 等级相关系数
 * Kendall 等级相关系数
 * Chi-square Test (卡方检验)
 
-### Pearson 相关系数
+#### Pearson 相关系数
 
 Pearson 相关系数，用于检验两样本数据之间线性关系的强度。
 该检验将两个变量之间的协方差进行归一化处理以给出可解释的分数，为一个介于 -1 到 1 之间的值，
@@ -368,7 +368,7 @@ else:
     print("两个变量可能存在线性相关关系")
 ```
 
-### Spearman 等级相关系数
+#### Spearman 等级相关系数
 
 Spearman 相关，用于检验两变量是否具有单调关系。当两变量因非线性关系相关，或者不服从正态分布时，
 Spearman 相关系数可以用来反映变量间的相关性强度。如果存在线性关系，也可以使用这种方法来检验，
@@ -408,7 +408,7 @@ else:
     print("两个变量可能存在相关关系")
 ```
 
-### Kendall 等级相关
+#### Kendall 等级相关
 
 用于检验两变量是否具有单调关系
 
@@ -445,7 +445,7 @@ else:
     print("两变量可能存在相关关系")
 ```
 
-### Chi-square Test
+#### Chi-square Test
 
 Chi-Squared Test，用于检验两分类变量是否相关，属于非参数检验的范畴。
 卡方检验的零假设是一个分类变量的实际观测频数与该分类变量的理论期望频数相吻合。
@@ -483,14 +483,14 @@ critical = chi2.ppf(prob, dof)
 
 ```
 
-## 参数检验
+### 参数检验
 
 * 单样本 t 检验
 * 两样本 t 检验 (方差齐性使用 Levene 检验)
 * 配对样本 t 检验
 * 方差分析(Anasis Of Variance, ANOVA)
 
-## 非参数检验
+### 非参数检验
 
 * Mann-Whitney U Test (曼惠特尼 U 检验)
 * Wilcoxon Signed-Rank Test
@@ -498,15 +498,15 @@ critical = chi2.ppf(prob, dof)
 * Friedman Test (弗里德曼检验)
 * Kolmogorv-Smirnov Test (K-S 检验)
 
-## 时间序列平稳性检验
+### 时间序列平稳性检验
 
 * Augmented Dickey-Fuller Unit Root Test (单位根检验)
 * Kwiatkowski-Phillips-Schmidt-Shin Test
 
-## Q-Q 图
+### Q-Q 图
 
 
-# 参考
+## 参考
 
 * [scipy 正态性检验](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html)
 * [基于Python的19种假设检验实现](https://zhuanlan.zhihu.com/p/351075744)

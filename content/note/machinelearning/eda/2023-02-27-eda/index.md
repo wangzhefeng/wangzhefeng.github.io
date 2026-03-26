@@ -51,9 +51,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 探索性数据分析
+## 探索性数据分析
 
-## 探索性数据分析简介
+### 探索性数据分析简介
 
 探索性数据分析是上世纪六十年代提出，其方法由美国统计学家 John Tukey 提出的。
 
@@ -63,7 +63,7 @@ img {
 特别是对面对大数据的时候，各种杂乱的“脏数据”，往往不知所措，
 不知道从哪里开始了解目前拿到手上的数据时候，探索性数据分析就非常有效。
 
-## 探索性数据分析模块
+### 探索性数据分析模块
 
 探索性数据分析基本可以汇总到下面的四个模块：
 
@@ -80,14 +80,14 @@ img {
     - 关于训练集和测试集的分布探索，在目前数据挖掘中最为核心的模块之一，
       训练集和测试集的分布不一致也是导致线上和线下不一致的重要原因之一
 
-# 自动探索性数据分析
+## 自动探索性数据分析
 
 Dataprep 是最常用的 EDA 包，AutoViz 和 D-Tale 也是不错的选择，
 如果需要定制化分析可以使用 Klib，SpeedML 整合的东西比较多，
 单独使用它啊进行 EDA 分析不是特别的适用，其他的包可以根据个人喜好选择，
 其实都还是很好用的，最后 edaviz 就不要考虑了，因为已经不开源了。
 
-## D-Tale
+### D-Tale
 
 D-Tale 使用 Flask 作为后端、React 作为前端并且可以与 ipython notebook 和终端无缝集成。
 
@@ -103,7 +103,7 @@ import pandas as pd
 dtale.show(pd.read_csv("titanic.csv"))
 ```
 
-## Pandas-Profiling
+### Pandas-Profiling
 
 Pandas-Profiling 可以生成 Pandas DataFrame 的概要报告。
 Panda-Profiling 扩展了 Pandas DataFrame `df.profile_report()`，
@@ -117,7 +117,7 @@ profile = ProfileReport(pd.read_csv("titanic.csv"), explorative = True)
 profile.to_file("output.html")
 ```
 
-## Sweetviz
+### Sweetviz
 
 Sweetviz 是一个开源的 Python 库，只需要两行 Python 代码就可以生成漂亮的可视化图，
 将 EDA(探索性数据分析)作为一个 HTML 应用程序启动。
@@ -133,7 +133,7 @@ sweet_report = sv.analyze(pd.read_csv("titanic.csv"))
 sweet_report.show_html("sweet_report.html")
 ```
 
-## AutoViz
+### AutoViz
 
 Autoviz 包可以用一行代码自动可视化任何大小的数据集，
 并自动生成 HTML、bokeh 等报告。用户可以与 AutoViz 包生成的 HTML 报告进行交互。
@@ -145,7 +145,7 @@ from autoviz.AutoViz_Class import AutoViz_Class
 autoviz = AutoViz_Class().AutoViz("train.csv")
 ```
 
-## Dataprep
+### Dataprep
 
 Dataprep 是一个用于分析、准备和处理数据的开源 Python 包。
 DataPrep 构建在 Pandas 和 Dask DataFrame 之上，可以很容易地与其他 Python 库集成。
@@ -159,7 +159,7 @@ df = load_dataset("titanic.csv")
 create_report(df).show_browser()
 ```
 
-## Klib
+### Klib
 
 klib 是一个用于导入、清理、分析和预处理数据的 Python 库。
 
@@ -177,7 +177,7 @@ klib.dist_plot(df_cleaned["Win_Prob"])
 klib.cat_plot(df, figsize=(50,15))
 ```
 
-## Dabl
+### Dabl
 
 Dabl 不太关注单个列的统计度量，而是更多地关注通过可视化提供快速概述，
 以及方便的机器学习预处理和模型搜索。
@@ -196,7 +196,7 @@ df = pd.read_csv("titanic.csv")
 dabl.plot(df, target_col="Survived")
 ```
 
-## Speedml
+### Speedml
 
 SpeedML 是用于快速启动机器学习管道的 Python 包。
 SpeedML 整合了一些常用的 ML 包，包括 Pandas，Numpy，Sklearn，Xgboost 和 Matplotlib，
@@ -220,7 +220,7 @@ sml.plot.ordinal('SibSp')
 sml.plot.continuous('Age')
 ```
 
-## DataTile
+### DataTile
 
 DataTile（以前称为Pandas-Summary）是一个开源的 Python 软件包，负责管理，
 汇总和可视化数据。DataTile 基本上是 Pandas DataFrame `describe()` 函数的扩展。
@@ -234,12 +234,12 @@ dfs = DataFrameSummary(df)
 dfs.summary()
 ```
 
-## edaviz
+### edaviz
 
 edaviz 是一个可以在 Jupyter Notebook 和 Jupyter Lab 中进行数据探索和可视化的 python 库，
 他本来是非常好用的，但是后来被砖厂 (Databricks) 收购并且整合到 bamboolib 中。
 
-# 参考
+## 参考
 
 * [Exploratory Data Analysis](https://www.stat.cmu.edu/~hseltman/309/Book/chapter4.pdf)
 * [Tidy Data](https://tomaugspurger.net/posts/modern-5-tidy/)

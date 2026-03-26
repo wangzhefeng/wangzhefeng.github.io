@@ -51,13 +51,13 @@ img {
 TensorFlow 一般使用梯度磁带 `tf.GradientTape` 来记录正向运算过程，然后反播磁带自动得到梯度值，
 这种利用 `tf.GradientTape` 求微分的方法叫做 TensorFlow 的自动微分机制
 
-# 利用梯度磁带求导数
+## 利用梯度磁带求导数
 
 求以下函数的导数:
 
 `$$f(x) = a \times x^{2} + b \times x + c$$`
 
-## 变量张量求导
+### 变量张量求导
 
 ```python
 import tensorflow as tf
@@ -79,7 +79,7 @@ print(dy_dx)
 tf.Tensor(-2.0, shape=(), dtype=float32)
 ```
 
-## 常量张量求导
+### 常量张量求导
 
 * 对常量张量也可以求导，需要增加 `watch`
 
@@ -108,7 +108,7 @@ tf.Tensor(0.0, shape=(), dtype=float32)
 tf.Tensor(1.0, shape=(), dtype=float32)
 ```
 
-## 求二阶导数
+### 求二阶导数
 
 ```python
 with tf.GradientTape() as tape2:
@@ -124,7 +124,7 @@ print(dy2_dx2)
 tf.Tensor(2.0, shape=(), dtype=float32)
 ```
 
-## 在 AutoGraph 中使用梯度磁带求导
+### 在 AutoGraph 中使用梯度磁带求导
 
 ```python
 @tf.function
@@ -146,13 +146,13 @@ tf.print(f(tf.constant(0.0)))
 tf.print(f(tf.constant(1.0)))
 ```
 
-# 利用梯度磁带和优化器求最小值
+## 利用梯度磁带和优化器求最小值
 
 求以下函的最小值:
 
 `$$f(x) = a \times x^{2} + b \times x + c$$`
 
-## 使用 optimizer.apply_gradients
+### 使用 optimizer.apply_gradients
 
 ```python
 x = tf.Variable(0.0, name = "x", dtype = tf.int32)
@@ -171,7 +171,7 @@ for _ in range(1000):
 tf.print(f"y = {y}; x = {x}")
 ```
 
-## 使用 optimizer.minimize
+### 使用 optimizer.minimize
 
 `optimizer.minimize` 相当于先用 `tape` 求 `gradient`，再 `apply_gradients`
 
@@ -193,7 +193,7 @@ for _ in range(1000):
 tf.print(f"y = {f()}; x = {x}")
 ```
 
-## 在 AutoGraph 中完成最小值求解
+### 在 AutoGraph 中完成最小值求解
 
 * 使用 `optimizer.apply_gradients`
 

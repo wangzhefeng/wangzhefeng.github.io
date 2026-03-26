@@ -51,9 +51,9 @@ img {
   - [Sequence class](#sequence-class)
 </p></details><p></p>
 
-# 模型可视化
+## 模型可视化
 
-## plot_model()
+### plot_model()
 
 - Converts a Keras model to dot format and save to a file.
 
@@ -73,7 +73,7 @@ tf.keras.utils.plot_model(
 )
 ```
 
-## model_to_dot()
+### model_to_dot()
 
 - Convert a Keras model to dot format.
 
@@ -92,7 +92,7 @@ tf.keras.utils.model_to_dot(
 )
 ```
 
-# 序列化工具(Serialization utilities)
+## 序列化工具(Serialization utilities)
 
 - custom_object_scope()
 - get_custom_objects()
@@ -100,7 +100,7 @@ tf.keras.utils.model_to_dot(
 - serialize_keras_object()
 - daserialize_keras_object()
 
-## CustomObjectScope class
+### CustomObjectScope class
 
 - 作用
 
@@ -133,7 +133,7 @@ with custom_object_scope({"my_regularizer": my_regularizer}):
     layer = Dense.from_config(config)
 ```
 
-## get_custom_objects()
+### get_custom_objects()
 
 - 作用
 
@@ -154,7 +154,7 @@ get_custom_objects().clear()
 get_custom_objects()["MyObject"] = MyObject
 ```
 
-## register_keras_serializable()
+### register_keras_serializable()
 
 - 作用
 
@@ -168,7 +168,7 @@ import tensorflow as tf
 tf.keras.utils.register_keras.serializable(package = "Custom", name = None)
 ```
 
-## serialize_keras_object()
+### serialize_keras_object()
 
 - 作用
 
@@ -182,7 +182,7 @@ import tensorflow as tf
 tf.keras.utils.serialize_keras_object(instance)
 ```
 
-## daserialize_keras_object()
+### daserialize_keras_object()
 
 - 作用
 
@@ -201,9 +201,9 @@ tf.keras.utils.deserialize_keras_object(
 )
 ```
 
-# Python & Numpy utilities
+## Python & Numpy utilities
 
-## to_categorical()
+### to_categorical()
 
 - 作用
 
@@ -243,7 +243,7 @@ print(np.around(loss, 5))
 ```
 
 
-## normalize()
+### normalize()
 
 - 作用
     
@@ -257,7 +257,7 @@ import tensorflow as tf
 tf.keras.utils.normalize(x, axis = -1, order = 2)
 ```
 
-## get_file()
+### get_file()
 
 - 作用
 
@@ -300,7 +300,7 @@ path_to_downloaded_file = tf.keras.utils.get_file(
 )
 ```
 
-## Progbar class
+### Progbar class
 
 - 作用
 
@@ -321,7 +321,7 @@ tf.keras.utils.Progbar(
 )
 ```
 
-## Sequence class
+### Sequence class
 
 - 作用
     - 用于拟合数据序列(如数据集)的基础对象

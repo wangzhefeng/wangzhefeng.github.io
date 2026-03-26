@@ -1,11 +1,80 @@
 ---
-author: Yihui Xie
-date: "2017-08-06"
-title: About Hugo Ivy
+title: 主题
+date: "2026-03-26"
 ---
 
-[<img src="../images/github-mark.svg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" />](https://github.com/yihui/hugo-ivy)
+这个站点最初基于 `hugo-ivy`，但现在已经不是默认主题，而是一个围绕长期写作、知识整理和文档化阅读不断重构的定制版本。
 
-This Hugo theme was ported from [Ivy](https://github.com/dmulholland/ivy), a minimalist website generator built in Python. I don't have time to document it. You have to read the source code to understand what it can do. Like Ivy, this theme is also released under [the Unlicense](https://en.wikipedia.org/wiki/Unlicense), which basically means you just do whatever you want. All I can say for now is that I love it. It is clean, minimal, and responsive.
+## 设计目标
 
-I hope you will enjoy this theme. The source code is [on Github](https://github.com/yihui/hugo-ivy). Happy hacking!
+这轮重构的目标，不是把博客做成“更花哨的博客模板”，而是把它收敛成一个更接近文档站和个人知识库的阅读界面。整体方向主要参考了 `Claude Code Docs` 的页面结构、导航方式、搜索入口、留白节奏和轻量交互，但保留了个人博客的内容组织和写作语气。
+
+## 已完成
+
+### 1. 页面骨架从博客布局切到文档布局
+
+* 首页使用更接近 landing page 的双栏结构，左侧是站点定位和个人说明，右侧是笔记子专题入口
+* 非首页页面使用文档站式布局：顶部导航、左侧栏目导航、中间正文、右侧页内目录
+* `日志`、`笔记`、`工具` 继续保持原有内容组织，但页面入口和阅读层级更清楚
+* `关于`、`事务`、`简历`、`主题` 这类独立页面弱化左侧导航，避免无意义的栏目树干扰阅读
+
+### 2. 视觉语言整体改成更接近 Claude Docs 的风格
+
+* 全站从原来偏博客化的主题样式，收成更克制的暖白背景、轻边框、低对比卡片和更稳定的留白
+* 品牌名、页面主标题和正文/导航分别使用不同字体栈，形成更接近文档站的标题层级
+* 搜索框、主题切换、语言切换、代码块、评论区等组件都做了统一的界面语言
+* 深色模式已经接入，并且会跟随站点主题切换评论区和代码块配色
+
+### 3. 功能层面补上了文档站需要的基础能力
+
+* 站内搜索改为基于 `Pagefind`，支持本地完整构建和 `blogdown` 预览两条链路
+* 首页“最近更新”不再直接暴露 Markdown 原码，而会先清洗摘要内容
+* 文章正文顶部重复目录被移除，只保留右侧页内目录
+* 评论区切到了和主站一致的自定义 `Utterances` 主题，而不是默认的 GitHub 风格
+* 代码块增加了语言标签、复制按钮和更接近文档站的容器样式
+
+### 4. 内容层面做了同步整理
+
+* 清理了大量历史遗留的空链接、失效占位链接和部分模板残留
+* 统一了大量 Markdown 文档的标题层级，让正文里的最高级标题统一落在 `##`
+* 首页和部分界面文案接入了中英文切换，当前主要覆盖导航和核心界面文案
+
+## 当前状态
+
+* 顶部主导航和文档页二级导航分离，阅读路径更稳定
+* 首页重点承担“说明站点在写什么”和“把人导向核心内容”的作用
+* 文档页强调左侧导航、右侧目录和正文三栏之间的平衡
+* 搜索、代码块、评论区、主题切换、语言切换都围绕文档站体验做了统一
+* 整站仍然保持 Hugo 静态站点的结构，没有引入重型前端框架
+
+## 技术实现
+
+* 站点生成：`Hugo`
+* 主题来源：`hugo-ivy` 的本地重构版本
+* 模板策略：优先使用 `layouts/` 下的本地 override 接管主题关键模板
+* 搜索方案：`Pagefind`
+* 评论系统：`Utterances`
+* 内容组织：`post`、`note`、`tool` 为主，辅以独立页面
+
+## 进行中
+
+### 需要继续收尾的问题
+
+* 语言切换目前仍以“界面文案切换”为主，正文内容还没有做真正的 Hugo 多语言支持
+* 部分历史文章的块引用、表格、列表和嵌套内容仍然存在局部样式不统一的问题
+* 本地 `blogdown` 预览和完整构建链之间仍然有少量行为差异，需要继续压缩
+* 首页和栏目页部分摘要仍需继续清洗，避免特殊 Markdown 或 HTML 残留
+
+## 待处理
+
+### 需要继续优化的方向
+
+* 进一步收紧全站配色，让浅色和深色主题都更接近 `Claude Code Docs`
+* 继续打磨搜索体验，包括搜索空状态、结果密度和命中高亮
+* 为 `笔记` 子专题建立更清楚的导航关系，减少仅靠目录树浏览的成本
+* 继续优化代码块、提示块、表格和评论区的视觉一致性
+* 评估是否为首页、关于页、简历页等少量页面补充真正的中英双语内容
+
+## 说明
+
+这个页面既是主题介绍，也是当前主题改造的简要设计记录。后续如果继续围绕布局、配色、导航、搜索和多语言能力做迭代，会优先在这里同步更新。

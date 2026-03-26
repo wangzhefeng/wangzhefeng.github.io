@@ -9,9 +9,9 @@ tags:
   - tool
 ---
 
-# PaddlePaddle 安装和卸载
+## PaddlePaddle 安装和卸载
 
-## macOS
+### macOS
 
 安装：
 
@@ -37,6 +37,6 @@ $ python
 PaddlePaddle is installed successfully!
 ```
 
-# PaddlePaddle 组件架构
+## PaddlePaddle 组件架构
 
 ![img](images/paddle_arc.png)

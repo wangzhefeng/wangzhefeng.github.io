@@ -53,9 +53,9 @@ img {
 - [Gensim 常用 API](#gensim-常用-api)
 </p></details><p></p>
 
-# Gensim 简介
-
 ## Gensim 简介
+
+### Gensim 简介
 
 * Gensim is a Free python library
 * Gensim is a topic modelling for humans
@@ -70,7 +70,7 @@ img {
     - open source
     - ready-to-use models and corpora
 
-## Gensim Demo
+### Gensim Demo
 
 ```python
 from gensim import corpora, models, similarities, downloader
@@ -88,9 +88,9 @@ index = similarities.MatrixSimilarity(lsi[another_corpus])
 sims = index[query]
 ```
 
-# Gensim 安装
-
 ## Gensim 安装
+
+### Gensim 安装
 
 pip:
 
@@ -104,15 +104,15 @@ conda:
 $ conda install -c conda-forge gensim
 ```
 
-## Gensim 依赖
+### Gensim 依赖
 
 * Python 3.6, 3.7, 3.8
 * Numpy
 * `smart_open`: 用于打开远程存储库中的文件或压缩文件
 
-# Gensim 使用
+## Gensim 使用
 
-## Gensim 核心概念
+### Gensim 核心概念
 
 `gensim` 核心概念:
 
@@ -121,13 +121,13 @@ $ conda install -c conda-forge gensim
 * Vector
 * Model
 
-### Document
+#### Document
 
 ```python
 document = "Human machine interface for lab abc computer applications"
 ```
 
-### Corpus
+#### Corpus
 
 一个 ``Corpus`` 是一系列 ``Document`` 对象的集合，Corpora 在 Gensim 中提供了两个角色:
 
@@ -174,7 +174,7 @@ dictionary = corpora.Dictionary(processed_corpus)
 print(dictionary)
 ```
 
-### Vector
+#### Vector
 
 为了推断语料库中的潜在结构，需要可以表示文档的数学处理方式:
 
@@ -195,7 +195,7 @@ new_vec = dictionary.doc2bow(new_doc.lower().split())
 print(new_vec)
 ```
 
-### Model
+#### Model
 
 常用模型:
 
@@ -212,21 +212,21 @@ words = "system minors".lower().split()
 print(tfidf[dictionary.doc2bow(words)])
 ```
 
-## 语料和词空间
+### 语料和词空间
 
 > Corpora & Vector Spaces
 
-## 主题和转换
+### 主题和转换
 
 > Topics & Transformations
 
-## 相似性查询
+### 相似性查询
 
 > Similarity Queries
 
-## 常用教程
+### 常用教程
 
 
 
-# Gensim 常用 API
+## Gensim 常用 API
 

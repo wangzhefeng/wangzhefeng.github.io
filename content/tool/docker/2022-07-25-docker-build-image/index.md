@@ -57,11 +57,11 @@ Docker 是一个开源的应用容器引擎，基于 Go 语言并遵从 Apache2.
 Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，
 然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
 
-# Linux
+## Linux
 
-## CentOS 7
+### CentOS 7
 
-### 安装 docker
+#### 安装 docker
 
 * 移除旧版本 docker
 
@@ -88,13 +88,13 @@ $ yum install -y yum-utils
 $ yum install docker-ce docker-ce-cli containerd.io
 ```
 
-### 启动 docker
+#### 启动 docker
 
 ```bash
 $ systemctl start docker
 ```
 
-### 查看 docker 镜像
+#### 查看 docker 镜像
 
 * 刚安装 docker 是没有镜像的
 
@@ -102,7 +102,7 @@ $ systemctl start docker
 $ docker images
 ```
 
-### 下载 CentOS 镜像
+#### 下载 CentOS 镜像
 
 默认 CentOS 镜像没有 `ifconfig`
 
@@ -110,7 +110,7 @@ $ docker images
 $ docker pull centos
 ```
 
-### 自定义 Dockerfile 文件
+#### 自定义 Dockerfile 文件
 
 ```bash
 FROM centos
@@ -124,30 +124,30 @@ CMD echo "-----end-----"
 CMD /bin/bash"
 ```
 
-### 构建镜像
+#### 构建镜像
 
 ```bash
 $ docker build -f ./dockerfile_chao_centos -t chao.centos:0.1 .
 ```
 
 
-### 创建虚拟机
+#### 创建虚拟机
 
 ```bash
 $ docker run -it --name test chao.centos:0.1 /bin/bash
 ```
 
-### 验证 ifconfig
+#### 验证 ifconfig
 
 ```bash
 $ ifconfig
 ```
 
-# MacOS
+## MacOS
 
 
 
 
 
 
-# Windows
+## Windows

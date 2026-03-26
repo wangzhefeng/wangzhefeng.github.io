@@ -51,7 +51,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 限幅滤波
+## 限幅滤波
 
 > 限幅滤波也叫程序判断滤波法
 
@@ -80,7 +80,7 @@ def limiting_filter(inputs, per):
     pass
 ```
 
-# 中位数滤波
+## 中位数滤波
 
 * 方法: 
     - 连续采样 `$N$` 次(`$N$` 取奇数), 把 `$N$` 次采样值按照大小排列, 取中间值为本次有效值
@@ -105,7 +105,7 @@ def median_filter(inputs, per):
     pass
 ```
 
-# 算法平均滤波
+## 算法平均滤波
 
 * 方法: 
     - 连续取 `$N$` 个采样值进行算术平均运算
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     plt.show()
 ```
 
-# 递推平均滤波(滑动平均滤波)
+## 递推平均滤波(滑动平均滤波)
 
 - 方法: 
     - 把连续取 `$N$` 个采样值看成一个队列队列的长度固定为 `$N$`，
@@ -195,7 +195,7 @@ def sliding_average_filter(inputs, per):
     return mean
 ```
 
-# 中位数平均滤波(防脉冲干扰平均滤波)
+## 中位数平均滤波(防脉冲干扰平均滤波)
 
 - 方法: 
    - 相当于`中位值滤波法 + 算术平均滤波法` 连续采样 `$N$` 个数据, 
@@ -231,7 +231,7 @@ def median_average_filter(inputs, per):
     return mean
 ```
 
-# 限幅平均滤波
+## 限幅平均滤波
 
 - 方法: 
      - 相当于 限幅滤波法 + 递推平均滤波法 每次采样到的新数据先进行限幅处理, 再送入队列进行递推平均滤波处理
@@ -273,7 +273,7 @@ def amplitude_limiting_average_filter(inputs, per, amplitude):
 ```
 
 
-# 一阶滞后滤波
+## 一阶滞后滤波
 
 - 方法: 
    - 取 `$a=0~1$` 本次滤波结果 `$=(1-a)$` 本次采样值 + a `$\times$`  上次滤波结果
@@ -302,7 +302,7 @@ def first_order_lag_filter(inputs, a):
     return inputs
 ```
 
-# 加权递推平均滤波
+## 加权递推平均滤波
 
 - 方法: 
    - 是对递推平均滤波法的改进, 即不同时刻的数据加以不同的权通常是, 越接近现时刻的数据, 权取得越大. 给予新采样值的权系数越大, 则灵敏度越高, 但信号平滑度越低
@@ -332,7 +332,7 @@ def weight_backstep_average_filter(inputs, per):
     return inputs
 ```
 
-# 消抖滤波
+## 消抖滤波
 
 - 方法: 
    - 设置一个滤波计数器将每次采样值与当前有效值比较: 如果采样值 ＝= 当前有效值, 则计数器清零如果采样值 <> 当前有效值, 
@@ -366,7 +366,7 @@ def shake_off_filter(inputs, N):
     return inputs
 ```
 
-# 限幅消抖滤波
+## 限幅消抖滤波
 
 - 方法: 
    - 相当于 `限幅滤波法 + 消抖滤波法` 先限幅, 后消抖
@@ -405,7 +405,7 @@ def amplitude_limiting_shake_off_filter(inputs, amplitude, N):
     return inputs
 ```
 
-# 低通滤波
+## 低通滤波
 
 - 低通滤波指的是去除高于某一阈值频率的信号
 - 假设采样频率为 1000hz, 信号本身最大的频率为 500hz, 要滤除 400hz 以上频率成分, 
@@ -439,7 +439,7 @@ def low_pass_filer(data, N, Wn):
 ```
 
 
-# 高通滤波
+## 高通滤波
 
 - 高通滤波去除低于某一频率的信号
 - 假设采样频率为 1000hz, 信号本身最大的频率为 500hz, 要滤除 100hz 以下频率成分, 
@@ -473,7 +473,7 @@ def high_pass_filter(data, N, Wn):
    return filted_data
 ```
 
-# 带通滤波
+## 带通滤波
 
 - 带通滤波指的是类似低通高通的结合保留中间频率信号
 - 假设采样频率为 1000hz, 信号本身最大的频率为 500hz, 要滤除 100hz 以下, 400hz 以上频率成分, 
@@ -508,7 +508,7 @@ def band_pass_filter(data, N, Wn):
    return filted_data
 ```
 
-# 带阻滤波
+## 带阻滤波
 
 - 带阻滤波也是低通高通的结合只是过滤掉的是中间部分
 - 假设采样频率为 1000hz, 信号本身最大的频率为 500hz, 要滤除 100hz 以上, 400hz 以下频率成分, 
@@ -544,7 +544,7 @@ def band_stop_filter(data, N, Wn):
     return filted_data
 ```
 
-# 参考
+## 参考
 
 * [1](https://blog.csdn.net/u010720661/article/details/63253509)
 * [2](http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/)

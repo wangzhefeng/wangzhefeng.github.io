@@ -84,7 +84,7 @@ img {
 - [Pillow API](#pillow-api)
 </p></details><p></p>
 
-# Pillow 概览
+## Pillow 概览
 
 PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
  
@@ -107,16 +107,16 @@ PIL: Python Imaging Library, Python 图像处理库，提供了如下的功能:
     - 图像仿射变换(image arbitray affine transforms)
     - 图像统计信息分析直方图(histogram method)
 
-# Pillow 安装
+## Pillow 安装
 
 ```bash
 $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --upgrade Pillow
 ```
 
-# Pillow 核心
+## Pillow 核心
 
-## Image class
+### Image class
 
 API:
 
@@ -160,7 +160,7 @@ except IOError as e:
 > * `.size`: 图像尺寸 (width_pixels, height_pixels)
 > * `.mode`: 图像中条带的数量和名称、像素类型、像素深度
 
-## 图像读写
+### 图像读写
 
 API:
 
@@ -170,7 +170,7 @@ API:
 
 示例:
 
-### 将图像转换为 JPEG 格式
+#### 将图像转换为 JPEG 格式
 
 ```python
 import os, sys
@@ -202,7 +202,7 @@ except IOError as e:
 
 ![images](images/lena.jpg)
     
-### 创建 JPEG 缩略图 thumbnails
+#### 创建 JPEG 缩略图 thumbnails
 
 ```python
 import os, sys
@@ -239,7 +239,7 @@ except IOError as e:
 
 ![images](images/lena.JPEG)
 
-### 识别图像文件
+#### 识别图像文件
 
 ```python
 import sys
@@ -267,7 +267,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-## 图像剪切、粘贴、拼接
+### 图像剪切、粘贴、拼接
 
 API:
 
@@ -277,7 +277,7 @@ API:
 * `Image.split`
 * `Image.transpose(Image.ROTATE_180)`
 
-### 从图像中复制子矩形
+#### 从图像中复制子矩形
 
 ```python
 import os
@@ -301,7 +301,7 @@ except IOError as e:
 > * PIL 中图像左上角坐标为 `(0, 0)`
 > * `box(left, upper, right, lowe)`
 
-### 从图像中复制子矩形并将子矩形粘贴回去
+#### 从图像中复制子矩形并将子矩形粘贴回去
 
 ```python
 import os
@@ -323,7 +323,7 @@ except IOError as e:
 
 ![images](images/lena_region_paste.png)
 
-### 图像滚动
+#### 图像滚动
 
 ```python
 import os
@@ -355,7 +355,7 @@ except OSError:
 
 ![images](images/lena_roll.png)
 
-### RGB 波段拆分、合并
+#### RGB 波段拆分、合并
 
 ```python
 import os
@@ -383,7 +383,7 @@ except OSError:
 > * 对于单波段图像(single-band)，`Image.split` 返回图像本身
 > * 为了对单个颜色波段进行处理，需要首先将图像转换为 RGB
 
-## 图像几何变换
+### 图像几何变换
 
 API:
 
@@ -392,7 +392,7 @@ API:
 - `Image.transpose`
 - `Image.transform`
 
-### 简单的几何变换-改变图像像素大小
+#### 简单的几何变换-改变图像像素大小
 
 ```python
 import os
@@ -411,7 +411,7 @@ except OSError:
 
 ![images](images/lena_resize.png)
 
-### 简单的几何变换-图像逆时针旋转一定的角度
+#### 简单的几何变换-图像逆时针旋转一定的角度
 
 ```python
 import os
@@ -430,7 +430,7 @@ except OSError:
 
 ![images](images/lena_rotate.png)
 
-### 图像转置
+#### 图像转置
 
 ```python
 import os
@@ -465,21 +465,21 @@ except OSError:
 > * `trasnpose(ROTATE)` 与 `Image.Image.rotate` 效果相同
 > * `transform()` 能进行更多形式的图像转换
 
-## 图像颜色转换
+### 图像颜色转换
 
-## 图像增强
-
-
-## 图像序列
-
-## PostScript 打印
-
-## 图像读取
+### 图像增强
 
 
-## 控制图像编码
+### 图像序列
 
-## ImageDraw 绘图方法
+### PostScript 打印
+
+### 图像读取
+
+
+### 控制图像编码
+
+### ImageDraw 绘图方法
 
 PIL 的 `ImageDraw` 提供了一系列绘图方法，让我们可以直接绘图。
 比如要生成字母验证码图片
@@ -525,7 +525,7 @@ image.save('code.jpg', 'jpeg')
 
 ![img](images/verfiycode.jpeg)
 
-# Pillow API
+## Pillow API
 
 - Module
     - Image

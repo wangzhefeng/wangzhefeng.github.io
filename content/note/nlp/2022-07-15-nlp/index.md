@@ -58,7 +58,7 @@ img {
 - [参考 \& TODO](#参考--todo)
 </p></details><p></p>
 
-# NLP 介绍
+## NLP 介绍
 
 自然语言处理(Nature Language Processing, NLP)是人工智能和语言学领域的分支学科。
 此领域探讨如何处理及运用自然语言。NLP 包括多方面和步骤，基本有**认知**、**理解**、**生成**等部分。
@@ -68,7 +68,7 @@ img {
 数学和统计理论建立各种自然语言，然后通过计算机来实现这些语言模型。因为人类语言的多样性和复杂性，
 所以总体而言 NLP 是一门极具挑战的学科和领域。
 
-# NLP 难度
+## NLP 难度
 
 NLP 是个非常庞杂的领域，学习和应用起来都颇有难度。
 难度体现在 **语言场景**、**学习算法** 和 **语料** 三个方面：
@@ -78,7 +78,7 @@ NLP 是个非常庞杂的领域，学习和应用起来都颇有难度。
   条件随机场(CRF)以及基于 RNN 的深度学习模型 
 * **语料** 的困难性指的是如何获取高质量的训练语料
 
-# NLP 结构
+## NLP 结构
 
 从自然语言的角度出发，NLP 结构如下: 
 
@@ -93,7 +93,7 @@ NLP 是个非常庞杂的领域，学习和应用起来都颇有难度。
     - 语句规划：从结构化数据中组合语句来表达信息流
     - 实现：产生语法通顺的语句来表达文本
 
-# NLP 模型
+## NLP 模型
 
 NLP 的模型基本包括两类：
 
@@ -110,7 +110,7 @@ NLP 的模型基本包括两类：
     - 基于 RNN 的机器翻译
     - 基于 Transformer 的大语言模型
 
-# NLP 任务
+## NLP 任务
 
 * **机器翻译**: 计算机具备将一种语言翻译成另一种语言的能力
 * **情感分析**: 计算机能够判断用户评论是否积极
@@ -157,7 +157,7 @@ NLP 的模型基本包括两类：
 * 语音识别
 * 语音合成
 
-# NLP 层面
+## NLP 层面
 
 * **词法分析**
     - 分词
@@ -169,7 +169,7 @@ NLP 的模型基本包括两类：
 * **语义分析**
     - 语义角色标注(semantic role labeling)
 
-# NLP 技术
+## NLP 技术
 
 * 文本分类
    - 朴素贝叶斯
@@ -191,7 +191,7 @@ NLP 的模型基本包括两类：
    - 文本转语音
    - 机器翻译
 
-# NLP 语料库
+## NLP 语料库
 
 * **中文**
     - [中文维基百科](https://dumps.wikimedia.org/zhwiki/) 
@@ -201,11 +201,11 @@ NLP 的模型基本包括两类：
     - 邮件相关
 * **英文**
 
-# 构建 NLP Pipeline
+## 构建 NLP Pipeline
 
 ![img](images/London.gif)
 
-## 数据
+### 数据
 
 ```
 London is the capital and most populous city of England and the United 
@@ -223,7 +223,7 @@ was founded by the Romans, who named it Londinium.
 * London was settled by Romans
 * ...
 
-## 分句
+### 分句
 
 > Sentence Segmentation
 
@@ -234,7 +234,7 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
    London has been a major settlement for two millennia."
 3. "It was founded by the Romans, who named it Londinium."
 
-## 分词
+### 分词
 
 > Word Tokenization
 
@@ -249,7 +249,7 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 分词对于英文来说非常容易，可以根据单词之间的空格对文本句子进行分割。
 并且，也可以将标点符号也看成一种分割符，因为标点符号也是有意义的。
 
-## 词性标注
+### 词性标注
 
 > Predicting Parts of Speech for Each Token
 
@@ -271,11 +271,11 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 通过词性标注后的信息，可以收集到一些关于句子的基本含义了，例如：可以看到句子中看到有"London"、
 和 "captial" 两个名词(Noun)，因此该句子可能在谈论 "London"。
 
-## Text Lemmatization
+### Text Lemmatization
 
 在 NLP 中，称此过程为 词性限制(lemmatization)，即找出句子中每个单词的最基本形式或词缀(lemma)。
 
-### 示例
+#### 示例
 
 在自然语言中，单词或词会以不同的形式同时出现:
 
@@ -293,11 +293,11 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 - I had two ponies.
 - I have two pony.
 
-### London 句子示例
+#### London 句子示例
 
 ![img](images/sentence3.png)
 
-## 识别停用词
+### 识别停用词
 
 > Identifying Stop Words
 
@@ -317,23 +317,23 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 - 例如:如果要构建摇滚乐队搜索引擎，则要确保不要过滤到单词 "The"。因为，"The" 一词
   会经常出现在乐队的名字中，比如 1980年代的注明摇滚乐队 "The The!".
 
-## 句法依赖分析
+### 句法依赖分析
 
 > Dependency Parsing
 
-## 命名实体识别
+### 命名实体识别
 
-## 共指解析
+### 共指解析
 
 
-## 构建 Python NLP Pipeline
+### 构建 Python NLP Pipeline
 
 ![img](images/NLP_Pipeline.png)
 
 
 
 
-# 参考 & TODO
+## 参考 & TODO
 
 * [Part 1: Natural Language Processing is Fun](https://medium.com/@ageitgey/natural-language-processing-is-fun-9a0bff37854e) 
 * [Part 2: Text Classification is Your New Secret Weapon](https://medium.com/@ageitgey/text-classification-is-your-new-secret-weapon-7ca4fad15788) 

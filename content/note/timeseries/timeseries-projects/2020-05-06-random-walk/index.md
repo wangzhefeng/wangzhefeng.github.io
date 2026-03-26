@@ -42,11 +42,11 @@ img {
 - [Python 示例](#python-示例)
 </p></details><p></p>
 
-# 随机漫步简介
+## 随机漫步简介
 
 - [百度百科](https://baike.baidu.com/item/%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0/1674146?fromtitle=%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5&fromid=15578433&fr=aladdin)
 
-# Python 示例
+## Python 示例
 
 ```python
 import random

@@ -19,7 +19,7 @@ tags:
     - [skimage-tutorial](http://scipy-lectures.org/packages/scikit-image/index.html#scikit-image) 
 * matplotlib
 
-# 任务
+## 任务
 
 * Input/Output, displaying images
 * Basic manipulations: cropping, flipping, rotating, …
@@ -30,7 +30,7 @@ tags:
 * Registration
 * ...
 
-# 图像读写
+## 图像读写
 
 ```python
 import matplotlib.pyplot as plt
@@ -44,11 +44,11 @@ plt.show()
 ```
 
 
-# 图像去噪
+## 图像去噪
 
 
 
 
-# 特征提取
+## 特征提取
 
 

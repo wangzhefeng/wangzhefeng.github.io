@@ -50,14 +50,14 @@ img {
     - [使用](#使用-3)
 </p></details><p></p>
 
-# MySQL
+## MySQL
 
-## mysqlclient
+### mysqlclient
 
 mysqlclient 包是用于 MySQL 的最流行的 Python 包之一。它包含 MySQLdb 模块，
 一个提供 Python 数据库 API 的 MySQL 接口
 
-### 安装
+#### 安装
 
 Linux:
 
@@ -72,7 +72,7 @@ Windows:
 $ pip install mysqlclient
 ```
 
-### 使用
+#### 使用
 
 `.env` 文件
 
@@ -118,7 +118,7 @@ else:
     print('Not connected.')
 ```
 
-## mysql-connector-python
+### mysql-connector-python
 
 MySQL connector/Python 模块是 Oracle 支持的官方驱动，
 用于通过 Python 连接 MySQL。该连接器完全是 Python 语言，
@@ -128,13 +128,13 @@ MySQL connector/Python 模块是 Oracle 支持的官方驱动，
 注意，MySQL Connector/Python 不支持旧的 MySQL 服务器认证方法，
 这意味着 4.1 之前的 MySQL 版本不能工作
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install mysql-connector-python
 ```
 
-### 使用
+#### 使用
 
 ```python
 import os
@@ -167,19 +167,19 @@ finally:
     connection.close()
 ```
 
-## PyMySQL
+### PyMySQL
 
 PyMySQL 包是另一个连接器，你可以用它来连接 Python 和 MySQL。
 如果你追求速度，这是一个很好的选择，因为它比 mysql-connector-python 快
 
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install PyMySQL
 ```
 
-### 使用
+#### 使用
 
 ```python
 from dotenv import load_dotenv
@@ -203,19 +203,19 @@ else:
 connection.close()
 ```
 
-## aiomysql
+### aiomysql
 
 aiomysql 库用于从 asyncio 框架访问 MySQL 数据库。除了是异步的特性之外，
 连接代码与 PyMySQL 相似。注意，使用 aiomysql 需要 Python 3.7 以上版本和 PyMySQL
 
-### 安装
+#### 安装
 
 ```bash
 $ pip install asyncio
 $ pip install aiomysql
 ```
 
-### 使用
+#### 使用
 
 ```python
 import os

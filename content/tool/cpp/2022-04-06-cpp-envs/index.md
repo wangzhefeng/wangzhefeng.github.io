@@ -43,17 +43,17 @@ img {
   - [CLion](#clion)
 </p></details><p></p>
 
-# 环境配置
+## 环境配置
 
-## Windows
+### Windows
 
-## Linux
+### Linux
 
-## macOS
+### macOS
 
 
-# IDE
+## IDE
 
-## VSCode
+### VSCode
 
-## CLion
+### CLion

@@ -49,11 +49,11 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# SVM API
+## SVM API
 
-## 分类
+### 分类
 
-### SVC
+#### SVC
 
 ```python
 class sklearn.svm.SVC(
@@ -83,7 +83,7 @@ class sklearn.svm.SVC(
 * degree = 3
 * coef0 = 1
 
-### LinearSVC
+#### LinearSVC
 
 > * LinearSVC，Linear Support Vector Classification
 > * 大数据集
@@ -111,7 +111,7 @@ class sklearn.svm.LinearSVC(
 * C = 1
 * loss = "hinge"
 
-### SGDClassifier
+#### SGDClassifier
 
 > * SGDClassifier，Linear classifiers (SVM, logistic regression, etc.) with SGD training
 > * 大数据集
@@ -148,9 +148,9 @@ class sklearn.linear_model.SGDClassifier(
 * loss = "hinge"
 * alpha = 1 / (1 * 1)
 
-## 回归
+### 回归
 
-### SVR
+#### SVR
 
 > Epsilon-Support Vector Regression
 
@@ -179,7 +179,7 @@ class sklearn.svm.SVR(
 * gamma
 * coef0
 
-### SGDRegressor
+#### SGDRegressor
 
 ```python
 class sklearn.linear_model.SGDRegressor(
@@ -213,7 +213,7 @@ class sklearn.linear_model.SGDRegressor(
 * alpha
 * l1_ratio
 
-### LinearSVR
+#### LinearSVR
 
 ```python
 class sklearn.svm.LinearSVR(
@@ -237,7 +237,7 @@ class sklearn.svm.LinearSVR(
 * loss
 * epsilon
 
-### NuSVR
+#### NuSVR
 
 > Nu Support Vector Regression
 
@@ -267,7 +267,7 @@ class sklearn.svm.NuSVR(
 * gamma
 * coef0
 
-## 核函数
+### 核函数
 
 * `linear`
 * `poly`
@@ -275,7 +275,7 @@ class sklearn.svm.NuSVR(
 * `sigmoid`
 * `precomputed`
 
-## 方法
+### 方法
 
 * `decision_function()`
 * `densify()`
@@ -289,6 +289,6 @@ class sklearn.svm.NuSVR(
 * `score()`
 * `sparsify()`
 
-# 参考
+## 参考
 
 * [Scikit-Learn SVM Doc](https://scikit-learn.org/stable/modules/svm.html#svm-kernels)

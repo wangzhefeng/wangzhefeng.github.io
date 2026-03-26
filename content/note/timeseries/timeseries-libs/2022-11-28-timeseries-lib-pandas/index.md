@@ -89,7 +89,7 @@ Pandas 提供了多种功能来支持时间序列数据。以下主要功能对�
 * 将时间序列重采样或转换为特定频率
 * 以绝对或相对时间增量执行日期和时间运算
 
-# Pandas 支持的四个与时间相关的概念
+## Pandas 支持的四个与时间相关的概念
 
 * 日期时间 (Date Time)
     - 带有时区支持的特定日期和时间
@@ -110,7 +110,7 @@ Pandas 提供了多种功能来支持时间序列数据。以下主要功能对�
 |             |              |                  |                     | `period_range()`    |
 | Date Offset | `DateOffset` | `None`           | `None`              | `DateOffset`        |
 
-# Freq
+## Freq
 
 * `date_range(freq = "")`
 
@@ -144,7 +144,7 @@ Pandas 提供了多种功能来支持时间序列数据。以下主要功能对�
 |U, us|microseconds|
 |N|nanoseconds|
 
-# Format
+## Format
 
 * `to_datetime(format = "")`
 
@@ -172,7 +172,7 @@ Pandas 提供了多种功能来支持时间序列数据。以下主要功能对�
 |**Timezone**||
 |%Z|001,002,...,366|
 
-# Date Time
+## Date Time
 
 * class
     - Timestamp
@@ -183,7 +183,7 @@ Pandas 提供了多种功能来支持时间序列数据。以下主要功能对�
     - bdate_range()
     - infer_freq
 
-## Timestamp
+### Timestamp
 
 ```python
 import datetime
@@ -210,9 +210,9 @@ Timestamp('2019-08-21 00:00:00')
 Wednesday
 ```
 
-## DatetimeIndex
+### DatetimeIndex
 
-### DatetimeIndex 对象
+#### DatetimeIndex 对象
 
 ```python
 dates = [
@@ -239,7 +239,7 @@ DatetimeIndex(['2019-08-21', '2019-08-22', '2019-08-23'], dtype='datetime64[ns]'
 <class 'pandas.core.indexes.datetimes.DatetimeIndex'>
 ```
 
-### slice and index
+#### slice and index
 
 ```python
 start = datetime.datetime(2011, 1, 1)
@@ -329,7 +329,7 @@ Freq: BM, dtype: float64
 Freq: BM, dtype: float64
 ```
 
-### freq infer
+#### freq infer
 
 ```python
 print(pd.DatetimeIndex(["2018-01-01", "2018-01-03", "2018-01-05"]))
@@ -341,7 +341,7 @@ DatetimeIndex(['2018-01-01', '2018-01-03', '2018-01-05'], dtype='datetime64[ns]'
 DatetimeIndex(['2018-01-01', '2018-01-03', '2018-01-05'], dtype='datetime64[ns]', freq='2D')
 ```
 
-### DataFrame slice and index
+#### DataFrame slice and index
 
 ```python
 dft = pd.DataFrame(np.random.randn(100000, 1),
@@ -388,11 +388,11 @@ idx = pd.IndexSlice
 print(dft2.loc[idx[:, "2013-01-05"], :])
 ```
 
-## to_datetime
+### to_datetime
 
 * `pd.to_datetime(pd.Series/List, dayfirst, format, errors, unit, origin)`
 
-### pd.Series
+#### pd.Series
 
 ```python
 s = pd.Series(data = ["Jul 31, 2009", "2010-01-10", None])
@@ -407,7 +407,7 @@ print(ts)
 dtype: datetime64[ns]
 ```
 
-### List
+#### List
 
 ```python
 l = [
@@ -424,7 +424,7 @@ DatetimeIndex(['2018-01-01', '2018-01-01', '2018-01-01'],
 dtype='datetime64[ns]', freq=None)
 ```
 
-### dayfirst
+#### dayfirst
 
 ```python
 d = ["04-01-2012 10:00"]
@@ -448,7 +448,7 @@ DatetimeIndex(['2019-01-14', '2019-01-14'], dtype='datetime64[ns]', freq=None)
 DatetimeIndex(['2019-01-14', '2019-01-14'], dtype='datetime64[ns]', freq=None)
 ```
 
-### format
+#### format
 
 ```python
 print(pd.to_datetime("2010/11/12", format = "%Y/%m/%d"))
@@ -460,7 +460,7 @@ print(pd.to_datetime("12-11-2010 00:00", format = "%d-%m-%Y %H:%M"))
 2010-11-12 00:00:00
 ```
 
-### pd.DataFrame
+#### pd.DataFrame
 
 ```python
 df = pd.DataFrame({
@@ -490,7 +490,7 @@ dtype: datetime64[ns]
 dtype: datetime64[ns]
 ```
 
-### errors
+#### errors
 
 ```python
 try:
@@ -508,7 +508,7 @@ print(pd.to_datetime(["2019-08-21", "asd"], errors = "coerce"))
 DatetimeIndex(['2019-08-21', 'NaT'], dtype='datetime64[ns]', freq=None)
 ```
 
-### unit
+#### unit
 
 ```python
 print(pd.to_datetime([
@@ -530,7 +530,7 @@ DatetimeIndex(['2012-10-08 18:15:05', '2012-10-09 18:15:05',
               dtype='datetime64[ns]', freq=None)
 ```
 
-### origin
+#### origin
 
 ```python
 print(pd.to_datetime([1, 2, 3], unit = "D", origin = pd.Timestamp('1960-01-01')))
@@ -542,7 +542,7 @@ DatetimeIndex(['1960-01-02', '1960-01-03', '1960-01-04'], dtype='datetime64[ns]'
 DatetimeIndex(['1970-01-02', '1970-01-03', '1970-01-04'], dtype='datetime64[ns]', freq=None)
 ```
 
-## to_localize
+### to_localize
 
 ```python
 print(pd.to_datetime([1262347200000000000]).tz_localize("US/Pacific"))
@@ -556,7 +556,7 @@ DatetimeIndex(['2010-01-01 12:00:00+00:00'], dtype='datetime64[ns, UTC]', freq=N
 DatetimeIndex(['2010-01-01 12:00:00-08:00'], dtype='datetime64[ns, US/Pacific]', freq=None)
 ```
 
-## tz_convert
+### tz_convert
 
 ```python
 print(pd.DatetimeIndex([1262347200000000000]).tz_convert('US/Pacific'))
@@ -566,7 +566,7 @@ print(pd.DatetimeIndex([1262347200000000000]).tz_convert('US/Pacific'))
 DatetimeIndex(['2010-01-01 12:00:00-08:00'], dtype='datetime64[ns, US/Pacific]', freq=None)
 ```
 
-## date_range
+### date_range
 
 * `pd.date_range(start, end, freq, period)`
 * `pd.bdate_range(start, end, freq, period)`
@@ -669,7 +669,7 @@ DatetimeIndex(['2018-01-01 00:00:00', '2018-01-01 10:40:00',
               dtype='datetime64[ns]', freq=None)
 ```
 
-### bdate_range
+#### bdate_range
 
 ```python
 weekmask = "Mon Wed Fri"
@@ -697,7 +697,7 @@ DatetimeIndex(['2018-01-01', '2018-02-02', '2018-03-02', '2018-04-02',
               dtype='datetime64[ns]', freq='CBMS')
 ```
 
-### min/max Timestamp
+#### min/max Timestamp
 
 ```python
 print(pd.Timestamp.min)
@@ -711,7 +711,7 @@ print(pd.Timestamp.max)
 
 
 
-# Time Deltas
+## Time Deltas
 
 * class
     - Timedelta
@@ -720,7 +720,7 @@ print(pd.Timestamp.max)
     - to_timedelta()
     - timedelta_range()
 
-## Timedelta
+### Timedelta
 
 ```python
 friday = pd.Timestamp("2019-08-23")
@@ -734,17 +734,17 @@ Friday
 Saturday
 ```
 
-## TimedeltaIndex
+### TimedeltaIndex
 
 
-## to_timedelta
+### to_timedelta
 
 
-## timedelta_range
+### timedelta_range
 
 
 
-# Time Spans
+## Time Spans
 
 * class
     - Period
@@ -753,7 +753,7 @@ Saturday
     - Period()
     - period_range()
 
-## Period
+### Period
 
 ```python
 pd.Period("2019-08")
@@ -765,7 +765,7 @@ Period('2019-08', 'M')
 Period('2019-08-01', 'D')
 ```
 
-## PeriodIndex
+### PeriodIndex
 
 ```python
 periods = [
@@ -793,7 +793,7 @@ PeriodIndex(['2019-08', '2019-07', '2019-06'], dtype='period[M]', freq='M')
 ```
 
 
-## period_range
+### period_range
 
 ```python
 ps = pd.Series(
@@ -809,9 +809,9 @@ ps
 dtype: object
 ```
 
-# Date Offset
+## Date Offset
 
-## DataOffset
+### DataOffset
 
 ```python
 ps = pd.Series(data = [pd.DateOffset(1), pd.DateOffset(2)])
@@ -824,7 +824,7 @@ ps
 dtype: object
 ```
 
-## offsets
+### offsets
 
 ```python
 friday = pd.Timestamp("2019-08-23")
@@ -837,18 +837,18 @@ print(monday.day_name())
 Monday
 ```
 
-# Time Zone
+## Time Zone
 
 * tz_localize()
 * tz_convert()
 
-## to_localize
+### to_localize
 
 
-## tz_convert
+### tz_convert
 
 
-# NaT
+## NaT
 
 ```python
 print(pd.Timestamp(pd.NaT))
@@ -865,13 +865,13 @@ False
 ```
 
 
-# Window
+## Window
 
 * pd.DataFrame.rolling().mean()
 * pd.DataFrame.expanding().mean()
 * pd.DataFrame.ewm().mean()
 
-# Resampling
+## Resampling
 
 * pd.DataFrame.resample()
 * pd.Series.resample()
@@ -907,12 +907,12 @@ Freq: 2H, dtype: float64
 ```
 
 
-# Difference 
+## Difference 
 
 * pd.DataFrame.diff()
 * pd.Series.diff()
 
-# Interpolate
+## Interpolate
 
 
 

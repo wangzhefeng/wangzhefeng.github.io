@@ -78,9 +78,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# LightGBM 核心数据结构
+## LightGBM 核心数据结构
 
-## 数据格式
+### 数据格式
 
 > 数据保存在 `lightgbm.Dataset` 对象中
 
@@ -94,7 +94,7 @@ img {
 * scipy sparse matrix
 * LightGBM 二进制文件
 
-### 加载文本文件和二进制文件
+#### 加载文本文件和二进制文件
 
 > * LibSVM(zero-based) 、TSV、CSV、TXT 文本文件
 > * LightGBM 二进制文件
@@ -118,7 +118,7 @@ train_csv_data = lgb.Dataset('train.csv')
 train_bin_data = lgb.Dataset('train.bin')
 ```
 
-### 加载 numpy 二维数组
+#### 加载 numpy 二维数组
 
 ```python
 import liggtgbm as lgb
@@ -128,11 +128,11 @@ label = np.random.randint(2, size = 500)
 train_array = lgb.Dataset(data, label = label)
 ```
 
-### 加载 pandas DataFrame
+#### 加载 pandas DataFrame
 
-### 加载 H2O DataTable Frame
+#### 加载 H2O DataTable Frame
 
-### 加载 scipy 稀疏矩阵
+#### 加载 scipy 稀疏矩阵
 
 > scipy.sparse.csr_matrix 数组
 
@@ -144,7 +144,7 @@ csr = scipy.sparse.csr_matirx((dat, (row, col)))
 train_sparse = lgb.Dataset(csr)
 ```
 
-### 保存数据为 LightGBM 二进制文件
+#### 保存数据为 LightGBM 二进制文件
 
 > 将数据保存为 LightGBM 二进制文件会使数据加载更快
 
@@ -155,7 +155,7 @@ train_data = lgb.Dataset("train.svm.txt")
 train_data.save_binary('train.bin')
 ```
 
-### 创建验证数据
+#### 创建验证数据
 
 > 在 LightGBM 中, 验证数据应该与训练数据格式一致
 
@@ -171,7 +171,7 @@ validation_data = train_data.create_vaild('validation.svm')
 validation_data = lgb.Dataset('validation.svm', reference = train_data)
 ```
 
-### 在数据加载时标识特征名称和类别特征
+#### 在数据加载时标识特征名称和类别特征
 
 > 对于 `categorical_feature` 特征，首先需要将它转换为整数类型，并且只支持非负数。如果转换为连续的范围更佳
 
@@ -198,7 +198,7 @@ train_data.set_init_score()
 train_data.set_group()
 ```
 
-### 有效利用内存空间
+#### 有效利用内存空间
 
 LightGBM 中的 `Dataset` 对象由于仅仅需要保存离散的数据桶，因此它具有很好的内存效率。
 但是由于 numpy array/pandas 对象的内存开销较大，因此当使用它们来创建 `Dataset`` 时，
@@ -208,9 +208,9 @@ LightGBM 中的 `Dataset` 对象由于仅仅需要保存离散的数据桶，因
 * 在构造 `Dataset` 之后，手动设置 `raw_data=True`
 * 手动调用 `gc`
 
-## Dataset
+### Dataset
 
-### API 及参数
+#### API 及参数
 
 Dataset：由 LightGBM 内部使用的数据结构，它存储了数据集。
 
@@ -234,7 +234,7 @@ class lightgbm.Dataset(
 * 
 
 
-### 示例
+#### 示例
 
 ```python
 import lightgbm as lgb
@@ -257,13 +257,13 @@ matrix_2.init_score
 matrix_2.group
 ```
 
-### 注意事项
+#### 注意事项
 
 1. 要确保你的数据集的样本数足够大，从而满足一些限制条件（如：单个节点的最小样本数、单个桶的最小样本数等）。否则会直接报错。
 
-# LightGBM APIs
+## LightGBM APIs
 
-## Booster
+### Booster
 
 ```python
 class lightgbm.Booster(
@@ -277,7 +277,7 @@ class lightgbm.Booster(
 
 
 
-## Training
+### Training
 
 LightGBM API：
 
@@ -294,10 +294,10 @@ Scikit-learn API：
 * `.predict()`
 * `.predict_proba()`
 
-### 直接学习
+#### 直接学习
 
 
-## Booster API 转换
+### Booster API 转换
 
 1. 从 LGBMModel 转换到 Booster：通过 `.booster_` 属性来获取底层的 `Booster`。
 2. 使用 `Booster` 来预测分类的概率
@@ -317,30 +317,30 @@ Scikit-learn API：
         return np.vstack((1. - class_probs, class_probs)).transpose()
     ```
 
-## 模型保存与加载
+### 模型保存与加载
 
 * save_model()
 * model_to_string()
 * lightgbm.Booster(model_file, model_str)
 
-## 交叉验证
+### 交叉验证
 
-## 特征交互约束
+### 特征交互约束
 
-## 自定义评价函数
+### 自定义评价函数
 
-## 自定义损失函数
+### 自定义损失函数
 
-## 提前停止训练
+### 提前停止训练
 
-## Callbacks
+### Callbacks
 
 * `early_stopping(stopping_round, ...)`
 * `print_evaluation(period, show_stdv)`
 * `record_evaluation(eval_result)`
 * `reset_parameter(**kwargs)`
 
-## Plotting
+### Plotting
 
 * `plot_importance(booster, ax, height, xlim, ...)`
 * `plot_split_value_histogram(booster, feature)`
@@ -348,15 +348,15 @@ Scikit-learn API：
 * `plot_tree(booster, ax, tree_index, ...)`
 * `create_tree_digraph(booster, tree_index, ...)`
 
-# LightGBM 调参参数
+## LightGBM 调参参数
 
-## 参数设置方式
+### 参数设置方式
 
 * 命令行参数
 * 参数配置文件
 * Python 参数字典
 
-## 参数类型
+### 参数类型
 
 * 核心参数
     - Booster 参数
@@ -369,7 +369,7 @@ Scikit-learn API：
 * 模型参数
 * 其他参数
 
-### train 方法参数
+#### train 方法参数
 
 * objective
     - "regression"
@@ -423,7 +423,7 @@ Scikit-learn API：
 * force_col_wise：指定训练时是否强制按列构建直方图。如果数据有太多列，则将此参数设置为 True 将通过减少内存使用来提高训练过程速度
 * force_row_wise：指定是否在训练时强制构建逐行直方图。如果数据行太多，则将此参数设置为 True 将通过减少内存使用来提高训练过程速度
 
-## 调参技巧
+### 调参技巧
 
 <font size=0.01em>
 
@@ -446,11 +446,11 @@ Scikit-learn API：
 
 </font>
 
-# Docker 安装和使用
+## Docker 安装和使用
 
-## CLI 模式
+### CLI 模式
 
-### 安装
+#### 安装
 
 ```bash
 $ mkdir lightgbm-docker
@@ -459,7 +459,7 @@ $ wget https://raw.githubusercontent.com/Microsoft/LightGBM/master/docker/docker
 $ docker build -t lightgbm-cli -f dockerfile-cli .
 ```
 
-### 使用
+#### 使用
 
 ```bash
 $ docker run -rm -it \
@@ -470,9 +470,9 @@ lightgbm-cli \
 config=lgbm.conf
 ```
 
-## Python 模式
+### Python 模式
 
-### 安装
+#### 安装
 
 ```bash
 $ mkdir lightgbm-docker
@@ -481,12 +481,12 @@ $ wget https://raw.githubusercontent.com/Microsoft/LightGBM/master/docker/docker
 $ docker build -t lightgbm -f dockerfile-python .
 ```
 
-### 使用
+#### 使用
 
 ```bash
 $ docker run --rm -it lightgbm
 ```
 
-# 参考
+## 参考
 
 * [LightGBM各种操作](https://mp.weixin.qq.com/s/iLgVeAKXR3EJW2mHbEWiFQ)

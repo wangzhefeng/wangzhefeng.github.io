@@ -41,12 +41,12 @@ img {
   - [实现](#实现)
 </p></details><p></p>
 
-# TODO
+## TODO
 
 * [文本分类算法综述](https://mp.weixin.qq.com/s/nwYDRoMKYZ0xal9bRXCfHw)
 * [一文总结文本分类必备经典模型](https://mp.weixin.qq.com/s/f5SkoWD4BY_HDWfPi5R5ng)
 
-# 文本分类任务简介
+## 文本分类任务简介
 
 一般, 文本分类大致分为以下几个步骤:
 
@@ -63,10 +63,10 @@ img {
 6. 应用阶段
     - 应用性能最高的分类模型对待分类文档进行分类
 
-# 朴素贝叶斯分类模型
+## 朴素贝叶斯分类模型
 
-## 理论
+### 理论
 
 
-## 实现
+### 实现
 

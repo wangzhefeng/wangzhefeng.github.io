@@ -46,7 +46,7 @@ img {
 - feature_extraction.text.TfidfTransformer
 - feature_extraction.text.TfidfVectorizer
 
-# Bag of Words
+## Bag of Words
 
 scikit-learn 提供的工具
 
@@ -54,12 +54,12 @@ scikit-learn 提供的工具
 - counting
 - normalizing
 
-# Sparsity
+## Sparsity
 
-# Common Vectorizer usage
+## Common Vectorizer usage
 
-# TF-IDF term weighting
+## TF-IDF term weighting
 
 
-# Decoding text files
+## Decoding text files
 

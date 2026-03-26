@@ -41,14 +41,14 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# GloVe 简介
+## GloVe 简介
 
 > 全局词向量表示，Global Vectors for Word Representation, GloVe
 
 除了 Word2Vec 之外，常用的通过训练神经网络的方法得到词向量的方法还包括 
 GloVe 词向量、fasttext 词向量等等
 
-# GloVe 词向量简介
+## GloVe 词向量简介
    
 GloVe 词向量直译为全局的词向量表示，跟 Word2Vec 词向量一样本质上是基于词共现矩阵来进行处理的。
 GloVe 词向量模型基本步骤如下:
@@ -94,11 +94,11 @@ GloVe 词向量模型基本步骤如下:
       比如要解决 `a is to b as c is to _` 这样的语义填空题，
       可以利用词汇之间的余弦相似性计算空格处到底填什么单词.
 
-# GloVe vs Word2Vec
+## GloVe vs Word2Vec
 
 ![img](images/GloVe_vs_word2vec.png)
 
-# 参考
+## 参考
 
 * [基于 PyTorch 实现的 Glove 词向量的实例](https://blog.csdn.net/a553181867/article/details/104837957)
 * [GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/projects/glove/)

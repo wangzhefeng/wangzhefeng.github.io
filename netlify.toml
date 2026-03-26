@@ -1,20 +1,17 @@
 [build]
-command = 'hugo'
+command = 'npm ci && npm run build'
 publish = 'public'
 [build.environment]
-HUGO_VERSION = '0.87.0'
+HUGO_VERSION = '0.134.1'
 
 
 [context]
 [context.branch-deploy]
-command = 'hugo -F -b $DEPLOY_PRIME_URL'
+command = 'npm ci && hugo -F -b $DEPLOY_PRIME_URL && npx pagefind --site public'
 
 [context.deploy-preview]
-command = 'hugo -F -b $DEPLOY_PRIME_URL'
+command = 'npm ci && hugo -F -b $DEPLOY_PRIME_URL && npx pagefind --site public'
 
 [context.production]
 [context.production.environment]
 HUGO_ENV = 'production'
-
-
-baseurl = "https://wangzhefeng.com/"

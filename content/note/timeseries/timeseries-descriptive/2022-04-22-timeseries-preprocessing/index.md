@@ -80,7 +80,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 时间序列示例数据
+## 时间序列示例数据
 
 > [澳大利亚墨尔本市10年(1981-1990年)内的最低每日温度](https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv)
 
@@ -123,9 +123,9 @@ plt.show()
 
 ![img](images/hist.png)
 
-# 标准化和中心化
+## 标准化和中心化
 
-## 标准化
+### 标准化
 
 标准化是使时间序列中的数值符合平均值为 0，标准差为 1。具体来说，
 对于给定的时间序列 `$\{x_{1}, x_{2}, \ldots, x_{t}, \ldots, x_{T}\}$`，
@@ -176,7 +176,7 @@ inversed.plot()
 
 ![img](images/line_inversed_standard.png)
 
-## 中心化
+### 中心化
 
 标准化的目标是将原始数据分布转换为标准正态分布，它和整体样本分布有关，
 每个样本点都能对标准化产生影响。这里，如果只考虑将均值缩放到 0，
@@ -188,12 +188,12 @@ inversed.plot()
 
 ```
 
-# 归一化
+## 归一化
 
 归一化是将样本的特征值转换到同一范围（量纲）下，把数据映射到 `$[0, 1]$` 或 `$[-1, 1]$` 区间内，
 它仅由变量的极值所决定，其主要是为了数据处理方便而提出来的。
 
-## 归一化
+### 归一化
 
 把数据映射到 `$[0, 1]$` 范围之内进行处理，可以更加便捷快速。具体公式如下：
 
@@ -241,17 +241,17 @@ inversed.plot()
 
 ![img](images/line_inversed_normalized.png)
 
-## 平均归一化
+### 平均归一化
 
 `$$\hat{x}_{t} = \frac{x_{t} - mean(\{x_{t}\}_{t}^{T})}{max(\{x_{t}\}_{t}^{T}) - min(\{x_{t}\}_{t}^{T})}$$`
 
-## 什么时候用归一化？什么时候用标准化？
+### 什么时候用归一化？什么时候用标准化？
 
 * 如果对输出结果范围有要求，用归一化；
 * 如果数据较为稳定，不存在极端的最大最小值，用归一化；
 * 如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响。
 
-# 时间序列聚合
+## 时间序列聚合
 
 通常来自不同数据源的时间轴常常无法一一对应, 此时就要用到改变时间频率的方法进行数据处理. 
 由于无法改变实际测量数据的频率, 我们能做的是改变数据收集的频率。
@@ -264,9 +264,9 @@ inversed.plot()
 * 升采样(up sampling): 在某种程度上是凭空获得更高频率数据的方式, 不增加额外的信息；
 * 降采样(down sampling): 减少数据收集的频率, 也就是从原始数据中抽取子集的方式。
 
-## Pandas 重采样
+### Pandas 重采样
 
-### API
+#### API
 
 ```python
 pd.DataFrame.resample(
@@ -337,7 +337,7 @@ pd.Series.resample(
     - 在向前或向后填充时，允许填充的最大时期数
     - int, default None
 
-### 升采样
+#### 升采样
 
 API：
 
@@ -349,7 +349,7 @@ API：
 * `.resample().asfreq()`
 * `.resample().interpolate()`
 
-### 降采样
+#### 降采样
 
 API：
 
@@ -371,7 +371,7 @@ API：
 * `.resample.max()`
 * `.resample.sum()`
 
-### Function application
+#### Function application
 
 API：
 
@@ -380,7 +380,7 @@ API：
 * `.resample().transfrom()`
 * `.resample().pipe()`
 
-### Indexing 和 iteration
+#### Indexing 和 iteration
 
 API：
 
@@ -389,13 +389,13 @@ API：
 * `.indices`
 * `get_group()`
 
-### 稀疏采样
+#### 稀疏采样
 
 API：
 
-## SciPy 重采样
+### SciPy 重采样
 
-### API
+#### API
 
 ```python
 import scipy
@@ -417,7 +417,7 @@ scipy.signal.resample(
 * `t`: 如果给定 `t`，则假定它是与 `x` 中的信号数据相关联的等距采样位置
 * `axis`: 对哪个轴重采样，默认是 0
 
-### 升采样
+#### 升采样
 
 ```python
 import numpy as np
@@ -441,7 +441,7 @@ plt.show()
 
 ![img](images/scipy_upsample.png)
 
-### 降采样
+#### 降采样
 
 ```python
 import numpy as np
@@ -465,7 +465,7 @@ plt.show()
 
 ![img](images/scipy_downsample.png)
 
-### 等间隔采样
+#### 等间隔采样
 
 ```python
 import numpy as np
@@ -488,7 +488,7 @@ plt.show()
 
 ![img](images/scipy_downsample_t.png)
 
-### 不等间隔采样
+#### 不等间隔采样
 
 原始数据不等间隔，采样成等间隔的点(点数不变)
 
@@ -543,7 +543,7 @@ plt.show()
 
 ![img](images/scipy_resample2.png)
 
-# 时间序列缺失处理
+## 时间序列缺失处理
 
 最常用的处理缺失值的方法包括填补(imputation) 和删除(deletion)两种
 
@@ -556,14 +556,14 @@ plt.show()
     - 插值方法要求数据和邻近点之间满足某种拟合关系, 
       因此插值法是一种先验方法且需要代入一些业务经验
 
-## forward 和 backward fill
+### forward 和 backward fill
 
 
-## Moving Average
+### Moving Average
 
-## Pandas 插值算法
+### Pandas 插值算法
 
-### Pandas 中缺失值的处理
+#### Pandas 中缺失值的处理
 
 1. Python 缺失值类型
    - `None`
@@ -590,9 +590,9 @@ plt.show()
 5. 缺失值删除
    - `.dropna(axis)`
 
-### 缺失值插值算法 API
+#### 缺失值插值算法 API
 
-### pandas.DataFrame.interpolate
+#### pandas.DataFrame.interpolate
 
 ```python
 
@@ -660,7 +660,7 @@ df.interpolate(args)
 df[""].interpolate(args)
 ```
 
-## Scipy 插值算法
+### Scipy 插值算法
 
 - scipy.interpolate.Akima1DInterpolator
    - 三次多项式插值
@@ -675,7 +675,7 @@ df[""].interpolate(args)
 - scipy.interpolate.CubicSpline
    - 三次样条插值
 
-### 1-D interpolation
+#### 1-D interpolation
 
 ```python
 class scipy.interpolate.interp1d(x, y, 
@@ -727,39 +727,39 @@ ynew4 = f4(xnew)
 ynew5 = f5(xnew)
 ```
 
-### Multivariate data interpolation
+#### Multivariate data interpolation
 
-### Spline interpolation
+#### Spline interpolation
 
-### Using radial basis functions for smoothing/interpolate
+#### Using radial basis functions for smoothing/interpolate
 
-# 时间序列异常值处理
+## 时间序列异常值处理
 
 * TOOD
 
-# 时间序列降噪
+## 时间序列降噪
 
-## 移动平均
+### 移动平均
 
 滚动平均值是先前观察窗口的平均值，其中窗口是来自时间序列数据的一系列值。
 为每个有序窗口计算平均值。这可以极大地帮助最小化时间序列数据中的噪声。
 
-## 傅里叶变换
+### 傅里叶变换
 
 傅里叶变换可以通过将时间序列数据转换到频域去除噪声，可以过滤掉噪声频率，
 然后应用傅里叶变换得到滤波后的时间序列。
 
-## 小波分析
+### 小波分析
 
 * TODO
 
-# 时间序列时区处理
+## 时间序列时区处理
 
-## API
+### API
 
 * `pandas.to_datetime(df.index)`
 
-## 原理
+### 原理
 
 本地化是什么意思？
 
@@ -775,7 +775,7 @@ ynew5 = f5(xnew)
 
 * 只需要更改数据集的索引部分
 
-## 示例
+### 示例
 
 ```python
 import numpy as np
@@ -799,6 +799,6 @@ df.index = df.index.tz_localize("UTC")
 df.index = df.index.tz_convert("Asia/Qatar")
 ```
 
-# 参考
+## 参考
 
 * [用于时间序列数据整理的Pandas函数](https://mp.weixin.qq.com/s/uy8jduqnA0tQM7qC476XSQ)

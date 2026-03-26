@@ -46,7 +46,7 @@ img {
 - [Solr 管理索引库](#solr-管理索引库)
 </p></details><p></p>
 
-# Solr 简介
+## Solr 简介
 
 - 基于关键字查询的搜索引擎
     - 缺点: 难以构造出准确表达用户需求的查询请求, 返回的结果冗余甚至无用的信息多
@@ -73,7 +73,7 @@ img {
       当用户提问机器人的时候, NLP 算法会先理解问题的语义, 之后将“翻译”后的语言推送给 Solr, 
       由 Solr 负责检索预存的问题, 将最匹配用户提问的那个答案返回给用户; 
 
-# 全文检索的原理
+## 全文检索的原理
 
 - 全文检索
     - 比如, 电脑里有一个文件夹, 文件夹中存储了很多文件, 例如 Word、Excel、PPT, 希望根据搜索关键字的方式搜索到相应的文档, 
@@ -95,9 +95,9 @@ img {
           每次搜索, 创建索引的过程不必经过, 仅仅搜索创建好的索引就可以了。这也是全文搜索相对于顺序扫描的优势之一:
             - 一次索引, 多次使用
 
-# Solr 简介和部署
+## Solr 简介和部署
 
-## Solr 简介
+### Solr 简介
 
 - Solr 是一种开发源码的、基于 Lucene Java 的搜索服务器, 易于加入 Web 应用程序中
 - Solr 提供了层面搜索(就是统计)、命中醒目显示并且支持多种输出格式
@@ -115,9 +115,9 @@ img {
     - (6)使用 XML 配置达到灵活性和适配性
     - (7)可扩展的插件体系
 
-## Solr 部署
+### Solr 部署
 
-### 下载 Tomcat、Solr、JDK 安装包
+#### 下载 Tomcat、Solr、JDK 安装包
 
 - Tomcat 8.5.24
      - http://tomcat.apache.org/download-80.cgi
@@ -126,7 +126,7 @@ img {
 - JDK 1.8
      - TODO
 
-### 规划安装目录
+#### 规划安装目录
 
 Solr 安装在 Linux 的 `/opt/bigdata/` 目录中
 
@@ -134,7 +134,7 @@ Solr 安装在 Linux 的 `/opt/bigdata/` 目录中
 $ mkdir -p /opt/bigdata
 ```
 
-### 安装
+#### 安装
 
 将下载好的 Tomcat、Solr、JDK 包移动到 `/opt/bigdata/` 下, 解压、安装
 
@@ -236,9 +236,9 @@ $ cp /opt/bigdata/solr/server/solr/configsets/sample_techproducts_config/conf /o
 - http://xxx.xxx.xxx.xxx:8000/solr/admin.html
 - 在 Solr 管理控制台界面, 添加一个 core
 
-# Solr 后台管理描述
+## Solr 后台管理描述
 
 
-# Solr 管理索引库
+## Solr 管理索引库
 
 

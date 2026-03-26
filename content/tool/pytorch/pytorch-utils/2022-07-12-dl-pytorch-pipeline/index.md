@@ -46,7 +46,7 @@ img {
 - [Model Loading](#model-loading)
 </p></details><p></p>
 
-# Libraries
+## Libraries
 
 ```python
 import torch
@@ -57,9 +57,9 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 ```
 
-# Data
+## Data
 
-## Data Download
+### Data Download
 
 ```python
 training_data = datasets.FashionMNIST(
@@ -76,7 +76,7 @@ test_data = datasets.FashionMNIST(
 )
 ```
 
-## Data Loader
+### Data Loader
 
 ```python
 batch_size = 64
@@ -96,7 +96,7 @@ for X, y in test_dataloader:
     break
 ```
 
-# Model
+## Model
 
 ```python
 # get cpu or gpu device for training.
@@ -127,16 +127,16 @@ model = NeuralNetwork().to(device)
 print(model)
 ```
 
-# Model Parameters Optimizing
+## Model Parameters Optimizing
 
-## Loss and Optimizer
+### Loss and Optimizer
 
 ```python
 loss_fn = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr = 1e-3)
 ```
 
-## Model Training
+### Model Training
 
 ```python
 def train(dataloader, model, loss_fn, optimizer):
@@ -194,14 +194,14 @@ for t in range(epochs):
 print("Done!")
 ```
 
-# Model Saving
+## Model Saving
 
 ```python
 torch.save(model.state_dict(), "model.pth")
 print("Saved PyTorch Model State to model.pth")
 ```
 
-# Model Loading
+## Model Loading
 
 ```python
 model = NeuralNetwork()

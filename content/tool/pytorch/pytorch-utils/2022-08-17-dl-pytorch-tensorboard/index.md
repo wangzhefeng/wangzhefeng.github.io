@@ -96,9 +96,9 @@ PyTorch 中利用 TensorBoard 进行信息可视化的方法如下:
 * 可视化参数分布
 * 可视化参数分布
 
-# 可视化模结构
+## 可视化模结构
 
-## 模型结构
+### 模型结构
 
 ```python
 import torch
@@ -139,7 +139,7 @@ print(net)
 summary(net, input_shape = (3, 32, 32))
 ```
 
-## 创建日志写入器
+### 创建日志写入器
 
 ```python
 from torch.utils.tensorboard import SummaryWriter
@@ -147,16 +147,16 @@ from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter("./data/tensorboard")
 ```
 
-## 利用日志写入器将相应信息日志写入指定的目录
+### 利用日志写入器将相应信息日志写入指定的目录
 
 ```python
 writer.add_graph(net, input_to_model = torch.rand(1, 3, 32, 32))
 writer.close()
 ```
 
-## 传入日志目录参数启动 TensorBoard
+### 传入日志目录参数启动 TensorBoard
 
-### Jupyte notebook/lab
+#### Jupyte notebook/lab
 
 完整示例代码:
 
@@ -290,7 +290,7 @@ Known TensorBoard instances:
   - port 6006: logdir ./data/tensorboard (started 0:00:39 ago; pid 219)
 ```
 
-### 命令行
+#### 命令行
 
 完整示例代码:
 
@@ -364,7 +364,7 @@ $ tensorboard --logdir ./data/tensorboard
 ![img](images/tensorboard_command_dash.png)
 
 
-# 可视化指标变化
+## 可视化指标变化
 
 在模型训练的过程中，实时动态地查看 loss 和各种 metric 的变化曲线，
 可以帮助更加直观地了解模型的训练情况
@@ -373,7 +373,7 @@ $ tensorboard --logdir ./data/tensorboard
 因此它一般用于对 loss 和 metric 的变化进行可视化
 
 
-## 模型结构
+### 模型结构
 
 求 `$f(x) = a x^{2} + b x + c$` 的最小值
 
@@ -396,7 +396,7 @@ def f(x):
     return (result)
 ```
 
-## 创建日志写入器
+### 创建日志写入器
 
 ```python
 from torch.utils.tensorboard import SummaryWriter
@@ -404,7 +404,7 @@ from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter("./data/tensorboard")
 ```
 
-## 利用日志写入器将相应信息日志写入指定的目录
+### 利用日志写入器将相应信息日志写入指定的目录
 
 ```python
 for i in range(500):
@@ -428,7 +428,7 @@ print(f"y = {f(x).data}; x = {x.data}")
 y = 0.0; x = 0.9999589920043945
 ```
 
-## 传入日志目录参数启动 TensorBoard
+### 传入日志目录参数启动 TensorBoard
 
 查看启动的 TensorBoard 程序:
 
@@ -461,12 +461,12 @@ notebook.start("--logdir ./data/tensorboard")
 
 ![img](images/tensorboard_lab3.png)
 
-# 可视化参数分布
+## 可视化参数分布
 
 如果需要对模型的参数(一般非标量)在训练过程中的变化进行可视化，可以使用 `writer.add_histogram`
 
 
-## 模型结构
+### 模型结构
 
 ```python
 import numpy as np
@@ -480,7 +480,7 @@ def norm(mean, std):
     return t
 ```
 
-## 创建日志写入器
+### 创建日志写入器
 
 ```python
 from torch.utils.tensorboard import SummaryWriter
@@ -488,7 +488,7 @@ from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter("./data/tensorboard")
 ```
 
-## 利用日志写入器将相应信息日志写入指定的目录
+### 利用日志写入器将相应信息日志写入指定的目录
 
 ```python
 for step, mean in enumerate(range(-10, 10, 1)):
@@ -498,7 +498,7 @@ for step, mean in enumerate(range(-10, 10, 1)):
 writer.close()
 ```
 
-## 传入日志目录参数启动 TensorBoard
+### 传入日志目录参数启动 TensorBoard
 
 查看启动的 TensorBoard 程序:
 
@@ -531,7 +531,7 @@ notebook.start("--logdir ./data/tensorboard")
 
 ![img](images/tensorboard_lab4.png)
 
-# 可视化原始图像
+## 可视化原始图像
 
 在做图像相关的任务时，可以将原始图像的图片在 TensorBoard 中进行展示
 
@@ -540,119 +540,6 @@ notebook.start("--logdir ./data/tensorboard")
 
 也可以使用 `torch.utils.make_grid` 将多张图片拼成一张图片，然后用 `writer.add_image` 写入。
 传入的是代表图片信息的 PyTorch 中的张量数据
-
-# 图像数据
-
-```python
-import torch
-from torch import nn
-from torch.utils.data import Dataset, DataLoader
-import torchvision
-from torchvision import transforms
-from torchvision import datasets
-
-
-transform_img = transforms.Compose([
-    T.ToTensor(),
-])
-
-def transform_label(x):
-    return torch.tensor([x]).float()
-
-ds_train = datasets.ImageFolder(
-    "./data/cifar2/train/",
-    transform = transform_img,
-    target_transform = transform_label,
-)
-ds_val = datasets.ImageFolder(
-    "./data/cifar2/test/",
-    transform = transform_img,
-    target_transform = transform_label,
-)
-print(ds_train.class_to_idx)
-
-dl_train = DataLoader(
-    ds_train, 
-    batch_size = 50,
-    shuffle = True,
-)
-dl_val = DataLoader(
-    ds_val,
-    batch_size = 50,
-    shuffle = True,
-)
-images, labels = next(iter(dl_train))
-```
-
-## 仅查看一张图片
-
-```python
-writer = SummaryWriter("./data/tensorboard")
-writer.add_image("images[0]", images[0])
-writer.close()
-```
-
-## 将多张图片拼接成一张图片
-
-中间用黑色网络分割
-
-```python
-writer = SummaryWriter("./data/tensorboard")
-
-# 创建图像网格
-img_grid = torchvision.utils.make_grid(images)
-
-writer.add_image("image_grid", img_grid)
-writer.close()
-```
-
-## 将多张图片直接写入
-
-```python
-writer = SummaryWriter("./data/tensorboard")
-writer.add_images("images", images, global_step = 0)
-writer.close()
-```
-
-## 传入日志目录参数启动 TensorBoard
-
-查看启动的 TensorBoard 程序:
-
-```python
-from tensorboard import notebook
-
-notebook.list()
-```
-
-```
-No known TensorBoard instances running.
-```
-
-启动 Tensorboard 程序:
-
-* 等价于在命令行中执行 `tensorboard --logdir ./data/tensorboard`
-* 等价于在 Jupyter 中执行 
-    - `%load_ext tensorboard`
-    - `%tensorboard --logdir ./data/tensorboard`
-
-```python
-%load_ext tensorboard
-from tensorboard import notebook
-notebook.start("--logdir ./data/tensorboard")
-# or 
-# %tensorboard --logdir ./data/tensorboard
-```
-
-![img](images/tensorboard_lab5.png)
-
-![img](images/tensorboard_lab6.png)
-
-![img](images/tensorboard_lab7.png)
-
-# 可视化人工绘图
-
-如果将 matplotlib 绘图的结果在 TensorBoard 中展示，可以使用 `add_figure`。
-和 `writer.add_image` 不同的是，`writer.add_figure` 需要传入 matplotlib 的 `figure` 对象
 
 ## 图像数据
 
@@ -697,7 +584,120 @@ dl_val = DataLoader(
 images, labels = next(iter(dl_train))
 ```
 
-## Matplotlib 绘图
+### 仅查看一张图片
+
+```python
+writer = SummaryWriter("./data/tensorboard")
+writer.add_image("images[0]", images[0])
+writer.close()
+```
+
+### 将多张图片拼接成一张图片
+
+中间用黑色网络分割
+
+```python
+writer = SummaryWriter("./data/tensorboard")
+
+# 创建图像网格
+img_grid = torchvision.utils.make_grid(images)
+
+writer.add_image("image_grid", img_grid)
+writer.close()
+```
+
+### 将多张图片直接写入
+
+```python
+writer = SummaryWriter("./data/tensorboard")
+writer.add_images("images", images, global_step = 0)
+writer.close()
+```
+
+### 传入日志目录参数启动 TensorBoard
+
+查看启动的 TensorBoard 程序:
+
+```python
+from tensorboard import notebook
+
+notebook.list()
+```
+
+```
+No known TensorBoard instances running.
+```
+
+启动 Tensorboard 程序:
+
+* 等价于在命令行中执行 `tensorboard --logdir ./data/tensorboard`
+* 等价于在 Jupyter 中执行 
+    - `%load_ext tensorboard`
+    - `%tensorboard --logdir ./data/tensorboard`
+
+```python
+%load_ext tensorboard
+from tensorboard import notebook
+notebook.start("--logdir ./data/tensorboard")
+# or 
+# %tensorboard --logdir ./data/tensorboard
+```
+
+![img](images/tensorboard_lab5.png)
+
+![img](images/tensorboard_lab6.png)
+
+![img](images/tensorboard_lab7.png)
+
+## 可视化人工绘图
+
+如果将 matplotlib 绘图的结果在 TensorBoard 中展示，可以使用 `add_figure`。
+和 `writer.add_image` 不同的是，`writer.add_figure` 需要传入 matplotlib 的 `figure` 对象
+
+### 图像数据
+
+```python
+import torch
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
+import torchvision
+from torchvision import transforms
+from torchvision import datasets
+
+
+transform_img = transforms.Compose([
+    T.ToTensor(),
+])
+
+def transform_label(x):
+    return torch.tensor([x]).float()
+
+ds_train = datasets.ImageFolder(
+    "./data/cifar2/train/",
+    transform = transform_img,
+    target_transform = transform_label,
+)
+ds_val = datasets.ImageFolder(
+    "./data/cifar2/test/",
+    transform = transform_img,
+    target_transform = transform_label,
+)
+print(ds_train.class_to_idx)
+
+dl_train = DataLoader(
+    ds_train, 
+    batch_size = 50,
+    shuffle = True,
+)
+dl_val = DataLoader(
+    ds_val,
+    batch_size = 50,
+    shuffle = True,
+)
+images, labels = next(iter(dl_train))
+```
+
+### Matplotlib 绘图
 
 ```python
 %matplotlib inline
@@ -717,7 +717,7 @@ for i in range(9):
 plt.show()
 ```
 
-## 利用日志写入器将相应信息日志写入指定的目录
+### 利用日志写入器将相应信息日志写入指定的目录
 
 ```python
 writer = SummaryWriter("./data/tensorboard")
@@ -725,7 +725,7 @@ writer.add_figure("figure", figure, global_step = 0)
 writer.close()
 ```
 
-## 传入日志目录参数启动 TensorBoard
+### 传入日志目录参数启动 TensorBoard
 
 查看启动的 TensorBoard 程序:
 
@@ -757,7 +757,7 @@ notebook.start("--logdir ./data/tensorboard")
 ![img](images/tensorboard_lab6.png)
 
 
-# torchkeras 中的 TensorBoard 回调函数
+## torchkeras 中的 TensorBoard 回调函数
 
 在 torchkeras 中调用 TensorBoard 回调函数实现常用可视化功能
 
@@ -783,7 +783,7 @@ from tensorboard import notebook
 %config InlineBackend.figure_format = "svg"
 ```
 
-## 准备数据
+### 准备数据
 
 ```python
 # ------------------------------
@@ -846,7 +846,7 @@ print(features.shape)
 print(labels.shape)
 ```
 
-## 定义模型
+### 定义模型
 
 ```python
 class Net(nn.Module):
@@ -888,7 +888,7 @@ model = torchkeras.LightModel(
 summary(model, input_data = features)
 ```
 
-## 模型训练
+### 模型训练
 
 ```python
 # 设置回调函数
@@ -931,7 +931,7 @@ trainer = pl.Trainer(
 trainer.fit(model, dl_train, dl_val)
 ```
 
-## TensorBoard 可视化监控
+### TensorBoard 可视化监控
 
 ```python
 notebook.list()

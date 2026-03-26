@@ -61,31 +61,31 @@ img {
 </p></details><p></p>
 
 
-# Windows 安装 PyTorch
+## Windows 安装 PyTorch
 
-## CPU version
+### CPU version
 
-### 使用 pip 安装 PyTorch
+#### 使用 pip 安装 PyTorch
 
 ```bash
 $ pip3 install torch torchvision torchaudio
 ```
 
-### 使用 conda 安装 PyTorch
+#### 使用 conda 安装 PyTorch
 
 ```bash
 $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 ```
 
-### 使用 Docker 安装 PyTorch
+#### 使用 Docker 安装 PyTorch
 
 ```bash
 $ TODO
 ```
 
-## GPU-CUDA version
+### GPU-CUDA version
 
-### 使用 pip 安装 PyTorch
+#### 使用 pip 安装 PyTorch
 
 ```bash
 # CUDA 11.3
@@ -98,7 +98,7 @@ $ pip3 install torch torchvision torchaudio --index-url https://download.pytorch
 $ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-### 使用 conda 安装 PyTorch
+#### 使用 conda 安装 PyTorch
 
 ```bash
 # CUDA 11.3
@@ -111,46 +111,24 @@ $ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c n
 $ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-### 使用 Docker 安装 PyTorch
+#### 使用 Docker 安装 PyTorch
 
 ```bash
 $ TODO
 ```
 
-# macOS 安装 PyTorch
+## macOS 安装 PyTorch
 
-## 使用 pip 安装 PyTorch
+### 使用 pip 安装 PyTorch
 
 ```bash
 $ pip3 install torch torchvision torchaudio
 ```
 
-## 使用 conda 安装 PyTorch
-
-```bash
-$ conda install pytorch::pytorch torchvision torchaudio -c pytorch
-```
-
-## 使用 Docker 安装 PyTorch
-
-```bash
-$ TODO
-```
-
-# Linux 安装 PyTorch
-
-## CPU version
-
-### 使用 pip 安装 PyTorch
-
-```bash
-$ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-```
-
 ### 使用 conda 安装 PyTorch
 
 ```bash
-$ conda install pytorch torchvision torchaudio cpuonly -c pytorch
+$ conda install pytorch::pytorch torchvision torchaudio -c pytorch
 ```
 
 ### 使用 Docker 安装 PyTorch
@@ -159,9 +137,31 @@ $ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 $ TODO
 ```
 
-## GPU-CUDA version
+## Linux 安装 PyTorch
 
-### 使用 pip 安装 PyTorch
+### CPU version
+
+#### 使用 pip 安装 PyTorch
+
+```bash
+$ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+```
+
+#### 使用 conda 安装 PyTorch
+
+```bash
+$ conda install pytorch torchvision torchaudio cpuonly -c pytorch
+```
+
+#### 使用 Docker 安装 PyTorch
+
+```bash
+$ TODO
+```
+
+### GPU-CUDA version
+
+#### 使用 pip 安装 PyTorch
 
 ```bash
 # CUDA 10.2
@@ -181,7 +181,7 @@ $ pip3 install torch torchvision torchaudio
 $ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.6
 ```
 
-### 使用 conda 安装 PyTorch
+#### 使用 conda 安装 PyTorch
 
 ```bash
 # CUDA 10.2
@@ -196,13 +196,13 @@ $ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c n
 $ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-### 使用 Docker 安装 PyTorch
+#### 使用 Docker 安装 PyTorch
 
 ```bash
 $ TODO
 ```
 
-# Verification
+## Verification
 
 * Torch 使用:
 
@@ -225,7 +225,7 @@ tensor([[0.3380, 0.3845, 0.3217],
 >>> torch.cuda.is_available()
 ```
 
-# 官网安装介绍
+## 官网安装介绍
 
 * [Install PyTorch](https://pytorch.org/get-started/locally/)
 * [Download Pytorch](https://download.pytorch.org/whl/torch)

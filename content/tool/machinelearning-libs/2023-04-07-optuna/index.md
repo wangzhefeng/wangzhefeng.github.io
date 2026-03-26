@@ -50,7 +50,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# Optuna 简介
+## Optuna 简介
 
 Optuna是一种自动超参数优化软件框架，专为机器学习而设计。它具有命令式、define-by-run API。
 得益于 define-by-run API，使用 Optuna 编写的代码享有高度模块化，
@@ -74,25 +74,25 @@ Optuna 的用户可以动态构建超参数的搜索空间
 * 研究(Study)：基于目标函数的优化
 * 试验(Trial)：目标函数的单次执行
 
-# Optuna 安装 
+## Optuna 安装 
 
-## Optuna
+### Optuna
 
 ```bash
 # PyPI
 $ pip install optuna
 ```
 
-## Optuna Web Dashboard
+### Optuna Web Dashboard
 
 ```bash
 $ pip install optuna-dashboard
 $ optuna-dashboard sqllite:///db.sqlite3
 ```
 
-# Optuna Demo
+## Optuna Demo
 
-## 快速开始
+### 快速开始
 
 ```python
 import optuna
@@ -109,7 +109,7 @@ print(study.best_params)  # E.g. {"x": 2.002108042}
 plot_intermediate_values(study)
 ```
 
-## Scikit-Learn
+### Scikit-Learn
 
 ```python
 from sklearn import datasets
@@ -151,7 +151,7 @@ study.optimize(objective, n_trials = 100)
 print(study.best_params)
 ```
 
-## XGBoost
+### XGBoost
 
 ```python
 import xgboost as xgb
@@ -175,7 +175,7 @@ study.optimize(objective, n_trials = 100)
 print(study.best_params)
 ```
 
-## LightGBM
+### LightGBM
 
 ```python
 import lightgbm as lgb
@@ -204,7 +204,7 @@ study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=100)
 ```
 
-## Keras
+### Keras
 
 ```python
 import keras
@@ -240,7 +240,7 @@ study = optuna.create_study(direction = 'maximize')
 study.optimize(objective, n_trials = 100)
 ```
 
-## TensorFlow
+### TensorFlow
 
 ```python
 import tensorflow as tf
@@ -261,7 +261,7 @@ study = optuna.create_study(direction = 'maximize')
 study.optimize(objective, n_trials = 100)
 ```
 
-## PyTorch
+### PyTorch
 
 ```python
 import torch
@@ -286,7 +286,7 @@ study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=100)
 ```
 
-# 参考
+## 参考
 
 * [Optuna Doc](https://optuna.org/)
 * [Optuna GitHub](https://github.com/optuna/optuna)

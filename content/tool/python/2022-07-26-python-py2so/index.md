@@ -77,16 +77,16 @@ img {
 * 系统环境: Ubuntu 18.04
 * Python 环境: Python 3.7.5
 
-# 安装依赖库
+## 安装依赖库
 
 ```bash
 $ sudo apt install python3-dev gcc
 $ pip install cython
 ```
 
-# 写一个测试 demo
+## 写一个测试 demo
 
-## 新建加密脚本和测试脚本
+### 新建加密脚本和测试脚本
 
 - `script`
     - 项目目录
@@ -105,7 +105,7 @@ $ touch main.py
 $ touch setup.py
 ```
 
-## 编译前测试文件夹目录
+### 编译前测试文件夹目录
 
 ```
 script
@@ -114,7 +114,7 @@ script
     └── ToadyModule.py
 ```
 
-## 编写测试文件脚本
+### 编写测试文件脚本
 
 * 待编译 `.py` 脚本
 
@@ -154,29 +154,29 @@ from Cython.Build import cythonize
 setup(ext_modules = cythonize(["TodayModule.py"]))
 ```
 
-## 编译前测试
+### 编译前测试
 
 ```bash
 $ python3 main.py
 ```
 
-## 编译前测试输出结果
+### 编译前测试输出结果
 
 ```
 2020-04-10 11:10:41.940473
 Hello World!
 ```
 
-# 编译加密
+## 编译加密
 
-## 对脚本进行编译加密
+### 对脚本进行编译加密
 
 ```bash
 $ cd ./py2so
 $ python3 setup.py build_ext
 ```
 
-## 生成文件夹目录
+### 生成文件夹目录
 
 ```
 script
@@ -191,9 +191,9 @@ script
     └── TodayModule.py
 ```
 
-# 运行加密后的文件
+## 运行加密后的文件
 
-## 编译后测试
+### 编译后测试
 
 ```bash
 $ mv ./bulid/lib.lib.linux-x86_64-3.7/TodayModule.cython-37m-x86_64-linux-gnu.so .
@@ -201,7 +201,7 @@ $ rm -rf TodayModule.py
 $ python3 main.py
 ```
 
-## 编译后测试输出结果
+### 编译后测试输出结果
 
 ```
 2020-04-10 11:10:43.940473

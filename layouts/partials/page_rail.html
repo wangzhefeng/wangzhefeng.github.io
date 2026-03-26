@@ -1,0 +1,32 @@
+{{ $toc := .TableOfContents }}
+{{ $hasToc := gt (len (plainify $toc)) 0 }}
+{{ $date := "" }}
+{{ if .Params.date }}
+  {{ $date = .Date.Format "2006-01-02" }}
+{{ else }}
+  {{ with .Lastmod }}
+    {{ $date = .Format "2006-01-02" }}
+  {{ end }}
+{{ end }}
+<aside class="page-rail" data-page-rail>
+  {{ if $hasToc }}
+  <div class="rail-card toc-shell">
+    {{ $toc }}
+  </div>
+  {{ else if .IsPage }}
+  <div class="rail-card toc-shell">
+    <div class="rail-card__title" data-i18n="page_info">页面信息</div>
+    <div class="rail-summary">
+      {{ with $date }}
+      <div class="rail-summary__line">
+        <span data-i18n="updated_on">更新于</span>
+        <strong>{{ . }}</strong>
+      </div>
+      {{ end }}
+      {{ with .CurrentSection }}
+      <a class="rail-action rail-action--subtle" href="{{ .RelPermalink }}" data-i18n-prefix="back_to">返回{{ .Title }}</a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</aside>

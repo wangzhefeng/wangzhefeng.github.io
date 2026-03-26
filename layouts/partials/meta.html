@@ -1,0 +1,28 @@
+{{ if not .IsHome }}
+<div class="page-head{{ if .IsPage }} is-page{{ else }} is-section{{ end }}">
+  <h1 data-route-title="{{ .RelPermalink }}">{{ .Title }}</h1>
+  {{ with .Params.subtitle }}<p class="subtitle">{{ . }}</p>{{ end }}
+
+  {{ if .IsPage }}
+  <div class="page-meta">
+    {{ with or (or .Params.author (index (or .Site.Params.author dict) .Section)) "" }}
+    <span class="meta-pill">{{ . }}</span>
+    {{ end }}
+    {{ $date := "" }}
+    {{ if .Params.date }}
+      {{ $date = .Date.Format "2006-01-02" }}
+    {{ else }}
+      {{ with .Lastmod }}
+        {{ $date = .Format "2006-01-02" }}
+      {{ end }}
+    {{ end }}
+    {{ with $date }}<span class="meta-pill">{{ . }}</span>{{ end }}
+  </div>
+  {{ else if .IsSection }}
+  <div class="page-meta">
+    <span class="meta-pill" data-i18n-count="items" data-count="{{ len .RegularPagesRecursive }}">{{ len .RegularPagesRecursive }} 篇内容</span>
+    {{ with .Sections }}<span class="meta-pill" data-i18n-count="subsections" data-count="{{ len . }}">{{ len . }} 个子栏目</span>{{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

@@ -62,7 +62,7 @@ img {
 - [参考资料](#参考资料)
 </p></details>
 
-# Hugo 简介
+## Hugo 简介
 
 - 一张图介绍
 
@@ -74,7 +74,7 @@ img {
 
 
 
-# Hugo 安装
+## Hugo 安装
 
 Hugo 可以运行在多种环境中，比如 macOS、Windowss、Linux、FreeBSD等等。
 同样可以托管在喜欢的服务器或者 CDN 上。
@@ -99,7 +99,7 @@ $ snap install hugo
 
 
 
-# Hugo 主题
+## Hugo 主题
 
 - https://themes.gohugo.io/
 
@@ -107,6 +107,6 @@ $ snap install hugo
 
 
 
-# 参考资料
+## 参考资料
 
 - https://themes.gohugo.io/

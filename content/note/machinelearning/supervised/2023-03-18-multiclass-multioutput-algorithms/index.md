@@ -52,12 +52,12 @@ img {
 
 ![img](images/tab.png)
 
-# Multiclass 分类
+## Multiclass 分类
 
 > Multiclass classification is a classification task with more than two classes. 
 > Each sample can only be labeled as one class.
 
-## 目标变量格式
+### 目标变量格式
 
 * 包含多个离散值的一维向量
 
@@ -97,7 +97,7 @@ y_sparse
 (3, 1)        1
 ```
 
-## OneVsRestClassifier
+### OneVsRestClassifier
 
 > one-vs-rest，one-vs-all
 
@@ -111,7 +111,7 @@ svc = LinearSVC(random_state = 0)
 OVR = OneVsRestClassifier(svc).fit(X, y).predict(X)
 ```
 
-## OneVsOneClassifier
+### OneVsOneClassifier
 
 ```python
 from sklearn import datasets
@@ -125,21 +125,21 @@ OVO = OneVsOneClassifier(svc).fit(X, y).predict(X)
 
 
 
-## OutputCodeClassifier
+### OutputCodeClassifier
 
 
 
 
 
 
-# Multilabel 分类
+## Multilabel 分类
 
 > Multilabel classification
 
 
 
 
-# Multiclass-Multioutput 分类
+## Multiclass-Multioutput 分类
 
 > Multiclass-Multioutput classification
 
@@ -149,12 +149,12 @@ OVO = OneVsOneClassifier(svc).fit(X, y).predict(X)
 
 
 
-# Multioutput 回归
+## Multioutput 回归
 
 > Multioutput regression
 
 
-## 目标变量格式
+### 目标变量格式
 
 ```python
 import numpy as np
@@ -166,7 +166,7 @@ y = np.array(
 )
 ```
 
-## MultiOutputRegressor
+### MultiOutputRegressor
 
 ```python
 from sklearn.datasets import make_regression
@@ -179,11 +179,11 @@ gbr = GradientBoostingRegressor(random_state = 0)
 MOR = MultiOutputRegressor(gbr).fit(X, y).predict(X)
 ```
 
-## RegressorChain
+### RegressorChain
 
 
 
 
-# 参考
+## 参考
 
 * [Multiclass and multioutput algorithms](https://scikit-learn.org/stable/modules/multiclass.html#multiclass-classification)

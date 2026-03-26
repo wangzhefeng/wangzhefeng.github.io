@@ -48,7 +48,7 @@ img {
   - [sys 示例](#sys-示例)
 </p></details><p></p>
 
-# os
+## os
 
 `os` 模块包含了在 C 程序和 shell 脚本中经常用的所有操作系统调用. 它的调用涉及目录、进程和 shell 变量等. 
 
@@ -57,9 +57,9 @@ img {
 在操作实践中, os 基本上作为计算机系统调用的可移植接口来使用: 用 os 和 os.path 编写的脚本通常无需改动即可在其他平台上运行. 在这些平台上, 
 还包括了专属该平台的额外工具(比如 Unix 下的底层进程调用). 不过总的来说, 只要是技术上可行的, os 都能做到跨平台. 
 
-## os 模块中的工具
+### os 模块中的工具
 
-### os 模块总的基本接口
+#### os 模块总的基本接口
 
 - Shell 变量
     - os.environ
@@ -85,7 +85,7 @@ img {
 - 路径名工具
     - os.path.exists("path"), os.path.isdir("path"), os.path.getsize("path")
 
-### 查看 os 模块的属性
+#### 查看 os 模块的属性
 
 ```python
 >>> import os
@@ -93,7 +93,7 @@ img {
 >>> dir(os.path)
 ```
 
-### 管理工具
+#### 管理工具
 
 ```python
 >>> os.getpid()
@@ -102,14 +102,14 @@ img {
 >>> os.getcwd()
 ```
 
-### 可移植的常量
+#### 可移植的常量
 
 
-## os.path 模块中的工具
+### os.path 模块中的工具
 
-## 在脚本里运行 shell 命令
+### 在脚本里运行 shell 命令
 
-## os 模块导出的其他工具
+### os 模块导出的其他工具
 
 - os.environ
     - 获取和设置 shell 环境变量
@@ -140,7 +140,7 @@ img {
   创建的 stdio 文件截然不同. 通常情况下, 除了特殊的文件处理需求(比如用排他性访问文件锁打开文件), 你应当使用内建的 open 函数, 
   而不是 os 模块, 来处理所有文件. 
 
-## os 示例
+### os 示例
 
 ```python
 #!/usr/bin/env python3
@@ -231,9 +231,9 @@ print(pipe.communicate())
 print(pipe.returncode)
 ```
 
-# sys
+## sys
 
-## sys 示例
+### sys 示例
 
 ```python
 #!/usr/bin/env python3

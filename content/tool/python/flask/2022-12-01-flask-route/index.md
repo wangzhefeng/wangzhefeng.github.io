@@ -55,7 +55,7 @@ def hello():
     return "Hello, World"
 ```
 
-# 变量规则
+## 变量规则
 
 * 通过把 URL 的一部分标记为 `<variable_name>` 就可以在 URL 中添加变量。
   标记的部分会作为关键字参数传递给函数。
@@ -70,7 +70,7 @@ def hello():
 | uuid   | 接受 UUID 字符串                |
 
 
-## 示例
+### 示例
     
 ```python
 from markupsafe import escape
@@ -97,7 +97,7 @@ def show_subpath(subpath):
     return "Subpath %s" % escape(subpath)
 ```
 
-# 唯一 URL、重定向
+## 唯一 URL、重定向
 
 以下两条规则的不同之处在于是否使用尾部的斜杠
 
@@ -117,7 +117,7 @@ def about():
     return 'The about page'
 ```
 
-# URL 构建
+## URL 构建
 
 `url_for()` 函数用于构建指定函数的 URL。它把函数名称作为第一个参数。
 它可以接受任意个关键字参数，每个关键字参数对应 URL 中的变量。
@@ -156,7 +156,7 @@ with app.test_request_context():
     print(url_for("profile", username = "John Doe"))
 ```
 
-# HTTP 方法
+## HTTP 方法
 
 Web 应用使用不同的 HTTP 方法处理 URL 。当你使用 Flask 时，应当熟悉 HTTP 方法。 
 缺省情况下，一个路由只回应 GET 请求。 

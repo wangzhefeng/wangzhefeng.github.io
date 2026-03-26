@@ -46,9 +46,9 @@ img {
     - [wave 使用示例](#wave-使用示例)
 </p></details><p></p>
 
-# 音频数据了解
+## 音频数据了解
 
-## 音频文件格式介绍
+### 音频文件格式介绍
 
 - 音频文件格式专指存放音频数据的文件的格式, 存在多种不同的格式
 - 一般获取音频数据的方法是:
@@ -63,7 +63,7 @@ img {
 - 音频文件和编解码器不同
     - 尽管一种音频文件格式可以支持多种编码, 例如 AVI 文件格式, 但多数的音频文件仅支持一种音频编码
 
-## 音频文件格式的种类
+### 音频文件格式的种类
 
 - 无损格式:
     - WAV, FLAC, APE, ALAC, WavPack(WV)
@@ -76,21 +76,21 @@ img {
       例如: 一个音量很高的声音后面紧跟着一个音量很低的声音. MP3就属于这一类文件
     - 有损压缩应用很多, 但在专业领域使用不多. 有损压缩具有很大的压缩比, 提供相对不错的声音质量
 
-## 参考文献
+### 参考文献
 
 - [维基百科(音频文件格式)](https://zh.wikipedia.org/wiki/%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F)
 - [维基百科(WAV格式)](https://zh.wikipedia.org/wiki/WAV)
 
-# 音频数据读写
+## 音频数据读写
 
-## Python wave
+### Python wave
 
 - Python 的 `wave` 库用来读写 WAV 格式文件
 - `wave` 模块提供了一个处理 WAV 声音格式的便利接口        
     - 不支持压缩、解压缩
     - 支持单声道、立体声
 
-### wave 函数和异常
+#### wave 函数和异常
 
 - `wave.open(file, mode = None)`
     - file: 文件名、文件类对象
@@ -100,7 +100,7 @@ img {
 - **exception** `wave.Error`
     - 当不符合 WAV 格式或无法操作时引发的错误
 
-### Wave_read 对象
+#### Wave_read 对象
 
 **Wave_read** 对象的常用方法: 
 
@@ -122,7 +122,7 @@ img {
     - `Wave_read.setpos(pos)`: 设置文件指针到指定位置
     - `Wave_read.tell()`: 当前文件指针位置
 
-## Wave_write 对象
+### Wave_write 对象
 
 对于可查找的输出流, wave 头将自动更新以反映实际写入的帧数. 对于不可查找的流, 当写入第一帧时 nframes 值必须准确. 
 获取准确的 nframes 值可以通过调用 setnframes() 或 setparams() 并附带 close() 被调用之前将要写入的帧数, 
@@ -154,5 +154,5 @@ img {
   而且任何这样的尝试将引发 wave.Error. 
 ***
 
-### wave 使用示例
+#### wave 使用示例
 

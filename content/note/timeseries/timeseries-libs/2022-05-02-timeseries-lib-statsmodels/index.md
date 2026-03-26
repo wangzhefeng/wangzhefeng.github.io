@@ -78,9 +78,9 @@ img {
 
 > statistical models, hypothesis tests, and data exploration
 
-# 安装
+## 安装
 
-## 依赖
+### 依赖
 
 * Python >= 3.7
 * NumPy >= 1.17
@@ -89,28 +89,28 @@ img {
 * Patsy >= 0.5.2
 * Cython
 
-## conda
+### conda
 
 ```bash
 $ conda install -c conda-forge statsmodels
 ```
 
-## PyPI
+### PyPI
 
 ```bash
 $ pip install statsmodels
 ```
 
-# 使用
+## 使用
 
-## 简单线性回归
+### 简单线性回归
 
 statsmodels 支持模型使用以下两种风格：
 
 * R 语言公式风格
 * pandas.DataFrame/numpy array
 
-### 公式风格
+#### 公式风格
 
 ```python
 import numpy as np
@@ -219,7 +219,7 @@ The special methods that are only available for OLS are:
 - conf_int_el
 ```
 
-### numpy array 风格
+#### numpy array 风格
 
 ```python
 import numpy as np
@@ -267,9 +267,9 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-## 详细使用
+### 详细使用
 
-### 载入模块和函数
+#### 载入模块和函数
 
 ```python
 import pandas as pd
@@ -277,7 +277,7 @@ import statsmodels.api as sm
 from patsy import dmatrices
 ```
 
-### 数据
+#### 数据
 
 ```python
 df = sm.datasets.get_rdataset("Guerry", "HistData").data
@@ -296,7 +296,7 @@ df[-5:]
 84         Yonne       51        47      30      C
 ```
 
-### 构造设计矩阵
+#### 构造设计矩阵
 
 ```python
 y, X = dmatrices(
@@ -322,7 +322,7 @@ x[:3]
 [3 rows x 7 columns]
 ```
 
-### 模型
+#### 模型
 
 ```python
 model = sm.OLS(y, X)
@@ -381,7 +381,7 @@ dtype: float64
 0.337950869192882
 ```
 
-### 模型诊断和测试
+#### 模型诊断和测试
 
 ```python
 sm.stats.linear_rainbow(result)
@@ -405,13 +405,13 @@ sm.graphics.plot_partregress(
 
 ![Alt text](https://www.statsmodels.org/stable/_images/gettingstarted_0.png)
 
-# 回归与线性模型
+## 回归与线性模型
 
-# 时间序列分析
+## 时间序列分析
 
-## ARMA
+### ARMA
 
-### statsmodels.tsa
+#### statsmodels.tsa
 
 * Univariate
     - autoregressive models(AR)
@@ -441,34 +441,34 @@ statsmodels.tsa 命名空间中的模块结构:
 * filters
 * regime_switching
 
-### 估计
+#### 估计
 
 * 极大似然估计、条件极大似然估计(exact or condition Maximum Likelihood)
 * 条件最小二乘(conditional least-quares)
 * 卡尔曼滤波(Kalman Filter)或直接滤波器(direct filters.)
 
-### 指数平滑 Exponential Smoothing
+#### 指数平滑 Exponential Smoothing
 
-#### Holt Winter's Exponential Smoothing
-
-
-
-#### Simple Exponential Smoothing
+##### Holt Winter's Exponential Smoothing
 
 
 
+##### Simple Exponential Smoothing
 
 
-#### Holt's Exponential Smoothing
 
 
+
+##### Holt's Exponential Smoothing
 
 
 
 
 
 
-### 自相关系数和偏自相关系数计算
+
+
+#### 自相关系数和偏自相关系数计算
 
 ```python
 import statsmodels.api as sm
@@ -478,7 +478,7 @@ print(sm.tsa.stattools.acf(X, nlags = 1, adjusted = True))
 [1, 0.3559322]
 ```
 
-### 自相关图和偏自相关图绘制
+#### 自相关图和偏自相关图绘制
 
 ```python
 import numpy as np
@@ -533,44 +533,44 @@ ax[3][1].set_title('PACF(gdp_diff)')
 plt.show()
 ```
 
-## 状态空间方法(State Space Methods)
+### 状态空间方法(State Space Methods)
 
 
-## 向量自回归(Vector Autoregressions)
-
-
-
-
-
-# 其他模型
-
-## 生存分析
-
-## 非参数方法
-
-## GMM(Generalized Method of Moments)
-
-## 小众模型
-
-## 多元统计分析
-
-
-
-# 统计学和工具
-
-## 统计
-
-## 分布
-
-## 图性
-
-## Input-Output
+### 向量自回归(Vector Autoregressions)
 
 
 
 
 
-# 参考
+## 其他模型
+
+### 生存分析
+
+### 非参数方法
+
+### GMM(Generalized Method of Moments)
+
+### 小众模型
+
+### 多元统计分析
+
+
+
+## 统计学和工具
+
+### 统计
+
+### 分布
+
+### 图性
+
+### Input-Output
+
+
+
+
+
+## 参考
 
 * [statsmodels tsa](https://www.statsmodels.org/stable/tsa.html)
 

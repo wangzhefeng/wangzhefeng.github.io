@@ -45,7 +45,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# AutoTS 简介
+## AutoTS 简介
 
 > AutoTS is a time series package for Python designed for 
 > rapidly deploying high-accuracy forecasts at scale.
@@ -58,15 +58,15 @@ img {
 所有模型都支持预测多变量（多个时间序列）输出，还支持概率（上限/下限）预测。
 大多数模型可以轻松扩展到数万甚至数十万个输入序列。许多模型还支持传入用户定义的外生回归变量
 
-# AutoTS 使用
+## AutoTS 使用
 
-## AutoTS 安装
+### AutoTS 安装
 
 ```bash
 $ pip install autots
 ```
 
-## 简单示例
+### 简单示例
 
 ```python
 from autots.datasets import load_monthly
@@ -93,7 +93,7 @@ model = model.fit(
 print(model)
 ```
 
-## 数据格式
+### 数据格式
 
 * 宽格式
     - `pandas.DataFrame(pandas.DatetimeIndex, ...)`
@@ -103,7 +103,7 @@ print(model)
     - Series ID: `id_col`，对于单时间序列为 `None`
     - Value: `value_col`
 
-## 仅支持宽数据的低阶 API
+### 仅支持宽数据的低阶 API
 
 ```python
 from autots import AutoTS
@@ -159,9 +159,9 @@ model_results = model.results()
 validation_results = model.results("validation")
 ```
 
-## 快速和大数据
+### 快速和大数据
 
-### 使用适当的模型列表，尤其是预定义的列表
+#### 使用适当的模型列表，尤其是预定义的列表
 
 查看预定义列表:
 
@@ -175,7 +175,7 @@ from autots.models.model_list import model_lists
     - "n_jobs"
     - "auto"
 
-# 参考
+## 参考
 
 * [GitHub](https://github.com/winedarksea/AutoTS)
 * [Document](https://winedarksea.github.io/AutoTS/build/html/index.html)

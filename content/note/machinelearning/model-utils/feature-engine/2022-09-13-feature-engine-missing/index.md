@@ -47,7 +47,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# 缺失值处理理论
+## 缺失值处理理论
 
 当缺失数据比例很小时，可直接对缺失记录进行舍弃或进行手工处理
 
@@ -72,17 +72,17 @@ img {
 对于完全随机缺失和完全非随机缺失，删除记录是不合适的，随机缺失可以通过已知变量对缺失值进行估计；
 非随机缺失没有很好的处理方法；
 
-# 缺失值处理实战
+## 缺失值处理实战
 
-## math
+### math
 
 * `isnan()`
 
-## Numpy
+### Numpy
 
 * `numpy.isna()`
 
-## Pandas
+### Pandas
 
 1. Python 缺失值类型
     - `None`
@@ -113,10 +113,10 @@ img {
 5. 缺失值删除
     - `.dropna(axis)`
 
-## Scipy
+### Scipy
 
 
-## Missingno
+### Missingno
 
 ```bash
 $ pip install missingno
@@ -146,9 +146,9 @@ msno.heatmap(df)
 
 
 
-# 缺失值插值
+## 缺失值插值
 
-## Pandas 插值
+### Pandas 插值
 
 > pandas.DataFrame.interpolate
 
@@ -217,7 +217,7 @@ df.interpolate(args)
 df[""].interpolate(args)
 ```
 
-## Scipy 插值
+### Scipy 插值
 
 > scipy.interpolate.XXX
 
@@ -234,4 +234,4 @@ df[""].interpolate(args)
 - scipy.interpolate.CubicSpline
    - 三次样条插值
 
-# 参考
+## 参考

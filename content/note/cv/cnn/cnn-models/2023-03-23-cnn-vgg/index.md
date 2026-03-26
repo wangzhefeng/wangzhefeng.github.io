@@ -41,7 +41,7 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-# VGG-Net 简介
+## VGG-Net 简介
 
 > VGG16，VGG19
 
@@ -72,7 +72,7 @@ VGG网络架构：
 * 多尺度训练和推理。每张图像都经过多轮不同尺度的训练，以确保在不同尺寸下捕获相似的特征。
 * VGG 网络的一致性和简单性使其更容易扩展或修改以进行未来的改进。
 
-# VGG-16 网络结构
+## VGG-16 网络结构
 
 ![img](images/vgg16.png)
 
@@ -85,11 +85,11 @@ VGG-16 在当年的 ILSVRC 以 32% 的 top5 错误率取得了当年大赛的第
 
 ![img](images/vgg162.png)
 
-# VGG-19 网络结构
+## VGG-19 网络结构
 
 
 
 
-# 参考
+## 参考
 
 * [Very Deep Convolutional Networks for Large-Scale Image Recognition](https://arxiv.org/pdf/1409.1556.pdf?ref=blog.paperspace.com)
