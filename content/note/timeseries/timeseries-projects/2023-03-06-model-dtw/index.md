@@ -6,7 +6,7 @@ slug: model-dtw
 categories:
   - timeseries
 tags:
-  - tool
+  - model
 ---
 
 <style>

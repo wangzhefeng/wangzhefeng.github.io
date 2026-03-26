@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-05-07'
 slug: data-structure-algorithm
 categories:
-  - algorithms
+  - computer algorithms
 tags:
   - algorithm
 ---

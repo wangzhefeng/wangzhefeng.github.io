@@ -7,7 +7,7 @@ slug: anomaly-detection
 categories:
   - feature engine
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

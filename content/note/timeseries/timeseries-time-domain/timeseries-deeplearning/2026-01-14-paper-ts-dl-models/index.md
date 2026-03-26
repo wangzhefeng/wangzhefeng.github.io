@@ -5,10 +5,8 @@ date: '2026-01-14'
 slug: paper-ts-dl-models
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

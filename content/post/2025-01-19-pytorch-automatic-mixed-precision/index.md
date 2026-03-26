@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-01-19'
 slug: pytorch-automatic-mixed-precision
 categories:
-  - tool
+  - pytorch
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

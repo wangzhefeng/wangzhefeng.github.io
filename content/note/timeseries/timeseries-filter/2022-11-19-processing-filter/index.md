@@ -6,7 +6,7 @@ slug: timeseries-processing-filter
 categories:
   - timeseries
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

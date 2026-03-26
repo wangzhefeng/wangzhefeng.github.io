@@ -7,7 +7,7 @@ slug: timeseries-lib-pmdarima
 categories:
   - timeseries
 tags:
-  - tool
+  - model
 ---
 
 <style>

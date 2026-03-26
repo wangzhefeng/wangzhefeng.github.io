@@ -7,7 +7,7 @@ slug: llm-byte-pair-encoder
 categories:
   - llm
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

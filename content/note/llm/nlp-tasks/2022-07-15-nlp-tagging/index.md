@@ -6,7 +6,7 @@ slug: nlp-tagging
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

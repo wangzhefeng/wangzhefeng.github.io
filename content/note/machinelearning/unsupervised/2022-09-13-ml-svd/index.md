@@ -5,10 +5,9 @@ author: wangzf
 date: '2022-09-13'
 slug: ml-svd
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
-  - tool
+  - model
 ---
 
 <style>
@@ -38,9 +37,9 @@ img {
 
 - [特征值和特征向量](#特征值和特征向量)
 - [SVD 介绍](#svd-介绍)
-  - [SVD 简介](#svd-简介)
-  - [SVD 定义](#svd-定义)
-  - [SVD 示例](#svd-示例)
+    - [SVD 简介](#svd-简介)
+    - [SVD 定义](#svd-定义)
+    - [SVD 示例](#svd-示例)
 - [SVD 性质](#svd-性质)
 - [SVD 在 PCA 中的应用](#svd-在-pca-中的应用)
 - [SVD 总结](#svd-总结)

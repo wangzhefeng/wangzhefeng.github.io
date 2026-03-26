@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-04-03'
 slug: mcp
 categories:
-  - AI
+  - vibe coding
 tags:
-  - tool
+  - agent
 ---
 
 <style>

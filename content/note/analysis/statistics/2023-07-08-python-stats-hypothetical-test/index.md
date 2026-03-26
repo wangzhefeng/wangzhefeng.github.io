@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-07-08'
 slug: python-stats-hypothetical-test
 categories:
-  - 数学、统计学
+  - statistic
 tags:
-  - article
+  - note
 ---
 
 <style>

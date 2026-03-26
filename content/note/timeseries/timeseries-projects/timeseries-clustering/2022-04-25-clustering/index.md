@@ -6,7 +6,7 @@ slug: timeseries-clustering
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

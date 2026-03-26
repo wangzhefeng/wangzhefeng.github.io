@@ -7,7 +7,7 @@ slug: llm-rag-app-knowledge
 categories:
   - llm
 tags:
-  - article
+  - model
 ---
 
 <style>

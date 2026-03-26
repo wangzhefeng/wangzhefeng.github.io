@@ -5,10 +5,8 @@ date: '2026-01-12'
 slug: paper-ts-patchtst
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

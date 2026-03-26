@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-02'
 slug: ml-gbm-xgboost-usage
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

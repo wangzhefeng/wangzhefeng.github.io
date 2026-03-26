@@ -6,5 +6,5 @@ slug: token-classification
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---

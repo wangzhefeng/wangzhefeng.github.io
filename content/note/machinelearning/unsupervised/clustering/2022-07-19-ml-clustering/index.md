@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-19'
 slug: ml-clustering
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

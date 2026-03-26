@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-07-28'
 slug: smart-rule
 categories:
-  - 感悟
+  - life
 tags:
-  - article
+  - note
 ---
 
 SMART 原则是目标管理中的一种方法。目标管理的任务是有效地进行成员的组织与目标的制定和控制以达到更好的工作绩效，

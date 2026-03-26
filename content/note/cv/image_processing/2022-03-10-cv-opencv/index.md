@@ -4,7 +4,6 @@ author: wangzf
 date: '2022-03-10'
 slug: cv-opencv
 categories: 
-  - deeplearning
   - computer vision
 tags:
   - tool

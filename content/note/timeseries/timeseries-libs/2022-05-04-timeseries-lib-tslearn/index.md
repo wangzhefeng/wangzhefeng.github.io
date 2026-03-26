@@ -7,7 +7,7 @@ slug: timeseries-lib-tslearn
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

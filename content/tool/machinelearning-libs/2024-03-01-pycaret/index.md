@@ -4,8 +4,7 @@ author: wangzf
 date: '2024-03-01'
 slug: pycaret
 categories:
-  - data analysis
-  - Python
+  - machine learning
 tags:
   - tool
 ---

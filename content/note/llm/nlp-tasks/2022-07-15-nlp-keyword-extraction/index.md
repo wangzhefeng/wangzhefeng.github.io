@@ -6,7 +6,7 @@ slug: nlp-keyword-extraction
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

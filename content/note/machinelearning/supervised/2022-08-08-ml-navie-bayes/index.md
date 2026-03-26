@@ -4,9 +4,8 @@ author: wangzf
 date: '2022-08-08'
 slug: ml-navie-bayes
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
   - model
 ---
 
@@ -64,8 +63,8 @@ img {
 
 - [模型推导](#模型推导)
 - [模型学习方法](#模型学习方法)
-  - [极大似然估计](#极大似然估计)
-  - [贝叶斯估计](#贝叶斯估计)
+    - [极大似然估计](#极大似然估计)
+    - [贝叶斯估计](#贝叶斯估计)
 </p></details><p></p>
 
 

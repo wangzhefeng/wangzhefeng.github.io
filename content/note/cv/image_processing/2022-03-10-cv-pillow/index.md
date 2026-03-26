@@ -4,48 +4,25 @@ author: wangzf
 date: '2022-03-10'
 slug: cv-pillow
 categories:
-  - deeplearning
   - computer vision
 tags:
   - tool
 ---
 
 <style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-h2 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-
 details {
     border: 1px solid #aaa;
     border-radius: 4px;
     padding: .5em .5em 0;
 }
-
 summary {
     font-weight: bold;
     margin: -.5em -.5em 0;
     padding: .5em;
 }
-
 details[open] {
     padding: .5em;
 }
-
 details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
@@ -60,27 +37,27 @@ img {
 - [Pillow 概览](#pillow-概览)
 - [Pillow 安装](#pillow-安装)
 - [Pillow 核心](#pillow-核心)
-  - [Image class](#image-class)
-  - [图像读写](#图像读写)
-    - [将图像转换为 JPEG 格式](#将图像转换为-jpeg-格式)
-    - [创建 JPEG 缩略图 thumbnails](#创建-jpeg-缩略图-thumbnails)
-    - [识别图像文件](#识别图像文件)
-  - [图像剪切、粘贴、拼接](#图像剪切粘贴拼接)
-    - [从图像中复制子矩形](#从图像中复制子矩形)
-    - [从图像中复制子矩形并将子矩形粘贴回去](#从图像中复制子矩形并将子矩形粘贴回去)
-    - [图像滚动](#图像滚动)
-    - [RGB 波段拆分、合并](#rgb-波段拆分合并)
-  - [图像几何变换](#图像几何变换)
-    - [简单的几何变换-改变图像像素大小](#简单的几何变换-改变图像像素大小)
-    - [简单的几何变换-图像逆时针旋转一定的角度](#简单的几何变换-图像逆时针旋转一定的角度)
-    - [图像转置](#图像转置)
-  - [图像颜色转换](#图像颜色转换)
-  - [图像增强](#图像增强)
-  - [图像序列](#图像序列)
-  - [PostScript 打印](#postscript-打印)
-  - [图像读取](#图像读取)
-  - [控制图像编码](#控制图像编码)
-  - [ImageDraw 绘图方法](#imagedraw-绘图方法)
+    - [Image class](#image-class)
+    - [图像读写](#图像读写)
+        - [将图像转换为 JPEG 格式](#将图像转换为-jpeg-格式)
+        - [创建 JPEG 缩略图 thumbnails](#创建-jpeg-缩略图-thumbnails)
+        - [识别图像文件](#识别图像文件)
+    - [图像剪切、粘贴、拼接](#图像剪切粘贴拼接)
+        - [从图像中复制子矩形](#从图像中复制子矩形)
+        - [从图像中复制子矩形并将子矩形粘贴回去](#从图像中复制子矩形并将子矩形粘贴回去)
+        - [图像滚动](#图像滚动)
+        - [RGB 波段拆分、合并](#rgb-波段拆分合并)
+    - [图像几何变换](#图像几何变换)
+        - [简单的几何变换-改变图像像素大小](#简单的几何变换-改变图像像素大小)
+        - [简单的几何变换-图像逆时针旋转一定的角度](#简单的几何变换-图像逆时针旋转一定的角度)
+        - [图像转置](#图像转置)
+    - [图像颜色转换](#图像颜色转换)
+    - [图像增强](#图像增强)
+    - [图像序列](#图像序列)
+    - [PostScript 打印](#postscript-打印)
+    - [图像读取](#图像读取)
+    - [控制图像编码](#控制图像编码)
+    - [ImageDraw 绘图方法](#imagedraw-绘图方法)
 - [Pillow API](#pillow-api)
 </p></details><p></p>
 

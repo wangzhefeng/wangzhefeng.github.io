@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-11-07'
 slug: things-people
 categories:
-  - 感悟
+  - life
 tags:
-  - article
+  - note
 ---
 
 ## 对事不对人

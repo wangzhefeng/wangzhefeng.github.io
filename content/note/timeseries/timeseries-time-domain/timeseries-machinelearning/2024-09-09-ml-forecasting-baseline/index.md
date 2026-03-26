@@ -6,7 +6,7 @@ slug: ml-forecasting-baseline
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

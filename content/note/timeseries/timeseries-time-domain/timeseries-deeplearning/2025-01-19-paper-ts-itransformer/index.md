@@ -5,10 +5,8 @@ date: '2025-01-19'
 slug: paper-ts-itransformer
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

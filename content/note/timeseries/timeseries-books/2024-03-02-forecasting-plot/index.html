@@ -3,7 +3,7 @@ title: "时间序列图形"
 author: "wangzf"
 date: "2024-03-02"
 slug: "forecasting-plot"
-categories: R
+categories: timeseries
 tags: tool
 ---
 
@@ -37,52 +37,52 @@ img {
 </summary>
 <p>
 <ul>
-<li><a href="#时间序列数据探索性分析">时间序列数据探索性分析</a></li>
-<li><a href="#r-语言知识">R 语言知识</a>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E6%8E%A2%E7%B4%A2%E6%80%A7%E5%88%86%E6%9E%90">时间序列数据探索性分析</a></li>
+<li><a href="#r-%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86">R 语言知识</a>
 <ul>
-<li><a href="#tsibble-对象">tsibble 对象</a>
+<li><a href="#tsibble-%E5%AF%B9%E8%B1%A1">tsibble 对象</a>
 <ul>
-<li><a href="#索引变量">索引变量</a></li>
-<li><a href="#关键变量">关键变量</a></li>
+<li><a href="#%E7%B4%A2%E5%BC%95%E5%8F%98%E9%87%8F">索引变量</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E5%8F%98%E9%87%8F">关键变量</a></li>
 </ul></li>
-<li><a href="#tsibble-对象的处理">tsibble 对象的处理</a></li>
-<li><a href="#读取-csv-文件并将其转化为-tsibble-对象">读取 CSV 文件并将其转化为 tsibble 对象</a></li>
-<li><a href="#季节性周期">季节性周期</a></li>
+<li><a href="#tsibble-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%84%E7%90%86">tsibble 对象的处理</a></li>
+<li><a href="#%E8%AF%BB%E5%8F%96-csv-%E6%96%87%E4%BB%B6%E5%B9%B6%E5%B0%86%E5%85%B6%E8%BD%AC%E5%8C%96%E4%B8%BA-tsibble-%E5%AF%B9%E8%B1%A1">读取 CSV 文件并将其转化为 tsibble 对象</a></li>
+<li><a href="#%E5%AD%A3%E8%8A%82%E6%80%A7%E5%91%A8%E6%9C%9F">季节性周期</a></li>
 </ul></li>
-<li><a href="#时间序列模式">时间序列模式</a>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%BC%8F">时间序列模式</a>
 <ul>
-<li><a href="#趋势">趋势</a></li>
-<li><a href="#季节性">季节性</a></li>
-<li><a href="#周期性">周期性</a></li>
-<li><a href="#季节性与周期性的区别">季节性与周期性的区别</a></li>
-<li><a href="#时间序列模型示例">时间序列模型示例</a></li>
+<li><a href="#%E8%B6%8B%E5%8A%BF">趋势</a></li>
+<li><a href="#%E5%AD%A3%E8%8A%82%E6%80%A7">季节性</a></li>
+<li><a href="#%E5%91%A8%E6%9C%9F%E6%80%A7">周期性</a></li>
+<li><a href="#%E5%AD%A3%E8%8A%82%E6%80%A7%E4%B8%8E%E5%91%A8%E6%9C%9F%E6%80%A7%E7%9A%84%E5%8C%BA%E5%88%AB">季节性与周期性的区别</a></li>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B%E7%A4%BA%E4%BE%8B">时间序列模型示例</a></li>
 </ul></li>
-<li><a href="#时间序列图形">时间序列图形</a>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E5%9B%BE%E5%BD%A2">时间序列图形</a>
 <ul>
-<li><a href="#时间图">时间图</a></li>
-<li><a href="#季节图">季节图</a>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%9B%BE">时间图</a></li>
+<li><a href="#%E5%AD%A3%E8%8A%82%E5%9B%BE">季节图</a>
 <ul>
-<li><a href="#季节图-1">季节图</a></li>
-<li><a href="#多重季节性周期">多重季节性周期</a></li>
+<li><a href="#%E5%AD%A3%E8%8A%82%E5%9B%BE-1">季节图</a></li>
+<li><a href="#%E5%A4%9A%E9%87%8D%E5%AD%A3%E8%8A%82%E6%80%A7%E5%91%A8%E6%9C%9F">多重季节性周期</a></li>
 </ul></li>
-<li><a href="#子序列季节图">子序列季节图</a></li>
-<li><a href="#散点图">散点图</a>
+<li><a href="#%E5%AD%90%E5%BA%8F%E5%88%97%E5%AD%A3%E8%8A%82%E5%9B%BE">子序列季节图</a></li>
+<li><a href="#%E6%95%A3%E7%82%B9%E5%9B%BE">散点图</a>
 <ul>
-<li><a href="#时间序列散点图">时间序列散点图</a></li>
-<li><a href="#相关性">相关性</a></li>
-<li><a href="#散点图矩阵">散点图矩阵</a></li>
+<li><a href="#%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%A3%E7%82%B9%E5%9B%BE">时间序列散点图</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E6%80%A7">相关性</a></li>
+<li><a href="#%E6%95%A3%E7%82%B9%E5%9B%BE%E7%9F%A9%E9%98%B5">散点图矩阵</a></li>
 </ul></li>
-<li><a href="#滞后图">滞后图</a></li>
-<li><a href="#自相关">自相关</a>
+<li><a href="#%E6%BB%9E%E5%90%8E%E5%9B%BE">滞后图</a></li>
+<li><a href="#%E8%87%AA%E7%9B%B8%E5%85%B3">自相关</a>
 <ul>
-<li><a href="#自相关系数定义">自相关系数定义</a></li>
-<li><a href="#自相关系数示例">自相关系数示例</a></li>
-<li><a href="#自相关图示例">自相关图示例</a></li>
-<li><a href="#自相关图中的趋势性和季节性">自相关图中的趋势性和季节性</a></li>
+<li><a href="#%E8%87%AA%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0%E5%AE%9A%E4%B9%89">自相关系数定义</a></li>
+<li><a href="#%E8%87%AA%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0%E7%A4%BA%E4%BE%8B">自相关系数示例</a></li>
+<li><a href="#%E8%87%AA%E7%9B%B8%E5%85%B3%E5%9B%BE%E7%A4%BA%E4%BE%8B">自相关图示例</a></li>
+<li><a href="#%E8%87%AA%E7%9B%B8%E5%85%B3%E5%9B%BE%E4%B8%AD%E7%9A%84%E8%B6%8B%E5%8A%BF%E6%80%A7%E5%92%8C%E5%AD%A3%E8%8A%82%E6%80%A7">自相关图中的趋势性和季节性</a></li>
 </ul></li>
-<li><a href="#白噪声">白噪声</a></li>
+<li><a href="#%E7%99%BD%E5%99%AA%E5%A3%B0">白噪声</a></li>
 </ul></li>
-<li><a href="#参考">参考</a></li>
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
 </ul>
 </p>
 </details>
@@ -183,18 +183,18 @@ olympic_running</code></pre>
 PBS</code></pre>
 <pre><code>## # A tsibble: 67,596 x 9 [1M]
 ## # Key:       Concession, Type, ATC1, ATC2 [336]
-##       Month Concession   Type      ATC1  ATC1_desc ATC2  ATC2_desc Scripts  Cost
-##       &lt;mth&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
-##  1 1991 Jul Concessional Co-payme… A     Alimenta… A01   STOMATOL…   18228 67877
-##  2 1991 Aug Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15327 57011
-##  3 1991 Sep Concessional Co-payme… A     Alimenta… A01   STOMATOL…   14775 55020
-##  4 1991 Oct Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15380 57222
-##  5 1991 Nov Concessional Co-payme… A     Alimenta… A01   STOMATOL…   14371 52120
-##  6 1991 Dec Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15028 54299
-##  7 1992 Jan Concessional Co-payme… A     Alimenta… A01   STOMATOL…   11040 39753
-##  8 1992 Feb Concessional Co-payme… A     Alimenta… A01   STOMATOL…   15165 54405
-##  9 1992 Mar Concessional Co-payme… A     Alimenta… A01   STOMATOL…   16898 61108
-## 10 1992 Apr Concessional Co-payme… A     Alimenta… A01   STOMATOL…   18141 65356
+##        Month Concession   Type     ATC1  ATC1_desc ATC2  ATC2_desc Scripts  Cost
+##        &lt;mth&gt; &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;
+##  1  1991 7月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18228 67877
+##  2  1991 8月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15327 57011
+##  3  1991 9月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14775 55020
+##  4 1991 10月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15380 57222
+##  5 1991 11月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   14371 52120
+##  6 1991 12月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15028 54299
+##  7  1992 1月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   11040 39753
+##  8  1992 2月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   15165 54405
+##  9  1992 3月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   16898 61108
+## 10  1992 4月 Concessional Co-paym… A     Alimenta… A01   STOMATOL…   18141 65356
 ## # ℹ 67,586 more rows</code></pre>
 <pre class="r"><code>PBS |&gt; 
     filter(ATC2 == &quot;A10&quot;) |&gt;
@@ -204,9 +204,9 @@ PBS</code></pre>
 </div>
 <div id="读取-csv-文件并将其转化为-tsibble-对象" class="section level2">
 <h2>读取 CSV 文件并将其转化为 tsibble 对象</h2>
-<pre class="r"><code>library(readr)</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>prison &lt;- readr::read_csv(&quot;https://OTexts.com/fpp3/extrafiles/prison_population.csv&quot;)</code></pre>
+<pre class="r"><code>library(readr)
+
+prison &lt;- readr::read_csv(&quot;https://OTexts.com/fpp3/extrafiles/prison_population.csv&quot;)</code></pre>
 <pre><code>## `curl` package not installed, falling back to using `url()`
 ## Rows: 3072 Columns: 6
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -470,6 +470,9 @@ visitors |&gt;
 <pre class="r"><code>visitors |&gt;
     pivot_wider(values_from = Trips, names_from = State) |&gt;
     GGally::ggpairs(columns = 2:9)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
 </div>

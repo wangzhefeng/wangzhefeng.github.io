@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-07-17'
 slug: ts-prob-forecasting
 categories:
-  - machinelearning
+  - timeseries
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

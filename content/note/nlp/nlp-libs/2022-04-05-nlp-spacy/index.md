@@ -6,7 +6,7 @@ slug: nlp-spacy
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

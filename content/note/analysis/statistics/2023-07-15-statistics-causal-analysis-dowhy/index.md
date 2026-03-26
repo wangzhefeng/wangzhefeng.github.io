@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-07-15'
 slug: statistics-causal-analysis-dowhy
 categories:
-  - 数学、统计学
+  - statistic
 tags:
   - tool
 ---

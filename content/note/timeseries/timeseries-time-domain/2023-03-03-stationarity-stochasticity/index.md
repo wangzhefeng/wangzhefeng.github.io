@@ -6,7 +6,7 @@ slug: stationarity-stochasticity
 categories:
   - timeseries
 tags:
-  - article
+  - note
 ---
 
 <style>

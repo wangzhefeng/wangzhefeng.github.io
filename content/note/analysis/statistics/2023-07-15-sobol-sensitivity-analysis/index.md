@@ -6,5 +6,5 @@ slug: sobol-sensitivity-analysis
 categories:
   - data analysis
 tags:
-  - article
+  - model
 ---

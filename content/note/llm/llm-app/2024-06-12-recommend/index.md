@@ -6,5 +6,5 @@ slug: recommend
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---

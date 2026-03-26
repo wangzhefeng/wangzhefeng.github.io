@@ -5,10 +5,8 @@ date: '2022-04-30'
 slug: paper-ts-prophet
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

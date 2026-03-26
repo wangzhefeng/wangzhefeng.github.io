@@ -5,9 +5,9 @@ author: wangzf
 date: '2022-11-13'
 slug: model-validation
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

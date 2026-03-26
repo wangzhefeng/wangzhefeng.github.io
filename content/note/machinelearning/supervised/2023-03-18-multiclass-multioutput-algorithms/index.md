@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-18'
 slug: multiclass-multioutput-algorithms
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

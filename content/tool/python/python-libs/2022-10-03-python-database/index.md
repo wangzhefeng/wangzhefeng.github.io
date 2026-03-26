@@ -4,8 +4,7 @@ author: wangzf
 date: '2022-10-03'
 slug: python-database
 categories:
-  - Python
-  - database
+  - python
 tags:
   - tool
 ---
@@ -36,18 +35,18 @@ img {
 <details><summary>目录</summary><p>
 
 - [MySQL](#mysql)
-  - [mysqlclient](#mysqlclient)
-    - [安装](#安装)
-    - [使用](#使用)
-  - [mysql-connector-python](#mysql-connector-python)
-    - [安装](#安装-1)
-    - [使用](#使用-1)
-  - [PyMySQL](#pymysql)
-    - [安装](#安装-2)
-    - [使用](#使用-2)
-  - [aiomysql](#aiomysql)
-    - [安装](#安装-3)
-    - [使用](#使用-3)
+    - [mysqlclient](#mysqlclient)
+        - [安装](#安装)
+        - [使用](#使用)
+    - [mysql-connector-python](#mysql-connector-python)
+        - [安装](#安装-1)
+        - [使用](#使用-1)
+    - [PyMySQL](#pymysql)
+        - [安装](#安装-2)
+        - [使用](#使用-2)
+    - [aiomysql](#aiomysql)
+        - [安装](#安装-3)
+        - [使用](#使用-3)
 </p></details><p></p>
 
 ## MySQL

@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-03-19'
 slug: binary-classification
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - tool
+  - model
 ---
 
 <style>

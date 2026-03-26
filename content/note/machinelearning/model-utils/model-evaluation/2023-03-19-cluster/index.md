@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-11-22'
 slug: cluster
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - tool
+  - model
 ---
 
 <style>

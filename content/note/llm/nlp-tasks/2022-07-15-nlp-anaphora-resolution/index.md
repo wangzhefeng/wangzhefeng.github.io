@@ -6,7 +6,7 @@ slug: nlp-app-anaphora-resolution
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 

@@ -4,9 +4,9 @@ author: wangzf
 date: '2024-05-15'
 slug: langchain-usage
 categories:
-  - tool
+  - llm
 tags:
-  - api
+  - agent
 ---
 
 <style>

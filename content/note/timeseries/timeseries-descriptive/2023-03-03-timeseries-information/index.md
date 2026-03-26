@@ -6,7 +6,7 @@ slug: timeseries-information
 categories:
   - timeseries
 tags:
-  - article
+  - note
 ---
 
 <style>

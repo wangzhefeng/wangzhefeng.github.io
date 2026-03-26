@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-27'
 slug: ml-perceptron
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

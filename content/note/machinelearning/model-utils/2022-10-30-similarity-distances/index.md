@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-10-30'
 slug: similarity-distances
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

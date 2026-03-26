@@ -6,7 +6,7 @@ slug: nlp-app-kg
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

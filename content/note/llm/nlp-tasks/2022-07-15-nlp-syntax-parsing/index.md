@@ -6,7 +6,7 @@ slug: nlp-syntax-parsing
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

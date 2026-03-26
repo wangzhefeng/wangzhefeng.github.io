@@ -6,5 +6,5 @@ slug: sentence-classification
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---

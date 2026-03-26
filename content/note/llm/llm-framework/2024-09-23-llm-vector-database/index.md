@@ -6,7 +6,7 @@ slug: llm-vector-database
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---
 
 <style>

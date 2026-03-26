@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-01-19'
 slug: distributed-parallel-training
 categories:
-  - tool
+  - deeplearning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

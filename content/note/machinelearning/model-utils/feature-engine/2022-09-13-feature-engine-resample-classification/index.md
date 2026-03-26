@@ -6,7 +6,7 @@ slug: feature-engine-resample
 categories:
   - feature engine
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

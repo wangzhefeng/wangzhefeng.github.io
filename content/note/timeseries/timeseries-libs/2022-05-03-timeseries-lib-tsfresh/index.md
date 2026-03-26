@@ -7,7 +7,7 @@ slug: timeseries-lib-tsfresh
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: dl-experience
 categories:
   - deeplearning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

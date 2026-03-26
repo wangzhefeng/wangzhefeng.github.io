@@ -6,7 +6,7 @@ slug: hf-transformers
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---
 
 <style>

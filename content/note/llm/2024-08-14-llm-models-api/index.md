@@ -5,8 +5,7 @@ author: wangzf
 date: '2024-08-14'
 slug: llm-models-api
 categories:
-  - nlp
-  - deeplearning
+  - llm
 tags:
   - model
 ---

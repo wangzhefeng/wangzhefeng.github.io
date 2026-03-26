@@ -5,10 +5,8 @@ date: '2024-09-04'
 slug: paper-ts-fedformer
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

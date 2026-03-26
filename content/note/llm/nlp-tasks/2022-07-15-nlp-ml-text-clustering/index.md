@@ -6,7 +6,7 @@ slug: nlp-text-clustering
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

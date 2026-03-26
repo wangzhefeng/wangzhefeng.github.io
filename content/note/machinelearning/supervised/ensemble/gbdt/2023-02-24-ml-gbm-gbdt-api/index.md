@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-24'
 slug: ml-gbm-gbdt-api
 categories: 
-    - machinelearning
+    - machine learning
 tags: 
     - model
 ---

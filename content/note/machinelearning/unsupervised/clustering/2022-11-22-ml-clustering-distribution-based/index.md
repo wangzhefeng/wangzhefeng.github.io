@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-11-22'
 slug: ml-clustering-mixture-of-gaussian
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

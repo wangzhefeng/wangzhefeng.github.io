@@ -6,7 +6,7 @@ slug: timeseries-lib-statsmodels
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

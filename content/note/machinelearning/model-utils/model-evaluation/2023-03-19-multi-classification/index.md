@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-11-22'
 slug: multi-classification
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - tool
+  - model
 ---
 
 <style>

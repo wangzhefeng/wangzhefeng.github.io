@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-02'
 slug: search
 categories:
-  - algorithms
+  - computer algorithms
 tags:
   - algorithm
 ---

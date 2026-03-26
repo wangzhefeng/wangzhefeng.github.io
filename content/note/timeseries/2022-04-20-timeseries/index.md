@@ -7,7 +7,7 @@ slug: timeseries
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

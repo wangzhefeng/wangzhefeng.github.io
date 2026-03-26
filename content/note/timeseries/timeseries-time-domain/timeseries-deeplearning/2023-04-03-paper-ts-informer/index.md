@@ -5,10 +5,8 @@ date: '2023-04-03'
 slug: paper-ts-informer
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

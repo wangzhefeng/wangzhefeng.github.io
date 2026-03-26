@@ -6,7 +6,7 @@ slug: model-decomposition
 categories:
   - feature engine
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-12-03'
 slug: baijiazhenming
 categories:
-  - 文学
+  - poems
 tags:
   - note
 ---

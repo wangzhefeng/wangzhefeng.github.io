@@ -6,7 +6,7 @@ slug: gradio
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---
 
 <style>

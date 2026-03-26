@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-02'
 slug: sort
 categories:
-  - algorithms
+  - computer algorithms
 tags:
   - algorithm
 ---
@@ -35,8 +35,8 @@ img {
 <details><summary>目录</summary><p>
 
 - [排序算法概述](#排序算法概述)
-    - [排序算法评价维度](#排序算法评价维度)
-    - [理想排序算法](#理想排序算法)
+  - [排序算法评价维度](#排序算法评价维度)
+  - [理想排序算法](#理想排序算法)
 - [选择排序](#选择排序)
 - [冒泡排序](#冒泡排序)
 - [插入排序](#插入排序)

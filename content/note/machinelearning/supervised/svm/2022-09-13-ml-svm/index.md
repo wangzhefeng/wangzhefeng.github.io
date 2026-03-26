@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-09-13'
 slug: ml-svm
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

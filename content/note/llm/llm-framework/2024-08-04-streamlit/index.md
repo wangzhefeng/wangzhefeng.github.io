@@ -4,9 +4,9 @@ author: wangzf
 date: '2024-08-04'
 slug: streamlit
 categories:
-  - streamlit
+  - app
 tags:
-  - tool
+  - model
 ---
 
 <style>

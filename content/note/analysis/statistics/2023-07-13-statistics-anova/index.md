@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-07-13'
 slug: statistics-anova
 categories:
-  - 数学、统计学
+  - statistic
 tags:
-  - article
+  - note
 ---
 
 <style>

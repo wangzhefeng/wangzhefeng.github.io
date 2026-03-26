@@ -7,7 +7,7 @@ slug: anomaly-detection
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

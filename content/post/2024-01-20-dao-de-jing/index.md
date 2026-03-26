@@ -5,9 +5,9 @@ date: '2024-01-20'
 show_toc: true
 slug: dao-de-jing
 categories:
-  - 文学
+  - poems
 tags:
-  - article
+  - note
 ---
 
 <style type='text/css'>

@@ -4,10 +4,9 @@ author: wangzf
 date: '2026-01-29'
 slug: conv1d
 categories:
-  - deeplearning
   - pytorch
 tags:
-  - algorithm
+  - tool
 ---
 
 <style>

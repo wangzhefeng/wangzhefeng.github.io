@@ -6,5 +6,5 @@ slug: cluster
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---

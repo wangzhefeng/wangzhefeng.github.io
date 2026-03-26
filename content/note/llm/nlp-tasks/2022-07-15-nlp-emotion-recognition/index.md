@@ -6,7 +6,7 @@ slug: nlp-emotion-recognition
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

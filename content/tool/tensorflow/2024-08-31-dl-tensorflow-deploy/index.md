@@ -4,9 +4,9 @@ author: wangzf
 date: '2024-08-31'
 slug: dl-tensorflow-deploy
 categories:
-  - tool
+  - tensorflow
 tags:
-  - article
+  - tool
 ---
 
 <style>

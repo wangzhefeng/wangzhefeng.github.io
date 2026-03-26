@@ -6,7 +6,7 @@ slug: global
 categories:
   - data analysis
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: covariate
 categories:
   - data analysis
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

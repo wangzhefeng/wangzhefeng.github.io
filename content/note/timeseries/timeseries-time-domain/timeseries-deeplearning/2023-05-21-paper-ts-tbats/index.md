@@ -5,10 +5,8 @@ date: '2023-05-21'
 slug: paper-ts-tbats
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

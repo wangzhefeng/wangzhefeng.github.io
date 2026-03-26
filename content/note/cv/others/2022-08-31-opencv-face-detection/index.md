@@ -6,7 +6,7 @@ slug: opencv-face-detection
 categories:
   - computer vision
 tags:
-  - article
+  - note
 ---
 
 <style>

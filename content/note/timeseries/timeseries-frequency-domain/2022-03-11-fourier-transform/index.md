@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-03-11'
 slug: fourier-transform
 categories:
-  - 数学、统计学
+  - statistic
 tags:
   - note
 ---

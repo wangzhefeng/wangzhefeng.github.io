@@ -7,7 +7,7 @@ slug: data-shift
 categories:
   - data analysis
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

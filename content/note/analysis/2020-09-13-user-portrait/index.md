@@ -6,7 +6,7 @@ slug: user-portrait
 categories:
   - data analysis
 tags:
-  - model
+  - note
 ---
 
 <style>

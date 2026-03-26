@@ -6,7 +6,7 @@ slug: ab-test
 categories:
   - data analysis
 tags:
-  - model
+  - note
 ---
 
 <style>

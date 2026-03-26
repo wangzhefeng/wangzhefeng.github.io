@@ -5,9 +5,9 @@ author: wangzf
 date: '2023-04-07'
 slug: model-selection
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - tool
+  - model
 ---
 
 <style>

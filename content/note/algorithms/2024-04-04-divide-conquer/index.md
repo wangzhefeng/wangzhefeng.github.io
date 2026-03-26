@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-04-04'
 slug: divide-conquer
 categories:
-  - algorithms
+  - computer algorithms
 tags:
   - algorithm
 ---

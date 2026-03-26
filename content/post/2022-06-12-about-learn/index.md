@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-06-12'
 slug: about-learn
 categories:
-  - 感悟
+  - life
 tags:
   - note
 ---

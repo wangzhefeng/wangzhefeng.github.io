@@ -6,5 +6,5 @@ slug: text-generation
 categories:
   - llm
 tags:
-  - tool
+  - model
 ---

@@ -5,10 +5,9 @@ author: wangzf
 date: '2025-07-05'
 slug: rlhf
 categories:
-  - AI
-  - algorithms
+  - reinforcement learning
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

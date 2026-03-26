@@ -6,7 +6,7 @@ slug: nlp-ml-text-classification
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

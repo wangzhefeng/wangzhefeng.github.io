@@ -6,7 +6,7 @@ slug: forecast-factor
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

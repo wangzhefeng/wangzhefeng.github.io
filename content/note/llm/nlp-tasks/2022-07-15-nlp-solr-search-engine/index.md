@@ -6,7 +6,7 @@ slug: nlp-solr-search-engine
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

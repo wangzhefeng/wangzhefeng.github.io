@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-07-28'
 slug: llm-post-training
 categories:
-  - AI
+  - llm
 tags:
-  - note
+  - model
 ---
 
 <style>

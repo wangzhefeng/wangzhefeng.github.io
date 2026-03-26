@@ -5,9 +5,9 @@ author: wangzf
 date: '2024-09-03'
 slug: python-optimizaion
 categories:
-  - Python
+  - optimizer algorithm
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: nlp-segment
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

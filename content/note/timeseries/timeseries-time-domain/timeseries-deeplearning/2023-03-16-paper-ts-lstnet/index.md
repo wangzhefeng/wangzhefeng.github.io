@@ -5,10 +5,8 @@ date: '2023-03-16'
 slug: paper-ts-lstnet
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

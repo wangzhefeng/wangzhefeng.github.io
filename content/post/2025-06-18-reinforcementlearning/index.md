@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-06-18'
 slug: reinforcementlearning
 categories:
-  - deeplearning
+  - reinforcement learning
 tags:
-  - tool
+  - model
 ---
 
 <style>

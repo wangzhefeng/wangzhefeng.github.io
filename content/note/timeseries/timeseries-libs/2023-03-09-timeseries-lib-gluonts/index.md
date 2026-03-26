@@ -7,7 +7,7 @@ slug: timeseries-lib-gluonts
 categories:
   - timeseries
 tags:
-  - tool
+  - model
 ---
 
 GluonTS is a Python package for probabilistic time series modeling, focusing on deep learning based models, based on PyTorch and MXNet.

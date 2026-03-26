@@ -3,7 +3,7 @@ title: 给父亲
 author: wangzf
 date: '2022-03-03'
 categories:
-  - 文学
+  - life
 tags:
   - note
 slug: to-my-father

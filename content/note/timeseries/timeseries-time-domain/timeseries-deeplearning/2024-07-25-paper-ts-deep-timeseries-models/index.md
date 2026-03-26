@@ -5,10 +5,8 @@ date: '2024-07-25'
 slug: paper-ts-deep-timeseries-models
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

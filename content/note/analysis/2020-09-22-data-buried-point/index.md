@@ -6,7 +6,7 @@ slug: data-buried-point
 categories:
   - data analysis
 tags:
-  - model
+  - note
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: trend-seasonal
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

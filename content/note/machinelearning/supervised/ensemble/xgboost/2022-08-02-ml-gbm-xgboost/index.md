@@ -4,9 +4,8 @@ author: wangzf
 date: '2022-08-02'
 slug: ml-gbm-xgboost
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
   - model
 ---
 

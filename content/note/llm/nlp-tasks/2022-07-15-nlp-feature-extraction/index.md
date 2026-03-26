@@ -6,7 +6,7 @@ slug: nlp-feature-extraction
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

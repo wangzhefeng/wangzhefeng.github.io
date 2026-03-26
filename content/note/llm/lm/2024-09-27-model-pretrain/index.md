@@ -5,9 +5,9 @@ author: wangzf
 date: '2024-09-27'
 slug: model-pretrain
 categories:
-  - deeplearning
+  - llm
 tags:
-  - algorithm
+  - model
 ---
 
 <style>

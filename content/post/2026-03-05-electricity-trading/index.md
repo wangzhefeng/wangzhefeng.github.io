@@ -4,9 +4,9 @@ author: wangzf
 date: '2026-03-05'
 slug: electricity-trading
 categories:
-  - 读书
+  - book
 tags:
-  - article
+  - note
 ---
 
 <style>

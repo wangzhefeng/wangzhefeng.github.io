@@ -6,9 +6,8 @@ date: '2024-04-12'
 slug: timeseries-lib-tsmoothie
 categories:
   - timeseries
-  - tool
 tags:
-  - machinelearning
+  - tool
 ---
 
 <style>

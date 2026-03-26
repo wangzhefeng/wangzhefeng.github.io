@@ -4,10 +4,9 @@ author: wangzf
 date: '2023-02-24'
 slug: ml-gbm-catboost-api
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
-  - api
 ---
 
 <style>
@@ -37,15 +36,15 @@ img {
 
 - [CatBoost 参数](#catboost-参数)
 - [CatBoost API](#catboost-api)
-  - [CatBoost 安装](#catboost-安装)
-    - [安装依赖库](#安装依赖库)
-    - [安装 CatBoost 库](#安装-catboost-库)
-  - [核心数据结构](#核心数据结构)
-  - [Learning API](#learning-api)
-    - [CatBoostClassifier](#catboostclassifier)
-    - [CatBoostRegressor](#catboostregressor)
-    - [CatBoost](#catboost)
-  - [数据可视化 API](#数据可视化-api)
+    - [CatBoost 安装](#catboost-安装)
+        - [安装依赖库](#安装依赖库)
+        - [安装 CatBoost 库](#安装-catboost-库)
+    - [核心数据结构](#核心数据结构)
+    - [Learning API](#learning-api)
+        - [CatBoostClassifier](#catboostclassifier)
+        - [CatBoostRegressor](#catboostregressor)
+        - [CatBoost](#catboost)
+    - [数据可视化 API](#数据可视化-api)
 </p></details><p></p>
 
 ## CatBoost 参数

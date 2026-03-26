@@ -4,12 +4,9 @@ author: wangzf
 date: '2024-07-21'
 slug: control-system
 categories:
-  - algorithms
+  - control system
 tags:
   - algorithm
-  - control
-  - pid
-  - fuzzy-control
 ---
 
 <style>
@@ -49,11 +46,17 @@ img {
 - [经典控制算法：PID](#经典控制算法pid)
   - [PID 的核心思想](#pid-的核心思想)
   - [如何理解 PID](#如何理解-pid)
+    - [1. 从“追目标”来理解](#1-从追目标来理解)
+    - [2. 从“开车”来理解](#2-从开车来理解)
+    - [3. 从“公式的单位”来理解](#3-从公式的单位来理解)
   - [比例控制 P](#比例控制-p)
   - [积分控制 I](#积分控制-i)
   - [微分控制 D](#微分控制-d)
   - [离散 PID 公式](#离散-pid-公式)
   - [用例子理解 PID](#用例子理解-pid)
+    - [水缸加水的例子](#水缸加水的例子)
+    - [刹车的例子](#刹车的例子)
+    - [一句话总结这三个项](#一句话总结这三个项)
   - [PID Python 实现示例](#pid-python-实现示例)
   - [PID 的优缺点](#pid-的优缺点)
   - [PID 调参经验](#pid-调参经验)

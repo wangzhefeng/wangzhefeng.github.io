@@ -4,9 +4,8 @@ author: wangzf
 date: '2022-08-04'
 slug: ml-gbm-catboost
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
   - model
 ---
 

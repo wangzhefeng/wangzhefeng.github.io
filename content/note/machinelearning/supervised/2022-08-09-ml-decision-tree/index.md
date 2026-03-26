@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-09'
 slug: ml-decision-tree
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

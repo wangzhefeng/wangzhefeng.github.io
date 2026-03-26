@@ -5,10 +5,8 @@ date: '2024-09-13'
 slug: paper-ts-wavenet
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

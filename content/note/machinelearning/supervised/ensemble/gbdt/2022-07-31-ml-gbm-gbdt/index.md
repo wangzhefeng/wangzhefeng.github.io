@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-31'
 slug: ml-gbm-gbdt
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

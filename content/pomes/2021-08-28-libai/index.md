@@ -5,7 +5,7 @@ author: wangzf
 date: '2021-08-28'
 slug: libai
 categories:
-  - 文学
+  - poems
 tags:
   - note
 ---

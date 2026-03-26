@@ -4,9 +4,8 @@ author: wangzf
 date: '2022-08-08'
 slug: ml-logistic-regression
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
   - model
 ---
 

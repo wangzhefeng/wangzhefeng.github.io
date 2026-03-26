@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-11-22'
 slug: model-evaluation
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

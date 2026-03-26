@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-07-23'
 slug: llm-flow
 categories:
-  - AI
+  - llm
 tags:
-  - note
+  - model
 ---
 
 <style>

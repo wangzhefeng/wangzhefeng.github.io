@@ -4,9 +4,9 @@ author: wangzf
 date: '2025-01-19'
 slug: what-is-statistics
 categories:
-  - 数学、统计学
+  - statistic
 tags:
-  - article
+  - note
 ---
 
 ![img](images/stat.jpg)

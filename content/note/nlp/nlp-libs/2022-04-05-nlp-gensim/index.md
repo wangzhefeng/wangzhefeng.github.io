@@ -6,7 +6,7 @@ slug: nlp-gensim
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

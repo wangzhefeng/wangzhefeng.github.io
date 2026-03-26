@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-07-18'
 slug: correlation
 categories:
-  - 数学、统计学
+  - statistic
 tags:
-  - article
+  - note
 ---
 
 <style>

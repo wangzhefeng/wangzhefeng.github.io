@@ -6,7 +6,7 @@ slug: nlp-app-kg-neo4j
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 

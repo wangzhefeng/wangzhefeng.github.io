@@ -6,7 +6,7 @@ slug: taiwan-question
 categories:
   - politics
 tags:
-  - article
+  - note
 ---
 
 <style>

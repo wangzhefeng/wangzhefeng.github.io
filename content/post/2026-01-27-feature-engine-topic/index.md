@@ -4,7 +4,7 @@ author: wangzf
 date: '2026-01-27'
 slug: feature-engine-topic
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

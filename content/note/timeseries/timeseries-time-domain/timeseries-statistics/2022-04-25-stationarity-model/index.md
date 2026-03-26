@@ -6,7 +6,7 @@ slug: stationarity-model
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

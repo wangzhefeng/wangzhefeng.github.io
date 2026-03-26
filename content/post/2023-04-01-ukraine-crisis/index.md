@@ -6,7 +6,7 @@ slug: ukraine-crisis
 categories:
   - politics
 tags:
-  - article
+  - note
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: timeseries-preprocessing
 categories:
   - timeseries
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

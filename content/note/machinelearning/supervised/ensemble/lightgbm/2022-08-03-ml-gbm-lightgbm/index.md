@@ -4,9 +4,8 @@ author: wangzf
 date: '2022-08-03'
 slug: ml-gbm-lightgbm
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
   - model
 ---
 

@@ -4,7 +4,6 @@ author: wangzf
 date: '2022-08-14'
 slug: cv-numpy-scipy-matplotlib
 categories:
-  - deeplearning
   - computer vision
 tags:
   - tool

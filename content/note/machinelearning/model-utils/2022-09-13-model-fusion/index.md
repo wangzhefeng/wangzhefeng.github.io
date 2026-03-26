@@ -5,9 +5,9 @@ author: wangzf
 date: '2022-09-13'
 slug: model-fusion
 categories:
-  - machinelearning
+  - machine learning
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__web-reader__webReader",
+      "Bash(curl -s http://localhost:4321/note/machinelearning/supervised/decision-tree/)",
+      "Bash(curl -s http://localhost:4321/note/llm/llm-arch/)"
+    ]
+  }
+}

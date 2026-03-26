@@ -6,7 +6,7 @@ slug: nlp-qa-system
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

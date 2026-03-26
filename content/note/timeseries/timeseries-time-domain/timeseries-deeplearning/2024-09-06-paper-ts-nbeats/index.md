@@ -5,10 +5,8 @@ date: '2024-09-06'
 slug: paper-ts-nbeats
 categories:
   - timeseries
-  - 论文阅读
 tags:
   - paper
-  - model
 ---
 
 <style>

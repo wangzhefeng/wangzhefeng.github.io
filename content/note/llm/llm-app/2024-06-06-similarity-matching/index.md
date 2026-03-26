@@ -6,7 +6,7 @@ slug: similarity-matching
 categories:
   - llm
 tags:
-  - note
+  - model
 ---
 
 <style>

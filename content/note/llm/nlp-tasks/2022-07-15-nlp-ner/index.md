@@ -6,7 +6,7 @@ slug: nlp-ner
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

@@ -6,7 +6,7 @@ slug: univariate
 categories:
   - data analysis
 tags:
-  - machinelearning
+  - model
 ---
 
 <style>

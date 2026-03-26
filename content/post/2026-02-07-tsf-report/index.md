@@ -6,7 +6,7 @@ slug: tsf-report
 categories:
   - timeseries
 tags:
-  - article
+  - note
 ---
 
 <style>

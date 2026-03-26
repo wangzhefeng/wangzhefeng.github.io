@@ -3,7 +3,7 @@ title: 中国通史
 author: wangzf
 date: '2021-08-28'
 categories:
-  - 纪录片
+  - life
 tags:
   - note
 slug: general-history-of-china

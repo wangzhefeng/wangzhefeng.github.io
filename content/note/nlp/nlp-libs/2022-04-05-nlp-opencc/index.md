@@ -6,7 +6,7 @@ slug: nlp-opencc
 categories:
   - nlp
 tags:
-  - tool
+  - algorithm
 ---
 
 <style>

@@ -5,10 +5,8 @@ date: '2023-03-03'
 slug: timeseries-visualization
 categories:
   - timeseries
-  - data analysis
-  - data visual
 tags:
-  - article
+  - tool
 ---
 
 <style>

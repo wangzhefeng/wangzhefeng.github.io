@@ -4,9 +4,9 @@ author: wangzf
 date: '2023-07-09'
 slug: statistics-causal-inference
 categories:
-  - 数学、统计学
+  - statistic
 tags:
-  - article
+  - note
 ---
 
 <style>

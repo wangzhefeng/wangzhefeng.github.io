@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-09'
 slug: ml-random-forest
 categories:
-  - machinelearning
+  - machine learning
 tags:
   - model
 ---

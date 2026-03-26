@@ -4,9 +4,9 @@ author: wangzf
 date: '2022-11-13'
 slug: data-scientist
 categories:
-  - 感悟
+  - life
 tags:
-  - article
+  - note
 ---
 
 <style>

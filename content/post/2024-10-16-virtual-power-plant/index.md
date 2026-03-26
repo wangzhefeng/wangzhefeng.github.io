@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-10-16'
 slug: virtual-power-plant
 categories:
-  - 整理
+  - learning
 tags:
   - note
 ---
