@@ -1,9 +1,0 @@
-{{ if eq hugo.Environment "development" }}
-{{ $customCSS := readFile "static/css/custom.css" }}
-<style>{{ $customCSS | safeCSS }}</style>
-{{ else }}
-<link rel="stylesheet" href="{{ "/css/custom.css" | relURL }}" />
-{{ end }}
-
-{{ partial "custom_css.html" (apply .Site.Params.customCSS "print" "utils/" ".") }}
-{{ partial "custom_css.html" .Params.customCSS }}

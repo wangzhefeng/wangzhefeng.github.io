@@ -20,7 +20,7 @@ npm run build
 npm run build:local-search
 ```
 
-Hugo version is **0.134.1** (pinned in `netlify.toml`). blogdown manages the Hugo binary internally.
+Hugo version is **0.134.1** (pinned in `netlify.toml` and aligned in `.Rprofile`). Local `blogdown` preview should use the same Hugo major/minor version as production builds.
 
 ## Architecture
 

@@ -1,0 +1,57 @@
+{{ $commentsHiddenRoutes := slice "/about/" "/ivy/" }}
+{{ $commentsHidden := in $commentsHiddenRoutes (lower .RelPermalink) }}
+{{ if and .IsPage (ne .Params.comment false) (not $commentsHidden) }}
+  {{ if .Site.Params.utteranc.enable }}
+    <section class="comments-shell"
+      data-utterances-root
+      data-utterances-theme-light='github-light'
+      data-utterances-theme-dark='github-dark'>
+      <script src="https://utteranc.es/client.js"
+            repo="{{ .Site.Params.utteranc.repo }}"
+            issue-term="{{ .Site.Params.utteranc.issueTerm }}"
+            theme='github-light'
+            crossorigin="anonymous"
+            async>
+      </script>
+    </section>
+  {{ else }}
+    {{- $disqusShortname := "" -}}
+    {{- with .Site.Config.Services.Disqus.Shortname -}}
+      {{- $disqusShortname = . -}}
+    {{- else -}}
+      {{- with .Site.DisqusShortname -}}
+        {{- $disqusShortname = . -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if $disqusShortname -}}
+    <div class="disqus-comment">
+      <button class="disqus-button" id="load_disqus" type="button" onclick="load_disqus()">
+        {{ i18n "loadDisqus" }}
+      </button>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = '{{ .Permalink }}';
+        };
+        function load_disqus() {
+          // Don't ever inject Disqus on localhost. It creates unwanted discussions.
+          if (window.location.hostname === 'localhost') return;
+
+          var dsq = document.createElement('script');
+          dsq.type = 'text/javascript';
+          dsq.async = true;
+          dsq.src = '//' + '{{ $disqusShortname }}' + '.disqus.com/embed.js';
+          (document.head || document.body).appendChild(dsq);
+
+          var trigger = document.getElementById('load_disqus');
+          if (trigger) trigger.remove();
+        }
+      </script>
+      <noscript>Please enable JavaScript to view the
+        <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+      </noscript>
+    </div>
+    {{- end }}
+  {{ end }}
+
+{{- end }}

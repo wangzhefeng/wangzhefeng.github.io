@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d kernel size 1</title>
+  <desc id="desc">一维卷积核大小为1时，输入向量逐元素乘以权重2，输出长度与输入相同。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 26px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .cell{fill:#f9f5ee;stroke:#ccbda8;stroke-width:2;rx:12}
+    .kernel{fill:#fde6b9;stroke:#d5852f;stroke-width:3;rx:14}
+    .arrow{stroke:#8d8274;stroke-width:3;marker-end:url(#m)}
+  </style>
+  <defs>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10Z" fill="#8d8274"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="380" rx="28"/>
+  <rect class="panel" x="18" y="18" width="1164" height="344" rx="28"/>
+  <text class="label" x="60" y="62">输入向量</text>
+  <text class="label" x="530" y="62">卷积核</text>
+  <text class="label" x="800" y="62">输出向量</text>
+  <g transform="translate(56 110)">
+    <rect class="cell" x="0" y="0" width="90" height="70"/><text class="num" x="45" y="45" text-anchor="middle">1</text>
+    <rect class="cell" x="100" y="0" width="90" height="70"/><text class="num" x="145" y="45" text-anchor="middle">2</text>
+    <rect class="cell" x="200" y="0" width="90" height="70"/><text class="num" x="245" y="45" text-anchor="middle">3</text>
+    <rect class="cell" x="300" y="0" width="90" height="70"/><text class="num" x="345" y="45" text-anchor="middle">4</text>
+    <rect class="cell" x="400" y="0" width="90" height="70"/><text class="num" x="445" y="45" text-anchor="middle">5</text>
+    <rect class="cell" x="500" y="0" width="90" height="70"/><text class="num" x="545" y="45" text-anchor="middle">6</text>
+  </g>
+  <g transform="translate(520 210)">
+    <rect class="kernel" x="0" y="0" width="110" height="84"/><text class="num" x="55" y="52" text-anchor="middle">2</text>
+    <text class="text" x="55" y="112" text-anchor="middle">核大小 = 1</text>
+  </g>
+  <line class="arrow" x1="360" y1="146" x2="500" y2="246"/>
+  <line class="arrow" x1="634" y1="246" x2="778" y2="146"/>
+  <g transform="translate(780 110)">
+    <rect class="cell" x="0" y="0" width="90" height="70"/><text class="num" x="45" y="45" text-anchor="middle">2</text>
+    <rect class="cell" x="100" y="0" width="90" height="70"/><text class="num" x="145" y="45" text-anchor="middle">4</text>
+    <rect class="cell" x="200" y="0" width="90" height="70"/><text class="num" x="245" y="45" text-anchor="middle">6</text>
+    <rect class="cell" x="300" y="0" width="90" height="70"/><text class="num" x="345" y="45" text-anchor="middle">8</text>
+  </g>
+  <text class="text" x="950" y="285" text-anchor="middle">每个元素与权重 2 相乘，输出长度不变</text>
+</svg>

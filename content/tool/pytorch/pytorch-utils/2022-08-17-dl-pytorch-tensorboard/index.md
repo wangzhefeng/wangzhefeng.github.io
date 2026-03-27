@@ -529,7 +529,6 @@ notebook.start("--logdir ./data/tensorboard")
 # %tensorboard --logdir ./data/tensorboard
 ```
 
-![img](images/tensorboard_lab4.png)
 
 ## 可视化原始图像
 
@@ -643,11 +642,6 @@ notebook.start("--logdir ./data/tensorboard")
 # %tensorboard --logdir ./data/tensorboard
 ```
 
-![img](images/tensorboard_lab5.png)
-
-![img](images/tensorboard_lab6.png)
-
-![img](images/tensorboard_lab7.png)
 
 ## 可视化人工绘图
 
@@ -753,8 +747,6 @@ notebook.start("--logdir ./data/tensorboard")
 # or 
 # %tensorboard --logdir ./data/tensorboard
 ```
-
-![img](images/tensorboard_lab6.png)
 
 
 ## torchkeras 中的 TensorBoard 回调函数

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="260" viewBox="0 0 1000 260" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d output size formula</title>
+  <desc id="desc">Conv1d 输出长度公式示意。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .title{font:700 28px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .formula{font:700 30px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .note{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+  </style>
+  <rect class="bg" width="1000" height="260" rx="28"/><rect class="panel" x="18" y="18" width="964" height="224" rx="24"/>
+  <text class="title" x="50" y="62">Conv1d 输出长度</text>
+  <text class="formula" x="80" y="128">L_out = floor((L_in + 2×padding - dilation×(kernel - 1) - 1) / stride + 1)</text>
+  <text class="note" x="80" y="178">当 kernel 从 1 增加到 2，而 padding=0、stride=1 时，输出向量会比输入更短。</text>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d padding</title>
+  <desc id="desc">在输入两端添加填充，使卷积输出长度与输入相同。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 24px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .cell{fill:#f9f5ee;stroke:#ccbda8;stroke-width:2;rx:12}
+    .pad{fill:#f2efe8;stroke:#bdb5aa;stroke-dasharray:6 6}
+  </style>
+  <rect class="bg" width="1200" height="420" rx="28"/><rect class="panel" x="18" y="18" width="1164" height="384" rx="28"/>
+  <text class="label" x="60" y="60">加入 padding 后的输入</text><text class="label" x="800" y="60">输出</text>
+  <g transform="translate(44 120)">
+    <rect class="cell pad" x="0" y="0" width="90" height="72"/><text class="num" x="45" y="46" text-anchor="middle">0</text>
+    <rect class="cell" x="98" y="0" width="90" height="72"/><text class="num" x="143" y="46" text-anchor="middle">1</text>
+    <rect class="cell" x="196" y="0" width="90" height="72"/><text class="num" x="241" y="46" text-anchor="middle">2</text>
+    <rect class="cell" x="294" y="0" width="90" height="72"/><text class="num" x="339" y="46" text-anchor="middle">3</text>
+    <rect class="cell" x="392" y="0" width="90" height="72"/><text class="num" x="437" y="46" text-anchor="middle">4</text>
+    <rect class="cell" x="490" y="0" width="90" height="72"/><text class="num" x="535" y="46" text-anchor="middle">5</text>
+    <rect class="cell" x="588" y="0" width="90" height="72"/><text class="num" x="633" y="46" text-anchor="middle">6</text>
+    <rect class="cell pad" x="686" y="0" width="90" height="72"/><text class="num" x="731" y="46" text-anchor="middle">0</text>
+  </g>
+  <g transform="translate(800 120)">
+    <rect class="cell" x="0" y="0" width="66" height="72"/><text class="num" x="33" y="46" text-anchor="middle">6</text>
+    <rect class="cell" x="76" y="0" width="66" height="72"/><text class="num" x="109" y="46" text-anchor="middle">12</text>
+    <rect class="cell" x="152" y="0" width="66" height="72"/><text class="num" x="185" y="46" text-anchor="middle">18</text>
+    <rect class="cell" x="228" y="0" width="66" height="72"/><text class="num" x="261" y="46" text-anchor="middle">24</text>
+    <rect class="cell" x="304" y="0" width="66" height="72"/><text class="num" x="337" y="46" text-anchor="middle">30</text>
+    <rect class="cell" x="380" y="0" width="66" height="72"/><text class="num" x="413" y="46" text-anchor="middle">22</text>
+  </g>
+  <text class="text" x="250" y="250">左右各补 1 个 0，等效输入长度从 6 变为 8。</text>
+  <text class="text" x="920" y="250">这样 kernel=3、stride=1 时输出长度恢复为 6。</text>
+  <text class="text" x="600" y="340" text-anchor="middle">padding 常用于保持特征长度不变，方便堆叠多层卷积。</text>
+</svg>

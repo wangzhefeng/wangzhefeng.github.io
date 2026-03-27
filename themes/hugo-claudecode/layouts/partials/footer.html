@@ -1,0 +1,49 @@
+        <footer class="site-footer">
+          {{ partial "foot_custom.html" . }}
+          {{ partial "footer_highlightjs" . }}
+          {{ with .Site.Params.footer }}
+          <hr>
+          <div class="copyright">{{ replace . "{Year}" now.Year | markdownify }}</div>
+          {{ end }}
+        </footer>
+      </article>
+    </main>
+
+    {{ if .Site.Params.design.search }}
+    <div class="search-modal" hidden data-search-modal>
+      <div class="search-modal__backdrop" data-close-search></div>
+      <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-label="站内搜索">
+        <div class="search-modal__shell">
+          <div class="search-field-shell">
+            <div class="search-field">
+              <span class="search-field__icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="8.5" cy="8.5" r="5.25"></circle>
+                  <path d="M12.25 12.25L16.5 16.5"></path>
+                </svg>
+              </span>
+              <input class="search-field__input" type="search" placeholder="搜索..." autocomplete="off" spellcheck="false" data-search-input data-i18n-placeholder="search_placeholder">
+            </div>
+          </div>
+          <div class="search-state" data-search-state></div>
+          <div class="search-results" data-search-results></div>
+        </div>
+      </div>
+    </div>
+    {{ end }}
+
+    <script>
+      window.__WZF_DESIGN__ = {
+        search: {{ if .Site.Params.design.search }}true{{ else }}false{{ end }},
+        style: {{ jsonify .Site.Params.design.style }}
+      };
+    </script>
+    {{ if eq hugo.Environment "development" }}
+    {{ $siteJS := readFile "themes/hugo-claudecode/static/js/site.js" }}
+    <script>{{ $siteJS | safeJS }}</script>
+    {{ else }}
+    <script src="{{ "/js/site.js" | relURL }}" defer></script>
+    {{ end }}
+    {{ template "_internal/google_analytics.html" . }}
+  </body>
+</html>

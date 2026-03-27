@@ -7,5 +7,7 @@ Thumbs.db
 /public/
 /resources/
 /static/pagefind/
+.hugo_cache/
+.hugo_build.lock
 .vscode/
 node_modules/

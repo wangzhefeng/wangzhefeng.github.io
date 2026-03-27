@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d stride</title>
+  <desc id="desc">步幅为3时，卷积窗口每次前进3个位置，实现下采样。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 24px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .cell{fill:#f9f5ee;stroke:#ccbda8;stroke-width:2;rx:12}
+    .active{fill:#fde6b9;stroke:#d5852f;stroke-width:3}
+    .dash{stroke:#d5852f;stroke-width:4;stroke-dasharray:10 10}
+  </style>
+  <rect class="bg" width="1200" height="400" rx="28"/><rect class="panel" x="18" y="18" width="1164" height="364" rx="28"/>
+  <text class="label" x="60" y="60">输入向量（stride = 3）</text><text class="label" x="820" y="60">输出</text>
+  <g transform="translate(54 120)">
+    <rect class="cell active" x="0" y="0" width="90" height="72"/><text class="num" x="45" y="46" text-anchor="middle">1</text>
+    <rect class="cell active" x="100" y="0" width="90" height="72"/><text class="num" x="145" y="46" text-anchor="middle">2</text>
+    <rect class="cell active" x="200" y="0" width="90" height="72"/><text class="num" x="245" y="46" text-anchor="middle">3</text>
+    <line class="dash" x1="305" y1="36" x2="395" y2="36"/>
+    <rect class="cell active" x="410" y="0" width="90" height="72"/><text class="num" x="455" y="46" text-anchor="middle">4</text>
+    <rect class="cell active" x="510" y="0" width="90" height="72"/><text class="num" x="555" y="46" text-anchor="middle">5</text>
+    <rect class="cell active" x="610" y="0" width="90" height="72"/><text class="num" x="655" y="46" text-anchor="middle">6</text>
+  </g>
+  <text class="text" x="380" y="240" text-anchor="middle">窗口每次前进 3 格</text>
+  <g transform="translate(840 120)">
+    <rect class="cell" x="0" y="0" width="110" height="72"/><text class="num" x="55" y="46" text-anchor="middle">12</text>
+    <rect class="cell" x="140" y="0" width="110" height="72"/><text class="num" x="195" y="46" text-anchor="middle">30</text>
+  </g>
+  <text class="text" x="600" y="320" text-anchor="middle">增大 stride 可以减少输出长度，相当于在卷积阶段完成下采样。</text>
+</svg>

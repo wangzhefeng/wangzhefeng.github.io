@@ -22,5 +22,6 @@ options(
   blogdown.subdir = "post"
 )
 
-# fix Hugo version
-options(blogdown.hugo.version = "0.87.0")
+# Keep blogdown aligned with the project's production Hugo version so
+# local RStudio/blogdown preview matches modern Hugo builds and Netlify.
+options(blogdown.hugo.version = "0.134.1")

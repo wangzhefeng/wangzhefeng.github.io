@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d kernel size 3</title>
+  <desc id="desc">核大小为3时，连续三个元素参与点积，输出长度进一步缩短。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 24px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .cell{fill:#f9f5ee;stroke:#ccbda8;stroke-width:2;rx:12}
+    .active{fill:#fde6b9;stroke:#d5852f;stroke-width:3}
+  </style>
+  <rect class="bg" width="1200" height="400" rx="28"/><rect class="panel" x="18" y="18" width="1164" height="364" rx="28"/>
+  <text class="label" x="60" y="60">输入</text><text class="label" x="780" y="60">输出</text>
+  <g transform="translate(54 120)">
+    <rect class="cell active" x="0" y="0" width="96" height="72"/><text class="num" x="48" y="46" text-anchor="middle">1</text>
+    <rect class="cell active" x="106" y="0" width="96" height="72"/><text class="num" x="154" y="46" text-anchor="middle">2</text>
+    <rect class="cell active" x="212" y="0" width="96" height="72"/><text class="num" x="260" y="46" text-anchor="middle">3</text>
+    <rect class="cell" x="318" y="0" width="96" height="72"/><text class="num" x="366" y="46" text-anchor="middle">4</text>
+    <rect class="cell" x="424" y="0" width="96" height="72"/><text class="num" x="472" y="46" text-anchor="middle">5</text>
+    <rect class="cell" x="530" y="0" width="96" height="72"/><text class="num" x="578" y="46" text-anchor="middle">6</text>
+  </g>
+  <text class="text" x="310" y="232" text-anchor="middle">第一步：1×2 + 2×2 + 3×2 = 12</text>
+  <g transform="translate(786 120)">
+    <rect class="cell" x="0" y="0" width="90" height="72"/><text class="num" x="45" y="46" text-anchor="middle">12</text>
+    <rect class="cell" x="100" y="0" width="90" height="72"/><text class="num" x="145" y="46" text-anchor="middle">18</text>
+    <rect class="cell" x="200" y="0" width="90" height="72"/><text class="num" x="245" y="46" text-anchor="middle">24</text>
+    <rect class="cell" x="300" y="0" width="90" height="72"/><text class="num" x="345" y="46" text-anchor="middle">30</text>
+  </g>
+  <text class="text" x="600" y="330" text-anchor="middle">核大小 3 更常见。它让每次卷积覆盖更宽的局部模式，但在无 padding 时输出从 6 缩到 4。</text>
+</svg>

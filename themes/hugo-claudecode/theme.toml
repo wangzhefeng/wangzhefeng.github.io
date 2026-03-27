@@ -1,0 +1,12 @@
+name = "hugo-claudecode"
+license = "MIT"
+licenselink = "https://github.com/wangzhefeng/wangzhefeng.github.io"
+description = "A Claude Code Docs inspired Hugo theme extracted from the site's local overrides."
+homepage = "https://wangzhefeng.com"
+tags = ["blog", "docs", "knowledge-base", "claude-code", "responsive"]
+features = ["search", "dark-mode", "docs-layout", "utterances"]
+min_version = "0.134.1"
+
+[author]
+  name = "wangzf"
+  homepage = "https://wangzhefeng.com"

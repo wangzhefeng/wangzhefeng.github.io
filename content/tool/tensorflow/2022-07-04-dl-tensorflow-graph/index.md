@@ -682,7 +682,6 @@ demo2.add_print(tf.constant(5.0))
 $ !sabed_model_cli show --dir ./data/demo/1 --all
 ```
 
-![img](images/)
 
 * 在 TensorBoard 中查看计算图，模块会被添加模块名 `demo_module`，方便层次化呈现计算图结构
 

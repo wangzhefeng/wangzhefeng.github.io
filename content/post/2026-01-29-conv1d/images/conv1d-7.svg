@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d dilation</title>
+  <desc id="desc">扩张卷积通过在核元素之间插入空洞来增大感受野。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 24px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .cell{fill:#f9f5ee;stroke:#ccbda8;stroke-width:2;rx:12}
+    .active{fill:#fde6b9;stroke:#d5852f;stroke-width:3}
+    .gap{fill:none;stroke:#d5852f;stroke-width:3;stroke-dasharray:8 8}
+  </style>
+  <rect class="bg" width="1200" height="420" rx="28"/><rect class="panel" x="18" y="18" width="1164" height="384" rx="28"/>
+  <text class="label" x="60" y="60">dilation = 2 的卷积核覆盖范围</text>
+  <g transform="translate(50 130)">
+    <rect class="cell active" x="0" y="0" width="86" height="72"/><text class="num" x="43" y="46" text-anchor="middle">1</text>
+    <rect class="cell" x="96" y="0" width="86" height="72"/><text class="num" x="139" y="46" text-anchor="middle">2</text>
+    <rect class="cell active" x="192" y="0" width="86" height="72"/><text class="num" x="235" y="46" text-anchor="middle">3</text>
+    <rect class="cell" x="288" y="0" width="86" height="72"/><text class="num" x="331" y="46" text-anchor="middle">4</text>
+    <rect class="cell active" x="384" y="0" width="86" height="72"/><text class="num" x="427" y="46" text-anchor="middle">5</text>
+    <rect class="cell" x="480" y="0" width="86" height="72"/><text class="num" x="523" y="46" text-anchor="middle">6</text>
+    <rect class="cell" x="576" y="0" width="86" height="72"/><text class="num" x="619" y="46" text-anchor="middle">7</text>
+  </g>
+  <path class="gap" d="M136 166H190M328 166H382"/>
+  <text class="text" x="430" y="246" text-anchor="middle">核元素之间空出 1 个位置，等效感受野从 3 扩大到 5</text>
+  <g transform="translate(820 130)">
+    <rect class="cell" x="0" y="0" width="110" height="72"/><text class="num" x="55" y="46" text-anchor="middle">18</text>
+    <rect class="cell" x="140" y="0" width="110" height="72"/><text class="num" x="195" y="46" text-anchor="middle">24</text>
+    <rect class="cell" x="280" y="0" width="110" height="72"/><text class="num" x="335" y="46" text-anchor="middle">30</text>
+  </g>
+  <text class="text" x="1000" y="246" text-anchor="middle">输出仍由 3 个权重点积得到</text>
+  <text class="text" x="600" y="330" text-anchor="middle">dilation 用更稀疏的采样扩大感受野，在不增加参数量的情况下捕捉更远的上下文。</text>
+</svg>

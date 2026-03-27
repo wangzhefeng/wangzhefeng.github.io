@@ -1,7 +1,7 @@
 baseurl: https://wangzhefeng.com/
 languageCode: zh-cn
 title: wangzf
-theme: hugo-ivy
+theme: hugo-claudecode
 disqusShortname: wangzf
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 preserveTaxonomyNames: true
@@ -55,11 +55,12 @@ menu:
 
 # https://simpleicons.org/icons/github.svg
 params:
+  iconVersion: "20260328-han-4"
   description: "统计、时间序列、机器学习与大模型的长期写作与知识整理。"
   footer: "&copy; [wangzf](https://wangzhefeng.com) 2017-2026 | [GitHub](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
   githubContentURL: "https://github.com/wangzhefeng"
-  twitterImage: "/images/logo.jpeg"
+  twitterImage: "/images/site/logo.jpeg"
   # options for highlight.js (version, additional languages, and theme)
   highlightjsCDN: "//cdn.bootcss.com"
   highlightjsLang: ["r", "yaml", "tex", "python", "bash", "shell", "cpp", "matlab", "mat", "MATLAB"]
@@ -67,10 +68,10 @@ params:
   highlightjsVersion: "11.9.0"
   # logo TODO
   logo:
-    img: "images/logo.jpeg"
+    img: "images/site/logo.jpeg"
     url: "/"
     alt: "logo"
-    wordmark: "Wangzf Doc"
+    wordmark: "Wangzf's Doc"
     # tag: "Statistics· TimeSeries· MachineLearning· LLM"
     tag: ""
   design:

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Conv1d groups</title>
+  <desc id="desc">分组卷积把输入通道拆成多个组，每组独立卷积后再拼接。</desc>
+  <style>
+    .bg{fill:#fffdf8}.panel{fill:#fff;stroke:#e4d7c8;stroke-width:2;rx:24}
+    .label{font:700 24px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#1d1a17}
+    .text{font:600 18px "PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#4d463f}
+    .num{font:700 22px ui-monospace,Menlo,Consolas,monospace;fill:#0f4a74}
+    .boxA{fill:#e8f0fb;stroke:#6c93c6;stroke-width:2;rx:16}
+    .boxB{fill:#fceddd;stroke:#d5852f;stroke-width:2;rx:16}
+    .boxC{fill:#eef6e8;stroke:#7c9e63;stroke-width:2;rx:16}
+    .arrow{stroke:#8d8274;stroke-width:3;marker-end:url(#m)}
+  </style>
+  <defs><marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8d8274"/></marker></defs>
+  <rect class="bg" width="1200" height="420" rx="28"/><rect class="panel" x="18" y="18" width="1164" height="384" rx="28"/>
+  <text class="label" x="60" y="60">groups = 2</text>
+  <rect class="boxA" x="60" y="110" width="220" height="110" rx="18"/>
+  <text class="label" x="170" y="150" text-anchor="middle">输入组 A</text>
+  <text class="num" x="170" y="190" text-anchor="middle">C1, C2</text>
+  <rect class="boxB" x="60" y="250" width="220" height="110" rx="18"/>
+  <text class="label" x="170" y="290" text-anchor="middle">输入组 B</text>
+  <text class="num" x="170" y="330" text-anchor="middle">C3, C4</text>
+  <rect class="boxA" x="430" y="110" width="220" height="110" rx="18"/>
+  <text class="label" x="540" y="150" text-anchor="middle">卷积层 A</text>
+  <text class="text" x="540" y="190" text-anchor="middle">仅处理组 A</text>
+  <rect class="boxB" x="430" y="250" width="220" height="110" rx="18"/>
+  <text class="label" x="540" y="290" text-anchor="middle">卷积层 B</text>
+  <text class="text" x="540" y="330" text-anchor="middle">仅处理组 B</text>
+  <rect class="boxC" x="810" y="180" width="280" height="110" rx="18"/>
+  <text class="label" x="950" y="222" text-anchor="middle">拼接后的输出</text>
+  <text class="num" x="950" y="262" text-anchor="middle">[Out_A ; Out_B]</text>
+  <line class="arrow" x1="280" y1="165" x2="430" y2="165"/>
+  <line class="arrow" x1="280" y1="305" x2="430" y2="305"/>
+  <line class="arrow" x1="650" y1="165" x2="810" y2="214"/>
+  <line class="arrow" x1="650" y1="305" x2="810" y2="256"/>
+  <text class="text" x="600" y="385" text-anchor="middle">分组卷积把通道拆开处理，既能减少参数量，也能针对不同子任务学习更专门的表示。</text>
+</svg>

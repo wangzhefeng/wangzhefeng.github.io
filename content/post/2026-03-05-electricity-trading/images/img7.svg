@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1338" height="360" viewBox="0 0 1338 360" role="img" aria-labelledby="title desc">
+  <title id="title">节点边际电价示意图</title>
+  <desc id="desc">节点边际电价由系统能量价格、输电阻塞成本和网络损耗成本三部分构成。</desc>
+  <style>
+    .bg { fill: #fffdf7; }
+    .card { fill: #ffffff; stroke: #e5d8c8; stroke-width: 2; rx: 26; }
+    .line { stroke: #b4b0a8; stroke-width: 4; stroke-linecap: round; }
+    .tick { stroke: #7a7266; stroke-width: 2; }
+    .node { fill: #ffffff; stroke: #285f8f; stroke-width: 4; }
+    .title { fill: #181614; font-size: 36px; font-weight: 700; font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .formula { fill: #0f4a74; font-size: 34px; font-weight: 700; font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .plus { fill: #0f4a74; font-size: 54px; font-weight: 700; font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .caption { fill: #4c443c; font-size: 22px; font-weight: 500; font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+  </style>
+  <rect class="bg" x="0" y="0" width="1338" height="360" rx="28"/>
+  <rect class="card" x="16" y="18" width="1306" height="324" rx="28"/>
+
+  <text class="title" x="669" y="58" text-anchor="middle">节点边际电价（LMP）</text>
+  <text class="title" x="669" y="108" text-anchor="middle">=</text>
+
+  <text class="formula" x="180" y="160" text-anchor="middle">系统能量价格</text>
+  <text class="formula" x="669" y="160" text-anchor="middle">输电阻塞成本</text>
+  <text class="formula" x="1158" y="160" text-anchor="middle">网络损耗成本</text>
+
+  <text class="plus" x="425" y="164" text-anchor="middle">+</text>
+  <text class="plus" x="913" y="164" text-anchor="middle">+</text>
+
+  <line class="line" x1="68" y1="214" x2="1270" y2="214"/>
+  <line class="tick" x1="196" y1="214" x2="196" y2="286"/>
+  <line class="tick" x1="669" y1="214" x2="669" y2="286"/>
+  <line class="tick" x1="1128" y1="214" x2="1128" y2="286"/>
+
+  <circle class="node" cx="196" cy="214" r="10"/>
+  <circle class="node" cx="669" cy="214" r="10"/>
+  <circle class="node" cx="1128" cy="214" r="10"/>
+
+  <text class="caption" x="196" y="314" text-anchor="middle">节点本地供需与机组成本</text>
+  <text class="caption" x="669" y="314" text-anchor="middle">输电约束与线路拥塞影响</text>
+  <text class="caption" x="1128" y="314" text-anchor="middle">潮流损耗与损耗分摊影响</text>
+</svg>

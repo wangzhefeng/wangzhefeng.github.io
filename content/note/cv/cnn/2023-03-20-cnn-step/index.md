@@ -659,7 +659,7 @@ visualize(
 )
 ```
 
-![img](images/conv.png)
+![img](images/convolution.png)
 
 可以看到图像的一些纹理，边缘，或者颜色信息被一定程度上提取出来了，shape 也发生了变化
 
@@ -688,7 +688,6 @@ visualize(
 )
 ```
 
-![img](images/conv_pooling.png)
 
 从上图可以明显的看到特征更加明显，并且 shape 减为三分之一了
 

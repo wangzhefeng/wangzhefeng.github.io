@@ -127,7 +127,7 @@ slug: "about"
 
 ## 养过的猫
 
-<img src="/images/tomster1.jpeg" width=50% height="250px" />
+<img src="/images/profile/tomster.jpeg" width=50% height="250px" />
 <p><center>Tomster</center></p>
 
 [^markdown]: Markdown 的教程: [这里](https://www.imooc.com/wiki/markdownlesson/markdownoverview.html)

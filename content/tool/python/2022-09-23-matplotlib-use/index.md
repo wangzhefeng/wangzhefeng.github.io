@@ -612,7 +612,7 @@ fig, ax = plt.subplots(1, 1)
 my_plotter(ax, data1, data2, {"marker": "x"})
 ```
 
-![image-20211201235123195](/Users/zfwang/Library/Application Support/typora-user-images/image-20211201235123195.png)
+![image-20211201235123195](images/image-20211201235123195.png)
 
 ```python
 # data
@@ -623,7 +623,7 @@ my_plotter(ax, data1, data2, {"marker": "x"})
 my_plotter(ax, data3, data4, {"marker": "o"})
 ```
 
-![image-20211201235141268](/Users/zfwang/Library/Application Support/typora-user-images/image-20211201235141268.png)
+![image-20211201235141268](images/image-20211201235141268.png)
 
 ## Matplotlib 个性化
 
@@ -949,7 +949,6 @@ eventplot(positions, orientation, lineoffsets)
 ```python
 hexbin(X, Y, C, gridsize, bins)
 ```
-
 
 
 ## Color, Line, Marker
@@ -1353,7 +1352,7 @@ print(img.shape)
 imgplot = plt.imshow(img)
 ```
 
-![image-20211204001730928](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204001730928.png)
+![image-20211204001730928](images/image-20211204001730928.png)
 
 ### 将伪彩色方案应用于图像
 
@@ -1365,14 +1364,14 @@ lum_img = img[:, :, 0]
 plt.imshow(lum_img)
 ```
 
-![image-20211204003701542](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204003701542.png)
+![image-20211204003701542](images/image-20211204003701542.png)
 
 ```python
 lum_img = img[:, : 0]
 plt.imshow(lum_img, cmap = "hot")
 ```
 
-![image-20211204003910446](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204003910446.png)
+![image-20211204003910446](images/image-20211204003910446.png)
 
 ```python
 lum_img = img[:, :, 0]
@@ -1380,7 +1379,7 @@ imgplot = plt.imshow(lum_img)
 imgplot.set_cmap("nipy_spectral")
 ```
 
-![image-20211204004118731](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204004118731.png)
+![image-20211204004118731](images/image-20211204004118731.png)
 
 ### 色标参考
 
@@ -1390,7 +1389,7 @@ imgplot = plt.imshow(lum_img)
 plt.colorbar()
 ```
 
-![image-20211204004308940](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204004308940.png)
+![image-20211204004308940](images/image-20211204004308940.png)
 
 ### 检查特定数据范围
 
@@ -1399,7 +1398,7 @@ lum_img = img[:, :, 0]
 plt.hist(lum_img.ravel(), bins = 256, range(0.0, 1.0), fc = "k", ec = "k")
 ```
 
-![image-20211204005900327](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204005900327.png)
+![image-20211204005900327](images/image-20211204005900327.png)
 
 ```python
 # 调增上限，有效放大直方图中的一部分
@@ -1407,7 +1406,7 @@ lum_img = img[:, :, 0]
 imgplot = plt.imshow(lum_img, clim = (0.0, 0.7))
 ```
 
-![image-20211204010057096](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204010057096.png)
+![image-20211204010057096](images/image-20211204010057096.png)
 
 ```python
 lum_img = img[:, :, 0]
@@ -1426,7 +1425,7 @@ ax.set_title('After')
 plt.colorbar(ticks=[0.1, 0.3, 0.5, 0.7], orientation='horizontal')
 ```
 
-![image-20211204011743914](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011743914.png)
+![image-20211204011743914](images/image-20211204011743914.png)
 
 ### 数组插值
 
@@ -1438,7 +1437,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img)
 ```
 
-![image-20211204011041795](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011041795.png)
+![image-20211204011041795](images/image-20211204011041795.png)
 
 ```python
 from PIL import Image
@@ -1448,7 +1447,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img, interpolation = "nearest")
 ```
 
-![image-20211204011222797](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011222797.png)
+![image-20211204011222797](images/image-20211204011222797.png)
 
 ```python
 from PIL import Image
@@ -1458,7 +1457,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img, interpolation = "bicubic")
 ```
 
-![image-20211204011514588](/Users/zfwang/Library/Application Support/typora-user-images/image-20211204011514588.png)
+![image-20211204011514588](images/image-20211204011514588.png)
 
 ## 资料
 
