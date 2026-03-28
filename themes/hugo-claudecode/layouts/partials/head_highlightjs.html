@@ -1,6 +1,0 @@
-{{ if and (not .Params.disable_highlight) (in (string .Content) "</pre>") }}
-{{ $highTheme := .Site.Params.highlightjsTheme }}
-{{ with .Site.Params.highlightjsVersion }}
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@{{ . }}/build/styles/{{ $highTheme }}.min.css">
-{{ end }}
-{{ end }}

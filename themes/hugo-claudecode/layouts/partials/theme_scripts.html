@@ -1,0 +1,2 @@
+{{ $bundle := resources.Get "js/site.js" | resources.Minify | fingerprint }}
+<script src="{{ $bundle.RelPermalink }}" integrity="{{ $bundle.Data.Integrity }}" defer></script>

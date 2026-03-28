@@ -2,6 +2,7 @@
   "name": "wangzhefeng-blog",
   "private": true,
   "scripts": {
+    "check:images": "python3 scripts/check-content-images.py",
     "build": "hugo && npx pagefind --site public",
     "search:local": "npx pagefind --site public --output-path static/pagefind",
     "build:local-search": "hugo && npx pagefind --site public && npx pagefind --site public --output-path static/pagefind"

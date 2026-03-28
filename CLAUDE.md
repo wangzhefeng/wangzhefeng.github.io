@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Chinese-language personal knowledge base and blog built with **Hugo**, deployed on **Netlify** at https://wangzhefeng.com/. Covers statistics, time series analysis, machine learning, deep learning, NLP, LLM, computer vision, and operations research. Also includes blog posts, Chinese poetry, tool guides, a resume, and a TODO list.
 
-Built with R package **blogdown** (Hugo-based static site generator). The `hugo-ivy` base theme has been heavily customized into an Anthropics-style documentation layout (design style: `anthropic-docs`).
+Built with R package **blogdown** (Hugo-based static site generator). The site now uses the standalone `hugo-claudecode` theme, which implements an Anthropics-style documentation layout (design style: `anthropic-docs`).
 
 ## Development
 
@@ -25,18 +25,27 @@ Hugo version is **0.134.1** (pinned in `netlify.toml` and aligned in `.Rprofile`
 ## Architecture
 
 ### Template Layer
-`layouts/` overrides `themes/hugo-ivy/layouts/`. Key templates:
-- `layouts/_default/list.html` -- Section listing with docs-layout (sidebar navigation + section cards + archive list)
-- `layouts/_default/single.html` -- Single page with docs-layout (sidebar + TOC rail + comments)
-- `layouts/partials/header.html` -- Site header (brand, nav, search trigger with Cmd+K, theme/locale toggles, mobile nav)
-- `layouts/partials/docs_sidebar.html` -- Left sidebar with section tree navigation
-- `layouts/partials/footer.html` -- Footer with Pagefind search modal
+The theme templates live in `themes/hugo-claudecode/layouts/`. Theme-specific shortcodes also live there. Key templates:
+- `themes/hugo-claudecode/layouts/_default/list.html` -- Section listing with docs-layout (sidebar navigation + section cards + archive list)
+- `themes/hugo-claudecode/layouts/_default/single.html` -- Single page with docs-layout (sidebar + TOC rail + comments)
+- `themes/hugo-claudecode/layouts/partials/header.html` -- Site header (brand, nav, search trigger with Cmd+K, theme/locale toggles, mobile nav)
+- `themes/hugo-claudecode/layouts/partials/docs_sidebar.html` -- Left sidebar with section tree navigation
+- `themes/hugo-claudecode/layouts/partials/footer.html` -- Footer with Pagefind search modal
+- `themes/hugo-claudecode/layouts/partials/docs_sidebar_data.html` -- Cached sidebar structure data
+- `themes/hugo-claudecode/layouts/partials/page_meta_data.html` -- Per-page meta/title/summary helpers
+- `themes/hugo-claudecode/layouts/partials/page_render_data.html` -- Cached content cleanup used by list/single templates
+- `themes/hugo-claudecode/layouts/shortcodes/blogdown/postref.html` -- blogdown-compatible post reference shortcode
 
 ### Design System
-CSS custom properties in `static/css/custom.css` with light/dark theme variants. Configured via `params.design.style = "anthropic-docs"` in `config.yaml`.
+Theme assets live in `themes/hugo-claudecode/assets/` and are emitted through Hugo Pipes with minification and fingerprinting.
+
+- `themes/hugo-claudecode/assets/css/custom.css` -- theme variables and component styling, including light/dark variants
+- `themes/hugo-claudecode/assets/js/site.js` -- client-side behavior bundle
+
+Configured via `params.design.style = "anthropic-docs"` in `config.yaml`.
 
 ### Client-Side Features
-All in `static/js/site.js`:
+All in `themes/hugo-claudecode/assets/js/site.js`:
 - Pagefind static search (built post-Hugo from `public/`)
 - Light/dark theme toggle with localStorage persistence
 - Chinese/English locale switching (UI strings only, not content)
@@ -45,7 +54,7 @@ All in `static/js/site.js`:
 
 ### External Integrations
 - **Comments**: Utterances (GitHub issues), config in `params.utteranc`
-- **Syntax highlighting**: highlight.js 11.9.0 from bootcss CDN
+- **Syntax highlighting**: Hugo/Chroma for Markdown code fences
 - **Math rendering**: MathJax via CDN
 - **Analytics**: Google Analytics via Hugo internal template
 
@@ -64,14 +73,14 @@ All in `static/js/site.js`:
 - Each content piece is a date-prefixed directory containing an `index.md`
 - Frontmatter: `title`, `author`, `date`, `slug`, `categories`, `tags`
 - Set `comment: false` in frontmatter to disable comments on a page
-- Set `disable_highlight: true` or `disable_mathjax: true` to disable those features per-page
+- Set `disable_mathjax: true` to disable math rendering per-page
 - The `<!--# ON_HOLD -->` marker truncates content display for old posts
 - Permalinks: `/post/:year/:month/:day/:slug/` and `/note/:year/:month/:day/:slug/`
 - All content is in Chinese (zh-cn); UI has partial English locale support
 
 ## Key Rules
 
-- **Do NOT modify files inside `themes/hugo-ivy/`**. Always use `layouts/` overrides.
+- Prefer editing `themes/hugo-claudecode/` directly for theme changes.
 - New content should be written in Chinese (zh-cn).
 - When adding new content sections, add the corresponding entry to `menu.main` in `config.yaml`.
 - `public/`, `resources/`, and `static/pagefind/` are git-ignored (build artifacts).

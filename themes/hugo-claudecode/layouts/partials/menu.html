@@ -1,11 +1,12 @@
+{{ $site := .Site }}
+{{ $navState := .NavState }}
 <nav class="site-nav" aria-label="主导航">
   <ul class="site-nav__list">
-    {{ $currentPage := . }}
-    {{ range .Site.Menus.main }}
+    {{ range $site.Menus.main }}
       {{ $active := false }}
       {{ if eq .URL "/" }}
-        {{ $active = $currentPage.IsHome }}
-      {{ else if hasPrefix $currentPage.RelPermalink .URL }}
+        {{ $active = eq $navState "home" }}
+      {{ else if eq $navState (strings.TrimSuffix "/" (strings.TrimPrefix "/" .URL)) }}
         {{ $active = true }}
       {{ end }}
       <li class="site-nav__item{{ if $active }} is-active{{ end }}">

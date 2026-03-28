@@ -1,0 +1,16 @@
+{{ $root := .Root }}
+{{ $isPostSection := .IsPostSection }}
+{{ $directPages := cond $isPostSection ($root.RegularPages.ByDate.Reverse) ($root.RegularPages.ByWeight.ByTitle) }}
+{{ $sections := slice }}
+{{ range $section := $root.Sections.ByWeight.ByTitle }}
+  {{ $sectionPages := cond $isPostSection ($section.RegularPages.ByDate.Reverse) ($section.RegularPages.ByWeight.ByTitle) }}
+  {{ $sections = $sections | append (dict
+    "section" $section
+    "pages" $sectionPages
+  ) }}
+{{ end }}
+{{ return (dict
+  "root" $root
+  "directPages" $directPages
+  "sections" $sections
+) }}

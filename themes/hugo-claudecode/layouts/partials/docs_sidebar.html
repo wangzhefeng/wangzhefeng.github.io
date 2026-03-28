@@ -10,15 +10,15 @@
 <aside class="docs-sidebar">
   <div class="docs-sidebar__inner">
     {{ if not $sidebarHidden }}
+    {{ $data := partialCached "docs_sidebar_data.html" (dict "Root" $root "IsPostSection" $isPostSection) $root.RelPermalink $isPostSection }}
     <div class="docs-sidebar__title">
-      <a href="{{ $root.RelPermalink }}">{{ $root.Title }}</a>
+      <a href="{{ $data.root.RelPermalink }}">{{ $data.root.Title }}</a>
     </div>
 
-    {{ $directPages := cond $isPostSection ($root.RegularPages.ByDate.Reverse) ($root.RegularPages.ByWeight.ByTitle) }}
-    {{ if gt (len $directPages) 0 }}
+    {{ if gt (len $data.directPages) 0 }}
     <div class="docs-nav-group">
       <ul class="docs-nav-list">
-        {{ range $directPages }}
+        {{ range $data.directPages }}
         <li class="docs-nav-list__item{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}">
           <a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>
         </li>
@@ -27,15 +27,14 @@
     </div>
     {{ end }}
 
-    {{ range $section := $root.Sections.ByWeight.ByTitle }}
+    {{ range $group := $data.sections }}
     <div class="docs-nav-group">
       <div class="docs-nav-group__title">
-        <a href="{{ $section.RelPermalink }}">{{ $section.Title }}</a>
+        <a href="{{ $group.section.RelPermalink }}">{{ $group.section.Title }}</a>
       </div>
-      {{ $sectionPages := cond $isPostSection ($section.RegularPages.ByDate.Reverse) ($section.RegularPages.ByWeight.ByTitle) }}
-      {{ if gt (len $sectionPages) 0 }}
+      {{ if gt (len $group.pages) 0 }}
       <ul class="docs-nav-list">
-        {{ range $sectionPages }}
+        {{ range $group.pages }}
         <li class="docs-nav-list__item{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}">
           <a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>
         </li>

@@ -1,0 +1,15 @@
+{{ $page := . }}
+{{ $content := $page.Content }}
+
+{{ if and $page.IsPage (eq (getenv "HUGO_BLOGDOWN_POST_RELREF") "") $page.Params.date (lt (now.AddDate 0 0 ($page.Site.Params.holdDays | default -90)) $page.Date) (in (string $content) "<!--# ON_HOLD -->") }}
+  {{ $content = index (split $content "<!--# ON_HOLD -->") 0 }}
+{{ end }}
+
+{{ if in $content "<summary>目录</summary>" }}
+  {{ $content = replaceRE `(?s)<style[^>]*>.*?</style>\s*<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $content }}
+  {{ $content = replaceRE `(?s)<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $content }}
+{{ end }}
+
+{{ return (dict
+  "content" $content
+) }}

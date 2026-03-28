@@ -61,11 +61,6 @@ params:
   disqusURL: "https://wangzhefeng.com/"
   githubContentURL: "https://github.com/wangzhefeng"
   twitterImage: "/images/site/logo.jpeg"
-  # options for highlight.js (version, additional languages, and theme)
-  highlightjsCDN: "//cdn.bootcss.com"
-  highlightjsLang: ["r", "yaml", "tex", "python", "bash", "shell", "cpp", "matlab", "mat", "MATLAB"]
-  highlightjsTheme: "github"
-  highlightjsVersion: "11.9.0"
   # logo TODO
   logo:
     img: "images/site/logo.jpeg"
@@ -101,7 +96,8 @@ blackfriday:
 # HTML 渲染
 markup:
   highlight:
-    codeFences: false
+    codeFences: true
+    noClasses: false
   goldmark:
     renderer:
       unsafe: true

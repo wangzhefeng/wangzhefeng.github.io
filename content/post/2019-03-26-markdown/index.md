@@ -262,10 +262,10 @@ a<sup>2</sup> + b<sup>2</sup> =c<sup>2</sup>
 - 图片加视频连接
 
 ```markdown
-[![Machine Learning Meets Fashion](images/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
+[![Machine Learning Meets Fashion](https://raw.githubusercontent.com/zalandoresearch/fashion-mnist/master/doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
 ```
 
-[![Machine Learning Meets Fashion](https://github.com/zalandoresearch/fashion-mnist/blob/master/doc/img/ae143b2d.png?raw=true)](https://youtu.be/RJudqel8DVA)
+[![Machine Learning Meets Fashion](https://raw.githubusercontent.com/zalandoresearch/fashion-mnist/master/doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
 
 
 ### 插入图片
@@ -520,4 +520,3 @@ $a^{2}+b^{2} = c^{2}$
 - [插入表情](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - [插入 Note](https://stackoverflow.com/questions/25654845/how-can-i-create-a-text-box-for-a-note-in-markdown)
 - [插入目录 DocToc](https://github.com/thlorenz/doctoc)
-

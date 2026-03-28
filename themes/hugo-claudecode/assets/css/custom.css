@@ -212,7 +212,8 @@ pre code {
   color: var(--code-ink);
 }
 
-.hljs {
+.hljs,
+.chroma {
   background: transparent !important;
   color: var(--code-ink);
 }
@@ -288,17 +289,33 @@ html[data-theme="dark"] .code-block__actions .code-copy:hover {
 
 .code-block-shell code[class*="language-"],
 .code-block-shell pre code,
-.hljs {
+.hljs,
+.chroma,
+.chroma code,
+.chroma pre {
   font-size: 0.88rem;
   line-height: 1.68;
 }
 
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1,
+.chroma .cs,
 .hljs-comment,
 .hljs-quote {
   color: var(--code-comment);
   font-style: italic;
 }
 
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .nt,
+.chroma .ow,
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-literal,
@@ -308,6 +325,20 @@ html[data-theme="dark"] .code-block__actions .code-copy:hover {
   color: var(--code-keyword);
 }
 
+.chroma .s,
+.chroma .sa,
+.chroma .sb,
+.chroma .sc,
+.chroma .dl,
+.chroma .sd,
+.chroma .s2,
+.chroma .se,
+.chroma .sh,
+.chroma .si,
+.chroma .sx,
+.chroma .s1,
+.chroma .ss,
+.chroma .na,
 .hljs-string,
 .hljs-regexp,
 .hljs-addition,
@@ -317,6 +348,19 @@ html[data-theme="dark"] .code-block__actions .code-copy:hover {
   color: var(--code-string);
 }
 
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo,
+.chroma .nb,
+.chroma .no,
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
 .hljs-number,
 .hljs-symbol,
 .hljs-bullet,
@@ -326,6 +370,14 @@ html[data-theme="dark"] .code-block__actions .code-copy:hover {
   color: var(--code-number);
 }
 
+.chroma .nf,
+.chroma .fm,
+.chroma .nc,
+.chroma .nn,
+.chroma .nd,
+.chroma .nl,
+.chroma .py,
+.chroma .bp,
 .hljs-title,
 .hljs-title.class_,
 .hljs-title.class_.inherited__,
@@ -336,21 +388,40 @@ html[data-theme="dark"] .code-block__actions .code-copy:hover {
   color: var(--code-function);
 }
 
+.chroma .o,
+.chroma .p,
+.chroma .w,
 .hljs-operator,
 .hljs-punctuation,
 .hljs-subst {
   color: var(--code-operator);
 }
 
+.chroma .kt,
+.chroma .cp,
+.chroma .cpf,
 .hljs-constant,
 .hljs-params,
 .hljs-type {
   color: var(--code-constant);
 }
 
+.chroma .err,
+.chroma .gd,
+.chroma .gr,
 .hljs-tag,
 .hljs-name {
   color: var(--code-tag);
+}
+
+.chroma .lnt,
+.chroma .ln,
+.chroma .lnlinks {
+  color: var(--code-muted);
+}
+
+.chroma .hl {
+  background: color-mix(in srgb, var(--code-border) 45%, transparent);
 }
 
 .hljs-deletion {
@@ -2138,7 +2209,10 @@ html[data-theme="dark"] .comments-shell {
   }
 
   .code-block-shell pre code,
-  .hljs {
+  .hljs,
+  .chroma,
+  .chroma code,
+  .chroma pre {
     font-size: 0.84rem;
   }
 }

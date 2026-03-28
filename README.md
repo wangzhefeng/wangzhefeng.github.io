@@ -2,28 +2,23 @@
 
 Personal website
 
-## Theme switching
+## Theme
 
-The site now ships with two Hugo themes:
+The site uses a single Hugo theme:
 
-- `hugo-claudecode`: the default docs-style theme used by the current site
-- `hugo-ivy`: the original upstream theme kept as a fallback/reference
-
-To switch themes, edit [config.yaml](/Users/wangzf/wangzhefeng.github.io/config.yaml) and change:
-
-```yaml
-theme: hugo-claudecode
-```
-
-to:
-
-```yaml
-theme: hugo-ivy
-```
+- `hugo-claudecode`: the docs-style theme used by the current site
 
 Theme-specific templates and assets for the current site design now live in:
 
 - [themes/hugo-claudecode/layouts](/Users/wangzf/wangzhefeng.github.io/themes/hugo-claudecode/layouts)
-- [themes/hugo-claudecode/static](/Users/wangzf/wangzhefeng.github.io/themes/hugo-claudecode/static)
+- [themes/hugo-claudecode/assets](/Users/wangzf/wangzhefeng.github.io/themes/hugo-claudecode/assets)
+
+Theme-specific shortcodes also live under `themes/hugo-claudecode/layouts/shortcodes/`.
+
+Implementation notes for the current theme:
+
+- CSS and JS are built through Hugo Pipes from `themes/hugo-claudecode/assets/`
+- Markdown code fences are highlighted by Hugo/Chroma instead of runtime `highlight.js`
+- Navigation/sidebar and page render cleanup use cached partials such as `docs_sidebar_data.html` and `page_render_data.html`
 
 Root-level `static/` now keeps only site-wide assets such as favicons, verification files, media, and `rmarkdown-libs`.

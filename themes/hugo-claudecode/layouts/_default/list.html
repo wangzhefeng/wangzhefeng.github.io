@@ -49,32 +49,38 @@
     </div>
     <div class="latest-list">
       {{ range first (default 6 .Site.Params.design.recent_updates_limit) $latest }}
+      {{ $page := . }}
       {{ $excerpt := "" }}
-      {{ with .Params.subtitle }}
-        {{ $excerpt = . }}
+      {{ if $page.Params.subtitle }}
+        {{ $excerpt = $page.Params.subtitle }}
+      {{ else if $page.Description }}
+        {{ $excerpt = $page.Description | plainify | truncate 120 }}
       {{ else }}
-        {{ $raw := .RawContent }}
-        {{ $clean := $raw | replaceRE "(?s)<style[^>]*>.*?</style>" "" | replaceRE "(?s)<details[^>]*>.*?</details>" "" | replaceRE "(?s)<!--.*?-->" "" | replaceRE "(?m)^#+\\s*" "" | replaceRE "(?m)^\\s*[-*+]\\s+" "" | replaceRE "(\\*\\*|__|`|~~)" "" | replaceRE "(?m)^>\\s*" "" | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
-        {{ $excerpt = $clean | truncate 120 }}
+        {{ $pageRender := partialCached "page_render_data.html" $page $page.RelPermalink $page.Lastmod.Unix $page.Kind $page.IsPage }}
+        {{ $plainContent := $pageRender.content | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+        {{ if $plainContent }}
+          {{ $excerpt = $plainContent | truncate 120 }}
+        {{ else }}
+          {{ $excerpt = $page.Title }}
+        {{ end }}
       {{ end }}
-      <a class="latest-row" href="{{ .RelPermalink }}" data-reveal>
+      <a class="latest-row" href="{{ $page.RelPermalink }}" data-reveal>
         <div class="latest-row__primary">
-          <h3>{{ .Title }}</h3>
+          <h3>{{ $page.Title }}</h3>
           {{ with $excerpt }}
           <p>{{ . }}</p>
           {{ end }}
         </div>
         <div class="latest-row__meta">
-          <span>{{ .Date.Format "2006-01-02" }}</span>
+          <span>{{ $page.Date.Format "2006-01-02" }}</span>
         </div>
       </a>
       {{ end }}
     </div>
   </section>
 {{ else }}
-  {{ $sectionContent := .Content }}
-  {{ $sectionContent = replaceRE `(?s)<style[^>]*>.*?</style>\s*<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $sectionContent }}
-  {{ $sectionContent = replaceRE `(?s)<details>\s*<summary>目录</summary>.*?</details>\s*(?:<p></p>)?` `` $sectionContent }}
+  {{ $pageRender := partialCached "page_render_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+  {{ $sectionContent := $pageRender.content }}
   <div class="docs-layout">
     {{ partial "docs_sidebar.html" . }}
     <div class="docs-content" data-pagefind-body>

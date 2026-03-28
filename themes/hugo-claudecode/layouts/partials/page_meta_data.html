@@ -1,0 +1,48 @@
+{{ $page := . }}
+{{ $summaryLength := default 200 $page.Site.Params.summary_length }}
+{{ $summarySuffix := default " &hellip;" $page.Site.Params.text.truncated }}
+
+{{ $navState := "home" }}
+{{ if not $page.IsHome }}
+  {{ $trimmed := strings.TrimSuffix "/" (strings.TrimPrefix "/" $page.RelPermalink) }}
+  {{ if $trimmed }}
+    {{ $segments := split $trimmed "/" }}
+    {{ with index $segments 0 }}
+      {{ $navState = . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ $summary := "" }}
+{{ if $page.Description }}
+  {{ $summary = $page.Description | plainify }}
+{{ else if $page.IsPage }}
+  {{ $summary = $page.Summary | plainify | truncate $summaryLength $summarySuffix }}
+{{ else }}
+  {{ $summary = $page.Site.Params.description }}
+{{ end }}
+
+{{ $twitterImage := "" }}
+{{ with $page.Params.images }}
+  {{ with index . 0 }}
+    {{ $twitterImage = absURL . }}
+  {{ end }}
+{{ end }}
+{{ if and (not $twitterImage) $page.IsPage }}
+  {{ with $page.Resources.ByType "image" }}
+    {{ with index . 0 }}
+      {{ $twitterImage = .Permalink }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ if not $twitterImage }}
+  {{ with $page.Site.Params.twitterImage }}
+    {{ $twitterImage = absURL . }}
+  {{ end }}
+{{ end }}
+
+{{ return (dict
+  "navState" $navState
+  "summary" $summary
+  "twitterImage" $twitterImage
+) }}

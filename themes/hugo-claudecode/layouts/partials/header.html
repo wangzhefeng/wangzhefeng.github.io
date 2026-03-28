@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {{ partial "html_open.html" . }}
+  {{ $pageMeta := partial "page_meta_data.html" . }}
+  {{ $navState := $pageMeta.navState }}
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,12 +16,7 @@
     <meta name="twitter:card" content="summary">
     <meta name="theme-color" content="#fbfaf7" data-theme-color>
 
-    {{ $summary := "" }}
-    {{ with .Description }}
-      {{ $summary = markdownify . }}
-    {{ else }}
-      {{ $summary = ((delimit (findRE "(<p.*?>(.|\n)*?</p>\\s*)+" .Content) "[&hellip;] ") | plainify | truncate (default 200 .Site.Params.summary_length) (default " &hellip;" .Site.Params.text.truncated)) }}
-    {{ end }}
+    {{ $summary := $pageMeta.summary }}
 
     {{ if eq .RelPermalink "/" }}
     <meta property="description" content="{{ .Site.Params.description }}">
@@ -31,15 +28,9 @@
       {{ end }}
     {{ end }}
 
-    {{ $autoImage := false }}
-    {{ range (findRE "<img src=\"https?://[^\"]+" .Content 1) }}
-    {{ $autoImage = true }}
-    <meta name="twitter:image" content="{{ replaceRE "<img src=\"" "" . | htmlUnescape }}">
-    {{ end }}
-    {{ with .Site.Params.twitterImage }}
-    {{ if not $autoImage }}
-    <meta name="twitter:image" content="{{ absURL . }}">
-    {{ end }}
+    {{ $twitterImage := $pageMeta.twitterImage }}
+    {{ with $twitterImage }}
+    <meta name="twitter:image" content="{{ . }}">
     {{ end }}
 
     {{ if .Keywords }}
@@ -72,10 +63,7 @@
         } catch (error) {}
       })();
     </script>
-    {{ partial "head_highlightjs" . }}
-    <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
-    <link rel="stylesheet" href="{{ "/css/fonts.css" | relURL }}">
-    {{ partial "head_custom.html" . }}
+    {{ partialCached "theme_styles.html" .Site "theme-styles" }}
   </head>
 
   <body class="page{{ if .IsHome }} page--home{{ else }}{{ with .Section }} page--{{ . }}{{ end }}{{ end }} kind-{{ .Kind }}{{ if .IsPage }} is-page{{ end }}{{ if .IsSection }} is-section{{ end }}{{ with .Params.page_class }} {{ . }}{{ end }}">
@@ -90,7 +78,7 @@
 
         <div class="site-header__desktop">
           {{ if .IsHome }}
-          {{ partial "menu.html" . }}
+          {{ partialCached "menu.html" (dict "Site" .Site "NavState" $navState) $navState }}
           {{ end }}
         </div>
 
@@ -124,13 +112,13 @@
       {{ if not .IsHome }}
       <div class="site-header__subnav">
         <div class="site-header__subnav-inner">
-          {{ partial "docs_tabs.html" . }}
+          {{ partialCached "docs_tabs.html" (dict "Site" .Site "NavState" $navState) $navState }}
         </div>
       </div>
       {{ end }}
 
       <div class="site-mobile-nav" id="mobile-nav" hidden data-mobile-nav>
-        {{ partial "menu.html" . }}
+        {{ partialCached "menu.html" (dict "Site" .Site "NavState" $navState) $navState }}
         {{ if .Site.Params.design.search }}
         <button class="site-search-trigger site-search-trigger--mobile" type="button" data-open-search>
           <span class="site-search-trigger__icon" aria-hidden="true">

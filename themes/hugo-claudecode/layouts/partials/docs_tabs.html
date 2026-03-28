@@ -1,13 +1,11 @@
-{{ if not .IsHome }}
+{{ if ne .NavState "home" }}
+{{ $site := .Site }}
+{{ $navState := .NavState }}
 <nav class="docs-tabs" aria-label="文档分区">
   <ul class="docs-tabs__list">
-    {{ $currentPage := . }}
-    {{ range .Site.Menus.main }}
+    {{ range $site.Menus.main }}
       {{ if ne .URL "/" }}
-        {{ $active := false }}
-        {{ if hasPrefix $currentPage.RelPermalink .URL }}
-          {{ $active = true }}
-        {{ end }}
+        {{ $active := eq $navState (strings.TrimSuffix "/" (strings.TrimPrefix "/" .URL)) }}
         <li class="docs-tabs__item{{ if $active }} is-active{{ end }}">
           <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
         </li>
