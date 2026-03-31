@@ -1,3 +1,5 @@
+import { clearCache as clearPretextCache, layout, prepare, setLocale as setPretextLocale } from "@chenglou/pretext";
+
 (() => {
   const body = document.body;
   const root = document.documentElement;
@@ -23,6 +25,7 @@
   const localeKey = "wzf-locale";
   let pagefindModule = null;
   let searchSequence = 0;
+  let textLayoutFrame = 0;
 
   const messages = {
     "zh-CN": {
@@ -161,6 +164,27 @@
     }
   };
 
+  const kindMessages = {
+    "zh-CN": {
+      post: "日志",
+      note: "笔记",
+      tool: "工具",
+      topic: "专题",
+      section: "栏目",
+      about: "页面",
+      page: "页面"
+    },
+    en: {
+      post: "Post",
+      note: "Note",
+      tool: "Tool",
+      topic: "Topic",
+      section: "Section",
+      about: "Page",
+      page: "Page"
+    }
+  };
+
   const currentLocale = () => root.getAttribute("data-locale") || "zh-CN";
   const normalizeKey = (key) => key.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
   const message = (key, locale = currentLocale()) => messages[locale]?.[key] ?? messages["zh-CN"][key] ?? "";
@@ -186,6 +210,107 @@
   const formatCount = (key, count, locale = currentLocale()) => {
     const formatter = message(key, locale);
     return typeof formatter === "function" ? formatter(count) : `${count}`;
+  };
+  const kindLabel = (kind, locale = currentLocale()) =>
+    kindMessages[locale]?.[kind] || kindMessages["zh-CN"][kind] || kind || message("menuPage", locale);
+
+  const graphemeSegmenter = typeof Intl !== "undefined" && Intl.Segmenter
+    ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+    : null;
+
+  const segmentGraphemes = (text) => {
+    if (!text) return [];
+    if (graphemeSegmenter) return Array.from(graphemeSegmenter.segment(text), (part) => part.segment);
+    return Array.from(text);
+  };
+
+  const cleanSnippet = (text = "") =>
+    text
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const fontShorthand = (node) => {
+    const style = window.getComputedStyle(node);
+    let family = style.fontFamily || "sans-serif";
+    if (/-apple-system|BlinkMacSystemFont|system-ui/i.test(family)) {
+      family = "\"Helvetica Neue\", Helvetica, Arial, sans-serif";
+    }
+    return [
+      style.fontStyle || "normal",
+      style.fontVariant || "normal",
+      style.fontWeight || "400",
+      style.fontSize || "16px",
+      family
+    ].join(" ");
+  };
+
+  const numericLineHeight = (node) => {
+    const style = window.getComputedStyle(node);
+    const parsed = Number.parseFloat(style.lineHeight);
+    if (Number.isFinite(parsed)) return parsed;
+    return Number.parseFloat(style.fontSize || "16") * 1.4;
+  };
+
+  const truncateToLines = (text, node, maxLines) => {
+    if (!text || !node || !maxLines) return text;
+    const width = node.clientWidth || node.getBoundingClientRect().width;
+    if (!width) return text;
+    const lineHeight = numericLineHeight(node);
+    const font = fontShorthand(node);
+    const prepared = prepare(text, font);
+    const fullLayout = layout(prepared, width, lineHeight);
+    if (fullLayout.lineCount <= maxLines) return text;
+
+    const graphemes = segmentGraphemes(text);
+    let low = 0;
+    let high = graphemes.length;
+    let best = `${graphemes[0] || ""}…`;
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      const candidate = `${graphemes.slice(0, mid).join("").trimEnd()}…`;
+      const candidateLayout = layout(prepare(candidate, font), width, lineHeight);
+      if (candidateLayout.lineCount <= maxLines) {
+        best = candidate;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    return best;
+  };
+
+  const applyTextLayout = (scope = document) => {
+    scope.querySelectorAll("[data-text-card]").forEach((card) => {
+      const titleNode = card.querySelector("[data-card-title-node]");
+      const excerptNode = card.querySelector("[data-card-excerpt-node]");
+      const kindNode = card.querySelector("[data-kind-label]");
+      const kind = card.getAttribute("data-card-kind") || "page";
+
+      if (kindNode) kindNode.textContent = kindLabel(kind);
+
+      if (titleNode) {
+        const titleText = card.getAttribute("data-card-title") || titleNode.textContent.trim();
+        const titleLines = Number(card.getAttribute("data-card-title-lines") || 2);
+        titleNode.textContent = truncateToLines(titleText, titleNode, titleLines);
+        titleNode.style.minHeight = `${numericLineHeight(titleNode) * titleLines}px`;
+      }
+
+      if (excerptNode) {
+        const excerptText = card.getAttribute("data-card-excerpt") || excerptNode.textContent.trim();
+        const excerptLines = Number(card.getAttribute("data-card-excerpt-lines") || 2);
+        excerptNode.textContent = truncateToLines(excerptText, excerptNode, excerptLines);
+        excerptNode.style.minHeight = `${numericLineHeight(excerptNode) * excerptLines}px`;
+      }
+    });
+  };
+
+  const scheduleTextLayout = (scope = document) => {
+    if (textLayoutFrame) window.cancelAnimationFrame(textLayoutFrame);
+    textLayoutFrame = window.requestAnimationFrame(() => {
+      applyTextLayout(scope);
+      textLayoutFrame = 0;
+    });
   };
 
   const updateLocaleUi = (locale) => {
@@ -251,6 +376,10 @@
     document.querySelectorAll(".code-copy").forEach((node) => {
       node.textContent = message("copy", locale);
     });
+    document.querySelectorAll("[data-kind-label]").forEach((node) => {
+      const kind = node.closest("[data-text-card]")?.getAttribute("data-card-kind") || "page";
+      node.textContent = kindLabel(kind, locale);
+    });
   };
 
   const currentTheme = () => root.getAttribute("data-theme") || "light";
@@ -313,6 +442,8 @@
   const setLocale = (locale, persist = true) => {
     updateLocaleUi(locale);
     updateThemeUi(currentTheme());
+    setPretextLocale(locale);
+    clearPretextCache();
     if (persist) {
       try {
         localStorage.setItem(localeKey, locale);
@@ -324,6 +455,7 @@
     if (searchInput && !searchInput.value.trim() && searchState) {
       searchState.textContent = message("searchIntro", locale);
     }
+    scheduleTextLayout();
   };
 
   setLocale(currentLocale(), false);
@@ -424,7 +556,8 @@
 
   const ensurePagefind = async () => {
     if (pagefindModule) return pagefindModule;
-    pagefindModule = await import("/pagefind/pagefind.js");
+    const pagefindPath = "/pagefind/pagefind.js";
+    pagefindModule = await import(pagefindPath);
     return pagefindModule;
   };
 
@@ -464,26 +597,34 @@
       searchState.textContent = "";
       searchResults.innerHTML = items
         .map((item, index) => {
-          const excerpt = item.excerpt ? item.excerpt.replace(/<[^>]+>/g, "") : message("openPage", locale);
-          const section = sectionLabelFromUrl(item.url);
+          const metadata = window.__WZF_SEARCH_INDEX__?.[item.url] || {};
+          const excerpt = cleanSnippet(metadata.excerpt || item.excerpt || message("openPage", locale));
+          const section = metadata.sectionTitle || sectionLabelFromUrl(item.url);
+          const kind = metadata.kind || (item.url.split("/").filter(Boolean)[0] || "page");
+          const date = metadata.date || "";
+          const title = item.meta.title || message("untitledPage", locale);
           return `
-            <a class="search-result" href="${item.url}">
+            <a class="search-result" href="${item.url}" data-text-card data-card-title="${title.replace(/"/g, "&quot;")}" data-card-excerpt="${excerpt.replace(/"/g, "&quot;")}" data-card-kind="${kind}" data-card-date="${date}" data-card-title-lines="2" data-card-excerpt-lines="2">
               <div class="search-result__top">
                 <span class="search-result__index">${String(index + 1).padStart(2, "0")}</span>
                 <div class="search-result__meta">
                   <span class="search-result__section">${section}</span>
-                  <span>${normalizedPath(item.url)}</span>
+                  <span>${date || normalizedPath(item.url)}</span>
                 </div>
               </div>
               <div class="search-result__body">
-                <h3>${item.meta.title || message("untitledPage", locale)}</h3>
+                <div class="search-result__headline">
+                  <span class="search-result__kind" data-kind-label>${kindLabel(kind, locale)}</span>
+                  <h3 data-card-title-node>${title}</h3>
+                </div>
                 <span class="search-result__cta">${message("openPage", locale)}</span>
               </div>
-              <p class="search-result__excerpt">${excerpt}</p>
+              <p class="search-result__excerpt" data-card-excerpt-node>${excerpt}</p>
             </a>
           `;
         })
         .join("");
+      scheduleTextLayout(searchResults);
     } catch (error) {
       searchState.innerHTML = `<div class="search-empty">${message("searchUnavailable", locale)}</div>`;
       searchResults.innerHTML = "";
@@ -500,6 +641,18 @@
       }, 120);
     });
   }
+
+  if (document.fonts && typeof document.fonts.ready?.then === "function") {
+    document.fonts.ready.then(() => {
+      scheduleTextLayout();
+    });
+  } else {
+    scheduleTextLayout();
+  }
+
+  window.addEventListener("resize", () => {
+    scheduleTextLayout();
+  }, { passive: true });
 
   const languageName = (className = "") => {
     const match = className.match(/(?:language|lang)-([a-z0-9#+_-]+)/i);
@@ -653,4 +806,6 @@
       if (attempts > 20) window.clearInterval(syncUtterances);
     }, 300);
   }
+
+  scheduleTextLayout();
 })();

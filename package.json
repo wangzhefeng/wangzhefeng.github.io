@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "pagefind": "1.3.0"
+  },
+  "dependencies": {
+    "@chenglou/pretext": "^0.0.3"
   }
 }

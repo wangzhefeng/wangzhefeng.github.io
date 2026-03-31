@@ -31,7 +31,19 @@
     </div>
     {{ end }}
 
+    {{ $searchIndex := dict }}
+    {{ range .Site.RegularPages }}
+      {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+      {{ $searchIndex = merge $searchIndex (dict .RelPermalink (dict
+        "title" $card.title
+        "excerpt" $card.excerpt
+        "kind" $card.kind
+        "date" $card.date
+        "sectionTitle" $card.sectionTitle
+      )) }}
+    {{ end }}
     <script>
+      window.__WZF_SEARCH_INDEX__ = {{ $searchIndex | jsonify | safeJS }};
       window.__WZF_DESIGN__ = {
         search: {{ if .Site.Params.design.search }}true{{ else }}false{{ end }},
         style: {{ jsonify .Site.Params.design.style }}

@@ -2,6 +2,7 @@
 
 {{ $pageRender := partialCached "page_render_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
 {{ $content := $pageRender.content }}
+{{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
 
 <div class="docs-layout">
   {{ partial "docs_sidebar.html" . }}
@@ -9,7 +10,7 @@
     <header class="title">
       {{ partial "meta.html" . }}
     </header>
-    <div class="article-content" id="article-content" data-pagefind-body>
+    <div class="article-content" id="article-content" data-pagefind-body data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}">
       {{ $content | safeHTML }}
     </div>
   </div>

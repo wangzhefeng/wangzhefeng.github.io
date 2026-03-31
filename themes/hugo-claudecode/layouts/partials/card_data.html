@@ -1,0 +1,39 @@
+{{ $page := . }}
+{{ $pageRender := partialCached "page_render_data.html" $page $page.RelPermalink $page.Lastmod.Unix $page.Kind $page.IsPage }}
+{{ $excerpt := "" }}
+
+{{ if $page.Params.subtitle }}
+  {{ $excerpt = $page.Params.subtitle | plainify }}
+{{ else if $page.Description }}
+  {{ $excerpt = $page.Description | plainify }}
+{{ else }}
+  {{ $plainContent := $pageRender.content | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+  {{ if $plainContent }}
+    {{ $excerpt = $plainContent | truncate 160 }}
+  {{ else }}
+    {{ $excerpt = $page.Title }}
+  {{ end }}
+{{ end }}
+
+{{ $date := "" }}
+{{ if $page.Params.date }}
+  {{ $date = $page.Date.Format "2006-01-02" }}
+{{ else }}
+  {{ with $page.Lastmod }}
+    {{ $date = .Format "2006-01-02" }}
+  {{ end }}
+{{ end }}
+
+{{ $sectionTitle := $page.Title }}
+{{ with $page.CurrentSection }}
+  {{ $sectionTitle = .Title }}
+{{ end }}
+
+{{ return (dict
+  "title" $page.Title
+  "excerpt" $excerpt
+  "kind" (or $page.Section "page")
+  "date" $date
+  "permalink" $page.RelPermalink
+  "sectionTitle" $sectionTitle
+) }}

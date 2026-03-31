@@ -11,31 +11,46 @@
   {{ with $noteRoot }}
     {{ $noteTopics = .Sections.ByTitle }}
   {{ end }}
-  {{ $topicPaths := slice "/note/timeseries" "/note/machinelearning" "/note/llm" "/note/analysis" "/tool/python" "/tool/pytorch" }}
-  {{ $topics := slice }}
-  {{ range $topicPaths }}
-    {{ with $.Site.GetPage . }}
-      {{ $topics = $topics | append . }}
-    {{ end }}
-  {{ end }}
+  {{ $contentEntries := slice
+    (dict "page" (.Site.GetPage "/post/") "title" "日志" "kind" "post" "desc" "按时间阅读近期文章、项目记录与思考。" "count" (len $posts))
+    (dict "page" (.Site.GetPage "/note/") "title" "笔记" "kind" "note" "desc" "围绕专题长期维护的知识条目与阅读路径。" "count" (len $notes))
+    (dict "page" (.Site.GetPage "/tool/") "title" "工具" "kind" "tool" "desc" "教程、参考页与工作时可直接检索的速查内容。" "count" (len $tools))
+    (dict "page" (.Site.GetPage "/about/") "title" "关于" "kind" "about" "desc" "快速了解作者、站点方向和内容组织方式。" "count" 1)
+  }}
+
   <section class="home-hero" data-reveal>
     <div class="home-hero__copy">
       <h1 data-i18n="home_hero_title">统计学、机器学习、深度学习、时间序列、运筹学与大模型的个人知识库。</h1>
       <p class="home-hero__lead" data-i18n="home_hero_lead">这个站点是一个持续维护的个人知识库，而不是只按时间滚动的博客首页。内容围绕统计、时间序列、机器学习与大模型展开，强调结构化浏览、快速检索和长期复用。</p>
-      <div class="home-hero__story" data-reveal>
-        <p data-i18n="home_story_intro">2017 年我从上海大学数学系毕业后，开始了在上海工作、生活的日子。工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，记录学习。</p>
-        <p data-i18n="home_github_intro">这是我的 GitHub 贡献图，看看我在忙些啥：</p>
-        <img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart" />
+      <div class="home-hero__metrics" data-reveal>
+        <div class="hero-metric">
+          <strong>{{ len $latest }}</strong>
+          <span>总内容条目</span>
+        </div>
+        <div class="hero-metric">
+          <strong>{{ len $noteTopics }}</strong>
+          <span>专题入口</span>
+        </div>
+        <div class="hero-metric">
+          <strong>{{ len $posts }}</strong>
+          <span>日志文章</span>
+        </div>
       </div>
     </div>
+
     <aside class="home-hero__panel">
-      <div class="hero-panel-block">
-        <div class="home-note-topics">
-          {{ range $noteTopics }}
-          <a class="home-note-topic" href="{{ .RelPermalink }}">
-            <strong>{{ .Title }}</strong>
-            {{ with .Params.subtitle }}<span>{{ . }}</span>{{ end }}
+      <div class="hero-panel-block hero-panel-block--stack">
+        <div class="hero-panel-block__eyebrow">Knowledge map</div>
+        <div class="content-type-grid">
+          {{ range $entry := $contentEntries }}
+          {{ with $entry.page }}
+          <a class="content-type-card content-type-card--{{ $entry.kind }}" href="{{ .RelPermalink }}" data-reveal>
+            <span class="content-type-card__kind">{{ $entry.title }}</span>
+            <strong>{{ $entry.title }}</strong>
+            <p>{{ $entry.desc }}</p>
+            <span class="content-type-card__count">{{ $entry.count }} 条内容</span>
           </a>
+          {{ end }}
           {{ end }}
         </div>
       </div>
@@ -47,33 +62,34 @@
       <h2 data-i18n="recent_updates">最近更新</h2>
       <p data-i18n="recent_updates_desc">最近整理与更新</p>
     </div>
-    <div class="latest-list">
+    <div class="content-card-grid content-card-grid--latest">
       {{ range first (default 6 .Site.Params.design.recent_updates_limit) $latest }}
-      {{ $page := . }}
-      {{ $excerpt := "" }}
-      {{ if $page.Params.subtitle }}
-        {{ $excerpt = $page.Params.subtitle }}
-      {{ else if $page.Description }}
-        {{ $excerpt = $page.Description | plainify | truncate 120 }}
-      {{ else }}
-        {{ $pageRender := partialCached "page_render_data.html" $page $page.RelPermalink $page.Lastmod.Unix $page.Kind $page.IsPage }}
-        {{ $plainContent := $pageRender.content | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
-        {{ if $plainContent }}
-          {{ $excerpt = $plainContent | truncate 120 }}
-        {{ else }}
-          {{ $excerpt = $page.Title }}
-        {{ end }}
+      {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+      <a class="content-card content-card--feature" href="{{ .RelPermalink }}" data-reveal data-text-card data-card-title="{{ $card.title }}" data-card-excerpt="{{ $card.excerpt }}" data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}" data-card-title-lines="2" data-card-excerpt-lines="3">
+        <div class="content-card__topline">
+          <span class="content-card__kind" data-kind-label>{{ $card.kind }}</span>
+          <span class="content-card__date">{{ $card.date }}</span>
+        </div>
+        <h3 class="content-card__title" data-card-title-node>{{ $card.title }}</h3>
+        <p class="content-card__excerpt" data-card-excerpt-node>{{ $card.excerpt }}</p>
+        <span class="content-card__cta">继续阅读</span>
+      </a>
       {{ end }}
-      <a class="latest-row" href="{{ $page.RelPermalink }}" data-reveal>
-        <div class="latest-row__primary">
-          <h3>{{ $page.Title }}</h3>
-          {{ with $excerpt }}
-          <p>{{ . }}</p>
-          {{ end }}
-        </div>
-        <div class="latest-row__meta">
-          <span>{{ $page.Date.Format "2006-01-02" }}</span>
-        </div>
+    </div>
+  </section>
+
+  <section class="section-block section-block--topics" data-reveal>
+    <div class="section-heading">
+      <h2>核心专题</h2>
+      <p>从高频知识域切入，继续向下展开子栏目和条目。</p>
+    </div>
+    <div class="topic-card-grid">
+      {{ range first 12 $noteTopics }}
+      <a class="topic-card" href="{{ .RelPermalink }}" data-reveal data-text-card data-card-title="{{ .Title }}" data-card-excerpt="{{ or .Params.subtitle (printf "%d 条内容" (len .RegularPagesRecursive)) }}" data-card-kind="topic" data-card-title-lines="2" data-card-excerpt-lines="2">
+        <span class="topic-card__eyebrow">Topic</span>
+        <h3 class="topic-card__title" data-card-title-node>{{ .Title }}</h3>
+        <p class="topic-card__excerpt" data-card-excerpt-node>{{ or .Params.subtitle (printf "%d 条内容" (len .RegularPagesRecursive)) }}</p>
+        <span class="topic-card__meta">{{ len .RegularPagesRecursive }} 条内容</span>
       </a>
       {{ end }}
     </div>
@@ -103,10 +119,11 @@
         </div>
         <div class="section-card-grid">
           {{ range first (default 6 .Site.Params.design.section_cards_limit) .Sections.ByTitle }}
-          <a class="section-card" href="{{ .RelPermalink }}" data-reveal>
-            <h3>{{ .Title }}</h3>
-            <p data-i18n-count="subsection_pages" data-count="{{ len .RegularPagesRecursive }}">{{ len .RegularPagesRecursive }} pages in this subsection.</p>
-            <span class="section-card__meta" data-i18n="open_subsection">Open subsection</span>
+          <a class="section-card section-card--rich" href="{{ .RelPermalink }}" data-reveal data-text-card data-card-title="{{ .Title }}" data-card-excerpt="{{ or .Params.subtitle (printf "%d 条内容" (len .RegularPagesRecursive)) }}" data-card-kind="section" data-card-title-lines="2" data-card-excerpt-lines="2">
+            <span class="section-card__badge">Section</span>
+            <h3 data-card-title-node>{{ .Title }}</h3>
+            <p data-card-excerpt-node>{{ or .Params.subtitle (printf "%d 条内容" (len .RegularPagesRecursive)) }}</p>
+            <span class="section-card__meta">{{ len .RegularPagesRecursive }} 条内容</span>
           </a>
           {{ end }}
         </div>
@@ -120,24 +137,34 @@
         </div>
         <div class="archive">
         {{ if .Params.list_pages }}
-          <div class="archive-group">
+          <div class="archive-card-grid">
           {{ range .Pages.ByParam (or .Params.order_by "date") }}
-          <p class="archive-item" data-reveal>
-            <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
-            <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}{{ with .Params.subtitle }}<span class="subtitle"> · {{ . }}</span>{{ end }}</a>
-          </p>
+          {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+          <a class="archive-card archive-card--{{ $card.kind }}" href="{{ .RelPermalink }}" data-reveal data-text-card data-card-title="{{ $card.title }}" data-card-excerpt="{{ $card.excerpt }}" data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}" data-card-title-lines="2" data-card-excerpt-lines="2">
+            <div class="archive-card__topline">
+              <span class="archive-card__kind" data-kind-label>{{ $card.kind }}</span>
+              <span class="archive-card__date">{{ $card.date }}</span>
+            </div>
+            <h3 class="archive-card__title" data-card-title-node>{{ $card.title }}</h3>
+            <p class="archive-card__excerpt" data-card-excerpt-node>{{ $card.excerpt }}</p>
+          </a>
           {{ end }}
           </div>
         {{ else }}
           {{ range .Pages.GroupByDate "2006" }}
           <h2 class="archive-title">{{ .Key }}</h2>
-          <div class="archive-group">
+          <div class="archive-card-grid archive-card-grid--year">
             {{ range .Pages.GroupByDate "2006-01-02" }}
               {{ range .Pages }}
-              <p class="archive-item" data-reveal>
-                <span class="archive-date">{{ .Date.Format "2006-01-02" }}</span>
-                <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
-              </p>
+              {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+              <a class="archive-card archive-card--{{ $card.kind }}" href="{{ .RelPermalink }}" data-reveal data-text-card data-card-title="{{ $card.title }}" data-card-excerpt="{{ $card.excerpt }}" data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}" data-card-title-lines="2" data-card-excerpt-lines="2">
+                <div class="archive-card__topline">
+                  <span class="archive-card__kind" data-kind-label>{{ $card.kind }}</span>
+                  <span class="archive-card__date">{{ $card.date }}</span>
+                </div>
+                <h3 class="archive-card__title" data-card-title-node>{{ $card.title }}</h3>
+                <p class="archive-card__excerpt" data-card-excerpt-node>{{ $card.excerpt }}</p>
+              </a>
               {{ end }}
             {{ end }}
           </div>
