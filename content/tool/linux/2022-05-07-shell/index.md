@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-05-07'
 slug: shell
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---

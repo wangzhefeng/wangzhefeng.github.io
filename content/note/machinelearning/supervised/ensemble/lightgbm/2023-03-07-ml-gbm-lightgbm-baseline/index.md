@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-07'
 slug: ml-gbm-lightgbm-baseline
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

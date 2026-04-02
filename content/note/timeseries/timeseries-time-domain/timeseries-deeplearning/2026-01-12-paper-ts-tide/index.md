@@ -68,7 +68,7 @@ img {
 
 ## 二、核心模型设计（TiDE）
 
-![img](images/model_arch.png)
+![img](./images/model_arch.png)
 
 TiDE 采用“编码-解码”架构，以 MLP 为核心组件，无自注意力、循环或卷积机制，实现对历史数据和协变量的高效处理，具体结构如下：
 

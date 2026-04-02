@@ -1,10 +1,12 @@
 ---
 title: 特征工程相关问题
+subtitle: Feature Engineering Topics
 author: wangzf
 date: '2026-01-27'
+description: 汇总特征工程中的核心问题，包括表示学习、归一化与特征选择等主题。
 slug: feature-engine-topic
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

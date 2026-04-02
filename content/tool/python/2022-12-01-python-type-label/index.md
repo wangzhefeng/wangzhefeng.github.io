@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-12-01'
 slug: python-type-label
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

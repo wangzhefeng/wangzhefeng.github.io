@@ -9,7 +9,7 @@ tags:
   - model
 ---
 
-![img](images/resnet.png)
+![img](./images/resnet.png)
 
 <style>
 details {
@@ -85,21 +85,21 @@ img {
 那么 `$f(x)$` 即为恒等映射。 实际中，当理想映射 `$f(x)$` 极接近于恒等映射时，残差映射也易于捕捉恒等映射的细微波动。 
 右图是 ResNet 的基础架构–残差块(residual block)。 在残差块中，输入可通过跨层数据线路更快地向前传播
 
-![img](images/resnet-block.png)
+![img](./images/resnet-block.png)
 
 ResNet 沿用了 VGG 完整的 `$3 \times 3$` 卷积层设计。 残差块里首先有 2 个有相同输出通道数的 `$3 \times 3$` 卷积层。 
 每个卷积层后接一个批量规范化层和ReLU激活函数。 然后我们通过跨层数据通路，跳过这 2 个卷积运算，将输入直接加在最后的 ReLU 激活函数前。
 这样的设计要求 2 个卷积层的输出与输入形状一样，从而使它们可以相加。 如果想改变通道数，
 就需要引入一个额外的 `$1 \times 1$` 卷积层来将输入变换成需要的形状后再做相加运算
 
-![img](images/resnet-block2.png)
+![img](./images/resnet-block2.png)
 
 ### ResNet 完整结构
 
 当很多个具备类似结构的这样的残差块组建到一起时，残差网络就顺利形成了。残差网络能够顺利训练很深层的卷积网络，
 其中能够很好的解决网络的退化问题。ResNet 的网络结构如下：
 
-![img](images/res.png)
+![img](./images/res.png)
 
 ### ResNet 的有效性
 

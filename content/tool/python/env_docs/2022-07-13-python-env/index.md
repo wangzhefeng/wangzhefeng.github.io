@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-13'
 slug: python-env
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---
@@ -498,7 +498,7 @@ $ pyenv uninstall 3.7.10
 
 * pyenv 如何准确地解析使用的 Python 版本
 
-![img](images/pyenv-pyramid.png)
+![img](./images/pyenv-pyramid.png)
 
 ```bash
 # 查看当前已经下载的、使用的 Python 版本

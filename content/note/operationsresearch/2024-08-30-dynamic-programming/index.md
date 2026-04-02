@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-08-30'
 slug: dynamic-programming
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -128,7 +128,7 @@ img {
 
 为了方便建模和讨论，以一个最短路径问题为例，对动态规划的基本概念和符号做一些约定：
 
-![img](images/path.png)
+![img](./images/path.png)
 
 1. 阶段 `$k$`
     - 把问题划分为多个互相联系的阶段，按一定的次序取求解，阶段用 `$k$` 表示
@@ -202,7 +202,7 @@ img {
 > 
 > 问题：给定一个共有 `$n$` 阶的楼梯，每步可以上 1 阶或者 2 阶，请问有多少种方案可以爬到楼顶？
 
-![img](images/q1.png)
+![img](./images/q1.png)
 
 #### 回溯算法
 
@@ -287,7 +287,7 @@ if __name__ == "__main__":
 
 这意味着在爬楼梯问题中，各个子问题之间存在递推关系，原问题的解可以由子问题的解构建得来。下图展示了该递推关系：
 
-![img](images/q2.png)
+![img](./images/q2.png)
 
 可以根据递推公式得到暴力搜索解法。以 `$dp[n]$` 为起始点，递归地将一个较大问题拆解为两个较小问题的和，
 直至到达最小子问题 `$dp[1]$` 和 `$dp[2]$` 时返回。其中，最小子问题的解是已知的，即 `$dp[1]=1$`、`$dp[2]=2$`，
@@ -344,7 +344,7 @@ if __name__ == "__main__":
 > 下图展示了暴力搜索形成的递归树。对于问题 `$dp[n]$`，其递归树的深度为 `$n$`，时间复杂度为 `$O(2^{n})$`。
 > 指数阶属于爆炸式增长，如果我们输入一个比较大的 `$n$`，则会陷入漫长的等待之中。
 > 
-> ![img](images/p3.png)
+> ![img](./images/p3.png)
 > 
 > **指数阶的时间复杂度是 “重叠子问题” 导致的**。例如 `$dp[9]$` 被分解为 `$dp[8]$` 和 `$dp[7]$`，
 > `$dp[8]$` 被分解为 `$dp[7]$` 和 `$dp[6]$`，两者都包含子问题 `$dp[7]$`。
@@ -413,7 +413,7 @@ if __name__ == "__main__":
 
 > 经过记忆化处理后，所有重叠子问题都只需计算一次，时间复杂度优化至 `$O(n)$`，这是一个巨大的飞跃。
 > 
-> ![img](images/p4.png)
+> ![img](./images/p4.png)
 
 #### 动态规划
 
@@ -461,7 +461,7 @@ if __name__ == "__main__":
 
 > 下图模拟了以上代码的执行过程：
 > 
-> ![img](images/q6.png)
+> ![img](./images/q6.png)
 > 
 > 与回溯算法一样，动态规划也使用“状态”概念来表示问题求解的特定阶段，每个状态都对应一个问题以及相应的局部最优解。
 > 例如，爬楼梯问题的状态定义为当前所在楼梯阶数 `$i$`。
@@ -528,7 +528,7 @@ def climbing_stairs_dp_comp(n: int) -> int:
 
 如下图所示，若 1、2、3 阶的代价分别为 1、10、1，则从地面爬到第 3 阶的最小代价为 2。
 
-![img](images/p7.png)
+![img](./images/p7.png)
 
 设 `$dp[i]$` 为爬到第 `$i$` 阶累计付出的代价，由于第 `$i$` 阶只可能从 `$i-1$` 阶或 `$i-2$` 阶走来，
 因此 `$dp[i]$` 只可能等于 `$dp[i-1]+cost[i]$` 或 `$dp[i-2]+cost[i]$`。
@@ -571,7 +571,7 @@ def min_cost_climbing_stairs_dp(cost, List[int]) -> int:
 
 下图展示了以上代码的动态规划过程：
 
-![img](images/p8.png)
+![img](./images/p8.png)
 
 本题也可以进行空间优化，将一维压缩至零维，使得空间复杂度从 `$O(n)$` 降至 `$O(1)$`：
 
@@ -612,7 +612,7 @@ def min_cost_climbing_stairs_dp(cost, List[int]) -> int:
 
 如下图所示，爬上第 3 阶仅剩 2 种可行方案，其中连续三次跳 1 阶的方案不满足约束条件，因此被舍弃。
 
-![img](images/p9.png)
+![img](./images/p9.png)
 
 在该问题中，如果上一轮是跳 1 阶上来的，那么下一轮就必须跳 2 阶。
 这意味着，下一步选择不能由当前状态（当前所在楼梯阶数）独立决定，
@@ -639,7 +639,7 @@ dp[i, 1] = dp[i-1, 2] \\\
 dp[i, 2] = dp[i-2, 1] + dp[i-2, 2]
 \end{cases}$$`
 
-![img](images/q10.png)
+![img](./images/q10.png)
 
 最终，返回 `$dp[n, 1] + dp[n, 2]$` 即可，两者之和代表爬到第 `$n$` 阶的方案总数：
 
@@ -731,7 +731,7 @@ def climbing_stairs_constraint_dp(n: int) -> int:
 
 下图展示了一个例子，给定网格的最小路径和为 13：
 
-![img](images/q11.png)
+![img](./images/q11.png)
 
 1. **第一步：思考每轮的决策，定义状态，从而得到 `$dp$` 表**
 
@@ -743,7 +743,7 @@ def climbing_stairs_constraint_dp(n: int) -> int:
 
 至此，我们就得到了下图所示的二维 `$dp$` 矩阵，其尺寸与输入网格 `$grid$` 相同。
 
-![img](images/q12.png)
+![img](./images/q12.png)
 
 > 动态规划和回溯过程可以描述为一个决策序列，而状态由所有决策变量构成。
 > 它应当包含描述解题进度的所有变量，其包含了足够的信息，能够用来推导出下一个状态。
@@ -760,7 +760,7 @@ def climbing_stairs_constraint_dp(n: int) -> int:
 
 `$$dp[i, j] = \text{min}(dp[i-1, j], dp[i, j-1]) + \text{grid}[i,j]$$`
 
-![img](images/q13.png)
+![img](./images/q13.png)
 
 > 根据定义好的 `$dp$` 表，思考原问题和子问题的关系，
 > 找出通过子问题的最优解来构造原问题的最优解的方法，即最优子结构。
@@ -776,7 +776,7 @@ def climbing_stairs_constraint_dp(n: int) -> int:
 如下图所示，由于每个格子是由其左方格子和上方格子转移而来，
 因此我们使用循环来遍历矩阵，外循环遍历各行，内循环遍历各列。
 
-![img](images/q14.png)
+![img](./images/q14.png)
 
 > 边界条件在动态规划中用于初始化 `$dp$` 表，在搜索中用于剪枝。
 > 
@@ -822,7 +822,7 @@ def min_path_sum_dfs(grid: list[list[int]], i: int, j: int) -> int:
 
 从本质上看，造成重叠子问题的原因为：存在多条路径可以从左上角到达某一单元格。
 
-![img](images/q15.png)
+![img](./images/q15.png)
 
 每个状态都有向下和向右两种选择，从左上角走到右下角总共需要 `$m+n-2$` 步，
 所以最差时间复杂度为 `$O(2^{m+n})$`。请注意，这种计算方式未考虑临近网格边界的情况，
@@ -862,7 +862,7 @@ def min_path_sum_dfs_mem(
 如下图所示(记忆化搜索递归树)，在引入记忆化后，所有子问题的解只需计算一次，因此时间复杂度取决于状态总数，
 即网格尺寸 `$O(nm)$` 。
 
-![img](images/q16.png)
+![img](./images/q16.png)
 
 ##### 动态规划
 
@@ -895,18 +895,18 @@ def min_path_sum_dp(grid: list[list[int]]) -> int:
 下图展示了最小路径和的状态转移过程，其遍历了整个网格，因此时间复杂度为 `$O(nm)$`。
 数组 `dp` 大小为  `$n \times m$`，因此空间复杂度为 `$O(nm)$`。
 
-![img](images/s1.png)
-![img](images/s2.png)
-![img](images/s3.png)
-![img](images/s4.png)
-![img](images/s5.png)
-![img](images/s6.png)
-![img](images/s7.png)
-![img](images/s8.png)
-![img](images/s9.png)
-![img](images/s10.png)
-![img](images/s11.png)
-![img](images/s12.png)
+![img](./images/s1.png)
+![img](./images/s2.png)
+![img](./images/s3.png)
+![img](./images/s4.png)
+![img](./images/s5.png)
+![img](./images/s6.png)
+![img](./images/s7.png)
+![img](./images/s8.png)
+![img](./images/s9.png)
+![img](./images/s10.png)
+![img](./images/s11.png)
+![img](./images/s12.png)
 
 ##### 空间优化动态规划
 
@@ -946,7 +946,7 @@ def min_path_sum_dp_comp(grid: list[list[int]]) -> int:
 最短路径是一类经典的动态规划问题。如下图。给定一个网络，需要从 A 出发到达 D，
 如何选择路径才能使总路程最短，显然这是一个 4 阶段决策问题。
 
-![img](images/path.png)
+![img](./images/path.png)
 
 先确定动态规划的几个变量，具体如下：
 
@@ -1314,7 +1314,7 @@ if __name__ == "__main__":
 > 观察下图，由于物品编号 `$i$` 从 `$1$` 开始计数，数组索引从 0 开始计数，
 > 因此物品 `$i$` 对应重量 `$wgt[i-1]$` 和价值 `$val[i-1]$`
 > 
-> ![img](images/bag1.png)
+> ![img](./images/bag1.png)
 
 #### 暴力搜索
 

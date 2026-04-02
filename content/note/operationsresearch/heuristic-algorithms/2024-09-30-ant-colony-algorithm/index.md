@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-09-30'
 slug: ant-colony-algorithm
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -69,7 +69,7 @@ img {
 
 蚁群算法解决旅行商问题的流程：
 
-![img](images/aco.png)
+![img](./images/aco.png)
 
 ## 数学模型
 

@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-04-29'
 slug: image-ocr
 categories:
-  - computer vision
+  - computer-vision
 tags:
   - model
 ---

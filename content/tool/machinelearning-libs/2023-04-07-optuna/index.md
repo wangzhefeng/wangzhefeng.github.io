@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-04-07'
 slug: optuna
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

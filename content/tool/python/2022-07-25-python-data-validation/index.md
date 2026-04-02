@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-25'
 slug: python-data-validation
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

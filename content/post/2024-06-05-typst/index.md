@@ -1,7 +1,9 @@
 ---
 title: Typst
+subtitle: Modern Typesetting with Typst
 author: wangzf
 date: '2024-06-05'
+description: 介绍 Typst 的排版思路、基础语法与实际写作使用体验。
 slug: typst
 categories:
   - typst

@@ -1,7 +1,9 @@
 ---
 title: 熵 Entropy
+subtitle: Entropy
 author: wangzf
 date: '2024-04-15'
+description: 从信息论与统计视角理解熵的含义、直觉和典型应用。
 slug: entropy
 categories:
   - statistic

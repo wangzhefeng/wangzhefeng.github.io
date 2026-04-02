@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-08-28'
 slug: integer-programming
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - model
 ---
@@ -212,7 +212,7 @@ x_{1},x_{2} \geq 0 \text{且为整数}
 
 用图形展示搜索过程如下图：
 
-![img](images/fenzhi.png)
+![img](./images/fenzhi.png)
 
 #### 总结
 

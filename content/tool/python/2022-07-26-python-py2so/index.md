@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-26'
 slug: python-py2so
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

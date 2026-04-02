@@ -70,7 +70,7 @@ ARIMA 模型旨在描绘数据的自回归性(autocorrelations)。
 
 一个分辨平稳时间序列示例：
 
-![img](images/stable.png)
+![img](./images/stable.png)
 
 * 显然序列 (d)，(h) 和 (i)因存在季节性因素而被排除
 * 序列 (a)，(c)，(e)，(f) 和 (i) 因为存在趋势和变化水平而被排除
@@ -86,7 +86,7 @@ ARIMA 模型旨在描绘数据的自回归性(autocorrelations)。
 在下图中，我们注意到 (a) 中谷歌股价数并不平稳，但 (b) 中谷歌股价每天的变化量则是平稳的。
 这向我们展示了一种让非平稳时间序列变平稳的方法——<span style='border-bottom:1.5px dashed red;'>计算相邻观测值之间的差值</span>，这种方法被称为 <span style='border-bottom:1.5px dashed red;'>差分</span>。
 
-![img](images/ab.png)
+![img](./images/ab.png)
 
 诸如 <span style='border-bottom:1.5px dashed red;'>对数变换</span> 的变换方法可用于平稳化时间序列的方差。<span style='border-bottom:1.5px dashed red;'>差分</span>则可以通过去除时间序列中的一些变化特征来平稳化它的均值，
 并因此消除（或减小）时间序列的趋势和季节性。
@@ -95,7 +95,7 @@ ARIMA 模型旨在描绘数据的自回归性(autocorrelations)。
 自相关系数（ACF）会快速的下降到接近 0 的水平，然而非平稳时间序列的自相关系数会下降的比较缓慢。
 同样的，非平稳时间序列的 `$r_{1}$` 通常非常大且为正值。
 
-![img](images/acf.png)
+![img](./images/acf.png)
 
 差分后的谷歌股价的自相关图看起来像白噪声序列。只有一个自相关系数超出了 95% 的限制。
 

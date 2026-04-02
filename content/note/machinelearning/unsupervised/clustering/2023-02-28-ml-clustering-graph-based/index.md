@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-28'
 slug: ml-clustering-graph-based
 categories:
-    - machine learning
+  - machine-learning
 tags: 
     - model
 ---

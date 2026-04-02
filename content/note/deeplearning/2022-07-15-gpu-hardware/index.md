@@ -44,7 +44,7 @@ img {
 
 ## 概述
 
-![images](images/GPU.png)
+![images](./images/GPU.png)
 
 深度学习训练通常需要大量的计算资源。GPU
 目前是深度学习最常使用的计算加速硬件。 相对于 CPU 来说, GPU
@@ -86,7 +86,7 @@ GPU 的性能主要由以下 3 个参数构成:
 
 下图描绘了 GTX 900 和 GTX 1000 系列里各个型号的 32 位浮点计算能力和价格的对比(其中的价格为 Wikipedia 的建议价格)。
 
-![images](images/gtx.png)
+![images](./images/gtx.png)
 
 我们可以从上图中读出以下两点信息:
 
@@ -96,7 +96,7 @@ GPU 的性能主要由以下 3 个参数构成:
 如果大家继续比较 NVIDIA 的一些其他系列, 也可以发现类似的规律。据此, 
 我们推荐大家在能力范围内尽可能买较新的 GPU
 
-![images](images/GPU_compare1.png) ![images](images/GPU_compare2.png)
+![images](./images/GPU_compare1.png) ![images](./images/GPU_compare2.png)
 
 ## 整机配置
 

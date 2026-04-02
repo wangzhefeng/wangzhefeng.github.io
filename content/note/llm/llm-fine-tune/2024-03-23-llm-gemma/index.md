@@ -327,12 +327,12 @@ output_text = tokenizer.batch_decode(
 
 * 预训练模型: 在这里我们统一使用 [gemma-2b](https://hf.co/google/gemma-2b-it) 这个模型。
 
-![img](images/gemma-2b.png)
+![img](./images/gemma-2b.png)
 
 * 选择了 [Hello-SimpleAI/HC3-Chinese](https://hf.co/datasets/Hello-SimpleAI/HC3-Chinese) 数据集来作为微调数据。
   这个数据集有不同主题的问答，包括问题，人类回答和 ChatGPT 回答，涵盖了金融，百科，法律等等诸多题材，我们只使用 `baike` 这个子集，且不使用 ChatGPT 回答。
 
-![img](images/hc3-chinese.png)
+![img](./images/hc3-chinese.png)
 
 ### Hugging Face TRL + Colab GPU
 

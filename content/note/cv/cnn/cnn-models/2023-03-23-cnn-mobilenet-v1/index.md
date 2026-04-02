@@ -9,8 +9,8 @@ tags:
   - model
 ---
 
-![img](images/mobilenetv1.png)
+![img](./images/mobilenetv1.png)
 
-![img](images/mobilenetv1-2.png)
+![img](./images/mobilenetv1-2.png)
 
-![img](images/mobilenetv1-3.png)
+![img](./images/mobilenetv1-3.png)

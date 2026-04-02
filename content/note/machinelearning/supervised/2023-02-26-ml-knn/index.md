@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-26'
 slug: ml-knn
 categories: 
-    - machine learning
+  - machine-learning
 tags: 
     - model
 ---

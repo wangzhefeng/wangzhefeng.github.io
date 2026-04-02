@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-25'
 slug: docker-dockerfile
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---

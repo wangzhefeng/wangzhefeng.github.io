@@ -58,7 +58,7 @@ img {
 
 风力涡轮机结构：
 
-![img](images/wind_turbine.png)
+![img](./images/wind_turbine.png)
 
 风力涡轮机结构组件：
 
@@ -90,7 +90,7 @@ img {
 
 * SDWPF 特征信息：
 
-    ![img](images/data.png)
+    ![img](./images/data.png)
 
     - 预测特征：
         - 风力涡轮机编号

@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-02-17'
 slug: matlab-grammar
 categories:
-  - MATLAB
+  - matlab
 tags:
   - tool
 ---

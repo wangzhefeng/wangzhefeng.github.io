@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-03-01'
 slug: pycaret
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - tool
 ---

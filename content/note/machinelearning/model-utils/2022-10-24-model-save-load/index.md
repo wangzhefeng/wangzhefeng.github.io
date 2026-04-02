@@ -5,7 +5,7 @@ author: wangzf
 date: '2022-10-24'
 slug: model-save-load
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

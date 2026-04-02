@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-13'
 slug: ml-pls
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

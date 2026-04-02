@@ -275,7 +275,7 @@ notebook.start("--logdir ./data/tensorboard")
 # %tensorboard --logdir ./data/tensorboard
 ```
 
-![img](images/tensorboard_lab2.png)
+![img](./images/tensorboard_lab2.png)
 
 查看启动的 TensorBoard 程序:
 
@@ -347,7 +347,7 @@ writer.close()
 
 运行示例代码:
 
-![img](images/output_command.png)
+![img](./images/output_command.png)
 
 启动 tensorboard 程序
 
@@ -355,13 +355,13 @@ writer.close()
 $ tensorboard --logdir ./data/tensorboard
 ```
 
-![img](images/tensorboard_command.png)
+![img](./images/tensorboard_command.png)
 
 在浏览器中打开:
 
 * http://localhost:6006/
 
-![img](images/tensorboard_command_dash.png)
+![img](./images/tensorboard_command_dash.png)
 
 
 ## 可视化指标变化
@@ -459,7 +459,7 @@ notebook.start("--logdir ./data/tensorboard")
 # %tensorboard --logdir ./data/tensorboard
 ```
 
-![img](images/tensorboard_lab3.png)
+![img](./images/tensorboard_lab3.png)
 
 ## 可视化参数分布
 

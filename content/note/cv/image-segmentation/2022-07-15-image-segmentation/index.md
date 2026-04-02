@@ -58,7 +58,7 @@ img {
 
 ### 图像分割类型
 
-![img](images/seg.png)
+![img](./images/seg.png)
 
 * 语义分割
     - 所有相同类型的对象都用一种颜色/标签标记。

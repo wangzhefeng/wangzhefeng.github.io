@@ -5,7 +5,7 @@ author: wangzf
 date: '2022-09-13'
 slug: ml-svd
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -102,7 +102,7 @@ SVD 也是对矩阵进行分解，但是和特征分解不同，SVD 并不要求
 
 下图可以很形象得看出上面 SVD 的定义：
 
-![img](images/svd.png)
+![img](./images/svd.png)
 
 如何求出 SVD 分解后的 `$U$`、`$\Sigma$`、`$V$` 这三个矩阵？
 
@@ -311,7 +311,7 @@ A_{m \times n}
 `$\Sigma_{k \times k}$`、`$V_{k \times n}^{T}$` 来表示。如下图所示，
 现在矩阵 `$A$` 只需要灰色的部分的三个小矩阵就可以近似描述了
 
-![img](images/svd2.png)
+![img](./images/svd2.png)
 
 由于这个重要的性质，SVD 可以用于 PCA 降维，来做数据压缩和去噪。也可以用于推荐算法，将用户和喜好对应的矩阵做特征分解，
 进而得到隐含的用户需求来做推荐。同时也可以用于 NLP 中的算法，比如潜在语义索引(LSI)

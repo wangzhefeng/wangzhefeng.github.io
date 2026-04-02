@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-11-22'
 slug: ml-clustering-hierarchical
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

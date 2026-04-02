@@ -85,11 +85,11 @@ img {
 那么，只要将估计的外部温度 `$\hat{T}_{\text{ext}}$` 与测量的外部温度 `$T_{\text{ext}}$` 相匹配上，
 数学模型就会收敛到 **真实系统的模型**，相应地，数据模型估算的内部温度 `$\hat{T}_{\text{in}}$` 也能逼近真实的内部温度。
 
-![img](images/rocket.png)
+![img](./images/rocket.png)
 
 可以通过下图的控制器 `$K$`，控制 **测量** 和 **估计** 的外部温度之间的误差为 0。
 
-![img](images/rocket-k.png)
+![img](./images/rocket-k.png)
 
 现在，透过数学公式来解释下状态观察器，如下图。为了方便理解公式，先解释下变量：
 
@@ -100,7 +100,7 @@ img {
 * `$x$` 和 `$y$`：测量的内部温度和外部温度
 * 加了 `^` 的变量都是预测的变量
 
-![img](images/math.png)
+![img](./images/math.png)
 
 > 由于官方视频直接带过了 `$e_{\text{obs}}(t)$` 的求解过程，这里进行补充下，
 > 由于 `$\dot{e}_{\text{obs}}$` 是内部温度误差对时间的导数，
@@ -156,7 +156,7 @@ img {
 导致定位噪声很大。可以简单看作这是一个 **传感器测量受误差影响** 的案例，
 如果想估算出汽车真实的位置状态，建议使用卡尔曼滤波。
 
-![img](images/car0.png)
+![img](./images/car0.png)
 
 ### 应用-最佳状态估计器
 
@@ -164,7 +164,7 @@ img {
 如下图所示，**卡尔曼滤波的目标**是将 **GPS 测量值(Measurement)** 和 **数学模型预测值(Prediction)** 相结合，
 去找到 **汽车位置的最优估计状态(即汽车位置)**。
 
-![img](images/car.png)
+![img](./images/car.png)
 
 同样地，我先解释下图中的变量：
 
@@ -201,7 +201,7 @@ img {
 * `$K$`：卡尔曼增益
 * `$A$`、`$B$` 和 `$C$`：矩阵
 
-![img](images/kf.png)
+![img](./images/kf.png)
 
 卡尔曼滤波步骤如下:
 
@@ -217,20 +217,20 @@ img {
 
 若测量值等于最佳状态估计值，说明测量值协方差 `$R$` 趋向于 0，那么如下图所示。
 
-![img](images/kf2.png)
+![img](./images/kf2.png)
 
 2. **当 `$K=0$` 时，预测值等于最佳状态估计值**
 
 若预测值等于最佳状态估计值，说明预测值协方差趋向于 0，那么如下图所示。
 
-![img](images/kf3.png)
+![img](./images/kf3.png)
 
 ## 其他滤波算法
 
 卡尔曼滤波是线性的，而实际中，很多数据模型是非线性的，此时可以考虑扩展卡尔曼滤波，
 另外，有兴趣的朋友也可以去了解无迹卡尔曼滤波和粒子滤波，如图12所示。
 
-![img](images/algo.png)
+![img](./images/algo.png)
 
 ## Python API
 
@@ -328,7 +328,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/res.png)
+![img](./images/res.png)
 
 ## 参考
 

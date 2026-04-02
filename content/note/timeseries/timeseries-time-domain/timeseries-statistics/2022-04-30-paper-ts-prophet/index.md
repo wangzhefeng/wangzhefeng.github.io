@@ -286,7 +286,7 @@ Prophet 的输入只需要 `ts` 和 `y`。所以核心公式是：
 这种时候，就有学者会去研究变点检测(change point detection)。
 例如下面的这幅图的 `$t^{*}_{1}$`，`$t^{*}_{2}$`  就是时间序列的两个变点
 
-![img](images/change_point.jpeg)
+![img](./images/change_point.jpeg)
 
 > 在 Prophet 里面，是需要设置变点的位置的，而每一段的趋势和走势也是会根据变点的情况而改变的。
   在程序里面有两种方法，一种是通过人工指定的方式指定变点的位置；另外一种是通过算法来自动选择。
@@ -946,7 +946,7 @@ holiday = pd.concat([playoffs, superbowls])
 print(holiday)
 ```
 
-![img](images/holiday_df.png)
+![img](./images/holiday_df.png)
 
 2.通过使用 `holidays` 参数传递节假日影响因素
 

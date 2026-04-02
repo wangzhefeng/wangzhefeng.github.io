@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-16'
 slug: feature-engine-resample-regression
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---

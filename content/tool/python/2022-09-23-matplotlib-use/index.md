@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-23'
 slug: matplotlib-use
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - tool
 ---
@@ -232,11 +232,11 @@ def quick_start():
 quick_start()
 ```
 
-<img src="images/quick_start.png" width="100%" />
+<img src="./images/quick_start.png" width="100%" />
 
 ## 一张统计图的结构
 
-<img src="images/anatomy.png" width="100%" />
+<img src="./images/anatomy.png" width="100%" />
 
 ## 图形 API
 
@@ -353,7 +353,7 @@ fig, ax = plt.subplots(2, 2) # a figure with a 2x2 grid of Axes
 
 #### API
 
-<img src="images/subplots_layout_api.png" width="70%" />
+<img src="./images/subplots_layout_api.png" width="70%" />
 
 #### subplots
 
@@ -363,7 +363,7 @@ def subplots_layout():
     fig.show()
 ```
 
-![img](images/subplots_layout.png)
+![img](./images/subplots_layout.png)
 
 #### gridsepc
 
@@ -612,7 +612,7 @@ fig, ax = plt.subplots(1, 1)
 my_plotter(ax, data1, data2, {"marker": "x"})
 ```
 
-![image-20211201235123195](images/image-20211201235123195.png)
+![image-20211201235123195](./images/image-20211201235123195.png)
 
 ```python
 # data
@@ -623,7 +623,7 @@ my_plotter(ax, data1, data2, {"marker": "x"})
 my_plotter(ax, data3, data4, {"marker": "o"})
 ```
 
-![image-20211201235141268](images/image-20211201235141268.png)
+![image-20211201235141268](./images/image-20211201235141268.png)
 
 ## Matplotlib 个性化
 
@@ -985,7 +985,7 @@ ax.plot(x, x + 5, color='chartreuse', label = "chartreuse")  # HTML颜色名称
 ax.legend(loc = "best");
 ```
 
-![img](images/color.png)
+![img](./images/color.png)
 
 #### Colormaps
 
@@ -1008,7 +1008,7 @@ ax.legend(loc = "best");
     - Cyclic
         - `twilight`
 
-![img](images/colormap2.png)
+![img](./images/colormap2.png)
 
 ### Line
 
@@ -1038,7 +1038,7 @@ plt.plot(x, x + 7, linestyle=':', label = ":") # 实点线
 plt.legend(loc = "best");
 ```
 
-![img](images/line.png)
+![img](./images/line.png)
 
 ### Marker
 
@@ -1352,7 +1352,7 @@ print(img.shape)
 imgplot = plt.imshow(img)
 ```
 
-![image-20211204001730928](images/image-20211204001730928.png)
+![image-20211204001730928](./images/image-20211204001730928.png)
 
 ### 将伪彩色方案应用于图像
 
@@ -1364,14 +1364,14 @@ lum_img = img[:, :, 0]
 plt.imshow(lum_img)
 ```
 
-![image-20211204003701542](images/image-20211204003701542.png)
+![image-20211204003701542](./images/image-20211204003701542.png)
 
 ```python
 lum_img = img[:, : 0]
 plt.imshow(lum_img, cmap = "hot")
 ```
 
-![image-20211204003910446](images/image-20211204003910446.png)
+![image-20211204003910446](./images/image-20211204003910446.png)
 
 ```python
 lum_img = img[:, :, 0]
@@ -1379,7 +1379,7 @@ imgplot = plt.imshow(lum_img)
 imgplot.set_cmap("nipy_spectral")
 ```
 
-![image-20211204004118731](images/image-20211204004118731.png)
+![image-20211204004118731](./images/image-20211204004118731.png)
 
 ### 色标参考
 
@@ -1389,7 +1389,7 @@ imgplot = plt.imshow(lum_img)
 plt.colorbar()
 ```
 
-![image-20211204004308940](images/image-20211204004308940.png)
+![image-20211204004308940](./images/image-20211204004308940.png)
 
 ### 检查特定数据范围
 
@@ -1398,7 +1398,7 @@ lum_img = img[:, :, 0]
 plt.hist(lum_img.ravel(), bins = 256, range(0.0, 1.0), fc = "k", ec = "k")
 ```
 
-![image-20211204005900327](images/image-20211204005900327.png)
+![image-20211204005900327](./images/image-20211204005900327.png)
 
 ```python
 # 调增上限，有效放大直方图中的一部分
@@ -1406,7 +1406,7 @@ lum_img = img[:, :, 0]
 imgplot = plt.imshow(lum_img, clim = (0.0, 0.7))
 ```
 
-![image-20211204010057096](images/image-20211204010057096.png)
+![image-20211204010057096](./images/image-20211204010057096.png)
 
 ```python
 lum_img = img[:, :, 0]
@@ -1425,7 +1425,7 @@ ax.set_title('After')
 plt.colorbar(ticks=[0.1, 0.3, 0.5, 0.7], orientation='horizontal')
 ```
 
-![image-20211204011743914](images/image-20211204011743914.png)
+![image-20211204011743914](./images/image-20211204011743914.png)
 
 ### 数组插值
 
@@ -1437,7 +1437,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img)
 ```
 
-![image-20211204011041795](images/image-20211204011041795.png)
+![image-20211204011041795](./images/image-20211204011041795.png)
 
 ```python
 from PIL import Image
@@ -1447,7 +1447,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img, interpolation = "nearest")
 ```
 
-![image-20211204011222797](images/image-20211204011222797.png)
+![image-20211204011222797](./images/image-20211204011222797.png)
 
 ```python
 from PIL import Image
@@ -1457,7 +1457,7 @@ img.thumbnail((64, 64), Image.ANTIALIAS) # resizes image in-replace
 imgplot = plt.imshow(img, interpolation = "bicubic")
 ```
 
-![image-20211204011514588](images/image-20211204011514588.png)
+![image-20211204011514588](./images/image-20211204011514588.png)
 
 ## 资料
 

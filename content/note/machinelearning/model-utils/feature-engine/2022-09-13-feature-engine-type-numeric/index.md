@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-13'
 slug: feature-engine-type-numeric
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---
@@ -1058,17 +1058,17 @@ df['isGood'] = isGood
 df['MeanPrice'] = df.groupby('UID')['Price'].transform('mean').values
 ```
 
-![img](images/tree_data.png)
+![img](./images/tree_data.png)
 
 如果我们只用用户 UID 进行分割，我们发现三次也可以全部分对，但是数据集合中，
 我们的用户很多，这么做又会出现和高基数类别数据类似的问题。如果我们使用 Price 进行分割，
 我们发现没法直接分割开，从而会出现下面这种的分割情况：
 
-![img](images/tree1.png)
+![img](./images/tree1.png)
 
 而如果我们基于用户ID和用户消费的价格求均值，再进行分割，我们就可以很快地将二者完美的分割开：
 
-![img](images/tree2.png)
+![img](./images/tree2.png)
 
 也就是说，我们直接基于用户的ID对用户的消费价格求均值得到的特征完美的帮助了我们的模型。
 这是一个简单的例子，还有非常多的情况树模型都没法挖掘，这些我们会在后续特征工程部分进行详细地展开
@@ -1080,17 +1080,17 @@ df['MeanPrice'] = df.groupby('UID')['Price'].transform('mean').values
 例如在某个波动曲线中，如果下一时刻与上一时刻的差值大于某个阈值，
 这个时候表示出了故障，而其它时候则正常，这种情况梯度提升树模型可能完全不知道该如何去区分
 
-![img](images/tree_data.png)
+![img](./images/tree_data.png)
 
 如果我们按照原始的 feature 去进行划分，模型可能会将大于 800 的值预测位 1，如下图所示：
 
-![img](images/tree3.png)
+![img](./images/tree3.png)
 
 对于剩下的 `200` 那个却极难划分。而如果我们进行上下文的特征抽取，
 即用下一阶段的值减去上一阶段的值并取绝对值，那么我们就可以得到下面所示的结果，
 模型很快就可以得到充分的学习并拿到很好的效果：
 
-![img](images/tree4.png)
+![img](./images/tree4.png)
 
 <p align='right'><a href='#top'><返回顶端></a></p>
 

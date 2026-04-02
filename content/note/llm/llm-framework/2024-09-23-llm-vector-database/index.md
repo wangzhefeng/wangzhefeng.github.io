@@ -97,9 +97,9 @@ img {
 > Chroma makes it easy to build LLM apps by making knowledge, 
 > facts, and skills pluggable(可插拔) for LLMs.
 
-![img](images/chroma-arch.png)
+![img](./images/chroma-arch.png)
 
-![img](images/chroma.png)
+![img](./images/chroma.png)
 
 Chroma gives you the tools to:
 

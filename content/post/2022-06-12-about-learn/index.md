@@ -49,4 +49,4 @@ tags:
 
 ## 学习金字塔
 
-![学习金字塔](images/learn_pyramid.jpeg)
+![学习金字塔](./images/learn_pyramid.jpeg)

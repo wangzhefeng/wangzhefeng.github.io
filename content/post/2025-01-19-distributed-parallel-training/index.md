@@ -1,7 +1,9 @@
 ---
 title: 模型分布式训练
+subtitle: Distributed Parallel Training
 author: wangzf
 date: '2025-01-19'
+description: 总结深度学习模型分布式训练中的并行策略、通信开销与实现要点。
 slug: distributed-parallel-training
 categories:
   - deeplearning
@@ -140,7 +142,7 @@ python -u YOUR_TRAINING_SCRIPT.py \
 与 DDP 相比，FSDP 通过分片模型参数、梯度和优化器状态来减少 GPU 内存占用。
 这使得训练无法在单个 GPU 上运行的模型成为可能。如下图所示，
 
-![img](images/fsdp_workflow.png)
+![img](./images/fsdp_workflow.png)
 
 * 在正向和反向传播计算之外，参数(parameters)是完全分片的(fully sharded)
 * 在正向和反向传播之前，分片参数(sharded parameters)会全部聚合(all-gathered)为未分片参数(unsharded parameters)
@@ -150,7 +152,7 @@ python -u YOUR_TRAINING_SCRIPT.py \
 
 FSDP 可以被视为将 DDP 的全归约(all-reduce)操作分解为：归约散播(reduce-scater)和全收集(all-gather)操作：
 
-![img](images/fsdp_sharding.png)
+![img](./images/fsdp_sharding.png)
 
 #### FSDP2 使用
 

@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-01-07'
 slug: base
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -215,7 +215,7 @@ img {
 所谓运筹学，就是通过构建及分析数学模型，将问题特征用数学语言合理表示并分析，
 用以处理各类决策问题(decision problem)。下图展示了运筹学处理问题的一般步骤。
 
-![img](images/)
+![img](./images/)
 
 1. 一般步骤开始于**建模**，即我们首先要定义相关变量，以及量化用于描述问题相关行为的一些关系。
 2. 之后是**分析**。我们需要应用数学方法与技术去找到模型建议的结论，
@@ -267,7 +267,7 @@ img {
 下图展示了如何用参数(parameter, 即给定的“数量”)定义适用于系统内部模型的目标函数以及约束，
 然后，通过对决策变量进行分析，进而输出系统结果：输出变量(output variable)。
 
-![img](images/)
+![img](./images/)
 
 ### 敏感性分析
 

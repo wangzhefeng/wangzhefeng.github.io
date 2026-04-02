@@ -281,7 +281,7 @@ with open("linear_regression.onnx", "wb") as f:
 
 导出的模型 `linear_regression.onnx` 可以在 [https://netron.app/](https://netron.app/) 中进行可视化：
 
-![img](images/onnx-lr.png)
+![img](./images/onnx-lr.png)
 
 * `A`、`B`、`X`、`Y` 表示输入、输出数据
 * 黑色的 `MatMul` 和 `Add` 是 Node，表示具体的操作

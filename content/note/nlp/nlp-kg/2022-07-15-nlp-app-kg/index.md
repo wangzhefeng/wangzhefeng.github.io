@@ -46,7 +46,7 @@ img {
 
 ## 知识图谱简介
 
-![img](images/knowledge_graph.png)
+![img](./images/knowledge_graph.png)
 
 ### 知识图谱定义
 

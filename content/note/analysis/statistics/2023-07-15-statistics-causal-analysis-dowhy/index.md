@@ -66,7 +66,7 @@ DoWhy 是微软发布的一个用于进行端到端因果推断的 Python 库，
 
 下图总结了 DoWhy 的整体流程：
 
-![img](images/dowhy.png)
+![img](./images/dowhy.png)
 
 下面将分别对这四个步骤及其所涉及的方法进行简要介绍。
 

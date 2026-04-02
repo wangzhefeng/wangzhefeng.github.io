@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-27'
 slug: feature-engine
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---

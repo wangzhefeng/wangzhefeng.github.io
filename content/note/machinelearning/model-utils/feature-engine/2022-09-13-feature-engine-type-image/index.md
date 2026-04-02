@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-13'
 slug: feature-engine-type-image
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---
@@ -130,7 +130,7 @@ img {
 这个时候基于梯度提升树模型的建模方案还是至关重要的，这个时候为了更好地使用所有的数据信息，
 需要对图像特征进行多方位的提取
 
-![img](images/image_features.png)
+![img](./images/image_features.png)
 
 ## 全局特征
 

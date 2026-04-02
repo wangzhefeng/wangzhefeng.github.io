@@ -51,7 +51,7 @@ img {
 
 ## Huggging Face NLP ecosystem
 
-![img](images/overview.png)
+![img](./images/overview.png)
 
 * [Transformers](https://github.com/huggingface/transformers)
 * [Datasets](https://github.com/huggingface/datasets)

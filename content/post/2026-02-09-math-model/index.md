@@ -1,10 +1,12 @@
 ---
 title: 数学建模
+subtitle: Mathematical Modeling
 author: wangzf
 date: '2026-02-09'
+description: 介绍数学建模的基本思路、评价标准与实际问题求解路径。
 slug: math-model
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -116,4 +118,3 @@ img {
 
 
 ## 函数极值与规划模型
-

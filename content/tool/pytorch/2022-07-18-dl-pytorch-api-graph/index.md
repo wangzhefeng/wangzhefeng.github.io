@@ -61,7 +61,7 @@ img {
 PyTorch 的计算图由节点和边组成，节点表示张量或者 Function，
 边表示张量和 Function 之间的依赖关系。
 
-![img](./images/torch动态图.gif)
+![img](./images/torch-dynamic-graph.gif)
 
 PyTorch 中的计算图是动态的，这里的动态主要有两重含义：
 

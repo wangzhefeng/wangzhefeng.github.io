@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-09'
 slug: univariate
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - model
 ---

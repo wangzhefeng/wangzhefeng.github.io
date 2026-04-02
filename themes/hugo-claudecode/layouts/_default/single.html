@@ -3,17 +3,38 @@
 {{ $pageRender := partialCached "page_render_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
 {{ $content := $pageRender.content }}
 {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+{{ $related := slice }}
+{{ $categoryLabel := "" }}
+{{ $heroHiddenRoutes := slice "/about/" "/resume/" "/ivy/" }}
+{{ $hideArticleHero := in $heroHiddenRoutes (lower .RelPermalink) }}
+{{ with $card.primaryCategory }}
+  {{ $categoryLabel = humanize (replace . "-" " ") }}
+{{ end }}
+{{ with .NextInSection }}{{ $related = $related | append . }}{{ end }}
+{{ with .PrevInSection }}{{ if not (in $related .) }}{{ $related = $related | append . }}{{ end }}{{ end }}
 
 <div class="docs-layout">
   {{ partial "docs_sidebar.html" . }}
-  <div class="docs-content">
-    <header class="title">
-      {{ partial "meta.html" . }}
+
+  <article class="docs-content article-frame" data-pagefind-body>
+    {{ if not $hideArticleHero }}
+    <header class="article-hero title">
+      <div class="article-hero__meta">
+        <span class="article-hero__kind">{{ $card.kind }}</span>
+        {{ with $card.date }}<span class="article-hero__date">{{ . }}</span>{{ end }}
+        {{ with $categoryLabel }}<span class="article-hero__category">{{ . }}</span>{{ end }}
+      </div>
+      <h1>{{ .Title }}</h1>
+      {{ with or .Description .Params.subtitle }}<p class="article-hero__lead">{{ . }}</p>{{ end }}
     </header>
-    <div class="article-content" id="article-content" data-pagefind-body data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}">
+    {{ end }}
+
+    <div class="article-content article-content--story" id="article-content" data-card-kind="{{ $card.kind }}" data-card-date="{{ $card.date }}">
       {{ $content | safeHTML }}
     </div>
-  </div>
+
+  </article>
+
   {{ partial "page_rail.html" . }}
 </div>
 

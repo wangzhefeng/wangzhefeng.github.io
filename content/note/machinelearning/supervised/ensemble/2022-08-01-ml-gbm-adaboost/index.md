@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-01'
 slug: ml-gbm-adaboost
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

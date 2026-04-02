@@ -4,7 +4,7 @@ author: wangzf
 date: '2021-11-20'
 slug: git
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---
@@ -355,7 +355,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 
 ### Create a Branch
 
-![git](images/git1.png)
+![git](./images/git1.png)
 
 - When you're working on a project, you're going to have a bunch of
     different features or ideas in progress at any given time – some of
@@ -382,7 +382,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 
 ### Add Commit
 
-![git](images/git2.png)
+![git](./images/git2.png)
 
 - Once your branch has been created, it's time to start making changes.
     Whenever you add, edit, or delete a file, you're making a commit, and
@@ -405,7 +405,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 
 ### Open a Pull Request
 
-![git](images/git3.png)
+![git](./images/git3.png)
 
 
 - Pull Requests initiate discussion about your commits. Because they're
@@ -432,7 +432,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 
 ### Discuss and Review your code
 
-![git](images/git4.png)
+![git](./images/git4.png)
 
 - Once a Pull Request has been opened, the person or team reviewing
     your changes may have questions or comments. Perhaps the coding style
@@ -455,7 +455,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 
 ### Deploy
 
-![git](images/git5.png)
+![git](./images/git5.png)
    
  - With GitHub, you can deploy from a branch for final testing in
     production before merging to master.
@@ -467,7 +467,7 @@ GitHub flow 是一个轻量级的、基于分支(branch)的工作流, 它支持�
 ### Merge
 
 
-![git](images/git6.png)
+![git](./images/git6.png)
    
 
 - Now that your changes have been verified in production, it is time to

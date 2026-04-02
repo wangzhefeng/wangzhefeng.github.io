@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-24'
 slug: python-bigdata
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

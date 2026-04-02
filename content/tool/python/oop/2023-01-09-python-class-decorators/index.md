@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-01-09'
 slug: python-class-decorators
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

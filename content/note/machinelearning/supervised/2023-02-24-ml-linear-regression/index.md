@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-24'
 slug: ml-linear-regression
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -180,7 +180,7 @@ img {
 
 举例如下：
 
-![img](images/res.png)
+![img](./images/res.png)
 
 * 图 1：残差和拟合值对比图
     - 对残差和拟合值作图，横坐标是拟合值，纵坐标是残差。残差和拟合值之间，数据点均匀分布在 `$y=0$` 两侧，

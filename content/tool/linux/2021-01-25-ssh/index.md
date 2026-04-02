@@ -4,7 +4,7 @@ author: wangzf
 date: '2021-01-25'
 slug: ssh
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---
@@ -125,7 +125,7 @@ $ /etc/init.d/ssh status
 
 ## 什么是 SSH
 
-![ssh](images/Linux_ssh2.png)
+![ssh](./images/Linux_ssh2.png)
 
 SSH 是 Secure Shell 的缩写, 也叫安全外壳协议, 是一种网络协议, 
 用于计算机之间的安全远程加密登录. 
@@ -138,7 +138,7 @@ SSH 是 Secure Shell 的缩写, 也叫安全外壳协议, 是一种网络协议,
 
 ## SSH 工作原理
 
-![ssh](images/Linux_ssh1.png)
+![ssh](./images/Linux_ssh1.png)
 
 SSH 的安全性比较好, 其对数据进行加密的方式主要有两种: 
 

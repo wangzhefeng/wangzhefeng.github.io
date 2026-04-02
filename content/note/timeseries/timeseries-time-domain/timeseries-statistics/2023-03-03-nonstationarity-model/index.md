@@ -112,7 +112,7 @@ img {
 
 非平稳时序（同方差）建模流程如下：
 
-![img](images/flow1.png)
+![img](./images/flow1.png)
 
 ### 非平稳时序分析-异方差
 
@@ -129,7 +129,7 @@ img {
 
 非平稳时序（异方差）建模流程：
 
-![img](images/flow2.png)
+![img](./images/flow2.png)
 
 ### 方差齐性检验
 
@@ -139,7 +139,7 @@ img {
 
 残差图是直接可视化残差序列，观察波动状况。
 
-![img](images/res.png)
+![img](./images/res.png)
 
 ```python
 
@@ -149,7 +149,7 @@ img {
 
 残差平方图是对一阶差分后的时序求平方后的图。差分是抽取波动性，平方是把差分变正数。
 
-![img](images/res_2.png)
+![img](./images/res_2.png)
 
 ```python
 
@@ -372,18 +372,18 @@ E(x_{s}\epsilon_{t}) = 0, \forall s < t&
 
 #### ARIMA 建模流程图
 
-![img](images/arima_flow.png)
+![img](./images/arima_flow.png)
 
 #### 差分运算
 
 差分运算是一种十分简单有效的确定性信息提取方法，
 很多时候适当阶数的差分便可以充分提取出确定性信息。
 
-![img](images/diff.png)
+![img](./images/diff.png)
 
 针对不同时序，我们可以选择不同差分方式，请见下图所示：
 
-![img](images/diff2.png)
+![img](./images/diff2.png)
 
 > p 阶差分
 
@@ -466,14 +466,14 @@ data = pdr.get_data_fred("HOUSTNSA", "1959-01-01", "2019-06-01")
 data
 ```
 
-![img](images/pct_change_data.png)
+![img](./images/pct_change_data.png)
 
 ```python
 fig, ax = plt.subplots()
 ax = housing.plot(ax = ax)
 ```
 
-![img](images/pct_change_data_plot.png)
+![img](./images/pct_change_data_plot.png)
 
 ```python
 housing = data.HOUSTNSA.pct_change().dropna()
@@ -502,7 +502,7 @@ fig, ax = plt.subplots()
 ax = housing.plot(ax = ax)
 ```
 
-![img](images/pct_change_housing_plot.png)
+![img](./images/pct_change_housing_plot.png)
 
 ### 残差自回归模型
 

@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-27'
 slug: eda
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - model
 ---
@@ -67,7 +67,7 @@ img {
 
 探索性数据分析基本可以汇总到下面的四个模块：
 
-![img](images/eda.jpeg)
+![img](./images/eda.jpeg)
 
 1. 全局数据分析
     - 通过数据全局分析，可以了解到数据的整体情况，包括数据类型、大小、质量等

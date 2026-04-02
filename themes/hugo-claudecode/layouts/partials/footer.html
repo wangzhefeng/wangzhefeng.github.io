@@ -37,9 +37,12 @@
       {{ $searchIndex = merge $searchIndex (dict .RelPermalink (dict
         "title" $card.title
         "excerpt" $card.excerpt
+        "description" $card.description
         "kind" $card.kind
+        "section" $card.section
         "date" $card.date
         "sectionTitle" $card.sectionTitle
+        "primaryCategory" $card.primaryCategory
       )) }}
     {{ end }}
     <script>

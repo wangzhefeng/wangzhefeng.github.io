@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-03-10'
 slug: matlab-visual
 categories:
-  - MATLAB
+  - matlab
 tags:
   - tool
 ---
@@ -87,7 +87,7 @@ ylabel("sin(x)")
 title("Plot of the Sine Function")
 ```
 
-![img](images/plot1.png)
+![img](./images/plot1.png)
 
 通过向 `plot` 函数添加第三个输入参数 `"r--"`，可以使用其他类型线条绘制相同的变量。
 在线条设定中，每个设定可包含表示线条 <span style='border-bottom:1.5px dashed red;'>颜色</span>、<span style='border-bottom:1.5px dashed red;'>样式</span> 和 <span style='border-bottom:1.5px dashed red;'>标记的字符</span>。
@@ -102,7 +102,7 @@ ylabel("sin(x)")
 title("Plot of the Sine Function")
 ```
 
-![img](images/plot2.png)
+![img](./images/plot2.png)
 
 为第一幅绘图定义的标题和标签不再被用于当前的图窗窗口中。
 默认情况下，每次调用绘图函数、重置坐标区及其他元素以准备新绘图时，
@@ -123,7 +123,7 @@ legend("sin", "cos")
 hold off
 ```
 
-![img](images/plot3.png)
+![img](./images/plot3.png)
 
 ### 三维绘图
 
@@ -141,7 +141,7 @@ z = x .* exp(-x.^2 - y.^2);
 surf(x, y, z)
 ```
 
-![img](images/surf1.png)
+![img](./images/surf1.png)
 
 #### surf 函数及 mesh 函数
 

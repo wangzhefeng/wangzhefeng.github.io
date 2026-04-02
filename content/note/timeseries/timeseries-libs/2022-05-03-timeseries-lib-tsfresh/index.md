@@ -195,7 +195,7 @@ pipeline.fit(X, y)
 
 ## Rolling 和 时间序列预测
 
-![img](images/rolling_mechanism_1.png)
+![img](./images/rolling_mechanism_1.png)
 
 
 

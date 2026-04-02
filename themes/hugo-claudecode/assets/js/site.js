@@ -12,6 +12,10 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
   const searchResults = document.querySelector("[data-search-results]");
   const themeColorMeta = document.querySelector("[data-theme-color]");
   const utterancesRoot = document.querySelector("[data-utterances-root]");
+  const homeStory = document.querySelector("[data-home-story]");
+  const homeCategoryShell = document.querySelector("[data-home-category-shell]");
+  const homeCategoryGrid = document.querySelector("[data-home-category-grid]");
+  const collectionShells = document.querySelectorAll("[data-collection-shell]");
   const openSearchButtons = document.querySelectorAll("[data-open-search]");
   const closeSearchButtons = document.querySelectorAll("[data-close-search]");
   const themeToggles = document.querySelectorAll("[data-theme-toggle]");
@@ -26,6 +30,24 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
   let pagefindModule = null;
   let searchSequence = 0;
   let textLayoutFrame = 0;
+
+  const syncViewSwitchHighlight = (switcher) => {
+    if (!switcher) return;
+
+    const highlight = switcher.querySelector("[data-view-switch-highlight]");
+    const active = switcher.querySelector(".view-switch__item.is-active");
+    if (!highlight || !active) return;
+
+    highlight.style.width = `${active.offsetWidth}px`;
+    highlight.style.height = `${active.offsetHeight}px`;
+    highlight.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop}px)`;
+  };
+
+  const syncAllViewSwitchHighlights = () => {
+    document.querySelectorAll(".view-switch").forEach((switcher) => {
+      syncViewSwitchHighlight(switcher);
+    });
+  };
 
   const messages = {
     "zh-CN": {
@@ -214,6 +236,11 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
   const kindLabel = (kind, locale = currentLocale()) =>
     kindMessages[locale]?.[kind] || kindMessages["zh-CN"][kind] || kind || message("menuPage", locale);
 
+  const normalizeSlugLabel = (value = "") =>
+    value
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
   const graphemeSegmenter = typeof Intl !== "undefined" && Intl.Segmenter
     ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
     : null;
@@ -309,8 +336,127 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
     if (textLayoutFrame) window.cancelAnimationFrame(textLayoutFrame);
     textLayoutFrame = window.requestAnimationFrame(() => {
       applyTextLayout(scope);
+      syncHomeCategoryPanel();
       textLayoutFrame = 0;
     });
+  };
+
+  const updateCollectionVisibility = (shell) => {
+    const activeSection = shell.getAttribute("data-active-section") || "all";
+    const activeCategory = shell.getAttribute("data-active-category") || "all";
+    shell.querySelectorAll("[data-collection-card]").forEach((card) => {
+      const section = card.getAttribute("data-section") || "";
+      const category = card.getAttribute("data-theme-key") || card.getAttribute("data-primary-category") || "";
+      const sectionVisible = activeSection === "all" || section === activeSection;
+      const categoryVisible = activeCategory === "all" || category === activeCategory;
+      card.hidden = !(sectionVisible && categoryVisible);
+    });
+
+    const featuredPanels = shell.querySelectorAll("[data-featured-panel]");
+    if (featuredPanels.length) {
+      featuredPanels.forEach((panel) => {
+        panel.classList.toggle("is-active", panel.getAttribute("data-featured-panel") === activeSection);
+      });
+    }
+
+    shell.querySelectorAll("[data-featured-container]").forEach((container) => {
+      const visibleCard = Array.from(container.querySelectorAll("[data-collection-card]")).some((card) => !card.hidden);
+      container.hidden = !visibleCard;
+    });
+  };
+
+  const initializeCollections = () => {
+    collectionShells.forEach((shell) => {
+      shell.setAttribute("data-active-section", "all");
+      const categoryButtons = Array.from(shell.querySelectorAll("[data-category-filter]"));
+      const initialCategory = categoryButtons[0]?.getAttribute("data-category-filter") || "all";
+      shell.setAttribute("data-active-category", initialCategory);
+
+      categoryButtons.forEach((item, index) => {
+        item.classList.toggle("is-active", index === 0);
+      });
+
+      shell.querySelectorAll("[data-section-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const next = button.getAttribute("data-section-filter") || "all";
+          shell.setAttribute("data-active-section", next);
+          shell.querySelectorAll("[data-section-filter]").forEach((item) => {
+            item.classList.toggle("is-active", item === button);
+          });
+          updateCollectionVisibility(shell);
+        });
+      });
+
+      categoryButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const next = button.getAttribute("data-category-filter") || "all";
+          shell.setAttribute("data-active-category", next);
+          categoryButtons.forEach((item) => {
+            item.classList.toggle("is-active", item === button);
+          });
+          updateCollectionVisibility(shell);
+        });
+      });
+
+      shell.querySelectorAll("[data-view-switch]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const grids = shell.querySelectorAll("[data-collection-grid]");
+          if (!grids.length) return;
+          const next = button.getAttribute("data-view-switch") || "grid";
+          grids.forEach((grid) => {
+            grid.classList.toggle("is-compact", next === "compact");
+          });
+          shell.querySelectorAll("[data-view-switch]").forEach((item) => {
+            item.classList.toggle("is-active", item === button);
+          });
+          const switcher = button.closest(".view-switch");
+          if (switcher) {
+            window.requestAnimationFrame(() => syncViewSwitchHighlight(switcher));
+          }
+        });
+      });
+
+      updateCollectionVisibility(shell);
+      const switcher = shell.querySelector(".view-switch");
+      if (switcher) {
+        window.requestAnimationFrame(() => syncViewSwitchHighlight(switcher));
+      }
+    });
+  };
+
+  const syncHomeCategoryPanel = () => {
+    if (!homeStory || !homeCategoryShell || !homeCategoryGrid) return;
+
+    if (window.innerWidth <= 980) {
+      homeCategoryShell.style.removeProperty("--home-category-max-height");
+      homeCategoryShell.classList.remove("is-scrollable", "is-dense");
+      homeCategoryGrid.style.removeProperty("max-height");
+      return;
+    }
+
+    const storyHeight = Math.ceil(homeStory.getBoundingClientRect().height);
+    if (!storyHeight) return;
+
+    const shellStyle = window.getComputedStyle(homeCategoryShell);
+    const paddingTop = Number.parseFloat(shellStyle.paddingTop) || 0;
+    const paddingBottom = Number.parseFloat(shellStyle.paddingBottom) || 0;
+    const shellGap = Number.parseFloat(shellStyle.rowGap || shellStyle.gap) || 0;
+    const head = homeCategoryShell.querySelector(".home-category-panel__head");
+    const headHeight = head ? Math.ceil(head.getBoundingClientRect().height) : 0;
+    const availableGridHeight = Math.max(storyHeight - headHeight - paddingTop - paddingBottom - shellGap, 120);
+
+    homeCategoryShell.style.setProperty("--home-category-max-height", `${storyHeight}px`);
+    homeCategoryGrid.style.maxHeight = `${availableGridHeight}px`;
+
+    homeCategoryShell.classList.remove("is-scrollable", "is-dense");
+    const needsDense = homeCategoryGrid.scrollHeight > availableGridHeight;
+    if (needsDense) {
+      homeCategoryShell.classList.add("is-dense");
+    }
+    const needsScroll = homeCategoryGrid.scrollHeight > availableGridHeight;
+    if (needsScroll) {
+      homeCategoryShell.classList.add("is-scrollable");
+    }
   };
 
   const updateLocaleUi = (locale) => {
@@ -603,23 +749,27 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
           const kind = metadata.kind || (item.url.split("/").filter(Boolean)[0] || "page");
           const date = metadata.date || "";
           const title = item.meta.title || message("untitledPage", locale);
+          const category = metadata.primaryCategory ? normalizeSlugLabel(metadata.primaryCategory) : "";
           return `
             <a class="search-result" href="${item.url}" data-text-card data-card-title="${title.replace(/"/g, "&quot;")}" data-card-excerpt="${excerpt.replace(/"/g, "&quot;")}" data-card-kind="${kind}" data-card-date="${date}" data-card-title-lines="2" data-card-excerpt-lines="2">
-              <div class="search-result__top">
-                <span class="search-result__index">${String(index + 1).padStart(2, "0")}</span>
-                <div class="search-result__meta">
-                  <span class="search-result__section">${section}</span>
-                  <span>${date || normalizedPath(item.url)}</span>
+              <div class="search-result__content">
+                <div class="search-result__top">
+                  <span class="search-result__index">${String(index + 1).padStart(2, "0")}</span>
+                  <div class="search-result__meta">
+                    <span class="search-result__section">${section}</span>
+                    <span>${date || normalizedPath(item.url)}</span>
+                    ${category ? `<span>${category}</span>` : ""}
+                  </div>
                 </div>
-              </div>
-              <div class="search-result__body">
-                <div class="search-result__headline">
-                  <span class="search-result__kind" data-kind-label>${kindLabel(kind, locale)}</span>
-                  <h3 data-card-title-node>${title}</h3>
+                <div class="search-result__body">
+                  <div class="search-result__headline">
+                    <span class="search-result__kind" data-kind-label>${kindLabel(kind, locale)}</span>
+                    <h3 data-card-title-node>${title}</h3>
+                  </div>
+                  <span class="search-result__cta">${message("openPage", locale)}</span>
                 </div>
-                <span class="search-result__cta">${message("openPage", locale)}</span>
+                <p class="search-result__excerpt" data-card-excerpt-node>${excerpt}</p>
               </div>
-              <p class="search-result__excerpt" data-card-excerpt-node>${excerpt}</p>
             </a>
           `;
         })
@@ -650,9 +800,23 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
     scheduleTextLayout();
   }
 
+  initializeCollections();
+  syncAllViewSwitchHighlights();
+
+  window.addEventListener("resize", () => {
+    window.requestAnimationFrame(syncAllViewSwitchHighlights);
+  });
+
   window.addEventListener("resize", () => {
     scheduleTextLayout();
   }, { passive: true });
+
+  if (typeof ResizeObserver === "function" && homeStory) {
+    const observer = new ResizeObserver(() => {
+      scheduleTextLayout();
+    });
+    observer.observe(homeStory);
+  }
 
   const languageName = (className = "") => {
     const match = className.match(/(?:language|lang)-([a-z0-9#+_-]+)/i);
@@ -768,6 +932,8 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
 
     headings.forEach((heading) => observer.observe(heading));
   }
+
+  body.classList.add("has-reveal");
 
   if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(

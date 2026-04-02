@@ -4,7 +4,7 @@ author: wangzf
 date: '2020-09-13'
 slug: ab-test
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - note
 ---
@@ -325,11 +325,11 @@ T 检验是用 t 分布理论来推论差异发生的概率，从而比较两个
 
 假设检验方法的选择规则如下：
 
-![img](images/test2.png)
+![img](./images/test2.png)
 
 TODO：
 
-![img](images/test.png)
+![img](./images/test.png)
 
 ##### 估算实验组和对照组评价指标差值
 
@@ -420,7 +420,7 @@ print(t, p_value)
 
 ### AB test 相关的统计学理论
 
-![img](images/stat.jpg)
+![img](./images/stat.jpg)
 
 随机将测试用户群分为 2 部分，用户群 1 使用 A 方案，用户群 2 使用 B 方案，
 经过一定测试时间后，根据收集到的两方案样本观测数据，根据显著性检验结果选取最好方案。

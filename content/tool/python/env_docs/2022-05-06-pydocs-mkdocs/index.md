@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-05-06'
 slug: pydocs-mkdocs
 categories: 
-  - Python
+  - python
 tags:
   - tool
 ---

@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-07-15'
 slug: sobol-sensitivity-analysis
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - model
 ---

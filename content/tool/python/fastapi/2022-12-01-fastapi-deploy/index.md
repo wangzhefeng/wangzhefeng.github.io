@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-12-01'
 slug: fastapi-deploy
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

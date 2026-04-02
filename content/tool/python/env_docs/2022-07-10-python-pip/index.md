@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-10'
 slug: python-pip
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

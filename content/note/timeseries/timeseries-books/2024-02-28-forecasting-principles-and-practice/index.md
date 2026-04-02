@@ -301,7 +301,7 @@ img {
 下面的图表显示了未来澳大利亚国际游客的 80% 和 95% 的预测区间。
 蓝线是可能的预测值的平均值，我们称之为 <span style='border-bottom:1.5px dashed red;'>点预测</span>。
 
-![img](images/aus.png)
+![img](./images/aus.png)
 
 #### 预测分布
 
@@ -322,7 +322,7 @@ img {
 
 为时间序列数据生成预测的过程可以分解为几个步骤：
 
-![img](images/tools.png)
+![img](./images/tools.png)
 
 1. 数据准备--整理
 

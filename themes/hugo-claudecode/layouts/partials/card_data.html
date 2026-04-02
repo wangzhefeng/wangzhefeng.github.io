@@ -1,11 +1,21 @@
 {{ $page := . }}
 {{ $pageRender := partialCached "page_render_data.html" $page $page.RelPermalink $page.Lastmod.Unix $page.Kind $page.IsPage }}
 {{ $excerpt := "" }}
+{{ $primaryCategory := "" }}
+{{ $themeKey := "" }}
 
-{{ if $page.Params.subtitle }}
-  {{ $excerpt = $page.Params.subtitle | plainify }}
-{{ else if $page.Description }}
+{{ with $page.Params.categories }}
+  {{ if reflect.IsSlice . }}
+    {{ $primaryCategory = index . 0 }}
+  {{ else }}
+    {{ $primaryCategory = . }}
+  {{ end }}
+{{ end }}
+
+{{ if $page.Description }}
   {{ $excerpt = $page.Description | plainify }}
+{{ else if $page.Params.subtitle }}
+  {{ $excerpt = $page.Params.subtitle | plainify }}
 {{ else }}
   {{ $plainContent := $pageRender.content | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
   {{ if $plainContent }}
@@ -29,11 +39,33 @@
   {{ $sectionTitle = .Title }}
 {{ end }}
 
+{{ with $page.File }}
+  {{ $path := .Path }}
+  {{ if strings.HasPrefix $path "note/" }}
+    {{ $segments := split $path "/" }}
+    {{ if ge (len $segments) 2 }}
+      {{ $themeKey = index $segments 1 }}
+    {{ end }}
+  {{ else if strings.HasPrefix $path "tool/" }}
+    {{ $segments := split $path "/" }}
+    {{ if ge (len $segments) 2 }}
+      {{ $themeKey = index $segments 1 }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ if not $themeKey }}
+  {{ $themeKey = $primaryCategory }}
+{{ end }}
+
 {{ return (dict
   "title" $page.Title
   "excerpt" $excerpt
+  "description" $excerpt
   "kind" (or $page.Section "page")
+  "section" (or $page.Section "page")
   "date" $date
   "permalink" $page.RelPermalink
   "sectionTitle" $sectionTitle
+  "primaryCategory" $primaryCategory
+  "themeKey" $themeKey
 ) }}

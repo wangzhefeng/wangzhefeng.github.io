@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-01'
 slug: python-wheel
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

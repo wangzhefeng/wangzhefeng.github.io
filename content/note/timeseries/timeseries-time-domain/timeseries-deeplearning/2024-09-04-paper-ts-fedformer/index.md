@@ -65,9 +65,9 @@ img {
 
 ## 模型定义
 
-![img](images/fedformer-frame.png)
+![img](./images/fedformer-frame.png)
 
-<!-- ![img](images/FEDformer.png) -->
+<!-- ![img](./images/FEDformer.png) -->
 
 ## 实验结果
 

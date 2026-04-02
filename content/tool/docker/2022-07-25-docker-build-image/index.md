@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-25'
 slug: docker-build-image
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---

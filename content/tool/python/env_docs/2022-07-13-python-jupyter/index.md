@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-13'
 slug: python-jupyter
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

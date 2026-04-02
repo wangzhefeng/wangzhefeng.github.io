@@ -218,7 +218,7 @@ for i in range(9):
 plt.show()
 ```
 
-![img](images/mnist.png)
+![img](./images/mnist.png)
 
 #### 神经网络示例
 

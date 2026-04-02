@@ -65,7 +65,7 @@ TODS 具有如下特点：
 
 TODS 提供了详尽的用于构建基于机器学习的异常检测系统的模块，它们包括：
 
-![img](images/tods.png)
+![img](./images/tods.png)
 
 * 数据处理(data processing)
     - data loading
@@ -103,9 +103,9 @@ TODS 提供了详尽的用于构建基于机器学习的异常检测系统的模
 
 ### TODS 异常检测场景
 
-![img](images/tranditional_type.png)
+![img](./images/tranditional_type.png)
 
-![img](images/tranditional_type3.png)
+![img](./images/tranditional_type3.png)
 
 TODS 的这些模块功能可以让时间序列数据执行三种常见的异常值检测场景：
 

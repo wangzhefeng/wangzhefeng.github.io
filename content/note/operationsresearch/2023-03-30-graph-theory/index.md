@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-03-30'
 slug: graph-theory
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -100,7 +100,7 @@ img {
 > 如果将顶点看作节点，将边看作连接各个节点的引用（指针），就可以将图看作一种从链表拓展而来的数据结构。
 > 相较于线性关系（链表）和分治关系（树），网络关系（图）的自由度更高，因而更为复杂。
 > 
-> ![img](images/graph1.png)
+> ![img](./images/graph1.png)
 
 顶点和边具有**属性(Attribute)**，边可能有**方向**(有向图 Directed Graph)。
 比如：社交网络中，人是顶点，人和人之间的关系是边，人(顶点)的属性比如年龄、性别、职业、
@@ -114,7 +114,7 @@ img {
 * 在有向图中，边具有方向性，即 `$A \rightarrow B$` 和 `$A \leftarrow B$` 两个方向的边是相互独立的，
   例如微博或抖音上的 “关注” 与 “被关注” 关系。
 
-![img](images/graph2.png)
+![img](./images/graph2.png)
 
 <!-- ![[img](https://sites.google.com/a/cs.christuniversity.in/discrete-mathematics-lectures/graphs/directed-and-undirected-graph)](images/graph.png) -->
 
@@ -122,7 +122,7 @@ img {
 
 根据所有顶点是否连通，可分为连通图(connected graph)和非连通图(disconnected graph)，如下图所示。
 
-![img](images/graph3.png)
+![img](./images/graph3.png)
 
 * **连通图**：若图中任意两个顶点之间至少有一条路径连接起来，即从某个顶点出发，可以到达其余任意顶点。
 * **非连通图**：从某个顶点出发，至少有一个顶点无法到达。
@@ -145,7 +145,7 @@ img {
 - 有向图的边或弧具有与它相关数字，这种与图的边或弧相关的数字叫作**权重**，
   在实际问题中，权通常是两个城市之间的距离、两个地点之间的运输费用等。
 
-![img](images/graph4.png)
+![img](./images/graph4.png)
 
 ### 图的其他概念
 
@@ -184,7 +184,7 @@ img {
 0, \text{otherwise} 
 \end{cases}$$`
 
-![img](images/adjacency_matrix2.png)
+![img](./images/adjacency_matrix2.png)
 
 邻接矩阵具有以下特性。
 
@@ -197,7 +197,7 @@ img {
 然而，矩阵的空间复杂度为 `$O(n^{2})$`，内存占用较多。
 
 <!-- 下图中 A 和 B、C、E 相连，故第一行和第一列对应的位置为 1，其余位置为 0
-![img](images/adjacency_matrix.png) -->
+![img](./images/adjacency_matrix.png) -->
 
 > **旅行商问题(Traveling Saleman Problem, TSP)：**
 > 
@@ -221,13 +221,13 @@ img {
 也可以选用边来表示图，即邻接列表(Adjacency List)，这可以大幅减少对空间的消耗，
 因为实际的边比所有可能的边(邻接矩阵)数量往往小很多。
 
-<!-- ![img](images/adjacency_list.png) -->
+<!-- ![img](./images/adjacency_list.png) -->
 
 邻接表（adjacency list）使用 `$n$` 个链表来表示图，链表节点表示顶点。
 第 `$i$` 个链表对应顶点 `$i$`，其中存储了该顶点的所有邻接顶点（与该顶点相连的顶点）。
 下图展示了一个使用邻接表存储的图的示例。
 
-![img](images/adjacency_list2.png)
+![img](./images/adjacency_list2.png)
 
 邻接表仅存储实际存在的边，而边的总数通常远小于 `$n^{2}$` ，因此它更加节省空间。
 然而，在邻接表中需要通过遍历链表来查找边，因此其时间效率不如邻接矩阵。
@@ -266,23 +266,23 @@ img {
 
 初始化邻接矩阵：
 
-![img](images/matrix1.png)
+![img](./images/matrix1.png)
 
 添加边：
 
-![img](images/matrix2.png)
+![img](./images/matrix2.png)
 
 删除边：
 
-![img](images/matrix3.png)
+![img](./images/matrix3.png)
 
 添加顶点：
 
-![img](images/matrix4.png)
+![img](./images/matrix4.png)
 
 删除顶点：
 
-![img](images/matrix5.png)
+![img](./images/matrix5.png)
 
 以下是基于邻接矩阵表示图的实现代码：
 
@@ -390,23 +390,23 @@ class GraphAdjMat:
 
 初始化邻接表：
 
-![img](images/list1.png)
+![img](./images/list1.png)
 
 添加边：
 
-![img](images/list2.png)
+![img](./images/list2.png)
 
 删除边：
 
-![img](images/list3.png)
+![img](./images/list3.png)
 
 添加顶点：
 
-![img](images/list4.png)
+![img](./images/list4.png)
 
 删除顶点：
 
-![img](images/list5.png)
+![img](./images/list5.png)
 
 以下是邻接表的代码实现。对比上图，实际代码有以下不同。
 
@@ -530,7 +530,7 @@ class GraphAdjList:
 广度优先遍历是一种**由近及远**的遍历方式，从某个节点出发，
 始终优先访问距离最近的顶点，并一层层向外扩张。如下图所示，
 
-![img](images/graph-search1.png)
+![img](./images/graph-search1.png)
 
 1. 从左上角顶点出发，首先遍历该顶点的所有邻接顶点；
 2. 然后遍历下一个顶点的所有邻接顶点；
@@ -588,17 +588,17 @@ def graph_bfs(graph: GraphAdjList, start_vet: Vertex) -> list[Vertex]:
 * 空间复杂度：列表 `res`，哈希集合 `visited`，队列 `que` 中的顶点数量最多为 `$|V|$`，
   使用 `$O(|V|)$` 空间。
 
-![img](images/bfs-1.png)
-![img](images/bfs-2.png)
-![img](images/bfs-3.png)
-![img](images/bfs-4.png)
-![img](images/bfs-5.png)
-![img](images/bfs-6.png)
-![img](images/bfs-7.png)
-![img](images/bfs-8.png)
-![img](images/bfs-9.png)
-![img](images/bfs-10.png)
-![img](images/bfs-11.png)
+![img](./images/bfs-1.png)
+![img](./images/bfs-2.png)
+![img](./images/bfs-3.png)
+![img](./images/bfs-4.png)
+![img](./images/bfs-5.png)
+![img](./images/bfs-6.png)
+![img](./images/bfs-7.png)
+![img](./images/bfs-8.png)
+![img](./images/bfs-9.png)
+![img](./images/bfs-10.png)
+![img](./images/bfs-11.png)
 
 > 广度优先遍历的序列是否唯一？
 > 
@@ -615,7 +615,7 @@ def graph_bfs(graph: GraphAdjList, start_vet: Vertex) -> list[Vertex]:
 
 深度优先遍历是一种优先走到底、无路可走再回头的遍历方式。如下图所示：
 
-![img](images/graph-search2.png)
+![img](./images/graph-search2.png)
 
 1. 从左上角顶点出发，访问当前顶点的某个邻接顶点，直到走到尽头时返回；
 2. 再继续走到尽头并返回；
@@ -664,17 +664,17 @@ def graph_dfs(graph: GraphAdjList, start_vet: Vertex) -> list[Vertex]:
 为了加深理解，建议将下图与代码结合起来，在脑中模拟（或者用笔画下来）整个 DFS 过程，
 包括每个递归方法何时开启、何时返回。
 
-![img](images/dfs-1.png)
-![img](images/dfs-2.png)
-![img](images/dfs-3.png)
-![img](images/dfs-4.png)
-![img](images/dfs-5.png)
-![img](images/dfs-6.png)
-![img](images/dfs-7.png)
-![img](images/dfs-8.png)
-![img](images/dfs-9.png)
-![img](images/dfs-10.png)
-![img](images/dfs-11.png)
+![img](./images/dfs-1.png)
+![img](./images/dfs-2.png)
+![img](./images/dfs-3.png)
+![img](./images/dfs-4.png)
+![img](./images/dfs-5.png)
+![img](./images/dfs-6.png)
+![img](./images/dfs-7.png)
+![img](./images/dfs-8.png)
+![img](./images/dfs-9.png)
+![img](./images/dfs-10.png)
+![img](./images/dfs-11.png)
 
 > 深度优先遍历的序列是否唯一？
 > 
@@ -807,7 +807,7 @@ print(f"最小生成树时：{res}")
 单出看上面的理论可能比较难理解，下面通过实例来对 Dijkstra 进行讲解，
 如下图所示，需要找出一条从起点 `$D$` 到终点 `$A$` 的最短路径。
 
-![img](images/dijkstra.png)
+![img](./images/dijkstra.png)
 
 #### Dijkstra 算法求解最短路径步骤
 

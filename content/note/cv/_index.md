@@ -7,7 +7,7 @@ order_by: title
 
 ## 计算机视觉的三大应用任务
 
-![img](images/computer_visual_task.png)
+![img](./images/computer_visual_task.png)
 
 * 图像分类
     - 分类：回答一张图像中是什么的问题

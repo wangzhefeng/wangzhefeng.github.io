@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-10-03'
 slug: python-pandas
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

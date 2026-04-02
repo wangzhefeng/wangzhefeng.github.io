@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-26'
 slug: python-exception
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

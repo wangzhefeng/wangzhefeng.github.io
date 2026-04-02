@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-25'
 slug: python-class-chain
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

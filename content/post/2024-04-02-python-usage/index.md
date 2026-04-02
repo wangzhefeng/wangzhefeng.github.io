@@ -1,10 +1,12 @@
 ---
 title: Python 类使用详解
+subtitle: Python Class Usage
 author: wangzf
 date: '2024-04-02'
+description: 系统梳理 Python 类的定义、实例化、属性、方法与常见使用方式。
 slug: python-usage
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

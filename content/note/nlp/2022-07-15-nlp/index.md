@@ -203,7 +203,7 @@ NLP 的模型基本包括两类：
 
 ## 构建 NLP Pipeline
 
-![img](images/London.gif)
+![img](./images/London.gif)
 
 ### 数据
 
@@ -240,11 +240,11 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 * 句子(Sentence):
 
-![img](images/London_sentences.png)
+![img](./images/London_sentences.png)
 
 * 分词(Tokenization):
 
-![img](images/London_word.png)
+![img](./images/London_word.png)
 
 分词对于英文来说非常容易，可以根据单词之间的空格对文本句子进行分割。
 并且，也可以将标点符号也看成一种分割符，因为标点符号也是有意义的。
@@ -262,11 +262,11 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 * 词性标注过程
 
-![img](images/sentence1.png)
+![img](./images/sentence1.png)
 
 - 词性标注结果
 
-![img](images/sentence2.png)
+![img](./images/sentence2.png)
 
 通过词性标注后的信息，可以收集到一些关于句子的基本含义了，例如：可以看到句子中看到有"London"、
 和 "captial" 两个名词(Noun)，因此该句子可能在谈论 "London"。
@@ -295,7 +295,7 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 #### London 句子示例
 
-![img](images/sentence3.png)
+![img](./images/sentence3.png)
 
 ### 识别停用词
 
@@ -310,7 +310,7 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 - London 示例:
 
-![img](images/sentence4.png)
+![img](./images/sentence4.png)
 
 - 通常仅通过检查已知停用词的硬编码列表即可识别停用词.
 - 没有适用于所有应用程序的标准停用词列表，要忽略的单词列表可能会因应用程序而异.
@@ -328,7 +328,7 @@ NLP Pipeline 的第一步就是 **将文本分割为句子**:
 
 ### 构建 Python NLP Pipeline
 
-![img](images/NLP_Pipeline.png)
+![img](./images/NLP_Pipeline.png)
 
 
 

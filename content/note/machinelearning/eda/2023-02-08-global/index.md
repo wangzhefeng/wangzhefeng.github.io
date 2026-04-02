@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-08'
 slug: global
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - model
 ---

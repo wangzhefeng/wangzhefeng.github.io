@@ -1,0 +1,38 @@
+{{ $card := .card }}
+{{ $featured := .featured | default false }}
+{{ $showSection := .showSection | default true }}
+{{ $showCategory := .showCategory | default true }}
+{{ $home := .home | default false }}
+{{ $categoryLabel := "" }}
+{{ with $card.primaryCategory }}
+  {{ $categoryLabel = humanize (replace . "-" " ") }}
+{{ end }}
+<a
+  class="story-card{{ if $featured }} story-card--featured{{ end }}{{ if $home }} story-card--home{{ end }}"
+  href="{{ $card.permalink }}"
+  data-reveal
+  data-text-card
+  data-collection-card
+  data-section="{{ $card.section }}"
+  data-primary-category="{{ $card.primaryCategory }}"
+  data-theme-key="{{ $card.themeKey }}"
+  data-card-title="{{ $card.title }}"
+  data-card-excerpt="{{ $card.excerpt }}"
+  data-card-kind="{{ $card.kind }}"
+  data-card-date="{{ $card.date }}"
+  data-card-title-lines="{{ if $featured }}3{{ else }}2{{ end }}"
+  data-card-excerpt-lines="{{ if $featured }}3{{ else }}2{{ end }}"
+>
+  <div class="story-card__body">
+    <div class="story-card__meta">
+      {{ if $showSection }}<span class="story-card__section" data-kind-label>{{ $card.kind }}</span>{{ end }}
+      {{ with $card.date }}<span class="story-card__date">{{ . }}</span>{{ end }}
+    </div>
+    <h3 class="story-card__title" data-card-title-node>{{ $card.title }}</h3>
+    {{ with $card.excerpt }}<p class="story-card__excerpt" data-card-excerpt-node>{{ . }}</p>{{ end }}
+    <div class="story-card__footer">
+      {{ if and $showCategory $categoryLabel }}<span class="story-card__category">{{ $categoryLabel }}</span>{{ else }}<span></span>{{ end }}
+      <span class="story-card__cta">阅读</span>
+    </div>
+  </div>
+</a>

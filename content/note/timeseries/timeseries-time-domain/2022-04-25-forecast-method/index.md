@@ -91,17 +91,17 @@ img {
 
 > Independent Multi-Series Forecasting
 
-![img](images/forecaster_multi_series_train_matrix_diagram.png)
+![img](./images/forecaster_multi_series_train_matrix_diagram.png)
 
 为了预测未来的 `$n$` 步，应该用**递归多步预测策略**：
 
-![img](images/forecaster_multi_series_prediction_diagram.png)
+![img](./images/forecaster_multi_series_prediction_diagram.png)
 
 #### 相关多变量预测
 
 > Dependent Multi-Series Forecasting(Multivariate time series)
 
-![img](images/forecaster_multivariate_train_matrix_diagram.png)
+![img](./images/forecaster_multivariate_train_matrix_diagram.png)
 
 
 ## 按预测步长
@@ -112,11 +112,11 @@ img {
 在时间序列预测中的标准做法是使用滞后的观测值 `$x_{t}$` 作为输入变量来预测当前的时间的观测值 `$x_{t+1}$`。
 单步预测的两个策略：扩展窗口、滑动窗口(推荐)。
 
-![img](images/timeseries_split.png)
+![img](./images/timeseries_split.png)
 
 上图中，左图为扩展窗口，右侧为滑动窗口。
 
-![img](images/1.png)
+![img](./images/1.png)
 
 ### 多步预测
 
@@ -149,7 +149,7 @@ img {
 
 定义的模型结构状态为：
 
-![img](images/direct_multi_output.png)
+![img](./images/direct_multi_output.png)
 
 <!-- `$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6, t7\}$$`  -->
 
@@ -174,10 +174,10 @@ img {
 
 定义的模型结构状态为：
 
-<!-- ![img](images/recursive_multi_step.png) -->
+<!-- ![img](./images/recursive_multi_step.png) -->
 
-![img](images/diagram-recursive-mutistep-forecasting.png)
-![img](images/2.png)
+![img](./images/diagram-recursive-mutistep-forecasting.png)
+![img](./images/2.png)
 <!-- 
 `$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `$$\{t2, t3, t4, t5, t6\} \Rightarrow \{t7\}$$` -->
@@ -202,10 +202,10 @@ img {
 
 定义的模型结构状态为：
 
-<!-- ![img](images/direct_multi_step.png) -->
+<!-- ![img](./images/direct_multi_step.png) -->
 
-![img](images/diagram-direct-multi-step-forecasting.png)
-![img](images/3.png)
+![img](./images/diagram-direct-multi-step-forecasting.png)
+![img](./images/3.png)
 <!-- `model_t6`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `model_t7`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t7\}$$` -->
 
@@ -222,7 +222,7 @@ img {
 举个例子，现有 7 月 10 号到 7 月 14 号的数据，需要预测未来 3 天的销量，那么，就不能用 lag1 和 lag2 作为特征，
 但是可以用 lag3，所以就用 lag3 作为特征构建一个模型：
 
-![img](images/one_model.png)
+![img](./images/one_model.png)
 
 这种是只使用一个模型来预测的，但是呢，缺点是特征居然要构造到 lag3，lag1 和 lag2 的信息完全没用到，
 所以就有人提出了一种思路，就是对于每一天都构建一个模型
@@ -234,7 +234,7 @@ img {
 所以就用 lag2 和 lag3 作为特征，再训练一个模型 2，17 号的话，就只有 lag3 能用了，所以就直接用 lag3 作为特征来训练一个模型 3，
 然后模型 1、模型 2、模型 3 分别就可以输出每一天的预测值了
 
-![img](images/n_model.png)
+![img](./images/n_model.png)
 
 这种方法的优势是最大可能的用到了 lag 的信息，但是缺陷也非常明显，就是因为对于每一天都需要构建一个模型的话，
 那预测的天数一长，数据一多，那计算量是没法想象的，所以也有人提出了一个这种的方案，就不是对每一天构建一个模型了，
@@ -247,7 +247,7 @@ img {
 那么为这两天构建一个模型 1，而 18 号和 19 号是只能用到 lag4 和 lag5 的特征的，那么为这两天构建一个模型 2，
 所以最后就是模型 1 输出 16 号和 17 号的预测值，模型 2 输出 18 号和 19 号的值
 
-![img](images/1_n_model.png)
+![img](./images/1_n_model.png)
 
 可以发现，这样的话，我们虽然没有尽最大可能的去使用 lag 特征，但是，计算量相比于使用 n 个模型直接小了一半 -->
 
@@ -262,8 +262,8 @@ img {
 
 定义的模型结构状态为：
 
-![img](images/direct_recursive_mixure.png)
-![img](images/4.png)
+![img](./images/direct_recursive_mixure.png)
+![img](./images/4.png)
 <!-- `model_t6`：`$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6\}$$`
 `model_t7`：`$$\{t2, t3, t4, t5, t6\} \Rightarrow \{t7\}$$` -->
 
@@ -282,7 +282,7 @@ Seq2Seq 实现了序列到序列的预测方案，由于多步预测的预测结
 
 定义的模型结构状态为：
 
-![img](images/seq2se2_multi_step.png)
+![img](./images/seq2se2_multi_step.png)
 
 <!-- `$$\{t1, t2, t3, t4, t5\} \Rightarrow \{t6, t7\}$$`  -->
 

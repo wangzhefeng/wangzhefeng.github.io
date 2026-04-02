@@ -1,10 +1,12 @@
 ---
 title: MCP
+subtitle: Model Context Protocol
 author: wangzf
 date: '2025-04-03'
+description: 介绍 MCP 的核心概念、协议作用以及 AI 应用中的典型接入方式。
 slug: mcp
 categories:
-  - vibe coding
+  - vibe-coding
 tags:
   - agent
 ---
@@ -112,4 +114,3 @@ MCP 聚合网站：
 * AI 编程 IDE
     - Cursor
     - Windsurf
-

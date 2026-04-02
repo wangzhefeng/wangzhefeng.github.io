@@ -5,12 +5,15 @@ disable_highlight: true
 ---
 
 2017 年我从上海大学数学系毕业后，开始了在上海工作、生活的日子。
-工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，
-记录学习。
-
+工作之余一般在家听音乐、看书、睡觉，偶尔在这里写文章、写笔记，记录生活，记录学习。
 这是我的 GitHub 贡献图，看看我在忙些啥：
 
-<img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart" />
+<img src="https://ghchart.rshah.org/409ba5/wangzhefeng" alt="wangzf's Github chart"  align="center" />
+
+> * 历史使人明智，诗歌使人巧慧，
+> * 数学使人精细，博物使人深沉，
+> * 伦理使人庄重，逻辑与修辞使人善辩，
+> * 统计使人豁达。
 
 <!--
 
@@ -77,5 +80,4 @@ disable_highlight: true
 
 -->
 
-<!-- <dev align="center">[<img src="images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="images/github.svg" width="6%" />](https://github.com) [<img src="images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)
-</dev> -->
+<!-- <dev align="center">[<img src="./images/Rlogo.svg" width="8%" />](https://www.r-project.org/) [<img src="./images/RStudio.svg" width="5%" />](https://www.rstudio.com/) [<img src="./images/blogdown.svg" width="5%" />](https://github.com/rstudio/blogdown) [<img src="./images/gopher-hero.svg" width="6%">](https://gohugo.io/) [<img src="./images/hugothemes.png" width="6%">](https://github.com/yihui/hugo-ivy) [<img src="./images/github.svg" width="6%" />](https://github.com) [<img src="./images/netlify-icon.svg" width="6%" />](https://www.netlify.com/) [<img src="./images/vercel.svg" width="6%" />](https://vercel.com/) [<img src="./images/disqus-icon.svg" width="6%">](https://disqus.com/) [<img src="./images/utterances-300.png" width="6%">](https://utteranc.es/) [<img src="./images/markdown.svg" width="6%" />](https://daringfireball.net/projects/markdown/syntax)</dev> -->

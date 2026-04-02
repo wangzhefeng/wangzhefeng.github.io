@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-09-30'
 slug: simulated-annealing-algorithm
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -60,7 +60,7 @@ img {
 
 ## 算法过程
 
-![img](images/saa.png)
+![img](./images/saa.png)
 
 ### 状态空间与邻域函数
 

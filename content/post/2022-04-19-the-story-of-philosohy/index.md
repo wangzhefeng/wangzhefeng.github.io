@@ -151,9 +151,9 @@ img {
 * 雅典
 * 斯巴达
 
-<img src="images/greece1.png" width="100%">
-<img src="images/greece2.png" width="100%">
-<img src="images/greece.jpeg" width="100%">
+<img src="./images/greece1.png" width="100%">
+<img src="./images/greece2.png" width="100%">
+<img src="./images/greece.jpeg" width="100%">
 
 #### 斯巴达
 

@@ -142,19 +142,19 @@ CNN 才开始正式发展起来
 
 函数 `$x(t)$` 和 `$h(t)$` 图像如下:
 
-![img](images/conv_fun.png)
+![img](./images/conv_fun.png)
 
 * 卷
     - 对函数 `$h(t)$` 进行翻转(Reverse), 得到 `$h(-\tau)$`:
   
-    ![img](images/h_reverse.png)
+    ![img](./images/h_reverse.png)
   
     - 对函数 `$h(-\tau)$` 进行平移(Shift), 得到 `$h(t-\tau)$` :
   
-    ![img](images/h_shift.png)
+    ![img](./images/h_shift.png)
 * 积
 
-![img](images/conv_sum.png)
+![img](./images/conv_sum.png)
 
 ### 卷积类型
 
@@ -167,7 +167,7 @@ CNN 才开始正式发展起来
 
 一个标准的单通道卷积如下图所示：
 
-![img](images/conv.gif)
+![img](./images/conv.gif)
 
 对于单通道卷积，假设输入图像(输入特征图)维度为 `$n \times n \times c = 5 \times 5 \times 1$`，
 滤波器维度为 `$f \times f \times c = 3 \times 3 \times 1$`，步长(stide)为 `$s=1$`，填充(padding) 大小为 `$p=0$`，
@@ -177,9 +177,9 @@ CNN 才开始正式发展起来
 
 #### 多通道卷积
 
-![img](images/3Dconv1.png)
-![img](images/3Dconv2.png)
-![img](images/3Dconv3.png)
+![img](./images/3Dconv1.png)
+![img](./images/3Dconv2.png)
+![img](./images/3Dconv3.png)
 
 3 维卷积运算的输入图像数据为 3 通道(channel)的 RGB 数据
 
@@ -214,8 +214,8 @@ CNN 才开始正式发展起来
 假设这里用了 10 个 `$3 \times 3 \times 3$` 的滤波器，那最后的输出便为 `$3 \times 3 \times 10$`，
 滤波器的个数变成了输出特征图的通道数
 
-![img](images/n_conv.gif)
-![img](images/n_conv2.gif)
+![img](./images/n_conv.gif)
+![img](./images/n_conv2.gif)
 
 #### 3D 卷积
 
@@ -227,7 +227,7 @@ CNN 才开始正式发展起来
 中间 9 个数乘以绿色通道中的数据，最后 9 个数乘以蓝色通道中的数据。
 将这些数据加总起来，就得到输出像素的第一个元素值。示意图如下所示
 
-![img](images/conv2d.png)
+![img](./images/conv2d.png)
 
 可以把 2D 卷积的计算输出公式进行扩展，可以得到 3D 卷积的输出维度计算公式。
 假设输入图像大小为 `$a_{1} \times a_{2} \times a_{3} \times c$`，通道数为 `$c$`，
@@ -246,8 +246,8 @@ CNN 才开始正式发展起来
 需要逐步恢复输入时的尺寸, 如果把常规卷积时的特征图不断变小叫做 **下采样**, 
 那么通过转置卷积来恢复分辨率的操作可以称作 **上采样**
 
-![img](images/normal_conv.gif)
-![img](images/transposed_conv.gif)
+![img](./images/normal_conv.gif)
+![img](./images/transposed_conv.gif)
 
 #### 1x1 卷积
 
@@ -265,11 +265,11 @@ CNN 才开始正式发展起来
 
 * `$a=1, 2, 4$` 的时候卷积核的感受野
 
-![img](images/dilated_conv.png)
+![img](./images/dilated_conv.png)
 
 * 扩展率 `$a=2$` 时的卷积过程
 
-![img](images/dilated_conv.gif)
+![img](./images/dilated_conv.gif)
 
 加入空洞之后的实际卷积核尺寸与原始卷积尺寸之间的关系如下:
 
@@ -347,7 +347,7 @@ ax[1].set_title("x_pad")
 ax[1].imshow(x_pad[0, :, :, 0])
 ```
 
-![img](images/padding.png)
+![img](./images/padding.png)
 
 ### 卷积输出维度
 
@@ -379,7 +379,7 @@ ax[1].imshow(x_pad[0, :, :, 0])
     - 步幅 `$s$`
 * 池化层只是计算神经网路某一层的静态属性, 中间没有学习过程 
 
-![img](images/pooling.png)
+![img](./images/pooling.png)
 
 ### 池化层的作用
 

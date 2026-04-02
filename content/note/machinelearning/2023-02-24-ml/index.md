@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-02-24'
 slug: ml
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

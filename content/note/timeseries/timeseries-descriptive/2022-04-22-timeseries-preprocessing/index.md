@@ -114,14 +114,14 @@ series.plot()
 plt.show()
 ```
 
-![img](images/line.png)
+![img](./images/line.png)
 
 ```python
 series.hist()
 plt.show()
 ```
 
-![img](images/hist.png)
+![img](./images/hist.png)
 
 ## 标准化和中心化
 
@@ -168,13 +168,13 @@ for i in range(5):
 normalized.plot()
 ```
 
-![img](images/line_standard.png)
+![img](./images/line_standard.png)
 
 ```python
 inversed.plot()
 ```
 
-![img](images/line_inversed_standard.png)
+![img](./images/line_inversed_standard.png)
 
 ### 中心化
 
@@ -233,13 +233,13 @@ for i in range(5):
 normalized.plot()
 ```
 
-![img](images/line_normalized.png)
+![img](./images/line_normalized.png)
 
 ```python
 inversed.plot()
 ```
 
-![img](images/line_inversed_normalized.png)
+![img](./images/line_inversed_normalized.png)
 
 ### 平均归一化
 
@@ -439,7 +439,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/scipy_upsample.png)
+![img](./images/scipy_upsample.png)
 
 #### 降采样
 
@@ -463,7 +463,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/scipy_downsample.png)
+![img](./images/scipy_downsample.png)
 
 #### 等间隔采样
 
@@ -486,7 +486,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/scipy_downsample_t.png)
+![img](./images/scipy_downsample_t.png)
 
 #### 不等间隔采样
 
@@ -516,7 +516,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/scipy_resample1.png)
+![img](./images/scipy_resample1.png)
 
 ```python
 import numpy as np
@@ -541,7 +541,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/scipy_resample2.png)
+![img](./images/scipy_resample2.png)
 
 ## 时间序列缺失处理
 

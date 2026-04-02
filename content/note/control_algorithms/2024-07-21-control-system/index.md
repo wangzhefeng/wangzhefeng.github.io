@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-07-21'
 slug: control-system
 categories:
-  - control system
+  - control-system
 tags:
   - algorithm
 ---
@@ -100,7 +100,7 @@ img {
 
 其基本关系可用下图表示：
 
-![img](images/control-system.png)
+![img](./images/control-system.png)
 
 控制器根据参考输入与实际输出之间的误差，计算控制量 `$u$`，再由执行机构作用于被控对象，从而改变系统输出。
 
@@ -108,11 +108,11 @@ img {
 
 **开环控制**不使用反馈，结构简单、成本低，但难以抵抗扰动。
 
-![img](images/cs-kaihuan.png)
+![img](./images/cs-kaihuan.png)
 
 **闭环控制**利用输出反馈来修正误差，精度更高、鲁棒性更好，是现代控制系统更常见的形式。
 
-![img](images/cs-bihuan.png)
+![img](./images/cs-bihuan.png)
 
 闭环控制的一般过程是：
 
@@ -138,7 +138,7 @@ img {
 
 控制框图是描述控制系统最常见的图形工具，它将复杂系统拆成若干功能模块，并明确输入、输出和反馈关系。
 
-![img](images/cs-digram.png)
+![img](./images/cs-digram.png)
 
 在分析和设计控制系统时，经常会出现这些元素：
 
@@ -151,7 +151,7 @@ img {
 
 典型控制框图如下：
 
-![img](images/cs-digram2.png)
+![img](./images/cs-digram2.png)
 
 ### 典型应用场景
 
@@ -165,7 +165,7 @@ img {
 
 以汽车怠速控制为例，节气门开度和负载扰动共同影响发动机转速，控制器需要在负载突变时尽快把转速拉回目标值。
 
-![img](images/car.png)
+![img](./images/car.png)
 
 ### 设计控制器时关注什么
 
@@ -182,7 +182,7 @@ img {
 
 ## 经典控制算法：PID
 
-![img](images/pid.png)
+![img](./images/pid.png)
 
 ### PID 的核心思想
 

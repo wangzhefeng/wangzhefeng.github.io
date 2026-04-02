@@ -1,0 +1,18 @@
+{{ $raw := .RawContent }}
+{{ $raw = replaceRE `(?s)<!--.*?-->` `` $raw }}
+{{ $raw = replaceRE `(?s)<img[^>]*>.*` `` $raw }}
+{{ $raw = replaceRE `(?m)!\[[^\]]*\]\([^)]+\).*` `` $raw }}
+{{ $paragraphs := split $raw "\n\n" }}
+{{ $leadBlock := "" }}
+{{ range $paragraphs }}
+  {{ $candidate := . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+  {{ if and (not $leadBlock) $candidate }}
+    {{ $leadBlock = $candidate }}
+  {{ end }}
+{{ end }}
+{{ $title := .Site.Params.description }}
+{{ $lead := $leadBlock | truncate 180 }}
+{{ return (dict
+  "title" $title
+  "lead" $lead
+) }}

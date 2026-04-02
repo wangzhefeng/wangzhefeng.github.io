@@ -126,7 +126,7 @@ img {
 它们起始时间的差值就是我们需要的周期. 比如下面的第二张图和第三张图, 它们的序列自相关系数为 1, 起始时间间隔是 12.57, 
 正好是第一张图的周期.
 
-![img](images/acf.jpeg)
+![img](./images/acf.jpeg)
 
 ### 周期性检测流程
 
@@ -138,10 +138,10 @@ img {
 1. 先通过傅里叶变换找到可能的周期
 2. 再用自相关系数做排除, 从而得到最可能的周期
 
-![img](images/cycle_detection.png)
+![img](./images/cycle_detection.png)
 
 #### 实例分析
 
-![img](images/cycle_detection_flow.png)
+![img](./images/cycle_detection_flow.png)
 
 ## 参考

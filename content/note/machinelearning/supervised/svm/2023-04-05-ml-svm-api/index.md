@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-04-05'
 slug: ml-svm-api
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

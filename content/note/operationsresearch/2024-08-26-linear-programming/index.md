@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-08-26'
 slug: linear-programming
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - model
 ---

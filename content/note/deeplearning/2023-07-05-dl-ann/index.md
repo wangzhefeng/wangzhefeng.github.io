@@ -107,13 +107,13 @@ MLP 神经元中的激活函数 `$f$` 为 0 或 1 的阶跃函数，
 
 其中非线性函数 `$f(\cdot)$` 称为激活函数(Activation Function)
 
-![img](images/neuron.png)
+![img](./images/neuron.png)
 
 ### 神经网络结构
 
 神经网络的结构指的是“神经元”之间如何连接，它可以是任意深度
 
-![img](images/network.png)
+![img](./images/network.png)
 
 #### 前馈网络
 
@@ -289,7 +289,7 @@ DBN 最主要的特色可以理解为两阶段学习：
 
 生成网络一般有逆卷积层(deconvolutional layer)，而判别网络一般就是上文介绍的 CNN
 
-![img](images/gan.png)
+![img](./images/gan.png)
 
 熟悉博弈论的朋友都知道零和游戏(zero-sum game)会很难得到优化方程，或很难优化，GAN 也不可避免这个问题。
 但有趣的是，GAN 的实际表现比我们预期的要好，而且所需的参数也远远按照正常方法训练神经网络，
@@ -304,7 +304,7 @@ DBN 最主要的特色可以理解为两阶段学习：
 自编码器是一种从名字上完全看不出和神经网络有什么关系的无监督神经网络，
 而且从名字上看也很难猜测其作用。让我们看一幅图了解它的工作原理：
 
-![img](images/autoencoder.png)
+![img](./images/autoencoder.png)
 
 如上图所示，AutoEncoder 主要有 2 个部分：
 

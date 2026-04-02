@@ -75,7 +75,7 @@ img {
 比如，下图的销售量和销售额的幂律函数（一个量的相对变化会导致另一个量的相应幂次比例的变化）的双对数形式，
 就有长尾表现：
 
-![img](images/img1.png)
+![img](./images/img1.png)
 
 ## 论文贡献
 
@@ -113,7 +113,7 @@ DeepAR 的主要特色是：<span style='border-bottom:1.5px dashed red;'>预测
 DeepAR 的模型是自回归循环网络(autoregressive recurrent network)结构，
 下图是 DeepAR 的 Encoder 和 Decoder(共享模型结构和参数)：
 
-![img](images/model.png)
+![img](./images/model.png)
 
 上图左边是训练过程，右边是预测过程，结构大致相同，唯一区别是预测阶段由于没有对应点的观察值，
 需要把上一个时刻的预测值作为下一个时刻的输入值。

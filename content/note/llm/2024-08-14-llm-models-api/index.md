@@ -324,14 +324,14 @@ download(
 从 [C-Eval 公开访问的模型榜单](https://cevalbenchmark.com/static/leaderboard.html)查询到 `Qwen-14B` 排名 14，
 从表中即可看到模型在各方面的得分：
 
-![img](images/c-evalmodels.png)
+![img](./images/c-evalmodels.png)
 
 ### 下载模型
 
 在确定使用到 `Qwen-14B` 后，在 Hugging Face 中搜索模型名，
 即可找到模型介绍界面和下载信息：
 
-[![img](images/qwen-14B-chat.png)](https://huggingface.co/Qwen/Qwen-14B-Chat)
+[![img](./images/qwen-14B-chat.png)](https://huggingface.co/Qwen/Qwen-14B-Chat)
 
 1. 首先我们根据使用说明进行环境配置，使用大模型的环境配置通常并不复杂，
    在终端中输入以下语句安装调用模型需要的第三方库：

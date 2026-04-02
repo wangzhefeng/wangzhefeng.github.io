@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-01'
 slug: model-decomposition
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---
@@ -61,7 +61,7 @@ img {
 而降维将数据转换为低维空间，会改变原始特征中特征的含义和数值，可以理解为低维的特征映射。
 这两种策略都可以用来提高机器学习模型的性能和可解释性，但它们的运作方式是截然不同的
 
-![img](images/dr_fs.png)
+![img](./images/dr_fs.png)
 
 ## 特征降维简介
 

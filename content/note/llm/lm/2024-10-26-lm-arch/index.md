@@ -637,7 +637,7 @@ Transformer 的关键是 Attention(注意机制)，
 
 混合专家模型可以追溯到 [Jacobs et al. (1991)](https://www.cs.toronto.edu/~fritz/absps/jjnh91.pdf)：
 
-![img](images/moe.png)
+![img](./images/moe.png)
 
 为了介绍基本思想，假设我们正在解决一个预测问题：
 

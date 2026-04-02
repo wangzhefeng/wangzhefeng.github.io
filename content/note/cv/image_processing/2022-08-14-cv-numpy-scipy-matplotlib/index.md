@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-14'
 slug: cv-numpy-scipy-matplotlib
 categories:
-  - computer vision
+  - computer-vision
 tags:
   - tool
 ---

@@ -67,19 +67,13 @@
   </head>
 
   <body class="page{{ if .IsHome }} page--home{{ else }}{{ with .Section }} page--{{ . }}{{ end }}{{ end }} kind-{{ .Kind }}{{ if .IsPage }} is-page{{ end }}{{ if .IsSection }} is-section{{ end }}{{ with .Params.page_class }} {{ . }}{{ end }}">
-    <header class="site-header{{ if not .IsHome }} site-header--docs{{ end }}" data-site-header>
+    <header class="site-header site-header--docs" data-site-header>
       <div class="site-header__inner">
         <div class="site-header__lead">
           <a class="site-brand" href="{{ "/" | relURL }}">
             <span class="site-brand__mark">{{ or .Site.Params.logo.wordmark .Site.Title }}</span>
             {{ with .Site.Params.logo.tag }}<span class="site-brand__meta">{{ . }}</span>{{ end }}
           </a>
-        </div>
-
-        <div class="site-header__desktop">
-          {{ if .IsHome }}
-          {{ partialCached "menu.html" (dict "Site" .Site "NavState" $navState) $navState }}
-          {{ end }}
         </div>
 
         <div class="site-header__actions">
@@ -109,13 +103,11 @@
         </div>
       </div>
 
-      {{ if not .IsHome }}
       <div class="site-header__subnav">
         <div class="site-header__subnav-inner">
           {{ partialCached "docs_tabs.html" (dict "Site" .Site "NavState" $navState) $navState }}
         </div>
       </div>
-      {{ end }}
 
       <div class="site-mobile-nav" id="mobile-nav" hidden data-mobile-nav>
         {{ partialCached "menu.html" (dict "Site" .Site "NavState" $navState) $navState }}

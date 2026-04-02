@@ -70,7 +70,7 @@ img {
 
 ## 数据结构与算法的关系
 
-![img](images/relationship_between_data_structure_and_algorithm.png)
+![img](./images/relationship_between_data_structure_and_algorithm.png)
 
 数据结构与算法高度相关、紧密结合，具体表现在以下三个方面：
 

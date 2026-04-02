@@ -151,7 +151,7 @@ img {
 
 ### 预测模型构建
 
-![img](images/timeseries.png)
+![img](./images/timeseries.png)
 
 ### 预测模型介绍
 

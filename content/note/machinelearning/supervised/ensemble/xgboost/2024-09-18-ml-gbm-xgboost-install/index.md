@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-09-18'
 slug: ml-gbm-xgboost-install
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

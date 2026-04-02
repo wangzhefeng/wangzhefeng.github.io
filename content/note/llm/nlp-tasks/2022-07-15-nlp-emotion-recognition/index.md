@@ -117,7 +117,7 @@ img {
 相反, 如果有一个消极的匹配, 输入文本的总分会减少。虽然这项技术感觉有些业余, 但已被证明是有价值的。
 词法分析技术的工作方式如下图:
 
-![img](images/word_analysis.png)
+![img](./images/word_analysis.png)
 
 文本的分类取决于文本的总得分。目前有大量的工作致力于度量词法信息的有效性。对于单个短语, 
 通过手动标记词汇(仅包含形容词)的方式, 大概能达到 85% 的准确性。这是由评价文本的主观性所决定的。
@@ -331,7 +331,7 @@ if __name__ == "__main__":
     data_visual(num_total_words)
 ```
 
-![img](images/pos_neg_data.png)
+![img](./images/pos_neg_data.png)
 
 ### 辅助函数
 

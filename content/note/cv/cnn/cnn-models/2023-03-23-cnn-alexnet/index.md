@@ -9,7 +9,7 @@ tags:
   - model
 ---
 
-![img](images/alexnet-slide.png)
+![img](./images/alexnet-slide.png)
 
 <style>
 details {
@@ -69,7 +69,7 @@ AlexNet 共有 8 层(输入输出层不计入层数，池化层与卷积层算 1
 
 原始论文中的结构：
 
-![img](images/alexnet.png)
+![img](./images/alexnet.png)
 
 
 

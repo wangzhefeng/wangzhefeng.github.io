@@ -103,7 +103,7 @@ plt.title("Value")
 plt.show()
 ```
 
-![img](images/value.png)
+![img](./images/value.png)
 
 能够明显看到周一到周日的周期波动，预测的核心任务就是尽可能准确地提取这种周期性
 

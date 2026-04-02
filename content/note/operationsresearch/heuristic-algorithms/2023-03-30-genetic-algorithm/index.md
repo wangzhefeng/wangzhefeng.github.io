@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-03-30'
 slug: genetic-algorithm
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -108,11 +108,11 @@ img {
 
 主要操作步骤如下：
 
-![img](images/main.png)
+![img](./images/main.png)
 
 详细操作步骤如下：
 
-![img](images/GA_process.png)
+![img](./images/GA_process.png)
 
 #### 种群初始化
 
@@ -149,7 +149,7 @@ img {
       则第二处的 `"1"` 需要调整为 `parent1` 中 `"1"` 对应的 `parent2` 中的 `"4"`；
     - 依次类推处理 `off2` 中的相冲突的基因。需要注意的是，调整 `off2`，则需要参考 `parent2`。
 
-![img](images/GA_cross.png)
+![img](./images/GA_cross.png)
 
 #### 变异操作
 

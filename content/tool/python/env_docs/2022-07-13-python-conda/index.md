@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-13'
 slug: python-conda
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

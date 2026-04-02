@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-03-10'
 slug: cv-pillow
 categories:
-  - computer vision
+  - computer-vision
 tags:
   - tool
 ---
@@ -131,7 +131,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-![images](images/lena.png)
+![images](./images/lena.png)
 
 > * `.format`: 图像格式
 > * `.size`: 图像尺寸 (width_pixels, height_pixels)
@@ -177,7 +177,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-![images](images/lena.jpg)
+![images](./images/lena.jpg)
     
 #### 创建 JPEG 缩略图 thumbnails
 
@@ -214,7 +214,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-![images](images/lena.JPEG)
+![images](./images/lena.JPEG)
 
 #### 识别图像文件
 
@@ -273,7 +273,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-![images](images/lena_region.png)
+![images](./images/lena_region.png)
 
 > * PIL 中图像左上角坐标为 `(0, 0)`
 > * `box(left, upper, right, lowe)`
@@ -298,7 +298,7 @@ except IOError as e:
     print(f"Can't open {image_name}")
 ```
 
-![images](images/lena_region_paste.png)
+![images](./images/lena_region_paste.png)
 
 #### 图像滚动
 
@@ -330,7 +330,7 @@ except OSError:
     print(f"cannot open {image_name}")
 ```
 
-![images](images/lena_roll.png)
+![images](./images/lena_roll.png)
 
 #### RGB 波段拆分、合并
 
@@ -350,12 +350,12 @@ except OSError:
     print(f"cannot open {image_name}")
 ```
 
-![images](images/lena.png)
-![images](images/lena_merge_rbg.png)
-![images](images/lena_merge_brg.png)
-![images](images/lena_merge_bgr.png)
-![images](images/lena_merge_grb.png)
-![images](images/lena_merge_gbr.png)
+![images](./images/lena.png)
+![images](./images/lena_merge_rbg.png)
+![images](./images/lena_merge_brg.png)
+![images](./images/lena_merge_bgr.png)
+![images](./images/lena_merge_grb.png)
+![images](./images/lena_merge_gbr.png)
 
 > * 对于单波段图像(single-band)，`Image.split` 返回图像本身
 > * 为了对单个颜色波段进行处理，需要首先将图像转换为 RGB
@@ -386,7 +386,7 @@ except OSError:
     print(f"cannot open {image_name}")
 ```
 
-![images](images/lena_resize.png)
+![images](./images/lena_resize.png)
 
 #### 简单的几何变换-图像逆时针旋转一定的角度
 
@@ -405,7 +405,7 @@ except OSError:
     print(f"cannot open {image_name}")
 ```
 
-![images](images/lena_rotate.png)
+![images](./images/lena_rotate.png)
 
 #### 图像转置
 
@@ -432,12 +432,12 @@ except OSError:
     print(f"cannot open {image_name}")
 ```
 
-![images](images/lena.png)
-![images](images/lena_rotate_1.png)
-![images](images/lena_rotate_2.png)
-![images](images/lena_rotate_3.png)
-![images](images/lena_rotate_4.png)
-![images](images/lena_rotate_5.png)
+![images](./images/lena.png)
+![images](./images/lena_rotate_1.png)
+![images](./images/lena_rotate_2.png)
+![images](./images/lena_rotate_3.png)
+![images](./images/lena_rotate_4.png)
+![images](./images/lena_rotate_5.png)
 
 > * `trasnpose(ROTATE)` 与 `Image.Image.rotate` 效果相同
 > * `transform()` 能进行更多形式的图像转换
@@ -500,7 +500,7 @@ image.save('code.jpg', 'jpeg')
 
 用随机颜色填充背景，再画上文字，最后对图像进行模糊，得到验证码图片如下
 
-![img](images/verfiycode.jpeg)
+![img](./images/verfiycode.jpeg)
 
 ## Pillow API
 

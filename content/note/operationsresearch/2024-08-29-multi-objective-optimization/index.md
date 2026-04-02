@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-08-29'
 slug: multi-objective-optimization
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - model
 ---
@@ -158,7 +158,7 @@ Pareto 是经济学中的一个概念，翻译过来叫作帕累托。
 所有 Pareto 最优解组成的曲面称为<span style='border-bottom:1.5px dashed red;'>Pareto 前沿(Pareto Front)</span>，
 见下图：
 
-![img](images/pareto_front.png)
+![img](./images/pareto_front.png)
 
 其中白色空心点表示 Pareto 最优解，它们互不相同，这一点与单目标规划是不相同的。
 它不存在一个单独的最优解，而是一个最优解的集合，在这些解中没有一个绝对的解比另一个更好，

@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-07-23'
 slug: linux-hangup
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 ---

@@ -1,7 +1,9 @@
 ---
 title: 电力交易
+subtitle: Electricity Trading
 author: wangzf
 date: '2026-03-05'
+description: 梳理电力交易中的市场机制、节点电价与典型交易策略框架。
 slug: electricity-trading
 categories:
   - book
@@ -73,7 +75,7 @@ img {
 
 #### 电力现货交易给调度模式带来的转变
 
-![img](images/img1.png)
+![img](./images/img1.png)
 
 * 日前市场：12:00 前交易第二天的电力
 * 日内市场：交易当天的电力，实际交割前 1~2 小时关闸
@@ -82,15 +84,15 @@ img {
 
 > 电网中的节点
 
-![img](images/img2.png)
+![img](./images/img2.png)
 
 > 一般现货市场交易结算的地点要素
 
-![img](images/img3.png)
+![img](./images/img3.png)
 
 > 为什么按安全域设置备用需求？
 
-![img](images/img4.png)
+![img](./images/img4.png)
 
 #### 现货市场的出清机制
 
@@ -99,12 +101,12 @@ img {
 * 基于申报信息以及电网运行边界条件，采用安全约束机组组合（SCUC）和安全约束经济调度（SCED）程序进行优化计算， 
   出清得到日前市场交易结果。简单而言，在保证电网安全的前提下，优先调用系统中报价最为便宜的机组，直至满足负荷需求。
 
-![img](images/img5.png)
+![img](./images/img5.png)
 
 * 电力现货市场价格随着负荷需求、电网约束以及电源参与类型等因素变化而变化。
   并由于这些因素的不确定性，导致电力现货价格的大幅波动和跳跃。
 
-![img](images/img6.png)
+![img](./images/img6.png)
 
 
 #### 电力现货市场的节点电价
@@ -116,7 +118,7 @@ img {
 * 在满足当前输电网络设备约束条件和各类其他资源工作特点的情况下，
   在节点增加单位负荷需求时的边际成本。
 
-![节点边际电价示意图](images/img7.svg)
+![节点边际电价示意图](./images/img7.svg)
 
 > **优势**
 
@@ -126,7 +128,7 @@ img {
 
 > 网损因子和网损惩罚因子
 
-![img](images/img8.png)
+![img](./images/img8.png)
 
 母线 `$i$` 的：
 
@@ -137,7 +139,7 @@ img {
 
 > 示例场景：
 
-![img](images/img9.png)
+![img](./images/img9.png)
 
 > 问题：
 
@@ -165,7 +167,7 @@ img {
 
 #### 现货市场体系中的电费结算机制
 
-![img](images/img10.png)
+![img](./images/img10.png)
 
 * 实时市场价格：可能受意外影响（如机组跳机、电网故障等），不确定性最高；
 * 日前市场价格：主要受相对稳定的电力供需关系影响，在短期内有一定可预测性；
@@ -173,7 +175,7 @@ img {
 
 #### 现货市场体系中的两种风险对冲
 
-![img](images/img11.png)
+![img](./images/img11.png)
 
 #### 差价合约
 
@@ -187,7 +189,7 @@ img {
 现货市场价格为 `0.6元/kWh`，A 的收益：`$100 \times 0.6 + 100 \times (0.5 - 0.6)$`，
 交易双方补齐差价电费：`$100 \times (0.5 - 0.6)=-10\text{元}$`；
 
-![img](images/img12.png)
+![img](./images/img12.png)
 
 1. 差价合约是一种避免和控制风险的金融手段，其本质是对现货（日前）价格的对赌；
 2. 电量将稳定地按照合约价格结算，合约电量以外增发（或少发）的电量将以现货（日前）市场节点价格结算；
@@ -196,7 +198,7 @@ img {
 
 ### 集中式电力现货市场的基本架构
 
-![img](images/img13.png)
+![img](./images/img13.png)
 
 #### 现货市场交易产品
 
@@ -215,4 +217,4 @@ img {
 
 #### 现货市场各类出清的边界和使用数据
 
-![img](images/img14.png)
+![img](./images/img14.png)

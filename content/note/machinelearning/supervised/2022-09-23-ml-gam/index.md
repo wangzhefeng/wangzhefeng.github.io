@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-23'
 slug: ml-gam
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

@@ -140,7 +140,7 @@ RAG 和 微调的对比可以参考下表：
 
 > RAG 基本结构
 
-![img](images/RAG-learning.png)
+![img](./images/RAG-learning.png)
 
 * 一个向量化(Embedding)模块，用来将文档片段向量化
 * 一个文档加载和切分的模块，用来加载文档并切分成文档片段
@@ -153,7 +153,7 @@ RAG 和 微调的对比可以参考下表：
 RAG 技术在具体实现方式上可能有所变化，但在概念层面，
 将其融入应用通常包括以下几个步骤（见下图）：
 
-![img](images/RAG.png)
+![img](./images/RAG.png)
 
 1. 用户提交一个问题
 2. 文档数据加载和处理

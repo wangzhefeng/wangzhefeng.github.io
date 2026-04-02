@@ -5,4 +5,4 @@ list_pages: true
 # order_by: title
 ---
 
-![img](images/hello_algo_mindmap.png)
+![img](./images/hello_algo_mindmap.png)

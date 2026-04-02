@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-05-06'
 slug: pydocs-sphinx
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

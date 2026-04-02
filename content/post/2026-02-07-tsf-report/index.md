@@ -1,7 +1,9 @@
 ---
 title: 基于非线性树模型的时间序列预测框架：全生命周期深度研究报告
+subtitle: Nonlinear Tree Models for Time Series Forecasting
 author: wangzf
 date: '2026-02-07'
+description: 面向时序预测任务，系统讨论非线性树模型从数据到部署的完整研究框架。
 slug: tsf-report
 categories:
   - timeseries

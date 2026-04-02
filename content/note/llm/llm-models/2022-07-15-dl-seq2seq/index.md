@@ -58,7 +58,7 @@ img {
 * 英语输入: `They`、`are`、`watching`、`.`
 * 法语输出: `Ils`、`regardent`、`.`
 
-![img](images/seq2seq.png)
+![img](./images/seq2seq.png)
 
 上图描述了使用 Encoder-Decoder 将上述英语句子翻译成法语句子的一种方法:
 

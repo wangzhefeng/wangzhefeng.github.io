@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-13'
 slug: ml-svm
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -64,7 +64,7 @@ img {
 通过寻求结构化风险最小来提高学习器的泛化能力，实现经验风险和置信范围的最小化，
 从而达到在统计样本量较少的情况下，也能获得良好的统计规律性 
 
-![img](images/surface2.png)
+![img](./images/surface2.png)
 
 对于一个分类问题，给定样本集​，的目的是在样本空间中找到一个划分超平面，可以将两种类别的样本分开。
 事实上可能存在好几个超平面可以将正负样本分开，对于上图中不同的划分超平面，
@@ -101,7 +101,7 @@ img {
 #### 点到超平面的距离
 
 > 点到平面的距离解释：
-> ![img](images/surface.png)
+> ![img](./images/surface.png)
 > 
 > 给定平面 `$Ax + By + Cz + D = 0$`，求平面外一点到平面的距离 `$d$`：
 > 任意取平面上一点 `$P(x, y,z)$`，连接两点 `$P, Q$`，
@@ -140,7 +140,7 @@ d\mathbf{w}^{T}\mathbf{x}_{i} + db \leq +d, y_{i} = -1 \\
 
 #### 支持向量
 
-![img](images/margin.webp)
+![img](./images/margin.webp)
 
 距离超平面最近的点使得上式中的等号成立，它们被称为“支持向量”(Support vectors)，
 不同种类的支持向量到超平面的距离之和称为“间隔”(Margin)，有：
@@ -305,7 +305,7 @@ f(\mathbf{x}) &= \mathbf{w}^{T}\mathbf{x} + b \\
 以上的推导形式都是建立在样本数据线性可分的基础上，如果样本数据中线性不可分（你中有我，我中有你），
 应该如何处理呢？这里我们引入软间隔（Soft Margin），意味着，允许支持向量机在一定程度上出错
 
-![img](images/soft_margin.png)
+![img](./images/soft_margin.png)
 
 引入常量 `$C > 0$` 和 “`$0/1$` 损失函数” `$l_{0/1}(z)$`，其特性为当 `$z<0$` 时函数为 1，否则函数为 0：
 
@@ -325,7 +325,7 @@ f(\mathbf{x}) &= \mathbf{w}^{T}\mathbf{x} + b \\
 * 当​ `$C$` 无穷大时，迫使所有样本均满足约束，使得上式后半部分为​
 * 当 `$C$` 取有限值时，允许一些样本不满足约束
 
-![img](images/param_c.png)
+![img](./images/param_c.png)
 
 但是上式的 `$l_{0/1}$` 损失函数非凸、非连续，数学性质不好，用其他一些函数来代替它：
 
@@ -343,7 +343,7 @@ f(\mathbf{x}) &= \mathbf{w}^{T}\mathbf{x} + b \\
 
 以上四种损失函数图像如下所示：
 
-![img](images/loss.png)
+![img](./images/loss.png)
 
 若采用 Hinge 损失，原优化目标变为：
 
@@ -409,7 +409,7 @@ f(\mathbf{x}) &= \mathbf{w}^{T}\mathbf{x} + b \\
 以“异或”问题为例，二维情况下无论如何都不能将正负样本线性分开，
 但映射到三维后就可以用一个平面将样本分开
 
-![img](images/kernel.png)
+![img](./images/kernel.png)
 
 由 Cover 定理可证，同一份样本数据在越高维的空间中越有可能线性可分。
 若设 `$d$` 维空间中 `$N$` 个点线性可分的概率为​ `$p(d, N)$`，那么就有：
@@ -473,7 +473,7 @@ f(\mathbf{x})
 
 下表列出了几种常用的核函数：
 
-![img](images/kernel_func.png)
+![img](./images/kernel_func.png)
 
 可以发现，线性核函数对应着样本空间本身，即不对样本做函数映射
 

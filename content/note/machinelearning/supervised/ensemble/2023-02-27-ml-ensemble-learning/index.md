@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-02-27'
 slug: ml-ensemble-learning
 categories:
-    - machine learning
+  - machine-learning
 tags:
     - model
 ---

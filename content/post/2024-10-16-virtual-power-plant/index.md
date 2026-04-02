@@ -3,6 +3,7 @@ title: 虚拟电厂
 subtitle: Virtual Power Plant
 author: wangzf
 date: '2024-10-16'
+description: 梳理虚拟电厂的基本概念、运行机制与电力市场中的典型应用场景。
 slug: virtual-power-plant
 categories:
   - learning

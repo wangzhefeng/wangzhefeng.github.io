@@ -3,7 +3,7 @@ title: Python 项目打包发布
 author: wangzf
 date: '2021-11-05'
 categories:
-  - Python
+  - python
 tags:
   - tool
 slug: python-package
@@ -398,7 +398,7 @@ packaging_tutorial/
 
 - 最终的project `packaging_tutorial` 结构如下图
 
-![packaging_tutorial](images/packaging_tutorial.jpg)
+![packaging_tutorial](./images/packaging_tutorial.jpg)
 
 ## 上传分发档案
 

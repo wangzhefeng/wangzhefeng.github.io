@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-08'
 slug: ml-navie-bayes
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---

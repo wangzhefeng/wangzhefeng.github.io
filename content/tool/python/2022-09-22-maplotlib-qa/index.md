@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-22'
 slug: maplotlib-qa
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - tool
 ---
@@ -113,7 +113,7 @@ print(mat_fonts)
 * macOS 中安装、停用字体
     - https://support.apple.com/zh-cn/HT201749
 * macOS 中字体册
-    ![img](images/mac_font.png)
+    ![img](./images/mac_font.png)
 
 ### 指定中文字体名称
 
@@ -316,7 +316,7 @@ plt.plot(x, y, c = "m")
 plt.show()
 ```
 
-![img](images/ticker1.png)
+![img](./images/ticker1.png)
 
 ### 为刻度添加辅助网络
 
@@ -336,7 +336,7 @@ plt.plot(x, y, c = "m")
 plt.show()
 ```
 
-![img](images/ticker2.png)
+![img](./images/ticker2.png)
 
 ```python
 import numpy as np
@@ -354,7 +354,7 @@ plt.plot(x, y, c = "m")
 plt.show()
 ```
 
-![img](images/ticker3.png)
+![img](./images/ticker3.png)
 
 
 ```python
@@ -373,7 +373,7 @@ plt.plot(x, y, c = "m")
 plt.show()
 ```
 
-![img](images/ticker4.png)
+![img](./images/ticker4.png)
 
 
 ### 控制刻度标签

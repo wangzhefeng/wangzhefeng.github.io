@@ -90,7 +90,7 @@ img {
 结果如下图所示，轴表示训练样本大小，即用于拟合预测模型的数据量。
 轴表示所有时间序列中每个模型的平均误差，使用交叉验证计算得出。
 
-![img](images/forecast.png)
+![img](./images/forecast.png)
 
 当只有少数观测值可用时，基础方法表现出更好的性能。
 然而，随着样本量的增加，机器学习方法优于经典方法。
@@ -134,7 +134,7 @@ img {
 新数据对应的时间均在分割点之后。历史数据和新数据均包含 `$N$` 维信息（如某品牌每家店的地理位置、销售的商品信息等），
 但前者比后者多一列数据：预测目标变量(Target/Label)，即要预测的对象(如销售额)。
 
-![img](images/data.png)
+![img](./images/data.png)
 
 基于给出的数据，预测任务是：根据已有数据，预测测试集的 Target（如，
 根据某品牌每家店 2018 年以前的历史销售情况，预测每家店 2018 年 1 月份头 15 天的销售额）。
@@ -146,17 +146,17 @@ img {
 
 > 单个时间序列数据变换：
 
-![img](images/ts_ml.png)
+![img](./images/ts_ml.png)
 
-![img](images/transform_timeseries.gif)
+![img](./images/transform_timeseries.gif)
 
 > 带有协变量的时序数据变换：
 
-![img](images/matrix_transformation_with_exog_variable.png)
+![img](./images/matrix_transformation_with_exog_variable.png)
 
 > 模型预测：
 
-![img](images/diagram-trainig-forecaster.png)
+![img](./images/diagram-trainig-forecaster.png)
 
 ## 时间序列数据集处理方式
 
@@ -166,7 +166,7 @@ img {
 
 首先来看针对截面数据的数据处理思路：
 
-![img](images/cross_section.png)
+![img](./images/cross_section.png)
 
 对于截面数据来说，训练集数据和测试集数据在时间维度上没有区别，
 二者唯一的区别是前者包含要预测的目标变量，而后者没有该目标变量
@@ -180,7 +180,7 @@ img {
 
 时间序列的处理思路则有所不同，时间序列预测的核心思想是：用过去时间里的数据预测未来时间里的 Target：
 
-![img](images/ts.png)
+![img](./images/ts.png)
 
 所以，在构建模型的时候，首先，将所有过去时间里的数据，
 即训练集里的 N 维数据和 Target 都应该拿来构建预测特征。

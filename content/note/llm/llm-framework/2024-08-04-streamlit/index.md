@@ -112,9 +112,9 @@ $ streamlit hello
 
 ### 社区云
 
-![img](images/community_cloud.png)
+![img](./images/community_cloud.png)
 
-![img](images/app.png)
+![img](./images/app.png)
 
 ## Streamlit 概念
 

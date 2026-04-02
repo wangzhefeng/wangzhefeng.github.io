@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-09-13'
 slug: feature-engine-type-audio
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---

@@ -81,7 +81,7 @@ img {
 
 > 给定一个长度为 `n` 的数组 `nums` ，元素按从小到大的顺序排列且不重复。
 > 请查找并返回元素 `target` 在该数组中的索引。若数组不包含该元素，则返回 `-1`。
-> ![img](images/binary_search_example.png)
+> ![img](./images/binary_search_example.png)
 
 ### 双闭区间二分查找
 
@@ -97,16 +97,16 @@ img {
     - 当 `nums[m] > target` 时，说明 `target` 在区间 `[i, m-1]` 中，因此执行 `j = m-1`。
     - 当 `nums[m] = target` 时，说明找到 `target` ，因此返回索引 `m`。
 
-<img src="images/binary_search_step1.png" width="48%" />
-<img src="images/binary_search_step2.png" width="48%" />
+<img src="./images/binary_search_step1.png" width="48%" />
+<img src="./images/binary_search_step2.png" width="48%" />
 
-<img src="images/binary_search_step3.png" width="48%" />
-<img src="images/binary_search_step4.png" width="48%" />
+<img src="./images/binary_search_step3.png" width="48%" />
+<img src="./images/binary_search_step4.png" width="48%" />
 
-<img src="images/binary_search_step5.png" width="48%" />
-<img src="images/binary_search_step6.png" width="48%" />
+<img src="./images/binary_search_step5.png" width="48%" />
+<img src="./images/binary_search_step6.png" width="48%" />
 
-<img src="images/binary_search_step7.png" width="48%" />
+<img src="./images/binary_search_step7.png" width="48%" />
 
 若数组不包含目标元素，搜索区间最终会缩小为空，此时返回 `-1`。
 值得注意的是，由于 `i` 和 `j` 都是 `int` 类型，因此 `i+j` 可能会超出 `int` 类型的取值范围。
@@ -159,7 +159,7 @@ if __name__ == "__main__":
 因此通过指针 `$i$` 和指针 `$j$` 缩小区间的操作也是对称的。
 这样更不容易出错，因此一般建议采用“双闭区间”的写法。
 
-![img](images/binary_search_ranges.png)
+![img](./images/binary_search_ranges.png)
 
 #### 实现
 
@@ -227,7 +227,7 @@ if __name__ == "__main__":
 > 给定一个长度为 `n` 的有序数组 `nums` 和一个元素 `targe`，数组不存在重复元素。
 > 现将 `target` 插入数组 `nums` 中，并保持其有序性。若数组中已存在元素 `target`，
 > 则插入到其左方。请返回插入后 `target` 在数组中的索引。
-> ![img](images/binary_search_example2.png)
+> ![img](./images/binary_search_example2.png)
 
 #### 算法
 
@@ -277,7 +277,7 @@ def binary_search_insertion_simple(nums: list[int], target: int) -> int:
 > 给定一个长度为 `n` 的有序数组 `nums` 和一个元素 `targe`，数组存在重复元素。
 > 现将 `target` 插入数组 `nums` 中，并保持其有序性。若数组中已存在元素 `target`，
 > 则插入到其左方。请返回插入后 `target` 在数组中的索引。
-> ![img](images/binary_search_example2.png)
+> ![img](./images/binary_search_example2.png)
 
 #### 算法
 
@@ -287,7 +287,7 @@ def binary_search_insertion_simple(nums: list[int], target: int) -> int:
 题目要求将目标元素插入到最左边，所以我们需要查找数组中最左一个 `target` 的索引。
 初步考虑通过下图所示的步骤实现：
 
-![img](images/binary_search_insertion_step.png)
+![img](./images/binary_search_insertion_step.png)
 
 1. 执行二分查找，得到任意一个 `target` 的索引，记为 `k`；
 2. 从索引 `k` 开始，向左进行线性遍历，当找到最左边的 `target` 时返回。
@@ -306,17 +306,17 @@ def binary_search_insertion_simple(nums: list[int], target: int) -> int:
 循环完成后，`i` 指向最左边的 `target`，`j` 指向首个小于 `target` 的元素，
 因此索引 `i` 就是插入点。
 
-<img src="images/binary_search_insertion_step1.png" width="48%" />
-<img src="images/binary_search_insertion_step2.png" width="48%" />
+<img src="./images/binary_search_insertion_step1.png" width="48%" />
+<img src="./images/binary_search_insertion_step2.png" width="48%" />
 
-<img src="images/binary_search_insertion_step3.png" width="48%" />
-<img src="images/binary_search_insertion_step4.png" width="48%" />
+<img src="./images/binary_search_insertion_step3.png" width="48%" />
+<img src="./images/binary_search_insertion_step4.png" width="48%" />
 
-<img src="images/binary_search_insertion_step5.png" width="48%" />
-<img src="images/binary_search_insertion_step6.png" width="48%" />
+<img src="./images/binary_search_insertion_step5.png" width="48%" />
+<img src="./images/binary_search_insertion_step6.png" width="48%" />
 
-<img src="images/binary_search_insertion_step7.png" width="48%" />
-<img src="images/binary_search_insertion_step8.png" width="48%" />
+<img src="./images/binary_search_insertion_step7.png" width="48%" />
+<img src="./images/binary_search_insertion_step8.png" width="48%" />
 
 观察以下代码，判断分支 `nums[m] > target` 和 `nums[m] == target` 的操作相同，
 因此两者可以合并。

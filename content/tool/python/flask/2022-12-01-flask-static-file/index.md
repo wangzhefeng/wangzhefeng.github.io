@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-12-01'
 slug: flask-static-file
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

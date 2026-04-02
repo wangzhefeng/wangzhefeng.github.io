@@ -117,7 +117,7 @@ model_dir = snapshot_download(
 
 下载的模型结构：
 
-![img](images/downloaded_models.png)
+![img](./images/downloaded_models.png)
 
 ## 构建 LLM 应用
 
@@ -876,7 +876,7 @@ if __name__ == "__main__":
 $ python api.py
 ```
 
-![img](images/fastAPI.png)
+![img](./images/fastAPI.png)
 
 ### 服务 API 调用
 
@@ -1033,7 +1033,7 @@ $ streamlit run chatBot.py --server.address 127.0.0.1 --server.port 6006
 运行成功后，在本地浏览器中打开 [http://127.0.0.1:6006](http://127.0.0.1:6006)，
 即可查看部署的 WebDemo，如下图所示：
 
-![img](images/chatBot.png)
+![img](./images/chatBot.png)
 
 ## 资料
 

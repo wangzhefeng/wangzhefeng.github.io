@@ -1,7 +1,9 @@
 ---
 title: PyTorch Automatic Mixed Precision
+subtitle: Automatic Mixed Precision
 author: wangzf
 date: '2025-01-19'
+description: 介绍 PyTorch 自动混合精度训练的原理、接口与实践注意事项。
 slug: pytorch-automatic-mixed-precision
 categories:
   - pytorch

@@ -155,7 +155,7 @@ img {
     - 网状结构：元素之间是多对多的关系 
         - 图
 
-![img](images/classification_logic_structure.png)
+![img](./images/classification_logic_structure.png)
 
 ### 物理结构: 连续与分散
 
@@ -167,7 +167,7 @@ img {
 计算机根据特定规则为表格中的每个单元格分配编号，确保每个内存空间都有唯一的内存地址。
 有了这些地址，程序便可以访问内存中的数据。
 
-![img](images/computer_memory_location.png)
+![img](./images/computer_memory_location.png)
 
 内存是所有程序的共享资源，当某块内存被某个程序占用时，则无法被其他程序同时使用了。
 因此在数据结构与算法的设计中，内存资源是一个重要的考虑因素。
@@ -179,7 +179,7 @@ img {
 物理结构从底层决定了数据的访问、更新、增删等操作方法，
 两种物理结构在时间效率和空间效率方面呈现出互补的特点。
 
-![img](images/classification_logic_structure.png)
+![img](./images/classification_logic_structure.png)
 
 值得说明的是，所有数据结构都是基于数组、链表或二者的组合实现的。
 例如，栈和队列既可以使用数组实现，也可以使用链表实现；
@@ -233,7 +233,7 @@ img {
 数组（array）是一种线性数据结构，其将相同类型的元素存储在连续的内存空间中。
 我们将元素在数组中的位置称为该元素的索引（index）。
 
-![img](images/array_definition.png)
+![img](./images/array_definition.png)
 
 #### 数组常用操作
 
@@ -253,7 +253,7 @@ nums: list[int] = [1, 3, 2, 5, 4]
 给定数组内存地址（首元素内存地址）和某个元素的索引，
 我们可以使用下图所示的公式计算得到该元素的内存地址，从而直接访问该元素。
 
-![img](images/array_memory_location_calculation.png)
+![img](./images/array_memory_location_calculation.png)
 
 我们发现数组首个元素的索引为 0，这似乎有些反直觉，因为从 1 开始计数会更自然。
 但从地址计算公式的角度看，索引本质上是内存地址的偏移量。首个元素的地址偏移量是 0，
@@ -281,7 +281,7 @@ def random_access(nums: list[int]) -> int:
 之后再把元素赋值给该索引。值得注意的是，由于数组的长度是固定的，
 因此插入一个元素必定会导致数组尾部元素“丢失”。
 
-![img](images/array_insert_element.png)
+![img](./images/array_insert_element.png)
 
 ```python
 def insert(nums: list[int], num: int, index: int):
@@ -300,7 +300,7 @@ def insert(nums: list[int], num: int, index: int):
 若想删除索引 `$i$` 处的元素，则需要把索引 `$i$` 之后的元素都向前移动一位。
 请注意，删除元素完成后，原先末尾的元素变得“无意义”了，所以我们无须特意去修改它。
 
-![img](images/array_remove_element.png)
+![img](./images/array_remove_element.png)
 
 ```python
 def remove(nums: list[int], index: int):
@@ -419,7 +419,7 @@ def extend(nums: list[int], enlarge: int) -> list[int]:
 引用记录了下一个节点的内存地址，通过它可以从当前节点访问到下一个节点。
 链表的设计使得各个节点可以分散存储在内存各处，它们的内存地址无须连续。
 
-![img](images/linkedlist_definition.png)
+![img](./images/linkedlist_definition.png)
 
 链表的组成单位是<span style='border-bottom:1.5px dashed red;'>节点（node）对象</span>。
 每个节点都包含两项数据：<span style='border-bottom:1.5px dashed red;'>节点的“值”</span>和<span style='border-bottom:1.5px dashed red;'>指向下一节点的“引用”</span>。
@@ -476,7 +476,7 @@ n3.next = n4
 
 相比之下，在数组中插入元素的时间复杂度为 `$O(n)$`，在大数据量下的效率较低。
 
-![img](images/linkedlist_insert_node.png)
+![img](./images/linkedlist_insert_node.png)
 
 ```python
 def insert(n0:ListNode, P: ListNode):
@@ -492,7 +492,7 @@ def insert(n0:ListNode, P: ListNode):
 
 在链表中删除节点也非常方便，只需改变一个节点的引用（指针）即可。
 
-![img](images/linkedlist_remove_node.png)
+![img](./images/linkedlist_remove_node.png)
 
 ```python
 def remove(n0: ListNode):
@@ -570,7 +570,7 @@ def find(head: ListNode, target: int) -> int:
   双向链表的节点定义同时包含指向后继节点（下一个节点）和前驱节点（上一个节点）的引用（指针）。
   相较于单向链表，双向链表更具灵活性，可以朝两个方向遍历链表，但相应地也需要占用更多的内存空间。
 
-![img](images/linkedlist_common_types.png)
+![img](./images/linkedlist_common_types.png)
 
 #### 链表的典型应用
 
@@ -774,13 +774,13 @@ class MyList:
 
 下表展示了它们在计算机系统中的不同角色和性能特点。
 
-![img](images/computer_memory_device.png)
+![img](./images/computer_memory_device.png)
 
 我们可以将计算机存储系统想象为下图所示的金字塔结构。
 越靠近金字塔顶端的存储设备的速度越快、容量越小、成本越高。
 这种多层级的设计并非偶然，而是计算机科学家和工程师们经过深思熟虑的结果。
 
-![img](images/storage_pyramid.png)
+![img](./images/storage_pyramid.png)
 
 * 硬盘难以被内存取代。
     - 首先，内存中的数据在断电后会丢失，因此它不适合长期存储数据；
@@ -798,7 +798,7 @@ class MyList:
 缓存可以看作 CPU 的一部分，它通过智能地从内存加载数据，给 CPU 提供高速的数据读取，
 从而显著提升程序的执行效率，减少对较慢的内存的依赖。
 
-![img](images/computer_storage_devices.png)
+![img](./images/computer_storage_devices.png)
 
 #### 数据结构的内存效率
 
@@ -865,14 +865,14 @@ class MyList:
 把堆叠元素的顶部称为 “栈顶”，底部称为 “栈底”。
 将把元素添加到栈顶的操作叫作“入栈”，删除栈顶元素的操作叫作“出栈”。
 
-![img](images/stack_operations.png)
+![img](./images/stack_operations.png)
 
 #### 栈的常用操作
 
 栈的常用操作如下表所示，具体的方法名需要根据所使用的编程语言来确定。
 在此，我们以常见的 `push()`、`pop()`、`peek()` 命名为例。
 
-![img](images/stack_operation.png)
+![img](./images/stack_operation.png)
 
 通常情况下，我们可以直接使用编程语言内置的栈类。然而，某些语言可能没有专门提供栈类，
 这时我们可以将该语言的“数组”或“链表”当作栈来使用，并在程序逻辑上忽略与栈无关的操作。
@@ -917,11 +917,11 @@ is_empty: bool = len(stack) == 0
 对于入栈操作，我们只需将元素插入链表头部，这种节点插入方法被称为 “头插法”。
 而对于出栈操作，只需将头节点从链表中删除即可。
 
-![img](images/linkedlist_stack_step1.png)
+![img](./images/linkedlist_stack_step1.png)
 
-![img](images/linkedlist_stack_step2_push.png)
+![img](./images/linkedlist_stack_step2_push.png)
 
-![img](images/linkedlist_stack_step3_pop.png)
+![img](./images/linkedlist_stack_step3_pop.png)
 
 
 ```python
@@ -1002,11 +1002,11 @@ class LinkedListStack:
 使用数组实现栈时，我们可以将数组的尾部作为栈顶。
 入栈与出栈操作分别对应在数组尾部添加元素与删除元素，时间复杂度都为 `$O(1)$`。
 
-![img](images/array_stack_step1.png)
+![img](./images/array_stack_step1.png)
 
-![img](images/array_stack_step2_push.png)
+![img](./images/array_stack_step2_push.png)
 
-![img](images/array_stack_step3_pop.png)
+![img](./images/array_stack_step3_pop.png)
 
 ```python
 class ArrayStack:
@@ -1100,14 +1100,14 @@ class ArrayStack:
 我们将队列头部称为 “队首”，尾部称为 “队尾”，将把元素加入队尾的操作称为 “入队”，
 删除队首元素的操作称为 “出队”。
 
-![img](images/queue_operations.png)
+![img](./images/queue_operations.png)
 
 #### 队列常用操作
 
 队列的常见操作如下表所示。需要注意的是，不同编程语言的方法名称可能会有所不同。
 我们在此采用与栈相同的方法命名。
 
-![img](images/queue_operation.png)
+![img](./images/queue_operation.png)
 
 ```python
 from collections import deque
@@ -1145,11 +1145,11 @@ is_empty: bool = len(que) == 0
 
 可以将链表的“头节点”和“尾节点”分别视为“队首”和“队尾”，规定队尾仅可添加节点，队首仅可删除节点。
 
-![img](images/linkedlist_queue_step1.png)
+![img](./images/linkedlist_queue_step1.png)
 
-![img](images/linkedlist_queue_step2_push.png)
+![img](./images/linkedlist_queue_step2_push.png)
 
-![img](images/linkedlist_queue_step3_pop.png)
+![img](./images/linkedlist_queue_step3_pop.png)
 
 ```python
 class LinkedListQueue:
@@ -1236,11 +1236,11 @@ class LinkedListQueue:
 
 可以看到，入队和出队操作都只需进行一次操作，时间复杂度均为 `$O(1)$`。
 
-![img](images/array_queue_step1.png)
+![img](./images/array_queue_step1.png)
 
-![img](images/array_queue_step2_push.png)
+![img](./images/array_queue_step2_push.png)
 
-![img](images/array_queue_step3_pop.png)
+![img](./images/array_queue_step3_pop.png)
 
 ```python
 class ArrayQueue:
@@ -1327,7 +1327,7 @@ class ArrayQueue:
 哈希表（hash table），又称散列表，它通过建立键 `key` 与值 `value` 之间的映射，实现高效的元素查询。
 具体而言，我们向哈希表中输入一个键 `key`，则可以在 `$O(1)$` 时间内获取对应的值 `value`。
 
-![img](images/hash_table_lookup.png)
+![img](./images/hash_table_lookup.png)
 
 除哈希表外，数组和链表也可以实现查询功能，它们的效率对比如下表所示：
 
@@ -1335,7 +1335,7 @@ class ArrayQueue:
 * 查询元素：由于数组（链表）是乱序的，因此需要遍历其中的所有元素，使用 `$O(n)$` 时间。
 * 删除元素：需要先查询到元素，再从数组（链表）中删除，使用 `$O(n)$` 时间。
 
-![img](images/array_linkedlist_hash.png)
+![img](./images/array_linkedlist_hash.png)
 
 在哈希表中进行增删查改的时间复杂度都是 `$O(1)$`，非常高效。
 
@@ -1516,15 +1516,15 @@ for value in hmap.values():
 
 * 无向无权图：
 
-    ![img](images/adjust_matrix_list1.jpg)
+    ![img](./images/adjust_matrix_list1.jpg)
 
 * 无向有权图中：
 
-    ![img](images/adjust_matrix_list2.jpg)
+    ![img](./images/adjust_matrix_list2.jpg)
 
 * 有向无权图：
 
-    ![img](images/adjust_matrix_list3.jpg)
+    ![img](./images/adjust_matrix_list3.jpg)
 
 邻接矩阵和链表对比：
 

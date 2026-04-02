@@ -74,7 +74,7 @@ img {
 
 - 热电厂结构
 
-<img src="images/CMB3.svg" width="100%"/>
+<img src="./images/CMB3.svg" width="100%"/>
 
 
 ### 热电联产
@@ -91,7 +91,7 @@ img {
 
 下面这张图是我第一次接触一热电联产场景时产品经理给我展示的图
 
-<img src="images/chp.png" width="100%"/>
+<img src="./images/chp.png" width="100%"/>
 
 下面我用自己的话描述一下热电联产的内在逻辑，以及在产品、算法层面可以做的事：
 

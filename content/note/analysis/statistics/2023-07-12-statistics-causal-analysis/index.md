@@ -73,7 +73,7 @@ img {
 
 原因可能有多个，导致的结果也可能是多个：
 
-![img](images/casual.png)
+![img](./images/casual.png)
 
 这里把问题聚焦，仅探讨抽象的因果关系，所以因果分析可以抽象如下：
 
@@ -148,7 +148,7 @@ A/B 实验是一种单因素归因，适用于验证单因素的因果关系。
 
 因果分析、推断工具：
 
-![img](images/tools.png)
+![img](./images/tools.png)
 
 1. DoWhy
     - 开发者：微软

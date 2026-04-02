@@ -158,7 +158,7 @@ O(\theta)
 * 对于 `$[\text{SEP}]$` 左边的，返回 `$e_{A}\in \mathbb{R}^{d}$`
 * 对于 `$[\text{SEP}]$` 右边的，返回 `$e_{B}\in \mathbb{R}^{d}$`
 
-![img](images/bert.png)
+![img](./images/bert.png)
 
 BERT-large 有 `$n_{\text{heads}}=16$` 个 Attention 头，
 并且 `$d_{\text{model}}=1024$`，总共 355M 个参数。
@@ -264,7 +264,7 @@ BART 是基于 Transformer 的 Encoder-Decoder 模型。
 
 BART 使用了以下变换 `$A(\tilde{x}_{1:L}|x_{1:L})$`：
 
-![img](images/bart.png)
+![img](./images/bart.png)
 
 基于 BERT 的实验，最终模型进行以下了变换：
 
@@ -287,13 +287,13 @@ T5 是另一种基于 Transformer 的 Encoder-Decoder 模型。
 
 论文尝试了许多不同的无监督目标：
 
-![img](images/t5-task.png)
+![img](./images/t5-task.png)
 
 并发现 `“i.i.d. noise, replace spans”` 效果最好（尽管许多目标相似）。
 
 论文还将所有经典的 NLP 任务放在一个统一的框架中，称为 “Text-to-Text” 任务：
 
-![img](images/t5.png)
+![img](./images/t5.png)
 
 以分类任务任务为例，不同模型的差异如下：
 
@@ -392,7 +392,7 @@ T5 是另一种基于 Transformer 的 Encoder-Decoder 模型。
 
 [混合精度训练](https://arxiv.org/pdf/1710.03740.pdf)是另一种减少存储的方法。
 
-![img](images/mix.png)
+![img](./images/mix.png)
 
 通常来说，默认的精度是：FP32（32 位浮点），其他可选精度为 FP16（16 位浮点），
 但问题是任何小于 `$2^{-24}$` 的值都会变为 0。
@@ -451,7 +451,7 @@ T5 将注意力矩阵增加一个 `$1/\sqrt{d}$`([代码](https://github.com/ten
 模型参数 `$w$` 的形状为 `$5 \times 8$`，那么，矩阵乘法输出形状为 `$4 \times 8$`。
 示意图如下：
 
-![img](images/dt1.png)
+![img](./images/dt1.png)
 
 * **单机单卡的训练中**，以上矩阵乘法，先计算得到 `$\text{out}$`，并将 `$\text{out}$` 传递给下一层，
   并最终计算得到 `$\text{loss}$`，然后在反向传播过程中，
@@ -465,7 +465,7 @@ T5 将注意力矩阵增加一个 `$1/\sqrt{d}$`([代码](https://github.com/ten
 这样，在两台设备上，分别得到的输出，都只是逻辑上输出的一半（形状为 `$2\times 8$`），
 将两个设备上的输出拼接到一起，才能得到逻辑上完整的输出。
 
-![img](images/dt2.png)
+![img](./images/dt2.png)
 
 注意，因为数据被分发到了 2 个设备上，因此反向传播过程，
 各自设备上得到的 `$\frac{\partial\text{loss}}{\partial w}$` 会不一样，
@@ -491,7 +491,7 @@ T5 将注意力矩阵增加一个 `$1/\sqrt{d}$`([代码](https://github.com/ten
 如下图所示，`$w$` 被按照第 1 维度平均切分到 2 个设备上，两个设备上都有完整的 `$x$`。
 两个设备上的输出也需要通过拼接才能得到逻辑上的输出。
 
-![img](images/dt3.png)
+![img](./images/dt3.png)
 
 模型并行的好处是，省去了多个设备之间的梯度 AllReduce；但是，由于每个设备都需要完整的数据输入，
 因此，数据会在多个设备之间进行广播，产生通信代价。比如，上图中的最终得到的 `$\text{out}(4\times 8)$`，
@@ -509,7 +509,7 @@ T5 将注意力矩阵增加一个 `$1/\sqrt{d}$`([代码](https://github.com/ten
 GPU1 上进行 `T3` 与 `T4` 的计算。GPU0 上完成前两层的计算后，
 它的输出被当作 GPU1 的输入，继续进行后两层的计算。
 
-![img](images/dt4.png)
+![img](./images/dt4.png)
 
 #### 混合并行
 
@@ -519,7 +519,7 @@ GPU1 上进行 `T3` 与 `T4` 的计算。GPU0 上完成前两层的计算后，
 在 6 台主机之间，进行的是数据并行训练；每台主机有 8 张 GPU 显卡，
 同一台机器上的 8 张 GPU 显卡之间是进行模型并行训练。
 
-![img](images/dt5.png)
+![img](./images/dt5.png)
 
 并行策略的选择影响着训练效率，框架对并行训练的接口支持程度，决定了算法工程师的开发效率。
 OneFlow 针对分布式训练所做的系统级设计和创新，为用户轻松上手分布式训练做足了铺垫。

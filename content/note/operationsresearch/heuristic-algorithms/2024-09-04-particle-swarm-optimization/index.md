@@ -5,7 +5,7 @@ author: wangzf
 date: '2024-09-04'
 slug: particle-swarm-optimization
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---
@@ -79,7 +79,7 @@ img {
 
 ### 算法过程
 
-![img](images/pso.png)
+![img](./images/pso.png)
 
 #### 核心公式
 

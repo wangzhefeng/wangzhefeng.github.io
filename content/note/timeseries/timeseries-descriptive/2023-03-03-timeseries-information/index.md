@@ -67,7 +67,7 @@ img {
 您可以使用差分运算来执行此操作。差分只是意味着取当前观察值与前一个观察值之间的差值。
 图 2 为差分去除趋势后的航空旅客时间序列；在此过程之后，系列的平均水平变得稳定。
 
-![img](images/trend.webp)
+![img](./images/trend.webp)
 
 ## 季节性和周期性模式
 
@@ -95,7 +95,7 @@ img {
 残差不能用任何趋势、季节性或周期性行为来解释，
 但仍然会对时间序列的动态产生影响。
 
-![img](images/residuals.webp)
+![img](./images/residuals.webp)
 
 ## 平稳性 
 
@@ -128,7 +128,7 @@ img {
 方差通常更高。异方差性在数据建模过程中提出了一个问题，并且有一些方法可以解决它。
 幂变换，例如取对数，或者更一般地说，Box-Cox 变换，通常用于稳定方差。下图显示了将 Box-Cox 方法应用于时间序列的示例。
 
-![img](images/heteroskedasticity.webp)
+![img](./images/heteroskedasticity.webp)
 
 ## 规律性和间歇性
 

@@ -5,7 +5,7 @@ list_pages: true
 # order_by: title
 ---
 
-![img](images/target_detection_big_picture.png)
+![img](./images/target_detection_big_picture.png)
 
 ## TODO
 

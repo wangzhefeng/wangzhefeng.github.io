@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-07-31'
 slug: ml-gbm-gbdt
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -86,11 +86,11 @@ img {
 
 GBDT 的一个应用示意图如下（某样本预测值 = 它在不同弱学习器所在叶子节点输出值的累加值）：
 
-![img](images/gbdt.png)
+![img](./images/gbdt.png)
 
 ### GBDT vs RandomForest
 
-![img](images/gbdt_rf.png)
+![img](./images/gbdt_rf.png)
 
 ### GBDT 优缺点
 
@@ -363,7 +363,7 @@ g_m (\mathbf{x}) &= \Bigg[\frac{\partial E_{y, \mathbf{x}}[L(y, f(\mathbf{x}))]}
 
 ### GBDT 模型框架
 
-![img](images/gbdt_frame.png)
+![img](./images/gbdt_frame.png)
 
 GBDT 的伪代码如上图所示，假设有个样本集 `$\{x_{i}, y_{i}\}_{1}^{N}$`，
 想用 `$M$` 个弱学习器加性组合成 GBDT 强学习器，得按以下步骤进行实现：
@@ -436,7 +436,7 @@ GBDT 的伪代码如上图所示，假设有个样本集 `$\{x_{i}, y_{i}\}_{1}^
 不同损失函数导致使用的负梯度不同，因此也就产生了不同的 GBDT 回归算法，
 总结了下 GBDT 回归模型所用的损失和负梯度如下：
 
-![img](images/reg.png)
+![img](./images/reg.png)
 
 这里特别说下 Huber 损失，它对于中间附近的点(`$|y-f(x)|\leq\delta$`)采用均方误差，
 对远离中心的异常点(`$|y-f(x)|>\delta$`)，采用绝对损失。

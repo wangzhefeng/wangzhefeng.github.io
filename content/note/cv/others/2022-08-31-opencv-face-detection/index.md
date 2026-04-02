@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-31'
 slug: opencv-face-detection
 categories:
-  - computer vision
+  - computer-vision
 tags:
   - note
 ---
@@ -57,11 +57,11 @@ img {
       视频捕获、跟踪移动对象和对象披露
     - Haarcascade 算法，是一种对象检测算法，用于识别图像或实时视频中的人脸。该算法使用边缘或线检测特征
 
-![img](images/haarcascade.jpeg)
+![img](./images/haarcascade.jpeg)
 
 ## 项目结构
 
-![img](images/opencv_flask_face.png)
+![img](./images/opencv_flask_face.png)
 
 ### Flask App
 

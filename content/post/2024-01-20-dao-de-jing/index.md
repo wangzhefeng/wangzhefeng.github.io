@@ -1,7 +1,9 @@
 ---
 title: 道德经
+subtitle: Tao Te Ching
 author: wangzf
 date: '2024-01-20'
+description: 老子《道德经》的阅读摘录与个人理解，围绕修身、处世与治理展开。
 show_toc: true
 slug: dao-de-jing
 categories:

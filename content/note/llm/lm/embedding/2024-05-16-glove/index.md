@@ -87,7 +87,7 @@ GloVe 词向量模型基本步骤如下:
 
     - 基于余弦相似度的词汇语义相似性度量:
 
-    ![img](images/cosine_similarity.png)
+    ![img](./images/cosine_similarity.png)
 
 5. 语义类比
     - 有了词汇之间的相似性度量之后，便可以基于此做进一步分析，
@@ -96,7 +96,7 @@ GloVe 词向量模型基本步骤如下:
 
 ## GloVe vs Word2Vec
 
-![img](images/GloVe_vs_word2vec.png)
+![img](./images/GloVe_vs_word2vec.png)
 
 ## 参考
 

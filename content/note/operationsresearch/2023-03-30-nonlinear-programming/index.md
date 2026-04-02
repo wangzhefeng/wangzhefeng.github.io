@@ -5,7 +5,7 @@ author: wangzf
 date: '2023-03-30'
 slug: nonlinear-programming
 categories:
-  - optimizer algorithm
+  - optimizer-algorithm
 tags:
   - algorithm
 ---

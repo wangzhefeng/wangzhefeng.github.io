@@ -74,16 +74,16 @@ VGG网络架构：
 
 ## VGG-16 网络结构
 
-![img](images/vgg16.png)
+![img](./images/vgg16.png)
 
 VGG 的网络结构非常规整，2-2-3-3-3 的卷积结构也非常利于编程实现。卷积层的滤波器数量的变化也存在明显的规律，
 由 64 到 128 再到 256 和 512，每一次卷积都是像素成规律的减少和通道数成规律的增加。
 VGG-16 在当年的 ILSVRC 以 32% 的 top5 错误率取得了当年大赛的第二名。这么厉害的网络为什么是第二名？
 因为当年有比 VGG 更厉害的网络，也就是致敬 LeNet-5 的 GoogLeNet。
 
-![img](images/vgg16.webp)
+![img](./images/vgg16.webp)
 
-![img](images/vgg162.png)
+![img](./images/vgg162.png)
 
 ## VGG-19 网络结构
 

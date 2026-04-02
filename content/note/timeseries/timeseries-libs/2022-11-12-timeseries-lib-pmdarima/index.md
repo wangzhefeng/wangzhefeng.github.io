@@ -268,7 +268,7 @@ pm.plot_acf(x)
 [ 1.0  0.57142857  0.17857143 -0.14285714 -0.35714286 -0.42857143 -0.32142857]
 ```
 
-![img](images/acf.png)
+![img](./images/acf.png)
 
 ```python
 import pmdarima as pm

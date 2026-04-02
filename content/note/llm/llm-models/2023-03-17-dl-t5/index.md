@@ -72,7 +72,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 那么 Text-to-Text 是什么呢。那就是作者在这提出的一个统一框架，靠着大力出奇迹，
 **将所有 NLP 任务都转化成 Text-to-Text(文本到文本)** 任务。
 
-![img](images/t5.png)
+![img](./images/t5.png)
 
 举几个例子就明白了：
 
@@ -110,7 +110,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 首先作者们先对预训练模型中的多种模型架构（Transformer）进行了比对，
 最主要的模型架构可以分成下面三种。
 
-![img](images/arch.png)
+![img](./images/arch.png)
 
 * 第一种，**Encoder-Decoder 型**，即 Seq2Seq 常用模型，分成 Encoder 和 Decoder 两部分，
   对于 Encoder 部分，输入可以看到全体，之后结果输给 Decoder，而 Decoder 因为输出方式只能看到之前的。
@@ -121,7 +121,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 
 上面这些模型架构都是 Transformer 构成，之所以有这些变换，主要是对其中注意力机制的 Mask 操作。
 
-![img](images/mask.png)
+![img](./images/mask.png)
 
 通过实验作者们发现，在提出的这个 Text-to-Text 架构中，Encoder-Decoder 模型效果最好。
 于是乎，就把它定为 T5 模型，因此所谓的 T5 模型其实就是个 Transformer 的 Encoder-Decoder 模型。
@@ -130,7 +130,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 
 之后是对预训练目标的大范围探索，具体做了哪些实验，下面这张图就能一目了然。
 
-![img](images/objectives.png)
+![img](./images/objectives.png)
 
 总共从四方面来进行比较：
 
@@ -139,7 +139,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
     - (2) BERT-style 式，就是像 BERT 一样将一部分给破坏掉，然后还原出来；
     - (3) Deshuffling（顺序还原）式，就是将文本打乱，然后还原出来。
 
-![img](images/method.png)
+![img](./images/method.png)
 
 其中发现 Bert-style 最好，进入下一轮。
 
@@ -150,7 +150,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
       每一小段替换一个特殊符，提高计算效率；
     - (3) **Drop 法**，没有替换操作，直接随机丢弃一些字符。
 
-![img](images/)
+![img](./images/)
 
 此轮获胜的是 Replace Span 法，类似做法如 SpanBERT 也证明了有效性。进入下一轮。
 
@@ -180,7 +180,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 
 还有从 C4 中抽出不同量数据做实验，发现数据少时，模型会记住数据所以之后表现会比较差（这个也是想当然）。
 
-![img](images/training-loss.png)
+![img](./images/training-loss.png)
 
 #### Training：Multi-Task Learning
 
@@ -206,7 +206,7 @@ Transfer 来自 Transfer Learning，预训练模型大体在这范畴。Transfor
 11B 的模型最后在 GLUE，SuperGLUE，SQuAD，还有 CNN/DM 上取得了 SOTA，而 WMT 则没有。
 看了性能表之后，我猜想之所以会有 3B 和 11B 模型出现，主要是为了刷榜。看表就能发现
 
-![img](images/res.png)
+![img](./images/res.png)
 
 比如说 GLUE，到 3B 时效果还并不是 SOTA，大概和 RoBERTa 评分差不多都是 88.5，
 而把模型加到 11B 才打破 ALBERT 的记录。然后其他实验结果也都差不多，3B 时还都不是 SOTA，

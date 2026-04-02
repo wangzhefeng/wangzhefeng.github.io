@@ -108,7 +108,7 @@ img {
 如何用数学表示图中顶点的关系呢？最常见的方法是邻接矩阵(Adjacency Matrix)，
 下图中 A 和 B、C、E 相连，故第一行和第一列对应的位置为 1，其余位置为 0
 
-![img](images/adjacency_matrix.png)
+![img](./images/adjacency_matrix.png)
 
 如果将图片的像素表达为图，下左图表示图片的像素值，深色表示 1，浅色表示 0，
 右图为该图片对应的图，中间为对应的邻接矩阵，蓝色表示 1，白色表示 0。
@@ -117,17 +117,17 @@ img {
 对应的邻接矩阵的大小就是(`$10^{6} \times 10^{6} = 10^{12}$`)，
 计算时容易内存溢出，而且其中大多数值为 0，很稀疏
 
-![img](images/graph_to_tensor_image.png)
+![img](./images/graph_to_tensor_image.png)
 
 文本也可以用邻接矩阵表示，但是问题也是类似的，很大很稀疏：
 
-![img](images/graph_to_tensor_text.png)
+![img](./images/graph_to_tensor_text.png)
 
 #### 邻接列表
 
 也可以选用边来表示图，即邻接列表(Adjacency List)，这可以大幅减少对空间的消耗，因为实际的边比所有可能的边(邻接矩阵)数量往往小很多
 
-![img](images/adjacency_list.png)
+![img](./images/adjacency_list.png)
 
 类似的例子有很多：
 

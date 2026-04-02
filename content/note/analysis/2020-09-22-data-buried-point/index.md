@@ -4,7 +4,7 @@ author: wangzf
 date: '2020-09-22'
 slug: data-buried-point
 categories:
-  - data analysis
+  - data-analysis
 tags:
   - note
 ---

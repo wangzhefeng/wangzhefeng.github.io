@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-03-18'
 slug: multiclass-multioutput-algorithms
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -48,9 +48,9 @@ img {
 - [参考](#参考)
 </p></details><p></p>
 
-![img](images/arc.png)
+![img](./images/arc.png)
 
-![img](images/tab.png)
+![img](./images/tab.png)
 
 ## Multiclass 分类
 

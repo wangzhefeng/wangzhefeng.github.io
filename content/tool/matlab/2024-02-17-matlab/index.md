@@ -4,7 +4,7 @@ author: wangzf
 date: '2024-02-17'
 slug: matlab
 categories: 
-  - MATLAB
+  - matlab
 tags:
   - tool
 ---
@@ -59,49 +59,49 @@ img {
 
 ### 解压安装文件
 
-![img](images/install1.png)
+![img](./images/install1.png)
 
 ### 运行安装文件
 
-![img](images/install2.png)
+![img](./images/install2.png)
 
-![img](images/install3.png)
+![img](./images/install3.png)
 
-![img](images/install4.png)
+![img](./images/install4.png)
 
-![img](images/install5.png)
+![img](./images/install5.png)
 
-![img](images/install6.png)
+![img](./images/install6.png)
 
 ### 安装 MATLAB
 
-![img](images/install8.png)
+![img](./images/install8.png)
 
-![img](images/install9.png)
+![img](./images/install9.png)
 
-![img](images/install10.png)
+![img](./images/install10.png)
 
-![img](images/install11.png)
+![img](./images/install11.png)
 
-![img](images/install12.png)
+![img](./images/install12.png)
 
-![img](images/install13.png)
+![img](./images/install13.png)
 
-![img](images/install14.png)
+![img](./images/install14.png)
 
-![img](images/install15.png)
+![img](./images/install15.png)
 
-![img](images/install16.png)
+![img](./images/install16.png)
 
-![img](images/install18.png)
+![img](./images/install18.png)
 
-![img](images/install19.png)
+![img](./images/install19.png)
 
-![img](images/install20.png)
+![img](./images/install20.png)
 
 ### 安装好的 MATLAB
 
-![img](images/install7.png)
+![img](./images/install7.png)
 
 ## 参考
 

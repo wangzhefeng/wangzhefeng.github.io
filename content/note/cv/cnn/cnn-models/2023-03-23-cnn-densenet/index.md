@@ -55,4 +55,4 @@ DenseNet 使用了 ResNet 改良版的 “批量规范化、激活和卷积” �
 
 
 
-![img](images/densenet.png)
+![img](./images/densenet.png)

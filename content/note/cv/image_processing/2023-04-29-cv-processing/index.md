@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-04-29'
 slug: cv-processing
 categories:
-  - computer vision
+  - computer-vision
 tags:
   - tool
 ---
@@ -151,7 +151,7 @@ ov, else
 需要注意的是，OpenCV 中图像坐标原点在其左上角，该点坐标值为 `$(0, 0)$`。
 自原点向右，`$x$` 值不断增加；自原点向下，`$y$` 值不断增加。OpenCV 中的图像坐标见下图：
 
-![img](images/xy.png)
+![img](./images/xy.png)
 
 坐标和矩阵的应用场景不同。在运算中，需要额外注意坐标和矩阵之间的关系。
 在图像处理中经常用到图像的行（row）、列（column）、宽度（width）、高度（height）信息。

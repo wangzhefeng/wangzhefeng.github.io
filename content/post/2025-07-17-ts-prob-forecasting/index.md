@@ -1,7 +1,9 @@
 ---
 title: 时间序列概率预测
+subtitle: Probabilistic Time Series Forecasting
 author: wangzf
 date: '2025-07-17'
+description: 介绍时间序列概率预测的建模目标、评价方式与常见方法。
 slug: ts-prob-forecasting
 categories:
   - timeseries
@@ -55,7 +57,7 @@ img {
 * 特定场景下的用处，比如供应链中的库存管理模型，使用区间预测/概率预测可以用来最优化补货量，
   如果需要满足95%的服务水平，那么就可以输出95%分位数下对应的销量预测值来作为补货量
 
-<!-- ![img](images/prob-forecasting.png) -->
+<!-- ![img](./images/prob-forecasting.png) -->
 
 目前关于时间序列区间预测的方法似乎还没有一个系统性的总结，这里把调研看到的几种方法整理出来，
 区间预测具体可以分为两类方法：

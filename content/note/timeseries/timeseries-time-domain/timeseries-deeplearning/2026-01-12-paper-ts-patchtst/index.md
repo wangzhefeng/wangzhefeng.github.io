@@ -78,7 +78,7 @@ img {
 PatchTST 的核心是 **时间序列分块（Patching）** 与 **通道独立（Channel-independence）** 两大组件，
 结合 Transformer 编码器实现高效预测。
 
-![img](images/model_arch.png)
+![img](./images/model_arch.png)
 
 ### 3.1 核心组件设计
 

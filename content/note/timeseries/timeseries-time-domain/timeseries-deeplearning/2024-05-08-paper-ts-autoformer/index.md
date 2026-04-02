@@ -96,7 +96,7 @@ Autoformer 模型的创新：
 Autoformer 全面革新 Transformer 为深度分解架构，
 包括**内部的序列分解单元**、**自相关机制**以及对应的**编-解码器**。
 
-![img](images/autoformer.png)
+![img](./images/autoformer.png)
 
 ### 深度分解架构
 
@@ -165,7 +165,7 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 
 将这种时延相似性看作未归一化的周期估计的置信度，即周期长度为 `$\tau$` 的置信度为 `$\mathbf{R}(\tau)$`。
 
-![img](images/correlation.png)
+![img](./images/correlation.png)
 
 #### 时延信息聚合
 
@@ -182,7 +182,7 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 这里挑选最有可能的 `$k=[c \times \text{log}L]$` 个周期长度，用于避免挑选到无关、甚至相反的相位。
 在 Autoformer 中，使用多头(multi-head) 版本。
 
-![img](images/qkv.png)
+![img](./images/qkv.png)
 
 #### 高效计算
 
@@ -197,7 +197,7 @@ Autoformer 提出深度分解架构，将序列分解作为 Autoformer 的一个
 自注意力机制（Auto-Correlation Mechanism）实现了序列级的高效连接，
 从而可以更好的进行信息聚合，打破了信息利用瓶颈。
 
-![img](images/auto-correlation.png)
+![img](./images/auto-correlation.png)
 
 ## 总结
 

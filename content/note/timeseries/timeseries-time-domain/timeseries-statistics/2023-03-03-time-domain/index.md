@@ -118,7 +118,7 @@ img {
 
 总的来说，基于此类方法的建模步骤是：
 
-![img](images/flow.png)
+![img](./images/flow.png)
 
 ### 优缺点及意义
 

@@ -4,7 +4,7 @@ author: wangzf
 date: '2021-12-30'
 slug: python-processing-threading
 categories:
-  - Python
+  - python
 tags:
   - note
 ---

@@ -5,7 +5,7 @@ author: wangzf
 date: '2022-09-13'
 slug: anomaly-detection
 categories:
-  - feature engine
+  - feature-engine
 tags:
   - model
 ---

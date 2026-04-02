@@ -4,7 +4,7 @@ author: wangzf
 date: '2021-03-17'
 slug: docker
 categories:
-  - Linux
+  - linux
 tags:
   - tool
 output:
@@ -150,7 +150,7 @@ Docker 是基于 Go 语言开发的一个开源项目
 
 ### Docker Engine
 
-![docker](images/engine-components-flow.png)
+![docker](./images/engine-components-flow.png)
 
 Docker 是一个客户端-服务器应用程序, 具有以下组件:
 
@@ -190,7 +190,7 @@ image运行起来后就是docker container。
 
 Docker 使用客户端-服务器架构:
 
-![docker](images/architecture.png)
+![docker](./images/architecture.png)
 
 Docker 客户端与 Docker 守护进程进行交互, 其中: 
 
@@ -487,7 +487,7 @@ Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docke
 
 ### 运行 hello-world 容器
 
-![docker](images/docker_helloworld.png)
+![docker](./images/docker_helloworld.png)
 
 ```bash
 $ docker run -d -p 80:80 docker/getting-started
@@ -581,7 +581,7 @@ $ docker run -dp 80:80 docker/getting-started
     - (1) [Docker Hub](https://hub.docker.com/)
     - (2) `Create a Repository`
 
-        ![docker](images/docker_repo.png)
+        ![docker](./images/docker_repo.png)
 
 2. Push 镜像
 
@@ -656,7 +656,7 @@ $ docker run -dp 80:80 docker/getting-started
 
 ## Docker 命令
 
-![docker](images/docker_cheetsheet.png)
+![docker](./images/docker_cheetsheet.png)
 
 ### docker help
 

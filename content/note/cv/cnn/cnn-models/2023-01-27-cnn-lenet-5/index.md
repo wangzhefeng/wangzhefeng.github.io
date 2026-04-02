@@ -9,7 +9,7 @@ tags:
   - paper
 ---
 
-![img](images/lenet-5-slide.png)
+![img](./images/lenet-5-slide.png)
 
 <style>
 details {
@@ -67,7 +67,7 @@ LeNet-5 共有 5 层(输入输出层不计入层数，池化层与卷积层算 1
 
 原始论文中的网络结构：
 
-![img](images/lenet-5.png)
+![img](./images/lenet-5.png)
 
 下面是对网络结构的详解：
 

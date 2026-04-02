@@ -43,7 +43,7 @@ img {
 
 ## 基于关键词匹配的 NLP 问答系统
 
-![img](images/QA_1.png)
+![img](./images/QA_1.png)
 
 - 基于 FEMA 表抽取实体、关系
 - 基于 Neo4j 图数据库存储
@@ -57,7 +57,7 @@ img {
 
 ## 基于相似度匹配的 NLP 问答系统
 
-![img](images/QA_2.png)
+![img](./images/QA_2.png)
 
 - 基于问答对形式的数据
 - 基于向量数据库 milvus 和关系型数据库 PostgreSQL

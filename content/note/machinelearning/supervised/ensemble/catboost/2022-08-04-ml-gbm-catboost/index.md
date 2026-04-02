@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-08-04'
 slug: ml-gbm-catboost
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -88,7 +88,7 @@ CatBoost 还解决了梯度偏差（Gradient Bias）以及预测偏移（Predict
 
 ### CatBoost vs LightGBM
 
-![img](images/cat_light.png)
+![img](./images/cat_light.png)
 
 CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此处我们将其归纳为下面几点：
 
@@ -100,13 +100,13 @@ CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此
 
 ## CatBoost 优化策略
 
-![img](images/optim.png)
+![img](./images/optim.png)
 
 ## 预测漂移
 
 > 预测偏移，Prediction Shift
 
-![img](images/bg.png)
+![img](./images/bg.png)
 
 在 GBDT 类模型中，弱学习器模型均在同一完整训练集上训练，然后不断提升成强学习器，
 但如果训练集和测试集存在分布不一致，模型就会过拟合训练集而在测试集上表现不好（即预测偏移到训练集上），
@@ -138,7 +138,7 @@ CatBoost 与 XGBoost、LightGBM 相比，又有哪些不一样的地方呢？此
 假设特征 `$k$`（类别为 `$k$`）为类别型且它的值都是独特的(unique)。
 那么如果 TS 编码就会发生严重的目标泄露，如下图所示：
 
-![img](images/ts_2.png)
+![img](./images/ts_2.png)
 
 有几种方法可以避免条件偏移 (Conditional shift)。其中一个通用的想法是为 `$x^{(k)}$` 计算其 TS 时，
 用除去 `$x^{(k)}$` 后的样本集 `$D^{(k)}$` 去计算：
@@ -221,7 +221,7 @@ CatBoost 采用的策略也是类似的，它采用了目标变量统计（Targe
 在处理类别特征的时候，最简单的就是直接用类别对应的目标变量的均值来替换原来的类别值。
 下面详细进行说明：
 
-![img](images/ts_1.png)
+![img](./images/ts_1.png)
 
 一个有效且高效处理类别型特征 `$k$`（类别为 `$k$`）的方法是用一个 TS 编码的数值型变量 `$\hat{x}^{(k)}_{i}$`，
 来替代第 `$i$` 个训练样本的类别 `$x^{(k)}_{i}$`。通常来说，
@@ -301,7 +301,7 @@ TS 是基于类别的目标变量 `$y$` 的期望来进行估算：`$\hat{x}^{(k
 之前在背景里有讲 Greedy TS 的编码思路，但其实还有其它 TS 编码方式。
 这里，根据论文整理了下 Greedy TS、Holdout TS 和 Leave-one-out TS 的编码思路对比图如下：
 
-![img](images/ts.png)
+![img](./images/ts.png)
 
 通过上图发现，常见的 TS 的编码方式没有平衡好 ”充分利用数据集“ 和 ”避免目标泄露“。
 CatBoost 作者受到在线学习算法 (即随时间变化不断获取训练集) 的启发，
@@ -318,7 +318,7 @@ CatBoost 作者受到在线学习算法 (即随时间变化不断获取训练集
 
 Ordered TS 的计算样例图：
 
-![img](images/orderts.png)
+![img](./images/orderts.png)
 
 如上图所示，如果对打乱顺序后 `ID` 为 `6` 的样本进行 TS 编码，
 会先将样本 `4`、`3`、`7`、`2` 作为历史样本，然后使用它们去计算样本 `6` 的 TS 编码，
@@ -336,7 +336,7 @@ Ordered TS 的计算样例图：
 第一样看上去，不可能吧，怎么可能模型训练不使用样本？但是，可以搞一堆模型，
 然后每个模型用不同的样本去训练。听起来有点迷糊，我们先看一张图
 
-![img](images/ordered_boosting.png)
+![img](./images/ordered_boosting.png)
 
 上图展示了传统提升和排序提升中残差计算的对比：
 
@@ -361,7 +361,7 @@ CatBoost 有两种提升模式：Ordered 和 Plain，后者是标准 GBDT 算法
 现在我们正式来看下 CatBoost 是怎么建树的。CatBoost 是用对称树(Oblivious Decision Tree)作为弱学习器，
 对称意味着树同一层都使用相同分裂标准。对称树是平衡的，不易过拟合，且能显著加速测试执行时间。具体伪代码如下所示：
 
-![img](images/ob_algo.png)
+![img](./images/ob_algo.png)
 
 首先，CatBoost 对训练集生成 `$s+1$` 个独立随机排列序列。
 序列 `$\sigma_{1}, \ldots, \sigma_{s}$` 用于评估树分裂情况，

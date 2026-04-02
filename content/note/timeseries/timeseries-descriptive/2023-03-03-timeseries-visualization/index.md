@@ -99,7 +99,7 @@ series.plot()
 plt.show()
 ```
 
-![img](images/line.png)
+![img](./images/line.png)
  
 
 ```python
@@ -107,14 +107,14 @@ series.plot(style = "k-")
 plt.show()
 ```
 
-![img](images/dashline.png)
+![img](./images/dashline.png)
  
 ```python
 series.plot(style = "k.")
 plt.show()
 ```
 
-![img](images/point.png)
+![img](./images/point.png)
 
 ```python
 groups = series.groupby(pd.Grouper(freq = "A"))
@@ -126,7 +126,7 @@ years.plot(subplots = True, legend = False)
 plt.show()
 ```
 
-![img](images/line_group.png)
+![img](./images/line_group.png)
 
 ## 时间序列直方图和密度图
 
@@ -139,14 +139,14 @@ series.plot(kind = "hist")
 plt.show()
 ```
 
-![img](images/hist.png)
+![img](./images/hist.png)
 
 ```python
 series.plot(kind = "kde")
 plt.show()
 ```
 
-![img](images/density.png)
+![img](./images/density.png)
  
 ## 时间序列箱型图和晶须图
 
@@ -162,7 +162,7 @@ years.boxplot()
 plt.plot()
 ```
 
-![img](images/boxplot1.png)
+![img](./images/boxplot1.png)
 
 ```python
 one_year = series["1990"]
@@ -178,7 +178,7 @@ months.boxplot()
 plt.show()
 ```
 
-![img](images/boxplot2.png)
+![img](./images/boxplot2.png)
 
 ## 时间序列热图
 
@@ -195,7 +195,7 @@ plt.matshow(years, interpolation = None, aspect = "auto")
 plt.show()
 ```
 
-![img](images/heatmap.png)
+![img](./images/heatmap.png)
  
 ```python
 one_year = series["1990"]
@@ -211,7 +211,7 @@ plt.matshow(months, interpolation = None, aspect = "auto")
 plt.show()
 ```
 
-![img](images/heatmap2.png)
+![img](./images/heatmap2.png)
  
 
 ## 时间序列滞后散点图
@@ -234,7 +234,7 @@ lag_plot(series)
 plt.show()
 ```
 
-![img](images/lag.png)
+![img](./images/lag.png)
 
 ```python
 values = pd.DataFrame(series.values)
@@ -262,7 +262,7 @@ for i in range(1, (lags + 1)):
 plt.show()
 ```
 
-![img](images/lag_grid.png)
+![img](./images/lag_grid.png)
  
 ## 时间序列自相关图
 
@@ -276,7 +276,7 @@ autocorrelation_plot(series)
 plt.show()
 ```
 
-![img](images/autocorrelation.png)
+![img](./images/autocorrelation.png)
 
 ## 时间序列可视化模版
 

@@ -353,7 +353,7 @@ img {
 
 * 西魏府兵制
 
-![西魏府兵制](images/fubing.jpg)
+![西魏府兵制](./images/fubing.jpg)
 
 #### 南朝
 
@@ -377,7 +377,7 @@ img {
 
 * 三省六部制
 
-![三省六部制](images/male.jpg)
+![三省六部制](./images/male.jpg)
 
 ### 唐朝
 
@@ -385,7 +385,7 @@ img {
 
 * 唐朝后宫结构
 
-![唐朝后宫结构](images/female.jpg)
+![唐朝后宫结构](./images/female.jpg)
 
 ### 五胡十六国时期
 

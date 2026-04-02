@@ -126,7 +126,7 @@ img {
 简单理解就是一个看起来平坦的序列，没有趋势，随时间变化的方差不变，
 随时间变化的自相关结构不变，也没有定期波动(季节性)。
 
-![img](images/stationarity.png)
+![img](./images/stationarity.png)
 
 #### 严平稳与宽平稳的关系
 
@@ -141,7 +141,7 @@ img {
   那么正态过程的概率密度函数也就不会随时间的推移而变化，
   所以说一个宽平稳的正态过程必定是严平稳的。
 
-![img](images/kx_dist.png)
+![img](./images/kx_dist.png)
 
 > * 宽平稳，因其定义，又叫二阶平稳，或者协方差平稳
 > * 平稳序列，一般是指宽平稳序列，也称弱平稳序列
@@ -170,7 +170,7 @@ plt.plot(white_noise)
 plt.show()
 ```
 
-![img](images/white_noise.png)
+![img](./images/white_noise.png)
 
 当一个序列为白噪声时，表示序列前后没有任何相关关系。过去的行为对将来的发展没有丝毫影响，
 从统计分析的角度而言，已没有任何分析建模的价值。未来的趋势亦无法预测，
@@ -181,7 +181,7 @@ plt.show()
 如果残差序列是白噪声，那么就说明原序列中所有有价值的信息已经被模型所提取，
 如果非白噪声就要检查模型的合理性了。
 
-![img](images/white_noise_note.png)
+![img](./images/white_noise_note.png)
 
 #### 非白噪声
 
@@ -221,7 +221,7 @@ gdp_diff.plot()
 plt.show()
 ```
 
-![img](images/non_white_noise.png)
+![img](./images/non_white_noise.png)
 
 ### 非平稳时间序列
 
@@ -257,7 +257,7 @@ plt.plot(close)
 plt.show()
 ```
 
-![img](images/non_stationarity.png)
+![img](./images/non_stationarity.png)
 
 #### 随机游走
 
@@ -282,7 +282,7 @@ plt.plot(y)
 plt.show()
 ```
 
-![img](images/random_walk.png)
+![img](./images/random_walk.png)
 
 ```python
 import numpy as np
@@ -302,7 +302,7 @@ plt.plot(random_walk())
 plt.show()
 ```
 
-![img](images/random_walk2.png)
+![img](./images/random_walk2.png)
 
 金融领域中有个概念叫**有效市场假说**，就认为股票的价格是随机游走的，
 也就是说我们刚刚举的那个上证指数的例子就是随机游走的。
@@ -353,7 +353,7 @@ plt.plot(l2)
 plt.show()
 ```
 
-![img](images/trend_random_walk.png)
+![img](./images/trend_random_walk.png)
 
 无论是简单随机游走，还是带漂移项的随机游走，
 都可以通过差分的方式转换为**纯随机的平稳时间序列**--白噪声。
@@ -411,7 +411,7 @@ plt.show()
 2. 方差 `$Var(X_{t}) = \sigma^{2}$` 是与时间无关的常数
 3. 协方差 `$Cov(X_{t}, X_{t+k}) = \gamma_{k}$` 是只与时间间隔 `$k$` 有关，与时间 `$t$` 无关的常数
 
-![img](images/wide_stationarity.png)
+![img](./images/wide_stationarity.png)
 
 第1)、2)条，均值恒定、方差恒定，还是 `$X_{t}$` 限制变量的分布，围绕某一均值上下波动，且波动幅度前后一致。
 到这里，还是可以用均值来预测。第3)条约束协方差，是希望不仅 `$X_{t}$` 的整体分布不随着时间变化，
@@ -459,7 +459,7 @@ Cov(X_{t+1}, X_{t}) = \gamma, (\gamma \neq 0)
 
 图检验内又分时序图检验和自相关图检验
 
-![img](images/graph_test.png)
+![img](./images/graph_test.png)
 
 时序图检验就是直接绘制时序图，观察是否近似平稳，比如上图第一行第 3 张时序图能看出：
 气温围绕 37 度上下随机波动，无明显趋势或周期，可以视作平稳序列
@@ -526,7 +526,7 @@ ax[1][1].set_title('gdp_diff')
 plt.show()
 ```
 
-![img](images/stationarity_test_figure.png)
+![img](./images/stationarity_test_figure.png)
 
 1. 白噪声，曲线围绕 0 值上下波动，波动幅度前后、上下一致，为平稳序列
 2. 随机游走，曲线无确定趋势，均值、方差波动较大，非平稳序列
@@ -671,7 +671,7 @@ plot_pacf(white_noise, ax = ax3)
 plt.show()
 ```
 
-![img](images/white_noise_acf_pacf.png)
+![img](./images/white_noise_acf_pacf.png)
 
 自相关图和偏自相关图中浅蓝色条形的边界为，T 为序列的长度。
 由于随机扰动的存在，自相关系数并不严格等于 0，期望在 95% 的置信度下，相关系数均在之间。
@@ -737,7 +737,7 @@ Barlett 证明，如果一个时间序列是纯随机的，得到一个观察期
 * Q 统计量小于选定置信水平下的临界值，或者 p 值大于显著性水平(如0.05)，不能拒绝原假设，可认为序列为白噪声序列
 * Q 统计量大于选定置信水平下的临界值，或者 p 值小于显著性水平(如0.05)，拒绝原假设，认为至少存在某一阶数的自相关，序列非白噪声
 
-![img](images/x_dist.png)
+![img](./images/x_dist.png)
 
 > 说明：卡方分布的自由度很重要，不同的自由度决定不同的卡方分布。
 > 而 Q 统计量中的 m(最大延迟阶数)又是手动指定，所以不同的 m 对应不同分布。

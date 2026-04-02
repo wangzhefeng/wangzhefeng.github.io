@@ -4,7 +4,7 @@ author: wangzf
 date: '2023-04-20'
 slug: numpy
 categories:
-  - Python
+  - python
 tags:
   - tool
 ---

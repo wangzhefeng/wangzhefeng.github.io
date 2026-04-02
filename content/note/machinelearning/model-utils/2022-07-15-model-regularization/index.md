@@ -5,7 +5,7 @@ author: wangzf
 date: '2022-07-15'
 slug: model-regularization
 categories:
-  - machine learning
+  - machine-learning
 tags:
   - model
 ---
@@ -195,7 +195,7 @@ Lp 范数不是一个范数，而是一组范数，其定义如下：
 根据 `$p$` 的变化，范数有着不同的变化，下面是一个经典的有关 `$p$` 范数的变化图。
 表示 `$p$` 从 `$0$` 到 `$\infty$`变化时，单位球(unit ball) 的变化情况：
 
-![img](images/p.jpeg)
+![img](./images/p.jpeg)
 
 可以看到：当 `$0 < p < 1$` 时，单位球(unit ball)并不是凸集，
 而在 `$p \geq 1$` 范数定义下的单位球(unit ball)都是凸集。
@@ -253,7 +253,7 @@ L1 范数就是向量各元素的绝对值之和：
 蓝色的圆圈表示问题可能的解范围（经验风险项），橘色的表示正则项可能的解范围。
 而整个目标函数(经验风险 + 正则项)有解当且仅当两个解范围相切。
 
-![img](images/l1_l2_1.png)
+![img](./images/l1_l2_1.png)
 
 从上图可以很容易地看出：
 
@@ -271,7 +271,7 @@ L1 范数就是向量各元素的绝对值之和：
 * L1 范数相当于加入了一个 Laplace 先验
 * L2 范数相当于加入了一个 Gaussian 先验
 
-![img](images/l1_l2_2.png)
+![img](./images/l1_l2_2.png)
 
 ## 神经网络正则化
 
@@ -346,7 +346,7 @@ Dropout 是深度学习中经常采用的一种正则化方法。它的做法可
 即使得被丢弃的神经元输出为 0。在网络图上则表示为该神经元节点的进出连线被删除。
 最后会得到一个神经元更少、模型相对简单的神经网络，能够在很大程度上简化神经网络结构，防止神经网络过拟合。
 
-![img](images/dropout.png)
+![img](./images/dropout.png)
 
 如果在卷积网络的末端有全连接层，那么很容易实现 Dropout。
 当然 Dropout 也只适用于 CNN 的全连接层，对于所有其他层，不应该使用 Dropout。
@@ -472,7 +472,7 @@ Batch Normalization，顾名思义，以进行学习时的 batch 为单位，按
 具体来说，就是对 batch 数据进行数据分布的均值为 0，方差为 1 的正规化，即通过在 batch 上减去经验平均值，
 除以经验标准差来对前一个输出层的输出进行规范化。这将使数据看起来接近高斯分布。
 
-![img](images/bn_dist.png)
+![img](./images/bn_dist.png)
 
 数学表示如下：
 

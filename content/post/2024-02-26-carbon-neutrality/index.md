@@ -1,7 +1,9 @@
 ---
 title: 碳中和 Carbon Neutrality
+subtitle: Carbon Neutrality
 author: wangzf
 date: '2024-02-26'
+description: 围绕碳中和主题整理核心概念、背景脉络与关键问题。
 slug: carbon-neutrality
 categories:
   - book

@@ -61,14 +61,14 @@ linear.save(export_path + version, save_format = "tf")
 $ !ls {export_path + verison}
 ```
 
-![img](images/model_path.png)
+![img](./images/model_path.png)
 
 ```bash
 # 查看模型文件相关信息
 $ !saved_model_cli show --dir {export_path + str(version)} --all
 ```
 
-![img](images/model.png)
+![img](./images/model.png)
 
 ## 创建 Spark 项目
 

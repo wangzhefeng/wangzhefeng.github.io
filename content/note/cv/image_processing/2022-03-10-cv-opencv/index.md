@@ -4,7 +4,7 @@ author: wangzf
 date: '2022-03-10'
 slug: cv-opencv
 categories: 
-  - computer vision
+  - computer-vision
 tags:
   - tool
 ---
@@ -443,7 +443,7 @@ img=
  [0 0 0 0 0 0 0 0]]
 ```
 
-![img](images/black_img1.png)
+![img](./images/black_img1.png)
 
 ```
 读取像素点 img[0, 3]=0
@@ -461,7 +461,7 @@ img=
 读取修改后像素点 img[0, 3]=255
 ```
 
-![img](images/black_img2.png)
+![img](./images/black_img2.png)
 
 示例 2：
 
@@ -479,7 +479,7 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
-<img src="images/before.png" width="50%" />
+<img src="./images/before.png" width="50%" />
 
 ```
 img 尺寸：(512, 512)
@@ -487,7 +487,7 @@ img[50, 90] 原始值：105
 img[50, 90] 修改值：255
 ```
 
-<img src="images/after.png" width="50%" />
+<img src="./images/after.png" width="50%" />
 
 #### 彩色图像
 
@@ -541,7 +541,7 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
-![img](images/color_before.png)
+![img](./images/color_before.png)
 
 ```
 访问 img[0, 0] = [121 135 223]
@@ -552,7 +552,7 @@ cv2.destroyAllWindows()
 访问 img[100, 0] = [ 87  70 181]
 ```
 
-![img](images/color_after.png)
+![img](./images/color_after.png)
 
 ```
 修改后 img[0, 0] = [255 255 255]
@@ -600,11 +600,11 @@ cv2.imshow("g", g)
 cv2.imshow("r", r)
 ```
 
-![img](images/channel-color.png)
+![img](./images/channel-color.png)
 
-<img src="images/channel-b.png" width="30%" />
-<img src="images/channel-g.png" width="30%" />
-<img src="images/channel-r.png" width="30%" />
+<img src="./images/channel-b.png" width="30%" />
+<img src="./images/channel-g.png" width="30%" />
+<img src="./images/channel-r.png" width="30%" />
 
 ```python
 # 通道值改变
@@ -614,8 +614,8 @@ lena[:, :, 1] = 0
 cv2.imshow("lenab0g0", lena)
 ```
 
-<img src="images/channel-b0.png" width="30%" />
-<img src="images/channel-b0g0.png" width="30%" />
+<img src="./images/channel-b0.png" width="30%" />
+<img src="./images/channel-b0g0.png" width="30%" />
 
 示例 2：除了使用索引，还可以使用函数 `cv2.split()` 来拆分图像的通道：
 
@@ -656,9 +656,9 @@ cv2.waitKey()
 cv2.destroyAllWindows()
 ```
 
-<img src="images/channel-color.png" width="30%" />
-<img src="images/channel-bgr.png" width="30%" />
-<img src="images/channel-rgb.png" width="30%" />
+<img src="./images/channel-color.png" width="30%" />
+<img src="./images/channel-bgr.png" width="30%" />
+<img src="./images/channel-rgb.png" width="30%" />
 
 ### 调整图像大小
 
@@ -734,7 +734,7 @@ plt.imshow(img_rgb)
 plt.show()
 ```
 
-![img](images/img_blank.png)
+![img](./images/img_blank.png)
 
 2. 功能与属性
 
@@ -773,7 +773,7 @@ plt.imshow(img_line)
 plt.show()
 ```
 
-![img](images/img_line.png)
+![img](./images/img_line.png)
 
 #### 矩形
 
@@ -793,7 +793,7 @@ plt.imshow(img_rectangle)
 plt.show()
 ```
 
-![img](images/img_rectangle.png)
+![img](./images/img_rectangle.png)
 
 #### 圆圈
 
@@ -813,7 +813,7 @@ plt.imshow(img_circle)
 plt.show()
 ```
 
-![img](images/img_circle.png)
+![img](./images/img_circle.png)
 
 ### 在图像上写文字
 
@@ -864,7 +864,7 @@ plt.imshow(img_text)
 plt.show()
 ```
 
-![img](images/img_text.png)
+![img](./images/img_text.png)
 
 ## OpenCV 收集图片数据集
 

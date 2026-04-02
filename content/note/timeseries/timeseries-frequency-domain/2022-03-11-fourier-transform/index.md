@@ -80,12 +80,12 @@ img {
 下图是一些正弦波的频率和功率的直观演示。可以看到高频正弦波的峰值与低频正弦波的峰值更接近，
 只是高频正弦波重复得更频繁。低功率正弦波的峰值比其他两个正弦波更小：
 
-![img](images/freq_power.avif)
+![img](./images/freq_power.avif)
 
 为了使这一点更加具体，想象一下您对某人在钢琴上同时弹奏三个音符的录音使用了傅立叶变换。
 生成的频谱(frequency spectrum)将显示三个峰值，每个音符对应一个峰值。
 
-![img](images/pianofreqblue.png)
+![img](./images/pianofreqblue.png)
 
 * 如果一个人弹奏的一个音符比其他音符 **更轻**，那么该音符的 **频率强度(frequency power)**（y 轴）就会低于其他两个音符。
 * 钢琴上的最高音符比其他两个音符弹得 **更安静**，因此该音符的 **频谱峰值**（y 轴） 较低。
@@ -106,12 +106,12 @@ img {
 在时域中，信号是幅度（y 轴）随时间（x 轴）变化的波。例如下图（这是一些音频的图像，它是一个时域信号。
 横轴表示时间，纵轴表示振幅。）：
 
-![img](images/time.png)
+![img](./images/time.png)
 
 在频域中，信号表示为一系列频率（x 轴），每个频率都有关联的功率（y 轴）。
 下图是上面的音频信号经过傅里叶变换后的结果：
 
-![img](images/freq.avif)
+![img](./images/freq.avif)
 
 这里，之前的音频信号由其组成频率表示。底部的每个频率都有一个相关的功率，产生频谱。
 
@@ -151,7 +151,7 @@ img {
 
 <!-- 傅立叶变换也可以用描述运动来解释：
 
-![img](images/fft0.gif) -->
+![img](./images/fft0.gif) -->
 
 ### 图形介绍
 
@@ -162,11 +162,11 @@ img {
 
 动态图：
 
-![img](images/ft.gif)
+![img](./images/ft.gif)
 
 静态图：
 
-![img](images/FT.png)
+![img](./images/FT.png)
 
 ### 数学公式介绍
 
@@ -296,7 +296,7 @@ plt.show()
       并将乘积乘以 `$2 \pi$`，将输入值转换为弧度。
 * 最终生成持续 5 秒的 2 赫兹正弦波
 
-![img](images/audio.png)
+![img](./images/audio.png)
 
 上图中 x 轴表示时间（以秒为单位），由于每一秒时间有两个峰值，因此可以看到正弦波每秒振荡两次。
 该正弦波的频率太低而听不见，下面将生成一些较高频率的正弦波，并且将了解如何将它们混合。
@@ -509,7 +509,7 @@ plt.ylabel("value")
 plt.show()
 ```
 
-![img](images/freq_50.png)
+![img](./images/freq_50.png)
 
 ```python
 plt.plot(t, freq_120_series)
@@ -519,7 +519,7 @@ plt.ylabel("value")
 plt.show()
 ```
 
-![img](images/freq_120.png)
+![img](./images/freq_120.png)
 
 ```python
 plt.plot(t, f_clean, label = "Clean")
@@ -529,7 +529,7 @@ plt.ylabel("value")
 plt.show()
 ```
 
-![img](images/clean.png)
+![img](./images/clean.png)
 
 ```python
 plt.plot(t, noise)
@@ -539,7 +539,7 @@ plt.ylabel("value")
 plt.show()
 ```
 
-![img](images/noise.png)
+![img](./images/noise.png)
 
 ```python
 plt.plot(t, f_noise)
@@ -549,7 +549,7 @@ plt.ylabel("value")
 plt.show()
 ```
 
-![img](images/noisy_series.png)
+![img](./images/noisy_series.png)
 
 ```python
 plt.plot(t, f_noise, c = "c", linewidth = 1.5, label = "Noisy")
@@ -561,7 +561,7 @@ plt.legend()
 plt.show()
 ```
 
-![img](images/clean_noise.png)
+![img](./images/clean_noise.png)
 
 上图所示为带有带噪音的波浪，黑色是想要的波，绿线是噪音。
 如果隐藏图表中的颜色，几乎无法将噪声从干净的数据中分离出来，
@@ -607,7 +607,7 @@ plt.title("FFT")
 plt.show()
 ```
 
-![img](images/rfft.png)
+![img](./images/rfft.png)
 
 上图为原始波的频域视图，x 轴表示频率。一些在时域看起来很复杂的东西现在被转换成非常简单的频域数据。
 **这两个峰代表两个正弦波的频率，一种波是 50Hz，另一种是 120Hz，其他频率就是噪声很容易去除**。
@@ -626,7 +626,7 @@ plt.title("FFT filter noise")
 plt.show()
 ```
 
-![img](images/fft_filter_noise.png)
+![img](./images/fft_filter_noise.png)
 
 #### 从频域到时域的转换
 
@@ -645,7 +645,7 @@ plt.ylim(-6, 8)
 plt.show()
 ```
 
-![img](images/new_clean.png)
+![img](./images/new_clean.png)
 
 #### 自定义傅里叶变换函数
 

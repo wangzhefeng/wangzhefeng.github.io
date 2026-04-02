@@ -48,7 +48,7 @@ img {
 - [基数排序](#基数排序)
 </p></details><p></p>
 
-![img](images/sort.png)
+![img](./images/sort.png)
 
 ## 排序算法概述
 
@@ -58,7 +58,7 @@ img {
 如下图所示，排序算法中的数据类型可以是整数、浮点数、字符或字符串等。
 排序的判断规则可根据需求设定，如数字大小、字符 ASCII 码顺序或自定义规则。
 
-![img](images/sorting_examples.png)
+![img](./images/sorting_examples.png)
 
 ### 排序算法评价维度
 

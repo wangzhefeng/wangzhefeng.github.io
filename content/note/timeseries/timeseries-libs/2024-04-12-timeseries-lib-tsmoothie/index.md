@@ -195,7 +195,7 @@ for i in range(3):
     )
 ```
 
-![img](images/randomwalk_smoothing.png)
+![img](./images/randomwalk_smoothing.png)
 
 #### 季节性数据平滑
 
@@ -248,7 +248,7 @@ for i in range(3):
     )
 ```
 
-![img](images/sinusoidal_smoothing.png)
+![img](./images/sinusoidal_smoothing.png)
 
 ### tsmoothie Bootstrap demo
 
@@ -292,7 +292,7 @@ plt.plot(bts_samples.T, alpha = 0.3, c = 'orange')
 plt.plot(data[0], c = 'blue', linewidth = 2)
 ```
 
-![img](images/sinusoidal_bootstrap.png)
+![img](./images/sinusoidal_bootstrap.png)
 
 ### 时间序列平滑以更好地聚类
 

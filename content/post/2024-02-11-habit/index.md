@@ -1,7 +1,9 @@
 ---
 title: 2024 自律清单
+subtitle: 2024 Habit Checklist
 author: wangzf
 date: '2024-02-11'
+description: 面向 2024 年的个人习惯、执行节奏与自我管理清单。
 categories:
   - life
 tags:
