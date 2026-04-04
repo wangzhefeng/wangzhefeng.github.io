@@ -1,0 +1,18 @@
+{{- $page := .PageInner | default .Page -}}
+{{- $dest := .Destination -}}
+{{- $plain := .PlainText -}}
+{{- $title := .Title -}}
+{{- $src := $dest -}}
+{{- $isExternal := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+{{- $isSpecial := or $isExternal (hasPrefix $dest "/") (hasPrefix $dest "#") (hasPrefix $dest "data:") -}}
+
+{{- if and $page (not $isSpecial) -}}
+  {{- $normalized := $dest | replaceRE "\\?.*$" "" | replaceRE "#.*$" "" | replaceRE "^\\./" "" -}}
+  {{- with $page.Resources.GetMatch $normalized -}}
+    {{- $src = .RelPermalink -}}
+  {{- else -}}
+    {{- warnf "Unresolved page image reference %q on %q" $dest $page.RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+
+<img src="{{ $src | safeURL }}" alt="{{ $plain }}"{{ with $title }} title="{{ . }}"{{ end }}>

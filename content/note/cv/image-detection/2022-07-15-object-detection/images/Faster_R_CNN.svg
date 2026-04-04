@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="320" viewBox="0 0 960 320" role="img" aria-labelledby="title desc">
+  <title id="title">Faster R-CNN</title>
+  <desc id="desc">A simplified placeholder diagram for Faster R-CNN.</desc>
+  <rect width="960" height="320" fill="#f7f4ed"/>
+  <rect x="40" y="110" width="180" height="100" rx="18" fill="#fff" stroke="#2f261c" stroke-width="3"/>
+  <rect x="285" y="110" width="180" height="100" rx="18" fill="#fff" stroke="#2f261c" stroke-width="3"/>
+  <rect x="530" y="60" width="180" height="80" rx="18" fill="#fff" stroke="#2f261c" stroke-width="3"/>
+  <rect x="530" y="180" width="180" height="80" rx="18" fill="#fff" stroke="#2f261c" stroke-width="3"/>
+  <rect x="775" y="110" width="140" height="100" rx="18" fill="#fff" stroke="#2f261c" stroke-width="3"/>
+  <text x="130" y="155" font-size="30" text-anchor="middle" fill="#2f261c" font-family="Georgia, serif">Image</text>
+  <text x="130" y="190" font-size="22" text-anchor="middle" fill="#6b5a46" font-family="Georgia, serif">Feature Map</text>
+  <text x="375" y="155" font-size="30" text-anchor="middle" fill="#2f261c" font-family="Georgia, serif">Backbone</text>
+  <text x="375" y="190" font-size="22" text-anchor="middle" fill="#6b5a46" font-family="Georgia, serif">CNN</text>
+  <text x="620" y="105" font-size="26" text-anchor="middle" fill="#2f261c" font-family="Georgia, serif">Region Proposal</text>
+  <text x="620" y="220" font-size="26" text-anchor="middle" fill="#2f261c" font-family="Georgia, serif">RoI Pooling</text>
+  <text x="845" y="155" font-size="26" text-anchor="middle" fill="#2f261c" font-family="Georgia, serif">Detection</text>
+  <text x="845" y="190" font-size="20" text-anchor="middle" fill="#6b5a46" font-family="Georgia, serif">Class + Box</text>
+  <path d="M220 160H285" fill="none" stroke="#2f261c" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M465 160H530" fill="none" stroke="#2f261c" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M620 140V180" fill="none" stroke="#2f261c" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M710 220H775" fill="none" stroke="#2f261c" stroke-width="4" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#2f261c"/>
+    </marker>
+  </defs>
+</svg>

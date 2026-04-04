@@ -133,8 +133,6 @@ Llama 进行了如下改动：
 
 Llama-1 模型架构：
 
-![img](./images/)
-
 为了更好地编码数据，Llama-1 使用 BPE(Sennrich R, Haddow B, Birch A.)算法进行分词，
 具体由 sentencepiece 进行实现。值得注意的是，Llama-1 将所有数字分解为单独的数字，
 并对未知的 UTF-8 字符回退到字节进行分解。词表大小为 32k。
@@ -143,16 +141,12 @@ Llama-1 模型架构：
 
 Llama-2 模型架构：
 
-![img](./images/)
-
 Llama-2 使用了和 Llama-1 相同的模型架构以及 tokenizer。与 Llama-1 不同的是，
 Llama-2 将上下文长长度扩展到了 4k。
 
 ### Llama-3 系列
 
 Llama-3 模型架构：
-
-![img](./images/)
 
 与 Llama-2 相比，Llama-3 将 tokenizer 由 sentencepiece 换成了 tiktoken，这与 GPT4 保持一致。
 同时，词表大小由 32k 扩展到了 128k。另外，为了提高模型效率，Llama-3 8B 和 70B 都采用了 GQA。

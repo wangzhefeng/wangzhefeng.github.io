@@ -83,6 +83,10 @@ def normalize_ref(ref: str) -> str:
     return ref
 
 
+def split_ref_path(ref: str) -> str:
+    return ref.split("#", 1)[0].split("?", 1)[0].strip()
+
+
 def iter_refs(text: str, suffix: str) -> list[str]:
     refs: list[str] = []
     if suffix in {".md", ".rmd"}:
@@ -91,6 +95,22 @@ def iter_refs(text: str, suffix: str) -> list[str]:
     elif suffix == ".html":
         refs.extend(match.group(1).strip() for match in HTML_IMAGE_RE.finditer(text))
     return refs
+
+
+def path_exists_with_exact_case(path: Path) -> bool:
+    path = path.expanduser()
+    parts = path.parts
+    if not parts:
+        return False
+
+    current = Path(parts[0])
+    for part in parts[1:]:
+        if not current.is_dir():
+            return False
+        if part not in {child.name for child in current.iterdir()}:
+            return False
+        current = current / part
+    return current.exists()
 
 
 def find_missing_assets(root: Path) -> list[tuple[Path, str]]:
@@ -104,8 +124,11 @@ def find_missing_assets(root: Path) -> list[tuple[Path, str]]:
             ref = normalize_ref(raw_ref)
             if should_skip(ref):
                 continue
-            candidate = (file_path.parent / ref).resolve()
-            if candidate.exists():
+            ref_path = split_ref_path(ref)
+            if not ref_path:
+                continue
+            candidate = (file_path.parent / ref_path).resolve()
+            if path_exists_with_exact_case(candidate):
                 continue
             missing.append((file_path, ref))
     return missing
