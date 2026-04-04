@@ -1,24 +1,27 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/72676f40-4e3e-4b9d-81d9-843759ddd081/deploy-status)](https://app.netlify.com/sites/wangzf/deploys)
 
-Personal website
+# wangzhefeng.github.io
 
-## Theme
+这是一个持续更新的个人知识库与博客项目，用来沉淀学习过程、整理实践经验、记录思考，并把可复用的内容长期归档为可阅读、可检索、可引用的知识资产。
 
-The site uses a single Hugo theme:
+项目的核心作用不是单纯发布文章，而是把零散的知识、笔记、教程和项目经验组织成一套适合长期积累与查阅的内容系统。它既服务于日常写作与记录，也服务于后续回顾、复盘和分享。
 
-- `hugo-claudecode`: the docs-style theme used by the current site
+## 项目主要内容
 
-Theme-specific templates and assets for the current site design now live in:
+- 博客文章：记录阶段性学习、实践总结与项目复盘
+- 知识笔记：围绕技术、方法和专题持续沉淀结构化内容
+- 工具与教程：整理可直接参考和复用的操作经验
+- 独立栏目：包括简历、专题页面及其他长期维护内容
 
-- [themes/hugo-claudecode/layouts](/Users/wangzf/wangzhefeng.github.io/themes/hugo-claudecode/layouts)
-- [themes/hugo-claudecode/assets](/Users/wangzf/wangzhefeng.github.io/themes/hugo-claudecode/assets)
+## 项目主要功能
 
-Theme-specific shortcodes also live under `themes/hugo-claudecode/layouts/shortcodes/`.
+- 知识沉淀：把分散的信息整理成可长期维护的内容集合
+- 分类浏览：按栏目组织内容，便于按主题阅读和定位
+- 站内检索：支持从大量内容中快速找到目标信息
+- 文档式阅读：强调连续阅读、目录导航与上下文关联
+- 内容复用：让笔记、教程和文章既能独立阅读，也能相互引用
+- 持续更新：适合作为长期演进的个人知识与写作仓库
 
-Implementation notes for the current theme:
+## 适合谁看
 
-- CSS and JS are built through Hugo Pipes from `themes/hugo-claudecode/assets/`
-- Markdown code fences are highlighted by Hugo/Chroma instead of runtime `highlight.js`
-- Navigation/sidebar and page render cleanup use cached partials such as `docs_sidebar_data.html` and `page_render_data.html`
-
-Root-level `static/` now keeps only site-wide assets such as favicons, verification files, media, and `rmarkdown-libs`.
+这个项目适合希望了解作者技术积累、阅读专题笔记、查找实践经验，或把零散问题快速定位到具体文章与教程的读者。
