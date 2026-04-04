@@ -12,3 +12,7 @@ Thumbs.db
 .vscode/
 node_modules/
 claude/
+.superpowers/
+.scripts/
+.tests/
+__pycache__/
