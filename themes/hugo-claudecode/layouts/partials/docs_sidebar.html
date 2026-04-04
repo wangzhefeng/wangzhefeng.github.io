@@ -5,7 +5,7 @@
   {{ end }}
 {{ end }}
 {{ $isPostSection := eq $root.Section "post" }}
-{{ $sidebarHiddenRoutes := slice "/about/" "/todo/" "/resume/" "/ivy/" }}
+{{ $sidebarHiddenRoutes := slice "/about/" "/todo/" "/resume/" }}
 {{ $sidebarHidden := in $sidebarHiddenRoutes (lower .RelPermalink) }}
 <aside class="docs-sidebar">
   <div class="docs-sidebar__inner">

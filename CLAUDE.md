@@ -1,88 +1,66 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+本文件为 Claude Code 在本仓库中的工作说明；如与根目录 `AGENTS.md` 冲突，以 `AGENTS.md` 为准。
 
-## Project Overview
+## 项目现状
 
-Chinese-language personal knowledge base and blog built with **Hugo**, deployed on **Netlify** at https://wangzhefeng.com/. Covers statistics, time series analysis, machine learning, deep learning, NLP, LLM, computer vision, and operations research. Also includes blog posts, Chinese poetry, tool guides, a resume, and a TODO list.
+这是一个部署到 Netlify 的 Hugo 中文站点，当前主题固定为 `hugo-claudecode`。仓库不再维护多主题切换逻辑，主题方向与协作约束统一收敛到根目录 `AGENTS.md`。站点定位不是传统时间流博客，而是更接近文档站和个人知识库：强调结构化浏览、搜索、长期写作和轻量交互。
 
-Built with R package **blogdown** (Hugo-based static site generator). The site now uses the standalone `hugo-claudecode` theme, which implements an Anthropics-style documentation layout (design style: `anthropic-docs`).
+## 关键目录
 
-## Development
+- `content/post/`：日志文章
+- `content/note/`：知识库笔记
+- `content/tool/`：工具、教程、参考页
+- `content/pomes/`、`content/resume/`：独立栏目
+- `themes/hugo-claudecode/layouts/`：主题模板
+- `themes/hugo-claudecode/assets/css/`：主题样式
+- `themes/hugo-claudecode/assets/js/site.js`：站点前端交互
+- `static/`：favicon、媒体、验证文件、`rmarkdown-libs`
+- `scripts/`：辅助脚本，如图片检查和图标生成
 
-The dev server is started via R/blogdown and runs at **http://localhost:4321/**. The site auto-rebuilds on file changes — open this URL to preview rendering in real time.
+## 构建与运行
+
+常用命令：
 
 ```bash
-# Full production build (Hugo + Pagefind search index)
+npm install
 npm run build
-
-# Build + generate search index for local dev preview
+npm run search:local
 npm run build:local-search
+npm run check:images
 ```
 
-Hugo version is **0.134.1** (pinned in `netlify.toml` and aligned in `.Rprofile`). Local `blogdown` preview should use the same Hugo major/minor version as production builds.
+- `npm run build`：正式构建，执行 `hugo` 并为 `public/` 生成 Pagefind 索引。
+- `npm run search:local`：将搜索索引写入 `static/pagefind`，用于本地预览。
+- `npm run build:local-search`：同时生成正式和本地两套搜索输出。
+- `npm run check:images`：检查内容图片引用是否存在。
 
-## Architecture
+Netlify 使用 `npm ci && npm run build`；分支预览和 deploy preview 使用 `hugo -F -b $DEPLOY_PRIME_URL && npx pagefind --site public`。Hugo 版本在 `netlify.toml` 和 `.Rprofile` 中统一为 `0.134.1`。本地 R/blogdown 预览通常在 `http://localhost:4321/`。
 
-### Template Layer
-The theme templates live in `themes/hugo-claudecode/layouts/`. Theme-specific shortcodes also live there. Key templates:
-- `themes/hugo-claudecode/layouts/_default/list.html` -- Section listing with docs-layout (sidebar navigation + section cards + archive list)
-- `themes/hugo-claudecode/layouts/_default/single.html` -- Single page with docs-layout (sidebar + TOC rail + comments)
-- `themes/hugo-claudecode/layouts/partials/header.html` -- Site header (brand, nav, search trigger with Cmd+K, theme/locale toggles, mobile nav)
-- `themes/hugo-claudecode/layouts/partials/docs_sidebar.html` -- Left sidebar with section tree navigation
-- `themes/hugo-claudecode/layouts/partials/footer.html` -- Footer with Pagefind search modal
-- `themes/hugo-claudecode/layouts/partials/docs_sidebar_data.html` -- Cached sidebar structure data
-- `themes/hugo-claudecode/layouts/partials/page_meta_data.html` -- Per-page meta/title/summary helpers
-- `themes/hugo-claudecode/layouts/partials/page_render_data.html` -- Cached content cleanup used by list/single templates
-- `themes/hugo-claudecode/layouts/shortcodes/blogdown/postref.html` -- blogdown-compatible post reference shortcode
+## 主题实现要点
 
-### Design System
-Theme assets live in `themes/hugo-claudecode/assets/` and are emitted through Hugo Pipes with minification and fingerprinting.
+- 主题模板集中在 `themes/hugo-claudecode/layouts/`，主页与栏目页主要由 `_default/list.html` 驱动，文章页由 `_default/single.html` 驱动。
+- `themes/hugo-claudecode/assets/js/site.js` 负责 Pagefind 搜索、明暗主题切换、界面文案中英切换、代码块交互、视图切换高亮等前端行为。
+- 主题样式集中在 `themes/hugo-claudecode/assets/css/custom.css`。
+- 设计方向保持文档站式阅读体验，不要为追求“更炫”引入重型前端框架、额外状态管理或恢复多主题兼容层。
 
-- `themes/hugo-claudecode/assets/css/custom.css` -- theme variables and component styling, including light/dark variants
-- `themes/hugo-claudecode/assets/js/site.js` -- client-side behavior bundle
+## 内容与配置约定
 
-Configured via `params.design.style = "anthropic-docs"` in `config.yaml`.
+- 新内容默认使用中文。
+- 内容目录一般采用 `content/<section>/<yyyy-mm-dd-slug>/index.md`，配图放在同级 `images/`。
+- 新增需要进入顶层导航的栏目时，同步更新 `config.yaml` 的 `menu.main`。
+- 搜索由 Pagefind 提供，评论系统使用 Utterances，界面支持中英切换，但正文并未实现完整 Hugo 多语言。
 
-### Client-Side Features
-All in `themes/hugo-claudecode/assets/js/site.js`:
-- Pagefind static search (built post-Hugo from `public/`)
-- Light/dark theme toggle with localStorage persistence
-- Chinese/English locale switching (UI strings only, not content)
-- Scroll-reveal animations via `[data-reveal]` attributes
-- Code copy buttons, heading anchor links, prev/next keyboard navigation
+## 历史 Session 沉淀
 
-### External Integrations
-- **Comments**: Utterances (GitHub issues), config in `params.utteranc`
-- **Syntax highlighting**: Hugo/Chroma for Markdown code fences
-- **Math rendering**: MathJax via CDN
-- **Analytics**: Google Analytics via Hugo internal template
+- 主题已从历史主题体系中抽离并收敛为单主题维护。
+- `.gitattributes` 已修复图片二进制规则：`png/jpg/jpeg/gif/webp/bmp/ico/pdf` 必须按二进制处理。
+- 仓库中仍可能存在历史损坏图片；遇到异常图片时，优先恢复原始资源或重新导出，其次才考虑 SVG 示意替代。
+- `themes/hugo-claudecode/`、`config.yaml`、`netlify.toml`、`.Rprofile` 是高影响区域，修改后要补做完整构建验证。
 
-## Content Structure
+## 工作规则
 
-- `content/post/` -- Blog posts (date-prefixed dirs, e.g. `2022-03-14-hugo-learning/index.md`)
-- `content/note/` -- Technical knowledge base (subdirs: `algorithms`, `analysis`, `control_algorithms`, `cv`, `deeplearning`, `llm`, `machinelearning`, `nlp`, `operationsresearch`, `timeseries`)
-- `content/tool/` -- Tool guides (python, pytorch, tensorflow, docker, matlab, etc.)
-- `content/pomes/` -- Chinese classical poetry
-- `content/resume/` -- Personal resume
-- `content/about.md`, `content/todo.md` -- Standalone pages
-- `content/Ivy/` -- Theme design documentation and changelog
-
-## Content Conventions
-
-- Each content piece is a date-prefixed directory containing an `index.md`
-- Frontmatter: `title`, `author`, `date`, `slug`, `categories`, `tags`
-- Set `comment: false` in frontmatter to disable comments on a page
-- Set `disable_mathjax: true` to disable math rendering per-page
-- The `<!--# ON_HOLD -->` marker truncates content display for old posts
-- Permalinks: `/post/:year/:month/:day/:slug/` and `/note/:year/:month/:day/:slug/`
-- All content is in Chinese (zh-cn); UI has partial English locale support
-
-## Key Rules
-
-- Prefer editing `themes/hugo-claudecode/` directly for theme changes.
-- New content should be written in Chinese (zh-cn).
-- When adding new content sections, add the corresponding entry to `menu.main` in `config.yaml`.
-- `public/`, `resources/`, and `static/pagefind/` are git-ignored (build artifacts).
-- Run `npm run build` to verify changes before committing.
-- The dev server at http://localhost:4321/ is always available for live preview — check it after making changes.
+- 优先直接编辑现有主题和内容，不做无关重构。
+- 不覆盖用户已有未提交改动。
+- 内容改动至少运行 `npm run check:images`；主题、模板、样式或脚本改动至少运行 `npm run build`。
+- 如果只修改协作文档，可不跑站点构建，但要明确说明未做运行验证。

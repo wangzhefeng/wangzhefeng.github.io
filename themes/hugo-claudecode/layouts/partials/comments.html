@@ -1,4 +1,4 @@
-{{ $commentsHiddenRoutes := slice "/about/" "/ivy/" }}
+{{ $commentsHiddenRoutes := slice "/about/" }}
 {{ $commentsHidden := in $commentsHiddenRoutes (lower .RelPermalink) }}
 {{ if and .IsPage (ne .Params.comment false) (not $commentsHidden) }}
   {{ if .Site.Params.utteranc.enable }}

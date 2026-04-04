@@ -108,7 +108,6 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
       menuPoems: "诗词",
       menuTodo: "事务",
       menuResume: "简历",
-      menuTheme: "主题",
       menuPage: "页面",
       archiveSuffix: "归档",
       countItems: (count) => `${count} 篇内容`,
@@ -175,7 +174,6 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
       menuPoems: "Poems",
       menuTodo: "Tasks",
       menuResume: "Resume",
-      menuTheme: "Theme",
       menuPage: "Page",
       archiveSuffix: "Archive",
       countItems: (count) => `${count} items`,
@@ -221,7 +219,6 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
       if (path === "/pomes/" || (!exact && path.startsWith("/pomes/"))) return "menuPoems";
       if (path === "/todo/" || (!exact && path.startsWith("/todo/"))) return "menuTodo";
       if (path === "/resume/" || (!exact && path.startsWith("/resume/"))) return "menuResume";
-      if (path === "/ivy/" || (!exact && path.startsWith("/ivy/"))) return "menuTheme";
     } catch (error) {}
     return "";
   };
@@ -362,6 +359,16 @@ import { clearCache as clearPretextCache, layout, prepare, setLocale as setPrete
     shell.querySelectorAll("[data-featured-container]").forEach((container) => {
       const visibleCard = Array.from(container.querySelectorAll("[data-collection-card]")).some((card) => !card.hidden);
       container.hidden = !visibleCard;
+    });
+
+    shell.querySelectorAll("[data-subtopic-group]").forEach((group) => {
+      const visibleCard = Array.from(group.querySelectorAll("[data-collection-card]")).some((card) => !card.hidden);
+      group.hidden = !visibleCard;
+    });
+
+    shell.querySelectorAll("[data-theme-group]").forEach((group) => {
+      const visibleCard = Array.from(group.querySelectorAll("[data-collection-card]")).some((card) => !card.hidden);
+      group.hidden = !visibleCard;
     });
   };
 

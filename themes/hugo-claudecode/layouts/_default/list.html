@@ -1,7 +1,7 @@
 {{ partial "header.html" . }}
 
-{{ $sections := slice "post" "note" "tool" }}
-{{ $allPages := where .Site.RegularPages.ByDate.Reverse "Section" "in" $sections }}
+{{ $featuredSections := slice "post" "note" "tool" }}
+{{ $allPages := where .Site.RegularPages.ByDate.Reverse "Section" "in" $featuredSections }}
 
 <div data-pagefind-body>
 {{ if .IsHome }}
@@ -83,7 +83,7 @@
     </div>
   </section>
 
-{{ else if in $sections .Section }}
+{{ else if .IsSection }}
   {{ $collectionPages := .RegularPagesRecursive.ByDate.Reverse }}
   {{ $lead := "" }}
   {{ if .Description }}
@@ -120,7 +120,7 @@
 
   <section class="collection-shell" data-collection-shell>
     <div class="collection-toolbar{{ if eq .Section "post" }} collection-toolbar--view-only{{ end }}">
-      {{ if and (in $sections .Section) (in (slice "note" "tool") .Section) (gt (len $themeList) 0) }}
+  {{ if and (in (slice "note" "tool") .Section) (gt (len $themeList) 0) }}
       <div class="topic-switch" role="tablist" aria-label="主题筛选">
         {{ range $index, $theme := $themeList }}
         <button class="topic-switch__item{{ if eq $index 0 }} is-active{{ end }}" type="button" data-category-filter="{{ $theme.name }}">{{ $theme.title }}</button>
@@ -160,6 +160,40 @@
       </div>
     </section>
     {{ end }}
+    {{ else if in (slice "note" "tool") .Section }}
+    {{ range .Sections.ByWeight.ByTitle }}
+    {{ $themePage := . }}
+    {{ $themeKey := $themePage.File.ContentBaseName }}
+    <div data-theme-group="{{ $themeKey }}">
+      {{ if gt (len $themePage.RegularPages) 0 }}
+      <section class="archive-year-group" data-subtopic-group>
+        <div class="archive-year-heading">概览</div>
+        <div class="story-grid" data-collection-grid>
+          {{ range $themePage.RegularPages.ByDate.Reverse }}
+            {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+            {{ partial "content_card.html" (dict "card" $card "showSection" false "showCategory" true) }}
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+
+      {{ range $themePage.Sections.ByWeight.ByTitle }}
+      {{ $subtopicPage := . }}
+      {{ $subtopicPages := $subtopicPage.RegularPagesRecursive.ByDate.Reverse }}
+      {{ if gt (len $subtopicPages) 0 }}
+      <section class="archive-year-group" data-subtopic-group>
+        <div class="archive-year-heading">{{ $subtopicPage.Title }}</div>
+        <div class="story-grid" data-collection-grid>
+          {{ range $subtopicPages }}
+            {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+            {{ partial "content_card.html" (dict "card" $card "showSection" false "showCategory" true) }}
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+      {{ end }}
+    </div>
+    {{ end }}
     {{ else }}
     <div class="story-grid" data-collection-grid>
       {{ range $collectionPages }}
@@ -172,7 +206,7 @@
 {{ else }}
   {{ $pageRender := partialCached "page_render_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
   {{ $lead := "" }}
-  {{ $heroHiddenRoutes := slice "/about/" "/resume/" "/ivy/" }}
+  {{ $heroHiddenRoutes := slice "/about/" "/resume/" }}
   {{ $hidePageHero := in $heroHiddenRoutes (lower .RelPermalink) }}
   {{ if .Description }}
     {{ $lead = .Description | plainify }}

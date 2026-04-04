@@ -1,0 +1,16 @@
+{{ $site := . }}
+{{ $searchIndex := dict }}
+{{ range $site.RegularPages }}
+  {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
+  {{ $searchIndex = merge $searchIndex (dict .RelPermalink (dict
+    "title" $card.title
+    "excerpt" $card.excerpt
+    "description" $card.description
+    "kind" $card.kind
+    "section" $card.section
+    "date" $card.date
+    "sectionTitle" $card.sectionTitle
+    "primaryCategory" $card.primaryCategory
+  )) }}
+{{ end }}
+{{ return $searchIndex }}

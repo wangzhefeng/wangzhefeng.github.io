@@ -5,7 +5,7 @@
 {{ $card := partialCached "card_data.html" . .RelPermalink .Lastmod.Unix .Kind .IsPage }}
 {{ $related := slice }}
 {{ $categoryLabel := "" }}
-{{ $heroHiddenRoutes := slice "/about/" "/resume/" "/ivy/" }}
+{{ $heroHiddenRoutes := slice "/about/" "/resume/" }}
 {{ $hideArticleHero := in $heroHiddenRoutes (lower .RelPermalink) }}
 {{ with $card.primaryCategory }}
   {{ $categoryLabel = humanize (replace . "-" " ") }}
