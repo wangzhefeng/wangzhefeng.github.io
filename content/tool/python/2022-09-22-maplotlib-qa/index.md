@@ -48,7 +48,6 @@ img {
 - [解决其他乱码问题](#解决其他乱码问题)
     - [负号的乱码问题](#负号的乱码问题)
     - [支持数学符号](#支持数学符号)
-- [双坐标轴](#双坐标轴)
 - [控制坐标轴刻度间距和标签](#控制坐标轴刻度间距和标签)
     - [添加主刻度和副刻度](#添加主刻度和副刻度)
     - [为刻度添加辅助网络](#为刻度添加辅助网络)
@@ -213,84 +212,6 @@ from matplotlib import rc
 rc('mathtext', default = 'regular')  # 支持数学符号
 ```
 
-## 双坐标轴
-
-```python
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from matplotlib import rc
-
-
-# style
-plt.style.use("classic")
-plt.style.use("seaborn-whitegrid")
-# font
-plt.rcParams['font.sans-serif']= ["Arial Unicode MS"] # 支持中文(macOS)
-# minus
-mpl.rcParams["axes.unicode_minus"] = False # 解决图像中的 “-” 负号的乱码问题
-# math
-rc('mathtext', default = 'regular')  # 支持数学符号
-
-
-def timeseries_plot_two_yaxis(df, 
-                              col_xaxis,
-                              col_left, col_right, 
-                              col_left_ylim, col_right_ylim, 
-                              title, imgpath):
-    fig = plt.figure(figsize = (20, 7))
-
-    # 左坐标轴画图
-    ax = fig.add_subplot(111)
-    line1 = ax.plot_date(
-        df[col_xaxis], 
-        df[col_left], 
-        linestyle = "solid", 
-        color = "#FF4700", 
-        label = col_left
-    )
-    # 右坐标轴画图
-    ax2 = ax.twinx()
-    line2 = ax2.plot_date(
-        df[col_xaxis], 
-        df[col_right], 
-        linestyle = "solid", 
-        color = "#009AFF", 
-        label = col_right
-    )
-    # 图例
-    lines = line1 + line2
-    labs = [line.get_label() for line in lines]
-    ax.legend(lines, labs, loc = 0)
-    
-    # 日期设置
-    plt.gcf().autofmt_xdate()
-    plt.gca().xaxis.set_major_formatter(
-        mpl_dates.DateFormatter('%Y-%m-%d')
-    )
-    
-    # x 轴标签
-    ax.grid()
-    ax.set_xlabel(col_xaxis)
-
-    # 左坐标轴设置
-    ax.set_ylabel(col_left)
-    ax.set_ylim(col_left_ylim)
-    ax.set_xticks()
-    ax.set_yticks()
-    # 右坐标轴设置
-    ax2.set_ylabel(col_right)
-    ax2.set_ylim(col_right_ylim)
-    ax2.xticks()
-    ax2.yticks()
-    
-    # 标题
-    plt.title(title)
-    
-    # 保存
-    if imgpath:
-        plt.savefig(os.path.join(os.path.dirname(__file__), imgpath))
-```
-
 ## 控制坐标轴刻度间距和标签
 
 Matplotlib 默认自动处理刻度在坐标轴上的位置，但有时我们需要覆盖默认的坐标轴刻度配置，
@@ -380,7 +301,6 @@ plt.show()
 
 刻度标签是图形空间中的坐标，虽然数字刻度标签对于大多说场景来说是足够的，但是却并不总是能够满足需求。
 例如，我们需要显示 100 个公司的营收情况，这时候我们就需要横坐标刻度标签为公司名，而非数字；
-同样对于时间序列，我们希望横坐标刻度标签为日期。考虑到此类需求，
 我们需要使用 Matplotlib 为此提供了的 API 控制刻度标签。
 
 #### ticker.Locator 和 ticker.Formatter

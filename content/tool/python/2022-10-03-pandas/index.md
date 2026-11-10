@@ -54,7 +54,6 @@ img {
     - [groupby 和 transform](#groupby-和-transform)
     - [向量化计算](#向量化计算)
     - [assign 和 numpy select](#assign-和-numpy-select)
-    - [timeseries](#timeseries)
 - [参考](#参考)
 </p></details><p></p>
 
@@ -707,48 +706,6 @@ df.assign(c = np.select(
 ))
 ```
 
-
-### timeseries
-
-一年的时间序列数据，读取每月第一天的数据
-
-```python
-index = pd.date_range("01/01/2021", "12/31/2021")
-df = pd.DataFrame(
-    data = np.random.randn(index.size, 3),
-    index = index,
-    columns = list("abc")
-)
-# 删除所有单数月份的1号
-df_droped = df.drop(
-    labels = [datetime.datetime(2021, i, 1) for i in range(1, 13, 2)]
-)
-```
-
-方法 1:
-
-```python
-df_droped.loc[df_droped.index.day == 1]
-```
-
-方法 2:
-
-```python
-df_droped.resample("MS").first()
-df_droped.resample("MS").agg("first")
-```
-
-方法 3:
-
-```python
-df_droped.asfreq("MS")
-```
-
-方法 4:
-
-```python
-df_droped.groupby(pd.Grouper(freq = "MS")).first()
-```
 
 ## 参考
 

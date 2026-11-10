@@ -553,7 +553,6 @@ fig = tfds.show_examples(info, mnist_test)
 
 #### Sequence Preprocessing
 
-- `TimeseriesGenerator`
 - `pad_sequences`
 - `skipgrams`
 - `makesamplingtable`

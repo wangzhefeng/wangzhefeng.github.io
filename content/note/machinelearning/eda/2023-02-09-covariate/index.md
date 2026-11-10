@@ -272,7 +272,6 @@ plt.show()
 * Analyzing Relationships Between Variables
 * Correlation and regression
 * Comprehensive data exploration with Python
-* Python 预测[周期性时间序列]
 * Data analysis and feature extraction with Python
 * pandas.DataFrame.corr
 * How To... Calculate Spearman's Rank Correlation Coefficient (By Hand)

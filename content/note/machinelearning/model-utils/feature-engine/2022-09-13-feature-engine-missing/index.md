@@ -167,7 +167,6 @@ pandas.DataFrame.interpolate(
 
 * `method`
    - `linear`: 等间距插值, 支持多多索引
-   - `time`: 对索引为不同分辨率时间序列数据插值
    - `index`, `value`: 使用索引的实际数值插值
    - `pad`: 使用其他不为 `NaN` 的值插值
    - `nearest`: 参考 `scipy.iterpolate.interp1d` 中的插值算法

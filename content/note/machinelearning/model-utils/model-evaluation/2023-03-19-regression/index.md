@@ -1,5 +1,5 @@
 ---
-title: 回归和时序评价指标
+title: 回归评价指标
 author: wangzf
 date: '2022-11-22'
 slug: regression
@@ -35,7 +35,6 @@ img {
 <details><summary>目录</summary><p>
 
 - [普通回归](#普通回归)
-- [时间序列预测](#时间序列预测)
 - [MBE](#mbe)
 - [MAE](#mae)
 - [MSE](#mse)
@@ -51,34 +50,10 @@ img {
 - [Huber Loss](#huber-loss)
 - [Log Cosh Loss](#log-cosh-loss)
 - [Quantile Loss](#quantile-loss)
-- [TILDE-Q 损失](#tilde-q-损失)
-- [DTW](#dtw)
 - [参考](#参考)
 </p></details><p></p>
 
 ## 普通回归
-
-## 时间序列预测
-
-最常见的时间序列预测损失函数是 MSE、MAE 等点误差函数，这类函数关注每个点的拟合是否准确。
-然而，这种损失函数完全忽略了不同点的关系，在时间序列中忽略了各个点的时序关系，
-导致了预测结果的形状和真实序列不匹配的问题
-
-针对 MSE 等损失函数的问题，业内提出一种针对时间序列预测问题的 DTW 损失函数。DTW 损失函数的核心思路是，
-利用动态规划方法，对两个序列的点之间进行匹配，找到让两个序列相似度最高的匹配方式。
-在这种最相似的匹配结果下，两个时间序列的距离就是最终真正的差异，也就可以转换成损失函数。
-DTW 充分考虑了两个序列各个点之间的关系，通过扭曲重整序列进行对齐，计算最短距离，实现形状上的匹配
-
-后续也有很多工作针对 DTW 在时间序列预测中的应用进行优化。DTW 也有其缺点，对齐过程容易受到噪声影响，
-且对齐过程一定程度上丢失了序列的时间位置信息，一般会影响 MSE 等评价指标
-
-损失函数对模型在给定目标上进行良好拟合起着关键作用。对于时间序列预测等复杂目标，
-不可能确定通用损失函数，有很多因素，如异常值、数据分布的偏差、ML模型要求、计算要求和性能要求等。
-没有适用于所有类型数据的单一损失函数
-
-特定损失函数可能有用的情况，例如在数据集中出现异常值的情况下，MSE 是最佳策略；
-然而，如果有更少的异常值，则MAE将是比MSE更好的选择。同样，如果我们希望保持平衡，
-并且目标基于百分位数损失，那么使用 LogCosh 是更好的方法
 
 ## MBE
 
@@ -396,7 +371,6 @@ MAPE 随着误差的增加而线性增加。MAPE 越小，模型性能越小
 所以实际问题中，经常会使用对数值量纲不敏感的一些 metric，尤其是 SMAPE 和 WMAPE 这两种。
 这类误差计算方法在各类不同的问题上都会落在 `$[0, 1]$` 的区间范围内，方便来进行跨序列的横向比较，十分方便
 
-在实际项目中还会经常发现，很多真实世界的时序预测目标，如销量，客流等，都会形成一个类似 tweedie 或 poisson 分布的情况。
 如果用 WMAPE 作为指标，模型优化目标基本可以等价为 MAE(优化目标为中位数)，则整体的预测就会比平均值小(偏保守)
 
 在很多业务问题中，预测偏少跟预测偏多造成的影响是不同的，所以实际在做优化时，可能还会考察整体的预测偏差(总量偏大或偏小)，
@@ -476,44 +450,9 @@ LogCosh 计算 Loss 的双曲余弦对数。这个函数比二次损失函数更
 
 * Quantile Loss 是计算密集型的。如果我们估计平均值或使用平方损失来量化效率，则 Quantile Loss 将比较糟
 
-## TILDE-Q 损失
-
-第一个损失函数是 Amplitude Shifting Invariance with Softmax，目标是让所有时刻的预测结果和真实结果的距离是一个常数 k。
-为了达成这个目标，文中使用了 softmax 函数。Softmax 中传入各个时间点的预测结果和真实结果的距离，
-只有当所有距离都相同时候，这个函数才会得到最小值
-
-`$$L_{a.shift}(Y, \hat{Y}) = T'\sum_{i=1}^{T'}\Big|\frac{1}{T'} - Softmax\big(d(y_{i} - \hat{y}_{i})\big)\Big|$$`
-
-`$$Softmax\big(d(y_{i}, \hat{y_{i}})\big) = \frac{e^{d(y_{i}, \hat{y}_{i})}}{\sum_{j=1}^{T'}e^{d(y_{j}, \hat{y}_{j})}}$$`
-
-第二个损失函数是 Invariances with Fourier Coefficients。通过对时间序列进行傅里叶变换，
-获取预测结果和真实结果的主成分，使用范数对比两个序列的主成分差异作为损失函数，主成分差异越小，
-对应的 loss 越小，以此引入了平移不变性
-
-`$$L_{phase}(Y, \hat{Y} = \begin{cases}
-||F(Y) - F(\hat{Y})||_{p}, \quad if dominant frequency\\
-||F(\hat{Y})||_{p}, \quad otherwise
-\end{cases}$$`
-
-第三个损失函数是 Invariances with auto-correlation，计算真实序列的自相关系数，
-以及预测结果和真实序列的相关系数，比较二者的差异
-
-`$$L_{amp}(Y, \hat{Y}) = ||R(Y, Y) - R(Y, \hat{Y})||_{p}$$`
-
-最终的 TILDE-Q 损失函数是上面 3 种衡量不变性损失函数的加权求和：
-
-`$$L_{TILDE-Q}(Y, \hat{Y}) = \alpha L_{a.shift}(Y, \hat{Y}) + (1 - \alpha)L_{phase}(Y, \hat{Y}) + \gamma L_{amp}(Y, \hat{Y})$$`
-
-## DTW
-
-![img](./images/dtw.png)
-
-
 ## 参考
 
 * [12种回归评价指标](https://mp.weixin.qq.com/s/q-lktuRnzyqe6t0XlVJKkQ)
-* [让时间序列预测更真实的损失函数](https://mp.weixin.qq.com/s/iLgxtIz8RvLYNvGZNN_JUw)
-* [可用于时间序列预测的14种损失函数](https://mp.weixin.qq.com/s?__biz=Mzg3NDUwNTM3MA==&mid=2247490609&idx=1&sn=7b59eaa06fa73e2628fcd4f46ad1880d&chksm=cecee9c4f9b960d2b382f2feb1e14ca5be4405a211220916343ca69e16207d2a3364e431a4f4&scene=132#wechat_redirect)
 * [mape和smape，基于mae的回归评价指标](https://zhuanlan.zhihu.com/p/259662864)
 * [What is the different MAE, MAPE, MSE, and RMSE](https://www.kaggle.com/learn-forum/52081)
 * [Choosing the correct error metric: MAPE vs. sMAPE](https://towardsdatascience.com/choosing-the-correct-error-metric-mape-vs-smape-5328dec53fac)

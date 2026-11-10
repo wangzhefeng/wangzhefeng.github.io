@@ -50,7 +50,7 @@ menu:
 # https://simpleicons.org/icons/github.svg
 params:
   iconVersion: "20260328-han-4"
-  description: "统计、时间序列、机器学习与大模型的长期写作与知识整理。"
+  description: "统计、机器学习与大模型的长期写作与知识整理。"
   footer: "&copy; [wangzf](https://wangzhefeng.com) 2017-2026 | [GitHub](https://github.com/wangzhefeng)"
   disqusURL: "https://wangzhefeng.com/"
   githubContentURL: "https://github.com/wangzhefeng"
@@ -61,7 +61,7 @@ params:
     url: "/"
     alt: "logo"
     wordmark: "Wangzf's Doc"
-    # tag: "Statistics· TimeSeries· MachineLearning· LLM"
+    # tag: "Statistics· MachineLearning· LLM"
     tag: ""
   design:
     style: anthropic-docs

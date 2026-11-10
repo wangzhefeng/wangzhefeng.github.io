@@ -54,7 +54,6 @@ img {
     - [Chi-square Test](#chi-square-test)
   - [参数检验](#参数检验)
   - [非参数检验](#非参数检验)
-  - [时间序列平稳性检验](#时间序列平稳性检验)
   - [Q-Q 图](#q-q-图)
 - [参考](#参考)
 </p></details><p></p>
@@ -497,11 +496,6 @@ critical = chi2.ppf(prob, dof)
 * Kruskal-Wallis H Test (K-W 检验)
 * Friedman Test (弗里德曼检验)
 * Kolmogorv-Smirnov Test (K-S 检验)
-
-### 时间序列平稳性检验
-
-* Augmented Dickey-Fuller Unit Root Test (单位根检验)
-* Kwiatkowski-Phillips-Schmidt-Shin Test
 
 ### Q-Q 图
 
