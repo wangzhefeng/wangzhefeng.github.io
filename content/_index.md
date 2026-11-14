@@ -21,13 +21,14 @@ disable_highlight: true
 > 
 > * 我小的时候，最高的追求，就是能够像我父亲一样的，能够有一个职业，能够养家糊口，能够读几本书，过一辈子。
 
+<!--
 ### 研究报告
 
 * [电力现货交易](https://claude.ai/public/artifacts/24d50440-846d-414f-a6c7-f87757be89e3)
 
 <iframe src="https://claude.site/public/artifacts/24d50440-846d-414f-a6c7-f87757be89e3/embed" title="Research Report" width="100%" height="100" frameborder="0" allow="clipboard-write" allowfullscreen></iframe>
 
-<!--
+
 
 关于人生，钟叔河说：
 
